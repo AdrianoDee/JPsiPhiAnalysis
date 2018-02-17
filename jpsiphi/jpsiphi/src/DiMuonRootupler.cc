@@ -77,6 +77,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
         UInt_t    ndimuon;
         UInt_t    nmuons;
         UInt_t    trigger;
+        UInt_t    tMatch;
         Int_t     charge;
 
 	TLorentzVector dimuon_p4;
