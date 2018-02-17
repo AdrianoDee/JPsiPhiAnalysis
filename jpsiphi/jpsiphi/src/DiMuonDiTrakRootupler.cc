@@ -70,7 +70,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  dimuonditrk_pdgid_, onia_pdgid_, trak_pdgid_;
+  int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_;
   bool isMC_,OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -324,13 +324,13 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
   isBestCandidate = true;
 
-// grabbing oniat information
-  if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No oniat information " << run << "," << event <<std::endl;
+// grabbing dimuontt information
+  if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!dimuonditrk_rf_cand_handle.isValid()) std::cout<< "No dimuonditrk_rf information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if (dimuonditrk_rf_cand_handle.isValid() && dimuonditrk_cand_handle.isValid()) {
 
-    pat::CompositeCandidate dimuonditrk_rf_cand, dimuonditrk_cand, *onia_cand, *ditrak_cand, *onia_cand_rf, *ditrak_cand_rf;
+    pat::CompositeCandidate dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
 
     noXCandidates = (Int_t)(dimuonditrk_rf_cand_handle->size());
     //Refitted Handle
@@ -342,7 +342,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuonditrk_rf_bindx = dimuonditrk_rf_cand.userInt("bIndex");
 
       if (dimuonditrk_rf_bindx<0 || dimuonditrk_rf_bindx>(int) dimuonditrk_cand_handle->size()) {
-        std::cout << "Incorrect index for oniat combination " << run << "," << event <<"," << dimuonditrk_rf_bindx << std::endl;
+        std::cout << "Incorrect index for dimuontt combination " << run << "," << event <<"," << dimuonditrk_rf_bindx << std::endl;
         continue;
       }
 
@@ -354,20 +354,20 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuonditrk_charge    = dimuonditrk_cand.charge();
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
-      dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("onia")->pt(),dimuonditrk_rf_cand.daughter("onia")->eta(),
-                              dimuonditrk_rf_cand.daughter("onia")->phi(),dimuonditrk_rf_cand.daughter("onia")->mass());
+      dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("dimuon")->pt(),dimuonditrk_rf_cand.daughter("dimuon")->eta(),
+                              dimuonditrk_rf_cand.daughter("dimuon")->phi(),dimuonditrk_rf_cand.daughter("dimuon")->mass());
       ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("ditrak")->pt(),dimuonditrk_rf_cand.daughter("ditrak")->eta(),
                               dimuonditrk_rf_cand.daughter("ditrak")->phi(),dimuonditrk_rf_cand.daughter("ditrak")->mass());
 
-      onia_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("onia"));
+      dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("dimuon"));
       ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("ditrak"));
 
-      reco::Candidate::LorentzVector vP = onia_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vM = onia_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vP = dimuon_cand_rf->daughter("muon1")->p4();
+      reco::Candidate::LorentzVector vM = dimuon_cand_rf->daughter("muon2")->p4();
 
-      if (onia_cand_rf->daughter("muon1")->charge() < 0) {
-         vP = onia_cand_rf->daughter("muon2")->p4();
-         vM = onia_cand_rf->daughter("muon1")->p4();
+      if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
+         vP = dimuon_cand_rf->daughter("muon2")->p4();
+         vM = dimuon_cand_rf->daughter("muon1")->p4();
       }
 
       muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
@@ -382,20 +382,20 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       //unref corresponding
 
       dimuonditrk_cand = dimuonditrk_cand_handle->at(dimuonditrk_rf_bindx);
-      onia_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("onia"));
+      dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
       const pat::Muon *muonP, *muonN;
 
-      if (onia_cand_rf->daughter("muon1")->charge() < 0) {
-         vP = onia_cand->daughter("muon2")->p4();
-         vM = onia_cand->daughter("muon1")->p4();
-         muonN = dynamic_cast<const pat::Muon*>(onia_cand->daughter("muon1"));
-         muonP = dynamic_cast<const pat::Muon*>(onia_cand->daughter("muon2"));
+      if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
+         vP = dimuon_cand->daughter("muon2")->p4();
+         vM = dimuon_cand->daughter("muon1")->p4();
+         muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
+         muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
       } else
       {
-        muonP = dynamic_cast<const pat::Muon*>(onia_cand->daughter("muon1"));
-        muonN = dynamic_cast<const pat::Muon*>(onia_cand->daughter("muon2"));
+        muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
+        muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
       }
 
       muonP_isLoose    =  muonP->isLooseMuon();
@@ -424,16 +424,16 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
       //double kmass = 0.4936770;
       dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());
-      dimuon_p4.SetPtEtaPhiM(onia_cand->pt(),onia_cand->eta(),onia_cand->phi(),onia_cand->mass());
+      dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
       ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
 
-      dimuon_vProb        = onia_cand->userFloat("vProb");
-      dimuon_vChi2        = onia_cand->userFloat("vNChi2");
-      dimuon_DCA          = onia_cand->userFloat("DCA");
-      dimuon_ctauPV      = onia_cand->userFloat("ppdlPV");
-      dimuon_ctauErrPV    = onia_cand->userFloat("ppdlErrPV");
-      dimuon_cosAlpha     = onia_cand->userFloat("cosAlpha");
-      dimuon_triggerMatch = DiMuonDiTrakRootupler::isTriggerMatched(onia_cand);
+      dimuon_vProb        = dimuon_cand->userFloat("vProb");
+      dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
+      dimuon_DCA          = dimuon_cand->userFloat("DCA");
+      dimuon_ctauPV      = dimuon_cand->userFloat("ppdlPV");
+      dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
+      dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
+      dimuon_triggerMatch = DiMuonDiTrakRootupler::isTriggerMatched(dimuon_cand);
 
       dimuonditrk_tree->Fill();
 
@@ -441,7 +441,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       else if(i==0)
       isBestCandidate = false;
 
-        // oniat candidates are sorted by vProb
+        // dimuontt candidates are sorted by vProb
     }
 
   }
