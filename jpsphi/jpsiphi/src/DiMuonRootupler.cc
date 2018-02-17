@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
-// Package:    Onia2MuMuRootupler
-// Class:      Onia2MuMuRootupler
+// Package:    DiMuonRootupler
+// Class:      DiMuonRootupler
 //
 // Description: Dump  Onia(mu+ mu-)  decays
 //
@@ -37,10 +37,10 @@
 // class declaration
 //
 
-class Onia2MuMuRootupler:public edm::EDAnalyzer {
+class DiMuonRootupler:public edm::EDAnalyzer {
       public:
-	explicit Onia2MuMuRootupler(const edm::ParameterSet &);
-	~Onia2MuMuRootupler() override;
+	explicit DiMuonRootupler(const edm::ParameterSet &);
+	~DiMuonRootupler() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -112,7 +112,7 @@ class Onia2MuMuRootupler:public edm::EDAnalyzer {
 // constructors and destructor
 //
 
-Onia2MuMuRootupler::Onia2MuMuRootupler(const edm::ParameterSet & iConfig):
+DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -124,7 +124,7 @@ OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
 {
   edm::Service < TFileService > fs;
-  onia_tree = fs->make < TTree > ("oniaTree", "Tree of Onia2MuMu");
+  onia_tree = fs->make < TTree > ("oniaTree", "Tree of DiMuon");
 
   onia_tree->Branch("run",      &run,      "run/i");
   onia_tree->Branch("event",    &event,    "event/l");
@@ -155,7 +155,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "Onia2MuMuRootupler::Onia2MuMuRootupler: Onia id " << pdgid_ << std::endl;
+     std::cout << "DiMuonRootupler::DiMuonRootupler: Onia id " << pdgid_ << std::endl;
      onia_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      onia_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      onia_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
@@ -166,13 +166,13 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
-Onia2MuMuRootupler::~Onia2MuMuRootupler() {}
+DiMuonRootupler::~DiMuonRootupler() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* Onia2MuMuRootupler::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonRootupler::GetAncestor(const reco::Candidate* p) {
    if (p->numberOfMothers()) {
       if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
       else return p->mother(0);
@@ -181,7 +181,7 @@ const reco::Candidate* Onia2MuMuRootupler::GetAncestor(const reco::Candidate* p)
 }
 
 //Check recursively if any ancestor of particle is the given one
-bool Onia2MuMuRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
    if (ancestor == particle ) return true;
    for (size_t i=0; i< particle->numberOfMothers(); i++) {
       if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -196,7 +196,7 @@ bool Onia2MuMuRootupler::isAncestor(const reco::Candidate* ancestor, const reco:
    ex. 1 = pass 0
 */
 
-UInt_t Onia2MuMuRootupler::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -224,7 +224,7 @@ UInt_t Onia2MuMuRootupler::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void Onia2MuMuRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
   iEvent.getByToken(dimuon_Label,dimuons);
@@ -286,7 +286,7 @@ void Onia2MuMuRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
         } else dimuon_pdgId = 0;
       }  // if ( p_id
     } // for (size
-    if ( ! dimuon_pdgId ) std::cout << "Onia2MuMuRootupler: does not found the given decay " << run << "," << event << std::endl; // sanity check
+    if ( ! dimuon_pdgId ) std::cout << "DiMuonRootupler: does not found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
   float OniaMassMax_ = OniaMassCuts_[1];
@@ -329,7 +329,7 @@ void Onia2MuMuRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
         }
       }
     } //..else {
-      //std::cout << "Onia2MuMuRootupler: (" << run << "," << event << ") -> ";
+      //std::cout << "DiMuonRootupler: (" << run << "," << event << ") -> ";
 
   }  // !OnlyGen_
 
@@ -341,25 +341,25 @@ void Onia2MuMuRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void Onia2MuMuRootupler::beginJob() {}
+void DiMuonRootupler::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void Onia2MuMuRootupler::endJob() {}
+void DiMuonRootupler::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void Onia2MuMuRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void Onia2MuMuRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void Onia2MuMuRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void Onia2MuMuRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void Onia2MuMuRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -368,4 +368,4 @@ void Onia2MuMuRootupler::fillDescriptions(edm::ConfigurationDescriptions & descr
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(Onia2MuMuRootupler);
+DEFINE_FWK_MODULE(DiMuonRootupler);
