@@ -26,19 +26,16 @@ process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-PsiTrakTrakRootupler.root'),
 )
 
-process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
-# process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
+process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
+# process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2016_cfi")
 
 hltList = [
-#Phi
- 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 'HLT_DoubleMu4_JpsiTrk_Displaced',
-'HLT_DoubleMu4_Jpsi_Displaced',
 'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-'HLT_Dimuon25_Jpsi',
+'HLT_Dimuon20_Jpsi',
+'HLT_Dimuon16_Jpsi',
+'HLT_Dimuon10_Jpsi_Barrel',
 ]
 
 #2016 tag 80X_dataRun2_2016SeptRepro_v7
@@ -47,68 +44,21 @@ hltpaths = cms.vstring(hltList)
 
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
-filters = cms.vstring(
-                                #PHI TRIGGERS FILTER
-                                #HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi
-                                'hltDiMuonGlbOrTrkFiltered0v2', #Phi
-                                #'hltDiMuonGlbOrTrk0zFiltered0p2v2',
-                                'hltDoubleMu2JpsiL3Filtered', ##JPsi
-                                #'hltMumuVtxProducerDoubleMu2Jpsi',
-                                'hltMumuFilterDoubleMu2Jpsi',
-                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                #'hltDoubleTrkmumuVtxProducerDoubleMu2Jpsi',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-                                #'hltJpsiTkAllConeTracksIterDoubleTrk',
-                                #'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-                                #HLT_Mu20_TkMu0_Phi
-                                #'hltL3fL1sMu16orMu18erorMu20L1f0L2f0L3Filtered20',
-                                #'hltDiMuonGlbFiltered20TrkFiltered0',
-                                'hltDiMuonGlb20Trk0DzFiltered0p2',
-                                #HLT_Dimuon14_Phi_Barrel_Seagulls
-                                #'hltDimuon14PhiBarrelnoCowL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon14PhiBarrelnoCow',
-                                'hltDisplacedmumuFilterDimuon14PhiBarrelnoCow',
-                                #HLT_Mu25_TkMu0_Phi
-                                #'hltL3fL1sMu16orMu18erorMu20L1f0L2f0L3Filtered20',
-                                #'hltDiMuonGlbFiltered25TrkFiltered0',
-                                'hltDiMuonGlb25Trk0DzFiltered0p2',
-                                #HLT_Dimuon24_Phi_noCorrL1
-                                #'hltDisplacedmumuFilterDimuon24PhiBarrelNoCorrL1',
-                                #'hltDisplacedmumuVtxProducerDimuon24PhiNoCorrL1',
-                                'hltDimuon24PhiNoCorrL1L3fL3Filtered',
-                                #JPSI Trigger Filters
-                                #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered'
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkAllConeTracksIter',
-                                #'hltJpsiTrkTrkVertexProducerPhiKstar',
-                                #'hltJpsiTkTkVertexFilterPhiKstar',
-                                #HLT_DoubleMu4_JpsiTrk_Displaced_v12
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkVertexProducer',
-                                #'hltJpsiTkVertexFilter',
-                                #HLT_DoubleMu4_Jpsi_Displaced
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #HLT_DoubleMu4_3_Jpsi_Displaced
-                                #'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu43Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                #HLT_Dimuon20_Jpsi_Barrel_Seagulls
-                                #'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon20JpsiBarrelnoCow',
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                #HLT_Dimuon25_Jpsi
-                                'hltDisplacedmumuFilterDimuon25Jpsis'
-                                #HLT_Dimuon0_Jpsi
-                                #'hltDimuon0JpsiL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon0Jpsi',
-                                # 'hltDisplacedmumuFilterDimuon0Jpsi'
+filters = cms.vstring(#HLT_DoubleMu4_JpsiTrk_Displaced_v4
+                      'hltDoubleMu4JpsiDisplacedL3Filtered',
+                      'hltJpsiTkVertexFilter',
+                      #HLT_DoubleMu4_3_Jpsi_Displaced_v4
+                      'hltDoubleMu43JpsiDisplacedL3Filtered',
+                      'hltDisplacedmumuFilterDoubleMu43Jpsi',
+                      #HLT_Dimuon20_Jpsi_v3
+                      'hltDimuon20JpsiL3Filtered',
+                      'hltDisplacedmumuFilterDimuon20Jpsi',
+                      #HLT_Dimuon16_Jpsi_v3
+                      'hltDimuon16JpsiL3Filtered',
+                      'hltDisplacedmumuFilterDimuon16Jpsi',
+                      #HLT_Dimuon10_Jpsi_Barrel_v4
+                      'hltDimuon10JpsiBarrelL3Filtered',
+                      'hltDisplacedmumuFilterDimuon10JpsiBarrel'
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",

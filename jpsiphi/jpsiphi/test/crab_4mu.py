@@ -1,7 +1,7 @@
 import sys
 import os
 
-jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
+jsonFile="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -33,16 +33,18 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR', 'T3_US_UCSB',
  'T3_US_UMD']
 
+
 datasetnames = {
 
-"F" :  datasetbase + '/Run2017F-PromptReco-v1/MINIAOD',
-"B1" : datasetbase + '/Run2017B-PromptReco-v1/MINIAOD',
-"B2" : datasetbase + '/Run2017B-PromptReco-v2/MINIAOD',
-"C1" : datasetbase + '/Run2017C-PromptReco-v1/MINIAOD',
-"C2" : datasetbase + '/Run2017C-PromptReco-v2/MINIAOD',
-"C3" : datasetbase + '/Run2017C-PromptReco-v3/MINIAOD',
-"D" : datasetbase + '/Run2017D-PromptReco-v1/MINIAOD',
-"E" : datasetbase + '/Run2017E-PromptReco-v1/MINIAOD'
+"B1" :  datasetbase + "/Run2016B-03Feb2017_ver1-v1/MINIAOD",
+"B2" :  datasetbase + "/Run2016B-03Feb2017_ver2-v2/MINIAOD",
+"C" :  datasetbase + "/Run2016C-03Feb2017-v1/MINIAOD",
+"D" :  datasetbase + "/Run2016D-03Feb2017-v1/MINIAOD",
+"E" :  datasetbase + "/Run2016E-03Feb2017-v1/MINIAOD",
+"F" :  datasetbase + "/Run2016F-03Feb2017-v1/MINIAOD",
+"G" :  datasetbase + "/Run2016G-03Feb2017-v1/MINIAOD",
+"H1" :  datasetbase + "/Run2016H-03Feb2017_ver2-v1/MINIAOD",
+"H2" :  datasetbase + "/Run2016H-03Feb2017_ver3-v1/MINIAOD"
 }
 
 
@@ -78,7 +80,7 @@ config.General.requestName      = 'miniaod_4mu_' + dataset[0]+'_'+dataset[1]+'_'
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/CMSSW_9_2_13/src/mmkk/mmkk/test/run-4mu-miniaod.py'
+config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2016/CMSSW_8_0_28/src/jpsiphi/jpsiphi/test/run-4mu-miniaod.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750

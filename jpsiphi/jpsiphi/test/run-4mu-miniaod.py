@@ -1,4 +1,4 @@
-#input_filename = '/store/data/Run2017B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
+#input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
 ouput_filename = 'rootuple.root'
 input_filename = 'file:FABC2662-9AC8-E711-BF94-02163E019BB9.root'
 
@@ -20,18 +20,18 @@ process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input
 process.TFileService = cms.Service("TFileService",fileName = cms.string(ouput_filename))
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
-process.load("mmkk.mmkk.slimmedMuonsTriggerMatcher2017_cfi")
+process.load("mmkk.mmkk.slimmedMuonsTriggerMatcher2016_cfi")
 process.load("HeavyFlavorAnalysis.Onia2MuMu.onia2MuMuPAT_cfi")
 
 hltList = [
-#Phi
+#Muonia
 'HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
 #'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 # 'HLT_Mu20_TkMu0_Phi',
 #'HLT_Dimuon14_Phi_Barrel_Seagulls',
 # 'HLT_Mu25_TkMu0_Phi',
 # 'HLT_Dimuon24_Phi_noCorrL1',
-#JPsi
+#Chamonium
 'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 'HLT_DoubleMu4_JpsiTrk_Displaced',
 'HLT_DoubleMu4_Jpsi_Displaced',
@@ -160,7 +160,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
 # )
 
 
-process.Phi2MuMuPAT = cms.EDProducer('FourOnia2MuMuPAT',
+process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -174,7 +174,7 @@ process.Phi2MuMuPAT = cms.EDProducer('FourOnia2MuMuPAT',
         HLTFilters                  = filters
 )
 
-process.JPsi2MuMuPAT = cms.EDProducer('FourOnia2MuMuPAT',
+process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -217,32 +217,32 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
     filter    = cms.bool(True)
 )
 
-process.PsiPhiProducer = cms.EDProducer('PsiPhiFourMuonsProducer',
-    JPsiCollection = cms.InputTag('JPsi2MuMuPAT'),
-    PhiCollection = cms.InputTag('Phi2MuMuPAT'),
-    JPsiMassCuts = cms.vdouble(2.9,3.2),      # J/psi mass window 3.096916 +/- 0.150
-    PhiMassCuts = cms.vdouble(0.9,1.15),  # phi mass window 1.019461 +/- .015
-    FourOniaMassCuts = cms.vdouble(4.0,6.0),            # b-hadron mass window
+process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
+    HighDiMuonCollection    = cms.InputTag('JPsi2MuMuPAT'),
+    LowDiMuonCollection     = cms.InputTag('Phi2MuMuPAT'),
+    HighDiMuonMassCuts      = cms.vdouble(2.9,3.2),      # J/psi mass window 3.096916 +/- 0.150
+    LowDiMuonMassCuts       = cms.vdouble(0.9,1.15),  # phi mass window 1.019461 +/- .015
+    DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
 )
 
 process.PsiPhiFitter = cms.EDProducer('PsiPhiFourMuKinematicFit',
-    JPsiPhiCollection     = cms.InputTag('PsiPhiProducer','PsiPhiFourMuonsCandidates'),
-    PhiConstraint = cms.double(1.019461),              # J/psi mass in GeV
-    JPsiConstraint = cms.double(3.096916),
-    FourOniaMassCuts = cms.vdouble(4.0,6.0),            # b-hadron mass window
-    product_name    = cms.string('PsiPhiCandidatesRefit')
+    HighDiMuonCollection    = cms.InputTag('PsiPhiProducer','DoubleDiMuonCandidates'),
+    LowDiMuonCollection     = cms.double(1.019461),              # J/psi mass in GeV
+    HighDiMuonMassCuts      = cms.double(3.096916),
+    LowDiMuonMassCuts       = cms.vdouble(4.0,6.0),            # b-hadron mass window
+    DoubleDiMuonMassCuts    = cms.string('PsiPhiCandidatesRefit')
 )
 
 process.rootuple = cms.EDAnalyzer('PsiPhiFourMuonsRootupler',
-    jpsiphi_cand = cms.InputTag('PsiPhiProducer','PsiPhiFourMuonsCandidates'),
-    jpsiphi_rf_cand = cms.InputTag("PsiPhiFitter","PsiPhiCandidatesRefit"),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(False),
-    OnlyBest = cms.bool(False),
-    HLTs = hltpaths,
-    filters = filters
+    doubledimuon_cand       = cms.InputTag('PsiPhiProducer','DoubleDiMuonCandidates'),
+    doubledimuon_rf_cand    = cms.InputTag("PsiPhiFitter","PsiPhiCandidatesRefit"),
+    beamSpotTag             = cms.InputTag("offlineBeamSpot"),
+    primaryVertices         = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),
+    isMC                    = cms.bool(False),
+    OnlyBest                = cms.bool(False),
+    HLTs                    = hltpaths,
+    filters                 = filters
 )
 
 process.xCandSequence = cms.Sequence(
