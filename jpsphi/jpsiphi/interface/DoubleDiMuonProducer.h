@@ -29,21 +29,21 @@ class DoubleDiMuonProducer : public edm::EDProducer {
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> PsiCollection_;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> PhiCollection_;
-  std::vector<double> JPsiMassCuts_;
-  std::vector<double> PhiMassCuts_;
-  std::vector<double> FourOniaMassCuts_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> HighDiMuonCollection_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> LowDiMuonCollection_;
+  std::vector<double> HighDiMuonMassCuts_;
+  std::vector<double> LowDiMuonMassCuts_;
+  std::vector<double> DoubleDiMuonMassCuts_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
 
-  const pat::CompositeCandidate makeCandidate(const pat::CompositeCandidate& phi,
-    const pat::CompositeCandidate& jpsi);
+  const pat::CompositeCandidate makeCandidate(const pat::CompositeCandidate& l,
+    const pat::CompositeCandidate& h);
 
   int candidates;
   int nevents;
-  int nPhi;
-  int nJps;
+  int nLdM;
+  int nHdM;
 
 };
 
