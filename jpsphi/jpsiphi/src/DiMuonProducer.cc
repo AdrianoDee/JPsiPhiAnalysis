@@ -27,7 +27,7 @@
 #include "TMath.h"
 #include "Math/VectorUtil.h"
 #include "TVector3.h"
-#include "../interface/FourOniaVtxReProducer.h"
+#include "../interface/DiMuonVtxReProducer.h"
 #include "TLorentzVector.h"
 
 #include "MagneticField/Engine/interface/MagneticField.h"
@@ -264,7 +264,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
               if( addMuonlessPrimaryVertex_  && thePrimaryV.tracksSize()>2) {
                 // Primary vertex matched to the dimuon, now refit it removing the two muons
-                FourOniaVtxReProducer revertex(priVtxs, iEvent);
+                DiMuonVtxReProducer revertex(priVtxs, iEvent);
                 edm::Handle<reco::TrackCollection> pvtracks;
                 iEvent.getByToken(revtxtrks_,   pvtracks);
                 if( !pvtracks.isValid()) { std::cout << "pvtracks NOT valid " << std::endl; }
