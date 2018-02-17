@@ -1,13 +1,5 @@
-/**
-   \file
-   Declaration of OniaTrakTrakProducer
-
-   \author Alberto Sanchez-Hernandez
-   \date 2 Mar 2014
-*/
-
-#ifndef __PsiPhiFourMuonsProducer_h_
-#define __PsiPhiFourMuonsProducer_h_
+#ifndef __DoubleDiMuonProducer_h_
+#define __DoubleDiMuonProducer_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -27,10 +19,10 @@
    Create a HF candidate by mathing Onia(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class PsiPhiFourMuonsProducer : public edm::EDProducer {
+class DoubleDiMuonProducer : public edm::EDProducer {
 
  public:
-  explicit PsiPhiFourMuonsProducer(const edm::ParameterSet& ps);
+  explicit DoubleDiMuonProducer(const edm::ParameterSet& ps);
 
  private:
 

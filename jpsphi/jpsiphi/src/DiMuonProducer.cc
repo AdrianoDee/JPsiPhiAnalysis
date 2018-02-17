@@ -1,4 +1,4 @@
-#include "jpsiphi/jpsiphi/interface/FourOnia2MuMu.h"
+#include "../interface/DiMuonProducer.h"
 
 //Headers for the data items
 #include <DataFormats/TrackReco/interface/TrackFwd.h>
@@ -36,7 +36,7 @@
 #include "TrackingTools/IPTools/interface/IPTools.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 
-FourOnia2MuMuPAT::FourOnia2MuMuPAT(const edm::ParameterSet& iConfig):
+DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
@@ -55,7 +55,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 }
 
 
-FourOnia2MuMuPAT::~FourOnia2MuMuPAT()
+DiMuonProducerPAT::~DiMuonProducerPAT()
 {
 
   // do anything here that needs to be done at desctruction time
@@ -68,7 +68,7 @@ FourOnia2MuMuPAT::~FourOnia2MuMuPAT()
 // member functions
 //
 
-UInt_t FourOnia2MuMuPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
+UInt_t DiMuonProducerPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
   const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
   const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
   UInt_t matched = 0;  // if no list is given, is not matched
@@ -99,7 +99,7 @@ UInt_t FourOnia2MuMuPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) 
 // ------------ method called to produce the data  ------------
 
 void
-FourOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
+DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
   using namespace std;
@@ -585,7 +585,7 @@ FourOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
     bool
-    FourOnia2MuMuPAT::isAbHadron(int pdgID) {
+    DiMuonProducerPAT::isAbHadron(int pdgID) {
 
       if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
       return false;
@@ -593,7 +593,7 @@ FourOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     bool
-    FourOnia2MuMuPAT::isAMixedbHadron(int pdgID, int momPdgID) {
+    DiMuonProducerPAT::isAMixedbHadron(int pdgID, int momPdgID) {
 
       if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
       (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
@@ -603,7 +603,7 @@ FourOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     std::pair<int, float>
-    FourOnia2MuMuPAT::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+    DiMuonProducerPAT::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
       int momJpsiID = 0;
       float trueLife = -99.;
@@ -663,14 +663,14 @@ FourOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // ------------ method called once each job just before starting event loop  ------------
     void
-    FourOnia2MuMuPAT::beginJob()
+    DiMuonProducerPAT::beginJob()
     {
     }
 
     // ------------ method called once each job just after ending the event loop  ------------
     void
-    FourOnia2MuMuPAT::endJob() {
+    DiMuonProducerPAT::endJob() {
     }
 
     //define this as a plug-in
-    DEFINE_FWK_MODULE(FourOnia2MuMuPAT);
+    DEFINE_FWK_MODULE(DiMuonProducerPAT);

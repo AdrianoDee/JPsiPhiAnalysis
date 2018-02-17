@@ -1,4 +1,4 @@
-#include "jpsiphi/jpsiphi/interface/DiMuonDiTrakProducer.h"
+#include "../interface/DiMuonDiTrakProducer.h"
 
 DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& ps):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("DiMuon"))),
