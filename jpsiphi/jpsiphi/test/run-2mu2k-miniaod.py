@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
-input_file = "file:20E77405-529D-E711-B55D-A4BF01011BF7.root"
+input_file = "file:0EE0B583-7A9C-E711-82D7-B083FED00117.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -9,7 +9,7 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
@@ -24,7 +24,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-PsiTrakTrakRootupler.root'),
+        fileName = cms.string('rootuple-2016-dimuonditrak.root'),
 )
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
@@ -68,6 +68,27 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         l1tResults = cms.InputTag( "" ),
                                         throw = cms.bool(False)
                                         )
+
+### unpack them
+process.unpackTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
+  triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
+  unpackFilterLabels          = cms.bool( True )
+)
+
+### then perform a match for all HLT triggers of interest
+PATmuonTriggerMatchID = cms.EDProducer( "PATTriggerMatcherDRDPtLessByR",
+    src     = cms.InputTag( "slimmedMuons" ),
+    matched = cms.InputTag( "unpackTriggers" ),
+    matchedCuts = cms.string('type( "TriggerL1Mu" ) || type( "TriggerMuon" )'),
+    maxDPtRel = cms.double( 10.0 ),
+    maxDeltaR = cms.double( 0.1 ),
+    resolveAmbiguities    = cms.bool( True ),
+    resolveByMatchQuality = cms.bool( True )
+)
+
+PATmuonMatchHLTL2   = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltL2MuonCandidates")'), maxDeltaR = 0.3, maxDPtRel = 10.0)           #maxDeltaR Changed accordingly to Zoltan tuning. It was: 1.2
+
 
 process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),

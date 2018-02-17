@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 
 ### unpack them
 unpackedPatTrigger = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
-  patTriggerObjectsStandAlone = cms.InputTag( 'selectedPatTrigger' ),
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
   triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
   unpackFilterLabels          = cms.bool( True )
 )
@@ -25,13 +25,15 @@ PATmuonMatchHLTL3   = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('col
 PATmuonMatchHLTL3v2 = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltIterL3MuonCandidates")'), maxDeltaR = 0.1, maxDPtRel = 10.0)       #needed because name changed
 PATmuonMatchHLTL3T  = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltGlbTrkMuonCands")'), maxDeltaR = 0.1, maxDPtRel = 10.0)            #maxDeltaR Changed accordingly to Zoltan tuning. It was: 0.5
 PATmuonMatchHLTTkMu = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltHighPtTkMuonCands")'), maxDeltaR = 0.1, maxDPtRel = 10.0)          #maxDeltaR Changed accordingly to Zoltan tuning. It was: 0.5
+PATmuonMatchHLTMuon = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('type( "TriggerL1Mu" ) || type( "TriggerMuon" )'), maxDeltaR = 0.1, maxDPtRel = 10.0)           #maxDeltaR Changed accordingly to Zoltan tuning. It was: 1.2
 
 slimmedMuonsTriggerMatchers1Mu = cms.Sequence(
       PATmuonMatchHLTL2 +
       PATmuonMatchHLTL3 +
       PATmuonMatchHLTL3v2 +
       PATmuonMatchHLTL3T +
-      PATmuonMatchHLTTkMu
+      PATmuonMatchHLTTkMu +
+      PATmuonMatchHLTMuon
 )
 
 slimmedMuonsTriggerMatchers1MuInputTags = [
@@ -40,6 +42,7 @@ slimmedMuonsTriggerMatchers1MuInputTags = [
     cms.InputTag('PATmuonMatchHLTL3v2'),
     cms.InputTag('PATmuonMatchHLTL3T'),
     cms.InputTag('PATmuonMatchHLTTkMu'),
+    cms.InputTag('PATmuonMatchHLTMuon'),
 ]
 
 ### Embed them
