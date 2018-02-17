@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 
 ### unpack them
 unpackedPatTrigger = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
-  patTriggerObjectsStandAlone = cms.InputTag( 'selectedPatTrigger' ),
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
   triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
   unpackFilterLabels          = cms.bool( True )
 )
