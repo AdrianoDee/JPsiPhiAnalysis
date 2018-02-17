@@ -10,7 +10,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F 
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 
 #Global Tags 2012 ReReco Jan13 CMSSW_5_3_7_patch5
 # /MuOnia/Run2012*-22Jan2013-*/AOD
@@ -51,7 +51,7 @@ process.TFileService = cms.Service("TFileService",
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
-hltList = [
+charmoniumHLT = [
 #JPsi
 'HLT_DoubleMu4_JpsiTrk_Displaced',
 'HLT_DoubleMu4_3_Jpsi_Displaced',
@@ -60,7 +60,7 @@ hltList = [
 'HLT_Dimuon10_Jpsi_Barrel',
 ]
 
-#2017 tag 80X_dataRun2_2017SeptRepro_v7
+hltList = charmoniumHLT
 
 hltpaths = cms.vstring(hltList)
 
