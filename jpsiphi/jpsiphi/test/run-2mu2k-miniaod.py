@@ -51,7 +51,7 @@ process.TFileService = cms.Service("TFileService",
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
-hltList = [
+charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
@@ -63,7 +63,7 @@ hltList = [
 'HLT_Dimuon25_Jpsi',
 ]
 
-#2017 tag 80X_dataRun2_2017SeptRepro_v7
+hltList = charmoniumHLT #muoniaHLT
 
 hltpaths = cms.vstring(hltList)
 
