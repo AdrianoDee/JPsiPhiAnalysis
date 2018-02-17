@@ -27,7 +27,7 @@ process.TFileService = cms.Service("TFileService",
 )
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
-process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
+# process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 hltList = [
 #Phi
@@ -152,26 +152,26 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 )
 
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
-    Onia = cms.InputTag('JPsi2MuMuPAT'),
-    PFCandidates = cms.InputTag('slimmedPFCandsWithTrigger'),
-    OniaMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
+    PFCandidates = cms.InputTag('packedPFCandidates'),
+    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-    OniaPFPFMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    DiMuonDiTrakMassCuts_ = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(0.493677,0.493677),         # traks masses
     OnlyBest  = cms.bool(False)
 )
 
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
-    PsiPFPF     = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    mass_constraint = cms.double(3.096916),              # J/psi mass in GeV
-    OniaTrakTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks = cms.vdouble(0.493677,0.493677),         # traks masses
-    product_name    = cms.string('DiMuonDiTrakCandidatesRef')
+    DiMuonTTCand        = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
+    DiMuonTTMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    MassTraks           = cms.vdouble(0.493677,0.493677),         # traks masses
+    Product             = cms.string('DiMuonDiTrakCandidatesRef')
 )
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-    jpsitrktrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    jpsitrktrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
+    dimuonditrk_cand_Label = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    dimuonditrk_rf_cand_Label = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
@@ -221,7 +221,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
-                     process.slimmedPFCandsWithTriggerSequence *
+                     # process.slimmedPFCandsWithTriggerSequence *
                      process.oniaSelectedMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
