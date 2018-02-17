@@ -11,27 +11,6 @@ process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4')
 
-#Global Tags 2012 ReReco Jan13 CMSSW_5_3_7_patch5
-# /MuOnia/Run2012*-22Jan2013-*/AOD
-# ABC -> FT_R_53_V18::All
-# D -> FT_R_53_V21::All
-#Dataset:
-# /MuOnia/Run2012A-22Jan2013-v1/AOD
-# /MuOnia/Run2012B-22Jan2013-v1/AOD
-# /MuOnia/Run2012C-22Jan2013-v1/AOD
-# /MuOnia/Run2012D-22Jan2013-v1/AOD
-
-#Global Tags 2017 ReReco Nov17 CMSSW_9_4_0
-#/Charmonium/Run2017*-17Nov2017-*/MINIAOD -> 9_4_0
-# BCDE -> 94X_dataRun2_ReReco_EOY17_v1
-# F -> 94X_dataRun2_ReReco_EOY17_v2
-# Dataset:
-#  /Charmonium/Run2017C-17Nov2017-v1/MINIAOD
-#  /Charmonium/Run2017D-17Nov2017-v1/MINIAOD
-#  /Charmonium/Run2017E-17Nov2017-v1/MINIAOD
-#  /Charmonium/Run2017F-17Nov2017-v1/MINIAOD
-#  /Charmonium/Run2017B-17Nov2017-v1/MINIAOD
-
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")

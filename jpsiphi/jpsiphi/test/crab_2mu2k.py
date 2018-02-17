@@ -33,20 +33,13 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR', 'T3_US_UCSB',
  'T3_US_UMD']
 
-
 datasetnames = {
-
-"B1" :  datasetbase + "/Run2016B-03Feb2017_ver1-v1/MINIAOD",
-"B2" :  datasetbase + "/Run2016B-03Feb2017_ver2-v2/MINIAOD",
-"C" :  datasetbase + "/Run2016C-03Feb2017-v1/MINIAOD",
-"D" :  datasetbase + "/Run2016D-03Feb2017-v1/MINIAOD",
-"E" :  datasetbase + "/Run2016E-03Feb2017-v1/MINIAOD",
-"F" :  datasetbase + "/Run2016F-03Feb2017-v1/MINIAOD",
-"G" :  datasetbase + "/Run2016G-03Feb2017-v1/MINIAOD",
-"H1" :  datasetbase + "/Run2016H-03Feb2017_ver2-v1/MINIAOD",
-"H2" :  datasetbase + "/Run2016H-03Feb2017_ver3-v1/MINIAOD"
+"B" :  datasetbase + "/Run2017B-17Nov2017-v1/MINIAOD",
+"C" :  datasetbase + "/Run2017C-17Nov2017-v1/MINIAOD",
+"D" :  datasetbase + "/Run2017D-17Nov2017-v1/MINIAOD",
+"E" :  datasetbase + "/Run2017E-17Nov2017-v1/MINIAOD",
+"F" :  datasetbase + "/Run2017F-17Nov2017-v1/MINIAOD",
 }
-
 
 runNumber = [
 #'274094-274240',
