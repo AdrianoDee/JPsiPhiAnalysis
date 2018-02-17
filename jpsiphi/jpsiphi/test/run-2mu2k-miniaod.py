@@ -156,7 +156,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     PFCandidates = cms.InputTag('packedPFCandidates'),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-    DiMuonDiTrakMassCuts_ = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(0.493677,0.493677),         # traks masses
     OnlyBest  = cms.bool(False)
 )
