@@ -1,9 +1,9 @@
-// -*- C++ -*-
+Dimuon// -*- C++ -*-
 //
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
 //
-// Description: Dump  Onia(mu+ mu-)  decays
+// Description: Dump  Dimuon(mu+ mu-)  decays
 //
 // Author:  Alberto Sanchez Hernandez
 //
@@ -64,7 +64,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
         edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
         edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
         int  pdgid_;
-        std::vector<double> OniaMassCuts_;
+        std::vector<double> DimuonMassCuts_;
 	bool isMC_;
         bool OnlyBest_;
         bool OnlyGen_;
@@ -73,7 +73,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	UInt_t    run;
 	ULong64_t event;
         UInt_t    lumiblock;
-        UInt_t    nonia;
+        UInt_t    ndimuon;
         UInt_t    nmuons;
         UInt_t    trigger;
         Int_t     charge;
@@ -95,7 +95,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
 	UInt_t numPrimaryVertices;
 
-	TTree *onia_tree;
+	TTree *dimuon_tree;
 
         Int_t mother_pdgId;
         Int_t dimuon_pdgId;
@@ -116,51 +116,53 @@ DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-pdgid_(iConfig.getParameter<uint32_t>("onia_pdgid")),
-OniaMassCuts_(iConfig.getParameter<std::vector<double>>("onia_mass_cuts")),
+pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
+DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
 {
   edm::Service < TFileService > fs;
-  onia_tree = fs->make < TTree > ("oniaTree", "Tree of DiMuon");
+  dimuon_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
 
-  onia_tree->Branch("run",      &run,      "run/i");
-  onia_tree->Branch("event",    &event,    "event/l");
-  onia_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
+  dimuon_tree->Branch("run",      &run,      "run/i");
+  dimuon_tree->Branch("event",    &event,    "event/l");
+  dimuon_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
 
   if (!OnlyGen_) {
-    onia_tree->Branch("nonia",    &nonia,    "nonia/i");
-    onia_tree->Branch("nmuons",   &nmuons,   "nmuons/i");
-    onia_tree->Branch("trigger",  &trigger,  "trigger/i");
-    onia_tree->Branch("charge",   &charge,   "charge/I");
+    dimuon_tree->Branch("ndimuon",    &ndimuon,    "ndimuon/i");
+    dimuon_tree->Branch("nmuons",   &nmuons,   "nmuons/i");
+    dimuon_tree->Branch("trigger",  &trigger,  "trigger/i");
+    dimuon_tree->Branch("charge",   &charge,   "charge/I");
 
-    onia_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
-    onia_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
-    onia_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
+    dimuon_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
 
-    onia_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
-    onia_tree->Branch("vProb",     &vProb,      "vProb/F");
-    onia_tree->Branch("DCA",       &DCA,        "DCA/F");
-    onia_tree->Branch("ppdlPV",    &ppdlPV,     "ppdlPV/F");
-    onia_tree->Branch("ppdlErrPV", &ppdlErrPV,  "ppdlErrPV/F");
-    onia_tree->Branch("ppdlBS",    &ppdlBS,     "ppdlBS/F");
-    onia_tree->Branch("ppdlErrBS", &ppdlErrBS,  "ppdlErrBS/F");
-    onia_tree->Branch("cosAlpha",  &cosAlpha,   "cosAlpha/F");
-    onia_tree->Branch("lxyPV",     &lxyPV,      "lxyPV/F");
-    onia_tree->Branch("lxyBS",     &lxyBS,      "lxyBS/F");
+    dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
+    dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
+    dimuon_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
-    onia_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
+    dimuon_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
+    dimuon_tree->Branch("vProb",     &vProb,      "vProb/F");
+    dimuon_tree->Branch("DCA",       &DCA,        "DCA/F");
+    dimuon_tree->Branch("ppdlPV",    &ppdlPV,     "ppdlPV/F");
+    dimuon_tree->Branch("ppdlErrPV", &ppdlErrPV,  "ppdlErrPV/F");
+    dimuon_tree->Branch("ppdlBS",    &ppdlBS,     "ppdlBS/F");
+    dimuon_tree->Branch("ppdlErrBS", &ppdlErrBS,  "ppdlErrBS/F");
+    dimuon_tree->Branch("cosAlpha",  &cosAlpha,   "cosAlpha/F");
+    dimuon_tree->Branch("lxyPV",     &lxyPV,      "lxyPV/F");
+    dimuon_tree->Branch("lxyBS",     &lxyBS,      "lxyBS/F");
+
+    dimuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "DiMuonRootupler::DiMuonRootupler: Onia id " << pdgid_ << std::endl;
-     onia_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
-     onia_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
-     onia_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-     onia_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
-     onia_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
+     std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+     dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
+     dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
+     dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
+     dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
+     dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
   }
   genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
@@ -242,7 +244,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   dimuon_pdgId = 0;
   mother_pdgId = 0;
-  nonia  = 0;
+  ndimuon  = 0;
   nmuons = 0;
 
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -262,18 +264,18 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
-      const reco::Candidate *aonia = &(*pruned)[i];
-      if ( (abs(aonia->pdgId()) == pdgid_) && (aonia->status() == 2) ) {
+      const reco::Candidate *adimuon = &(*pruned)[i];
+      if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
         int foundit = 1;
-        dimuon_pdgId = aonia->pdgId();
+        dimuon_pdgId = adimuon->pdgId();
         for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
           const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
           const reco::Candidate * d = &(*packed)[j];
-          if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(aonia , motherInPrunedCollection) ) {
+          if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
             gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
             foundit++;
           }
-          if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(aonia , motherInPrunedCollection) ) {
+          if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
             gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
             foundit++;
           }
@@ -281,7 +283,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         }
         if ( foundit == 3 ) {
           gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
-          mother_pdgId  = GetAncestor(aonia)->pdgId();
+          mother_pdgId  = GetAncestor(adimuon)->pdgId();
           break;
         } else dimuon_pdgId = 0;
       }  // if ( p_id
@@ -289,14 +291,14 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
     if ( ! dimuon_pdgId ) std::cout << "DiMuonRootupler: does not found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
-  float OniaMassMax_ = OniaMassCuts_[1];
-  float OniaMassMin_ = OniaMassCuts_[0];
+  float DimuonMassMax_ = DimuonMassCuts_[1];
+  float DimuonMassMin_ = DimuonMassCuts_[0];
 
   bool already_stored = false;
   if ( ! OnlyGen_ ) { // we will look for dimuons, then for muons
     if ( dimuons.isValid() && !dimuons->empty()) {
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
-        if (dimuonCand->mass() > OniaMassMin_ && dimuonCand->mass() < OniaMassMax_ && dimuonCand->charge() == 0) {
+        if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < OniaMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
           reco::Candidate::LorentzVector vP = dimuonCand->daughter("muon1")->p4();
           reco::Candidate::LorentzVector vM = dimuonCand->daughter("muon2")->p4();
@@ -316,14 +318,15 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           ppdlBS = dimuonCand->userFloat("ppdlBS");
           ppdlErrBS = dimuonCand->userFloat("ppdlErrBS");
           cosAlpha = dimuonCand->userFloat("cosAlpha");
+          tMatch = dimuonCand->userInt("isTriggerMatched");
           charge = dimuonCand->charge();
           TVector3 pperp(dimuonCand->px(),dimuonCand->py(),0);
           lxyPV = ppdlPV * pperp.Perp() / dimuonCand->mass();
           lxyBS = ppdlBS * pperp.Perp() / dimuonCand->mass();
-          nonia++;
+          ndimuon++;
           if (OnlyBest_) break;
           else {
-            onia_tree->Fill();   // be aware, we are storing all combinations
+            dimuon_tree->Fill();   // be aware, we are storing all combinations
             already_stored = true;
           }
         }
@@ -335,8 +338,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   if ( !already_stored ) {  // we have to make sure, we are not double storing an combination
     if ( !isMC_ ) {
-      if ( nonia > 0 ) onia_tree->Fill();   // if not MC filter out
-    } else onia_tree->Fill();
+      if ( ndimuon > 0 ) dimuon_tree->Fill();   // if not MC filter out
+    } else dimuon_tree->Fill();
   }
 }
 
