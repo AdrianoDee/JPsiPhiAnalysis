@@ -70,7 +70,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         )
 
 
-process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
+process.softMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
    cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
@@ -82,7 +82,7 @@ process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
    filter = cms.bool(True)
 )
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('oniaSelectedMuons'),
+        muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -134,37 +134,13 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     TreeName = cms.string('JPsi Phi Tree')
 )
 
-# process.Phi2KKPAT = cms.EDProducer('Phi2KKPAT',
-#   kaons = cms.InputTag("patSelectedTracks"),
-#   beamSpotTag = cms.InputTag("offlineBeamSpot"),
-#   primaryVertexTag = cms.InputTag("offlinePrimaryVertices"),
-#   OniaTag = cms.InputTag("onia2MuMuPAT"),                      ## Use Onia2MuMu as seed for PV, only tracks in this PV are used, PV=0 is used otherwise
-#   higherPuritySelection = cms.string(""),                      ## At least one kaon must pass this selection
-#   lowerPuritySelection  = cms.string(""),                      ## BOTH kaons must pass this selection
-#   dikaonSelection  = cms.string("0.85 < mass && mass < 1.2 && charge==0 && userFloat('deltar') < 0.7"),  ## The dikaon must pass this selection before vertexing
-#   addCommonVertex = cms.bool(True),                            ## Embed the full reco::Vertex out of the common vertex fit
-#   resolvePileUpAmbiguity = cms.bool(True)                      ## Order PVs by their vicinity to the Phi vertex, not by sumPt
-# )
-
-# process.rootupleKK = cms.EDAnalyzer('Phi2KKRootupler',
-#                           dikaons = cms.InputTag("Phi2KKPAT"),
-#                           kaons = cms.InputTag("patSelectedTracks"),
-#                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-#                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-# 			              TestFilterNames =  filters,
-#                           kk_mass_cuts = cms.vdouble(0.85,1.2),
-#                           isMC = cms.bool(False),
-#                           OnlyBest = cms.bool(False),
-#                           OnlyGen = cms.bool(False)
-#                           )
-
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           dimuons = cms.InputTag("JPsi2MuMuFilter"),
                           muons = cms.InputTag("replaceme"),
                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-                          onia_pdgid = cms.uint32(443),
-                          onia_mass_cuts = cms.vdouble(2.5,3.5),
+                          dimuon_pdgid = cms.uint32(443),
+                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
                           isMC = cms.bool(False),
                           OnlyBest = cms.bool(False),
                           OnlyGen = cms.bool(False),
@@ -174,7 +150,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
                      # process.slimmedPFCandsWithTriggerSequence *
-                     process.oniaSelectedMuons *
+                     process.softMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *

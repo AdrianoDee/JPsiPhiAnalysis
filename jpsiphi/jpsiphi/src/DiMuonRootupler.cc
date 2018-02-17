@@ -62,51 +62,51 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuon_Label;
-        edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
-        edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-        int  pdgid_;
-        std::vector<double> DimuonMassCuts_;
+  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
+  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  int  pdgid_;
+  std::vector<double> DimuonMassCuts_;
 	bool isMC_;
-        bool OnlyBest_;
-        bool OnlyGen_;
-        std::vector<std::string>                            HLTs_;
+  bool OnlyBest_;
+  bool OnlyGen_;
+  std::vector<std::string>  HLTs_;
 
 	UInt_t    run;
 	ULong64_t event;
-        UInt_t    lumiblock;
-        UInt_t    ndimuon;
-        UInt_t    nmuons;
-        UInt_t    trigger;
-        UInt_t    tMatch;
-        Int_t     charge;
+  UInt_t    lumiblock;
+  UInt_t    ndimuon;
+  UInt_t    nmuons;
+  UInt_t    trigger;
+  UInt_t    tMatch;
+  Int_t     charge;
 
 	TLorentzVector dimuon_p4;
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
 
-        Float_t MassErr;
-        Float_t vProb;
-        Float_t DCA;
-        Float_t ppdlPV;
-        Float_t ppdlErrPV;
-        Float_t ppdlBS;
-        Float_t ppdlErrBS;
-        Float_t cosAlpha;
-        Float_t lxyPV;
-        Float_t lxyBS;
+  Float_t MassErr;
+  Float_t vProb;
+  Float_t DCA;
+  Float_t ppdlPV;
+  Float_t ppdlErrPV;
+  Float_t ppdlBS;
+  Float_t ppdlErrBS;
+  Float_t cosAlpha;
+  Float_t lxyPV;
+  Float_t lxyBS;
 
 	UInt_t numPrimaryVertices;
 
 	TTree *dimuon_tree;
 
-        Int_t mother_pdgId;
-        Int_t dimuon_pdgId;
+  Int_t mother_pdgId;
+  Int_t dimuon_pdgId;
 	TLorentzVector gen_dimuon_p4;
 	TLorentzVector gen_muonP_p4;
 	TLorentzVector gen_muonM_p4;
 
-        edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
-        edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
+  edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
+  edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 
 };
 
