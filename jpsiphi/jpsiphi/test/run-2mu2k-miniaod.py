@@ -170,8 +170,8 @@ process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
 )
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-    dimuonditrk_cand_Label = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    dimuonditrk_rf_cand_Label = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
+    dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    dimuonditrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
