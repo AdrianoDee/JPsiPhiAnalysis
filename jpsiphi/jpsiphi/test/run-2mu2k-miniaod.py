@@ -9,8 +9,7 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4')
 
 #Global Tags 2012 ReReco Jan13 CMSSW_5_3_7_patch5
 # /MuOnia/Run2012*-22Jan2013-*/AOD
@@ -45,7 +44,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
+        fileName = cms.string('rootuple-2016-dimuonditrak.root'),
 )
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
