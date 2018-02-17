@@ -1,4 +1,4 @@
-Dimuon// -*- C++ -*-
+// -*- C++ -*-
 //
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
