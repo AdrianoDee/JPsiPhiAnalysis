@@ -69,26 +69,6 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-### unpack them
-process.unpackTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
-  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
-  triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
-  unpackFilterLabels          = cms.bool( True )
-)
-
-### then perform a match for all HLT triggers of interest
-PATmuonTriggerMatchID = cms.EDProducer( "PATTriggerMatcherDRDPtLessByR",
-    src     = cms.InputTag( "slimmedMuons" ),
-    matched = cms.InputTag( "unpackTriggers" ),
-    matchedCuts = cms.string('type( "TriggerL1Mu" ) || type( "TriggerMuon" )'),
-    maxDPtRel = cms.double( 10.0 ),
-    maxDeltaR = cms.double( 0.1 ),
-    resolveAmbiguities    = cms.bool( True ),
-    resolveByMatchQuality = cms.bool( True )
-)
-
-PATmuonMatchHLTL2   = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltL2MuonCandidates")'), maxDeltaR = 0.3, maxDPtRel = 10.0)           #maxDeltaR Changed accordingly to Zoltan tuning. It was: 1.2
-
 
 process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
