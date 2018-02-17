@@ -353,10 +353,10 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuonditrk_ctauErrPV = dimuonditrk_rf_cand.userFloat("ctauErrPV");
       dimuonditrk_charge    = dimuonditrk_cand.charge();
 
-      dimuonditrk_rf_p4.SetPtEtaDiTrakM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
-      dimuon_rf_p4.SetPtEtaDiTrakM(dimuonditrk_rf_cand.daughter("onia")->pt(),dimuonditrk_rf_cand.daughter("onia")->eta(),
+      dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
+      dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("onia")->pt(),dimuonditrk_rf_cand.daughter("onia")->eta(),
                               dimuonditrk_rf_cand.daughter("onia")->phi(),dimuonditrk_rf_cand.daughter("onia")->mass());
-      ditrak_rf_p4.SetPtEtaDiTrakM(dimuonditrk_rf_cand.daughter("ditrak")->pt(),dimuonditrk_rf_cand.daughter("ditrak")->eta(),
+      ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("ditrak")->pt(),dimuonditrk_rf_cand.daughter("ditrak")->eta(),
                               dimuonditrk_rf_cand.daughter("ditrak")->phi(),dimuonditrk_rf_cand.daughter("ditrak")->mass());
 
       onia_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("onia"));
@@ -370,14 +370,14 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
          vM = onia_cand_rf->daughter("muon1")->p4();
       }
 
-      muonp_rf_p4.SetPtEtaDiTrakM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-      muonn_rf_p4.SetPtEtaDiTrakM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+      muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
+      muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
 
       reco::Candidate::LorentzVector kP = ditrak_cand_rf->daughter("trakP")->p4();
       reco::Candidate::LorentzVector kM = ditrak_cand_rf->daughter("trakN")->p4();
 
-      kaonp_rf_p4.SetPtEtaDiTrakM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
-      kaonn_rf_p4.SetPtEtaDiTrakM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
+      kaonp_rf_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
+      kaonn_rf_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
 
       //unref corresponding
 
@@ -413,19 +413,19 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       muonP_type       = muonP->type();
       muonN_type       = muonN->type();
 
-      muonp_p4.SetPtEtaDiTrakM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-      muonn_p4.SetPtEtaDiTrakM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+      muonp_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
+      muonn_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
 
       kP = ditrak_cand->daughter("trakP")->p4();
       kM = ditrak_cand->daughter("trakN")->p4();
 
-      kaonp_p4.SetPtEtaDiTrakM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
-      kaonn_p4.SetPtEtaDiTrakM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
+      kaonp_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
+      kaonn_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
 
       //double kmass = 0.4936770;
-      dimuonditrk_p4.SetPtEtaDiTrakM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());
-      dimuon_p4.SetPtEtaDiTrakM(onia_cand->pt(),onia_cand->eta(),onia_cand->phi(),onia_cand->mass());
-      ditrak_p4.SetPtEtaDiTrakM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
+      dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());
+      dimuon_p4.SetPtEtaPhiM(onia_cand->pt(),onia_cand->eta(),onia_cand->phi(),onia_cand->mass());
+      ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
 
       dimuon_vProb        = onia_cand->userFloat("vProb");
       dimuon_vChi2        = onia_cand->userFloat("vNChi2");
