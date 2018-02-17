@@ -26,8 +26,8 @@ process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-PsiTrakTrakRootupler.root'),
 )
 
-process.load("mmkk.mmkk.slimmedMuonsTriggerMatcher2017_cfi")
-process.load("mmkk.mmkk.slimmedTracksTriggerMatcher2017_cfi")
+process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
+process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 hltList = [
 #Phi
