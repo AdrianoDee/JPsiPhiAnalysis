@@ -42,7 +42,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   std::vector<double> DiMuonMassCuts_;
   std::vector<double> TrakTrakMassCuts_;
-  std::vector<double> DiMuonTrakTrakMassCuts_;
+  std::vector<double> DiMuonDiTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
 
@@ -54,7 +54,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
                                                 const pat::PackedCandidate& trak2);
   int candidates;
   int nevents;
-  int nDiMuon;
+  int ndimuon;
   int nreco;
 };
 
