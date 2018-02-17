@@ -166,20 +166,17 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     MuMuTT.push_back((*theB).build(&JpsiTk[0]));
     MuMuTT.push_back((*theB).build(&JpsiTk[1]));
 
-    if(!trakP->hasTrackDetails())
-      continue;
-    else if(trakP->bestTrack())
+
+    if(trakP->bestTrack())
       MuMuTT.push_back((*theB).build(*(trakP->bestTrack()))); // K+
     else
-      MuMuTT.push_back((*theB).build((trakP->pseudoTrack()))); // K+
+      continue; // K+
 
 
-    if(!trakN->hasTrackDetails())
-      continue;
-    else if(trakN->bestTrack())
+    if(trakN->bestTrack())
       MuMuTT.push_back((*theB).build(*(trakN->bestTrack()))); // K+
     else
-      MuMuTT.push_back((*theB).build((trakN->pseudoTrack()))); // K+
+      continue; //no track information
 
     const reco::Vertex thePrimaryV = *dimuonC->userData<reco::Vertex>("PVwithmuons");
 
