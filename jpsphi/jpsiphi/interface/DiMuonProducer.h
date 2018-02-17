@@ -1,5 +1,5 @@
-#ifndef HeavyFlavorAnalysis_DiMuonProducer_DiMuonProducerPAT_h
-#define HeavyFlavorAnalysis_DiMuonProducer_DiMuonProducerPAT_h
+#ifndef JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerPAT_h
+#define JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerPAT_h
 
 
 // system include files
@@ -69,22 +69,4 @@ class DiMuonProducerPAT : public edm::EDProducer {
 
 };
 
-namespace pat
-{
-  typedef PATTriggerMatchEmbedder< CompositeCandidate > PATTriggerMatchPFEmbedder;
-}
-
-//
-// constants, enums and typedefs
-//
-
-
-//
-// static data member definitions
-//
-
-//
-// constructors and destructor
-//
-DEFINE_FWK_MODULE( PATTriggerMatchPFEmbedder );
 #endif
