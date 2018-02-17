@@ -1,6 +1,6 @@
 #input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
 ouput_filename = 'rootuple.root'
-input_filename = 'file:FABC2662-9AC8-E711-BF94-02163E019BB9.root'
+input_filename = 'file:20E77405-529D-E711-B55D-A4BF01011BF7.root '
 
 import FWCore.ParameterSet.Config as cms
 process = cms.Process("Rootuple")

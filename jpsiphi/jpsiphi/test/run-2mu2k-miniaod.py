@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
-input_file = "file:FABC2662-9AC8-E711-BF94-02163E019BB9.root "
+input_file = "file:20E77405-529D-E711-B55D-A4BF01011BF7.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
