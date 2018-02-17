@@ -3,9 +3,10 @@
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
 //
-// Description: Dump  Dimuon(mu+ mu-)  decays
+// Description: Dimuon(mu+ mu-)  producer
 //
-// Author:  Alberto Sanchez Hernandez
+// Author:  Adriano Di Florio
+//    based on : Alberto Sanchez Hernandez Onia2MuMu code
 //
 
 // system include files
@@ -298,7 +299,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   if ( ! OnlyGen_ ) { // we will look for dimuons, then for muons
     if ( dimuons.isValid() && !dimuons->empty()) {
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
-        if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < OniaMassMax_ && dimuonCand->charge() == 0) {
+        if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
           reco::Candidate::LorentzVector vP = dimuonCand->daughter("muon1")->p4();
           reco::Candidate::LorentzVector vM = dimuonCand->daughter("muon2")->p4();
