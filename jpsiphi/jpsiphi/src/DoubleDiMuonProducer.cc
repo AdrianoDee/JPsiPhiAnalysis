@@ -1,4 +1,4 @@
-#include "jpsiphi/jpsiphi/interface/DoubleDiMuonProducer.h"
+#include "../interface/DoubleDiMuonProducer.h"
 
 DoubleDiMuonProducer::DoubleDiMuonProducer(const edm::ParameterSet& ps):
   HighDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("HighDiMuonCollection"))),

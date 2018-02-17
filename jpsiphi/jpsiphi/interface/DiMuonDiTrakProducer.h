@@ -1,13 +1,13 @@
 /**
    \file
-   Declaration of OniaPFPFProducer
+   Declaration of DiMuonDiTrakProducer
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
 */
 
-#ifndef __OniaPFPFProducer_h_
-#define __OniaPFPFProducer_h_
+#ifndef __DiMuonDiTrakProducer_h_
+#define __DiMuonDiTrakProducer_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -25,37 +25,37 @@
 #include <vector>
 
 /**
-   Create a HF candidate by mathing Onia(chi,psi,etc.) and a track (K, pi, etc.)
+   Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class OniaPFPFProducer : public edm::EDProducer {
+class DiMuonDiTrakProducer : public edm::EDProducer {
 
  public:
-  explicit OniaPFPFProducer(const edm::ParameterSet& ps);
+  explicit DiMuonDiTrakProducer(const edm::ParameterSet& ps);
 
  private:
 
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> OniaCollection_;
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> PFCandCollection_;
-  std::vector<double> OniaMassCuts_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
+  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
+  std::vector<double> DiMuonMassCuts_;
   std::vector<double> TrakTrakMassCuts_;
-  std::vector<double> OniaPFPFMassCuts_;
+  std::vector<double> DiMuonDiTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
-  const pat::CompositeCandidate makeOniaTTCandidate(const pat::CompositeCandidate& onia,
+  const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
   int candidates;
   int nevents;
-  int nonia;
+  int ndimuon;
   int nreco;
 };
 
-#endif // __OniaPFPFProducer_h_
+#endif // __DiMuonDiTrakProducer_h_

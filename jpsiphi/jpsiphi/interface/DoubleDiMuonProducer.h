@@ -1,13 +1,5 @@
-/**
-   \file
-   Declaration of OniaTrakTrakProducer
-
-   \author Alberto Sanchez-Hernandez
-   \date 2 Mar 2014
-*/
-
-#ifndef __PsiPhiFourMuonsProducer_h_
-#define __PsiPhiFourMuonsProducer_h_
+#ifndef __DoubleDiMuonProducer_h_
+#define __DoubleDiMuonProducer_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -27,31 +19,31 @@
    Create a HF candidate by mathing Onia(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class PsiPhiFourMuonsProducer : public edm::EDProducer {
+class DoubleDiMuonProducer : public edm::EDProducer {
 
  public:
-  explicit PsiPhiFourMuonsProducer(const edm::ParameterSet& ps);
+  explicit DoubleDiMuonProducer(const edm::ParameterSet& ps);
 
  private:
 
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> PsiCollection_;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> PhiCollection_;
-  std::vector<double> JPsiMassCuts_;
-  std::vector<double> PhiMassCuts_;
-  std::vector<double> FourOniaMassCuts_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> HighDiMuonCollection_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> LowDiMuonCollection_;
+  std::vector<double> HighDiMuonMassCuts_;
+  std::vector<double> LowDiMuonMassCuts_;
+  std::vector<double> DoubleDiMuonMassCuts_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
 
-  const pat::CompositeCandidate makeCandidate(const pat::CompositeCandidate& phi,
-    const pat::CompositeCandidate& jpsi);
+  const pat::CompositeCandidate makeCandidate(const pat::CompositeCandidate& l,
+    const pat::CompositeCandidate& h);
 
   int candidates;
   int nevents;
-  int nPhi;
-  int nJps;
+  int nLdM;
+  int nHdM;
 
 };
 
