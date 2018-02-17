@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
-input_file = "file:FABC2662-9AC8-E711-BF94-02163E019BB9.root "
+input_file = "file:0EE0B583-7A9C-E711-82D7-B083FED00117.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -9,7 +9,8 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v11')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2017LegacyRepro_v4')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -23,92 +24,42 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-PsiTrakTrakRootupler.root'),
+        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
 )
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 hltList = [
-#Phi
- 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 'HLT_DoubleMu4_JpsiTrk_Displaced',
-'HLT_DoubleMu4_Jpsi_Displaced',
 'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-'HLT_Dimuon25_Jpsi',
+'HLT_Dimuon20_Jpsi',
+'HLT_Dimuon16_Jpsi',
+'HLT_Dimuon10_Jpsi_Barrel',
 ]
 
-#2016 tag 80X_dataRun2_2016SeptRepro_v7
+#2017 tag 80X_dataRun2_2017SeptRepro_v7
 
 hltpaths = cms.vstring(hltList)
 
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
-filters = cms.vstring(
-                                #PHI TRIGGERS FILTER
-                                #HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi
-                                'hltDiMuonGlbOrTrkFiltered0v2', #Phi
-                                #'hltDiMuonGlbOrTrk0zFiltered0p2v2',
-                                'hltDoubleMu2JpsiL3Filtered', ##JPsi
-                                #'hltMumuVtxProducerDoubleMu2Jpsi',
-                                'hltMumuFilterDoubleMu2Jpsi',
-                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                #'hltDoubleTrkmumuVtxProducerDoubleMu2Jpsi',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-                                #'hltJpsiTkAllConeTracksIterDoubleTrk',
-                                #'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-                                #HLT_Mu20_TkMu0_Phi
-                                #'hltL3fL1sMu16orMu18erorMu20L1f0L2f0L3Filtered20',
-                                #'hltDiMuonGlbFiltered20TrkFiltered0',
-                                'hltDiMuonGlb20Trk0DzFiltered0p2',
-                                #HLT_Dimuon14_Phi_Barrel_Seagulls
-                                #'hltDimuon14PhiBarrelnoCowL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon14PhiBarrelnoCow',
-                                'hltDisplacedmumuFilterDimuon14PhiBarrelnoCow',
-                                #HLT_Mu25_TkMu0_Phi
-                                #'hltL3fL1sMu16orMu18erorMu20L1f0L2f0L3Filtered20',
-                                #'hltDiMuonGlbFiltered25TrkFiltered0',
-                                'hltDiMuonGlb25Trk0DzFiltered0p2',
-                                #HLT_Dimuon24_Phi_noCorrL1
-                                #'hltDisplacedmumuFilterDimuon24PhiBarrelNoCorrL1',
-                                #'hltDisplacedmumuVtxProducerDimuon24PhiNoCorrL1',
-                                'hltDimuon24PhiNoCorrL1L3fL3Filtered',
-                                #JPSI Trigger Filters
-                                #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered'
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkAllConeTracksIter',
-                                #'hltJpsiTrkTrkVertexProducerPhiKstar',
-                                #'hltJpsiTkTkVertexFilterPhiKstar',
-                                #HLT_DoubleMu4_JpsiTrk_Displaced_v12
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkVertexProducer',
-                                #'hltJpsiTkVertexFilter',
-                                #HLT_DoubleMu4_Jpsi_Displaced
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #HLT_DoubleMu4_3_Jpsi_Displaced
-                                #'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu43Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                #HLT_Dimuon20_Jpsi_Barrel_Seagulls
-                                #'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon20JpsiBarrelnoCow',
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                #HLT_Dimuon25_Jpsi
-                                'hltDisplacedmumuFilterDimuon25Jpsis'
-                                #HLT_Dimuon0_Jpsi
-                                #'hltDimuon0JpsiL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDimuon0Jpsi',
-                                # 'hltDisplacedmumuFilterDimuon0Jpsi'
+filters = cms.vstring(#HLT_DoubleMu4_JpsiTrk_Displaced_v4
+                      'hltDoubleMu4JpsiDisplacedL3Filtered',
+                      'hltJpsiTkVertexFilter',
+                      #HLT_DoubleMu4_3_Jpsi_Displaced_v4
+                      'hltDoubleMu43JpsiDisplacedL3Filtered',
+                      'hltDisplacedmumuFilterDoubleMu43Jpsi',
+                      #HLT_Dimuon20_Jpsi_v3
+                      'hltDimuon20JpsiL3Filtered',
+                      'hltDisplacedmumuFilterDimuon20Jpsi',
+                      #HLT_Dimuon16_Jpsi_v3
+                      'hltDimuon16JpsiL3Filtered',
+                      'hltDisplacedmumuFilterDimuon16Jpsi',
+                      #HLT_Dimuon10_Jpsi_Barrel_v4
+                      'hltDimuon10JpsiBarrelL3Filtered',
+                      'hltDisplacedmumuFilterDimuon10JpsiBarrel'
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
@@ -118,7 +69,8 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
+
+process.softMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
    cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
@@ -130,7 +82,7 @@ process.oniaSelectedMuons = cms.EDFilter('PATMuonSelector',
    filter = cms.bool(True)
 )
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('oniaSelectedMuons'),
+        muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -182,37 +134,13 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     TreeName = cms.string('JPsi Phi Tree')
 )
 
-# process.Phi2KKPAT = cms.EDProducer('Phi2KKPAT',
-#   kaons = cms.InputTag("patSelectedTracks"),
-#   beamSpotTag = cms.InputTag("offlineBeamSpot"),
-#   primaryVertexTag = cms.InputTag("offlinePrimaryVertices"),
-#   OniaTag = cms.InputTag("onia2MuMuPAT"),                      ## Use Onia2MuMu as seed for PV, only tracks in this PV are used, PV=0 is used otherwise
-#   higherPuritySelection = cms.string(""),                      ## At least one kaon must pass this selection
-#   lowerPuritySelection  = cms.string(""),                      ## BOTH kaons must pass this selection
-#   dikaonSelection  = cms.string("0.85 < mass && mass < 1.2 && charge==0 && userFloat('deltar') < 0.7"),  ## The dikaon must pass this selection before vertexing
-#   addCommonVertex = cms.bool(True),                            ## Embed the full reco::Vertex out of the common vertex fit
-#   resolvePileUpAmbiguity = cms.bool(True)                      ## Order PVs by their vicinity to the Phi vertex, not by sumPt
-# )
-
-# process.rootupleKK = cms.EDAnalyzer('Phi2KKRootupler',
-#                           dikaons = cms.InputTag("Phi2KKPAT"),
-#                           kaons = cms.InputTag("patSelectedTracks"),
-#                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-#                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-# 			              TestFilterNames =  filters,
-#                           kk_mass_cuts = cms.vdouble(0.85,1.2),
-#                           isMC = cms.bool(False),
-#                           OnlyBest = cms.bool(False),
-#                           OnlyGen = cms.bool(False)
-#                           )
-
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           dimuons = cms.InputTag("JPsi2MuMuFilter"),
                           muons = cms.InputTag("replaceme"),
                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-                          onia_pdgid = cms.uint32(443),
-                          onia_mass_cuts = cms.vdouble(2.5,3.5),
+                          dimuon_pdgid = cms.uint32(443),
+                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
                           isMC = cms.bool(False),
                           OnlyBest = cms.bool(False),
                           OnlyGen = cms.bool(False),
@@ -222,7 +150,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
                      # process.slimmedPFCandsWithTriggerSequence *
-                     process.oniaSelectedMuons *
+                     process.softMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *
