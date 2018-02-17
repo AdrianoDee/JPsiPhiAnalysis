@@ -9,8 +9,20 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2017LegacyRepro_v4')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
+
+
+#Global Tags 2016 ReReco Nov17 CMSSW_9_4_0
+#/Charmonium/Run2017*-17Nov2017-*/MINIAOD -> 9_4_0
+# BCDE -> 94X_dataRun2_ReReco_EOY17_v1
+# F -> 94X_dataRun2_ReReco_EOY17_v2
+# Dataset:
+#  /Charmonium/Run2017C-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017D-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017E-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017F-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017B-17Nov2017-v1/MINIAOD
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -24,11 +36,11 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2016-dimuonditrak.root'),
+        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
 )
 
-process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
-# process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2016_cfi")
+process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
+# process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 hltList = [
 #JPsi
@@ -39,7 +51,7 @@ hltList = [
 'HLT_Dimuon10_Jpsi_Barrel',
 ]
 
-#2016 tag 80X_dataRun2_2016SeptRepro_v7
+#2017 tag 80X_dataRun2_2017SeptRepro_v7
 
 hltpaths = cms.vstring(hltList)
 
