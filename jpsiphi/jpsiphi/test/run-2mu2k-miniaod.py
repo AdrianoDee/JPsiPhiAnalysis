@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
-input_file = "file:0EE0B583-7A9C-E711-82D7-B083FED00117.root"
+input_file = "006425F0-6DED-E711-850C-0025904C66E8.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -9,8 +9,29 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2017LegacyRepro_v4')
-#process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
+
+#Global Tags 2012 ReReco Jan13 CMSSW_5_3_7_patch5
+# /MuOnia/Run2012*-22Jan2013-*/AOD
+# ABC -> FT_R_53_V18::All
+# D -> FT_R_53_V21::All
+#Dataset:
+# /MuOnia/Run2012A-22Jan2013-v1/AOD
+# /MuOnia/Run2012B-22Jan2013-v1/AOD
+# /MuOnia/Run2012C-22Jan2013-v1/AOD
+# /MuOnia/Run2012D-22Jan2013-v1/AOD
+
+#Global Tags 2017 ReReco Nov17 CMSSW_9_4_0
+#/Charmonium/Run2017*-17Nov2017-*/MINIAOD -> 9_4_0
+# BCDE -> 94X_dataRun2_ReReco_EOY17_v1
+# F -> 94X_dataRun2_ReReco_EOY17_v2
+# Dataset:
+#  /Charmonium/Run2017C-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017D-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017E-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017F-17Nov2017-v1/MINIAOD
+#  /Charmonium/Run2017B-17Nov2017-v1/MINIAOD
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -31,12 +52,15 @@ process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 hltList = [
+#Phi
+'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
+'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 'HLT_DoubleMu4_JpsiTrk_Displaced',
+'HLT_DoubleMu4_Jpsi_Displaced',
 'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi',
-'HLT_Dimuon16_Jpsi',
-'HLT_Dimuon10_Jpsi_Barrel',
+'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+'HLT_Dimuon25_Jpsi',
 ]
 
 #2017 tag 80X_dataRun2_2017SeptRepro_v7
@@ -45,21 +69,32 @@ hltpaths = cms.vstring(hltList)
 
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
-filters = cms.vstring(#HLT_DoubleMu4_JpsiTrk_Displaced_v4
-                      'hltDoubleMu4JpsiDisplacedL3Filtered',
-                      'hltJpsiTkVertexFilter',
-                      #HLT_DoubleMu4_3_Jpsi_Displaced_v4
-                      'hltDoubleMu43JpsiDisplacedL3Filtered',
-                      'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                      #HLT_Dimuon20_Jpsi_v3
-                      'hltDimuon20JpsiL3Filtered',
-                      'hltDisplacedmumuFilterDimuon20Jpsi',
-                      #HLT_Dimuon16_Jpsi_v3
-                      'hltDimuon16JpsiL3Filtered',
-                      'hltDisplacedmumuFilterDimuon16Jpsi',
-                      #HLT_Dimuon10_Jpsi_Barrel_v4
-                      'hltDimuon10JpsiBarrelL3Filtered',
-                      'hltDisplacedmumuFilterDimuon10JpsiBarrel'
+filters = cms.vstring(
+                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
+                                #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
+                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
+                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
+                                #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
+                                'hltDoubleMu4JpsiDisplacedL3Filtered'
+                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                'hltJpsiTkTkVertexFilterPhiKstar',
+                                #HLT_DoubleMu4_JpsiTrk_Displaced_v12
+                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
+                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                #'hltJpsiTkVertexProducer',
+                                #'hltJpsiTkVertexFilter',
+                                #HLT_DoubleMu4_Jpsi_Displaced
+                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
+                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
+                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                #HLT_DoubleMu4_3_Jpsi_Displaced
+                                #'hltDoubleMu43JpsiDisplacedL3Filtered',
+                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
+                                #HLT_Dimuon20_Jpsi_Barrel_Seagulls
+                                #'hltDimuon20JpsiBarrelnoCowL3Filtered',
+                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
+                                #HLT_Dimuon25_Jpsi
+                                'hltDisplacedmumuFilterDimuon25Jpsis'
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
