@@ -36,13 +36,13 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 
 datasetnames = {
 
-    "B1": datasetbase + "/Run2016B-07Aug17_ver2-v1/MINIAOD"
-    "B2": datasetbase + "/Run2016B-07Aug17_ver1-v1/MINIAOD"
-    "C" :  datasetbase + "/Run2016C-07Aug17-v1/MINIAOD"
-    "D" :  datasetbase + "/Run2016D-07Aug17-v1/MINIAOD"
-    "E" :  datasetbase + "/Run2016E-07Aug17-v1/MINIAOD"
-    "F" :  datasetbase + "/Run2016F-07Aug17-v1/MINIAOD"
-    "G" :  datasetbase + "/Run2016G-07Aug17-v1/MINIAOD"
+    "B1": datasetbase + "/Run2016B-07Aug17_ver2-v1/MINIAOD",
+    "B2": datasetbase + "/Run2016B-07Aug17_ver1-v1/MINIAOD",
+    "C" :  datasetbase + "/Run2016C-07Aug17-v1/MINIAOD",
+    "D" :  datasetbase + "/Run2016D-07Aug17-v1/MINIAOD",
+    "E" :  datasetbase + "/Run2016E-07Aug17-v1/MINIAOD",
+    "F" :  datasetbase + "/Run2016F-07Aug17-v1/MINIAOD",
+    "G" :  datasetbase + "/Run2016G-07Aug17-v1/MINIAOD",
     "H" :  datasetbase + "/Run2016H-07Aug17-v1/MINIAOD"
 
 }
