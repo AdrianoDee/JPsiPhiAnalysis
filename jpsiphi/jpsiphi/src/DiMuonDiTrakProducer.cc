@@ -8,7 +8,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& ps):
   DiMuonDiTrakMassCuts_(ps.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
-  product_name_(ps.getParameter<string>("Product"))
+  product_name_(ps.getParameter<std::string>("Product"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
