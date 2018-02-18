@@ -120,23 +120,44 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
       HLTFilters          = filters
 )
 
-process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
+process.PsiPiKProducer = cms.EDProducer('DiMuonDiTrakProducer',
+    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
+    PFCandidates = cms.InputTag('packedPFCandidates'),
+    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    TrakTrakMassCuts = cms.vdouble(0.75,1.04),  # phi mass window 1.019461 +/- .015
+    DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    MassTraks = cms.vdouble(pionmass,kaonmass),         # traks masses
+    OnlyBest  = cms.bool(False)
+    Product   = cms.string('DiMuonPiKCandidates')
+)
+
+process.PsiKPiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(0.75,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,pionmass),         # traks masses
-    OnlyBest  = cms.bool(False)
+    OnlyBest  = cms.bool(False).
+    Product   = cms.string('DiMuonKPiCandidates')
 )
 
-process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
-    DiMuonDiTrak        = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+process.PsiPiKFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
+    DiMuonDiTrak        = cms.InputTag('PsiPiKProducer','DiMuonPiKCandidates'),
+    DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
+    DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    MassTraks           = cms.vdouble(pionmass,kaonmass),         # traks masses
+    Product             = cms.string('DiMuonDiTrakCandidatesRef')
+)
+
+process.PsiKPiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
+    DiMuonDiTrak        = cms.InputTag('PsiKPiProducer','DiMuonKPiCandidates'),
     DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks           = cms.vdouble(kaonmass,pionmass),         # traks masses
     Product             = cms.string('DiMuonDiTrakCandidatesRef')
 )
+
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
