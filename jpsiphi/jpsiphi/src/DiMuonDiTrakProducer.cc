@@ -7,9 +7,10 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& ps):
   TrakTrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   DiMuonDiTrakMassCuts_(ps.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
-  OnlyBest_(ps.getParameter<bool>("OnlyBest"))
+  OnlyBest_(ps.getParameter<bool>("OnlyBest")),
+  product_name_(ps.getParameter<string>("Product"))
 {
-  produces<pat::CompositeCandidateCollection>("DiMuonDiTrakCandidates");
+  produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
   nevents = 0;
   ndimuon = 0;
@@ -84,7 +85,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& ese
   if ( ncombo != DiMuonTTCandColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiMuonTTCandColl->size()<<")"<< std::endl;
   if ( !dimuon->empty() )  ndimuon++;
   if ( ncombo > 0 ) nreco++;
-  event.put(std::move(DiMuonTTCandColl),"DiMuonDiTrakCandidates");
+  event.put(std::move(DiMuonTTCandColl),product_name_);
   nevents++;
 }
 
