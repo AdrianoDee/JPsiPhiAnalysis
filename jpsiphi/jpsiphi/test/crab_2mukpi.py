@@ -1,7 +1,8 @@
 import sys
 import os
 
-jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
+#jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
+jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -34,7 +35,6 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_US_UMD']
 
 datasetnames = {
-
 "F" :  datasetbase + '/Run2017F-17Nov2017-v1/MINIAOD',
 "B" : datasetbase + '/Run2017B-17Nov2017-v1/MINIAOD',
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',

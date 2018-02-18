@@ -2,7 +2,7 @@ import sys
 import os
 
 jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
-
+"Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
