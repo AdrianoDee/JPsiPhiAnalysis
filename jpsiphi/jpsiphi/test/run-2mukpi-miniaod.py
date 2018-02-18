@@ -126,7 +126,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    MassTraks = cms.vdouble(kaonmass,pionmass),         # traks masses
     OnlyBest  = cms.bool(False)
 )
 
@@ -134,7 +134,7 @@ process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
     DiMuonDiTrak        = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks           = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    MassTraks           = cms.vdouble(kaonmass,pionmass),         # traks masses
     Product             = cms.string('DiMuonDiTrakCandidatesRef')
 )
 
