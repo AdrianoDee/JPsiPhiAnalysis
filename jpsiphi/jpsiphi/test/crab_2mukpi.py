@@ -78,7 +78,7 @@ config.General.requestName      = 'miniaod_2mukpi_' + dataset[0]+'_'+dataset[1]+
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2016/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2mukpi-miniaod.py'
+config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2017/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2mukpi-miniaod.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
