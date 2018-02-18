@@ -127,7 +127,7 @@ process.PsiPiKProducer = cms.EDProducer('DiMuonDiTrakProducer',
     TrakTrakMassCuts = cms.vdouble(0.75,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(pionmass,kaonmass),         # traks masses
-    OnlyBest  = cms.bool(False)
+    OnlyBest  = cms.bool(False),
     Product   = cms.string('DiMuonPiKCandidates')
 )
 
@@ -138,7 +138,7 @@ process.PsiKPiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     TrakTrakMassCuts = cms.vdouble(0.75,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,pionmass),         # traks masses
-    OnlyBest  = cms.bool(False).
+    OnlyBest  = cms.bool(False),
     Product   = cms.string('DiMuonKPiCandidates')
 )
 
