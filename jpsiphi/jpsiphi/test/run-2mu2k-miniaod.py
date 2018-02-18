@@ -26,7 +26,7 @@ process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-2016-dimuonditrak.root'),
 )
 
-process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
+process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
