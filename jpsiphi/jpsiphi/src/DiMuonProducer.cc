@@ -37,12 +37,12 @@
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 
 DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
-muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
-thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
-higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
-lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
-dimuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),
+// muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
+// thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
+// thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+// higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
+// lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
+// dimuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 addMuonlessPrimaryVertex_(iConfig.getParameter<bool>("addMuonlessPrimaryVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
