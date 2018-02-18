@@ -147,7 +147,7 @@ process.PsiPiKFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
     DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks           = cms.vdouble(pionmass,kaonmass),         # traks masses
-    Product             = cms.string('DiMuonDiTrakCandidatesRef')
+    Product             = cms.string('DiMuonPiKCandidatesRef')
 )
 
 process.PsiKPiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
@@ -155,13 +155,13 @@ process.PsiKPiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
     DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks           = cms.vdouble(kaonmass,pionmass),         # traks masses
-    Product             = cms.string('DiMuonDiTrakCandidatesRef')
+    Product             = cms.string('DiMuonKPiCandidatesRef')
 )
 
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-    dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    dimuonditrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
+process.rootupleKPi = cms.EDAnalyzer('DiMuonDiTrakRootupler',
+    dimuonditrk_cand = cms.InputTag('PsiKPiProducer','DiMuonKPiCandidates'),
+    dimuonditrk_rf_cand = cms.InputTag("PsiKPiFitter","DiMuonKPiCandidatesRef"),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
@@ -169,21 +169,21 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     OnlyBest = cms.bool(False),
     HLTs = hltpaths,
     Filters = filters,
-    TreeName = cms.string('JPsi Phi Tree')
+    TreeName = cms.string('DiMuon KPi Tree')
 )
 
-process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
-                          dimuons = cms.InputTag("JPsi2MuMuFilter"),
-                          muons = cms.InputTag("replaceme"),
-                          primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-                          TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-                          dimuon_pdgid = cms.uint32(443),
-                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-                          isMC = cms.bool(False),
-                          OnlyBest = cms.bool(False),
-                          OnlyGen = cms.bool(False),
-                          HLTs = hltpaths
-                          )
+process.rootuplePiK = cms.EDAnalyzer('DiMuonDiTrakRootupler',
+    dimuonditrk_cand = cms.InputTag('PsiPiKProducer','DiMuonPiKCandidates'),
+    dimuonditrk_rf_cand = cms.InputTag("PsiPiKFitter","DiMuonPiKCandidatesRef"),
+    beamSpotTag = cms.InputTag("offlineBeamSpot"),
+    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    isMC = cms.bool(False),
+    OnlyBest = cms.bool(False),
+    HLTs = hltpaths,
+    Filters = filters,
+    TreeName = cms.string('DiMuon PiK Tree')
+)
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
@@ -191,7 +191,9 @@ process.p = cms.Path(process.triggerSelection *
                      process.softMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
-                     process.PsiPhiProducer *
-                     process.PsiPhiFitter *
-                     process.rootuple *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+                     process.PsiKPiProducer *
+                     process.PsiPiKProducer *
+                     process.PsiKPiFitter *
+                     process.PsiPiKFitter *
+                     process.rootuplePiK *
+                     process.rootupleKPi)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
