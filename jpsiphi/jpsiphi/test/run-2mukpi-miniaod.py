@@ -9,7 +9,7 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))

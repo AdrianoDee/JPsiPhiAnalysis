@@ -10,7 +10,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -127,7 +127,8 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
-    OnlyBest  = cms.bool(False)
+    OnlyBest  = cms.bool(False),
+    Product = cms.string("DiMuonDiTrakCandidates")
 )
 
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
