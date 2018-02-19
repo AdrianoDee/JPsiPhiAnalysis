@@ -21,7 +21,6 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
-#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
@@ -61,15 +60,15 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
 	// ----------member data ---------------------------
 	std::string file_name;
-	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuon_Label;
-  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+	std::string dimuon_Label;
+  std::string primaryVertices_Label;
+  std::string triggerResults_Label;
   int  pdgid_;
   std::vector<double> DimuonMassCuts_;
 	bool isMC_;
   bool OnlyBest_;
   bool OnlyGen_;
-  std::vector<std::string>  HLTs_;
+  std::vector<std::string>  HLTs_, Filters_;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -105,8 +104,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector gen_muonP_p4;
 	TLorentzVector gen_muonM_p4;
 
-  edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
-  edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
+  std::string  genCands_;
 
 };
 
@@ -115,15 +113,16 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 //
 
 DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
-dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
-primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
-triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+dimuon_Label(iConfig.getParameter<std::string>("dimuons")),
+primaryVertices_Label(iConfig.getParameter<std::string>("primaryVertices")),
+triggerResults_Label(iConfig.getParameter<std::string>("TriggerResults")),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
   dimuon_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
@@ -205,7 +204,7 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
   UInt_t trigger = 0;
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+  iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
@@ -231,10 +230,10 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
 void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
-  iEvent.getByToken(dimuon_Label,dimuons);
+  iEvent.getByLabel(dimuon_Label,dimuons);
 
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+  iEvent.getByLabel(primaryVertices_Label, primaryVertices_handle);
 
   run       = iEvent.id().run();
   event     = iEvent.id().event();
@@ -258,11 +257,11 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   // Pruned particles are the one containing "important" stuff
   edm::Handle<reco::GenParticleCollection> pruned;
-  iEvent.getByToken(genCands_, pruned);
+  iEvent.getByLabel(genCands_, pruned);
 
   // Packed particles are all the status 1. The navigation to pruned is possible (the other direction should be made by hand)
   edm::Handle<pat::PackedGenParticleCollection> packed;
-  iEvent.getByToken(packCands_,  packed);
+  iEvent.getByLabel(packCands_,  packed);
 
   if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
