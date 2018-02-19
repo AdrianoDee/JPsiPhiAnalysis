@@ -51,6 +51,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
   revtxtrks_ = "generalTracks"; //if that is not true, we will raise an exception
   revtxbs_ = "offlineBeamSpot";
+  genCands_ = "genParticles";
 
   produces<pat::CompositeCandidateCollection>();
 }
@@ -629,7 +630,6 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
               } else {
                 edm::Handle<reco::GenParticleCollection> theGenParticles;
-                edm::EDGetTokenT<reco::GenParticleCollection> genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"genParticles");
                 iEvent.getByLabel(genCands_, theGenParticles);
                 if (theGenParticles.isValid()){
                   for(size_t iGenParticle=0; iGenParticle<theGenParticles->size();++iGenParticle) {

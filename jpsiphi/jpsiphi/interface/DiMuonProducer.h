@@ -51,7 +51,7 @@ class DiMuonProducerPAT : public edm::EDProducer {
   // ----------member data ---------------------------
  private:
 
-  std::string revtxtrks_, revtxbs_;
+  std::string revtxtrks_, revtxbs_, genCands_;
   std::string muons_, thebeamspot_, thePVs_;
 
   StringCutObjectSelector<pat::Muon> higherPuritySelection_;
