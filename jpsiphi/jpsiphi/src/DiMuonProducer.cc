@@ -50,7 +50,7 @@ addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
   //revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
-  revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
+  // revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
   produces<pat::CompositeCandidateCollection>();
 }
 
@@ -112,67 +112,67 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> oniaOutput(new pat::CompositeCandidateCollection);
 
-  ///////////////////////////////////////////////////////////////
-  /// Get the HLT results
-
-  std::map < std::string,int > HLTPreScaleMap;
-  edm::Handle<edm::TriggerResults> hltresults;
-  try {
-    iEvent.getByLabel(hlTriggerResults_, hltresults);
-  }
-  catch ( ... ) {
-    std::cout << "Couldn't get handle on HLT Trigger!" << std::endl;
-  }
-  if (!hltresults.isValid())
-    std::cout << "No Trigger Results!" << std::endl;
-  else
-  {
-    int ntrigs = hltresults->size();
-    if (ntrigs==0){
-      std::cout << "No trigger name given in TriggerResults of the input " << endl;
-    }
-
-    /// get hold of trigger names - based on TriggerResults object!
-    edm::TriggerNames triggerNames_;
-    triggerNames_ = iEvent.triggerNames(*hltresults);
-    int ntriggers = TriggersForMatching_.size();
-    for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++) { // initialize MatchingTriggerResult array
-      MatchingTriggerResult[MatchTrig] = 0;
-    }
-
-    for (int itrig = 0; itrig < ntrigs; itrig++) {
-      string trigName = triggerNames_.triggerName(itrig);
-      int hltflag = (*hltresults)[itrig].accept();
-      if (Debug_) if (hltflag) cout << trigName << " " <<hltflag <<endl;
-      trigRes->push_back(hltflag);
-      trigNames->push_back(trigName);
-
-      int ntriggers = TriggersForMatching_.size();
-      for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++) {
-        if (TriggersForMatching_[MatchTrig] == triggerNames_.triggerName(itrig)){
-          MatchingTriggerResult[MatchTrig] = hltflag;
-          if (hltflag==1) hasRequestedTrigger = true;
-          break;
-        }
-      }
-    }
-    for (int MatchTrig = 0; MatchTrig<ntriggers; MatchTrig++){
-      if (Debug_) cout << TriggersForMatching_[MatchTrig]<<endl;
-      MatchTriggerNames->push_back(TriggersForMatching_[MatchTrig]);
-    }
+  // ///////////////////////////////////////////////////////////////
+  // /// Get the HLT results
+  //
+  // std::map < std::string,int > HLTPreScaleMap;
+  // edm::Handle<edm::TriggerResults> hltresults;
+  // try {
+  //   iEvent.getByLabel(hlTriggerResults_, hltresults);
+  // }
+  // catch ( ... ) {
+  //   std::cout << "Couldn't get handle on HLT Trigger!" << std::endl;
+  // }
+  // if (!hltresults.isValid())
+  //   std::cout << "No Trigger Results!" << std::endl;
+  // else
+  // {
+  //   int ntrigs = hltresults->size();
+  //   if (ntrigs==0){
+  //     std::cout << "No trigger name given in TriggerResults of the input " << endl;
+  //   }
+  //
+  //   /// get hold of trigger names - based on TriggerResults object!
+  //   edm::TriggerNames triggerNames_;
+  //   triggerNames_ = iEvent.triggerNames(*hltresults);
+  //   int ntriggers = TriggersForMatching_.size();
+  //   for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++) { // initialize MatchingTriggerResult array
+  //     MatchingTriggerResult[MatchTrig] = 0;
+  //   }
+  //
+  //   for (int itrig = 0; itrig < ntrigs; itrig++) {
+  //     string trigName = triggerNames_.triggerName(itrig);
+  //     int hltflag = (*hltresults)[itrig].accept();
+  //     if (Debug_) if (hltflag) cout << trigName << " " <<hltflag <<endl;
+  //     trigRes->push_back(hltflag);
+  //     trigNames->push_back(trigName);
+  //
+  //     int ntriggers = TriggersForMatching_.size();
+  //     for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++) {
+  //       if (TriggersForMatching_[MatchTrig] == triggerNames_.triggerName(itrig)){
+  //         MatchingTriggerResult[MatchTrig] = hltflag;
+  //         if (hltflag==1) hasRequestedTrigger = true;
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   for (int MatchTrig = 0; MatchTrig<ntriggers; MatchTrig++){
+  //     if (Debug_) cout << TriggersForMatching_[MatchTrig]<<endl;
+  //     MatchTriggerNames->push_back(TriggersForMatching_[MatchTrig]);
+  //   }
 
     ///
     /// Get HLT map : triggername associated with its prescale, saved only for accepted trigger
     ///
-    for (unsigned int i=0; i<triggerNames_.size(); i++){
-      if ( hltresults->accept(i) ) { //  save trigger info only for accepted paths
-        /// get the prescale from the HLTConfiguration, initialized at beginRun
-        int prescale = hltConfig_.prescaleValue(iEvent,iSetup,triggerNames_.triggerNames().at(i));
-        if (Debug_) std::cout<<" HLT===> "<<triggerNames_.triggerNames().at(i)<<" prescale ="<<prescale<<std::endl;
-        HLTPreScaleMap[triggerNames_.triggerNames().at(i)] = prescale;
-      }
-    }
-    HLTTrig = &HLTPreScaleMap; // store in the branch
+    // for (unsigned int i=0; i<triggerNames_.size(); i++){
+    //   if ( hltresults->accept(i) ) { //  save trigger info only for accepted paths
+    //     /// get the prescale from the HLTConfiguration, initialized at beginRun
+    //     int prescale = hltConfig_.prescaleValue(iEvent,iSetup,triggerNames_.triggerNames().at(i));
+    //     if (Debug_) std::cout<<" HLT===> "<<triggerNames_.triggerNames().at(i)<<" prescale ="<<prescale<<std::endl;
+    //     HLTPreScaleMap[triggerNames_.triggerNames().at(i)] = prescale;
+    //   }
+    // }
+    // HLTTrig = &HLTPreScaleMap; // store in the branch
 
   } /// end valid trigger
 

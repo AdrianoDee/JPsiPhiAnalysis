@@ -53,12 +53,13 @@ class DiMuonProducerPAT : public edm::EDProducer {
 
   // edm::EDGetTokenT<edm::View<pat::Muon>> muons_;
   // edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  // edm::EDGetTokenT<reco::VertexCollection> thePVs_;
+
   // edm::EDGetTokenT<reco::TrackCollection> revtxtrks_;
   // edm::EDGetTokenT<reco::BeamSpot> revtxbs_;
   // StringCutObjectSelector<pat::Muon> higherPuritySelection_;
   // StringCutObjectSelector<pat::Muon> lowerPuritySelection_;
   // StringCutObjectSelector<reco::Candidate, true> dimuonSelection_;
+  std::string thePVs_;
   bool addCommonVertex_, addMuonlessPrimaryVertex_;
   bool resolveAmbiguity_;
   bool addMCTruth_;
