@@ -228,6 +228,9 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
 // ------------ method called for each event  ------------
 void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
+  using namespace reco;
+  using namespace pat;
+  
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
   iEvent.getByLabel(dimuon_Label,dimuons);
 
