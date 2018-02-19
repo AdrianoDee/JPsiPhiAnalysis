@@ -39,7 +39,7 @@
 DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 // muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-thePVs_(iConfig.getParameter<std::vector<std::string>>("primaryVertexTag")),
+thePVs_(iConfig.getParameter<std::string>("primaryVertexTag")),
 // higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
 // lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
 // dimuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),
