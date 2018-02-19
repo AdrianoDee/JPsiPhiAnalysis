@@ -51,7 +51,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
   revtxtrks_ = "generalTracks"; //if that is not true, we will raise an exception
   revtxbs_ = "offlineBeamSpot";
-  
+
   produces<pat::CompositeCandidateCollection>();
 }
 
@@ -183,10 +183,10 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   Vertex thePrimaryV, theBeamSpotV;
 
   reco::BeamSpot bs;
-  edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel(thebeamspot_, beamSpotHandle);
-  if ( beamSpotHandle.isValid() ) {
-    bs = *beamSpotHandle;
+  edm::Handle<reco::BeamSpot> theBeamSpot;
+  iEvent.getByLabel(thebeamspot_, theBeamSpot);
+  if ( theBeamSpot.isValid() ) {
+    bs = *theBeamSpot;
     theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
   }
   else std::cout << "No Beam Spot available from EventSetup" << std::endl;
