@@ -37,8 +37,8 @@
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 
 DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
-// muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
-// thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
+muons_(iConfig.getParameter<std::string>("muons")),
+thebeamspot_(iConfig.getParameter<std::string>("beamSpotTag")),
 thePVs_(iConfig.getParameter<std::string>("primaryVertexTag")),
 // higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
 // lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
@@ -174,7 +174,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // }
     // HLTTrig = &HLTPreScaleMap; // store in the branch
 
-  } /// end valid trigger
+  // } /// end valid trigger
 
   ///////////////////////////////////////////////////////////////
   ///The BeamSpot, the PrimaryV and the BeamSpotV
@@ -183,20 +183,20 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   reco::BeamSpot beamSpot;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+  iEvent.getByLabel(thebeamspot_, beamSpotHandle);
   if ( beamSpotHandle.isValid() ) {
     beamSpot = *beamSpotHandle;
     theBeamSpotV = Vertex(beamSpot.position(), beamSpot.covariance3D());
   }
   else std::cout << "No Beam Spot available from EventSetup" << std::endl;
 
+  bool addXlessPrimaryVertex_ = true //TODO check this
   Handle<VertexCollection> recVtxs;
-  iEvent.getByLabel(vtxSample, recVtxs);
+  iEvent.getByLabel(thePVs_, recVtxs);
   unsigned int nVtxTrks = 0;
   if ( recVtxs->begin() != recVtxs->end() ) {
-    thePrimaryVtx_multiplicity = recVtxs->size() ;
 
-    if (addMuMulessPrimaryVertex_ || addXlessPrimaryVertex_ || resolveAmbiguity_) {
+    if (addMuonlessPrimaryVertex_ || addXlessPrimaryVertex_ || resolveAmbiguity_) {
       //thePrimaryV = Vertex(*(recVtxs->begin()));
       //cout <<"here" <<endl;
       thePrimaryV = *(recVtxs->begin());
@@ -209,28 +209,17 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
       }
     }
-  } else {
+  } else
     thePrimaryV = Vertex(beamSpot.position(), beamSpot.covariance3D());
-    thePrimaryVtx_multiplicity = 1 ;
-  }
+
 
   ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
 
-
-  Handle<VertexCollection> priVtxs;
-  iEvent.getByToken(thePVs_, priVtxs);
-  if ( priVtxs->begin() != priVtxs->end() ) {
-    thePrimaryV = Vertex(*(priVtxs->begin()));
-  }
-  else {
-    thePrimaryV = Vertex(bs.position(), bs.covariance3D());
-  }
-
   Handle< View<pat::Muon> > muons;
-  iEvent.getByToken(muons_,muons);
+  iEvent.getByLabel(muons_,muons);
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
@@ -362,11 +351,11 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 // Primary vertex matched to the dimuon, now refit it removing the two muons
                 DiMuonVtxReProducer revertex(priVtxs, iEvent);
                 edm::Handle<reco::TrackCollection> pvtracks;
-                iEvent.getByToken(revtxtrks_,   pvtracks);
+                iEvent.getByLabel(revtxtrks_,   pvtracks);
                 if( !pvtracks.isValid()) { std::cout << "pvtracks NOT valid " << std::endl; }
                 else {
                   edm::Handle<reco::BeamSpot> pvbeamspot;
-                  iEvent.getByToken(revtxbs_, pvbeamspot);
+                  iEvent.getByLabel(revtxbs_, pvbeamspot);
                   if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
                   // I need to go back to the reco::Muon object, as the TrackRef in the pat::Muon can be an embedded ref.
                   const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(it->originalObject());
@@ -640,7 +629,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               } else {
                 edm::Handle<reco::GenParticleCollection> theGenParticles;
                 edm::EDGetTokenT<reco::GenParticleCollection> genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"genParticles");
-                iEvent.getByToken(genCands_, theGenParticles);
+                iEvent.getByLabel(genCands_, theGenParticles);
                 if (theGenParticles.isValid()){
                   for(size_t iGenParticle=0; iGenParticle<theGenParticles->size();++iGenParticle) {
                     const Candidate & genCand = (*theGenParticles)[iGenParticle];
