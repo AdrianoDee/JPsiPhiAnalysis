@@ -25,6 +25,7 @@
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
 
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
@@ -230,7 +231,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   using namespace reco;
   using namespace pat;
-  
+
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
   iEvent.getByLabel(dimuon_Label,dimuons);
 
