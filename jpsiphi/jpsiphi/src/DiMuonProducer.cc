@@ -49,8 +49,9 @@ resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
 addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
-  //revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
-  // revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
+  revtxtrks_ = "generalTracks"; //if that is not true, we will raise an exception
+  revtxbs_ = "offlineBeamSpot";
+  
   produces<pat::CompositeCandidateCollection>();
 }
 
@@ -181,28 +182,28 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   Vertex thePrimaryV, theBeamSpotV;
 
-  reco::BeamSpot beamSpot;
+  reco::BeamSpot bs;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
   iEvent.getByLabel(thebeamspot_, beamSpotHandle);
   if ( beamSpotHandle.isValid() ) {
-    beamSpot = *beamSpotHandle;
-    theBeamSpotV = Vertex(beamSpot.position(), beamSpot.covariance3D());
+    bs = *beamSpotHandle;
+    theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
   }
   else std::cout << "No Beam Spot available from EventSetup" << std::endl;
 
-  bool addXlessPrimaryVertex_ = true //TODO check this
-  Handle<VertexCollection> recVtxs;
-  iEvent.getByLabel(thePVs_, recVtxs);
+  bool addXlessPrimaryVertex_ = true; //TODO check this
+  Handle<VertexCollection> priVtxs;
+  iEvent.getByLabel(thePVs_, priVtxs);
   unsigned int nVtxTrks = 0;
-  if ( recVtxs->begin() != recVtxs->end() ) {
+  if ( priVtxs->begin() != priVtxs->end() ) {
 
     if (addMuonlessPrimaryVertex_ || addXlessPrimaryVertex_ || resolveAmbiguity_) {
-      //thePrimaryV = Vertex(*(recVtxs->begin()));
+      //thePrimaryV = Vertex(*(priVtxs->begin()));
       //cout <<"here" <<endl;
-      thePrimaryV = *(recVtxs->begin());
+      thePrimaryV = *(priVtxs->begin());
     }
     else {
-      for ( reco::VertexCollection::const_iterator vtx = recVtxs->begin(); vtx != recVtxs->end(); ++vtx) {
+      for ( reco::VertexCollection::const_iterator vtx = priVtxs->begin(); vtx != priVtxs->end(); ++vtx) {
         if (nVtxTrks < vtx->tracksSize() ) {
           nVtxTrks = vtx->tracksSize();
           thePrimaryV = Vertex(*vtx);
@@ -210,7 +211,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       }
     }
   } else
-    thePrimaryV = Vertex(beamSpot.position(), beamSpot.covariance3D());
+    thePrimaryV = Vertex(bs.position(), bs.covariance3D());
 
 
   ESHandle<MagneticField> magneticField;
