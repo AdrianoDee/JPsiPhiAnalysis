@@ -58,7 +58,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 
   //Filtering
 
-  for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++triggerColl)
+  for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++trigger)
   {
     std::vector< std::string > thisFilters trigger->filterLabels();
     std::vector< std::string > matchFilters;
@@ -72,10 +72,10 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 
   //Matching
 
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trakColl)
+  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
-    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl->begin(), triggerEnd=filteredColl->end(); trigger!= triggerEnd; ++filteredColl)
+    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl->begin(), triggerEnd=filteredColl->end(); trigger!= triggerEnd; ++trigger)
     {
       if(MatchByDRDPt(*trak,*trigger))
       {
