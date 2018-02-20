@@ -78,14 +78,14 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl->begin(), triggerEnd=filteredColl->end(); trigger!= triggerEnd; ++filteredColl)
     {
-      if(MatchByDRDPt(trak,trigger))
+      if(MatchByDRDPt(trak,*trigger))
       {
         if(matched)
         {
-          if(DeltaR(trak,matchedColl.back()) > DeltaR(trak,trigger))
+          if(DeltaR(trak,matchedColl.back()) > DeltaR(trak,*trigger))
           {
             matchedColl.pop_back();
-            matchedColl.push_back(trigger);
+            matchedColl.push_back(*trigger);
           }
         }
         matched = true;
@@ -154,9 +154,9 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 //      }
 
   if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
-  if ( !dimuon->empty() )  ndimuon++;
   if ( ncombo > 0 ) nreco++;
   event.put(std::move(DiTrackColl),product_name_);
+
   nevents++;
 }
 
