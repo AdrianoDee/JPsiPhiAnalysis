@@ -1,7 +1,7 @@
 #include "../interface/DiTrackHLTProducer.h"
 
 
-DiTrackHLTProducer::MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
+float DiTrackHLTProducer::MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -12,7 +12,7 @@ DiTrackHLTProducer::MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectS
    return (e1-e2)*(e1-e2) + dp*dp;
 }
 
-DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
+bool DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDPtRel);
