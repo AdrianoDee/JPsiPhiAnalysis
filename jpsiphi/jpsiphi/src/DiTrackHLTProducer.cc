@@ -24,7 +24,7 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& ps):
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
   product_name_(ps.getParameter<std::string>("Product")),
-  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
+  HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters"))
   triggerObj_(consumes<std::vector<pat::TriggerObjectStandAlone>>("TriggerInput"))
 {
 
