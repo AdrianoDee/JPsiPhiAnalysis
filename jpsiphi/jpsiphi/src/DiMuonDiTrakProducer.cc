@@ -8,8 +8,11 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& ps):
   DiMuonDiTrakMassCuts_(ps.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
-  product_name_(ps.getParameter<std::string>("Product"))
+  product_name_(ps.getParameter<std::string>("Product")),
+  // HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
+  // triggerObj_(consumes<std::vector<pat::TriggerObjectStandAlone>>("TriggerInput"))
 {
+
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
   nevents = 0;
@@ -26,6 +29,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& ese
 
   edm::Handle<std::vector<pat::PackedCandidate> > trak;
   event.getByToken(TrakCollection_,trak);
+
+  // edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerObjects;
+  // event.getByToken(triggerObj_,dimuon);
 
   uint ncombo = 0;
   float DiMuonMassMax_ = DiMuonMassCuts_[1];

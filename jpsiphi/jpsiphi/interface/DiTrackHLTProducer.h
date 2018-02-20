@@ -1,13 +1,13 @@
 /**
    \file
-   Declaration of DiMuonDiTrakProducer
+   Declaration of DiTrackHLTProducer
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
 */
 
-#ifndef __DiMuonDiTrakProducer_h_
-#define __DiMuonDiTrakProducer_h_
+#ifndef __DiTrackHLTProducer_h_
+#define __DiTrackHLTProducer_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -21,33 +21,34 @@
 #include "DataFormats/PatCandidates/interface/UserData.h"
 #include "DataFormats/PatCandidates/interface/GenericParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+
+#include "CommonTools/UtilAlgos/interface/DeltaR.h"
+#include "CommonTools/UtilAlgos/interface/MatchByDRDPt.h"
 #include <TLorentzVector.h>
 #include <vector>
+#include <cmath>
 
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class DiMuonDiTrakProducer : public edm::EDProducer {
+class DiTrackHLTProducer : public edm::EDProducer {
 
  public:
-  explicit DiMuonDiTrakProducer(const edm::ParameterSet& ps);
+  explicit DiTrackHLTProducer(const edm::ParameterSet& ps);
 
  private:
 
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
-  std::vector<double> DiMuonMassCuts_;
   std::vector<double> TrakTrakMassCuts_;
-  std::vector<double> DiMuonDiTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
   std::string product_name_;
-  // std::string HLTFilters_;
-  // edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone> triggerObj_;
+  std::string HLTFilters_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone> triggerObj_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
@@ -55,12 +56,14 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
+
+  bool DiTrackHLTProducer::MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2);
+  float DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2);
+
   int candidates;
   int nevents;
   int ndimuon;
   int nreco;
-  float maxDeltaR;
-  float maxDPtRel;
 };
 
-#endif // __DiMuonDiTrakProducer_h_
+#endif // __DiTrackHLTProducer_h_
