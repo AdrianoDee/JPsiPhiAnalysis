@@ -65,7 +65,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 
     std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters));
 
-    if(interSection.size()>0)
+    if(matchFilters.size()>0)
       filteredColl.push_back(*trigger);
 
   }
@@ -75,7 +75,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
   for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
-    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl->begin(), triggerEnd=filteredColl->end(); trigger!= triggerEnd; ++trigger)
+    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
     {
       if(MatchByDRDPt(*trak,*trigger))
       {
