@@ -58,8 +58,8 @@ class DiTrackHLTProducer : public edm::EDProducer {
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
 
-  bool MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2);
-  float DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2);
+  bool MatchByDRDPt(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaR(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2);
 
   int candidates;
   int nevents;

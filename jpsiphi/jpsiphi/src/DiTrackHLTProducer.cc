@@ -1,7 +1,7 @@
 #include "../interface/DiTrackHLTProducer.h"
 
 
-float DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
+float DiTrackHLTProducer::DeltaR(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -12,7 +12,7 @@ float DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectS
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiTrackHLTProducer::MatchByDRDPt(pat::CompositeCandidate t1, pat::TriggerObjectStandAlone t2)
+bool DiTrackHLTProducer::MatchByDRDPt(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDPtRel);
@@ -60,7 +60,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 
   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++trigger)
   {
-    std::vector< std::string > thisFilters trigger->filterLabels();
+    std::vector< std::string > thisFilters = trigger->filterLabels();
     std::vector< std::string > matchFilters;
 
     std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters))
