@@ -21,6 +21,7 @@
 #include "DataFormats/PatCandidates/interface/UserData.h"
 #include "DataFormats/PatCandidates/interface/GenericParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 
 #include "CommonTools/UtilAlgos/interface/DeltaR.h"
 #include "CommonTools/UtilAlgos/interface/MatchByDRDPt.h"
