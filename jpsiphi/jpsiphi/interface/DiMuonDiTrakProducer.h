@@ -59,8 +59,6 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   int nevents;
   int ndimuon;
   int nreco;
-  float maxDeltaR;
-  float maxDPtRel;
 };
 
 #endif // __DiMuonDiTrakProducer_h_

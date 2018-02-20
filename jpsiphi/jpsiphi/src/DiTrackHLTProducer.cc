@@ -44,14 +44,13 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
   std::unique_ptr<pat::TriggerObjectStandAloneCollection> DiTriggColl(new pat::TriggerObjectStandAloneCollection);
 
   edm::Handle<std::vector<pat::PackedCandidate> > trakColl;
-  event.getByToken(TrakCollection_,trak);
+  event.getByToken(TrakCollection_,trakColl);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
   event.getByToken(triggerObj_,triggerColl);
 
   uint ncombo = 0;
 
-  float
   float TrakTrakMassMax_ = TrakTrakMassCuts_[1];
   float TrakTrakMassMin_ = TrakTrakMassCuts_[0];
 

@@ -65,6 +65,8 @@ class DiTrackHLTProducer : public edm::EDProducer {
   int nevents;
   int ndimuon;
   int nreco;
+  float maxDeltaR;
+  float maxDPtRel;
 };
 
 #endif // __DiTrackHLTProducer_h_
