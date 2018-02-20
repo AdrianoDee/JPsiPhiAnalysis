@@ -25,7 +25,7 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& ps):
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
   product_name_(ps.getParameter<std::string>("Product")),
   HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters")),
-  triggerObj_(consumes<std::vector<pat::TriggerObjectStandAlone>>(ps.getParameter<edm::InputTag>("TriggerInput"))),
+  triggerObj_(consumes<std::vector<pat::TriggerObjectStandAlone>>(ps.getParameter<edm::InputTag>("TriggerInput")))
 {
 
   produces<pat::CompositeCandidateCollection>(product_name_);
@@ -63,7 +63,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
     std::vector< std::string > thisFilters = trigger->filterLabels();
     std::vector< std::string > matchFilters;
 
-    std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters))
+    std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters));
 
     if(interSection.size()>0)
       filteredColl.push_back(*trigger);
