@@ -7,7 +7,7 @@ float DiTrackHLTProducer::DeltaR(pat::CompositeCandidate t1, pat::TriggerObjectS
    float p2 = t2.phi();
    float e1 = t1.eta();
    float e2 = t2.eta();
-   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=Float(2*M_PI);
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
 
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
