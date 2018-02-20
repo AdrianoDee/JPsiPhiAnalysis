@@ -49,7 +49,7 @@ class DiTrackHLTProducer : public edm::EDProducer {
   bool OnlyBest_;
   std::string product_name_;
   std::string HLTFilters_;
-  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone> triggerObj_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggerObj_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
