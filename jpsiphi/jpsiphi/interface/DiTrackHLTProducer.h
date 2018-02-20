@@ -44,12 +44,13 @@ class DiTrackHLTProducer : public edm::EDProducer {
 
   void endJob() override;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
   std::string product_name_;
   std::string HLTFilters_;
-  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggerObj_;
+
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);

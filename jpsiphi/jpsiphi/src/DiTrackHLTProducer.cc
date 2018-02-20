@@ -20,12 +20,12 @@ bool DiTrackHLTProducer::MatchByDRDPt(const pat::CompositeCandidate t1, const pa
 
 DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& ps):
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(ps.getParameter<edm::InputTag>("PFCandidates"))),
+  TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(ps.getParameter<edm::InputTag>("TriggerInput"))),
   TrakTrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
   product_name_(ps.getParameter<std::string>("Product")),
   HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters")),
-  triggerObj_(consumes<std::vector<pat::TriggerObjectStandAlone>>(ps.getParameter<edm::InputTag>("TriggerInput")))
 {
 
   produces<pat::CompositeCandidateCollection>(product_name_);
@@ -47,7 +47,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
   event.getByToken(TrakCollection_,trakColl);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
-  event.getByToken(triggerObj_,triggerColl);
+  event.getByToken(TriggerCollection_,triggerColl);
 
   uint ncombo = 0;
 
