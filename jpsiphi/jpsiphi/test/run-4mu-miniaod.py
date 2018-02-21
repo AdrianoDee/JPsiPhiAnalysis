@@ -23,19 +23,18 @@ process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
 
+
 charmoniumHLT = [
-#Chamonium
+'HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
+'HLT_DoubleMu4_Jpsi_Displaced',
 'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi',
-'HLT_Dimuon16_Jpsi',
-'HLT_Dimuon10_Jpsi_Barrel',
-'HLT_Dimuon0_Jpsi_Muon',
-'HLT_QuadMuon0_Dimuon0_Jpsi'
-# 'HLT_Dimuon0_Jpsi'
+'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+'HLT_Dimuon25_Jpsi',
+'HLT_Dimuon0_Jpsi3p5_Muon2'
 ]
 
 muoniaHLT = [
-'HLT_Dimuon10_Phi_Barrel',
+'HLT_Dimuon14_Phi_Barrel_Seagulls',
 ]
 
 hltList = charmoniumHLT
@@ -44,20 +43,25 @@ hltpaths = cms.vstring(hltList)
 
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
-filters = cms.vstring(
-                                'hltDoubleMu2JpsiL3Filtered', ##JPsi
-                                'hltMumuFilterDoubleMu2Jpsi',
-                                ##'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                ##'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                'hltDisplacedmumuFilterDimuon25Jpsis',
-                                'hltJpsiMuonL3Filtered3p5'
-                                'hltJpsiMuonMuonL3Filtered',
+charmoniumFilters = cms.vstring(
+                                "hltDoubleMu2JpsiDoubleTrkL3Filtered",
+                                "hltDoubleTrkmumuFilterDoubleMu2Jpsi",
+                                "hltJpsiTkTkVertexFilterPhiDoubleTrk1v2",
 
+                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
+
+                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
+
+                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
+
+                                'hltDisplacedmumuFilterDimuon25Jpsis',
+
+                                'hltJpsiMuonL3Filtered3p5',
                                 )
+
+muoniaFilters = cms.vstring("hltDisplacedmumuFilterDimuon14PhiBarrelnoCow")
+
+filters = charmoniumFilters
 
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
