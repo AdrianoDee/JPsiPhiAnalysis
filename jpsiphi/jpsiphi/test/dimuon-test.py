@@ -8,9 +8,10 @@ process = cms.Process("Rootuple")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'FT_R_53_V18::All') #ABC
+#process.GlobalTag.globaltag = 'FT_R_53_V18::All' #ABC
+process.GlobalTag.globaltag = 'FT_R_53_V21::All'
 process.GlobalTag = GlobalTag(process.GlobalTag, 'FT_R_53_V21::All') #D
 #process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
 
