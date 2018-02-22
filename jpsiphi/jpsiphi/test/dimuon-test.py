@@ -9,6 +9,9 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.load('Configuration/EventContent/EventContent_cff')
+process.load('L1TriggerConfig.L1GtConfigProducers.L1GtTriggerMaskAlgoTrigConfig_cff')
+process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 #process.GlobalTag.globaltag = 'FT_R_53_V18::All' #ABC
 process.GlobalTag.globaltag = 'FT_R_53_V21::All'
 #process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
@@ -22,6 +25,8 @@ process.TFileService = cms.Service("TFileService",fileName = cms.string(ouput_fi
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
 process.load("jpsiphi.jpsiphi.patMuonsTriggerMatcher2012_cfi")
+
+process.isMC = cms.bool(False)
 
 charmoniumHLT = [
 #Chamonium

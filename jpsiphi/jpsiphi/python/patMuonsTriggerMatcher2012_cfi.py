@@ -58,3 +58,46 @@ patMuonsWithTriggerSequence = cms.Sequence(
     patMuonsTriggerMatchers1Mu *
     patMuonsWithTrigger
 )
+
+
+
+from PhysicsTools.PatAlgos.producersLayer1.muonProducer_cfi import *
+from MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff import  addMCinfo, useExistingPATMuons, useL1MatchingWindowForSinglets, changeTriggerProcessName, switchOffAmbiguityResolution, addDiMuonTriggers
+
+
+# PAT Layer 0+1
+process.load("PhysicsTools.PatAlgos.patSequences_cff")
+process.load("PhysicsTools.PatAlgos.cleaningLayer1.genericTrackCleaner_cfi")
+process.load("MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff")
+
+process.cleanPatTracks.checkOverlaps.muons.requireNoOverlaps = cms.bool(False)
+process.cleanPatTracks.checkOverlaps.electrons.requireNoOverlaps = cms.bool(False)
+patMuons.embedTrack = cms.bool(True)
+patMuons.embedPickyMuon = cms.bool(False)
+patMuons.embedTpfmsMuon = cms.bool(False)
+
+
+if process.isMC:
+        addMCinfo(process)
+        # since we match inner tracks, keep the matching tight and make it one-to-one
+        process.muonMatch.maxDeltaR = 0.05
+        process.muonMatch.resolveByMatchQuality = True
+
+addDiMuonTriggers(process)
+useExistingPATMuons(process,'cleanPatMuons',addL1Info=False)
+changeTriggerProcessName(process, 'HLT')
+switchOffAmbiguityResolution(process) # Switch off ambiguity resolution: allow multiple reco muons to match to the same trigger muon
+useL1MatchingWindowForSinglets(process)
+
+process.muonL1Info.maxDeltaR     = 0.3
+process.muonL1Info.fallbackToME1 = True
+process.muonMatchHLTL1.maxDeltaR     = 0.3
+process.muonMatchHLTL1.fallbackToME1 = True
+process.muonMatchHLTL2.maxDeltaR = 0.3
+process.muonMatchHLTL2.maxDPtRel = 10.0
+process.muonMatchHLTL3.maxDeltaR = 0.1
+process.muonMatchHLTL3.maxDPtRel = 10.0
+process.muonMatchHLTCtfTrack.maxDeltaR = 0.1
+process.muonMatchHLTCtfTrack.maxDPtRel = 10.0
+process.muonMatchHLTTrackMu.maxDeltaR = 0.1
+process.muonMatchHLTTrackMu.maxDPtRel = 10.0
