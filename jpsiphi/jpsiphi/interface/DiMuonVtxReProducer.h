@@ -12,6 +12,9 @@
 #include "RecoVertex/VertexPrimitives/interface/TransientVertex.h"
 #include "RecoVertex/PrimaryVertexProducer/interface/PrimaryVertexProducerAlgorithm.h"
 
+#include <vector>
+using namespace std;
+
 class DiMuonVtxReProducer {
     public:
         /// This is the real constructor to be used
@@ -21,6 +24,7 @@ class DiMuonVtxReProducer {
 
         /// Make the vertices
         std::vector<TransientVertex> makeVertices(const reco::TrackCollection &tracks, const reco::BeamSpot &bs, const edm::EventSetup &iSetup) const;
+  	    std::vector<TransientVertex> makeVertices(const std::vector<reco::TransientTrack> &tracks, const reco::BeamSpot &bs, const edm::EventSetup &iSetup) const;
 
         /// Get the configuration used in the VertexProducer
         const edm::ParameterSet & inputConfig()   const { return config_; }
@@ -36,7 +40,9 @@ class DiMuonVtxReProducer {
         edm::ParameterSet config_;
         edm::InputTag     tracksTag_;
         edm::InputTag     beamSpotTag_;
-        std::unique_ptr<PrimaryVertexProducerAlgorithm> algo_;
+        std::auto_ptr<PrimaryVertexProducerAlgorithm> algo_;
 };
 
 #endif
+
+// rsync -vut --existing interface/DiMuonVtxReProducer.h semrat@lxplus.cern.ch:/afs/cern.ch/user/s/semrat/scratch0/CMSSW_5_3_22/src/X4140/MuMuKKPAT/interface/DiMuonVtxReProducer.h
