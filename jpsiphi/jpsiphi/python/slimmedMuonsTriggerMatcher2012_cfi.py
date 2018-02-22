@@ -27,7 +27,7 @@ PATmuonMatchHLTL3T  = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('col
 PATmuonMatchHLTTkMu = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('coll("hltHighPtTkMuonCands")'), maxDeltaR = 0.1, maxDPtRel = 10.0)          #maxDeltaR Changed accordingly to Zoltan tuning. It was: 0.5
 PATmuonMatchHLTMuon = PATmuonTriggerMatchHLT.clone(matchedCuts = cms.string('type( "TriggerL1Mu" ) || type( "TriggerMuon" )'), maxDeltaR = 0.1, maxDPtRel = 10.0)           #maxDeltaR Changed accordingly to Zoltan tuning. It was: 1.2
 
-slimmedMuonsTriggerMatchers1Mu = cms.Sequence(
+patMuonsTriggerMatchers1Mu = cms.Sequence(
       PATmuonMatchHLTL2 +
       PATmuonMatchHLTL3 +
       PATmuonMatchHLTL3v2 +
@@ -36,7 +36,7 @@ slimmedMuonsTriggerMatchers1Mu = cms.Sequence(
       PATmuonMatchHLTMuon
 )
 
-slimmedMuonsTriggerMatchers1MuInputTags = [
+patMuonsTriggerMatchers1MuInputTags = [
     cms.InputTag('PATmuonMatchHLTL2'),
     cms.InputTag('PATmuonMatchHLTL3'),
     cms.InputTag('PATmuonMatchHLTL3v2'),
@@ -46,15 +46,15 @@ slimmedMuonsTriggerMatchers1MuInputTags = [
 ]
 
 ### Embed them
-slimmedMuonsWithTrigger = cms.EDProducer( "PATTriggerMatchMuonEmbedder",
+patMuonsWithTrigger = cms.EDProducer( "PATTriggerMatchMuonEmbedder",
     src     = cms.InputTag(  "patMuons" ),
     matches = cms.VInputTag()
 )
-slimmedMuonsWithTrigger.matches += slimmedMuonsTriggerMatchers1MuInputTags
+patMuonsWithTrigger.matches += patMuonsTriggerMatchers1MuInputTags
 
 ### Run the whole trigger Sequence
-slimmedMuonsWithTriggerSequence = cms.Sequence(
+patMuonsWithTriggerSequence = cms.Sequence(
     unpackedPatTrigger *
-    slimmedMuonsTriggerMatchers1Mu *
-    slimmedMuonsWithTrigger
+    patMuonsTriggerMatchers1Mu *
+    patMuonsWithTrigger
 )
