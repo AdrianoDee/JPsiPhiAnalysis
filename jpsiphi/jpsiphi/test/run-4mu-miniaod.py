@@ -138,7 +138,7 @@ process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducer',
 )
 
 process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
-    HighDiMuonCollection    = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
+    DoubleDiMuonCollection    = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     LowDiMuonCollection     = cms.double(1.019461),              # J/psi mass in GeV
     HighDiMuonMassCuts      = cms.double(3.096916),
     LowDiMuonMassCuts       = cms.vdouble(4.0,6.0),            # b-hadron mass window
