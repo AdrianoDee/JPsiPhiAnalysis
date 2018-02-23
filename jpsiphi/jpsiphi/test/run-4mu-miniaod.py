@@ -11,8 +11,8 @@ process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7')
-#process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v16')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 20000
@@ -22,7 +22,7 @@ process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input
 process.TFileService = cms.Service("TFileService",fileName = cms.string(ouput_filename))
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
-process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2016_cfi")
+process.load("jDoubleDiMuon.jDoubleDiMuon.slimmedMuonsTriggerMatcher2017_cfi")
 
 
 charmoniumHLT = [
@@ -129,7 +129,7 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
     filter    = cms.bool(True)
 )
 
-process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
+process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducer',
     HighDiMuonCollection    = cms.InputTag('JPsi2MuMuPAT'),
     LowDiMuonCollection     = cms.InputTag('Phi2MuMuPAT'),
     HighDiMuonMassCuts      = cms.vdouble(2.9,3.2),      # J/psi mass window 3.096916 +/- 0.150
@@ -137,17 +137,17 @@ process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
     DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
 )
 
-process.PsiPhiFitter = cms.EDProducer('PsiPhiFourMuKinematicFit',
-    HighDiMuonCollection    = cms.InputTag('PsiPhiProducer','DoubleDiMuonCandidates'),
+process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonFourMuKinematicFit',
+    HighDiMuonCollection    = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     LowDiMuonCollection     = cms.double(1.019461),              # J/psi mass in GeV
     HighDiMuonMassCuts      = cms.double(3.096916),
     LowDiMuonMassCuts       = cms.vdouble(4.0,6.0),            # b-hadron mass window
-    DoubleDiMuonMassCuts    = cms.string('PsiPhiCandidatesRefit')
+    DoubleDiMuonMassCuts    = cms.string('DoubleDiMuonCandidatesRefit')
 )
 
-process.rootuplefourmu = cms.EDAnalyzer('PsiPhiFourMuonsRootupler',
-    doubledimuon_cand       = cms.InputTag('PsiPhiProducer','DoubleDiMuonCandidates'),
-    doubledimuon_rf_cand    = cms.InputTag("PsiPhiFitter","PsiPhiCandidatesRefit"),
+process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuonFourMuonsRootupler',
+    doubledimuon_cand       = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
+    doubledimuon_rf_cand    = cms.InputTag("DoubleDiMuonFitter","DoubleDiMuonCandidatesRefit"),
     beamSpotTag             = cms.InputTag("offlineBeamSpot"),
     primaryVertices         = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),
@@ -190,8 +190,8 @@ process.sequence = cms.Sequence(
                     process.Phi2MuMuPAT *
                     process.DiMuonFilteredJpsi *
                     process.DiMuonFilteredPhi *
-                    process.PsiPhiProducer *
-                    process.PsiPhiFitter *
+                    process.DoubleDiMuonProducer *
+                    process.DoubleDiMuonFitter *
                     process.rootuplefourmu *
                     process.rootupleJPsi *
                     process.rootuplePhi
