@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
-// Package:    DoubleDiMuonMuKinematicFit
-// Class:      DoubleDiMuonMuKinematicFit
+// Package:    DoubleDiMuonKinematicFit
+// Class:      DoubleDiMuonKinematicFit
 //
-/**\class DoubleDiMuonMuKinematicFit Ponia/OniaTrak/src/DoubleDiMuonMuKinematicFit.cc
+/**\class DoubleDiMuonKinematicFit Ponia/OniaTrak/src/DoubleDiMuonKinematicFit.cc
 
  Description: performs vertex kinematical fit for DiMuon + DiTrak candidates
 
@@ -59,10 +59,10 @@
 // class declaration
 //
 
-class DoubleDiMuonMuKinematicFit : public edm::EDProducer {
+class DoubleDiMuonKinematicFit : public edm::EDProducer {
    public:
-      explicit DoubleDiMuonMuKinematicFit(const edm::ParameterSet&);
-      ~DoubleDiMuonMuKinematicFit() override;
+      explicit DoubleDiMuonKinematicFit(const edm::ParameterSet&);
+      ~DoubleDiMuonKinematicFit() override;
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -103,7 +103,7 @@ class DoubleDiMuonMuKinematicFit : public edm::EDProducer {
 //
 // constructors and destructor
 //
-DoubleDiMuonMuKinematicFit::DoubleDiMuonMuKinematicFit(const edm::ParameterSet& iConfig) {
+DoubleDiMuonKinematicFit::DoubleDiMuonKinematicFit(const edm::ParameterSet& iConfig) {
   doubledimuon_cand_   = consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DoubleDiMuonCollection"));
   mass_low_dimuon         = iConfig.getParameter<double>("LowMassConstraint");
   mass_hig_dimuon         = iConfig.getParameter<double>("HighMassConstraint");
@@ -116,7 +116,7 @@ DoubleDiMuonMuKinematicFit::DoubleDiMuonMuKinematicFit(const edm::ParameterSet& 
 // now do what ever other initialization is needed
 }
 
-DoubleDiMuonMuKinematicFit::~DoubleDiMuonMuKinematicFit() {
+DoubleDiMuonKinematicFit::~DoubleDiMuonKinematicFit() {
 // do anything here that needs to be done at desctruction time
 // (e.g. close files, deallocate resources etc.)
 }
@@ -126,7 +126,7 @@ DoubleDiMuonMuKinematicFit::~DoubleDiMuonMuKinematicFit() {
 //
 
 // ------------ method called to produce the data  ------------
-void DoubleDiMuonMuKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
   // Grab paramenters
   edm::Handle<pat::CompositeCandidateCollection> DoubleDiMuHandle;
@@ -390,31 +390,31 @@ void DoubleDiMuonMuKinematicFit::produce(edm::Event& iEvent, const edm::EventSet
 
 
 // now sort by vProb
-  DoubleDiMuonMuKinematicFit::GreaterByVProb<pat::CompositeCandidate> vPComparator;
+  DoubleDiMuonKinematicFit::GreaterByVProb<pat::CompositeCandidate> vPComparator;
   std::sort(DoubleDiMuRefitColl->begin(),DoubleDiMuRefitColl->end(),vPComparator);
   iEvent.put(std::move(DoubleDiMuRefitColl),product_name_);
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DoubleDiMuonMuKinematicFit::beginJob() {}
+void DoubleDiMuonKinematicFit::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DoubleDiMuonMuKinematicFit::endJob() {}
+void DoubleDiMuonKinematicFit::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DoubleDiMuonMuKinematicFit::beginRun(edm::Run&, edm::EventSetup const&) {}
+void DoubleDiMuonKinematicFit::beginRun(edm::Run&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DoubleDiMuonMuKinematicFit::endRun(edm::Run&, edm::EventSetup const&) {}
+void DoubleDiMuonKinematicFit::endRun(edm::Run&, edm::EventSetup const&) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DoubleDiMuonMuKinematicFit::beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&) {}
+void DoubleDiMuonKinematicFit::beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DoubleDiMuonMuKinematicFit::endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&) {}
+void DoubleDiMuonKinematicFit::endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DoubleDiMuonMuKinematicFit::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void DoubleDiMuonKinematicFit::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -423,4 +423,4 @@ void DoubleDiMuonMuKinematicFit::fillDescriptions(edm::ConfigurationDescriptions
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DoubleDiMuonMuKinematicFit);
+DEFINE_FWK_MODULE(DoubleDiMuonKinematicFit);

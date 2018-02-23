@@ -22,7 +22,7 @@ process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input
 process.TFileService = cms.Service("TFileService",fileName = cms.string(ouput_filename))
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
-process.load("jDoubleDiMuon.jDoubleDiMuon.slimmedMuonsTriggerMatcher2017_cfi")
+process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 
 
 charmoniumHLT = [
@@ -137,7 +137,7 @@ process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducer',
     DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
 )
 
-process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonFourMuKinematicFit',
+process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
     HighDiMuonCollection    = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     LowDiMuonCollection     = cms.double(1.019461),              # J/psi mass in GeV
     HighDiMuonMassCuts      = cms.double(3.096916),
@@ -145,7 +145,7 @@ process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonFourMuKinematicFit',
     DoubleDiMuonMassCuts    = cms.string('DoubleDiMuonCandidatesRefit')
 )
 
-process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuonFourMuonsRootupler',
+process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuononsRootupler',
     doubledimuon_cand       = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     doubledimuon_rf_cand    = cms.InputTag("DoubleDiMuonFitter","DoubleDiMuonCandidatesRefit"),
     beamSpotTag             = cms.InputTag("offlineBeamSpot"),
