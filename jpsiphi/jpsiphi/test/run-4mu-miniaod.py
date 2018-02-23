@@ -138,11 +138,11 @@ process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducer',
 )
 
 process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
-    DoubleDiMuonCollection    = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
-    LowDiMuonCollection     = cms.double(1.019461),              # J/psi mass in GeV
-    HighDiMuonMassCuts      = cms.double(3.096916),
-    LowDiMuonMassCuts       = cms.vdouble(4.0,6.0),            # b-hadron mass window
-    DoubleDiMuonMassCuts    = cms.string('DoubleDiMuonCandidatesRefit')
+    DoubleDiMuonCollection  = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
+    LowMassConstraint       = cms.double(1.019461),              # J/psi mass in GeV
+    HighMassConstraint      = cms.double(3.096916),
+    DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
+    product_name            = cms.string('DoubleDiMuonCandidatesRefit')
 )
 
 process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuononsRootupler',
