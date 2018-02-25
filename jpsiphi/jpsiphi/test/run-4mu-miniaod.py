@@ -1,4 +1,4 @@
-softMuons#input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
+#input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
 ouput_filename = 'rootuple-2017-doubledimuon.root'
 input_filename = 'file:00000113-58FF-E711-AB19-002590E7E02E.root'#Muonia
 input_filename = "file:006425F0-6DED-E711-850C-0025904C66E8.root" #Charmonium
@@ -71,6 +71,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         l1tResults = cms.InputTag( "" ),
                                         throw = cms.bool(False)
                                         )
+
 process.softMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
    cut = cms.string('muonID(\"TMOneStationTight\")'
