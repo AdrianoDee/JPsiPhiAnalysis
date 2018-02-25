@@ -109,7 +109,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   //Double_t track_d0, track_d0Err, track_dz, track_dxy;
   Double_t higdim_vProb, higdim_vChi2, higdim_DCA, higdim_ctauPV, higdim_ctauErrPV, higdim_cosAlpha;
   Double_t lowdim_vProb, lowdim_vChi2, lowdim_DCA, lowdim_ctauPV, lowdim_ctauErrPV, lowdim_cosAlpha;
-  Double_t  doubledimuon_jpsiM_fit, doubledimuon_jpsiPx_fit, doubledimuon_jpsiPy_fit, doubledimuon_jpsiPz_fit;
+  Double_t  highDiMM_fit, highDiMPx_fit, highDiMPy_fit, highDiMPz_fit;
 
   Bool_t muonHighP_isLoose, muonHighP_isSoft, muonHighP_isMedium, muonHighP_isHighPt;
   Bool_t muonHighN_isLoose, muonHighN_isSoft, muonHighN_isMedium, muonHighN_isHighPt;
@@ -220,10 +220,10 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         doubledimuon_tree->Branch("doubledimuon_ctauErrPV",  &doubledimuon_ctauErrPV,    "doubledimuon_ctauErrPV/D");
         doubledimuon_tree->Branch("doubledimuon_charge",     &doubledimuon_charge,       "doubledimuon_charge/I");
 
-        doubledimuon_tree->Branch("doubledimuon_jpsiM_fit",  &doubledimuon_jpsiM_fit,    "doubledimuon_jpsiM_fit/D");
-        doubledimuon_tree->Branch("doubledimuon_jpsiPx_fit",  &doubledimuon_jpsiPx_fit,    "doubledimuon_jpsiPx_fit/D");
-        doubledimuon_tree->Branch("doubledimuon_jpsiPy_fit",  &doubledimuon_jpsiPy_fit,    "doubledimuon_jpsiPy_fit/D");
-        doubledimuon_tree->Branch("doubledimuon_jpsiPz_fit",  &doubledimuon_jpsiPz_fit,    "doubledimuon_jpsiPz_fit/D");
+        doubledimuon_tree->Branch("highDiMM_fit",  &highDiMM_fit,    "highDiMM_fit/D");
+        doubledimuon_tree->Branch("highDiMPx_fit",  &highDiMPx_fit,    "highDiMPx_fit/D");
+        doubledimuon_tree->Branch("highDiMPy_fit",  &highDiMPy_fit,    "highDiMPy_fit/D");
+        doubledimuon_tree->Branch("highDiMPz_fit",  &highDiMPz_fit,    "highDiMPz_fit/D");
 
 
         doubledimuon_tree->Branch("muonHighP_isLoose",        &muonHighP_isLoose,        "muonHighP_isLoose/O");
@@ -382,10 +382,10 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       doubledimuon_cosAlpha  = doubledimuon_rf_cand.userFloat("cosAlpha");
       doubledimuon_ctauPV    = doubledimuon_rf_cand.userFloat("ctauPV");
       doubledimuon_ctauErrPV = doubledimuon_rf_cand.userFloat("ctauErrPV");
-      doubledimuon_jpsiM_fit = doubledimuon_rf_cand.userFloat("jpsiM_fit");
-      doubledimuon_jpsiPx_fit = doubledimuon_rf_cand.userFloat("jpsiPx_fit");
-      doubledimuon_jpsiPy_fit = doubledimuon_rf_cand.userFloat("jpsiPy_fit");
-      doubledimuon_jpsiPz_fit = doubledimuon_rf_cand.userFloat("jpsiPz_fit");
+      highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
+      highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
+      highDiMPy_fit = doubledimuon_rf_cand.userFloat("highDiMPy_fit");
+      highDiMPz_fit = doubledimuon_rf_cand.userFloat("highDiMPz_fit");
 
       doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.pt(),doubledimuon_rf_cand.eta(),doubledimuon_rf_cand.phi(),doubledimuon_rf_cand.mass());
       higdim_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("higdimuon")->pt(),doubledimuon_rf_cand.daughter("higdimuon")->eta(),
