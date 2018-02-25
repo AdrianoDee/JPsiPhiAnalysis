@@ -24,12 +24,13 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& ps):
   TrakTrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
-  product_name_(ps.getParameter<std::string>("Product")),
+  TTCandidate_name_(ps.getParameter<std::string>("TTCandidate_name")),
+  TTTrigger_name_(ps.getParameter<std::string>("TTTrigger_name")),
   HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters")),
 {
 
-  produces<pat::CompositeCandidateCollection>(product_name_);
-  produces<pat::TriggerObjectStandAloneCollection>(product_name_);
+  produces<pat::CompositeCandidateCollection>(TTCandidate_name_);
+  produces<pat::TriggerObjectStandAloneCollection>(TTTrigger_name_);
   candidates = 0;
   nevents = 0;
   ndimuon = 0;
@@ -55,7 +56,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
   float TrakTrakMassMin_ = TrakTrakMassCuts_[0];
 
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
-
+  std::vector< pat::PackedCandidate> filteredTracks;
   //Filtering
 
   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++trigger)
@@ -87,76 +88,55 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
             matchedColl.push_back(*trigger);
           }
         }
+
+        if(!matched)
+          filteredTracks.push_back(*trak);
+
         matched = true;
       }
     }
   }
-//
-//   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++triggerColl)
-//   {
-//
-//   }
-//
-//   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl->begin(), triggerEnd=filteredColl->end(); trigger!= triggerEnd; ++filteredColl)
-//   {
-//     if(posTrack->charge()==0) continue;
-//
-//
-//   }
-//
-//
-// // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
-//   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
-//      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
-//        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
-//        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
-//
-// // loop on track candidates, make DiMuonT candidate, positive charge
-//        for (std::vector<pat::PackedCandidate>::const_iterator posTrack = trak->begin(), trakend=trak->end(); posTrack!= trakend; ++posTrack){
-//
-//          if(posTrack->charge()==0) continue;
-//          if(posTrack->pt()<0.5) continue;
-// 	       if(fabs(posTrack->pdgId())!=211) continue;
-// 	       if(!(posTrack->trackHighPurity())) continue;
-//
-//          if ( IsTheSame(*posTrack,*pmu1) || IsTheSame(*posTrack,*pmu2) || posTrack->charge() < 0 ) continue;
-//
-// // loop over second track candidate, negative charge
-//          for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
-//
-//            if(negTrack->charge()==0) continue;
-//            if(negTrack->pt()<0.5) continue;
-//   	       if(fabs(negTrack->pdgId())!=211) continue;
-//   	       if(!(negTrack->trackHighPurity())) continue;
-//
-//            if (negTrack == posTrack) continue;
-//            if ( IsTheSame(*negTrack,*pmu1) || IsTheSame(*negTrack,*pmu2) || negTrack->charge() > 0 ) continue;
-//
-//            pat::CompositeCandidate TTCand = makeTTCandidate(*posTrack, *negTrack);
-//
-//            if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
-//
-//            pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
-//
-//            if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
-//
-//              DiMuonTTCandColl->push_back(DiMuonTTCand);
-//              candidates++;
-//              ncombo++;
-//            }
-//         }
-//
-//          }
-//          } // loop over second track
-//        }   // loop on track candidates
-//        if (OnlyBest_) break;
-//      }
 
-  if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
-  if ( ncombo > 0 ) nreco++;
-  event.put(std::move(DiTrackColl),product_name_);
+  std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
+  // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
+  for (size_t i = 0; i < filteredTracks.size(); i++) {
+  {
+           auto posTrack = filteredTracks[i];
+           if(posTrack.charge()==0) continue;
+           if(posTrack.pt()<0.5) continue;
+  	       if(fabs(posTrack.pdgId())!=211) continue;
+  	       if(!(posTrack.trackHighPurity())) continue;
 
-  nevents++;
+           if ( IsTheSame(*posTrack,*pmu1) || IsTheSame(*posTrack,*pmu2) || posTrack.charge() < 0 ) continue;
+
+  // loop over second track candidate, negative charge
+           // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
+           for (size_t j = 0; j < filteredTracks.size(); j++) {
+             auto negTrack = filteredTracks[j];
+             if(negTrack.charge()==0) continue;
+             if(negTrack.pt()<0.5) continue;
+    	       if(fabs(negTrack.pdgId())!=211) continue;
+    	       if(!(negTrack.trackHighPurity())) continue;
+
+             if (i == j) continue;
+             if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) || negTrack.charge() > 0 ) continue;
+
+             pat::CompositeCandidate TTCand = makeTTCandidate(posTrack,negTrack);
+             pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j])
+             if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
+
+               DiTrackColl->push_back(TTCand);
+               DiTriggColl->push_back(TTTrigger);
+
+             }
+           } // loop over second track
+         }   // loop on track candidates
+
+  // if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
+  // if ( ncombo > 0 ) nreco++;
+  event.put(std::move(DiTrackColl),TTCandidate_name_);
+  event.put(std::move(DiTriggColl),TTTrigger_name_);
+
 }
 
 void DiTrackHLTProducer::endJob(){
@@ -199,6 +179,30 @@ const pat::CompositeCandidate DiTrackHLTProducer::makeDiMuonTTCandidate(
 const pat::CompositeCandidate DiTrackHLTProducer::makeTTCandidate(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN
+                                         ){
+
+  pat::CompositeCandidate TTCand;
+  TTCand.addDaughter(trakP,"trakP");
+  TTCand.addDaughter(trakN,"trakN");
+  TTCand.setCharge(trakP.charge()+trakN.charge());
+
+  double m_kaon1 = MassTraks_[0];
+  math::XYZVector mom_kaon1 = trakP.momentum();
+  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+  double m_kaon2 = MassTraks_[1];
+  math::XYZVector mom_kaon2 = trakN.momentum();
+  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+  TTCand.setP4(vTT);
+
+  return TTCand;
+}
+
+const pat::CompositeCandidate DiTrackHLTProducer::makeTTTriggerCandidate(
+                                          const pat::TriggerObjectStandAlone& trakP,
+                                          const pat::TriggerObjectStandAlone& trakN
                                          ){
 
   pat::CompositeCandidate TTCand;

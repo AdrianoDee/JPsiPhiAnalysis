@@ -48,7 +48,7 @@ class DiTrackHLTProducer : public edm::EDProducer {
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
-  std::string product_name_;
+  std::string TTCandidate_name_,TTTrigger_name_;
   std::string HLTFilters_;
 
 
