@@ -1,4 +1,4 @@
-#input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
+softMuons#input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
 ouput_filename = 'rootuple-2017-doubledimuon.root'
 input_filename = 'file:00000113-58FF-E711-AB19-002590E7E02E.root'#Muonia
 input_filename = "file:006425F0-6DED-E711-850C-0025904C66E8.root" #Charmonium
@@ -71,9 +71,20 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         l1tResults = cms.InputTag( "" ),
                                         throw = cms.bool(False)
                                         )
+process.softMuons = cms.EDFilter('PATMuonSelector',
+   src = cms.InputTag('slimmedMuonsWithTrigger'),
+   cut = cms.string('muonID(\"TMOneStationTight\")'
+                    ' && abs(innerTrack.dxy) < 0.3'
+                    ' && abs(innerTrack.dz)  < 20.'
+                    ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
+                    ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
+                    ' && innerTrack.quality(\"highPurity\")'
+   ),
+   filter = cms.bool(True)
+)
 
 process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('slimmedMuons'),
+        muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -87,7 +98,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
 )
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('slimmedMuons'),
+        muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -160,7 +171,7 @@ process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuonRootupler',
 
 process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
                           dimuons = cms.InputTag("JPsi2MuMuPAT"),
-                          muons = cms.InputTag("slimmedMuons"),
+                          muons = cms.InputTag("softMuons"),
                           primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(443),
@@ -173,7 +184,7 @@ process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
 
 process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           dimuons = cms.InputTag("Phi2MuMuPAT"),
-                          muons = cms.InputTag("slimmedMuons"),
+                          muons = cms.InputTag("softMuons"),
                           primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(331),
@@ -187,6 +198,7 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
 process.sequence = cms.Sequence(
                     process.triggerSelection *
                     process.slimmedMuonsWithTriggerSequence *
+                    process.softMuons *
                     process.JPsi2MuMuPAT *
                     process.Phi2MuMuPAT *
                     process.DiMuonFilteredJpsi *
