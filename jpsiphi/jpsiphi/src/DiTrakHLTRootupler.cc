@@ -99,7 +99,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 
 };
 
-UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Candidate) {
+UInt_t DiTrakHLTRootupler::isTriggerMatched(const pat::CompositeCandidate *diTrig_Candidate) {
   const pat::TriggerObjectStandAlone* trig1 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakP"));
   const pat::TriggerObjectStandAlone* trig2 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakN"));
   UInt_t matched = 0;  // if no list is given, is not matched
@@ -123,9 +123,9 @@ UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Cand
 DiTrakHLTRootupler::DiTrakHLTRootupler(const edm::ParameterSet & iConfig):
 diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
 diTrig_label(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
-ditrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
