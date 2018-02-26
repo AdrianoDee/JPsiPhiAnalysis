@@ -99,8 +99,8 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 };
 
 UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Candidate) {
-  const pat::Muon* trig1 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakP"));
-  const pat::Muon* trig2 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakN"));
+  const pat::TriggerObjectStandAlone* trig1 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakP"));
+  const pat::TriggerObjectStandAlone* trig2 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakN"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
@@ -267,7 +267,7 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
         trigP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
         trigN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
-        tMatch = DiTrakHLTRootupler::isTriggerMatched(ditrigCand);
+        tMatch = DiTrakHLTRootupler::isTriggerMatched(&ditrigCand);
 
         // MassErr = -1.0;
         // if (ditrakCand.hasUserFloat("MassErr"))    MassErr = ditrakCand.userFloat("MassErr");
