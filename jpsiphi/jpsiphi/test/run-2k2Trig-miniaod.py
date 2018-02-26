@@ -111,7 +111,7 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
 
 process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
     PFCandidates        = cms.InputTag("packedPFCandidates"),
-    TriggerInput        = cms.InputTag("slimmedPatTrigger"),
+    TriggerInput        = cms.InputTag("unpackedPatTrigger"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
     MassTraks           = cms.vdouble(kaonmass,kaonmass),
