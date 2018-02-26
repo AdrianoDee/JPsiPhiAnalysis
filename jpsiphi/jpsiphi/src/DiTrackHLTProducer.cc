@@ -25,13 +25,13 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& iConfig):
   TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-  TTCandidate_name_(iConfig.getParameter<std::string>("TTCandidate_name")),
+  // TTCandidate_name_(iConfig.getParameter<std::string>("TTCandidate_name")),
   TTTrigger_name_(iConfig.getParameter<std::string>("TTTrigger_name")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
 
-  produces<pat::CompositeCandidateCollection>(TTCandidate_name_);
-  produces<pat::TriggerObjectStandAloneCollection>(TTTrigger_name_);
+  // produces<pat::CompositeCandidateCollection>(TTCandidate_name_);
+  produces<pat::CompositeCandidateCollection>(TTTrigger_name_);
   candidates = 0;
   nevents = 0;
   ndimuon = 0;
@@ -43,7 +43,7 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& iConfig):
 void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DiTrackColl(new pat::CompositeCandidateCollection);
-  std::unique_ptr<pat::TriggerObjectStandAloneCollection> DiTriggColl(new pat::TriggerObjectStandAloneCollection);
+  std::unique_ptr<pat::TriggerObjectStandAloneCollection> DiTriggColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<std::vector<pat::PackedCandidate> > trakColl;
   iEvent.getByToken(TrakCollection_,trakColl);
@@ -61,6 +61,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
+
   //Filtering
 
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
@@ -74,14 +75,9 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
     bool filtered = false;
 
-    // std::vector< std::string > thisFilters = unPackedTrigger->filterLabels();
     for (size_t i = 0; i < HLTFilters_.size(); i++)
       if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
         filtered = true;
-    //
-    // std::vector< std::string > matchFilters;
-    //
-    // std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters));
 
     if(filtered)
       filteredColl.push_back(unPackedTrigger);
@@ -147,7 +143,8 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
              if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
-               DiTrackColl->push_back(TTCand);
+               // DiTrackColl->push_back(TTCand);
+               TTTrigger.addDaughter("TrakTrak",TTCand);
                DiTriggColl->push_back(TTTrigger);
 
              }
@@ -158,7 +155,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   // if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
   // if ( ncombo > 0 ) nreco++;
-  iEvent.put(std::move(DiTrackColl),TTCandidate_name_);
+  // iEvent.put(std::move(DiTrackColl),TTCandidate_name_);
   iEvent.put(std::move(DiTriggColl),TTTrigger_name_);
 
 }

@@ -63,7 +63,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 
 	// ----------member data ---------------------------
 	std::string file_name;
-	edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrak_label;
+	// edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrak_label;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrig_label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
@@ -121,7 +121,7 @@ UInt_t DiTrakHLTRootupler::isTriggerMatched(const pat::CompositeCandidate *diTri
 //
 
 DiTrakHLTRootupler::DiTrakHLTRootupler(const edm::ParameterSet & iConfig):
-diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
+// diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
 diTrig_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -208,11 +208,11 @@ UInt_t DiTrakHLTRootupler::getTriggerBits(const edm::Event& iEvent ) {
 // ------------ method called for each event  ------------
 void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
-  edm::Handle<pat::CompositeCandidateCollection> ditraks;
-  iEvent.getByToken(diTrak_label,ditraks);
+  // edm::Handle<pat::CompositeCandidateCollection> ditraks;
+  // iEvent.getByToken(diTrak_label,ditraks);
 
   edm::Handle<pat::CompositeCandidateCollection> ditrigs;
-  iEvent.getByToken(diTrig_label,ditraks);
+  iEvent.getByToken(diTrig_label,ditrigs);
 
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
