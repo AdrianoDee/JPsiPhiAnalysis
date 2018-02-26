@@ -191,7 +191,7 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
   iEvent.getByToken(diTrak_label,ditraks);
 
   edm::Handle<pat::CompositeCandidateCollection> ditrigs;
-  iEvent.getByToken(diTrig_Label,ditraks);
+  iEvent.getByToken(diTrig_label,ditraks);
 
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
@@ -225,8 +225,8 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
     // for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
     for (size_t i = 0; i < (*ditraks).size(); ++i) {
 
-      pat::CompositeCandidateCollection ditrakCand = (*ditraks)[i];
-      pat::CompositeCandidateCollection ditrigCand = (*ditrigs)[i];
+      const pat::CompositeCandidate ditrakCand = (*ditraks)[i];
+      const pat::CompositeCandidate ditrigCand = (*ditrigs)[i];
 
       if (ditrakCand.mass() > ditrakMassMin_ && ditrakCand.mass() < ditrakMassMax_ && ditrakCand.charge() == 0) {
 
