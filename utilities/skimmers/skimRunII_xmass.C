@@ -60,34 +60,129 @@ int skimXTree(std::string path, std::string filename, std::string treename = "xT
 
 int skimXTreeTrigger(int triggerbit, std::string path, std::string filename, std::string treename = "xTree")//, std::string dirname = "rootuple")
 {
-  
+
   TFile *oldfile = TFile::Open((path+filename).data());
   //TDirectory *directory = (TDirectory*)oldfile->Get(dirname.data());
   TTree *oldtree = (TTree*)oldfile->Get(treename.data());
   Long64_t nentries = oldtree->GetEntries();
   ULong64_t event   = 0;
-  
+
   //Create a new file + a clone of old tree in new file
   TFile *newfile = new TFile((treename + "_skim_trigger_"+ std::to_string(triggerbit) + "_" + filename).data(),"RECREATE");
   TTree *newtree = oldtree->CloneTree(0);
-  
+
   Int_t theTrigger = 0;
   oldtree->SetBranchAddress("trigger",&theTrigger);
- 
-  for (Long64_t i=0;i<nentries; i++) 
+
+  for (Long64_t i=0;i<nentries; i++)
   {
-	oldtree->GetEntry(i);	
+	oldtree->GetEntry(i);
 	std::bitset<16> tt(theTrigger);
-			
+
 	if(tt.test(triggerbit))
-	newtree->Fill();	
+	newtree->Fill();
   }
   newtree->Print();
   newtree->Write();
-              
+
               return 0;
-  
-              }
+
+}
+
+int skimXTreeCuts(std::string path, std::string filename, std::string treename = "xTree")//, std::string dirname = "rootuple")
+{
+
+  TFile *oldfile = TFile::Open((path+filename).data());
+  //TDirectory *directory = (TDirectory*)oldfile->Get(dirname.data());
+  TTree *oldtree = (TTree*)oldfile->Get(treename.data());
+  Long64_t nentries = oldtree->GetEntries();
+  ULong64_t event   = 0;
+
+  //Create a new file + a clone of old tree in new file
+  TFile *newfile = new TFile((treename + "_skim_cut_" + filename).data(),"RECREATE");
+  TTree *newtree = new TTree("JPsiPhiCuts Tree","JPsiPhiCuts Tree");
+
+  Long64_t ditrak_tree = oldtree->GetEntries();
+
+  Double_t cosA  = 0.0, ctau  = 0.0, ctauErr  = 0.0, vProb  = 0.0;
+  Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
+  // Int_t phiMType = 0, phiPType = 0;
+  // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
+
+  TLorentzVector *xP4 = 0, *jP4 = 0, *pP4 = 0;
+  TLorentzVector *xP4_out = 0, *jP4_out = 0, *pP4_out = 0;
+  TLorentzVector *mN_p4 = 0, *mP_p4 = 0, *kN_p4 = 0, *kP_p4 = 0;
+  TLorentzVector *mN_p4_out = 0, *mP_p4_out = 0, *kN_p4_out = 0, *kP_p4_out = 0;
+
+  oldtree->SetBranchAddress("trigger",&trigger);
+
+  oldtree->SetBranchAddress("dimuonditrk_p4",&xP4);
+  oldtree->SetBranchAddress("dimuonditrk_p4",&jP4);
+  oldtree->SetBranchAddress("dimuonditrk_p4",&pP4);
+
+  oldtree->SetBranchAddress("kaonp_rf_p4",&kN_p4);
+  oldtree->SetBranchAddress("kaonn_rf_p4",&kP_p4);
+
+  oldtree->SetBranchAddress("muonp_rf_p4",&mP_p4);
+  oldtree->SetBranchAddress("muonn_rf_p4",&mN_p4);
+
+  oldtree->SetBranchAddress("dimuonditrk_ctauPV",&ctau);
+  oldtree->SetBranchAddress("dimuonditrk_ctauErrPV",&ctauErr);
+  oldtree->SetBranchAddress("dimuonditrk_cosAlpha",&cosA);
+  oldtree->SetBranchAddress("dimuonditrk_vProb",&vProb);
+
+
+  ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4_out);
+  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
+  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4_out);
+
+  ditrak_tree->Branch("dimuonditrk_ctauPV", "TLorentzVector",&ctau_out);
+  ditrak_tree->Branch("dimuonditrk_ctauErrPV", "TLorentzVector",&ctauErr_out);
+  ditrak_tree->Branch("dimuonditrk_cosAlpha", "TLorentzVector",&cosA_out);
+  ditrak_tree->Branch("dimuonditrk_vProb", "TLorentzVector",&vProb_out);
+
+  ditrak_tree->SetBranchAddress("kaonp_rf_p4", "TLorentzVector",&kN_p4_out);
+  ditrak_tree->SetBranchAddress("kaonn_rf_p4", "TLorentzVector",&kP_p4_out);
+
+  ditrak_tree->SetBranchAddress("muonp_rf_p4", "TLorentzVector",&mP_p4_out);
+  ditrak_tree->SetBranchAddress("muonn_rf_p4", "TLorentzVector",&mN_p4_out);
+
+  for (Long64_t i=0;i<nentries; i++)
+  {
+	oldtree->GetEntry(i);
+	std::bitset<16> tt(theTrigger);
+
+  bool phiM = pP4.M() > 1.089 && pP4.M() < 1.291;
+  bool jpsiM = jP4.M() > 3.00 && jP4.M() < 3.15
+  bool cosAlpha = cosA > 0.99;
+  bool vertexP = vProb > 0.1;
+  bool flight = ctau/ctauErr > 3.0;
+
+
+    	if(tt.test(triggerbit) && phiM && jpsiM && cosAlpha && vertexP && flight)
+      {
+        xP4_out     = xP4;
+        jP4_out     = jP4;
+        pP4_out     = pP4;
+        ctau_out    = ctau;
+        ctauErr_out = ctauErr;
+        cosA_out    = cosA;
+        vProb_out   = vProb;
+        kN_p4_out   = kN_p4;
+        kP_p4_out   = kP_p4;
+        mP_p4_out   = mP_p4;
+        mN_p4_out   = mN_p4;
+
+    	  newtree->Fill();
+      }
+
+  }
+  newtree->Print();
+  newtree->Write();
+
+  return 0;
+
+}
 
 
 int selectXTree()
