@@ -62,7 +62,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrak_label;
-  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> diTrig_Label;
+  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> diTrig_label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> ditrakMassCuts_;
@@ -76,6 +76,8 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 
   UInt_t    trigger;
   UInt_t    tMatch;
+
+  UInt_t charge;
 
 	TLorentzVector ditrak_p4;
 	TLorentzVector trakP_p4;
@@ -221,10 +223,10 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
   if ( ditrigs.isValid() && !ditrigs->empty())
   if ( ditraks.isValid() && !ditraks->empty()) {
     // for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
-    for (size_t i = 0; i < ditraks.size(); ++i) {
+    for (size_t i = 0; i < (*ditraks).size(); ++i) {
 
-      pat::CompositeCandidateCollection ditrakCand = ditraks[i];
-      pat::CompositeCandidateCollection ditrigCand = ditrigs[i];
+      pat::CompositeCandidateCollection ditrakCand = (*ditraks)[i];
+      pat::CompositeCandidateCollection ditrigCand = (*ditrigs)[i];
 
       if (ditrakCand.mass() > ditrakMassMin_ && ditrakCand.mass() < ditrakMassMax_ && ditrakCand.charge() == 0) {
 
@@ -236,6 +238,7 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
         trakP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
         trakN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
+        charge = ditrakCand.charge();
 
         ditrig_p4.SetPtEtaPhiM(ditrigCand.pt(),ditrigCand.eta(),ditrigCand.phi(),ditrigCand.mass());
 
