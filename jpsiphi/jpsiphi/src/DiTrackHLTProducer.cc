@@ -63,11 +63,9 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   std::vector< pat::PackedCandidate> filteredTracks;
   //Filtering
 
-  for ( size_t iTrigObj = 0; iTrigObj < patTriggerObjectsStandAlone->size(); ++iTrigObj ) {
+  for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
-
-    const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
     const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
