@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
 import ROOT
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooFit
@@ -25,50 +20,49 @@ from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
 
 # In[4]:
 
-rootfile = "../rootfiles/Prompt_skim_cut_JPsi_Phi_Tree_skim_trigger_0_JPsi_Phi_Tree_skim_merge.root" #mmkk 2017 bcdef Jan 18 run
-#rootfile = "../rootfiles/NONPrompt_skim_cut_JPsi_Phi_Tree_skim_trigger_0_JPsi_Phi_Tree_skim_merge.root" #mmkk 2017 bcdef Jan 18 run
+
+rootfile = "/Users/adrianodiflorio/Documents/Git/X4140/utilities/rootfiles/OniaPhiTree_skim_mmkk_X_PROMPT_2017_BCDEF.root" #mmkk 2017 bcdef Jan 18 run
 inputfile = TFile(rootfile,"READ")
 inputfile.ls()
 
 
-# In[7]:
+# In[5]:
 
 
-xTree = (inputfile.Get("JPsiPhiCuts Tree"))
+xTree = (inputfile.Get("skimmed_x_tree"))
 
 
-# In[30]:
+# In[6]:
 
 
 massmin = 4.0
 massmax = 6.0
-phimin = 1.01
-phimax = 1.03
+phimin = 1.0045
+phimax = 1.0344
+
+# In[7]:
 
 
-# In[48]:
+mass = RooRealVar("xM","M(#mu#muKK)[GeV]",massmin,massmax)
+masskk = RooRealVar("phiM","phiM",phimin,phimax)
+massmumu = RooRealVar("jPsiM","jPsiM",2.5,3.5)
+lxy = RooRealVar("xL","l(xy)",0.0,10000.)
+hlt = RooRealVar("xHlt","xHlt",0.0,20.0)
 
 
-mass = RooRealVar("xMass","M(#mu#muKK)[GeV]",massmin,massmax)
-mass.setBins(500)
-masskk = RooRealVar("phiMass","phiMass",phimin,phimax)
-masskk.setBins(80)
-massmumu = RooRealVar("jpsiMass","jpsiMass",2.9,3.3)
-
-
-# In[49]:
+# In[8]:
 
 
 alldata = RooDataSet("alldata","alldata",xTree,RooArgSet(masskk,mass,massmumu))
 
 
-# In[50]:
+# In[9]:
 
 
 alldata.numEntries()
 
 
-# In[51]:
+# In[10]:
 
 
 alldata.numEntries()
@@ -78,19 +72,13 @@ massFrame = mass.frame()
 alldata.plotOn(massFrame)
 
 massFrame.Draw()
-c.SaveAs("testmass.png")
+c.SaveAs("plots/testmass.png")
 
-kkFrame = masskk.frame()
-alldata.plotOn(kkFrame)
+massKKFrame = masskk.frame(Range(phimin,phimax))
+alldata.plotOn(massKKFrame,RooLinkedList())
 
-kkFrame.Draw()
-c.SaveAs("testkk.png")
-
-mumuFrame = massmumu.frame()
-alldata.plotOn(mumuFrame)
-
-mumuFrame.Draw()
-c.SaveAs("testmm.png")
+massKKFrame.Draw()
+c.SaveAs("plots/testmasskk.png")
 
 
 # In[11]:
@@ -99,7 +87,7 @@ c.SaveAs("testmm.png")
 #b0dataNonPromptMass = b0dataNonPrompt.reduce(SelectVars(RooArgSet(mass)))
 
 
-# In[52]:
+# In[12]:
 
 
 sigma1 = RooRealVar("sigma1","width of gaussian1",0.002,0.0005,0.05);
@@ -126,16 +114,16 @@ B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
 B_3     = RooRealVar ( "B_3"    , "B_3"    , 0.3  , -20   , 100   )
 B_4     = RooRealVar ( "B_4"    , "B_4"    , 0.3  , -20   , 100   )
 
-gaussFrac = RooRealVar("sig1frac","fraction of component 1 in signal",0.3,0.0,1.0)
-nSig = RooRealVar("nSig","nSig",100000,0.,10E6)
-nBkg = RooRealVar("nBkg","nBkg",55000,0.,10E6)
+gaussFrac = RooRealVar("sig1frac","fraction of component 1 in signal",0.2,0.0,1.0)
+nSig = RooRealVar("nSig","nSig",1000000,0.,50E6)
+nBkg = RooRealVar("nBkg","nBkg",1000000,0.,50E6)
 
 
-# In[53]:
+# In[13]:
 
 
 signal = RooVoigtian("signal","signal",masskk,mean,gamma,sigma)
-bkg    = RooBernstein("pdfB" , "pdfB"    , masskk   , RooArgList(B_1, B_2,B_3,B_4))
+bkg    = RooBernstein("pdfB" , "pdfB"    , masskk   , RooArgList(B_1,B_2,B_3, B_4))
 tot = RooAddPdf("tot","g+cheb",RooArgList(signal,bkg),RooArgList(nSig,nBkg))
 
 #mean.setValV(phimean)
@@ -153,19 +141,18 @@ gamma.setConstant(ROOT.kFALSE)
 rfit = tot.fitTo(alldata,Range(phimin,phimax),RooFit.NumCPU(8))
 
 
-
 # In[ ]:
 
 
-kkFrame = masskk.frame(Range(phimin,phimax))
-alldata.plotOn(kkFrame,RooLinkedList())
-tot.plotOn(kkFrame)
+massKKFrame = masskk.frame(Range(phimin,phimax))
+alldata.plotOn(massKKFrame,RooLinkedList())
+tot.plotOn(massKKFrame,Normalization(alldata.numEntries()))
 
-kkFrame.Draw()
-c.SaveAs("testmassPhiFit.png")
+massKKFrame.Draw()
+c.SaveAs("plots/testmassFit.png")
 
-
-cD=TCanvas("cD","cD",750,600);cD.cd()
+cD=TCanvas("cD","cD",1000,1200)
+cD.cd()
 splot   = RooStats.SPlot ( "sPlot","sPlot", alldata, tot, RooArgList(nSig,nBkg))
 
 
@@ -179,7 +166,7 @@ dstree.GetEntryNumber(88)
 # In[ ]:
 
 
-sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 200, 4.00, 6.0)
+sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 100, 5.00, 1.05)
 
 
 # In[ ]:
@@ -187,22 +174,22 @@ sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 200, 4.00, 6.0)
 
 sPlot_B0_hist.Sumw2()
 sPlot_B0_hist.SetLineColor(2)
-sPlot_B0_hist.SetMarkerColor(2);
-sPlot_B0_hist.SetMinimum(0.)
-dstree.Project('sPlot_B0_hist','xMass','nSig_sw');
+sPlot_B0_hist.SetMarkerColor(2); sPlot_B0_hist.SetMinimum(0.)
+dstree.Project('sPlot_B0_hist','xM','nSig_sw');
 
 
 # In[ ]:
 
 
 sPlot_B0_hist.Draw('e0');
-cD.SaveAs('b0_Splot_Phi.gif')
+cD.SaveAs('sPlot_B0_hist.eps')
 
 
 # In[ ]:
 
 
 sys.exit()
+
 xdataPrompt = (alldata.reduce('xM<4.8')).reduce('xM>4.0').reduce("xL<2.0")
 
 

@@ -166,7 +166,6 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 
   for (Long64_t i=0;i<nentries; i++)
   {
-	std::cout<<i<<std::endl;
 	oldtree->GetEntry(i);
 	std::bitset<16> tt(trigger);
 
@@ -196,9 +195,9 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         jP4Ref_out  = *jP4Ref;
         pP4Ref_out  = *pP4Ref;
 
-        phiMass_out = pP4_out.M();
-        jpsiMass_out= jP4_out.M();
-        xMass_out   = xP4_out.M();
+        phiMass_out = pP4Ref_out.M();
+        jpsiMass_out= pP4Ref_out.M();
+        xMass_out   = xP4Ref_out.M();
 
     	  ditrak_tree->Fill();
       }
