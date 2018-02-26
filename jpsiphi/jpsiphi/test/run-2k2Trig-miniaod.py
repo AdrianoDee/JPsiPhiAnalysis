@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
-input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
+input_file = "file:049F2D32-26F2-E711-A162-00266CFFC664.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -109,7 +109,7 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
 )
 
 
-process.DiTrakHLTProducer = cms.EDAnalyzer('DiTrakHLTProducer',
+process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
     PFCandidates        = cms.InputTag("packedPFCandidates"),
     TriggerInput        = cms.InputTag("slimmedPatTrigger"),
     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
@@ -117,19 +117,19 @@ process.DiTrakHLTProducer = cms.EDAnalyzer('DiTrakHLTProducer',
     OnlyBest            = cms.bool(False),
     TTCandidate_name    = cms.string("DiTrakCandidate"),
     TTTrigger_name      = cms.string("DiTrigCandidate"),
-    HLTs          = filters,
-    Filters = filters,
+    HLTFilters          = filters,
 )
 
 process.rootuple = cms.EDAnalyzer('DiTrakHLTRootupler',
-    ditraks = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    ditrigs = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(False),
-    OnlyBest = cms.bool(False),
-    HLTs = hltpaths,
-    Filters = filters,
+    ditraks             = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    ditrigs             = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
+    primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
+    TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
+    isMC                = cms.bool(False),
+    OnlyBest            = cms.bool(False),
+    HLTs                = hltpaths,
+    Filters             = filters,
 )
 #
 # process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
@@ -155,5 +155,5 @@ process.p = cms.Path(process.triggerSelection *
                      # process.PsiPhiProducer *
                      # process.PsiPhiFitter *
                      process.DiTrakHLTProducer *
-                     process.rootuple *
+                     process.rootuple)
                      # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
