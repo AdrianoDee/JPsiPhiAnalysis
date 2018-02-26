@@ -122,7 +122,7 @@ UInt_t DiTrakHLTRootupler::isTriggerMatched(const pat::CompositeCandidate *diTri
 
 DiTrakHLTRootupler::DiTrakHLTRootupler(const edm::ParameterSet & iConfig):
 diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
-diTrig_label(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
+diTrig_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
