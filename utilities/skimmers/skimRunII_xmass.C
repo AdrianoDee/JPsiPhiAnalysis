@@ -142,12 +142,12 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   oldtree->SetBranchAddress("dimuonditrk_vProb",&vProb);
 
   ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4_out);
-  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
-  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4_out);
+  ditrak_tree->Branch("dimuon_p4",  "TLorentzVector", &jP4_out);
+  ditrak_tree->Branch("ditrak_p4",  "TLorentzVector", &pP4_out);
 
   ditrak_tree->Branch("dimuonditrk_rf_p4", "TLorentzVector", &xP4Ref_out);
-  ditrak_tree->Branch("dimuonditrk_rf_p4",  "TLorentzVector", &jP4Ref_out);
-  ditrak_tree->Branch("dimuonditrk_rf_p4",  "TLorentzVector", &pP4Ref_out);
+  ditrak_tree->Branch("dimuon_rf_p4",  "TLorentzVector", &jP4Ref_out);
+  ditrak_tree->Branch("ditrak_rf_p4",  "TLorentzVector", &pP4Ref_out);
 
   ditrak_tree->Branch("dimuonditrk_ctauPV", &ctau_out, "dimuonditrk_ctauPV/I");
   ditrak_tree->Branch("dimuonditrk_ctauErrPV", &ctauErr_out, "dimuonditrk_ctauErrPV/I");
