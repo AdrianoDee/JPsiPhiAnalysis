@@ -53,14 +53,14 @@ class DiTrackHLTProducer : public edm::EDProducer {
 
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
-  bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
-  const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
-						    const pat::CompositeCandidate& tt);
-  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
-                                                const pat::PackedCandidate& trak2);
+  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2);
+  const pat::CompositeCandidate makeTTTriggerCandidate(const pat::TriggerObjectStandAlone& t1,
+						    const pat::TriggerObjectStandAlone& t2);
+  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& t1,
+                                                const pat::PackedCandidate& t2);
 
-  bool MatchByDRDPt(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2);
-  float DeltaR(const pat::CompositeCandidate t1, const pat::TriggerObjectStandAlone t2);
+  bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
   int candidates;
   int nevents;

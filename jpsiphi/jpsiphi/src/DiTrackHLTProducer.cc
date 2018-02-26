@@ -26,7 +26,7 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& ps):
   OnlyBest_(ps.getParameter<bool>("OnlyBest")),
   TTCandidate_name_(ps.getParameter<std::string>("TTCandidate_name")),
   TTTrigger_name_(ps.getParameter<std::string>("TTTrigger_name")),
-  HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters")),
+  HLTFilters_(ps.getParameter<std::vector<std::string>>("HLTFilters"))
 {
 
   produces<pat::CompositeCandidateCollection>(TTCandidate_name_);
@@ -102,27 +102,28 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
   for (size_t i = 0; i < filteredTracks.size(); i++) {
   {
            auto posTrack = filteredTracks[i];
-           if(posTrack.charge()==0) continue;
+           if(posTrack.charge() <= 0 ) continue;
            if(posTrack.pt()<0.5) continue;
   	       if(fabs(posTrack.pdgId())!=211) continue;
   	       if(!(posTrack.trackHighPurity())) continue;
 
-           if ( IsTheSame(*posTrack,*pmu1) || IsTheSame(*posTrack,*pmu2) || posTrack.charge() < 0 ) continue;
+
 
   // loop over second track candidate, negative charge
            // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
            for (size_t j = 0; j < filteredTracks.size(); j++) {
+
+             if (i == j) continue;
+
              auto negTrack = filteredTracks[j];
-             if(negTrack.charge()==0) continue;
+             if(negTrack.charge() >= 0 ) continue;
              if(negTrack.pt()<0.5) continue;
     	       if(fabs(negTrack.pdgId())!=211) continue;
     	       if(!(negTrack.trackHighPurity())) continue;
 
-             if (i == j) continue;
-             if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) || negTrack.charge() > 0 ) continue;
-
              pat::CompositeCandidate TTCand = makeTTCandidate(posTrack,negTrack);
-             pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j])
+             pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j]);
+
              if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
                DiTrackColl->push_back(TTCand);
@@ -151,12 +152,6 @@ void DiTrackHLTProducer::endJob(){
   std::cout << "###########################" << std::endl;
 }
 
-bool DiTrackHLTProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
-  double DeltaEta = fabs(mu.eta()-tk.eta());
-  double DeltaP   = fabs(mu.p()-tk.p());
-  if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
-  return false;
-}
 
 const pat::CompositeCandidate DiTrackHLTProducer::makeDiMuonTTCandidate(
                                           const pat::CompositeCandidate& dimuon,
