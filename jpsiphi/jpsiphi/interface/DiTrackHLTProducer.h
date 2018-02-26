@@ -49,7 +49,7 @@ class DiTrackHLTProducer : public edm::EDProducer {
   std::vector<double> MassTraks_;
   bool OnlyBest_;
   std::string TTCandidate_name_,TTTrigger_name_;
-  std::string HLTFilters_;
+  std::vector <std::string> HLTFilters_;
 
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
