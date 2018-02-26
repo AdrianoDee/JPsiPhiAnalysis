@@ -1,3 +1,8 @@
+
+Master branch is for analysis utilities (root, python, notebooks, proof ...)
+
+Checkout 2016,2016,2012 branches for CMSSW analyzers
+
 Global Tags 2012 ReReco Jan13 CMSSW_5_3_7_patch5 /MuOnia/Run2012*-22Jan2013-*/AOD
 
 - ABC -> FT_R_53_V18::All
