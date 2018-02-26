@@ -88,27 +88,22 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   }
 
-  std::cout<<"Out Filtering : "<<  filteredColl.size() <<std::endl;
   //Matching
 
   for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
   {
-    std::cout << "Trak loop" << std::endl;
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
     {
-      std::cout << "Trig loop" << std::endl;
       if(MatchByDRDPt(*trak,*trigger))
       {
-        std::cout << "DRDPt match" << std::endl;
         if(matched)
         {
           if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,*trigger))
           {
-            std::cout << "Better Trig" << std::endl;
             matchedColl.pop_back();
             matchedColl.push_back(*trigger);
-            std::cout << "Better trig replaced" << std::endl;
+
           }
         }
 
@@ -123,7 +118,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
     }
   }
 
-  std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
+  // std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
   for (size_t i = 0; i < filteredTracks.size(); i++)
   {
@@ -159,6 +154,8 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
            } // loop over second track
          }   // loop on track candidates
 
+  candidates = DiTriggColl->size();
+
   // if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
   // if ( ncombo > 0 ) nreco++;
   iEvent.put(std::move(DiTrackColl),TTCandidate_name_);
@@ -168,13 +165,9 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
 void DiTrackHLTProducer::endJob(){
   std::cout << "###########################" << std::endl;
-  std::cout << "DiMuonDiTrak Candidate producer report:" << std::endl;
+  std::cout << "DiTrak(DiTrig) Candidate producer report:" << std::endl;
   std::cout << "###########################" << std::endl;
-  std::cout << "Found " << nevents << " Events" << std::endl;
-  std::cout << "Events with DiMuon candidates " << ndimuon << std::endl;
-  std::cout << "Events with DiMuonDiTrak candidates " << nreco << std::endl;
-  std::cout << "###########################" << std::endl;
-  std::cout << "Found " << candidates << " DiMuonDiTrak candidates." << std::endl;
+  std::cout << "Found " << candidates << " DiTrak (DiTrig) candidates." << std::endl;
   std::cout << "###########################" << std::endl;
 }
 
