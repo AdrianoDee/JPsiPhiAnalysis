@@ -110,7 +110,11 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
 
   TLorentzVector *xP4 = 0, *jP4 = 0, *pP4 = 0;
+  TLorentzVector *xP4Ref = 0, *jP4Ref = 0, *pP4Ref = 0;
+
   TLorentzVector xP4_out, jP4_out, pP4_out;
+  TLorentzVector xP4Ref_out, jP4Ref_out, pP4Ref_out;
+
   TLorentzVector *mN_p4 = 0, *mP_p4 = 0, *kN_p4 = 0, *kP_p4 = 0;
   TLorentzVector mN_p4_out, mP_p4_out, kN_p4_out, kP_p4_out;
 
@@ -119,6 +123,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   oldtree->SetBranchAddress("dimuonditrk_p4",&xP4);
   oldtree->SetBranchAddress("dimuon_p4",&jP4);
   oldtree->SetBranchAddress("ditrak_p4",&pP4);
+
+  oldtree->SetBranchAddress("dimuonditrk_rf_p4",&xP4Ref);
+  oldtree->SetBranchAddress("dimuon_rf_p4",&jP4Ref);
+  oldtree->SetBranchAddress("ditrak_rf_p4",&pP4Ref);
 
   oldtree->SetBranchAddress("kaonp_rf_p4",&kN_p4);
   oldtree->SetBranchAddress("kaonn_rf_p4",&kP_p4);
@@ -134,6 +142,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4_out);
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4_out);
+
+  ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4Ref_out);
+  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4Ref_out);
+  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4Ref_out);
 
   ditrak_tree->Branch("dimuonditrk_ctauPV", &ctau_out, "dimuonditrk_ctauPV/I");
   ditrak_tree->Branch("dimuonditrk_ctauErrPV", &ctauErr_out, "dimuonditrk_ctauErrPV/I");
@@ -152,16 +164,16 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 	oldtree->GetEntry(i);
 	std::bitset<16> tt(trigger);
 
-  bool phiM = pP4->M() > 1.089 && pP4->M() < 1.291;
+  bool phiM = pP4->M() > 1.0089 && pP4->M() < 1.0300;
   bool jpsiM = jP4->M() > 3.00 && jP4->M() < 3.15;
   bool cosAlpha = cosA > 0.99;
   bool vertexP = vProb > 0.1;
   bool flight = ctau/ctauErr > 3.0;
-  bool triggerbit = 0;
+  bool triggerbit = tt.test(0);
 
-    	if(tt.test(triggerbit) && phiM && jpsiM && cosAlpha && vertexP && flight)
+    	if(phiM && jpsiM && cosAlpha && vertexP && flight)
       {
-	      std::cout << "In" << std::endl;
+
         xP4_out     = *xP4;
         jP4_out     = *jP4;
         pP4_out     = *pP4;
@@ -173,6 +185,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         kP_p4_out   = *kP_p4;
         mP_p4_out   = *mP_p4;
         mN_p4_out   = *mN_p4;
+
+        xP4Ref_out  = *xP4Ref;
+        jP4Ref_out  = *jP4Ref;
+        pP4Ref_out  = *pP4Ref;
 
     	  ditrak_tree->Fill();
       }
