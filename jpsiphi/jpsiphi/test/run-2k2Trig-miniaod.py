@@ -153,6 +153,7 @@ process.rootuple = cms.EDAnalyzer('DiTrakHLTRootupler',
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
+                     process.unpackPatTriggers *
                      # process.slimmedPFCandsWithTriggerSequence *
                      process.softMuons *
                      process.JPsi2MuMuPAT *
