@@ -50,7 +50,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
         UInt_t getTriggerBits(const edm::Event &);
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
-        UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Candidate);
+        UInt_t DiTrakHLTRootupler::isTriggerMatched(const pat::CompositeCandidate *diTrig_Candidate);
 
 	void beginJob() override;
 	void analyze(const edm::Event &, const edm::EventSetup &) override;
