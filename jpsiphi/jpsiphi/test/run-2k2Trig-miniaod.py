@@ -103,7 +103,7 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 )
 
 process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
-    src       = cms.InputTag("DiMuonFilteredJpsi"),
+    src       = cms.InputTag("JPsi2MuMuFilter"),
     minNumber = cms.uint32(1),
     filter    = cms.bool(True)
 )
