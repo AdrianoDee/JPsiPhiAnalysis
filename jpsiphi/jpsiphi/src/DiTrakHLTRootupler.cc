@@ -107,8 +107,8 @@ UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Cand
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
 
-    if(std::find((trig1->filters()).begin(),(trig1->filters()).end(),HLTFilters_[iTr])!=(trig1->filters()).end())
-      if(std::find((trig2->filters()).begin(),(trig2->filters()).end(),HLTFilters_[iTr])!=(trig2->filters()).end())
+    if(std::find((trig1->filterLabels()).begin(),(trig1->filterLabels()).end(),HLTFilters_[iTr])!=(trig1->filterLabels()).end())
+      if(std::find((trig2->filterLabels()).begin(),(trig2->filterLabels()).end(),HLTFilters_[iTr])!=(trig2->filterLabels()).end())
         matched += (1<<iTr);
 
   }
