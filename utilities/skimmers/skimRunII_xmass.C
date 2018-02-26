@@ -101,13 +101,11 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   //Create a new file + a clone of old tree in new file
   TFile *newfile = new TFile((treename + "_skim_cut_" + filename).data(),"RECREATE");
   TTree *ditrak_tree = new TTree("JPsiPhiCuts Tree","JPsiPhiCuts Tree");
-
-  Long64_t nentries = oldtree->GetEntries();
-
+  std::cout<<"New tree"<<std::endl;
   Double_t cosA  = 0.0, ctau  = 0.0, ctauErr  = 0.0, vProb  = 0.0;
   Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
 
-  UInt_t trigger;
+  Int_t trigger;
   // Int_t phiMType = 0, phiPType = 0;
   // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
 
@@ -143,14 +141,15 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   ditrak_tree->Branch("dimuonditrk_cosAlpha", "TLorentzVector",&cosA_out);
   ditrak_tree->Branch("dimuonditrk_vProb", "TLorentzVector",&vProb_out);
 
-  ditrak_tree->SetBranchAddress("kaonp_rf_p4", "TLorentzVector",&kN_p4_out);
-  ditrak_tree->SetBranchAddress("kaonn_rf_p4", "TLorentzVector",&kP_p4_out);
+  ditrak_tree->Branch("kaonp_rf_p4", "TLorentzVector",&kN_p4_out);
+  ditrak_tree->Branch("kaonn_rf_p4", "TLorentzVector",&kP_p4_out);
 
-  ditrak_tree->SetBranchAddress("muonp_rf_p4", "TLorentzVector",&mP_p4_out);
-  ditrak_tree->SetBranchAddress("muonn_rf_p4", "TLorentzVector",&mN_p4_out);
+  ditrak_tree->Branch("muonp_rf_p4", "TLorentzVector",&mP_p4_out);
+  ditrak_tree->Branch("muonn_rf_p4", "TLorentzVector",&mN_p4_out);
 
   for (Long64_t i=0;i<nentries; i++)
   {
+	std::cout<<i<<std::endl;
 	oldtree->GetEntry(i);
 	std::bitset<16> tt(trigger);
 
@@ -159,10 +158,11 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   bool cosAlpha = cosA > 0.99;
   bool vertexP = vProb > 0.1;
   bool flight = ctau/ctauErr > 3.0;
-
+  bool triggerbit = 0;
 
     	if(tt.test(triggerbit) && phiM && jpsiM && cosAlpha && vertexP && flight)
       {
+	std::cout << "In" << std::endl;
         xP4_out     = xP4;
         jP4_out     = jP4;
         pP4_out     = pP4;
@@ -175,12 +175,12 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         mP_p4_out   = mP_p4;
         mN_p4_out   = mN_p4;
 
-    	  newtree->Fill();
+    	  ditrak_tree->Fill();
       }
 
   }
-  newtree->Print();
-  newtree->Write();
+  ditrak_tree->Print();
+  ditrak_tree->Write();
 
   return 0;
 
