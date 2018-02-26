@@ -63,13 +63,15 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   std::vector< pat::PackedCandidate> filteredTracks;
   //Filtering
 
-  for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++trigger)
-  {
-    // pat::TriggerObjectStandAlone* unPackedTrigger = (pat::TriggerObjectStandAlone*)trigger->clone();
+  for ( size_t iTrigObj = 0; iTrigObj < patTriggerObjectsStandAlone->size(); ++iTrigObj ) {
 
-    TriggerObjectStandAlone unPackedTrigger( *trigger );
+    pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
 
-    // if(unPackedTrigger.checkIfFiltersAreUnpacked(false))
+    const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+    const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+    unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
     bool filtered = false;
@@ -88,21 +90,27 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   }
 
+  std::cout<<"Out Filtering : "<<  filteredColl.size() <<std::endl;
   //Matching
 
   for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
   {
+    std::cout << "Trak loop" << std::endl;
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
     {
+      std::cout << "Trig loop" << std::endl;
       if(MatchByDRDPt(*trak,*trigger))
       {
+        std::cout << "DRDPt match" << std::endl;
         if(matched)
         {
           if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,*trigger))
           {
+            std::cout << "Better Trig" << std::endl;
             matchedColl.pop_back();
             matchedColl.push_back(*trigger);
+            std::cout << "Better trig replaced" << std::endl;
           }
         }
 
@@ -112,7 +120,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
         matched = true;
       }
     }
-  }
+  
 
   std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
