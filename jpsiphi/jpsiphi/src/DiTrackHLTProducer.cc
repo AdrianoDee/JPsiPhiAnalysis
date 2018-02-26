@@ -115,12 +115,15 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
         }
 
         if(!matched)
-          filteredTracks.push_back(*trak);
+          {
+            filteredTracks.push_back(*trak);
+            matchedColl.push_back(*trigger);
+          }
 
         matched = true;
       }
     }
-  
+
 
   std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
