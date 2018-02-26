@@ -135,10 +135,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4_out);
 
-  ditrak_tree->Branch("dimuonditrk_ctauPV", ctau_out, "dimuonditrk_ctauPV/I");
-  ditrak_tree->Branch("dimuonditrk_ctauErrPV", ctauErr_out, "dimuonditrk_ctauErrPV/I");
-  ditrak_tree->Branch("dimuonditrk_cosAlpha", cosA_out, "dimuonditrk_cosAlpha/I");
-  ditrak_tree->Branch("dimuonditrk_vProb", vProb_out, "dimuonditrk_vProb/I");
+  ditrak_tree->Branch("dimuonditrk_ctauPV", &ctau_out, "dimuonditrk_ctauPV/I");
+  ditrak_tree->Branch("dimuonditrk_ctauErrPV", &ctauErr_out, "dimuonditrk_ctauErrPV/I");
+  ditrak_tree->Branch("dimuonditrk_cosAlpha", &cosA_out, "dimuonditrk_cosAlpha/I");
+  ditrak_tree->Branch("dimuonditrk_vProb", &vProb_out, "dimuonditrk_vProb/I");
 
   ditrak_tree->Branch("kaonp_rf_p4", "TLorentzVector",&kN_p4_out);
   ditrak_tree->Branch("kaonn_rf_p4", "TLorentzVector",&kP_p4_out);
@@ -165,10 +165,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         xP4_out     = *xP4;
         jP4_out     = *jP4;
         pP4_out     = *pP4;
-        ctau_out    = *ctau;
-        ctauErr_out = *ctauErr;
-        cosA_out    = *cosA;
-        vProb_out   = *vProb;
+        ctau_out    = ctau;
+        ctauErr_out = ctauErr;
+        cosA_out    = cosA;
+        vProb_out   = vProb;
         kN_p4_out   = *kN_p4;
         kP_p4_out   = *kP_p4;
         mP_p4_out   = *mP_p4;
