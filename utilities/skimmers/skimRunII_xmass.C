@@ -101,7 +101,7 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   //Create a new file + a clone of old tree in new file
   TFile *newfile = new TFile((treename + "_skim_cut_" + filename).data(),"RECREATE");
   TTree *ditrak_tree = new TTree("JPsiPhiCuts Tree","JPsiPhiCuts Tree");
-  std::cout<<"New tree"<<std::endl;
+
   Double_t cosA  = 0.0, ctau  = 0.0, ctauErr  = 0.0, vProb  = 0.0;
   Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
 
@@ -110,9 +110,9 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
 
   TLorentzVector *xP4 = 0, *jP4 = 0, *pP4 = 0;
-  TLorentzVector *xP4_out = 0, *jP4_out = 0, *pP4_out = 0;
+  TLorentzVector xP4_out, jP4_out, pP4_out;
   TLorentzVector *mN_p4 = 0, *mP_p4 = 0, *kN_p4 = 0, *kP_p4 = 0;
-  TLorentzVector *mN_p4_out = 0, *mP_p4_out = 0, *kN_p4_out = 0, *kP_p4_out = 0;
+  TLorentzVector mN_p4_out, mP_p4_out, kN_p4_out, kP_p4_out;
 
   oldtree->SetBranchAddress("trigger",&trigger);
 
@@ -130,7 +130,6 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   oldtree->SetBranchAddress("dimuonditrk_ctauErrPV",&ctauErr);
   oldtree->SetBranchAddress("dimuonditrk_cosAlpha",&cosA);
   oldtree->SetBranchAddress("dimuonditrk_vProb",&vProb);
-
 
   ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4_out);
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
@@ -162,18 +161,18 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 
     	if(tt.test(triggerbit) && phiM && jpsiM && cosAlpha && vertexP && flight)
       {
-	std::cout << "In" << std::endl;
-        xP4_out     = xP4;
-        jP4_out     = jP4;
-        pP4_out     = pP4;
-        ctau_out    = ctau;
-        ctauErr_out = ctauErr;
-        cosA_out    = cosA;
-        vProb_out   = vProb;
-        kN_p4_out   = kN_p4;
-        kP_p4_out   = kP_p4;
-        mP_p4_out   = mP_p4;
-        mN_p4_out   = mN_p4;
+	      std::cout << "In" << std::endl;
+        xP4_out     = *xP4;
+        jP4_out     = *jP4;
+        pP4_out     = *pP4;
+        ctau_out    = *ctau;
+        ctauErr_out = *ctauErr;
+        cosA_out    = *cosA;
+        vProb_out   = *vProb;
+        kN_p4_out   = *kN_p4;
+        kP_p4_out   = *kP_p4;
+        mP_p4_out   = *mP_p4;
+        mN_p4_out   = *mN_p4;
 
     	  ditrak_tree->Fill();
       }
