@@ -245,7 +245,7 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
   if ( ditraks.isValid() && !ditraks->empty()) {
     // for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
     for (size_t i = 0; i < (*ditraks).size(); ++i) {
-
+      std::cout<< "Valids"<<std::endl;
       const pat::CompositeCandidate ditrakCand = (*ditraks)[i];
       const pat::CompositeCandidate ditrigCand = (*ditrigs)[i];
 
