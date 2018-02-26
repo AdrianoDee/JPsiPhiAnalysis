@@ -171,7 +171,7 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 	std::bitset<16> tt(trigger);
 
   bool phiM = pP4->M() > 1.0089 && pP4->M() < 1.0300;
-  bool jpsiM = jP4->M() > 3.00 && jP4->M() < 3.15;
+  bool jpsiM = jP4->M() > 3.00 && jP4->M() < 3.20;
   bool cosAlpha = cosA > 0.99;
   bool vertexP = vProb > 0.1;
   bool flight = ctau/ctauErr > 3.0;
@@ -196,9 +196,9 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         jP4Ref_out  = *jP4Ref;
         pP4Ref_out  = *pP4Ref;
 
-        phiMass_out = xP4_out.M();
+        phiMass_out = pP4_out.M();
         jpsiMass_out= jP4_out.M();
-        xMass_out   = pP4_out.M();
+        xMass_out   = xP4_out.M();
 
     	  ditrak_tree->Fill();
       }
