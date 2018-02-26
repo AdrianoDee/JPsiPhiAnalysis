@@ -65,6 +65,11 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
+process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
+  triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
+  unpackFilterLabels          = cms.bool( True )
+)
 
 process.softMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
@@ -111,7 +116,7 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
 
 process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
     PFCandidates        = cms.InputTag("packedPFCandidates"),
-    TriggerInput        = cms.InputTag("unpackedPatTrigger"),
+    TriggerInput        = cms.InputTag("unpackPatTriggers"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
     MassTraks           = cms.vdouble(kaonmass,kaonmass),

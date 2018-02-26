@@ -70,7 +70,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
     // unPackedTrigger->unpackFilterLabels(iEvent,*triggerResults_handle);
     bool filtered = false;
 
-    std::vector< std::string > thisFilters = unPackedTrigger->filterLabels();
+    // std::vector< std::string > thisFilters = unPackedTrigger->filterLabels();
     for (size_t i = 0; i < HLTFilters_.size(); i++)
       if(unPackedTrigger->hasFilterLabel(HLTFilters_[i]))
         filtered = true;
