@@ -58,6 +58,37 @@ int skimXTree(std::string path, std::string filename, std::string treename = "xT
 }
 
 
+int skimXTreeTrigger(int triggerbit, std::string path, std::string filename, std::string treename = "xTree")//, std::string dirname = "rootuple")
+{
+  
+  TFile *oldfile = TFile::Open((path+filename).data());
+  //TDirectory *directory = (TDirectory*)oldfile->Get(dirname.data());
+  TTree *oldtree = (TTree*)oldfile->Get(treename.data());
+  Long64_t nentries = oldtree->GetEntries();
+  ULong64_t event   = 0;
+  
+  //Create a new file + a clone of old tree in new file
+  TFile *newfile = new TFile((treename + "_skim_trigger_"+ std::to_string(triggerbit) + "_" + filename).data(),"RECREATE");
+  TTree *newtree = oldtree->CloneTree(0);
+  
+  Int_t theTrigger = 0;
+  oldtree->SetBranchAddress("trigger",&theTrigger);
+ 
+  for (Long64_t i=0;i<nentries; i++) 
+  {
+	oldtree->GetEntry(i);	
+	std::bitset<16> tt(theTrigger);
+			
+	if(tt.test(triggerbit))
+	newtree->Fill();	
+  }
+  newtree->Print();
+  newtree->Write();
+              
+              return 0;
+  
+              }
+
 
 int selectXTree()
 {
