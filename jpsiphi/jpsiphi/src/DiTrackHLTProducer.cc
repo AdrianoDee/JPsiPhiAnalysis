@@ -68,14 +68,18 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
     pat::TriggerObjectStandAlone* unPackedTrigger = (pat::TriggerObjectStandAlone*)trigger->clone();
 
     // unPackedTrigger->unpackFilterLabels(iEvent,*triggerResults_handle);
+    bool filtered = false;
+
     std::vector< std::string > thisFilters = unPackedTrigger->filterLabels();
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+      if(unPackedTrigger->hasFilterLabel(HLTFilters_[i]))
+        filtered = true;
+    //
+    // std::vector< std::string > matchFilters;
+    //
+    // std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters));
 
-    // PunPackedTrigger->unpackFilterLabels(thisFilters);
-    std::vector< std::string > matchFilters;
-
-    std::set_intersection(thisFilters.begin(),thisFilters.end(),HLTFilters_.begin(),HLTFilters_.end(),back_inserter(matchFilters));
-
-    if(matchFilters.size()>0)
+    if(filtered)
       filteredColl.push_back(*unPackedTrigger);
 
   }
