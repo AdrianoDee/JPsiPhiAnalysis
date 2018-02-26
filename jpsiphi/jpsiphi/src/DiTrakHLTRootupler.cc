@@ -49,6 +49,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
         UInt_t getTriggerBits(const edm::Event &);
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
+        UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Candidate);
 
 	void beginJob() override;
 	void analyze(const edm::Event &, const edm::EventSetup &) override;
@@ -65,10 +66,11 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> diTrig_label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  std::vector<double> ditrakMassCuts_;
+  // std::vector<double> ditrakMassCuts_;
 	bool isMC_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
+  std::vector<std::string>  HLTFilters_;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -96,6 +98,23 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 
 };
 
+UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Candidate) {
+  const pat::Muon* trig1 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakP"));
+  const pat::Muon* trig2 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trakN"));
+  UInt_t matched = 0;  // if no list is given, is not matched
+
+  // if matched a given trigger, set the bit, in the same order as listed
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+
+    if(std::find((trig1->filters()).begin(),(trig1->filters()).end(),HLTFilters_[iTr])!=(trig1->filters()).end())
+      if(std::find((trig2->filters()).begin(),(trig2->filters()).end(),HLTFilters_[iTr])!=(trig2->filters()).end())
+        matched += (1<<iTr);
+
+  }
+
+  return matched;
+}
+
 //
 // constructors and destructor
 //
@@ -105,13 +124,13 @@ diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< e
 diTrig_label(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("ditrak_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
-  ditrak_tree = fs->make < TTree > ("ditrakTree", "Tree of ditrak");
+  ditrak_tree = fs->make < TTree > ("DiTrakDiTrigTree", "Tree of ditrakditrig");
 
   ditrak_tree->Branch("run",      &run,      "run/i");
   ditrak_tree->Branch("event",    &event,    "event/l");
@@ -215,8 +234,8 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
   trigP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   trigN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  float ditrakMassMax_ = ditrakMassCuts_[1];
-  float ditrakMassMin_ = ditrakMassCuts_[0];
+  // float ditrakMassMax_ = ditrakMassCuts_[1];
+  // float ditrakMassMin_ = ditrakMassCuts_[0];
 
   bool already_stored = false;
 
@@ -242,11 +261,13 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
 
         ditrig_p4.SetPtEtaPhiM(ditrigCand.pt(),ditrigCand.eta(),ditrigCand.phi(),ditrigCand.mass());
 
-        reco::Candidate::LorentzVector vP = ditrigCand.daughter("trigP")->p4();
-        reco::Candidate::LorentzVector vM = ditrigCand.daughter("trigN")->p4();
+        vP = ditrigCand.daughter("trigP")->p4();
+        vM = ditrigCand.daughter("trigN")->p4();
 
         trigP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
         trigN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
+
+        tMatch = DiTrakHLTRootupler::isTriggerMatched(ditrigCand);
 
         // MassErr = -1.0;
         // if (ditrakCand.hasUserFloat("MassErr"))    MassErr = ditrakCand.userFloat("MassErr");

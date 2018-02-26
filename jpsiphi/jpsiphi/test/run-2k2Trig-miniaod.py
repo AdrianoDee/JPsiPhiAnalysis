@@ -77,6 +77,8 @@ process.softMuons = cms.EDFilter('PATMuonSelector',
    ),
    filter = cms.bool(True)
 )
+
+
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
@@ -90,6 +92,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
+
 
 process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
       OniaTag             = cms.InputTag("JPsi2MuMuPAT"),
@@ -105,17 +108,28 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
     filter    = cms.bool(True)
 )
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-    dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    dimuonditrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
+
+process.DiTrakHLTProducer = cms.EDAnalyzer('DiTrakHLTProducer',
+    PFCandidates        = cms.InputTag("packedPFCandidates"),
+    TriggerInput        = cms.InputTag("slimmedPatTrigger"),
+    TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
+    MassTraks           = cms.vdouble(kaonmass,kaonmass),
+    OnlyBest            = cms.bool(False),
+    TTCandidate_name    = cms.string("DiTrakCandidate"),
+    TTTrigger_name      = cms.string("DiTrigCandidate"),
+    HLTs          = filters,
+    Filters = filters,
+)
+
+process.rootuple = cms.EDAnalyzer('DiTrakHLTRootupler',
+    ditraks = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    ditrigs = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
     HLTs = hltpaths,
     Filters = filters,
-    TreeName = cms.string('JPsi Phi Tree')
 )
 #
 # process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
@@ -140,5 +154,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.DiMuonCounterJPsi*
                      # process.PsiPhiProducer *
                      # process.PsiPhiFitter *
+                     process.DiTrakHLTProducer *
                      process.rootuple *
                      # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
