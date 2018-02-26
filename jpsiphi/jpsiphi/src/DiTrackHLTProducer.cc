@@ -65,7 +65,7 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = triggerColl->begin(), triggerEnd=triggerColl->end(); trigger!= triggerEnd; ++trigger)
   {
-    TriggerObjectStandAlone* unPackedTrigger = trigger->clone();
+    pat::TriggerObjectStandAlone* unPackedTrigger = (pat::TriggerObjectStandAlone*)trigger->clone();
 
     unPackedTrigger->unpackFilterLabels(iEvent,*triggerResults_handle);
 
