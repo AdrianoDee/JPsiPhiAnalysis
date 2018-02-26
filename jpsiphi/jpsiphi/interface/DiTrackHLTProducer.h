@@ -45,6 +45,7 @@ class DiTrackHLTProducer : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
+  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> MassTraks_;
   bool OnlyBest_;
