@@ -26,8 +26,9 @@
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
-
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+
 #include "FWCore/Common/interface/TriggerNames.h"
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -66,7 +67,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> diTrig_label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  // std::vector<double> ditrakMassCuts_;
+  std::vector<double> ditrakMassCuts_;
 	bool isMC_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
@@ -122,6 +123,7 @@ UInt_t DiTrakHLTRootupler::isTriggerMatched(pat::CompositeCandidate *diTrig_Cand
 DiTrakHLTRootupler::DiTrakHLTRootupler(const edm::ParameterSet & iConfig):
 diTrak_label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
 diTrig_label(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter< edm::InputTag>("ditrigs"))),
+ditrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 isMC_(iConfig.getParameter<bool>("isMC")),
@@ -234,8 +236,8 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
   trigP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   trigN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  // float ditrakMassMax_ = ditrakMassCuts_[1];
-  // float ditrakMassMin_ = ditrakMassCuts_[0];
+  float ditrakMassMax_ = ditrakMassCuts_[1];
+  float ditrakMassMin_ = ditrakMassCuts_[0];
 
   bool already_stored = false;
 
