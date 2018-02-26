@@ -117,8 +117,8 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   oldtree->SetBranchAddress("trigger",&trigger);
 
   oldtree->SetBranchAddress("dimuonditrk_p4",&xP4);
-  oldtree->SetBranchAddress("dimuonditrk_p4",&jP4);
-  oldtree->SetBranchAddress("dimuonditrk_p4",&pP4);
+  oldtree->SetBranchAddress("dimuon_p4",&jP4);
+  oldtree->SetBranchAddress("ditrak_p4",&pP4);
 
   oldtree->SetBranchAddress("kaonp_rf_p4",&kN_p4);
   oldtree->SetBranchAddress("kaonn_rf_p4",&kP_p4);
