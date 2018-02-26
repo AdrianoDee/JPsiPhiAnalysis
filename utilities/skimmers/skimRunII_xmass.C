@@ -100,12 +100,14 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 
   //Create a new file + a clone of old tree in new file
   TFile *newfile = new TFile((treename + "_skim_cut_" + filename).data(),"RECREATE");
-  TTree *newtree = new TTree("JPsiPhiCuts Tree","JPsiPhiCuts Tree");
+  TTree *ditrak_tree = new TTree("JPsiPhiCuts Tree","JPsiPhiCuts Tree");
 
-  Long64_t ditrak_tree = oldtree->GetEntries();
+  Long64_t nentries = oldtree->GetEntries();
 
   Double_t cosA  = 0.0, ctau  = 0.0, ctauErr  = 0.0, vProb  = 0.0;
   Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
+
+  UInt_t trigger;
   // Int_t phiMType = 0, phiPType = 0;
   // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
 
@@ -150,10 +152,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   for (Long64_t i=0;i<nentries; i++)
   {
 	oldtree->GetEntry(i);
-	std::bitset<16> tt(theTrigger);
+	std::bitset<16> tt(trigger);
 
-  bool phiM = pP4.M() > 1.089 && pP4.M() < 1.291;
-  bool jpsiM = jP4.M() > 3.00 && jP4.M() < 3.15
+  bool phiM = pP4->M() > 1.089 && pP4->M() < 1.291;
+  bool jpsiM = jP4->M() > 3.00 && jP4->M() < 3.15;
   bool cosAlpha = cosA > 0.99;
   bool vertexP = vProb > 0.1;
   bool flight = ctau/ctauErr > 3.0;
