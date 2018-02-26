@@ -99,7 +99,7 @@ void DiTrackHLTProducer::produce(edm::Event& event, const edm::EventSetup& esetu
 
   std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
-  for (size_t i = 0; i < filteredTracks.size(); i++) {
+  for (size_t i = 0; i < filteredTracks.size(); i++)
   {
            auto posTrack = filteredTracks[i];
            if(posTrack.charge() <= 0 ) continue;
@@ -150,25 +150,6 @@ void DiTrackHLTProducer::endJob(){
   std::cout << "###########################" << std::endl;
   std::cout << "Found " << candidates << " DiMuonDiTrak candidates." << std::endl;
   std::cout << "###########################" << std::endl;
-}
-
-
-const pat::CompositeCandidate DiTrackHLTProducer::makeDiMuonTTCandidate(
-                                          const pat::CompositeCandidate& dimuon,
-				          const pat::CompositeCandidate& tt
-                                         ){
-
-  pat::CompositeCandidate DiMuonTCand;
-  DiMuonTCand.addDaughter(dimuon,"dimuon");
-  DiMuonTCand.addDaughter(tt,"ditrak");
-  DiMuonTCand.setVertex(dimuon.vertex());
-  DiMuonTCand.setCharge(tt.charge());
-
-  reco::Candidate::LorentzVector vDiMuonT = dimuon.p4() + tt.p4();
-  DiMuonTCand.setP4(vDiMuonT);
-
-  return DiMuonTCand;
-
 }
 
 const pat::CompositeCandidate DiTrackHLTProducer::makeTTCandidate(
