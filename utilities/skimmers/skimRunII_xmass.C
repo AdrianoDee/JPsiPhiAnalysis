@@ -105,6 +105,8 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   Double_t cosA  = 0.0, ctau  = 0.0, ctauErr  = 0.0, vProb  = 0.0;
   Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
 
+  Double_t phiMass_out = 0.0, jpsiMass_out = 0., xMass_out = 0.0;
+
   Int_t trigger;
   // Int_t phiMType = 0, phiPType = 0;
   // UInt_t phi_trigger = 0, jpsi_trigger = 0, trigger = 0;
@@ -143,14 +145,18 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4_out);
   ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4_out);
 
-  ditrak_tree->Branch("dimuonditrk_p4", "TLorentzVector", &xP4Ref_out);
-  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &jP4Ref_out);
-  ditrak_tree->Branch("dimuonditrk_p4",  "TLorentzVector", &pP4Ref_out);
+  ditrak_tree->Branch("dimuonditrk_rf_p4", "TLorentzVector", &xP4Ref_out);
+  ditrak_tree->Branch("dimuonditrk_rf_p4",  "TLorentzVector", &jP4Ref_out);
+  ditrak_tree->Branch("dimuonditrk_rf_p4",  "TLorentzVector", &pP4Ref_out);
 
   ditrak_tree->Branch("dimuonditrk_ctauPV", &ctau_out, "dimuonditrk_ctauPV/I");
   ditrak_tree->Branch("dimuonditrk_ctauErrPV", &ctauErr_out, "dimuonditrk_ctauErrPV/I");
   ditrak_tree->Branch("dimuonditrk_cosAlpha", &cosA_out, "dimuonditrk_cosAlpha/I");
   ditrak_tree->Branch("dimuonditrk_vProb", &vProb_out, "dimuonditrk_vProb/I");
+
+  ditrak_tree->Branch("phiMass", &phiMass_out, "phiMass/D");
+  ditrak_tree->Branch("jpsiMass", &jpsiMass_out, "jpsiMass/D");
+  ditrak_tree->Branch("xMass", &xMass_out, "xMass/D");
 
   ditrak_tree->Branch("kaonp_rf_p4", "TLorentzVector",&kN_p4_out);
   ditrak_tree->Branch("kaonn_rf_p4", "TLorentzVector",&kP_p4_out);
@@ -189,6 +195,10 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         xP4Ref_out  = *xP4Ref;
         jP4Ref_out  = *jP4Ref;
         pP4Ref_out  = *pP4Ref;
+
+        phiMass_out = xP4_out.M();
+        jpsiMass_out= jP4_out.M();
+        xMass_out   = pP4_out.M();
 
     	  ditrak_tree->Fill();
       }
