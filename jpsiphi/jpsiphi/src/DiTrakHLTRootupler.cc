@@ -64,7 +64,7 @@ class DiTrakHLTRootupler:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrak_label;
-  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> diTrig_label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> diTrig_label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> ditrakMassCuts_;
