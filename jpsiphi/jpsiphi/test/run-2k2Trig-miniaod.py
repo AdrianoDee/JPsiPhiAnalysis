@@ -24,7 +24,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
+        fileName = cms.string('rootuple-2017-ditraktrigger.root'),
 )
 
 kaonmass = 0.493677
@@ -127,8 +127,8 @@ process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
 )
 
 process.rootuple = cms.EDAnalyzer('DiTrakHLTRootupler',
-    ditraks             = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    ditrigs             = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
+    ditraks             = cms.InputTag('DiTrackHLTProducer','DiTrakCandidate'),
+    ditrigs             = cms.InputTag("DiTrackHLTProducer","DiTrigCandidate"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
