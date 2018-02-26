@@ -144,7 +144,11 @@ void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
                // DiTrackColl->push_back(TTCand);
-               TTTrigger.addDaughter("TrakTrak",TTCand);
+               TTTrigger.addUserFloat("TTMass",TTCand.mass());
+               TTTrigger.addUserFloat("TTPt",TTCand.pt());
+               TTTrigger.addUserFloat("TTEta",TTCand.eta());
+               TTTrigger.addUserFloat("TTPhi",TTCand.phi());
+
                DiTriggColl->push_back(TTTrigger);
 
              }

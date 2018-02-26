@@ -248,24 +248,29 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
       std::cout<< "Valids"<<std::endl;
       // const pat::CompositeCandidate ditrakCand = (*ditraks)[i];
       const pat::CompositeCandidate ditrigCand = (*ditrigs)[i];
-      pat::CompositeCandidate ditrakCand = ditrigCand.daughter("TrakTrak");
-      
-      if (ditrakCand.mass() > ditrakMassMin_ && ditrakCand.mass() < ditrakMassMax_ && ditrakCand.charge() == 0) {
+      // pat::CompositeCandidate ditrakCand = ditrigCand.daughter("TrakTrak");
 
-        ditrak_p4.SetPtEtaPhiM(ditrakCand.pt(),ditrakCand.eta(),ditrakCand.phi(),ditrakCand.mass());
+      double ditrakmass = ditrigCand.userFloat("TTMass");
+      double ditrakpt = ditrigCand.userFloat("TTPt");
+      double ditraketa = ditrigCand.userFloat("TTEta");
+      double ditrakphi = ditrigCand.userFloat("TTPhi");
 
-        reco::Candidate::LorentzVector vP = ditrakCand.daughter("trakP")->p4();
-        reco::Candidate::LorentzVector vM = ditrakCand.daughter("trakN")->p4();
+      if (ditrakmass > ditrakMassMin_ && ditrakmass < ditrakMassMax_ && ditrigCand.charge() == 0) {
 
-        trakP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
-        trakN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
+        ditrak_p4.SetPtEtaPhiM(ditrakpt,ditraketa,ditrakphi,ditrakmass);
 
-        charge = ditrakCand.charge();
+        // reco::Candidate::LorentzVector vP = ditrakCand.daughter("trakP")->p4();
+        // reco::Candidate::LorentzVector vM = ditrakCand.daughter("trakN")->p4();
+        //
+        // trakP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
+        // trakN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
+
+        charge = ditrigCand.charge();
 
         ditrig_p4.SetPtEtaPhiM(ditrigCand.pt(),ditrigCand.eta(),ditrigCand.phi(),ditrigCand.mass());
 
-        vP = ditrigCand.daughter("trigP")->p4();
-        vM = ditrigCand.daughter("trigN")->p4();
+        reco::Candidate::LorentzVector vP = ditrigCand.daughter("trigP")->p4();
+        reco::Candidate::LorentzVector vM = ditrigCand.daughter("trigN")->p4();
 
         trigP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
         trigN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
