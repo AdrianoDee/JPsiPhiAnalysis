@@ -146,9 +146,9 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   ditrak_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
 
-  ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
-  ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
-  ditrak_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
+  // ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
+  // ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
+  // ditrak_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
 
   ditrak_tree->Branch("ditrig_p4", "TLorentzVector", &ditrig_p4);
   ditrak_tree->Branch("trigP_p4",  "TLorentzVector", &trigP_p4);
@@ -241,14 +241,15 @@ void DiTrakHLTRootupler::analyze(const edm::Event & iEvent, const edm::EventSetu
 
   bool already_stored = false;
 
-  if ( ditrigs.isValid() && !ditrigs->empty())
-  if ( ditraks.isValid() && !ditraks->empty()) {
+  if ( ditrigs.isValid() && !ditrigs->empty()) {
+  // if ( ditraks.isValid() && !ditraks->empty()) {
     // for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
-    for (size_t i = 0; i < (*ditraks).size(); ++i) {
+    for (size_t i = 0; i < (*ditrigs).size(); ++i) {
       std::cout<< "Valids"<<std::endl;
-      const pat::CompositeCandidate ditrakCand = (*ditraks)[i];
+      // const pat::CompositeCandidate ditrakCand = (*ditraks)[i];
       const pat::CompositeCandidate ditrigCand = (*ditrigs)[i];
-
+      pat::CompositeCandidate ditrakCand = ditrigCand.daughter("TrakTrak");
+      
       if (ditrakCand.mass() > ditrakMassMin_ && ditrakCand.mass() < ditrakMassMax_ && ditrakCand.charge() == 0) {
 
         ditrak_p4.SetPtEtaPhiM(ditrakCand.pt(),ditrakCand.eta(),ditrakCand.phi(),ditrakCand.mass());
