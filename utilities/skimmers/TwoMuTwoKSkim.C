@@ -117,8 +117,8 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
     kaonp_pT_out = (*kaonn_rf_p4).Pt();
 
-    outTuple->Fill(run,evt,xM,kkM,mumuM,xM_ref,kkM_ref,mumuM_ref,
-    xL,xPt,xEta,xVtx,xCos,xHltmuonp_pT,muonn_pT,kaonn_pT,kaonp_pT);
+    outTuple->Fill(run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
+    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHltmuonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT);
   }
 
 
