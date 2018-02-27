@@ -19,7 +19,9 @@
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
-
+#include <TNtuple.h>
+#include <TString.h>
+#include <TSelector.h>
 
 class TwoMuPiKSkim : public TSelector {
 public :
@@ -28,7 +30,7 @@ public :
 
    Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
    TNtuple *outTuple;
-   
+
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
    TTreeReaderValue<Int_t> event = {fReader, "event"};
