@@ -18,14 +18,14 @@ import sys
 
 
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
-from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta,RooVoigtian
+from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta,RooVoigtian,RooArgSet
 from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,SelectVars
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
 
 
 # In[4]:
 
-rootfile = "../rootfiles/Prompt_skim_cut_JPsi_Phi_Tree_skim_trigger_0_JPsi_Phi_Tree_skim_merge.root" #mmkk 2017 bcdef Jan 18 run
+rootfile = "../rootfiles/PromptTree_skim_cut_XTree_skim_2mu2k_BCDF_2017.root" #mmkk 2017 bcdef Jan 18 run
 #rootfile = "../rootfiles/NONPrompt_skim_cut_JPsi_Phi_Tree_skim_trigger_0_JPsi_Phi_Tree_skim_merge.root" #mmkk 2017 bcdef Jan 18 run
 inputfile = TFile(rootfile,"READ")
 inputfile.ls()
@@ -43,16 +43,16 @@ xTree = (inputfile.Get("JPsiPhiCuts Tree"))
 massmin = 4.0
 massmax = 6.0
 phimin = 1.01
-phimax = 1.03
+phimax = 1.028
 
 
 # In[48]:
 
 
 mass = RooRealVar("xMass","M(#mu#muKK)[GeV]",massmin,massmax)
-mass.setBins(500)
+mass.setBins(200)
 masskk = RooRealVar("phiMass","phiMass",phimin,phimax)
-masskk.setBins(80)
+masskk.setBins(25)
 massmumu = RooRealVar("jpsiMass","jpsiMass",2.9,3.3)
 
 
@@ -159,7 +159,7 @@ rfit = tot.fitTo(alldata,Range(phimin,phimax),RooFit.NumCPU(8))
 
 kkFrame = masskk.frame(Range(phimin,phimax))
 alldata.plotOn(kkFrame,RooLinkedList())
-tot.plotOn(kkFrame)
+tot.plotOn(kkFrame,RooFit.Normalization((nSig.getValV()+nBkg.getValV())))
 
 kkFrame.Draw()
 c.SaveAs("testmassPhiFit.png")
@@ -179,7 +179,7 @@ dstree.GetEntryNumber(88)
 # In[ ]:
 
 
-sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 200, 4.00, 6.0)
+sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 25, 4.00, 4.5)
 
 
 # In[ ]:
