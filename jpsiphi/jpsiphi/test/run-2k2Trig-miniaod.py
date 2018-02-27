@@ -162,6 +162,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.DiMuonCounterJPsi*
                      # process.PsiPhiProducer *
                      # process.PsiPhiFitter *
-                     process.DiTrakHLTProducer *
-                     process.rootuple)
+                     process.DiTrakHLT)
+                     #process.rootuple)
                      # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
