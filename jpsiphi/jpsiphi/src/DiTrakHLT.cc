@@ -213,6 +213,7 @@ TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.g
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
+MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),

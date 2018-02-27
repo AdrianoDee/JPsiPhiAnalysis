@@ -114,24 +114,25 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
 )
 
 
-process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
+# process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
+#     PFCandidates        = cms.InputTag("packedPFCandidates"),
+#     TriggerInput        = cms.InputTag("unpackPatTriggers"),
+#     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
+#     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
+#     MassTraks           = cms.vdouble(kaonmass,kaonmass),
+#     OnlyBest            = cms.bool(False),
+#     # TTCandidate_name    = cms.string("DiTrakCandidate"),
+#     TTTrigger_name      = cms.string("DiTrigCandidate"),
+#     HLTFilters          = filters,
+# )
+
+process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
     PFCandidates        = cms.InputTag("packedPFCandidates"),
     TriggerInput        = cms.InputTag("unpackPatTriggers"),
-    TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
-    TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
-    MassTraks           = cms.vdouble(kaonmass,kaonmass),
-    OnlyBest            = cms.bool(False),
-    # TTCandidate_name    = cms.string("DiTrakCandidate"),
-    TTTrigger_name      = cms.string("DiTrigCandidate"),
-    HLTFilters          = filters,
-)
-
-process.rootuple = cms.EDAnalyzer('DiTrakHLTRootupler',
-    # ditraks             = cms.InputTag('DiTrackHLTProducer','DiTrakCandidate'),
-    ditrigs             = cms.InputTag("DiTrackHLTProducer","DiTrigCandidate"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
+    MassTraks           = cms.vdouble(kaonmass,kaonmass),
     isMC                = cms.bool(False),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
