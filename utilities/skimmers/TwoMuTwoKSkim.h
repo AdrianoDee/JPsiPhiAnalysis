@@ -123,6 +123,9 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
    ClassDef(TwoMuTwoKSkim,0);
 
 };
