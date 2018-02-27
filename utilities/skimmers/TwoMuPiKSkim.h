@@ -23,6 +23,9 @@
 #include <TString.h>
 #include <TSelector.h>
 
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
 class TwoMuPiKSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
