@@ -255,6 +255,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   ditrak_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
+  candidates = 0;
 }
 
 DiTrakHLT::~DiTrakHLT() {}
