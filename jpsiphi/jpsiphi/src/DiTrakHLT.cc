@@ -22,6 +22,7 @@
 
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
@@ -47,7 +48,7 @@ class DiTrakHLT:public edm::EDAnalyzer {
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
       private:
-        UInt_t getTriggerBits(const edm::Event &);
+        UInt_t getTriggerBits(const edm::Event &, const edm::TriggerNames & TheTriggerNames);
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
         UInt_t isTriggerMatched(const pat::CompositeCandidate *diTrig_Candidate);
@@ -336,6 +337,9 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
   float ditrakMassMax_ = ditrakMassCuts_[1];
   float ditrakMassMin_ = ditrakMassCuts_[0];
+
+  pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
+  std::vector< pat::PackedCandidate> filteredTracks;
 
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
