@@ -269,7 +269,6 @@ UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent, const edm::TriggerNam
 
   UInt_t trigger = 0;
 
-     const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
      unsigned int NTRIGGERS = HLTs_.size();
 
      for (unsigned int i = 0; i < NTRIGGERS; i++) {
@@ -335,8 +334,8 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   trigP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   trigN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  float ditrakMassMax_ = ditrakMassCuts_[1];
-  float ditrakMassMin_ = ditrakMassCuts_[0];
+  float TrakTrakMassMax_ = ditrakMassCuts_[1];
+  float TrakTrakMassMin_ = ditrakMassCuts_[0];
 
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
