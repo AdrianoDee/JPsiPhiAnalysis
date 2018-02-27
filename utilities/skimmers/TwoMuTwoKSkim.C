@@ -103,9 +103,9 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     mumuM_out= (*dimuon_p4).M();
     xM_out   = (*dimuonditrk_p4).M();
 
-    kkM_ref_out = (*ditrak_rf_p4)->M();
-    mumuM_ref_out= (*dimuon_rf_p4)->M();
-    xM_ref_out   = (*dimuonditrk_rf_p4)->M();
+    kkM_ref_out = (*ditrak_rf_p4).M();
+    mumuM_ref_out= (*dimuon_rf_p4).M();
+    xM_ref_out   = (*dimuonditrk_rf_p4).M();
 
     xL_out = (*ctau)/(*ctauErr);
     xPt_out = (*xP4Ref)->Pt();
