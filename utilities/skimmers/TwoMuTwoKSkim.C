@@ -81,8 +81,8 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   //
   // The return value is currently not used.
 
-  Double_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref_out;
-  Double_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
+  Float_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref_out;
+  Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
 
   fReader.SetEntry(entry);
 
@@ -117,7 +117,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
     kaonp_pT_out = (*kaonn_rf_p4).Pt();
 
-    Double_t params[18] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
+    Float_t params[18] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
     xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out}
     outTuple->Fill(params);
   }
