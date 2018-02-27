@@ -99,7 +99,7 @@ class DiTrakHLT:public edm::EDAnalyzer {
   UInt_t    lumiblock;
 
   UInt_t    trigger;
-  UInt_t    tMatch;
+  UInt_t    tMatchOne,tMatchTwo;
 
   UInt_t charge;
 
@@ -232,8 +232,8 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   ditrak_tree->Branch("trigger",  &trigger,  "trigger/i");
   ditrak_tree->Branch("charge",   &charge,   "charge/I");
 
-  ditrak_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
-
+  ditrak_tree->Branch("tMatchOne",    &tMatchOne,      "tMatchOne/I");
+  ditrak_tree->Branch("tMatchTwo",    &tMatchTwo,      "tMatchTwo/I");
   // ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   // ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
   // ditrak_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
@@ -348,7 +348,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
-
+  std::vector < int > filterResults;
   std::cout << "Trigger vs trak" << std::endl;
   std::cout << triggerColl->size() << " vs " << trakColl->size() << std::endl;
 
@@ -360,14 +360,20 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
     bool filtered = false;
+    int thisFilter = 0;
 
     for (size_t i = 0; i < HLTFilters_.size(); i++)
       if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
-        filtered = true;
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
 
     if(filtered)
+    {
       filteredColl.push_back(unPackedTrigger);
-
+      filterResults.push_back(thisFilter);
+    }
   }
 
   std::cout << "Filtered vs trig" << std::endl;
@@ -445,10 +451,11 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
                trigP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
                trigN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
-               tMatch = DiTrakHLT::isTriggerMatched(&TTTrigger);
-
+               tMatchOne = filterResults[i];
+               tMatchTwo = filterResults[j];
+               std::cout<< "Filled?"<<std::endl;
                ditrak_tree->Fill();
-
+               std::cout<< "Filled"<<std::endl;
                candidates++;
                // DiTriggColl->push_back(TTTrigger);
 
