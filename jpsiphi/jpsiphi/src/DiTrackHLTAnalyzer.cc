@@ -260,13 +260,14 @@ void DiTrackHLTAnalyzer::analyze(edm::Event& iEvent, const edm::EventSetup& iSet
 
                ditrak_tree->Fill();
 
+               candidates++;
                // DiTriggColl->push_back(TTTrigger);
 
              }
            } // loop over second track
          }   // loop on track candidates
 
-  candidates = DiTriggColl->size();
+
 
   // if ( ncombo != DiTrackColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiTrackColl->size()<<")"<< std::endl;
   // if ( ncombo > 0 ) nreco++;
