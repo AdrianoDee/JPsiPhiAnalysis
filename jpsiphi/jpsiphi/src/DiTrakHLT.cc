@@ -48,7 +48,7 @@ class DiTrakHLT:public edm::EDAnalyzer {
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
       private:
-        UInt_t getTriggerBits(const edm::Event &, const edm::TriggerNames & TheTriggerNames);
+        UInt_t getTriggerBits(const edm::Event& iEvent, const edm::Handle< edm::TriggerResults >& triggerResults_handle);
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
         UInt_t isTriggerMatched(const pat::CompositeCandidate *diTrig_Candidate);
