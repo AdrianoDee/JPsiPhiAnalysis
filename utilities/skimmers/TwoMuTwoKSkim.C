@@ -59,8 +59,7 @@ void TwoMuTwoKSkim::SlaveBegin(TTree * /*tree*/)
   Phi_mean = 1.019723;
   Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:
-  xL:xPt:xEta:xVtx:xCos:xHltmuonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
+  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHltmuonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
 
 }
 
