@@ -10,10 +10,10 @@
 
   TDSet* dataset = new TDSet("TTree", "DiMuon KPi Tree", "rootupleKPi");
   //
-  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mu2k_BCDEF_2017.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mukpi_BCDEF_2017.root");
 
   // dataset->Add("/Users/adrianodiflorio/Documents/Git/X4140/ProofLite/Y4140_testrootuple.root");
-  TString selector = "TwoMuTwoKSkim";
+  TString selector = "TwoMuPiKSkim";
   TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
 
   // Processing
