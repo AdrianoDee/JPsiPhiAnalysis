@@ -276,7 +276,7 @@ UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent, const edm::Handle< ed
         for (int version = 1; version < 20; version++) {
            std::stringstream ss;
            ss << HLTs_[i] << "_v" << version;
-           unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
+           unsigned int bit = names.triggerIndex(edm::InputTag(ss.str()).label());
            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
               trigger += (1<<i);
               break;
