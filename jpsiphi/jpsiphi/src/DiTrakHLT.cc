@@ -151,7 +151,7 @@ float DiTrakHLT::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectS
 bool DiTrakHLT::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
-	DeltaR(t1,t2) < maxDPtRel);
+	DeltaR(t1,t2) < maxDeltaR);
 }
 
 const pat::CompositeCandidate DiTrakHLT::makeTTCandidate(
@@ -256,6 +256,12 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   ditrak_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
   candidates = 0;
+  nevents = 0;
+  ndimuon = 0;
+  nreco = 0;
+  maxDeltaR = 0.1;
+  maxDPtRel = 10.0;
+
 }
 
 DiTrakHLT::~DiTrakHLT() {}
@@ -365,7 +371,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   }
 
   std::cout << "Filtered vs trig" << std::endl;
-  std::cout << filteredColl->size() << " vs " << trigColl->size() << std::endl;
+  std::cout << filteredColl.size() << " vs " << triggerColl->size() << std::endl;
 
   //Matching
 
