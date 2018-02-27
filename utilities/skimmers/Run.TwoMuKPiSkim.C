@@ -8,7 +8,7 @@
 
   // INPUT DATA SAMPLE ON LOCAL DISK
 
-  TDSet* dataset = new TDSet("TTree", "DiMuon PiK Tree", "rootuplePiK");
+  TDSet* dataset = new TDSet("TTree", "DiMuon KPi Tree", "rootupleKPi");
   //
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mu2k_BCDEF_2017.root");
 
