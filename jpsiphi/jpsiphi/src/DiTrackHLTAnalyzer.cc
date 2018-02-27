@@ -1,3 +1,5 @@
+// system include files
+#include <memory>
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
@@ -377,24 +379,6 @@ void DiTrackHLTAnalyzer::analyze(edm::Event& iEvent, const edm::EventSetup& iSet
 
 }
 
-void DiTrackHLTAnalyzer::endJob(){
-  std::cout << "###########################" << std::endl;
-  std::cout << "DiTrak(DiTrig) Candidate Analyzer report:" << std::endl;
-  std::cout << "###########################" << std::endl;
-  std::cout << "Found " << candidates << " DiTrak (DiTrig) candidates." << std::endl;
-  std::cout << "###########################" << std::endl;
-}
-
-void DiTrackHLTAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
-
-// ------------ method called when ending the processing of a run  ------------
-void DiTrackHLTAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
-
-// ------------ method called when starting to processes a luminosity block  ------------
-void DiTrackHLTAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
-
-// ------------ method called when ending the processing of a luminosity block  ------------
-void DiTrackHLTAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 
 const pat::CompositeCandidate DiTrackHLTAnalyzer::makeTTCandidate(
@@ -451,6 +435,31 @@ reco::Candidate::LorentzVector DiTrackHLTAnalyzer::convertVector(const math::XYZ
   return reco::Candidate::LorentzVector(v.x(),v.y(), v.z(), v.t());
 }
 
+// ------------ method called once each job just before starting event loop  ------------
+void DiTrackHLTAnalyzer::beginJob() {}
+
+// ------------ method called once each job just after ending the event loop  ------------
+void DiTrackHLTAnalyzer::endJob(){
+  std::cout << "###########################" << std::endl;
+  std::cout << "DiTrak(DiTrig) Candidate Analyzer report:" << std::endl;
+  std::cout << "###########################" << std::endl;
+  std::cout << "Found " << candidates << " DiTrak (DiTrig) candidates." << std::endl;
+  std::cout << "###########################" << std::endl;
+}
+
+// ------------ method called when starting to processes a run  ------------
+void DiTrackHLTAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
+
+// ------------ method called when ending the processing of a run  ------------
+void DiTrackHLTAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
+
+// ------------ method called when starting to processes a luminosity block  ------------
+void DiTrackHLTAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+
+// ------------ method called when ending the processing of a luminosity block  ------------
+void DiTrackHLTAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+
+// ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void DiTrackHLTAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
