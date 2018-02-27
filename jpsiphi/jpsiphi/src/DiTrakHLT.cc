@@ -264,14 +264,10 @@ DiTrakHLT::~DiTrakHLT() {}
    ex. 1 = pass 0
 */
 
-UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent, const edm::TriggerNames & TheTriggerNames) {
 
   UInt_t trigger = 0;
 
-  edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
-
-  if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
      unsigned int NTRIGGERS = HLTs_.size();
 
@@ -286,7 +282,6 @@ UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent ) {
            }
         }
      }
-   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
    return trigger;
 }
@@ -315,7 +310,18 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
   numPrimaryVertices = 0;
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
-  trigger = getTriggerBits(iEvent);
+
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+  trigger = 0;
+
+  if (triggerResults_handle.isValid())
+    trigger = getTriggerBits(iEvent,names);
+  else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
 
   nditrak  = 0;
   ntraks = 0;
@@ -334,8 +340,6 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
-
-    const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
