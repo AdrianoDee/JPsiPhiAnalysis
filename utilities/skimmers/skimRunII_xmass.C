@@ -44,7 +44,7 @@ int skimXTree(std::string path, std::string filename, std::string treename = "xT
   TDirectory *directory = (TDirectory*)oldfile->Get(dirname.data());
   TTree *oldtree = (TTree*)directory->Get(treename.data());
   Long64_t nentries = oldtree->GetEntries();
-  ULong64_t event   = 0; 
+  ULong64_t event   = 0;
   //Create a new file + a clone of old tree in new file
   TFile *newfile = new TFile((treename + "_skim_" + filename).data(),"RECREATE");
   TTree *newtree = oldtree->CloneTree();
@@ -72,7 +72,7 @@ int skimXTreeTrigger(int triggerbit, std::string path, std::string filename, std
 
   Int_t theTrigger = 0;
   oldtree->SetBranchAddress("trigger",&theTrigger);
-  
+
   for (Long64_t i=0;i<nentries; i++)
   {
 	oldtree->GetEntry(i);
@@ -105,7 +105,12 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   Double_t cosA_out  = 0.0, ctau_out  = 0.0, ctauErr_out  = 0.0, vProb_out  = 0.0;
 
   Double_t phiMass_out = 0.0, jpsiMass_out = 0., xMass_out = 0.0;
-  
+
+  Double_t phiMass_ref_out = 0.0, jpsiMass_ref_out = 0.0, xMass_ref_out = 0.0;
+  Double_t dimuon_eta = 0.0, dimuon_pt = 0.0, ditrak_eta = 0.0, ditrak_pt = 0.0;
+  Double_t muonp_pt = 0.0, muonn_pt = 0.0, kaonn_pt = 0.0, kaonp_pt = 0.0;
+  Double_t dimuonditrk_eta = 0.0, dimuonditrk_pt = 0.0;
+
   Int_t trigger, run;
   Int_t trigger_out, run_out;
   // Int_t phiMType = 0, phiPType = 0;
@@ -149,29 +154,29 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   ditrak_tree->Branch("dimuonditrk_rf_p4", "TLorentzVector", &xP4Ref_out);
   ditrak_tree->Branch("dimuon_rf_p4",  "TLorentzVector", &jP4Ref_out);
   ditrak_tree->Branch("ditrak_rf_p4",  "TLorentzVector", &pP4Ref_out);
-  
-  ditrak_tree->Branch("trigger", &trigger_out, "trigger/I"); 
-  ditrak_tree->Branch("run", &run_out, "run/I");  
+
+  ditrak_tree->Branch("trigger", &trigger_out, "trigger/I");
+  ditrak_tree->Branch("run", &run_out, "run/I");
 
   ditrak_tree->Branch("dimuonditrk_ctauPV", &ctau_out, "dimuonditrk_ctauPV/D");
   ditrak_tree->Branch("dimuonditrk_ctauErrPV", &ctauErr_out, "dimuonditrk_ctauErrPV/D");
   ditrak_tree->Branch("dimuonditrk_cosAlpha", &cosA_out, "dimuonditrk_cosAlpha/D");
   ditrak_tree->Branch("dimuonditrk_vProb", &vProb_out, "dimuonditrk_vProb/D");
-  ditrak_tree->Branch("dimuonditrk_eta", &vProb_out, "dimuonditrk_eta/D");
-  ditrak_tree->Branch("dimuonditrk_pT", &vProb_out, "dimuonditrk_pT/D");
 
-    
   ditrak_tree->Branch("phiMass", &phiMass_out, "phiMass/D");
   ditrak_tree->Branch("jpsiMass", &jpsiMass_out, "jpsiMass/D");
   ditrak_tree->Branch("xMass", &xMass_out, "xMass/D");
-  
+
   ditrak_tree->Branch("phiMass_ref", &phiMass_ref_out, "phiMass_ref/D");
   ditrak_tree->Branch("jpsiMass_ref", &jpsiMass_ref_out, "jpsiMass_ref/D");
   ditrak_tree->Branch("xMass_ref", &xMass_ref_out, "xMass_ref/D");
 
-  ditrak_tree->Branch("dimuonditrk_eta", &dimuon_eta, "dimuon_eta/D");
-  ditrak_tree->Branch("dimuonditrk_pT", &dimuon_pt, "dimuon_pT/D");
-  
+  ditrak_tree->Branch("dimuonditrk_eta", &dimuonditrk_eta, "dimuonditrk_eta/D");
+  ditrak_tree->Branch("dimuonditrk_pT", &dimuonditrk_pt, "dimuonditrk_pt/D");
+
+  ditrak_tree->Branch("dimuon_eta", &dimuon_eta, "dimuon_eta/D");
+  ditrak_tree->Branch("dimuon_pT", &dimuon_pt, "dimuon_pT/D");
+
   ditrak_tree->Branch("ditrk_eta", &ditrak_eta, "ditrk_eta/D");
   ditrak_tree->Branch("ditrk_pT", &ditrak_pt, "ditrk_pT/D");
 
@@ -180,12 +185,12 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
 
   ditrak_tree->Branch("muonp_rf_p4", "TLorentzVector",&mP_p4_out);
   ditrak_tree->Branch("muonn_rf_p4", "TLorentzVector",&mN_p4_out);
-  
+
   ditrak_tree->Branch("muonp_pT", &muonp_pt, "muonp_pT/D");
   ditrak_tree->Branch("muonn_pT", &muonn_pt, "muonn_pT/D");
   ditrak_tree->Branch("kaonn_pT", &kaonn_pt, "kaonn_pT/D");
   ditrak_tree->Branch("kaonp_pT", &kaonp_pt, "kaonp_pT/D");
- 
+
   for (Long64_t i=0;i<nentries; i++)
   {
 	oldtree->GetEntry(i);
@@ -199,7 +204,7 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
   bool triggerbit = tt.test(0);
   bool jPT = jP4->Pt() > 2.0;
   bool theTrigger = trigger > 0;
-  
+
     	if(trigger && jPT && phiM && jpsiM && cosAlpha && vertexP && flight)
       {
 
@@ -222,7 +227,23 @@ int skimXTreeCuts(std::string path, std::string filename, std::string treename =
         phiMass_out = pP4_out.M();
         jpsiMass_out= jP4_out.M();
         xMass_out   = xP4_out.M();
-        
+
+        phiMass_ref_out = xP4Ref->M();
+        jpsiMass_ref_out= jP4Ref->M();
+        xMass_ref_out   = pP4Ref->M();
+
+        dimuon_eta    = jP4Ref->eta();
+        dimuon_pt     = jP4Ref->Pt();
+        ditrak_eta    = pP4Ref->eta();
+        ditrak_pt     = pP4Ref->Pt();
+        muonp_pt      = mP_p4->Pt();
+        muonn_pt      = mN_p4->Pt();
+        kaonn_pt      = kN_p4->Pt();
+        kaonp_pt      = kP_p4->Pt();
+
+        dimuonditrk_eta = xP4Ref->eta();
+        dimuonditrk_pT  = xP4Ref->Pt();
+
         run_out = run;
         trigger_out = trigger;
 
