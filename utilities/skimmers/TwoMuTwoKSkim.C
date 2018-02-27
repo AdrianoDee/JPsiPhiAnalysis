@@ -106,7 +106,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     mumuM_ref_out= (*dimuon_rf_p4).M();
     xM_ref_out   = (*dimuonditrk_rf_p4).M();
 
-    xL_out = (*ctau)/(*ctauErr);
+    xL_out = (*dimuonditrk_ctauPV)/(*dimuonditrk_ctauErrPV);
     xPt_out = (*dimuonditrk_rf_p4)->Pt();
     xEta_out = (*dimuonditrk_rf_p4)->Eta();
     xVtx_out = *dimuonditrk_vProb;
