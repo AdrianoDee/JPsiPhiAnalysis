@@ -4,6 +4,7 @@
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
 
+
 // The following methods are defined in this file:
 //    Begin():        called every time a loop on the tree starts,
 //                    a convenient place to create your histograms.
@@ -18,15 +19,15 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// Root > T->Process("TwoMuPiKSkim.C")
-// Root > T->Process("TwoMuPiKSkim.C","some options")
-// Root > T->Process("TwoMuPiKSkim.C+")
+// root> T->Process("TwoMuPiKSkim.C")
+// root> T->Process("TwoMuPiKSkim.C","some options")
+// root> T->Process("TwoMuPiKSkim.C+")
 //
+
 
 #include "TwoMuPiKSkim.h"
 #include <TH2.h>
 #include <TStyle.h>
-
 
 void TwoMuPiKSkim::Begin(TTree * /*tree*/)
 {
@@ -35,7 +36,6 @@ void TwoMuPiKSkim::Begin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
-
 }
 
 void TwoMuPiKSkim::SlaveBegin(TTree * /*tree*/)
@@ -53,12 +53,10 @@ Bool_t TwoMuPiKSkim::Process(Long64_t entry)
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
    // specifies which entry in the currently loaded tree is to be processed.
-   // It can be passed to either TwoMuPiKSkim::GetEntry() or TBranch::GetEntry()
-   // to read either all or the required parts of the data. When processing
-   // keyed objects with PROOF, the object is already loaded and is available
-   // via the fObject pointer.
+   // When processing keyed objects with PROOF, the object is already loaded
+   // and is available via the fObject pointer.
    //
-   // This function should contain the "body" of the analysis. It can contain
+   // This function should contain the \"body\" of the analysis. It can contain
    // simple or elaborate selection criteria, run algorithms on the data
    // of the event and typically fill histograms.
    //
@@ -68,6 +66,7 @@ Bool_t TwoMuPiKSkim::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+   fReader.SetEntry(entry);
 
    return kTRUE;
 }
