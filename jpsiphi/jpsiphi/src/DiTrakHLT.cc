@@ -184,8 +184,8 @@ const pat::CompositeCandidate DiTrakHLT::makeTTTriggerCandidate(
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(trakP,"trakP");
-  TTCand.addDaughter(trakN,"trakN");
+  TTCand.addDaughter(trakP,"trigP");
+  TTCand.addDaughter(trakN,"trigN");
   TTCand.setCharge(trakP.charge()+trakN.charge());
 
   double m_kaon1 = MassTraks_[0];
