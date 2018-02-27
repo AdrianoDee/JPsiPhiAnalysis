@@ -26,6 +26,9 @@ public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
 
+   Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
+   TNtuple *outTuple;
+   
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
    TTreeReaderValue<Int_t> event = {fReader, "event"};
@@ -91,6 +94,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(TwoMuPiKSkim,0);
 
