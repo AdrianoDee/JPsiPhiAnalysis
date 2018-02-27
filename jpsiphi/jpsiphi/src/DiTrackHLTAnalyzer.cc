@@ -256,7 +256,7 @@ void DiTrackHLTAnalyzer::analyze(edm::Event& iEvent, const edm::EventSetup& iSet
                trigP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
                trigN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
-               tMatch = DiTrakHLTRootupler::isTriggerMatched(&TTTrigger);
+               tMatch = DiTrackHLTAnalyzer::isTriggerMatched(&TTTrigger);
 
                ditrak_tree->Fill();
 
@@ -282,16 +282,16 @@ void DiTrackHLTAnalyzer::endJob(){
   std::cout << "###########################" << std::endl;
 }
 
-void DiTrakHLTRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiTrackHLTAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiTrakHLTRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiTrackHLTAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiTrakHLTRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiTrackHLTAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiTrakHLTRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiTrackHLTAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 
 const pat::CompositeCandidate DiTrackHLTAnalyzer::makeTTCandidate(
@@ -348,7 +348,7 @@ reco::Candidate::LorentzVector DiTrackHLTAnalyzer::convertVector(const math::XYZ
   return reco::Candidate::LorentzVector(v.x(),v.y(), v.z(), v.t());
 }
 
-void DiTrakHLTRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiTrackHLTAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
