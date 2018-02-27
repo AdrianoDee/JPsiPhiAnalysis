@@ -14,12 +14,10 @@
 
   // dataset->Add("/Users/adrianodiflorio/Documents/Git/X4140/ProofLite/Y4140_testrootuple.root");
   TString selector = "TwoMuTwoKSkim";
-  TProof *p = TProof::Open("workers=1"); // 12 workers for qsub
+  TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
 
   // Processing
   cout << ">> Processing " << selector << " ... " << endl;
-
-
 
   TString selectorplus = selector;
   selectorplus += ".C+";
