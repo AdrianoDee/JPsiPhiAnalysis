@@ -42,8 +42,8 @@ DiTrackHLTProducer::DiTrackHLTProducer(const edm::ParameterSet& iConfig):
 
 void DiTrackHLTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
-  std::unique_ptr<pat::CompositeCandidateCollection> DiTrackColl(new pat::CompositeCandidateCollection);
-  std::unique_ptr<pat::TriggerObjectStandAloneCollection> DiTriggColl(new pat::CompositeCandidateCollection);
+  // std::unique_ptr<pat::CompositeCandidateCollection> DiTrackColl(new pat::CompositeCandidateCollection);
+  std::unique_ptr<pat::CompositeCandidateCollection> DiTriggColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<std::vector<pat::PackedCandidate> > trakColl;
   iEvent.getByToken(TrakCollection_,trakColl);
