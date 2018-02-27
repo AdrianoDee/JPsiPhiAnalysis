@@ -265,9 +265,10 @@ DiTrakHLT::~DiTrakHLT() {}
    ex. 1 = pass 0
 */
 
-UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent, const edm::TriggerNames & TheTriggerNames) {
+UInt_t DiTrakHLT::getTriggerBits(const edm::Event& iEvent, const edm::Handle< edm::TriggerResults >& triggerResults_handle) {
 
   UInt_t trigger = 0;
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
      unsigned int NTRIGGERS = HLTs_.size();
 
@@ -319,7 +320,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   trigger = 0;
 
   if (triggerResults_handle.isValid())
-    trigger = getTriggerBits(iEvent,names);
+    trigger = getTriggerBits(iEvent,triggerResults_handle);
   else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
 
