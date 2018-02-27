@@ -14,7 +14,7 @@
 #include <TSelector.h>
 
 // Header file for the classes stored in the TTree if any.
-#include "/mnt/build/jenkins/workspace/root-release/BUILDTYPE/Release/COMPILER/native/LABEL/slc6/sources/root_v5.34.28/root/math/physics/inc/TLorentzVector.h"
+#include "TLorentzVector.h"
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
