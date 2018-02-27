@@ -390,7 +390,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
     }
   }
 
-  // std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
+  std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
   for (size_t i = 0; i < filteredTracks.size(); i++)
   {
