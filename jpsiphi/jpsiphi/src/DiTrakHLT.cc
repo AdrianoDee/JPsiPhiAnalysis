@@ -358,7 +358,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
     bool filtered = false;
-    int thisFilter = 0;
+    UInt_t thisFilter = 0;
 
     for (size_t i = 0; i < HLTFilters_.size(); i++)
       if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
