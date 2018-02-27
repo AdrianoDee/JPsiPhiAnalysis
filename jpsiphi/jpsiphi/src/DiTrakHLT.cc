@@ -343,6 +343,9 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
 
+  std::cout << "Trigger vs trak" << std::endl;
+  std::cout << triggerColl->size() << " vs " << trakColl->size() << std::endl;
+
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
@@ -360,6 +363,9 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
       filteredColl.push_back(unPackedTrigger);
 
   }
+
+  std::cout << "Filtered vs trig" << std::endl;
+  std::cout << filteredColl->size() << " vs " << trigColl->size() << std::endl;
 
   //Matching
 
@@ -391,6 +397,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
     }
   }
 
+  std::cout << "Matched vs FiltTrak" << std::endl;
   std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
   for (size_t i = 0; i < filteredTracks.size(); i++)
