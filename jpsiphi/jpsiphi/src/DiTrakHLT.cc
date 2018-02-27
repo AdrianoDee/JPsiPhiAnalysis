@@ -234,7 +234,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   ditrak_tree->Branch("tMatchOne",    &tMatchOne,      "tMatchOne/I");
   ditrak_tree->Branch("tMatchTwo",    &tMatchTwo,      "tMatchTwo/I");
-  // ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
+  ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   // ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
   // ditrak_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
 
@@ -259,8 +259,8 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   nevents = 0;
   ndimuon = 0;
   nreco = 0;
-  maxDeltaR = 0.1;
-  maxDPtRel = 10.0;
+  maxDeltaR = 0.01;
+  maxDPtRel = 2.0;
 
 }
 
@@ -349,8 +349,6 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
   std::vector < int > filterResults;
-  std::cout << "Trigger vs trak" << std::endl;
-  std::cout << triggerColl->size() << " vs " << trakColl->size() << std::endl;
 
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
@@ -375,9 +373,6 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
       filterResults.push_back(thisFilter);
     }
   }
-
-  std::cout << "Filtered vs trig" << std::endl;
-  std::cout << filteredColl.size() << " vs " << triggerColl->size() << std::endl;
 
   //Matching
 
@@ -409,8 +404,6 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
     }
   }
 
-  std::cout << "Matched vs FiltTrak" << std::endl;
-  std::cout << matchedColl.size() << " vs " << filteredTracks.size() << std::endl;
   // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = filteredTracks.begin(), trakend=filteredTracks.end(); posTrack!= trakend; ++posTrack)
   for (size_t i = 0; i < filteredTracks.size(); i++)
   {
@@ -453,9 +446,8 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
                tMatchOne = filterResults[i];
                tMatchTwo = filterResults[j];
-               std::cout<< "Filled?"<<std::endl;
                ditrak_tree->Fill();
-               std::cout<< "Filled"<<std::endl;
+
                candidates++;
                // DiTriggColl->push_back(TTTrigger);
 
