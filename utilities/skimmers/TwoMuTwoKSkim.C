@@ -59,7 +59,7 @@ void TwoMuTwoKSkim::SlaveBegin(TTree * /*tree*/)
   Phi_mean = 1.019723;
   Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHltmuonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
+  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
 
 }
 
@@ -82,7 +82,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   // The return value is currently not used.
 
   Double_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref;
-  Double_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHltmuonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT;
+  Double_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT;
 
   fReader.SetEntry(entry);
 
@@ -111,7 +111,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     xEta_out = (*dimuonditrk_rf_p4).Eta();
     xVtx_out = *dimuonditrk_vProb;
     xCos_out = *dimuonditrk_cosAlpha;
-    xHlt = *trigger;
+    xHlt_out = *trigger;
     muonp_pT_out = (*muonp_rf_p4).Pt();
     muonn_pT_out = (*muonn_rf_p4).Pt();
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
