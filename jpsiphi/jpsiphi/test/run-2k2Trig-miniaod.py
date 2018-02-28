@@ -113,19 +113,6 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
     filter    = cms.bool(True)
 )
 
-
-# process.DiTrakHLTProducer = cms.EDProducer('DiTrackHLTProducer',
-#     PFCandidates        = cms.InputTag("packedPFCandidates"),
-#     TriggerInput        = cms.InputTag("unpackPatTriggers"),
-#     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
-#     TrakTrakMassCuts    = cms.vdouble(0.6,1.3),
-#     MassTraks           = cms.vdouble(kaonmass,kaonmass),
-#     OnlyBest            = cms.bool(False),
-#     # TTCandidate_name    = cms.string("DiTrakCandidate"),
-#     TTTrigger_name      = cms.string("DiTrigCandidate"),
-#     HLTFilters          = filters,
-# )
-
 process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
     PFCandidates        = cms.InputTag("packedPFCandidates"),
     TriggerInput        = cms.InputTag("unpackPatTriggers"),
@@ -136,21 +123,58 @@ process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
     isMC                = cms.bool(False),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters             = filters,
+    Filters             = filters
 )
-#
-process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootuplerHLT',
-                          dimuons = cms.InputTag("JPsi2MuMuFilter"),
-                          muons = cms.InputTag("slimmedMuonsWithTrigger"),
-                          primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-                          TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-                          dimuon_pdgid = cms.uint32(443),
-                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-                          isMC = cms.bool(False),
-                          OnlyBest = cms.bool(False),
-                          OnlyGen = cms.bool(False),
-                          HLTs = hltpaths
-                          )
+
+process.DiMuonDiTrakProducerHLT = cms.EDProducer('DiMuonDiTrakProducerHLT',
+    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
+    PFCandidates = cms.InputTag('packedPFCandidates'),
+    TriggerInput        = cms.InputTag("unpackPatTriggers"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
+    DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    MaxDeltaRPt = cms.vdouble(0.01,2.0),
+    OnlyBest  = cms.bool(False),
+    Product = cms.string("DiMuonDiTrakCandidatesHLT"),
+    HLTs                = hltpaths,
+    Filters             = filters
+)
+
+process.DiMuonDiTrakKinematicFit = cms.EDProducer('DiMuonDiTrakKinematicFit',
+    DiMuonDiTrak        = cms.InputTag('DiMuonDiTrakProducerHLT','DiMuonDiTrakCandidatesHLT'),
+    DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
+    DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    MassTraks           = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    Product             = cms.string('DiMuonDiTrakCandidatesRef')
+)
+
+process.DiMuonDiTrakRootuplerHLT = cms.EDAnalyzer('DiMuonDiTrakRootuplerHLT',
+    dimuonditrk_cand = cms.InputTag('DiMuonDiTrakProducerHLT','DiMuonDiTrakCandidatesHLT'),
+    dimuonditrk_rf_cand = cms.InputTag("DiMuonDiTrakKinematicFit","DiMuonDiTrakCandidatesRef"),
+    beamSpotTag = cms.InputTag("offlineBeamSpot"),
+    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    isMC = cms.bool(False),
+    OnlyBest = cms.bool(False),
+    HLTs = hltpaths,
+    Filters = filters,
+    TreeName = cms.string('JPsi Phi Tree')
+)
+
+process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootuplerHLT',
+    dimuons = cms.InputTag("JPsi2MuMuFilter"),
+    muons = cms.InputTag("slimmedMuonsWithTrigger"),
+    primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    dimuon_pdgid = cms.uint32(443),
+    dimuon_mass_cuts = cms.vdouble(2.8,3.3),
+    isMC = cms.bool(False),
+    OnlyBest = cms.bool(False),
+    OnlyGen = cms.bool(False),
+    HLTs = hltpaths
+ )
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
@@ -160,8 +184,9 @@ process.p = cms.Path(process.triggerSelection *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
                      process.DiMuonCounterJPsi*
-                     # process.PsiPhiProducer *
-                     # process.PsiPhiFitter *
+                     process.DiMuonDiTrakProducerHLT *
+                     process.DiMuonDiTrakKinematicFit *
+                     process.DiMuonDiTrakRootuplerHLT *
                      process.DiTrakHLT*
-                     process.rootupleMuMu)
+                     process.DiMuonRootuplerHLT)
                      # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
