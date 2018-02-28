@@ -249,7 +249,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if(isTriggerMatched(m))
         filteredMuons.push_back(*m);
 
-  for(std::vector<pat::Muon>::const_iterator m = filteredMuons->begin(), itendN = filteredMuons->end(); m != itendN; ++m)
+  for(std::vector<pat::Muon>::const_iterator m = filteredMuons.begin(), itendN = filteredMuons.end(); m != itendN; ++m)
     triggerColl.push_back(BestTriggerMuon(m));
 
   std::cout << triggerColl.size() << " - " << filteredMuons.size() << std::endl;
