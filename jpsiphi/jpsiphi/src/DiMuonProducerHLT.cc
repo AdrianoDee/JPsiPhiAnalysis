@@ -164,20 +164,20 @@ bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon& m) {
 }
 
 UInt_t DiMuonProducerHLTPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
+  const pat::Muon* muonN = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonN"));
+  const pat::Muon* muonP = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonP"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
     // std::cout << HLTFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muon2->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muonN->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muonP->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
     // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
   }
 
-  // auto tObjs = muon1->triggerObjectMatches();
+  // auto tObjs = muonN->triggerObjectMatches();
   //
   // if(tObjs.size()==0) std::cout<<"No matched object"<<std::endl;
   // for(auto hO : tObjs)
@@ -278,8 +278,8 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
 
-      mumucand.addDaughter(mNeg,"muon1");
-      mumucand.addDaughter(mPos,"muon2");
+      mumucand.addDaughter(mNeg,"muonN");
+      mumucand.addDaughter(mPos,"muonP");
 
       // ---- define and set candidate's 4momentum  ----
       LorentzVector mumu = mNeg.p4() + mPos.p4();
