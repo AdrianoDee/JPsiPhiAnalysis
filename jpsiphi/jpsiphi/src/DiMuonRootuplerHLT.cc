@@ -331,6 +331,8 @@ void DiMuonRootuplerHLT::analyze(const edm::Event & iEvent, const edm::EventSetu
           ppdlErrBS = dimuonCand->userFloat("ppdlErrBS");
           cosAlpha = dimuonCand->userFloat("cosAlpha");
           tMatch = dimuonCand->userInt("isTriggerMatched");
+          tMatchP = dimuonCand->userInt("tMatchP");
+          tMatchN = dimuonCand->userInt("tMatchN");
           charge = dimuonCand->charge();
           TVector3 pperp(dimuonCand->px(),dimuonCand->py(),0);
           lxyPV = ppdlPV * pperp.Perp() / dimuonCand->mass();

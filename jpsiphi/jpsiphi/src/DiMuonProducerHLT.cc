@@ -302,8 +302,8 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       mumucand.addDaughter(mumuTrigP4,"mumTrigger");
 
-      mumucand.addUserFloat("tMatchP",mumuP4.M());
-      mumucand.addUserFloat("tMatchN",mumuP4.M());
+      mumucand.addUserInt("tMatchP",isTriggerMatched(triggerColl[i]));
+      mumucand.addUserInt("tMatchN",isTriggerMatched(triggerColl[j]));
 
       vector<TransientTrack> muon_ttks;
       muon_ttks.push_back(theTTBuilder->build(mNeg.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
