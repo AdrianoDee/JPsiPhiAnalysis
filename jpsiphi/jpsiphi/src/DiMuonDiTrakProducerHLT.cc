@@ -154,8 +154,8 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
            pat::CompositeCandidate DiMuonTTTriggerCand = makeDiMuonTTCandidate(*dimuonTriggerCand, *&TTTrigger);
 
            DiMuonTTCand.addDaughter(DiMuonTTTriggerCand,"dimuonTTTrigger");
-           DiMuonTTCand.addUserInt(isTriggerMatched(matchedColl[i]),"trakMatchP");
-           DiMuonTTCand.addUserInt(isTriggerMatched(matchedColl[j]),"trakMatchN");
+           DiMuonTTCand.addUserInt("trakMatchP",isTriggerMatched(matchedColl[i]));
+           DiMuonTTCand.addUserInt("trakMatchN",isTriggerMatched(matchedColl[j]));
 
            if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
 
