@@ -84,10 +84,11 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
    // The return value is currently not used.
    Float_t run_out, ttM, trigtrigM;
    Float_t trigp_pT, trign_pT;
+   
+   fReader.SetEntry(entry);
 
    bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
 
-   fReader.SetEntry(entry);
 
    if(trigMass)
    {
