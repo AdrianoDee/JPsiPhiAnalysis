@@ -449,10 +449,10 @@ void DiMuonDiTrakRootuplerHLT::analyze(const edm::Event& iEvent, const edm::Even
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerHLT::isTriggerMatched(dimuon_cand);
 
-      muonP_tMatch  = dimuon_cand->userFloat("tMatchP");
-      muonN_tMatch  = dimuon_cand->userFloat("tMatchN");
-      trakP_tMatch  = dimuonditrk_cand.userFloat("trakMatchP");
-      trakN_tMatch  = dimuonditrk_cand.userFloat("trakMatchN");
+      muonP_tMatch  = dimuon_cand->userInt("tMatchP");
+      muonN_tMatch  = dimuon_cand->userInt("tMatchN");
+      trakP_tMatch  = dimuonditrk_cand.userInt("trakMatchP");
+      trakN_tMatch  = dimuonditrk_cand.userInt("trakMatchN");
 
       dimuonditrk_tree->Fill();
 
