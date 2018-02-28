@@ -19,12 +19,21 @@
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
+#include <TNtuple.h>
+#include <TString.h>
+#include <TSelector.h>
+
+#include <TProof.h>
+#include <TProofOutputFile.h>
 
 
 class TrakTrigSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
+   TNtuple *outTuple;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<UInt_t> run = {fReader, "run"};
@@ -58,6 +67,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(TrakTrigSkim,0);
 

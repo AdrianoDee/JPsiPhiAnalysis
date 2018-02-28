@@ -46,6 +46,23 @@ void TrakTrigSkim::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2Trak2Trig_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   ////////////////// Histograms //////////////////
+   JPsi_mass = 3.096916; /// pdg mass
+   Phi_mass = 1.019455; /// pdg mass
+   Phi_mean = 1.019723;
+   Phi_sigma = 2.35607e-03;//2.28400e-03;
+
+   outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT");
+
+
 }
 
 Bool_t TrakTrigSkim::Process(Long64_t entry)
@@ -65,8 +82,23 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
    // Use fStatus to set the return value of TTree::Process().
    //
    // The return value is currently not used.
+   Float_t run_out, ttM, trigtrigM;
+   Float_t trigp_pT, trign_pT;
+
+   bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
 
    fReader.SetEntry(entry);
+
+   if(trigMass)
+   {
+     run_out = (*run);
+     ttM = (*ditrak_p4).M();
+     trigtrigM = (*ditrig_p4).M();
+     trigp_pT = (*trigP_p4).Pt();
+     trign_pT = (*trigN_p4).Pt();
+
+     outTuple->Fill(run_out,ttM,trigtrigM,trigp_pT,trign_pT);
+   }
 
    return kTRUE;
 }
@@ -76,6 +108,22 @@ void TrakTrigSkim::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
+
 
 }
 
