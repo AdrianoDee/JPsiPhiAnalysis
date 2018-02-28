@@ -49,14 +49,14 @@ class DiMuonProducerHLTPAT : public edm::EDProducer {
   bool isAMixedbHadron(int pdgID, int momPdgID);
 
   UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
-  bool isTriggerMatched(const pat::Muon *m);
+  bool isTriggerMatched(const pat::Muon& m);
   UInt_t isTriggerMatched(const pat::TriggerObjectStandAlone *t);
 
   float DeltaR(const pat::Muon m, const pat::TriggerObjectStandAlone t);
 
   const pat::CompositeCandidate makeMuMuTriggerCand(const pat::TriggerObjectStandAlone& muonP, const pat::TriggerObjectStandAlone& muonN);
 
-  const pat::TriggerObjectStandAlone BestTriggerMuon(const pat::Muon* m);
+  const pat::TriggerObjectStandAlone BestTriggerMuon(const pat::Muon& m);
   std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
 
   // ----------member data ---------------------------
