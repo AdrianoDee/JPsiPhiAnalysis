@@ -1,4 +1,4 @@
-mPos.#include "../interface/DiMuonProducerHLT.h"
+#include "../interface/DiMuonProducerHLT.h"
 
 //Headers for the data items
 #include <DataFormats/TrackReco/interface/TrackFwd.h>
