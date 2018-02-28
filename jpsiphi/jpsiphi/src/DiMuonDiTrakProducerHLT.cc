@@ -1,20 +1,20 @@
-#include "../interface/DiMuonDiTrakProducerHLT.h"
+iEvent#include "../interface/DiMuonDiTrakProducerHLT.h"
 
 
 
 
-DiMuonDiTrakProducerHLT::DiMuonDiTrakProducerHLT(const edm::ParameterSet& ps):
-  DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("DiMuon"))),
-  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(ps.getParameter<edm::InputTag>("PFCandidates"))),
+DiMuonDiTrakProducerHLT::DiMuonDiTrakProducerHLT(const edm::ParameterSet& iConfig):
+  DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
+  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-  DiMuonMassCuts_(ps.getParameter<std::vector<double>>("DiMuonMassCuts")),
-  TrakTrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
-  DiMuonDiTrakMassCuts_(ps.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
-  MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
-  MaxDeltaRPt_(ps.getParameter<std::vector<double>>("MaxDeltaRPt")),
-  OnlyBest_(ps.getParameter<bool>("OnlyBest")),
-  product_name_(ps.getParameter<std::string>("Product")),
+  DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
+  TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
+  DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
+  MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
+  MaxDeltaRPt_(iConfig.getParameter<std::vector<double>>("MaxDeltaRPt")),
+  OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+  product_name_(iConfig.getParameter<std::string>("Product")),
   HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
@@ -25,18 +25,23 @@ DiMuonDiTrakProducerHLT::DiMuonDiTrakProducerHLT(const edm::ParameterSet& ps):
   nreco = 0;
 }
 
-void DiMuonDiTrakProducerHLT::produce(edm::Event& event, const edm::EventSetup& esetup){
+void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
-  event.getByToken(DiMuonCollection_,dimuon);
+  iEvent.getByToken(DiMuonCollection_,dimuon);
 
   edm::Handle<std::vector<pat::PackedCandidate> > trak;
-  event.getByToken(TrakCollection_,trak);
+  iEvent.getByToken(TrakCollection_,trak);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
-  iEvent.getByToken(TriggerCollection_,triggerColl);
+  iiEvent.getByToken(TriggerCollection_,triggerColl);
+
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
   uint ncombo = 0;
   float DiMuonMassMax_ = DiMuonMassCuts_[1];
@@ -126,8 +131,11 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& event, const edm::EventSetup& 
 
 // loop over second track candidate, negative charge
          for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
+         for (size_t j = 0; j < filteredTracks.size(); j++)
+         {
 
            if (i == j) continue;
+           auto negTrack = filteredTracks[j];
 
            if(negTrack.charge()>=0) continue;
            if(negTrack.pt()<0.5) continue;
@@ -147,7 +155,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& event, const edm::EventSetup& 
            pat::CompositeCandidate DiMuonTTTriggerCand = makeDiMuonTTCandidate(*dimuonTriggerCand, *&TTTrigger);
 
            DiMuonTTCand.addDaughter("dimuonTTTrigger");
-           
+
            if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
 
              DiMuonTTCandColl->push_back(DiMuonTTCand);
@@ -165,7 +173,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& event, const edm::EventSetup& 
   if ( ncombo != DiMuonTTCandColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiMuonTTCandColl->size()<<")"<< std::endl;
   if ( !dimuon->empty() )  ndimuon++;
   if ( ncombo > 0 ) nreco++;
-  event.put(std::move(DiMuonTTCandColl),product_name_);
+  iEvent.put(std::move(DiMuonTTCandColl),product_name_);
   nevents++;
 }
 
