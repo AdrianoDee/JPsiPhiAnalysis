@@ -145,7 +145,7 @@ UInt_t DiMuonProducerHLTPAT::isTriggerMatched(const pat::TriggerObjectStandAlone
   UInt_t matched = 0;
 
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
-    if(t->hasFilterLabel(HLTFilters_[iTr]))  matched += (1<<iTr);
+    if(t.hasFilterLabel(HLTFilters_[iTr]))  matched += (1<<iTr);
 
   return matched;
 }
