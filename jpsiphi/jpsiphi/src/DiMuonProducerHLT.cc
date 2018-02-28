@@ -126,6 +126,18 @@ const pat::TriggerObjectStandAlone& DiMuonProducerHLTPAT::BestTriggerMuon(const 
   }
 }
 
+
+UInt_t DiMuonProducerHLTPAT::isTriggerMatched(const pat::TriggerObjectStandAlone *t) {
+
+  UInt_t matched = 0;
+
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+    if(t->hasFilterLabel(HLTFilters_[iTr]))  matched += (1<<iTr);
+
+  return matched;
+}
+
+
 bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon *m) {
 
   bool matched = false;
@@ -275,6 +287,9 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       pat::CompositeCandidate mumuTrigP4 = makeMuMuTriggerCand(triggerColl[i],triggerColl[j]);
 
       mumucand.addDaughter(mumuTrigP4,"mumTrigger");
+
+      mumucand.addUserFloat("tMatchP",mumuP4.M());
+      mumucand.addUserFloat("tMatchN",mumuP4.M());
 
       vector<TransientTrack> muon_ttks;
       muon_ttks.push_back(theTTBuilder->build(mNeg.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)

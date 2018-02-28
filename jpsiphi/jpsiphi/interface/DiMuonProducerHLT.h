@@ -45,8 +45,11 @@ class DiMuonProducerPAT : public edm::EDProducer {
   void endJob() override ;
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
+
   UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
   bool isTriggerMatched(pat::Muon *m);
+  UInt_t isTriggerMatched(const pat::TriggerObjectStandAlone *t);
+
   float DeltaR(const pat::Muon m, const pat::TriggerObjectStandAlone t);
 
   const pat::TriggerObjectStandAlone& BestTriggerMuon(const pat::Muon* m);
