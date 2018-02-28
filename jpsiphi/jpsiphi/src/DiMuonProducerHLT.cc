@@ -637,7 +637,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
           // ---- MC Truth, if enabled ----
           if (addMCTruth_) {
             reco::GenParticleRef genMu1 = mNeg.genParticleRef();
-            reco::GenParticleRef genMu2 = it2->genParticleRef();
+            reco::GenParticleRef genMu2 = mPos.genParticleRef();
             if (genMu1.isNonnull() && genMu2.isNonnull()) {
               if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
                 reco::GenParticleRef mom1 = genMu1->motherRef();
