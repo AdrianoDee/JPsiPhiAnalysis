@@ -54,6 +54,8 @@ hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
                                 'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
+                                'hltJpsiTkTkVertexFilterPhiKstar',
+                                'hltJpsiTkVertexFilter'
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
