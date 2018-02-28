@@ -1,4 +1,4 @@
-#include "../interface/DiMuonProducerHLT.h"
+mPos.#include "../interface/DiMuonProducerHLT.h"
 
 //Headers for the data items
 #include <DataFormats/TrackReco/interface/TrackFwd.h>
@@ -262,7 +262,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if(!lowerPuritySelection_(mNeg)) continue;
 
     for (size_t j = 0; j < filteredMuons.size(); j++){
-      
+
       auto mPos = filteredMuons[j];
       if(mPos.charge()<=0.0) continue;
       if(i == j) continue;
@@ -273,7 +273,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (!(higherPuritySelection_(mNeg) || higherPuritySelection_(mPos))) continue;
 
       // ---- fit vertex using Tracker tracks (if they have tracks) ----
-      if (!(it->track().isNonnull() && it2->track().isNonnull())) continue;
+      if (!(mNeg.track().isNonnull() && mPos.track().isNonnull())) continue;
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
@@ -282,19 +282,19 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.addDaughter(mPos,"muon2");
 
       // ---- define and set candidate's 4momentum  ----
-      LorentzVector mumu = it->p4() + it2->p4();
+      LorentzVector mumu = mNeg.p4() + mPos.p4();
       TLorentzVector mu1, mu2,mumuP4;
-      mu1.SetXYZM(it->track()->px(),it->track()->py(),it->track()->pz(),muon_mass);
-      mu2.SetXYZM(it2->track()->px(),it2->track()->py(),it2->track()->pz(),muon_mass);
+      mu1.SetXYZM(mNeg.track()->px(),mNeg.track()->py(),mNeg.track()->pz(),muon_mass);
+      mu2.SetXYZM(mPos.track()->px(),mPos.track()->py(),mPos.track()->pz(),muon_mass);
       // LorentzVector mumu;
 
       mumuP4=mu1+mu2;
       mumucand.setP4(mumu);
-      mumucand.setCharge(it->charge()+it2->charge());
+      mumucand.setCharge(mNeg.charge()+mPos.charge());
 
       if(!dimuonSelection_(mumucand)) continue;
 
-      float deltaRMuMu = reco::deltaR2(it->eta(),it->phi(),it2->eta(),it2->phi());
+      float deltaRMuMu = reco::deltaR2(mNeg.eta(),mNeg.phi(),mPos.eta(),mPos.phi());
       mumucand.addUserFloat("deltaR",deltaRMuMu);
       mumucand.addUserFloat("mumuP4",mumuP4.M());
 
@@ -384,8 +384,8 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                   iEvent.getByToken(revtxbs_, pvbeamspot);
                   if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
                   // I need to go back to the reco::Muon object, as the TrackRef in the pat::Muon can be an embedded ref.
-                  const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(it->originalObject());
-                  const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(it2->originalObject());
+                  const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(mNeg.originalObject());
+                  const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(mPos.originalObject());
                   // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
                   // also check that the tracks really come from the track collection used for the BS
                   if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
@@ -427,8 +427,8 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               // count the number of high Purity tracks with pT > 900 MeV attached to the chosen vertex
               double vertexWeight = -1., sumPTPV = -1.;
               int countTksOfPV = -1;
-              const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(it->originalObject());
-              const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(it2->originalObject());
+              const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(mNeg.originalObject());
+              const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(mPos.originalObject());
               try{
                 for(reco::Vertex::trackRef_iterator itVtx = theOriginalPV.tracks_begin(); itVtx != theOriginalPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
                   const reco::Track& track = **itVtx;
@@ -636,7 +636,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           // ---- MC Truth, if enabled ----
           if (addMCTruth_) {
-            reco::GenParticleRef genMu1 = it->genParticleRef();
+            reco::GenParticleRef genMu1 = mNeg.genParticleRef();
             reco::GenParticleRef genMu2 = it2->genParticleRef();
             if (genMu1.isNonnull() && genMu2.isNonnull()) {
               if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
