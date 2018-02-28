@@ -79,7 +79,7 @@ float DiMuonProducerHLTPAT::DeltaR(const pat::Muon t1, const pat::TriggerObjectS
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-const pat::CompositeCandidate DiTrakHLT::makeMuMuTriggerCand(
+const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(
                                           const pat::TriggerObjectStandAlone& muonP,
                                           const pat::TriggerObjectStandAlone& muonN
                                          ){
