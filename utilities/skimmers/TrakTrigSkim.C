@@ -60,7 +60,7 @@ void TrakTrigSkim::SlaveBegin(TTree * /*tree*/)
    Phi_mean = 1.019723;
    Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-   outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT");
+   outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT:matchOne:matchTwo");
 
 
 }
@@ -84,7 +84,7 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
    // The return value is currently not used.
    Float_t run_out, ttM, trigtrigM;
    Float_t trigp_pT, trign_pT;
-   
+   UInt_t matchOne, matchTwo;
    fReader.SetEntry(entry);
 
    bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
@@ -97,8 +97,9 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
      trigtrigM = (*ditrig_p4).M();
      trigp_pT = (*trigP_p4).Pt();
      trign_pT = (*trigN_p4).Pt();
-
-     outTuple->Fill(run_out,ttM,trigtrigM,trigp_pT,trign_pT);
+     matchOne = (*tMatchOne);
+     matchTwo = (*tMatchTwo);
+     outTuple->Fill(run_out,ttM,trigtrigM,trigp_pT,trign_pT,matchOne,matchTwo);
    }
 
    return kTRUE;
