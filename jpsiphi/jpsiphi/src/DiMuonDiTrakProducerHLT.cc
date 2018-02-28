@@ -32,8 +32,8 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > trak;
-  iEvent.getByToken(TrakCollection_,trak);
+  edm::Handle<std::vector<pat::PackedCandidate> > trakCollection;
+  iEvent.getByToken(TrakCollection_,trakCollection);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
   iEvent.getByToken(TriggerCollection_,triggerColl);
@@ -83,7 +83,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
 
   //Matching
 
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trak->begin(); trak!= trak->end(); ++trak)
+  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakCollection->begin(), trakend=trakCollection->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
@@ -150,7 +150,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
 
            pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
 
-           pat::CompositeCandidate* dimuonTriggerCand = dynamic_cast <pat::CompositeCandidate *> (dimuonCand->daughter("mumuTrigger"));// ->userData<CompositeCandidate>()
+           pat::CompositeCandidate* dimuonTriggerCand = dynamic_cast <pat::CompositeCandidate *> (dimuonCand.daughter("mumuTrigger"));// ->userData<CompositeCandidate>()
            pat::CompositeCandidate DiMuonTTTriggerCand = makeDiMuonTTCandidate(*dimuonTriggerCand, *&TTTrigger);
 
            DiMuonTTCand.addDaughter("dimuonTTTrigger");
