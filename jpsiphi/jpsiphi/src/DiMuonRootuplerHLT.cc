@@ -47,7 +47,6 @@ class DiMuonRootuplerHLT:public edm::EDAnalyzer {
 
       private:
         UInt_t getTriggerBits(const edm::Event &);
-        UInt_t isTriggerMatched(const pat::CompositeCandidate *diMuon_cand)
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
 
@@ -78,7 +77,7 @@ class DiMuonRootuplerHLT:public edm::EDAnalyzer {
   UInt_t    ndimuon;
   UInt_t    nmuons;
   UInt_t    trigger;
-  UInt_t    tMatch;
+  UInt_t    tMatch, tMatchP, tMatchN;
   Int_t     charge;
 
 	TLorentzVector dimuon_p4;
@@ -142,6 +141,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("charge",   &charge,   "charge/I");
 
     dimuon_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
+    dimuon_tree->Branch("tMatchN",    &tMatchN,      "tMatchN/I");
+    dimuon_tree->Branch("tMatchP",    &tMatchP,      "tMatchP/I");
 
     dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
     dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
@@ -204,47 +205,6 @@ bool DiMuonRootuplerHLT::isAncestor(const reco::Candidate* ancestor, const reco:
    ex. 6 = pass 1, 2
    ex. 1 = pass 0
 */
-
-UInt_t DiMuonRootuplerHLT::isTriggerMatched(const pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muonP = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonP"));
-  const pat::Muon* muonN = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonN"));
-  UInt_t matched = 0;  // if no list is given, is not matched
-
-// if matched a given trigger, set the bit, in the same order as listed
-  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-     // std::cout << HLTFilters_[iTr] << std::endl;
-     const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muonP->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-     const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muonN->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
-     // if (!mu1HLTMatches.empty() || !mu2HLTMatches.empty()) std::cout << " MMM " << std::endl;
-  }
-
-  return matched;
-}
-
-const pat::CompositeCandidate DiTrakHLT::makeTTTriggerCandidate(
-                                          const pat::TriggerObjectStandAlone& muonP,
-                                          const pat::TriggerObjectStandAlone& muonN
-                                         ){
-
-  pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(muonP,"muonP");
-  TTCand.addDaughter(muonN,"muonN");
-  TTCand.setCharge(muonP.charge()+muonN.charge());
-
-  double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = muonP.momentum();
-  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
-  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
-  double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = muonN.momentum();
-  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
-  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
-  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
-  TTCand.setP4(vTT);
-
-  return TTCand;
-}
 
 
 UInt_t DiMuonRootuplerHLT::getTriggerBits(const edm::Event& iEvent ) {
@@ -423,4 +383,4 @@ void DiMuonRootuplerHLT::fillDescriptions(edm::ConfigurationDescriptions & descr
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonRootuplerHLTHLT);
+DEFINE_FWK_MODULE(DiMuonRootuplerHLT);

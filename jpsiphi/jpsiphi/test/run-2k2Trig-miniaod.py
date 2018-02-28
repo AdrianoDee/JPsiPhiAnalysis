@@ -84,7 +84,7 @@ process.softMuons = cms.EDFilter('PATMuonSelector',
 )
 
 
-process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
+process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerHLTPAT',
         muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -139,18 +139,18 @@ process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
     Filters             = filters,
 )
 #
-# process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
-#                           dimuons = cms.InputTag("JPsi2MuMuFilter"),
-#                           muons = cms.InputTag("replaceme"),
-#                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-#                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#                           dimuon_pdgid = cms.uint32(443),
-#                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-#                           isMC = cms.bool(False),
-#                           OnlyBest = cms.bool(False),
-#                           OnlyGen = cms.bool(False),
-#                           HLTs = hltpaths
-#                           )
+process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootuplerHLT',
+                          dimuons = cms.InputTag("JPsi2MuMuFilter"),
+                          muons = cms.InputTag("slimmedMuonsWithTrigger"),
+                          primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+                          TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+                          dimuon_pdgid = cms.uint32(443),
+                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
+                          isMC = cms.bool(False),
+                          OnlyBest = cms.bool(False),
+                          OnlyGen = cms.bool(False),
+                          HLTs = hltpaths
+                          )
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
@@ -162,6 +162,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.DiMuonCounterJPsi*
                      # process.PsiPhiProducer *
                      # process.PsiPhiFitter *
-                     process.DiTrakHLT)
-                     #process.rootuple)
+                     process.DiTrakHLT*
+                     process.rootupleMuMu)
                      # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
