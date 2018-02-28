@@ -159,8 +159,8 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakP"));
     const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakN"));
 
-    JpsiTk.push_back(*( dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muon1") ) )->innerTrack());
-    JpsiTk.push_back(*( dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muon2") ) )->innerTrack());
+    JpsiTk.push_back(*( dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muonP") ) )->innerTrack());
+    JpsiTk.push_back(*( dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muonN") ) )->innerTrack());
 
     std::vector<reco::TransientTrack> MuMuTT;
     MuMuTT.push_back((*theB).build(&JpsiTk[0]));
@@ -285,8 +285,8 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
 
 // Define psi from two muons
 	          pat::CompositeCandidate psi;
-	          psi.addDaughter(patMu1,"muon1");
-            psi.addDaughter(patMu2,"muon2");
+	          psi.addDaughter(patMu1,"muonP");
+            psi.addDaughter(patMu2,"muonN");
             psi.setP4(patMu1.p4()+patMu2.p4());
 // get kaon
             child = PsiTTree->movePointerToTheNextChild();
