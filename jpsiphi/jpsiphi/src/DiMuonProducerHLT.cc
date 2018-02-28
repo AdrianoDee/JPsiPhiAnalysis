@@ -102,7 +102,7 @@ const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(
 
   MMCand.setP4(vMuMu);
 
-  return vMuMu;
+  return MMCand;
 }
 
 const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon* m)
