@@ -36,7 +36,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
   iEvent.getByToken(TrakCollection_,trak);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
-  iiEvent.getByToken(TriggerCollection_,triggerColl);
+  iEvent.getByToken(TriggerCollection_,triggerColl);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
@@ -83,7 +83,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
 
   //Matching
 
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
+  for (std::vector<pat::PackedCandidate>::const_iterator trak = trak->begin(), trakend=trak->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
@@ -130,7 +130,6 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
 
 // loop over second track candidate, negative charge
-         for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
          for (size_t j = 0; j < filteredTracks.size(); j++)
          {
 
