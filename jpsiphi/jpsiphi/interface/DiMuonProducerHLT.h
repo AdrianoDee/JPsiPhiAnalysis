@@ -20,6 +20,8 @@
 #include <CommonTools/UtilAlgos/interface/StringCutObjectSelector.h>
 #include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
 
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 
 template<typename T>
