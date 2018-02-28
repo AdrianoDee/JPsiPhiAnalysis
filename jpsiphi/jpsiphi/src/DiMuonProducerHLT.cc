@@ -108,15 +108,15 @@ const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(
 const pat::TriggerObjectStandAlone& DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon* m)
 {
   const pat::TriggerObjectStandAloneCollection triggerColl = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-  if(triggerColl->size()==1)
-    return triggerColl->at(0);
+  if(triggerColl.size()==1)
+    return triggerColl.at(0);
   else
   {
-    pat::TriggerObjectStandAlone bestTrigger( triggerColl->at(0) )
+    pat::TriggerObjectStandAlone bestTrigger( triggerColl.at(0) )
 
-    for ( size_t iTrigObj = 1; iTrigObj < triggerColl->size(); ++iTrigObj )
+    for ( size_t iTrigObj = 1; iTrigObj < triggerColl.size(); ++iTrigObj )
     {
-      pat::TriggerObjectStandAlone thisTrigger( triggerColl->at( iTrigObj ) );
+      pat::TriggerObjectStandAlone thisTrigger( triggerColl.at( iTrigObj ) );
 
       if(DeltaR(*m,bestTrigger) > DeltaR(*m,thisTrigger))
         bestTrigger = thisTrigger;
