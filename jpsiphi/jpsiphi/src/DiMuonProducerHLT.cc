@@ -105,7 +105,7 @@ const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(
   return MMCand;
 }
 
-const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon* m)
+const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon& m)
 {
 
   pat::TriggerObjectStandAloneCollection triggerColl;
@@ -250,7 +250,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         filteredMuons.push_back(*m);
 
   for(std::vector<pat::Muon>::const_iterator m = filteredMuons.begin(), itendN = filteredMuons.end(); m != itendN; ++m)
-    triggerColl.push_back(BestTriggerMuon(m));
+    triggerColl.push_back(BestTriggerMuon(*m));
 
   std::cout << triggerColl.size() << " - " << filteredMuons.size() << std::endl;
 
