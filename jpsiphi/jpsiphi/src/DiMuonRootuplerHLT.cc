@@ -312,7 +312,7 @@ void DiMuonRootuplerHLT::analyze(const edm::Event & iEvent, const edm::EventSetu
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
 
-          reco::Candidate::LorentzVector vTrig = dimuonCand->daughter("mumTrigger")->p4();
+          reco::Candidate::LorentzVector vTrig = dimuonCand->daughter("mumuTrigger")->p4();
           dimuonTrigger_p4.SetPtEtaPhiM(vTrig.pt(),vTrig.eta(),vTrig.phi(),vTrig.mass());
 
           reco::Candidate::LorentzVector vP = dimuonCand->daughter("muonP")->p4();

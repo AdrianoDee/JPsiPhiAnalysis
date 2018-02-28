@@ -300,7 +300,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       pat::CompositeCandidate mumuTrigP4 = makeMuMuTriggerCand(triggerColl[i],triggerColl[j]);
 
-      mumucand.addDaughter(mumuTrigP4,"mumTrigger");
+      mumucand.addDaughter(mumuTrigP4,"mumuTrigger");
 
       mumucand.addUserInt("tMatchP",isTriggerMatched(triggerColl[i]));
       mumucand.addUserInt("tMatchN",isTriggerMatched(triggerColl[j]));
