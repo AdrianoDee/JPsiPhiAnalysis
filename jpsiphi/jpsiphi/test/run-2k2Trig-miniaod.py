@@ -37,8 +37,8 @@ charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-# 'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-# 'HLT_DoubleMu4_JpsiTrk_Displaced',
+'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
+'HLT_DoubleMu4_JpsiTrk_Displaced'
 # 'HLT_DoubleMu4_Jpsi_Displaced',
 # 'HLT_DoubleMu4_3_Jpsi_Displaced',
 # 'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
@@ -53,8 +53,6 @@ hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
 filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
                                 'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
                                 )
 

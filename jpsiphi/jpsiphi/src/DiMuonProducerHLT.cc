@@ -252,8 +252,6 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(std::vector<pat::Muon>::const_iterator m = filteredMuons.begin(), itendN = filteredMuons.end(); m != itendN; ++m)
     triggerColl.push_back(BestTriggerMuon(*m));
 
-  std::cout << triggerColl.size() << " - " << filteredMuons.size() << std::endl;
-
   // MuMu candidates only from muons
   for (size_t i = 0; i < filteredMuons.size(); i++){
     auto mNeg = filteredMuons[i];
