@@ -261,8 +261,9 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if(mNeg.charge()>=0.0) continue;
     if(!lowerPuritySelection_(mNeg)) continue;
 
-    for(std::vector<pat::Muon>::const_iterator mPos = filteredMuons->begin(), itendP = filteredMuons->end(); mPos != itendP; ++mPos){
-
+    for (size_t j = 0; j < filteredMuons.size(); j++){
+      
+      auto mPos = filteredMuons[j];
       if(mPos.charge()<=0.0) continue;
       if(i == j) continue;
       // both must pass low quality
