@@ -115,8 +115,8 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
-       const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
-       const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
+       const pat::Muon *pmuon = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP"));
+       const pat::Muon *nmuon = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN"));
 
 // loop on track candidates, make DiMuonT candidate, positive charge
        for (size_t i = 0; i < filteredTracks.size(); i++)
@@ -127,7 +127,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
 	       if(fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
 
-         if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
+         if ( IsTheSame(posTrack,*pmuon) || IsTheSame(posTrack,*nmuon)) continue;
 
 // loop over second track candidate, negative charge
          for (size_t j = 0; j < filteredTracks.size(); j++)
@@ -141,7 +141,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
   	       if(fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
 
-           if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2)) continue;
+           if ( IsTheSame(negTrack,*pmuon) || IsTheSame(negTrack,*nmuon)) continue;
 
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
            pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j]);
