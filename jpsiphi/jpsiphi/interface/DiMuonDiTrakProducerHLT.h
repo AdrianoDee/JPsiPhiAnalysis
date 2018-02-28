@@ -71,6 +71,8 @@ class DiMuonDiTrakProducerHLT : public edm::EDProducer {
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
+  UInt_t isTriggerMatched(const pat::TriggerObjectStandAlone& t)
+
   int candidates;
   int nevents;
   int ndimuon;

@@ -1,6 +1,6 @@
 /*
-   Package:    DiMuonDiTrakRootupler
-   Class:      DiMuonDiTrakRootupler
+   Package:    DiMuonDiTrakRootuplerHLT
+   Class:      DiMuonDiTrakRootuplerHLT
 
    Description: make rootuple of DiMuon-DiTrack combination
 
@@ -44,10 +44,10 @@
 // class declaration
 //
 
-class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
+class DiMuonDiTrakRootuplerHLT : public edm::EDAnalyzer {
    public:
-      explicit DiMuonDiTrakRootupler(const edm::ParameterSet&);
-      ~DiMuonDiTrakRootupler() override;
+      explicit DiMuonDiTrakRootuplerHLT(const edm::ParameterSet&);
+      ~DiMuonDiTrakRootuplerHLT() override;
 
       bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
@@ -86,6 +86,10 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   TLorentzVector kaonp_p4;
   TLorentzVector kaonn_p4;
 
+  TLorentzVector dimuonditrkTrigger_p4;
+  TLorentzVector dimuonTrigger_p4;
+  TLorentzVector ditrakTrigger_p4;
+
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_not_rf_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
@@ -98,6 +102,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   Int_t dimuonditrk_charge;
 
   UInt_t dimuon_triggerMatch, dimuon_triggerMatch_rf;
+  UInt_t muonN_tMatch, muonP_tMatch, trakN_tMatch, trakP_tMatch;
 
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
 
@@ -140,16 +145,16 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 };
 
-UInt_t DiMuonDiTrakRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
+UInt_t DiMuonDiTrakRootuplerHLT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
+  const pat::Muon* muonN = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonN"));
+  const pat::Muon* muonP = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonP"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
     // std::cout << HLTFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muon2->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muonN->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muonP->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
     // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
   }
@@ -170,7 +175,7 @@ static const Double_t psi1SMass =  3.09691;
 //
 // constructors and destructor
 //
-DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
+DiMuonDiTrakRootuplerHLT::DiMuonDiTrakRootuplerHLT(const edm::ParameterSet& iConfig):
         dimuonditrk_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("dimuonditrk_cand"))),
         dimuonditrk_rf_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("dimuonditrk_rf_cand"))),
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
@@ -200,6 +205,11 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("kaonp_p4",   "TLorentzVector", &kaonp_p4);
         dimuonditrk_tree->Branch("kaonn_p4",   "TLorentzVector", &kaonn_p4);
 
+        //Trigger
+        dimuonditrk_tree->Branch("dimuonditrkTrigger_p4",   "TLorentzVector", &dimuonditrkTrigger_p4);
+        dimuonditrk_tree->Branch("ditrakTrigger_p4",     "TLorentzVector", &ditrakTrigger_p4);
+        dimuonditrk_tree->Branch("dimuonTrigger_p4",     "TLorentzVector", &dimuonTrigger_p4);
+
         //refitted p4s
         dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
         dimuonditrk_tree->Branch("ditrak_rf_p4",     "TLorentzVector", &ditrak_rf_p4);
@@ -209,7 +219,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
         dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
 
-        //2mu vertexing
+        // //2mu vertexing
         dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
         dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
         dimuonditrk_tree->Branch("dimuon_DCA",          &dimuon_DCA,          "dimuon_DCA/D");
@@ -217,7 +227,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
         dimuonditrk_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
         dimuonditrk_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
-
+        //
         //2mu+2Trk vertexing
         dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
         dimuonditrk_tree->Branch("dimuonditrk_vChi2",      &dimuonditrk_vChi2,        "dimuonditrk_vChi2/D");
@@ -226,12 +236,12 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
         dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
 
-        //Muon flags
+        // //Muon flags
         dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
         dimuonditrk_tree->Branch("muonP_isSoft",        &muonP_isSoft,        "muonP_isSoft/O");
         dimuonditrk_tree->Branch("muonP_isMedium",        &muonP_isMedium,        "muonP_isMedium/O");
         dimuonditrk_tree->Branch("muonP_isHighPt",        &muonP_isHighPt,        "muonP_isHighPt/O");
-
+        //
         dimuonditrk_tree->Branch("muonP_isTracker",        &muonP_isTracker,        "muonP_isTracker/O");
         dimuonditrk_tree->Branch("muonP_isGlobal",        &muonP_isGlobal,        "muonP_isGlobal/O");
 
@@ -246,20 +256,21 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
         dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
 
-        //Track flags
-
-
         dimuonditrk_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/O");
 
+        dimuonditrk_tree->Branch("muonN_tMatch", &muonN_tMatch, "muonN_tMatch/I");
+        dimuonditrk_tree->Branch("muonP_tMatch", &muonP_tMatch, "muonP_tMatch/I");
+        dimuonditrk_tree->Branch("trakN_tMatch", &trakN_tMatch, "trakN_tMatch/I");
+        dimuonditrk_tree->Branch("trakP_tMatch", &trakP_tMatch, "trakP_tMatch/I");
 }
 
-DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
+DiMuonDiTrakRootuplerHLT::~DiMuonDiTrakRootuplerHLT() {}
 
 //
 // member functions
 //
 
-bool DiMuonDiTrakRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonDiTrakRootuplerHLT::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
    if (ancestor == particle ) return true;
    for (size_t i=0; i< particle->numberOfMothers(); i++) {
       if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -269,7 +280,7 @@ bool DiMuonDiTrakRootupler::isAncestor(const reco::Candidate* ancestor, const re
 
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void DiMuonDiTrakRootuplerHLT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
 //  using namespace edm;
   using namespace std;
 
@@ -331,11 +342,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   if (dimuonditrk_rf_cand_handle.isValid() && dimuonditrk_cand_handle.isValid()) {
 
     pat::CompositeCandidate dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
+    pat::CompositeCandidate *dimuonditrkTrigger_cand, *dimuonTrigger_cand, *ditrakTrigger_cand;
 
     noXCandidates = (Int_t)(dimuonditrk_rf_cand_handle->size());
     //Refitted Handle
     for (unsigned int i=0; i< dimuonditrk_rf_cand_handle->size(); i++){
-
 
 
       dimuonditrk_rf_cand   = dimuonditrk_rf_cand_handle->at(i);
@@ -362,16 +373,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("dimuon"));
       ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("ditrak"));
 
-      reco::Candidate::LorentzVector vP = dimuon_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vM = dimuon_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vN = dimuon_cand_rf->daughter("muonN")->p4();
+      reco::Candidate::LorentzVector VP = dimuon_cand_rf->daughter("muonP")->p4();
 
-      if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
-         vP = dimuon_cand_rf->daughter("muon2")->p4();
-         vM = dimuon_cand_rf->daughter("muon1")->p4();
-      }
-
-      muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-      muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+      muonp_rf_p4.SetPtEtaPhiM(vN.pt(), vN.eta(), vN.phi(), vN.mass());
+      muonn_rf_p4.SetPtEtaPhiM(VP.pt(), VP.eta(), VP.phi(), VP.mass());
 
       reco::Candidate::LorentzVector kP = ditrak_cand_rf->daughter("trakP")->p4();
       reco::Candidate::LorentzVector kM = ditrak_cand_rf->daughter("trakN")->p4();
@@ -385,17 +391,21 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
+      dimuonditrkTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
+      dimuonTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
+      ditrakTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
+
       const pat::Muon *muonP, *muonN;
 
-      if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
-         vP = dimuon_cand->daughter("muon2")->p4();
-         vM = dimuon_cand->daughter("muon1")->p4();
-         muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
-         muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
+      if (dimuon_cand_rf->daughter("muonN")->charge() < 0) {
+         vN = dimuon_cand->daughter("muonP")->p4();
+         VP = dimuon_cand->daughter("muonN")->p4();
+         muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muonN"));
+         muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muonP"));
       } else
       {
-        muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
-        muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
+        muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muonN"));
+        muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muonP"));
       }
 
       muonP_isLoose    =  muonP->isLooseMuon();
@@ -413,8 +423,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       muonP_type       = muonP->type();
       muonN_type       = muonN->type();
 
-      muonp_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-      muonn_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+      muonp_p4.SetPtEtaPhiM(vN.pt(), vN.eta(), vN.phi(), vN.mass());
+      muonn_p4.SetPtEtaPhiM(VP.pt(), VP.eta(), VP.phi(), VP.mass());
 
       kP = ditrak_cand->daughter("trakP")->p4();
       kM = ditrak_cand->daughter("trakN")->p4();
@@ -427,13 +437,22 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
       ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
 
+      dimuonditrkTrigger_p4.SetPtEtaPhiM(dimuonditrkTrigger_cand->pt(),dimuonditrkTrigger_cand->eta(),dimuonditrkTrigger_cand->phi(),dimuonditrkTrigger_cand->mass());
+      dimuonTrigger_p4.SetPtEtaPhiM(dimuonTrigger_cand->pt(),dimuonTrigger_cand->eta(),dimuonTrigger_cand->phi(),dimuonTrigger_cand->mass());
+      ditrakTrigger_p4.SetPtEtaPhiM(ditrakTrigger_cand->pt(),ditrakTrigger_cand->eta(),ditrakTrigger_cand->phi(),ditrakTrigger_cand->mass());
+
       dimuon_vProb        = dimuon_cand->userFloat("vProb");
       dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
       dimuon_DCA          = dimuon_cand->userFloat("DCA");
-      dimuon_ctauPV      = dimuon_cand->userFloat("ppdlPV");
+      dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
       dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
-      dimuon_triggerMatch = DiMuonDiTrakRootupler::isTriggerMatched(dimuon_cand);
+      dimuon_triggerMatch = DiMuonDiTrakRootuplerHLT::isTriggerMatched(dimuon_cand);
+
+      muonP_tMatch  = dimuon_cand->userFloat("tMatchP");
+      muonN_tMatch  = dimuon_cand->userFloat("tMatchN");
+      trakP_tMatch  = dimuonditrk_cand.userFloat("trakMatchP");
+      trakN_tMatch  = dimuonditrk_cand.userFloat("trakMatchN");
 
       dimuonditrk_tree->Fill();
 
@@ -449,25 +468,25 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakRootupler::beginJob() {}
+void DiMuonDiTrakRootuplerHLT::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakRootupler::endJob() {}
+void DiMuonDiTrakRootuplerHLT::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakRootupler::beginRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootuplerHLT::beginRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakRootupler::endRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootuplerHLT::endRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakRootupler::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootuplerHLT::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakRootupler::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootuplerHLT::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void DiMuonDiTrakRootuplerHLT::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -476,4 +495,4 @@ void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& des
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakRootupler);
+DEFINE_FWK_MODULE(DiMuonDiTrakRootuplerHLT);

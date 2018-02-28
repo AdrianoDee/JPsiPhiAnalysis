@@ -154,6 +154,8 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
            pat::CompositeCandidate DiMuonTTTriggerCand = makeDiMuonTTCandidate(*dimuonTriggerCand, *&TTTrigger);
 
            DiMuonTTCand.addDaughter(DiMuonTTTriggerCand,"dimuonTTTrigger");
+           DiMuonTTCand.addUserFloat(isTriggerMatched(matchedColl[i]),"trakMatchP");
+           DiMuonTTCand.addUserFloat(isTriggerMatched(matchedColl[j]),"trakMatchN");
 
            if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
 
@@ -193,6 +195,16 @@ bool DiMuonDiTrakProducerHLT::IsTheSame(const pat::PackedCandidate& tk, const pa
   double DeltaP   = fabs(mu.p()-tk.p());
   if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
   return false;
+}
+
+UInt_t DiMuonDiTrakProducerHLT::isTriggerMatched(const pat::TriggerObjectStandAlone& t) {
+
+  UInt_t matched = 0;
+
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
+    if(t.hasFilterLabel(HLTFilters_[iTr]))  matched += (1<<iTr);
+
+  return matched;
 }
 
 const pat::CompositeCandidate DiMuonDiTrakProducerHLT::makeDiMuonTTCandidate(
