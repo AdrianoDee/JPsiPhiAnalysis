@@ -89,8 +89,10 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
 
    bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
 
+   std::bitset<16> tOne(*tMatchOne);
+   std::bitset<16> tTwo(*tMatchTwo);
 
-   if(trigMass)
+   if(trigMass && tOne.test(3) && tTwo.test(3))
    {
      run_out = (*run);
      ttM = (*ditrak_p4).M();

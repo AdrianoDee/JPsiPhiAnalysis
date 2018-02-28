@@ -26,6 +26,7 @@
 #include <TProof.h>
 #include <TProofOutputFile.h>
 
+#include <bitset>
 
 class TrakTrigSkim : public TSelector {
 public :
