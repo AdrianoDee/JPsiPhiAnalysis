@@ -156,8 +156,8 @@ bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon *m) {
   bool matched = false;
 
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = m->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched = true;
+    const pat::TriggerObjectStandAloneCollection muHLT = m->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    if (!muHLT.empty()) matched = true;
   }
 
   return matched;
