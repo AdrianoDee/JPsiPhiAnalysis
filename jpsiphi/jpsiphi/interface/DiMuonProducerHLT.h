@@ -1,5 +1,5 @@
-#ifndef JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerPAT_h
-#define JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerPAT_h
+#ifndef JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerHLTPAT_h
+#define JpsiPhiAnalysis_DiMuonProducer_DiMuonProducerHLTPAT_h
 
 
 // system include files
@@ -34,10 +34,10 @@ struct GreaterByVProb {
 // class decleration
 //
 
-class DiMuonProducerPAT : public edm::EDProducer {
+class DiMuonProducerHLTPAT : public edm::EDProducer {
  public:
-  explicit DiMuonProducerPAT(const edm::ParameterSet&);
-  ~DiMuonProducerPAT() override;
+  explicit DiMuonProducerHLTPAT(const edm::ParameterSet&);
+  ~DiMuonProducerHLTPAT() override;
 
  private:
   void beginJob() override ;
