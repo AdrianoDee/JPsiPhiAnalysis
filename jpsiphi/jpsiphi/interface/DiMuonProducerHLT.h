@@ -50,7 +50,7 @@ class DiMuonProducerHLTPAT : public edm::EDProducer {
 
   UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
   bool isTriggerMatched(const pat::Muon& m);
-  UInt_t isTriggerMatched(const pat::TriggerObjectStandAlone *t);
+  UInt_t isTriggerMatched(const pat::TriggerObjectStandAlone& t);
 
   float DeltaR(const pat::Muon m, const pat::TriggerObjectStandAlone t);
 

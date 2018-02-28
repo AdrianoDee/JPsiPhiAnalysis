@@ -140,7 +140,7 @@ const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const p
 }
 
 
-UInt_t DiMuonProducerHLTPAT::isTriggerMatched(const pat::TriggerObjectStandAlone *t) {
+UInt_t DiMuonProducerHLTPAT::isTriggerMatched(const pat::TriggerObjectStandAlone& t) {
 
   UInt_t matched = 0;
 
