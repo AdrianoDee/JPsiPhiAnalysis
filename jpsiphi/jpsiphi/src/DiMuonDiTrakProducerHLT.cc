@@ -153,7 +153,7 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
            pat::CompositeCandidate* dimuonTriggerCand = dynamic_cast <pat::CompositeCandidate *> (dimuonCand.daughter("mumuTrigger"));// ->userData<CompositeCandidate>()
            pat::CompositeCandidate DiMuonTTTriggerCand = makeDiMuonTTCandidate(*dimuonTriggerCand, *&TTTrigger);
 
-           DiMuonTTCand.addDaughter("dimuonTTTrigger");
+           DiMuonTTCand.addDaughter(DiMuonTTTriggerCand,"dimuonTTTrigger");
 
            if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
 
