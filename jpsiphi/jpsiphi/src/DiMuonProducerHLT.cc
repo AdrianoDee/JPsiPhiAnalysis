@@ -107,23 +107,34 @@ const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(
 
 const pat::TriggerObjectStandAlone& DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon* m)
 {
-  const pat::TriggerObjectStandAloneCollection triggerColl = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-  if(triggerColl.size()==1)
-    return triggerColl.at(0);
-  else
+
+  pat::TriggerObjectStandAloneCollection triggerColl;
+  pat::TriggerObjectStandAlone bestTrigger, thisTrigger;
+  bool matched = false;
+
+  for (size_t i = 0; i < HLTFilters_.size(); i++)
   {
-    pat::TriggerObjectStandAlone bestTrigger( triggerColl.at(0) )
-
-    for ( size_t iTrigObj = 1; iTrigObj < triggerColl.size(); ++iTrigObj )
+    pat::TriggerObjectStandAloneCollection filterColl = m->triggerObjectMatchesByFilter(HLTFilters_[i]);
+    for ( size_t iTrigObj = 0; iTrigObj < filterColl.size(); ++iTrigObj )
     {
-      pat::TriggerObjectStandAlone thisTrigger( triggerColl.at( iTrigObj ) );
+      if(!matched)
+      {
+        bestTrigger = filterColl.at(iTrigObj);
+        matched = true;
+      } else
+      {
+        thisTrigger = filterColl.at(iTrigObj);
 
-      if(DeltaR(*m,bestTrigger) > DeltaR(*m,thisTrigger))
-        bestTrigger = thisTrigger;
+        if(DeltaR(*m,bestTrigger) > DeltaR(*m,thisTrigger))
+          bestTrigger = thisTrigger;
+      }
+
     }
 
-    return bestTrigger;
   }
+
+  return bestTrigger;
+
 }
 
 

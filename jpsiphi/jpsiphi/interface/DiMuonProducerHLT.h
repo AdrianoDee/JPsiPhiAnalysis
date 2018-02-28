@@ -52,7 +52,7 @@ class DiMuonProducerHLTPAT : public edm::EDProducer {
 
   float DeltaR(const pat::Muon m, const pat::TriggerObjectStandAlone t);
 
-  const pat::CompositeCandidate DiMuonProducerHLTPAT::makeMuMuTriggerCand(const pat::TriggerObjectStandAlone& muonP, const pat::TriggerObjectStandAlone& muonN);
+  const pat::CompositeCandidate makeMuMuTriggerCand(const pat::TriggerObjectStandAlone& muonP, const pat::TriggerObjectStandAlone& muonN);
 
   const pat::TriggerObjectStandAlone& BestTriggerMuon(const pat::Muon* m);
   std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
