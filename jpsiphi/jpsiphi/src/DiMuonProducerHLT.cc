@@ -127,7 +127,7 @@ const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const p
       {
         thisTrigger = filterColl.at(iTrigObj);
 
-        if(DeltaR(*m,bestTrigger) > DeltaR(*m,thisTrigger))
+        if(DeltaR(m,bestTrigger) > DeltaR(m,thisTrigger))
           bestTrigger = thisTrigger;
       }
 
@@ -151,12 +151,12 @@ UInt_t DiMuonProducerHLTPAT::isTriggerMatched(const pat::TriggerObjectStandAlone
 }
 
 
-bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon *m) {
+bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon& m) {
 
   bool matched = false;
 
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-    const pat::TriggerObjectStandAloneCollection muHLT = m->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection muHLT = m.triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!muHLT.empty()) matched = true;
   }
 
@@ -246,7 +246,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   pat::TriggerObjectStandAloneCollection triggerColl;
 
   for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
-    if(isTriggerMatched(m))
+    if(isTriggerMatched(*m))
         filteredMuons.push_back(*m);
 
   for(std::vector<pat::Muon>::const_iterator m = filteredMuons.begin(), itendN = filteredMuons.end(); m != itendN; ++m)
