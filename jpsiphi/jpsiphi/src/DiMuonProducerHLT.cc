@@ -116,7 +116,7 @@ const pat::TriggerObjectStandAlone DiMuonProducerHLTPAT::BestTriggerMuon(const p
 
   for (size_t i = 0; i < HLTFilters_.size(); i++)
   {
-    filterColl = m->triggerObjectMatchesByFilter(HLTFilters_[i]);
+    filterColl = m.triggerObjectMatchesByFilter(HLTFilters_[i]);
     for ( size_t iTrigObj = 0; iTrigObj < filterColl.size(); ++iTrigObj )
     {
       if(!matched)
