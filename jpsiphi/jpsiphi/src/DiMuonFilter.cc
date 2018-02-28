@@ -52,15 +52,6 @@ UInt_t DiMuonFilter::isTriggerMatched(const pat::CompositeCandidate *diMuon_cand
      // if (!mu1HLTMatches.empty() || !mu2HLTMatches.empty()) std::cout << " MMM " << std::endl;
   }
 
-  // const pat::TriggerObjectStandAloneCollection muon1Collection = muon1->triggerObjectMatches();
-  // const pat::TriggerObjectStandAloneCollection muon2Collection = muon2->triggerObjectMatches();
-  //
-  // for ( size_t i = 0; i < muon1Collection.size(); ++i )
-  //   for ( size_t j = 0; j < muon1->triggerObjectMatch(i)->filterLabels().size(); ++j )
-  //     std::cout << (muon1->triggerObjectMatch(i)->filterLabels())[j] << std::endl;
-
-  // std::cout << "Triggers matched : " << matched << std::endl;
-  // std::cout << "Sizes : " << muon1Collection.size() << " - " << muon2Collection.size() << std::endl;
   return matched;
 }
 

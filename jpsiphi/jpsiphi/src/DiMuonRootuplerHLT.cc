@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonRootupler
-// Class:      DiMuonRootupler
+// Package:    DiMuonRootuplerHLT
+// Class:      DiMuonRootuplerHLT
 //
 // Description: Dimuon(mu+ mu-)  producer
 //
@@ -38,15 +38,16 @@
 // class declaration
 //
 
-class DiMuonRootupler:public edm::EDAnalyzer {
+class DiMuonRootuplerHLT:public edm::EDAnalyzer {
       public:
-	explicit DiMuonRootupler(const edm::ParameterSet &);
-	~DiMuonRootupler() override;
+	explicit DiMuonRootuplerHLT(const edm::ParameterSet &);
+	~DiMuonRootuplerHLT() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
       private:
         UInt_t getTriggerBits(const edm::Event &);
+        UInt_t isTriggerMatched(const pat::CompositeCandidate *diMuon_cand)
         bool   isAncestor(const reco::Candidate *, const reco::Candidate *);
         const  reco::Candidate* GetAncestor(const reco::Candidate *);
 
@@ -84,6 +85,8 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
 
+  TLorentzVector dimuonTrigger_p4;
+
   Float_t MassErr;
   Float_t vProb;
   Float_t DCA;
@@ -114,7 +117,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 // constructors and destructor
 //
 
-DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
+DiMuonRootuplerHLT::DiMuonRootuplerHLT(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -144,6 +147,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
     dimuon_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
+    dimuon_tree->Branch("dimuonTrigger_p4", "TLorentzVector", &dimuonTrigger_p4);
+
     dimuon_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
     dimuon_tree->Branch("vProb",     &vProb,      "vProb/F");
     dimuon_tree->Branch("DCA",       &DCA,        "DCA/F");
@@ -159,7 +164,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+     std::cout << "DiMuonRootuplerHLT::DiMuonRootuplerHLT: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
@@ -170,13 +175,13 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
-DiMuonRootupler::~DiMuonRootupler() {}
+DiMuonRootuplerHLT::~DiMuonRootuplerHLT() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* DiMuonRootupler::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonRootuplerHLT::GetAncestor(const reco::Candidate* p) {
    if (p->numberOfMothers()) {
       if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
       else return p->mother(0);
@@ -185,7 +190,7 @@ const reco::Candidate* DiMuonRootupler::GetAncestor(const reco::Candidate* p) {
 }
 
 //Check recursively if any ancestor of particle is the given one
-bool DiMuonRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonRootuplerHLT::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
    if (ancestor == particle ) return true;
    for (size_t i=0; i< particle->numberOfMothers(); i++) {
       if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -200,7 +205,49 @@ bool DiMuonRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Ca
    ex. 1 = pass 0
 */
 
-UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonRootuplerHLT::isTriggerMatched(const pat::CompositeCandidate *diMuon_cand) {
+  const pat::Muon* muonP = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonP"));
+  const pat::Muon* muonN = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muonN"));
+  UInt_t matched = 0;  // if no list is given, is not matched
+
+// if matched a given trigger, set the bit, in the same order as listed
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+     // std::cout << HLTFilters_[iTr] << std::endl;
+     const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muonP->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+     const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muonN->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
+     // if (!mu1HLTMatches.empty() || !mu2HLTMatches.empty()) std::cout << " MMM " << std::endl;
+  }
+
+  return matched;
+}
+
+const pat::CompositeCandidate DiTrakHLT::makeTTTriggerCandidate(
+                                          const pat::TriggerObjectStandAlone& muonP,
+                                          const pat::TriggerObjectStandAlone& muonN
+                                         ){
+
+  pat::CompositeCandidate TTCand;
+  TTCand.addDaughter(muonP,"muonP");
+  TTCand.addDaughter(muonN,"muonN");
+  TTCand.setCharge(muonP.charge()+muonN.charge());
+
+  double m_kaon1 = MassTraks_[0];
+  math::XYZVector mom_kaon1 = muonP.momentum();
+  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+  double m_kaon2 = MassTraks_[1];
+  math::XYZVector mom_kaon2 = muonN.momentum();
+  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+  TTCand.setP4(vTT);
+
+  return TTCand;
+}
+
+
+UInt_t DiMuonRootuplerHLT::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -228,7 +275,7 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonRootuplerHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
   iEvent.getByToken(dimuon_Label,dimuons);
@@ -250,6 +297,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   nmuons = 0;
 
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  dimuonTrigger_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -290,7 +339,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         } else dimuon_pdgId = 0;
       }  // if ( p_id
     } // for (size
-    if ( ! dimuon_pdgId ) std::cout << "DiMuonRootupler: does not found the given decay " << run << "," << event << std::endl; // sanity check
+    if ( ! dimuon_pdgId ) std::cout << "DiMuonRootuplerHLT: does not found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
@@ -302,12 +351,13 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
-          reco::Candidate::LorentzVector vP = dimuonCand->daughter("muon1")->p4();
-          reco::Candidate::LorentzVector vM = dimuonCand->daughter("muon2")->p4();
-          if ( dimuonCand->daughter("muon1")->charge() < 0 ) {
-              vP = dimuonCand->daughter("muon2")->p4();
-              vM = dimuonCand->daughter("muon1")->p4();
-          }
+
+          reco::Candidate::LorentzVector vTrig = dimuonCand->daughter("mumTrigger")->p4();
+          dimuonTrigger_p4.SetPtEtaPhiM(vTrig.pt(),vTrig.eta(),vTrig.phi(),vTrig.mass());
+
+          reco::Candidate::LorentzVector vP = dimuonCand->daughter("muonP")->p4();
+          reco::Candidate::LorentzVector vM = dimuonCand->daughter("muonN")->p4();
+
           muonP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
           MassErr = -1.0;
@@ -334,7 +384,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         }
       }
     } //..else {
-      //std::cout << "DiMuonRootupler: (" << run << "," << event << ") -> ";
+      //std::cout << "DiMuonRootuplerHLT: (" << run << "," << event << ") -> ";
 
   }  // !OnlyGen_
 
@@ -346,25 +396,25 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonRootupler::beginJob() {}
+void DiMuonRootuplerHLT::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonRootupler::endJob() {}
+void DiMuonRootuplerHLT::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootuplerHLT::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootuplerHLT::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootuplerHLT::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootuplerHLT::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonRootuplerHLT::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -373,4 +423,4 @@ void DiMuonRootupler::fillDescriptions(edm::ConfigurationDescriptions & descript
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonRootupler);
+DEFINE_FWK_MODULE(DiMuonRootuplerHLTHLT);

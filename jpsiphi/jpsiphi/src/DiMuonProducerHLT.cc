@@ -1,4 +1,4 @@
-#include "../interface/DiMuonProducer.h"
+#include "../interface/DiMuonProducerHLT.h"
 
 //Headers for the data items
 #include <DataFormats/TrackReco/interface/TrackFwd.h>
@@ -36,7 +36,7 @@
 #include "TrackingTools/IPTools/interface/IPTools.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 
-DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
+DiMuonProducerHLTPAT::DiMuonProducerHLTPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
@@ -55,7 +55,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 }
 
 
-DiMuonProducerPAT::~DiMuonProducerPAT()
+DiMuonProducerHLTPAT::~DiMuonProducerHLTPAT()
 {
 
   // do anything here that needs to be done at desctruction time
@@ -68,7 +68,77 @@ DiMuonProducerPAT::~DiMuonProducerPAT()
 // member functions
 //
 
-UInt_t DiMuonProducerPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
+float DiMuonProducerHLTPAT::DeltaR(const pat::Muon t1, const pat::TriggerObjectStandAlone t2)
+{
+   float p1 = t1.phi();
+   float p2 = t2.phi();
+   float e1 = t1.eta();
+   float e2 = t2.eta();
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+   return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
+const pat::CompositeCandidate DiTrakHLT::makeMuMuTriggerCand(
+                                          const pat::TriggerObjectStandAlone& muonP,
+                                          const pat::TriggerObjectStandAlone& muonN
+                                         ){
+
+  double mMuon = 0.1056583715;
+
+  pat::CompositeCandidate MMCand;
+  MMCand.addDaughter(muonP,"muonP");
+  MMCand.addDaughter(muonN,"muonN");
+  MMCand.setCharge(muonP.charge()+muonN.charge());
+
+  math::XYZVector mom_muonP = muonP.momentum();
+  double e_muonP = sqrt(mMuon*mMuon + mom_muonP.Mag2());
+  math::XYZTLorentzVector p4_muonP = math::XYZTLorentzVector(mom_muonP.X(),mom_muonP.Y(),mom_muonP.Z(),e_muonP);
+
+  math::XYZVector mom_muonN = muonN.momentum();
+  double e_muonN = sqrt(mMuon*mMuon + mom_muonN.Mag2());
+  math::XYZTLorentzVector p4_muonN = math::XYZTLorentzVector(mom_muonN.X(),mom_muonN.Y(),mom_muonN.Z(),e_muonN);
+  reco::Candidate::LorentzVector vMuMu = p4_muonP + p4_muonN;
+
+  MMCand.setP4(vMuMu);
+
+  return vMuMu;
+}
+
+const pat::TriggerObjectStandAlone& DiMuonProducerHLTPAT::BestTriggerMuon(const pat::Muon* m)
+{
+  const pat::TriggerObjectStandAloneCollection triggerColl = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+  if(triggerColl->size()==1)
+    return triggerColl->at(0);
+  else
+  {
+    pat::TriggerObjectStandAlone bestTrigger( triggerColl->at(0) )
+
+    for ( size_t iTrigObj = 1; iTrigObj < triggerColl->size(); ++iTrigObj )
+    {
+      pat::TriggerObjectStandAlone thisTrigger( triggerColl->at( iTrigObj ) );
+
+      if(DeltaR(*m,bestTrigger) > DeltaR(*m,thisTrigger))
+        bestTrigger = thisTrigger;
+    }
+
+    return bestTrigger;
+  }
+}
+
+bool DiMuonProducerHLTPAT::isTriggerMatched(const pat::Muon *m) {
+
+  bool matched = false;
+
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = m->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched = true;
+  }
+
+  return matched;
+}
+
+UInt_t DiMuonProducerHLTPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
   const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
   const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
   UInt_t matched = 0;  // if no list is given, is not matched
@@ -99,7 +169,7 @@ UInt_t DiMuonProducerPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand)
 // ------------ method called to produce the data  ------------
 
 void
-DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
+DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
   using namespace std;
@@ -145,19 +215,36 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //ParticleMass psi_mass = 3.096916;
   float muon_sigma = muon_mass*1.e-6;
 
-  // MuMu candidates only from muons
-  for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
-    // both must pass low quality
-    if(!lowerPuritySelection_(*it)) continue;
-    //std::cout << "First muon quality flag" << std::endl;
-    for(View<pat::Muon>::const_iterator it2 = it+1; it2 != itend;++it2){
+  //Filtering Muons
 
-      if(it == it2) continue;
+  std::vector<pat::Muon> filteredMuons;
+  pat::TriggerObjectStandAloneCollection triggerColl;
+
+  for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
+    if(isTriggerMatched(m))
+        filteredMuons.push_back(*m);
+
+  for(std::vector<pat::Muon>::const_iterator m = filteredMuons->begin(), itendN = filteredMuons->end(); m != itendN; ++m)
+    triggerColl.push_back(BestTriggerMuon(*m));
+
+  std::cout << triggerColl.size() << " - " << filteredMuons.size() << std::endl;
+
+  // MuMu candidates only from muons
+  for (size_t i = 0; i < filteredMuons.size(); i++){
+    auto mNeg = filteredMuons[i];
+    // both must pass low quality
+    if(mNeg.charge()>=0.0) continue;
+    if(!lowerPuritySelection_(mNeg)) continue;
+
+    for(std::vector<pat::Muon>::const_iterator mPos = filteredMuons->begin(), itendP = filteredMuons->end(); mPos != itendP; ++mPos){
+
+      if(mPos.charge()<=0.0) continue;
+      if(i == j) continue;
       // both must pass low quality
-      if(!lowerPuritySelection_(*it2)) continue;
+      if(!lowerPuritySelection_(mPos)) continue;
       //std::cout << "Second muon quality flag" << std::endl;
       // one must pass tight quality
-      if (!(higherPuritySelection_(*it) || higherPuritySelection_(*it2))) continue;
+      if (!(higherPuritySelection_(mNeg) || higherPuritySelection_(mPos))) continue;
 
       // ---- fit vertex using Tracker tracks (if they have tracks) ----
       if (!(it->track().isNonnull() && it2->track().isNonnull())) continue;
@@ -165,17 +252,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
 
-      // ---- no explicit order defined ----
-      if(it->charge() > 0)
-      {
-        mumucand.addDaughter(*it, "muon1");
-        mumucand.addDaughter(*it2,"muon2");
-      } else
-      {
-        mumucand.addDaughter(*it, "muon2");
-        mumucand.addDaughter(*it2,"muon1");
-      }
-
+      mumucand.addDaughter(mNeg,"muon1");
+      mumucand.addDaughter(mPos,"muon2");
 
       // ---- define and set candidate's 4momentum  ----
       LorentzVector mumu = it->p4() + it2->p4();
@@ -188,17 +266,19 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.setP4(mumu);
       mumucand.setCharge(it->charge()+it2->charge());
 
+      if(!dimuonSelection_(mumucand)) continue;
+
       float deltaRMuMu = reco::deltaR2(it->eta(),it->phi(),it2->eta(),it2->phi());
       mumucand.addUserFloat("deltaR",deltaRMuMu);
       mumucand.addUserFloat("mumuP4",mumuP4.M());
-      // ---- apply the dimuon cut ----
 
-      if(!dimuonSelection_(mumucand)) continue;
+      pat::CompositeCandidate mumuTrigP4 = makeMuMuTriggerCand(triggerColl[i],triggerColl[j]);
 
+      mumucand.addDaughter(mumuTrigP4,"mumTrigger");
 
       vector<TransientTrack> muon_ttks;
-      muon_ttks.push_back(theTTBuilder->build(*it->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-      muon_ttks.push_back(theTTBuilder->build(*it2->track())); // otherwise the vertex will have transient refs inside.
+      muon_ttks.push_back(theTTBuilder->build(mNeg.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+      muon_ttks.push_back(theTTBuilder->build(mPos.track())); // otherwise the vertex will have transient refs inside.
 
       //Vertex Fit W/O mass constrain
 
@@ -223,6 +303,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           mumucand.addUserFloat("vNChi2",vChi2/vNDF);
           mumucand.addUserFloat("vProb",vProb);
+
+
 
           TVector3 vtx,vtx3D;
           TVector3 pvtx,pvtx3D;
@@ -585,7 +667,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
     bool
-    DiMuonProducerPAT::isAbHadron(int pdgID) {
+    DiMuonProducerHLTPAT::isAbHadron(int pdgID) {
 
       if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
       return false;
@@ -593,7 +675,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     bool
-    DiMuonProducerPAT::isAMixedbHadron(int pdgID, int momPdgID) {
+    DiMuonProducerHLTPAT::isAMixedbHadron(int pdgID, int momPdgID) {
 
       if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
       (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
@@ -603,7 +685,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     std::pair<int, float>
-    DiMuonProducerPAT::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+    DiMuonProducerHLTPAT::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
       int momJpsiID = 0;
       float trueLife = -99.;
@@ -663,14 +745,14 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // ------------ method called once each job just before starting event loop  ------------
     void
-    DiMuonProducerPAT::beginJob()
+    DiMuonProducerHLTPAT::beginJob()
     {
     }
 
     // ------------ method called once each job just after ending the event loop  ------------
     void
-    DiMuonProducerPAT::endJob() {
+    DiMuonProducerHLTPAT::endJob() {
     }
 
     //define this as a plug-in
-    DEFINE_FWK_MODULE(DiMuonProducerPAT);
+    DEFINE_FWK_MODULE(DiMuonProducerHLTPAT);
