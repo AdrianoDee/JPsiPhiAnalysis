@@ -46,6 +46,18 @@ void TrigTwoMuSkim::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2Mu2Trig_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   outTuple = new TNtuple("outuple","outuple","run:vProb:mmM:trigtrigM:trigp_pT:trign_pT:matchOne:matchTwo");
+
+
+
 }
 
 Bool_t TrigTwoMuSkim::Process(Long64_t entry)
@@ -68,6 +80,31 @@ Bool_t TrigTwoMuSkim::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   Float_t run_out, mmM, trigtrigM;
+   Float_t trigp_pT, trign_pT,vProb_out;
+   UInt_t matchOne, matchTwo;
+   fReader.SetEntry(entry);
+
+   bool trigMass = (*dimuonTrigger_p4).M() > 2.88 && (*dimuonTrigger_p4).M() < 3.32;
+
+   std::bitset<16> tOne(*tMatchN);
+   std::bitset<16> tTwo(*tMatchP);
+   std::bitset<16> theTrig(*trigger);
+
+   if(trigMass && tOne.test(0) && tTwo.test(0))
+   {
+     run_out = (*run);
+     mmM = (*dimuon_p4).M();
+     trigtrigM = (*dimuonTrigger_p4).M();
+     trigp_pT = (*muonP_p4).Pt();
+     trign_pT = (*muonN_p4).Pt();
+     matchOne = (*tMatchN);
+     matchTwo = (*tMatchP);
+     vProb_out = (*vProb);
+
+     outTuple->Fill(run_out,vProb_out,mmM,trigtrigM,trigp_pT,trign_pT,matchOne,matchTwo);
+   }
+
    return kTRUE;
 }
 
@@ -76,6 +113,21 @@ void TrigTwoMuSkim::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
 
 }
 

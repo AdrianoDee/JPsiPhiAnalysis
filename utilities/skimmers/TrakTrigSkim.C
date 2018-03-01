@@ -54,12 +54,6 @@ void TrakTrigSkim::SlaveBegin(TTree * /*tree*/)
      Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
    }
 
-   ////////////////// Histograms //////////////////
-   JPsi_mass = 3.096916; /// pdg mass
-   Phi_mass = 1.019455; /// pdg mass
-   Phi_mean = 1.019723;
-   Phi_sigma = 2.35607e-03;//2.28400e-03;
-
    outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT:matchOne:matchTwo");
 
 

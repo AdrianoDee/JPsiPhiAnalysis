@@ -46,6 +46,17 @@ void TwoMuTwoTrigSkim::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2Trak2Trig_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   outTuple = new TNtuple("outuple","outuple","run,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb");
+
+
 }
 
 Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
@@ -68,6 +79,52 @@ Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   Float_t run_out,ttM,mmM,xM;
+   Float_t xTrigM,ttTrigM,mmTrigM;
+   Float_t matchKP,matchKN,matchMN,matchMP;
+   Float_t muonp_pT, muonn_pT, kaonn_pT, kaonp_pT, vProb_out;
+
+   fReader.SetEntry(entry);
+
+   bool phiMass = (*ditrakTrigger_p4).M() > 0.9 && (*ditrakTrigger_p4).M() < 1.3;
+   bool jpsiMass = (*dimuonTrigger_p4).M() > 2.88 && (*dimuonTrigger_p4).M() < 3.32;
+   bool xMass = (*dimuonditrkTrigger_p4).M() > 4.0 && (*dimuonditrkTrigger_p4).M() < 6.0;
+
+   std::bitset<16> tOne(*muonN_tMatch);
+   std::bitset<16> tTwo(*muonP_tMatch);
+   std::bitset<16> tThree(*trakN_tMatch);
+   std::bitset<16> tFour(*trakP_tMatch);
+
+   std::bitset<16> theTrig(*trigger);
+
+   if(phiMass && xMass && jpsiMass && tOne.test(0) && tTwo.test(0)  && tThree.test(0) && tFour.test(0))
+   {
+     run_out = (*run);
+
+     xM = (*dimuonditrk_p4).M();
+     ttM = (*ditrak_p4).M();
+     mmM = (*dimuon_p4).M();
+
+     xTrigM = (*dimuonditrkTrigger_p4).M();
+     ttTrigM = (*ditrakTrigger_p4).M();
+     mmTrigM = (*dimuonTrigger_p4).M();
+
+     muonp_pT = (*muonp_p4).Pt();
+     muonn_pT = (*muonn_p4).Pt();
+     kaonp_pT = (*kaonp_p4).Pt();
+     kaonn_pT = (*kaonn_p4).Pt();
+
+     matchMN = (*muonN_tMatch);
+     matchMP = (*muonP_tMatch);
+     matchKN = (*trakN_tMatch);
+     matchKP = (*trakP_tMatch);
+
+     vProb_out = (*dimuonditrk_vProb);
+
+     Float_t params[16] = {run,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb};
+     outTuple->Fill(params);
+   }
+
    return kTRUE;
 }
 
@@ -76,6 +133,21 @@ void TwoMuTwoTrigSkim::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
 
 }
 

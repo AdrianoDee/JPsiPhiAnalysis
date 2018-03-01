@@ -19,12 +19,22 @@
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
+#include <TNtuple.h>
+#include <TString.h>
+#include <TSelector.h>
+
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include <bitset>
 
 
 class TwoMuTwoTrigSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   TNtuple *outTuple;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -98,6 +108,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(TwoMuTwoTrigSkim,0);
 
