@@ -1,5 +1,5 @@
-#define TwoMuTwoTrigSkim_cxx
-// The class definition in TwoMuTwoTrigSkim.h has been generated automatically
+#define TwoMuTwoTrakTrigSkim_cxx
+// The class definition in TwoMuTwoTrakTrigSkim.h has been generated automatically
 // by the ROOT utility TTree::MakeSelector(). This class is derived
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
@@ -19,17 +19,17 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// root> T->Process("TwoMuTwoTrigSkim.C")
-// root> T->Process("TwoMuTwoTrigSkim.C","some options")
-// root> T->Process("TwoMuTwoTrigSkim.C+")
+// root> T->Process("TwoMuTwoTrakTrigSkim.C")
+// root> T->Process("TwoMuTwoTrakTrigSkim.C","some options")
+// root> T->Process("TwoMuTwoTrakTrigSkim.C+")
 //
 
 
-#include "TwoMuTwoTrigSkim.h"
+#include "TwoMuTwoTrakTrigSkim.h"
 #include <TH2.h>
 #include <TStyle.h>
 
-void TwoMuTwoTrigSkim::Begin(TTree * /*tree*/)
+void TwoMuTwoTrakTrigSkim::Begin(TTree * /*tree*/)
 {
    // The Begin() function is called at the start of the query.
    // When running with PROOF Begin() is only called on the client.
@@ -38,7 +38,7 @@ void TwoMuTwoTrigSkim::Begin(TTree * /*tree*/)
    TString option = GetOption();
 }
 
-void TwoMuTwoTrigSkim::SlaveBegin(TTree * /*tree*/)
+void TwoMuTwoTrakTrigSkim::SlaveBegin(TTree * /*tree*/)
 {
    // The SlaveBegin() function is called after the Begin() function.
    // When running with PROOF SlaveBegin() is called on each slave server.
@@ -46,7 +46,7 @@ void TwoMuTwoTrigSkim::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
-   std::string outputString = "2Trak2Trig_tree.root";
+   std::string outputString = "2Trak2MuTrig_tree.root";
    OutFile = new TProofOutputFile( outputString.data() );
    fOut = OutFile->OpenFile("RECREATE");
    if (!(fOut=OutFile->OpenFile("RECREATE")))
@@ -59,7 +59,7 @@ void TwoMuTwoTrigSkim::SlaveBegin(TTree * /*tree*/)
 
 }
 
-Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
+Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
 {
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
@@ -97,7 +97,7 @@ Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
 
    std::bitset<16> theTrig(*trigger);
 
-   if(phiMass && xMass && jpsiMass && tOne.test(0) && tTwo.test(0)  && tThree.test(0) && tFour.test(0))
+   if(phiMass && xMass && jpsiMass)// && tOne.test(0) && tTwo.test(0)  && tThree.test(0) && tFour.test(0))
    {
      run_out = (*run);
 
@@ -128,7 +128,7 @@ Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
    return kTRUE;
 }
 
-void TwoMuTwoTrigSkim::SlaveTerminate()
+void TwoMuTwoTrakTrigSkim::SlaveTerminate()
 {
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
@@ -151,7 +151,7 @@ void TwoMuTwoTrigSkim::SlaveTerminate()
 
 }
 
-void TwoMuTwoTrigSkim::Terminate()
+void TwoMuTwoTrakTrigSkim::Terminate()
 {
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present
