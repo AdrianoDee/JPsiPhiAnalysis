@@ -83,6 +83,7 @@ Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
    Float_t xTrigM,ttTrigM,mmTrigM;
    Float_t matchKP,matchKN,matchMN,matchMP;
    Float_t muonp_pT, muonn_pT, kaonn_pT, kaonp_pT, vProb_out;
+   Float_t lxysig;
 
    fReader.SetEntry(entry);
 
@@ -96,7 +97,7 @@ Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
    std::bitset<16> tFour(*trakP_tMatch);
 
    std::bitset<16> theTrig(*trigger);
-   
+
    int triggerToTest = 0; //trigger-filter one to one
 
    if(theTrig.test(triggerToTest) && phiMass && xMass && jpsiMass && tOne.test(triggerToTest) && tTwo.test(triggerToTest)  && tThree.test(triggerToTest) && tFour.test(triggerToTest))
@@ -123,7 +124,9 @@ Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
 
      vProb_out = (*dimuonditrk_vProb);
 
-     Float_t params[16] = {run_out,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb_out};
+     lxysig = (*dimuonditrk_ctauPV) / (*dimuonditrk_ctauErrPV):
+
+     Float_t params[17] = {run_out,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb_out,lxysig};
      outTuple->Fill(params);
    }
 
