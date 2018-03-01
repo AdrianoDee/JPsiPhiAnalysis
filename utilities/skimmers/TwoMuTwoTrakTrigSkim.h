@@ -5,8 +5,8 @@
 // found on file: /lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2k2Trig_Charmonium_Run2017F-17Nov2017-v1_MINIAOD_305388-309000__20180301_001621/merge.root
 //////////////////////////////////////////////////////////
 
-#ifndef TwoMuTwoTrigSkim_h
-#define TwoMuTwoTrigSkim_h
+#ifndef TwoMuTwoTrakTrigSkim_h
+#define TwoMuTwoTrakTrigSkim_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -29,7 +29,7 @@
 #include <bitset>
 
 
-class TwoMuTwoTrigSkim : public TSelector {
+class TwoMuTwoTrakTrigSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
@@ -93,8 +93,8 @@ public :
    TTreeReaderValue<Int_t> trakP_tMatch = {fReader, "trakP_tMatch"};
 
 
-   TwoMuTwoTrigSkim(TTree * /*tree*/ =0) { }
-   virtual ~TwoMuTwoTrigSkim() { }
+   TwoMuTwoTrakTrigSkim(TTree * /*tree*/ =0) { }
+   virtual ~TwoMuTwoTrakTrigSkim() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -112,14 +112,14 @@ public :
    TProofOutputFile *OutFile;
    TFile            *fOut;
 
-   ClassDef(TwoMuTwoTrigSkim,0);
+   ClassDef(TwoMuTwoTrakTrigSkim,0);
 
 };
 
 #endif
 
-#ifdef TwoMuTwoTrigSkim_cxx
-void TwoMuTwoTrigSkim::Init(TTree *tree)
+#ifdef TwoMuTwoTrakTrigSkim_cxx
+void TwoMuTwoTrakTrigSkim::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -131,7 +131,7 @@ void TwoMuTwoTrigSkim::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t TwoMuTwoTrigSkim::Notify()
+Bool_t TwoMuTwoTrakTrigSkim::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -143,4 +143,4 @@ Bool_t TwoMuTwoTrigSkim::Notify()
 }
 
 
-#endif // #ifdef TwoMuTwoTrigSkim_cxx
+#endif // #ifdef TwoMuTwoTrakTrigSkim_cxx
