@@ -121,7 +121,7 @@ Bool_t TwoMuTwoTrigSkim::Process(Long64_t entry)
 
      vProb_out = (*dimuonditrk_vProb);
 
-     Float_t params[16] = {run,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb};
+     Float_t params[16] = {*run,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb_out};
      outTuple->Fill(params);
    }
 
