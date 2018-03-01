@@ -90,8 +90,10 @@ Bool_t TrigTwoMuSkim::Process(Long64_t entry)
    std::bitset<16> tOne(*tMatchN);
    std::bitset<16> tTwo(*tMatchP);
    std::bitset<16> theTrig(*trigger);
-
-   if(trigMass && tOne.test(0) && tTwo.test(0))
+   
+   int triggerToTest = 0;
+ 
+   if(trigMass && tOne.test(triggerToTest) && tTwo.test(triggerToTest) && theTrig.test(triggerToTest))
    {
      run_out = (*run);
      mmM = (*dimuon_p4).M();
