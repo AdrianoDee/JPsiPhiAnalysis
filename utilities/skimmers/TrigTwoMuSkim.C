@@ -1,5 +1,5 @@
-#define TrakTrigSkim_cxx
-// The class definition in TrakTrigSkim.h has been generated automatically
+#define TrigTwoMuSkim_cxx
+// The class definition in TrigTwoMuSkim.h has been generated automatically
 // by the ROOT utility TTree::MakeSelector(). This class is derived
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
@@ -19,17 +19,17 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// root> T->Process("TrakTrigSkim.C")
-// root> T->Process("TrakTrigSkim.C","some options")
-// root> T->Process("TrakTrigSkim.C+")
+// root> T->Process("TrigTwoMuSkim.C")
+// root> T->Process("TrigTwoMuSkim.C","some options")
+// root> T->Process("TrigTwoMuSkim.C+")
 //
 
 
-#include "TrakTrigSkim.h"
+#include "TrigTwoMuSkim.h"
 #include <TH2.h>
 #include <TStyle.h>
 
-void TrakTrigSkim::Begin(TTree * /*tree*/)
+void TrigTwoMuSkim::Begin(TTree * /*tree*/)
 {
    // The Begin() function is called at the start of the query.
    // When running with PROOF Begin() is only called on the client.
@@ -38,7 +38,7 @@ void TrakTrigSkim::Begin(TTree * /*tree*/)
    TString option = GetOption();
 }
 
-void TrakTrigSkim::SlaveBegin(TTree * /*tree*/)
+void TrigTwoMuSkim::SlaveBegin(TTree * /*tree*/)
 {
    // The SlaveBegin() function is called after the Begin() function.
    // When running with PROOF SlaveBegin() is called on each slave server.
@@ -46,26 +46,9 @@ void TrakTrigSkim::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
-   std::string outputString = "2Trak2Trig_tree.root";
-   OutFile = new TProofOutputFile( outputString.data() );
-   fOut = OutFile->OpenFile("RECREATE");
-   if (!(fOut=OutFile->OpenFile("RECREATE")))
-   {
-     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
-   }
-
-   ////////////////// Histograms //////////////////
-   JPsi_mass = 3.096916; /// pdg mass
-   Phi_mass = 1.019455; /// pdg mass
-   Phi_mean = 1.019723;
-   Phi_sigma = 2.35607e-03;//2.28400e-03;
-
-   outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT:matchOne:matchTwo");
-
-
 }
 
-Bool_t TrakTrigSkim::Process(Long64_t entry)
+Bool_t TrigTwoMuSkim::Process(Long64_t entry)
 {
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
@@ -82,57 +65,21 @@ Bool_t TrakTrigSkim::Process(Long64_t entry)
    // Use fStatus to set the return value of TTree::Process().
    //
    // The return value is currently not used.
-   Float_t run_out, ttM, trigtrigM;
-   Float_t trigp_pT, trign_pT;
-   UInt_t matchOne, matchTwo;
+
    fReader.SetEntry(entry);
-
-   bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
-
-   std::bitset<16> tOne(*tMatchOne);
-   std::bitset<16> tTwo(*tMatchTwo);
-   std::bitset<16> theTrig(*trigger);
-
-   if(trigMass && tOne.test(0) && tTwo.test(0))
-   {
-     run_out = (*run);
-     ttM = (*ditrak_p4).M();
-     trigtrigM = (*ditrig_p4).M();
-     trigp_pT = (*trigP_p4).Pt();
-     trign_pT = (*trigN_p4).Pt();
-     matchOne = (*tMatchOne);
-     matchTwo = (*tMatchTwo);
-     outTuple->Fill(run_out,ttM,trigtrigM,trigp_pT,trign_pT,matchOne,matchTwo);
-   }
 
    return kTRUE;
 }
 
-void TrakTrigSkim::SlaveTerminate()
+void TrigTwoMuSkim::SlaveTerminate()
 {
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 
-   TDirectory *savedir = gDirectory;
-   if (fOut)
-   {
-     fOut->cd();
-     gStyle->SetOptStat(111111) ;
-
-
-     outTuple->Write();
-     OutFile->Print();
-     fOutput->Add(OutFile);
-     gDirectory = savedir;
-     fOut->Close();
-
-   }
-
-
 }
 
-void TrakTrigSkim::Terminate()
+void TrigTwoMuSkim::Terminate()
 {
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present

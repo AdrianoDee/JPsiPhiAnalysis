@@ -28,6 +28,7 @@
 #include "TwoMuTwoKSkim.h"
 #include <TH2.h>
 #include <TStyle.h>
+#include <bitset>
 
 void TwoMuTwoKSkim::Begin(TTree * /*tree*/)
 {
@@ -85,15 +86,19 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
 
   fReader.SetEntry(entry);
-
+  
+  std::bitset<16> tt(*trigger);
+ 
   bool phiM = (*ditrak_p4).M() > 1.00 && (*ditrak_p4).M() < 1.04;
   bool jpsiM = (*dimuon_p4).M() > 3.00 && (*dimuon_p4).M() < 3.20;
   bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.995;
   bool vertexP = (*dimuonditrk_vProb) > 0.15;
   bool jPT = (*dimuon_p4).Pt() > 2.0;
   bool theTrigger = (*trigger) > 0;
+ 
+  bool triggerBit = tt.test(0);
 
-  if(theTrigger && jPT && phiM && jpsiM && cosAlpha && vertexP)
+  if(triggerBit)//theTrigger && jPT && phiM && triggerBit && jpsiM && cosAlpha && vertexP)
   {
     run_out =  *run;
     evt_out =  *event;
@@ -112,6 +117,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     xVtx_out = *dimuonditrk_vProb;
     xCos_out = *dimuonditrk_cosAlpha;
     xHlt_out = *trigger;
+
     muonp_pT_out = (*muonp_rf_p4).Pt();
     muonn_pT_out = (*muonn_rf_p4).Pt();
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
