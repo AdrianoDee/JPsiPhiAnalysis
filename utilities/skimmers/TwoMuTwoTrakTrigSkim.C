@@ -54,7 +54,7 @@ void TwoMuTwoTrakTrigSkim::SlaveBegin(TTree * /*tree*/)
      Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
    }
 
-   outTuple = new TNtuple("outuple","outuple","run:xM:ttM:mmM:xTrigM:ttTrigM:mmTrigM:muonp_pT:muonn_pT:kaonp_pT:kaonn_pT:matchMN:matchMP:matchKN:matchKP:vProb");
+   outTuple = new TNtuple("outuple","outuple","run:xM:ttM:mmM:xTrigM:ttTrigM:mmTrigM:muonp_pT:muonn_pT:kaonp_pT:kaonn_pT:matchMN:matchMP:matchKN:matchKP:vProb:lxysig");
 
 
 }
@@ -124,7 +124,7 @@ Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
 
      vProb_out = (*dimuonditrk_vProb);
 
-     lxysig = (*dimuonditrk_ctauPV) / (*dimuonditrk_ctauErrPV):
+     lxysig = (*dimuonditrk_ctauPV) / (*dimuonditrk_ctauErrPV);
 
      Float_t params[17] = {run_out,xM,ttM,mmM,xTrigM,ttTrigM,mmTrigM,muonp_pT,muonn_pT,kaonp_pT,kaonn_pT,matchMN,matchMP,matchKN,matchKP,vProb_out,lxysig};
      outTuple->Fill(params);
