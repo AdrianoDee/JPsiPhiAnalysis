@@ -97,7 +97,7 @@ Bool_t TwoMuTwoTrakTrigSkim::Process(Long64_t entry)
 
    std::bitset<16> theTrig(*trigger);
 
-   if(phiMass && xMass && jpsiMass)// && tOne.test(0) && tTwo.test(0)  && tThree.test(0) && tFour.test(0))
+   if(phiMass && xMass && jpsiMass && tOne.test(0) && tTwo.test(0)  && tThree.test(0) && tFour.test(0))
    {
      run_out = (*run);
 
