@@ -46,7 +46,7 @@ class TriggersByFilters : public edm::EDProducer {
  private:
 
    edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
-   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+   edm::EDGetTokenT<edm::TriggerResults> triggerResults;
    std::vector<std::string>  HLTFilters_;
 
 };
