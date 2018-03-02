@@ -74,7 +74,7 @@ config.General.requestName      = 'miniaod_2k2Trig_' + dataset[0]+'_'+dataset[1]
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/hltstudies/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2mk2Trig-miniaod.py'
+config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/hltstudies/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2k2Trig-miniaod.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750

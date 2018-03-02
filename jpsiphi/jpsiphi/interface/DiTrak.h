@@ -14,10 +14,21 @@
 #include "CommonTools/Utils/interface/PtComparator.h"
 
 // DataFormat includes
-#include <DataFormats/PatCandidates/interface/CompositeCandidate.h>
-#include <DataFormats/PatCandidates/interface/Muon.h>
-
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+
+#include "FWCore/Common/interface/TriggerNames.h"
+
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TLorentzVector.h"
+#include "TTree.h"
 
 
 
