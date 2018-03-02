@@ -34,35 +34,32 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float DiMuonMassMax_ = dimuonMassCuts_[1];
   float DiMuonMassMin_ = dimuonMassCuts_[0];
 
-  for(View<pat::Muon>::const_iterator mN = muons->begin(), itend = muons->end(); mN != itend; ++mN)
+  for(View<pat::Muon>::const_iterator mNeg = muons->begin(), itend = muons->end(); mNeg != itend; ++mNeg)
 
-    auto mNeg = *m;
+    if(mNeg->charge()>=0.0) continue;
 
-    if(mNeg.charge()>=0.0) continue;
-
-    for(View<pat::Muon>::const_iterator mP = muons->begin(), itend = muons->end(); mP != itend; ++mP)
+    for(View<pat::Muon>::const_iterator mPos = muons->begin(), itend = muons->end(); mPos != itend; ++mPos)
 
       if(i == j) continue;
 
-      auto mPos = *mP;
-      if(mPos.charge()<=0.0) continue;
+      if(mPos->charge()<=0.0) continue;
 
-      if (!(mNeg.track().isNonnull() && mPos.track().isNonnull())) continue;
+      if (!(mNeg->track().isNonnull() && mPos->track().isNonnull())) continue;
 
       pat::CompositeCandidate mumucand;
 
-      mumucand.addDaughter(mNeg,"muonN");
-      mumucand.addDaughter(mPos,"muonP");
+      mumucand.addDaughter(*mNeg,"muonN");
+      mumucand.addDaughter(*mPos,"muonP");
 
-      LorentzVector mumu = mNeg.p4() + mPos.p4();
+      LorentzVector mumu = mNeg->p4() + mPos->p4();
       TLorentzVector mu1, mu2,mumuP4;
 
-      mu1.SetXYZM(mNeg.track()->px(),mNeg.track()->py(),mNeg.track()->pz(),muon_mass);
-      mu2.SetXYZM(mPos.track()->px(),mPos.track()->py(),mPos.track()->pz(),muon_mass);
+      mu1.SetXYZM(mNeg->track()->px(),mNeg->track()->py(),mNeg->track()->pz(),muon_mass);
+      mu2.SetXYZM(mPos->track()->px(),mPos->track()->py(),mPos->track()->pz(),muon_mass);
 
       mumuP4=mu1+mu2;
       mumucand.setP4(mumu);
-      mumucand.setCharge(mNeg.charge()+mPos.charge());
+      mumucand.setCharge(mNeg->charge()+mPos->charge());
 
       if ( mumucand.mass() < DiMuonMassMax_ && mumucand.mass() > DiMuonMassMin_ )
         mumuCollection->push_back(TTCand);
