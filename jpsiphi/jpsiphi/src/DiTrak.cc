@@ -63,7 +63,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     } // loop over second track
   }
 
-  iEvent.put(std::move(oniaOutput));
+  iEvent.put(std::move(trakCollection));
 
 }
 
