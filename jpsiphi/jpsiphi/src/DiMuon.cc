@@ -1,4 +1,4 @@
-#include "../interface/DiTrak.h"
+#include "../interface/DiMuon.h"
 
 DiMuonPAT::DiMuonPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons"))),
