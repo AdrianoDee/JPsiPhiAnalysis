@@ -26,7 +26,7 @@ TriggersByFilters::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   using namespace reco;
   typedef Candidate::LorentzVector LorentzVector;
 
-  std::unique_ptr<pat::CompositeCandidateCollection> trigCollection(new pat::TriggerObjectStandAloneCollection);
+  std::unique_ptr<pat::TriggerObjectStandAloneCollection> trigCollection(new pat::TriggerObjectStandAloneCollection);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trigs;
   iEvent.getByToken(triggers_,trigs);
