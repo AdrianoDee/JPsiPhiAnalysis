@@ -36,9 +36,9 @@ TriggersByFilters::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
-  for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
+  for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
-    pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
+    pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
