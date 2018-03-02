@@ -1,14 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    DiTrakHLT
-// Class:      DiTrakHLT
-//
-// Description: ditrak(mu+ mu-)  producer
-//
-// Author:  Adriano Di Florio
-//    based on : Alberto Sanchez Hernandez Onia2MuMu code
-//
-
 // system include files
 #include <memory>
 

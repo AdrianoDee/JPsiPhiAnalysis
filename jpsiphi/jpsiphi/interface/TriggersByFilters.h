@@ -1,5 +1,5 @@
-#ifndef JpsiPhiAnalysis_DiTrak_h
-#define JpsiPhiAnalysis_DiTrak_h
+#ifndef JpsiPhiAnalysis_TriggersByFilters_h
+#define JpsiPhiAnalysis_TriggersByFilters_h
 
 
 // system include files
@@ -31,25 +31,23 @@
 #include "TTree.h"
 
 
-class DiTrakPAT : public edm::EDProducer {
+class TriggersByFilters : public edm::EDProducer {
  public:
-  explicit DiTrakPAT(const edm::ParameterSet&);
-  ~DiTrakPAT() override;
+  explicit TriggersByFilters(const edm::ParameterSet&);
+  ~TriggersByFilters() override;
 
  private:
   void beginJob() override ;
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endJob() override ;
-  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP,
-    const pat::PackedCandidate& trakN);
 
 
   // ----------member data ---------------------------
  private:
 
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> traks_;
-  std::vector<double> ditrakMassCuts_;
-  std::vector<double> massTraks_;
+   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
+   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+   std::vector<std::string>  HLTFilters_;
 
 };
 
