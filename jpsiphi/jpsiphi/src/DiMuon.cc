@@ -1,6 +1,6 @@
 #include "../interface/DiTrak.h"
 
-DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
+DiMuonPAT::DiMuonPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons"))),
 dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 {
@@ -8,7 +8,7 @@ dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 }
 
 
-DiTrakPAT::~DiTrakPAT()
+DiMuonPAT::~DiMuonPAT()
 {
 
   // do anything here that needs to be done at desctruction time
@@ -18,7 +18,7 @@ DiTrakPAT::~DiTrakPAT()
 
 
 void
-DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
+DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
   using namespace std;
@@ -74,14 +74,14 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method called once each job just before starting event loop  ------------
 void
-DiTrakPAT::beginJob()
+DiMuonPAT::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void
-DiTrakPAT::endJob() {
+DiMuonPAT::endJob() {
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiTrakPAT);
+DEFINE_FWK_MODULE(DiMuonPAT);
