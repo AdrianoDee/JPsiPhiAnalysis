@@ -2,7 +2,7 @@
 
 DiMuonPAT::DiMuonPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons"))),
-dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
+dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
 {
   produces<pat::CompositeCandidateCollection>();
 }
@@ -40,7 +40,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for(View<pat::Muon>::const_iterator mPos = muons->begin(), itend = muons->end(); mPos != itend; ++mPos)
 
-      if(i == j) continue;
+      if(mNeg == mPos) continue;
 
       if(mPos->charge()<=0.0) continue;
 
