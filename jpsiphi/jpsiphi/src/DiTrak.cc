@@ -5,8 +5,6 @@ traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::Inp
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses")),
 {
-  revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
-  revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
   produces<pat::CompositeCandidateCollection>();
 }
 

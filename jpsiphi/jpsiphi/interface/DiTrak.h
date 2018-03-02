@@ -17,10 +17,7 @@
 #include <DataFormats/PatCandidates/interface/CompositeCandidate.h>
 #include <DataFormats/PatCandidates/interface/Muon.h>
 
-#include <CommonTools/UtilAlgos/interface/StringCutObjectSelector.h>
-#include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
-
-#include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 
 
 
