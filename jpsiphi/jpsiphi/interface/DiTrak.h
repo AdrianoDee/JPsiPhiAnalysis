@@ -45,6 +45,7 @@ class DiTrakPAT : public edm::EDProducer {
   void beginJob() override ;
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endJob() override ;
+  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP, const pat::PackedCandidate& trakN)
 
 
   // ----------member data ---------------------------
