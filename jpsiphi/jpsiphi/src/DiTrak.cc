@@ -144,8 +144,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (!(ttVertex.isValid()))
           continue;
 
-      vChi2 = mumuVertex.totalChiSquared();
-      vNDF  = mumuVertex.degreesOfFreedom();
+      vChi2 = ttVertex.totalChiSquared();
+      vNDF  = ttVertex.degreesOfFreedom();
       vProb = (TMath::Prob(vChi2,(int)vNDF);
 
       //Vertex parameters

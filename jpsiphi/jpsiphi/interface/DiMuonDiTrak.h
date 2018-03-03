@@ -66,8 +66,8 @@ class DiMuonDiTrakPAT : public edm::EDProducer {
   // ----------member data ---------------------------
  private:
 
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> ditraks_;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuons_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> ditraks_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   std::vector<double> DiMuonDiTrakMassCuts_;
