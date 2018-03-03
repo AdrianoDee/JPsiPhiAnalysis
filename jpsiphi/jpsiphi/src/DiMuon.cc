@@ -9,7 +9,7 @@ dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
 {
   revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
   revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
-  
+
   produces<pat::CompositeCandidateCollection>();
   muon_mass = 0.1056583715;
 }
@@ -91,6 +91,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       minDz = 999999.; dca = 1E20;
 
       pat::CompositeCandidate mumucand;
+
+      vector<TransientVertex> pvs;
 
       mumucand.addDaughter(*mNeg,"muonN");
       mumucand.addDaughter(*mPos,"muonP");
