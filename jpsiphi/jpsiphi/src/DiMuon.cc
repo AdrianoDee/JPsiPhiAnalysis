@@ -114,16 +114,16 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
       mm_ttks.push_back(theTTBuilder->build(mPos->track()));
 
-      TransientVertex ttVertex = vtxFitter.vertex(mm_ttks);
+      TransientVertex mumuVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
 
       Measurement1D MassWErr(mPos->mass(),-9999.);
       if ( field->nominalValue() > 0 )
           MassWErr = massCalculator.invariantMass( VtxForInvMass, mmMasses );
       else
-          ttVertex = TransientVertex();                      // with no arguments it is invalid
+          mumuVertex = TransientVertex();                      // with no arguments it is invalid
 
-      if (!(ttVertex.isValid()))
+      if (!(mumuVertex.isValid()))
           continue;
 
       vChi2 = mumuVertex.totalChiSquared();
@@ -135,8 +135,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       TVector3 pvtx,pvtx3D;
       VertexDistanceXY vdistXY;
 
-      vtx.SetXYZ(ttVertex.position().x(),ttVertex.position().y(),0);
-      vtx3D.SetXYZ(ttVertex.position().x(),ttVertex.position().y(),ttVertex.position().z());
+      vtx.SetXYZ(mumuVertex.position().x(),mumuVertex.position().y(),0);
+      vtx3D.SetXYZ(mumuVertex.position().x(),mumuVertex.position().y(),mumuVertex.position().z());
       TVector3 pperp(mumu.px(), mumu.py(), 0);
       TVector3 pperp3D(mumu.px(), mumu.py(), mumu.pz());
       AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
@@ -145,7 +145,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       //Resolving pileup ambiguity with two trak min distance
       TwoTrackMinimumDistance ttmd;
       bool status = ttmd.calculate( GlobalTrajectoryParameters(
-        GlobalPoint(ttVertex.position().x(), ttVertex.position().y(), ttVertex.position().z()),
+        GlobalPoint(mumuVertex.position().x(), mumuVertex.position().y(), mumuVertex.position().z()),
         GlobalVector(mumucand.px(),mumucand.py(),mumucand.pz()),TrackCharge(0),&(*magneticField)),
         GlobalTrajectoryParameters(
           GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
@@ -179,10 +179,10 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       TVector3 vdiff = vtx - pvtx;
       cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
 
-      Measurement1D distXY = vdistXY.distance(Vertex(ttVertex), thePrimaryV);
+      Measurement1D distXY = vdistXY.distance(Vertex(mumuVertex), thePrimaryV);
       ctauPV = distXY.value()*cosAlpha * mumucand.mass()/pperp.Perp();
 
-      GlobalError v1e = (Vertex(ttVertex)).error();
+      GlobalError v1e = (Vertex(mumuVertex)).error();
       GlobalError v2e = thePrimaryV.error();
       AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
       ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*mumucand.mass()/(pperp.Perp2());
@@ -256,7 +256,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.addUserFloat("cosAlpha",cosAlpha);
       mumucand.addUserData("thePV",Vertex(thePrimaryV));
       mumucand.addUserData("theMuLessPV",Vertex(muonLessPV));
-      mumucand.addUserData("theVertex",Vertex(ttVertex));
+      mumucand.addUserData("theVertex",Vertex(mumuVertex));
 
 
       mumuCollection->push_back(mumucand);
