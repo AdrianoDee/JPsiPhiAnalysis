@@ -5,6 +5,7 @@ muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons
 dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
 {
   produces<pat::CompositeCandidateCollection>();
+  muon_mass = 0.1056583715;
 }
 
 

@@ -53,6 +53,8 @@ class DiMuonPAT : public edm::EDProducer {
   edm::EDGetTokenT<edm::View<pat::Muon>> muons_;
   std::vector<double> dimuonMassCuts_;
 
+  double muon_mass;
+
 };
 
 #endif
