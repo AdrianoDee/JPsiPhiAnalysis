@@ -28,8 +28,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   using namespace reco;
 
   vector<double> mmMasses;
-  muMasses.push_back( 0.1056583715 );
-  muMasses.push_back( 0.1056583715 );
+  mmMasses.push_back( 0.1056583715 );
+  mmMasses.push_back( 0.1056583715 );
 
   typedef Candidate::LorentzVector LorentzVector;
 
@@ -104,8 +104,6 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       TransientVertex ttVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
-
-      LorentzVector mumu = mPos->p4() + mNeg->p4();
 
       Measurement1D MassWErr(mPos->mass(),-9999.);
       if ( field->nominalValue() > 0 )
