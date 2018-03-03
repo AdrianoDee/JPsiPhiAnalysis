@@ -120,7 +120,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuonditrk_tree->Branch("trigger",  &trigger,  "trigger/i");
   dimuonditrk_tree->Branch("charge",   &charge,   "charge/I");
 
-  ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
+  dimuonditrk_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   dimuonditrk_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
 
@@ -246,7 +246,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
         charge = dimuonditrkCand->charge();
 
         dimuonditrk_tree->Fill();
-        isBest = false;  
+        isBest = false;
         if (OnlyBest_) break;
     }
   }
