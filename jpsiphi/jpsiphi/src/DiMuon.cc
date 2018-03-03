@@ -80,6 +80,10 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if (!(mNeg->track().isNonnull() && mPos->track().isNonnull())) continue;
 
+      vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
+      cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
+      dca = -1.0; minDz = 999999.; dca = 1E20;
+
       pat::CompositeCandidate mumucand;
 
       mumucand.addDaughter(*mNeg,"muonN");
@@ -99,8 +103,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         continue;
 
       vector<TransientTrack> mm_ttks;
-      mm_ttks.push_back(theTTBuilder->build(mNeg->bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-      mm_ttks.push_back(theTTBuilder->build(mPos->bestTrack()));
+      mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+      mm_ttks.push_back(theTTBuilder->build(mPos->track()));
 
       TransientVertex ttVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
