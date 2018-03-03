@@ -63,7 +63,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.setCharge(mNeg->charge()+mPos->charge());
 
       if ( mumucand.mass() < DiMuonMassMax_ && mumucand.mass() > DiMuonMassMin_ )
-        mumuCollection->push_back(TTCand);
+        mumuCollection->push_back(mumucand);
 
     }
   }
