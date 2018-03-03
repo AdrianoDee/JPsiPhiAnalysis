@@ -81,8 +81,6 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
   TLorentzVector ditrak_p4;
   TLorentzVector dimuon_p4;
 
-  std::vector < TLorentzVector > trigs_p4;
-
   std::vector < Float_t > trigs_pt;
   std::vector < Float_t > trigs_eta;
   std::vector < Float_t > trigs_phi;
@@ -143,7 +141,6 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
   dimuonditrk_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
-  dimuonditrk_tree->Branch("trigs_p4", &trigs_p4);
   dimuonditrk_tree->Branch("trigs_pt",   &trigs_pt);
   dimuonditrk_tree->Branch("trigs_eta",   &trigs_eta);
   dimuonditrk_tree->Branch("trigs_phi",   &trigs_phi);
