@@ -99,15 +99,15 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         continue;
 
       vector<TransientTrack> mm_ttks;
-      mm_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-      mm_ttks.push_back(theTTBuilder->build(posTrack.bestTrack()));
+      mm_ttks.push_back(theTTBuilder->build(mNeg->bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+      mm_ttks.push_back(theTTBuilder->build(mPos->bestTrack()));
 
       TransientVertex ttVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
 
-      LorentzVector mumu = posTrack.p4() + negTrack.p4();
+      LorentzVector mumu = mPos->p4() + mNeg->p4();
 
-      Measurement1D MassWErr(posTrack.mass(),-9999.);
+      Measurement1D MassWErr(mPos->mass(),-9999.);
       if ( field->nominalValue() > 0 )
           MassWErr = massCalculator.invariantMass( VtxForInvMass, mmMasses );
       else
