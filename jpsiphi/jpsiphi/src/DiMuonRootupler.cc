@@ -245,13 +245,11 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           already_stored = true;
         }
     }
-  } 
-
-  if ( !already_stored ) {  // we have to make sure, we are not double storing an combination
-    if ( !isMC_ ) {
-      if ( ndimuon > 0 ) dimuon_tree->Fill();   // if not MC filter out
-    } else dimuon_tree->Fill();
   }
+
+  if ( !already_stored )   // we have to make sure, we are not double storing an combination
+      if ( ndimuon > 0 ) dimuon_tree->Fill();  
+
 }
 
 // ------------ method called once each job just before starting event loop  ------------
