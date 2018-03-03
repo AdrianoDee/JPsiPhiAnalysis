@@ -209,14 +209,10 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  float DimuonMassMax_ = DimuonMassCuts_[1];
-  float DimuonMassMin_ = DimuonMassCuts_[0];
-
   bool already_stored = false;
   if ( dimuons.isValid() && !dimuons->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
 
-      if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
         dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
 
         reco::Candidate::LorentzVector vP = dimuonCand->daughter("muonP")->p4();
@@ -248,9 +244,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           dimuon_tree->Fill();   // be aware, we are storing all combinations
           already_stored = true;
         }
-      }
     }
-  } //..else {
+  } 
 
   if ( !already_stored ) {  // we have to make sure, we are not double storing an combination
     if ( !isMC_ ) {
