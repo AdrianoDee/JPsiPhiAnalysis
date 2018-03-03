@@ -204,8 +204,6 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   ndimuon  = 0;
 
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  dimuonTrigger_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
@@ -248,7 +246,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   }
 
   if ( !already_stored )   // we have to make sure, we are not double storing an combination
-      if ( ndimuon > 0 ) dimuon_tree->Fill();  
+      if ( ndimuon > 0 ) dimuon_tree->Fill();
 
 }
 
