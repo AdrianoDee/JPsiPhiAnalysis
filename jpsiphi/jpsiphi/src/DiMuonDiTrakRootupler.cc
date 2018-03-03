@@ -206,11 +206,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
         dimuonditrak_p4.SetPtEtaPhiM(dimuonditrkCand->pt(),dimuonditrkCand->eta(),dimuonditrkCand->phi(),dimuonditrkCand->mass());
 
-        dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("dimuon"));
-        ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("ditrak"));
+        dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand.daughter("dimuon"));
+        ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand.daughter("ditrak"));
 
         dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
-        ditrk_p4.SetPtEtaPhiM(ditrak_cand->pt(),ditrak_cand->eta(),ditrak_cand->phi(),ditrak_cand->mass());
+        ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(),ditrak_cand->eta(),ditrak_cand->phi(),ditrak_cand->mass());
 
         reco::Candidate::LorentzVector vP = dimuon_cand->daughter("muonP")->p4();
         reco::Candidate::LorentzVector vM = dimuon_cand->daughter("muonN")->p4();
