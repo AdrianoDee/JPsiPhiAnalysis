@@ -5,6 +5,8 @@ dimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::I
 ditraks_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiTraks"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
+DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
+DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts"))
 DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts"))
 {
   produces<pat::CompositeCandidateCollection>();
@@ -64,9 +66,14 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> mmttCollection(new pat::CompositeCandidateCollection);
 
-
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
+
+  float DiMuonMassMax_ = DiMuonMassCuts_[1];
+  float DiMuonMassMin_ = DiMuonMassCuts_[0];
+
+  float DiMuonDiTrakMassMax_ = DiTrakMassCuts_[1];
+  float DiMuonDiTrakMassMin_ = DiTrakMassCuts_[0];
 
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV;
@@ -79,7 +86,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (pat::CompositeCandidateCollection::const_iterator ditrakCand = ditrak->begin(); ditrakCand != ditrak->end(); ++ditrakCand)
     {
-      if ( !(ditrakCand->mass() < DiMuonDiTrakMassMax_  && ditrakCand->mass() > DiMuonDiTrakMassMin_) )
+      if ( !(ditrakCand->mass() < DiTrakMassMax_  && ditrakCand->mass() > DiTrakMassMin_) )
         continue;
 
         vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
@@ -87,6 +94,9 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         minDz = 999999.;
 
         pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
+
+        if ( !(ditrakCand->mass() < DiMuonDiTrakMassMax_  && ditrakCand->mass() > DiMuonDiTrakMassMin_) )
+          continue;
 
         const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakP"));
         const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakN"));
