@@ -7,6 +7,9 @@ thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamS
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
 {
+  revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
+  revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
+  
   produces<pat::CompositeCandidateCollection>();
   muon_mass = 0.1056583715;
 }
