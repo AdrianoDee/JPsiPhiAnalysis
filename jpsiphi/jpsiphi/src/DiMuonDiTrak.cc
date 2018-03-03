@@ -104,23 +104,23 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) )->innerTrack();
 
         std::vector<reco::TransientTrack> MuMuTT;
-        MuMuTT.push_back((*theB).build(muonP));
-        MuMuTT.push_back((*theB).build(muonN));
+        MuMuTT.push_back(theTTBuilder->build(muonP));
+        MuMuTT.push_back(theTTBuilder->build(muonN));
 
         if(!trakP->hasTrackDetails())
           continue;
         else if(trakP->bestTrack())
-          MuMuTT.push_back((*theB).build(*(trakP->bestTrack())));
+          MuMuTT.push_back(theTTBuilder->build(*(trakP->bestTrack())));
         else
-          MuMuTT.push_back((*theB).build((trakP->pseudoTrack())));
+          MuMuTT.push_back(theTTBuilder->build((trakP->pseudoTrack())));
 
 
         if(!trakN->hasTrackDetails())
           continue;
         else if(trakN->bestTrack())
-          MuMuTT.push_back((*theB).build(*(trakN->bestTrack())));
+          MuMuTT.push_back(theTTBuilder->build(*(trakN->bestTrack())));
         else
-          MuMuTT.push_back((*theB).build((trakN->pseudoTrack())));
+          MuMuTT.push_back(theTTBuilder->build((trakN->pseudoTrack())));
 
         TransientVertex mmttVertex = vtxFitter.vertex(MuMuTT);
         CachingVertex<5> VtxForInvMass = vtxFitter.vertex( MuMuTT );
