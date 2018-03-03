@@ -196,6 +196,9 @@ UInt_t DiMuonDiTrakRootupler::getTriggerBits(const edm::Event& iEvent ) {
 // ------------ method called for each event  ------------
 void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
+  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trigs;
+  iEvent.getByToken(triggers_,trigs);
+
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrks;
   iEvent.getByToken(dimuonditrk_Label,dimuonditrks);
 
