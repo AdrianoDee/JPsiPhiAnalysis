@@ -10,7 +10,6 @@ DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts"))
 {
   produces<pat::CompositeCandidateCollection>();
-  muon_mass = 0.1056583715;
 }
 
 
@@ -72,8 +71,8 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float DiMuonMassMax_ = DiMuonMassCuts_[1];
   float DiMuonMassMin_ = DiMuonMassCuts_[0];
 
-  float DiMuonDiTrakMassMax_ = DiTrakMassCuts_[1];
-  float DiMuonDiTrakMassMin_ = DiTrakMassCuts_[0];
+  float DiTrakMassMax_ = DiTrakMassCuts_[1];
+  float DiTrakMassMin_ = DiTrakMassCuts_[0];
 
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV;
@@ -95,14 +94,14 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
 
-        if ( !(ditrakCand->mass() < DiMuonDiTrakMassMax_  && ditrakCand->mass() > DiMuonDiTrakMassMin_) )
+        if ( !(mmttCand->mass() < DiMuonDiTrakMassMax_  && mmttCand->mass() > DiMuonDiTrakMassMin_) )
           continue;
 
-        const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakP"));
-        const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakN"));
+        const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakCand->daughter("trakP"));
+        const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakCand->daughter("trakN"));
 
-        const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muonP") ) )->innerTrack();
-        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuontt->daughter("dimuon")->daughter("muonN") ) )->innerTrack();
+        const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP") ) )->innerTrack();
+        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) )->innerTrack();
 
         std::vector<reco::TransientTrack> MuMuTT;
         MuMuTT.push_back((*theB).build(muonP));
