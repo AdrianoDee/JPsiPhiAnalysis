@@ -51,6 +51,12 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 
+template<typename T>
+struct GreaterByVProb {
+  bool operator()( const T & t1, const T & t2 ) const {
+    return t1.userFloat("vProb") > t2.userFloat("vProb");
+  }
+};
 
 class DiMuonPAT : public edm::EDProducer {
  public:
@@ -78,6 +84,9 @@ class DiMuonPAT : public edm::EDProducer {
   double muon_mass;
 
   InvariantMassFromVertex massCalculator;
+
+  GreaterByVProb<pat::CompositeCandidate> vPComparator_;
+
 
 };
 
