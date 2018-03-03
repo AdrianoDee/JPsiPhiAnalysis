@@ -136,7 +136,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         vChi2 = mmttVertex.totalChiSquared();
         vNDF  = mmttVertex.degreesOfFreedom();
-        vProb(TMath::Prob(vChi2,(int)vNDF));
+        vProb = TMath::Prob(vChi2,(int)vNDF);
 
         //Vertex parameters
         TVector3 vtx,vtx3D;
