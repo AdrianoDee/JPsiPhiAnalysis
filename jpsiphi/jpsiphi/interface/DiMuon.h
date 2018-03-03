@@ -70,6 +70,9 @@ class DiMuonPAT : public edm::EDProducer {
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   std::vector<double> dimuonMassCuts_;
 
+  edm::EDGetTokenT<reco::TrackCollection> revtxtrks_;
+  edm::EDGetTokenT<reco::BeamSpot> revtxbs_;
+  
   double muon_mass;
 
   InvariantMassFromVertex massCalculator;
