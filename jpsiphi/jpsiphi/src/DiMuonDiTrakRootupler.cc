@@ -204,8 +204,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
         dimuonditrak_p4.SetPtEtaPhiM(dimuonditrkCand->pt(),dimuonditrkCand->eta(),dimuonditrkCand->phi(),dimuonditrkCand->mass());
 
-        const pat::CompositeCandidate *dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuon"));
-        const pat::CompositeCandidate *ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("ditrak"));
+        const pat::CompositeCandidate *dimuon_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuon"));
+        const pat::CompositeCandidate *ditrak_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkCand->daughter("ditrak"));
 
         dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
         ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(),ditrak_cand->eta(),ditrak_cand->phi(),ditrak_cand->mass());
