@@ -34,12 +34,12 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float DiMuonMassMax_ = dimuonMassCuts_[1];
   float DiMuonMassMin_ = dimuonMassCuts_[0];
 
-  for(View<pat::Muon>::const_iterator mNeg = muons->begin(), itend = muons->end(); mNeg != itend; ++mNeg)
+  for(View<pat::Muon>::const_iterator mNeg = muons->begin(), itend = muons->end(); mNeg != itend; ++mNeg){
 
     if(mNeg->charge()>=0.0) continue;
 
     for(View<pat::Muon>::const_iterator mPos = muons->begin(), itend = muons->end(); mPos != itend; ++mPos)
-
+    {
       if(mNeg == mPos) continue;
 
       if(mPos->charge()<=0.0) continue;
