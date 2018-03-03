@@ -19,15 +19,15 @@ DiTrakPAT::~DiTrakPAT()
 
 }
 
-const pat::CompositeCandidate DiTrakPAT::makeTTCandidate(
+const pat::CompositeCandidate DiTrakPAT::maketrktrkcandidate(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN
                                          ){
 
-  pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(trakP,"trakP");
-  TTCand.addDaughter(trakN,"trakN");
-  TTCand.setCharge(trakP.charge()+trakN.charge());
+  pat::CompositeCandidate trktrkcand;
+  trktrkcand.addDaughter(trakP,"trakP");
+  trktrkcand.addDaughter(trakN,"trakN");
+  trktrkcand.setCharge(trakP.charge()+trakN.charge());
 
   double m_trakP = massTraks_[0];
   math::XYZVector mom_trakP = trakP.momentum();
@@ -38,9 +38,9 @@ const pat::CompositeCandidate DiTrakPAT::makeTTCandidate(
   double e_trakN = sqrt(m_trakN*m_trakN + mom_trakN.Mag2());
   math::XYZTLorentzVector p4_trakN = math::XYZTLorentzVector(mom_trakN.X(),mom_trakN.Y(),mom_trakN.Z(),e_trakN);
   reco::Candidate::LorentzVector vTT = p4_trakP + p4_trakN;
-  TTCand.setP4(vTT);
+  trktrkcand.setP4(vTT);
 
-  return TTCand;
+  return trktrkcand;
 }
 
 
@@ -120,10 +120,10 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(fabs(negTrack.pdgId())!=211) continue;
       if(!negTrack.hasTrackDetails()) continue;
 
-      pat::CompositeCandidate TTCand = makeTTCandidate(posTrack,negTrack);
+      pat::CompositeCandidate trktrkcand = maketrktrkcandidate(posTrack,negTrack);
       vector<TransientVertex> pvs;
 
-      if ( !(TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_) )
+      if ( !(trktrkcand.mass() < TrakTrakMassMax_ && trktrkcand.mass() > TrakTrakMassMin_) )
         continue;
 
       vector<TransientTrack> tt_ttks;
@@ -219,7 +219,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       trktrkcand.addUserData("thePV",Vertex(thePrimaryV));
       trktrkcand.addUserData("theVertex",Vertex(ttVertex));
 
-      trakCollection->push_back(TTCand);
+      trakCollection->push_back(trktrkcand);
 
 
     } // loop over second track
