@@ -68,7 +68,8 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
-
+  std::vector<std::string>  HLTFilters_;
+  
 	UInt_t    run;
 	ULong64_t event;
   UInt_t    lumiblock;

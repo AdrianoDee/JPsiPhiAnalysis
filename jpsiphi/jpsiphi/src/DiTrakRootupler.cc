@@ -79,7 +79,7 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
   TLorentzVector trig_p4;
-  
+
   std::vector < TLorentzVector > trigs_p4;
   std::vector < UInt_t > trigs_filters;
 
