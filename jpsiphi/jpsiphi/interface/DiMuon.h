@@ -23,12 +23,16 @@
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/Common/interface/View.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
+
+// system include files
+#include <memory>
 
 
 class DiMuonPAT : public edm::EDProducer {
