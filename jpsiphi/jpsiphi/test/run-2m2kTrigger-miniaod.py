@@ -72,9 +72,20 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
       unpackFilterLabels          = cms.bool( True )
 )
 
+process.softMuons = cms.EDFilter('PATMuonSelector',
+   src = cms.InputTag('slimmedMuons'),
+   cut = cms.string('muonID(\"TMOneStationTight\")'
+                    ' && abs(innerTrack.dxy) < 0.3'
+                    ' && abs(innerTrack.dz)  < 20.'
+                    ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
+                    ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
+                    ' && innerTrack.quality(\"highPurity\")'
+   ),
+   filter = cms.bool(True)
+)
 
 process.DiMuonPAT = cms.EDProducer('DiMuonPAT',
-    Muons                       = cms.InputTag('slimmedMuons'),
+    Muons                       = cms.InputTag('softMuons'),
     BeamSpot                     = cms.InputTag('offlineBeamSpot'),
     PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
     DiMuonCuts                  = cms.string("2.9 < mass && mass < 3.3 && charge==0"),

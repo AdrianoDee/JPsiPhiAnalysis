@@ -74,6 +74,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(View<pat::Muon>::const_iterator mNeg = muons->begin(), itend = muons->end(); mNeg != itend; ++mNeg){
 
     if(mNeg->charge()>=0.0) continue;
+    if (!(mNeg->track().isNonnull())) continue;
 
     for(View<pat::Muon>::const_iterator mPos = muons->begin(), itend = muons->end(); mPos != itend; ++mPos)
     {
@@ -81,7 +82,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if(mPos->charge()<=0.0) continue;
 
-      if (!(mNeg->track().isNonnull() && mPos->track().isNonnull())) continue;
+      if (!(mPos->track().isNonnull())) continue;
 
       vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
       cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
