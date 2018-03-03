@@ -21,7 +21,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5))
 
 process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-2017-ditraktrigger.root'),
