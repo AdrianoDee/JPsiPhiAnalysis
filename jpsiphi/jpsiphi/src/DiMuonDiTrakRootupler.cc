@@ -62,6 +62,7 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_Label;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
