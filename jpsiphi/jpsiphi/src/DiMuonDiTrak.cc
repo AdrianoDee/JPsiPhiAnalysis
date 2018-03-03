@@ -125,7 +125,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         TransientVertex mmttVertex = vtxFitter.vertex(MuMuTT);
         CachingVertex<5> VtxForInvMass = vtxFitter.vertex( MuMuTT );
 
-        Measurement1D MassWErr(mPos->mass(),-9999.);
+        Measurement1D MassWErr(mmttCand.mass(),-9999.);
         if ( field->nominalValue() > 0 )
             MassWErr = massCalculator.invariantMass( VtxForInvMass, mmMasses );
         else
