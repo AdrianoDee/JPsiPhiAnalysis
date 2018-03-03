@@ -75,28 +75,6 @@ class TriggersByFilters:public edm::EDAnalyzer {
 
 };
 
-UInt_t TriggersByFilters::getTriggerBits(const edm::Event& iEvent, const edm::Handle< edm::TriggerResults >& triggerResults_handle) {
-
-  UInt_t trigger = 0;
-  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
-
-     unsigned int NTRIGGERS = HLTs_.size();
-
-     for (unsigned int i = 0; i < NTRIGGERS; i++) {
-        for (int version = 1; version < 20; version++) {
-           std::stringstream ss;
-           ss << HLTs_[i] << "_v" << version;
-           unsigned int bit = names.triggerIndex(edm::InputTag(ss.str()).label());
-           if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
-              trigger += (1<<i);
-              break;
-           }
-        }
-     }
-
-   return trigger;
-}
-
 
 //
 // constructors and destructor
