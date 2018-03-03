@@ -1,5 +1,5 @@
-#ifndef JpsiPhiAnalysis_DiTrak_h
-#define JpsiPhiAnalysis_DiTrak_h
+#ifndef JpsiPhiAnalysis_DiMuonDiTrak_h
+#define JpsiPhiAnalysis_DiMuonDiTrak_h
 
 
 // system include files
@@ -31,10 +31,10 @@
 #include "TTree.h"
 
 
-class DiTrakPAT : public edm::EDProducer {
+class DiMuonDiTrakPAT : public edm::EDProducer {
  public:
-  explicit DiTrakPAT(const edm::ParameterSet&);
-  ~DiTrakPAT() override;
+  explicit DiMuonDiTrakPAT(const edm::ParameterSet&);
+  ~DiMuonDiTrakPAT() override;
 
  private:
   void beginJob() override ;
@@ -47,12 +47,9 @@ class DiTrakPAT : public edm::EDProducer {
   // ----------member data ---------------------------
  private:
 
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> traks_;
-  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
-  std::vector<double> ditrakMassCuts_;
-  std::vector<double> massTraks_;
-
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> ditraks_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuons_;
+  std::vector<double> DiMuonDiTrakMassCuts_;
 
 };
 
