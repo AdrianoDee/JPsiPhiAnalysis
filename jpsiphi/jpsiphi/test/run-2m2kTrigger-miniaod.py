@@ -29,6 +29,7 @@ process.TFileService = cms.Service("TFileService",
 
 kaonmass = 0.493677
 pionmass = 0.13957061
+muonmass = 0.1056583715;
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
@@ -73,10 +74,10 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonPAT',
-        muons                       = cms.InputTag('slimmedMuons'),
-        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-        primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        DiMuonCuts                  = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
+        Muons                       = cms.InputTag('slimmedMuons'),
+        BeamSpot                     = cms.InputTag('offlineBeamSpot'),
+        PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        DiMuonCuts                  = cms.string("2.9 < mass && mass < 3.3 && charge==0"),
 )
 
 
@@ -87,17 +88,29 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
 )
 
 process.Phi2KKPAT = cms.EDProducer('DiTrakPAT',
-        muons                       = cms.InputTag('slimmedMuons'),
-        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-        primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        DiMuonCuts                  = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
+        Traks                       = cms.InputTag('packedPFCandidates'),
+        BeamSpot                    = cms.InputTag('offlineBeamSpot'),
+        PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        DiTrakCuts                  = cms.string("0.93 < mass && mass < 1.32 && charge==0"),
+        TraksMasses                 = cms.vdouble(kaonmass,kaonmass)
 )
 
 
-process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
-    src       = cms.InputTag("DiMuonPAT"),
+process.DiTrakCounterPhi = cms.EDFilter('CandViewCountFilter',
+    src       = cms.InputTag("DiTrakPAT"),
     minNumber = cms.uint32(1),
     filter    = cms.bool(True)
+)
+
+process.DiMuonDiTrakPAT = cms.EDProducer('DiMuonDiTrakPAT',
+        DiMuons             = cms.InputTag('DiMuonPAT'),
+        DiTraks             = cms.InputTag('DiTrakPAT'),
+        BeamSpot            = cms.InputTag('offlineBeamSpot'),
+        PrimaryVertex       = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        DiMuonCuts          = cms.vdouble(2.9,3.3),
+        DiTrakCuts          = cms.vdouble(0.9,1.3),
+        DiMuonDiTrakCuts    = cms.vdouble(4.0,6.0),
+        CandsMasses         = cms.vdouble(muonmass,muonmass,kaonmass,kaonmass)
 )
 
 process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
