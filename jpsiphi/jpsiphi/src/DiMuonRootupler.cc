@@ -79,6 +79,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector dimuon_p4;
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
+  TLorentzVector trig_p4;
 
   std::vector < TLorentzVector > trigs_p4;
   std::vector < UInt_t > trigs_filters;
