@@ -141,11 +141,11 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
   dimuonditrk_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
-  dimuonditrk_tree->Branch("trigs_pt",   &trigs_pt);
-  dimuonditrk_tree->Branch("trigs_eta",   &trigs_eta);
-  dimuonditrk_tree->Branch("trigs_phi",   &trigs_phi);
-  dimuonditrk_tree->Branch("trigs_m",   &trigs_m);
-  dimuonditrk_tree->Branch("trigs_filters", &trigs_filters);
+  dimuonditrk_tree->Branch("trigs_pt",   trigs_pt);
+  dimuonditrk_tree->Branch("trigs_eta",   trigs_eta);
+  dimuonditrk_tree->Branch("trigs_phi",   trigs_phi);
+  dimuonditrk_tree->Branch("trigs_m",   trigs_m);
+  dimuonditrk_tree->Branch("trigs_filters", trigs_filters);
 
   dimuonditrk_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   dimuonditrk_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
