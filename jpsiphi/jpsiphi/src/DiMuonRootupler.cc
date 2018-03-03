@@ -118,7 +118,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuon_tree->Branch("trigger",  &trigger,  "trigger/i");
   dimuon_tree->Branch("charge",   &charge,   "charge/I");
 
-  ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
+  dimuon_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
