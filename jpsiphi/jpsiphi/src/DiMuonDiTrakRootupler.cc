@@ -90,6 +90,8 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
   Float_t lxyPV;
   Float_t lxyErrPV;
 
+  Bool_t isBest;
+
 	UInt_t numPrimaryVertices;
 
 	TTree *dimuonditrk_tree;
@@ -117,6 +119,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuonditrk_tree->Branch("ndimuonditrk",    &ndimuonditrk,    "ndimuonditrk/i");
   dimuonditrk_tree->Branch("trigger",  &trigger,  "trigger/i");
   dimuonditrk_tree->Branch("charge",   &charge,   "charge/I");
+
+  ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   dimuonditrk_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
 
@@ -192,13 +196,14 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
 
-  ndimuonditrk  = 0;
+  ndimuonditrk  = dimuonditrks->size();
 
   dimuonditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  bool already_stored = false;
+  isBest = true;
+
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {
 
@@ -240,17 +245,12 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
         charge = dimuonditrkCand->charge();
 
-        ndimuonditrk++;
+        dimuonditrk_tree->Fill();
+        isBest = false;  
         if (OnlyBest_) break;
-        else {
-          dimuonditrk_tree->Fill();   // be aware, we are storing all combinations
-          already_stored = true;
-        }
     }
   }
 
-  if ( !already_stored )   // we have to make sure, we are not double storing an combination
-      if ( ndimuonditrk > 0 ) dimuonditrk_tree->Fill();
 
 }
 

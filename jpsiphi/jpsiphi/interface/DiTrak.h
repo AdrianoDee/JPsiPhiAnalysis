@@ -82,6 +82,9 @@ class DiTrakPAT : public edm::EDProducer {
 
   InvariantMassFromVertex massCalculator;
 
+  GreaterByVProb<pat::CompositeCandidate> vPComparator_;
+
+
 };
 
 #endif

@@ -88,6 +88,8 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Float_t lxyPV;
   Float_t lxyErrPV;
 
+  Bool_t isBest;
+
 	UInt_t numPrimaryVertices;
 
 	TTree *dimuon_tree;
@@ -115,6 +117,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuon_tree->Branch("ndimuon",    &ndimuon,    "ndimuon/i");
   dimuon_tree->Branch("trigger",  &trigger,  "trigger/i");
   dimuon_tree->Branch("charge",   &charge,   "charge/I");
+
+  ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
@@ -207,7 +211,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  bool already_stored = false;
+  isBest = false;
+
   if ( dimuons.isValid() && !dimuons->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
 
@@ -232,22 +237,17 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         ctauErrPV = dimuonCand->userFloat("catuErrPV");
         lxyPV = dimuonCand->userFloat("lxy");
         lxyErrPV = dimuonCand->userFloat("lErrxy");
-        
+
         cosAlpha = dimuonCand->userFloat("cosAlpha");
 
         charge = dimuonCand->charge();
 
-        ndimuon++;
+        dimuon_tree->Fill();   // be aware, we are storing all combinations
+        isBest = false;
+
         if (OnlyBest_) break;
-        else {
-          dimuon_tree->Fill();   // be aware, we are storing all combinations
-          already_stored = true;
-        }
     }
   }
-
-  if ( !already_stored )   // we have to make sure, we are not double storing an combination
-      if ( ndimuon > 0 ) dimuon_tree->Fill();
 
 }
 
