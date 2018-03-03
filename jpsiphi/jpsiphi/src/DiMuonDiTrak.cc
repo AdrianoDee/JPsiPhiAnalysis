@@ -64,8 +64,6 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> mmttCollection(new pat::CompositeCandidateCollection);
 
-  edm::Handle<edm::View<pat::Muon> > muons;
-  iEvent.getByToken(muons_,muons);
 
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
@@ -81,7 +79,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (pat::CompositeCandidateCollection::const_iterator ditrakCand = ditrak->begin(); ditrakCand != ditrak->end(); ++ditrakCand)
     {
-      if ( !(ditrakCand->mass() < DiTrakMassMax_  && ditrakCand->mass() > DiTrakMassMin_) )
+      if ( !(ditrakCand->mass() < DiMuonDiTrakMassMax_  && ditrakCand->mass() > DiMuonDiTrakMassMin_) )
         continue;
 
         vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
@@ -175,38 +173,6 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         mmttCand.addUserData("thePV",Vertex(thePrimaryV));
         mmttCand.addUserData("theVertex",Vertex(mmttVertex));
 
-        mmttCollection->push_back(mmttCand);
-
-    }
-  }
-  for(View<pat::Muon>::const_iterator mNeg = muons->begin(), itend = muons->end(); mNeg != itend; ++mNeg){
-
-    if(mNeg->charge()>=0.0) continue;
-
-    for(View<pat::Muon>::const_iterator mPos = muons->begin(), itend = muons->end(); mPos != itend; ++mPos)
-    {
-      if(mNeg == mPos) continue;
-
-      if(mPos->charge()<=0.0) continue;
-
-      if (!(mNeg->track().isNonnull() && mPos->track().isNonnull())) continue;
-
-      pat::CompositeCandidate mmttCand;
-
-      mmttCand.addDaughter(*mNeg,"muonN");
-      mmttCand.addDaughter(*mPos,"muonP");
-
-      LorentzVector mumu = mNeg->p4() + mPos->p4();
-      TLorentzVector mu1, mu2,mumuP4;
-
-      mu1.SetXYZM(mNeg->track()->px(),mNeg->track()->py(),mNeg->track()->pz(),muon_mass);
-      mu2.SetXYZM(mPos->track()->px(),mPos->track()->py(),mPos->track()->pz(),muon_mass);
-
-      mumuP4=mu1+mu2;
-      mmttCand.setP4(mumu);
-      mmttCand.setCharge(mNeg->charge()+mPos->charge());
-
-      if ( mmttCand.mass() < DiMuonDiTrakMassMax_ && mmttCand.mass() > DiMuonDiTrakMassMin_ )
         mmttCollection->push_back(mmttCand);
 
     }
