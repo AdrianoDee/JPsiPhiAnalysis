@@ -204,8 +204,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
           iEvent.getByToken(revtxbs_, pvbeamspot);
           if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
 
-          const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(mNeg.originalObject());
-          const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(mPos.originalObject());
+          const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(mNeg->originalObject());
+          const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(mPos->originalObject());
 
           if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
 
