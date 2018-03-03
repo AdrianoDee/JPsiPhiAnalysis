@@ -231,8 +231,8 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         if (ditrakCand->hasUserFloat("DCA"))
           DCA = ditrakCand->userFloat("DCA");
 
-        ctauPV = ditrakCand->userFloat("catuPV");
-        ctauErrPV = ditrakCand->userFloat("catuErrPV");
+        ctauPV = ditrakCand->userFloat("ctauPV");
+        ctauErrPV = ditrakCand->userFloat("ctauErrPV");
         lxyPV = ditrakCand->userFloat("lxy");
         lxyErrPV = ditrakCand->userFloat("lErrxy");
 

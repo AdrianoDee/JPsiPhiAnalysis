@@ -236,8 +236,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
         if (dimuonditrkCand->hasUserFloat("DCA"))
           DCA = dimuonditrkCand->userFloat("DCA");
 
-        ctauPV = dimuonditrkCand->userFloat("catuPV");
-        ctauErrPV = dimuonditrkCand->userFloat("catuErrPV");
+        ctauPV = dimuonditrkCand->userFloat("ctauPV");
+        ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
         lxyPV = dimuonditrkCand->userFloat("lxy");
         lxyErrPV = dimuonditrkCand->userFloat("lErrxy");
 

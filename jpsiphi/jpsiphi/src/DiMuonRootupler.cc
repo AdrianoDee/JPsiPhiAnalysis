@@ -233,8 +233,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         if (dimuonCand->hasUserFloat("DCA"))
           DCA = dimuonCand->userFloat("DCA");
 
-        ctauPV = dimuonCand->userFloat("catuPV");
-        ctauErrPV = dimuonCand->userFloat("catuErrPV");
+        ctauPV = dimuonCand->userFloat("ctauPV");
+        ctauErrPV = dimuonCand->userFloat("ctauErrPV");
         lxyPV = dimuonCand->userFloat("lxy");
         lxyErrPV = dimuonCand->userFloat("lErrxy");
 
