@@ -69,7 +69,7 @@ class DiTrakPAT : public edm::EDProducer {
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> traks_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
-  StringCutObjectSelector<reco::Candidate, true> dimuonSelection_;
+  StringCutObjectSelector<reco::Candidate, true> ditrakSelection_;
   std::vector<double> massTraks_;
 
   InvariantMassFromVertex massCalculator;
