@@ -67,7 +67,6 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   edm::Handle<BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
-  BeamSpot bs = *theBeamSpot;
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
@@ -88,7 +87,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float DiTrakMassMax_ = DiTrakMassCuts_[1];
   float DiTrakMassMin_ = DiTrakMassCuts_[0];
 
-  float vProb, vNDF, vChi2, minDz = 999999.;
+  float vProb, vNDF, vChi2;
   float cosAlpha, ctauPV, ctauErrPV;
   float l_xy, lErr_xy;
 
@@ -104,7 +103,6 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
         cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
-        minDz = 999999.;
 
         pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *ditrakCand);
 
