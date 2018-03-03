@@ -60,11 +60,13 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> ditrak_Label;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
+  std::vector<std::string>  HLTFilters_;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -76,6 +78,9 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	TLorentzVector ditrak_p4;
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
+
+  std::vector < TLorentzVector > trigs_p4;
+  std::vector < UInt_t > trigs_filters;
 
   Bool_t isBest;
 
@@ -100,10 +105,12 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 
 DiTrakRootupler::DiTrakRootupler(const edm::ParameterSet & iConfig):
 ditrak_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("ditraks"))),
+triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
   ditrak_tree = fs->make < TTree > ("ditrakTree", "Tree of DiTrak");
@@ -112,11 +119,14 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   ditrak_tree->Branch("event",    &event,    "event/l");
   ditrak_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
 
-  ditrak_tree->Branch("nditrak",    &nditrak,    "nditrak/i");
+  ditrak_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
   ditrak_tree->Branch("trigger",  &trigger,  "trigger/i");
   ditrak_tree->Branch("charge",   &charge,   "charge/I");
 
   ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
+
+  ditrak_tree->Branch("trigs_p4", &trigs_p4);
+  ditrak_tree->Branch("trigs_filters", &trigs_filters);
 
   ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
@@ -195,6 +205,9 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
 
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
   run       = iEvent.id().run();
   event     = iEvent.id().event();
   lumiblock = iEvent.id().luminosityBlock();
@@ -210,6 +223,37 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   trakN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   isBest = true;
+
+  for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
+
+    trig_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
+
+    if(unPackedTrigger.charge()==0) continue;
+
+    unPackedTrigger.unpackPathNames( names );
+    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+
+    bool filtered = false;
+    UInt_t thisFilter = 0;
+
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+    {
+      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
+    }
+
+    if(!filtered) continue;
+
+    trigs_filters.push_back(thisFilter);
+    trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
+    trigs_p4.push_back(trig_p4);
+
+  }
 
   if ( ditraks.isValid() && !ditraks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {

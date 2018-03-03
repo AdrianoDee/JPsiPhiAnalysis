@@ -24,6 +24,9 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 
@@ -64,6 +67,7 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
 
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
+  std::vector<std::string>  HLTFilters_;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -76,10 +80,14 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
   TLorentzVector ditrak_p4;
   TLorentzVector dimuon_p4;
 
+  std::vector < TLorentzVector > trigs_p4;
+  std::vector < UInt_t > trigs_filters;
+
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
   TLorentzVector trakP_p4;
   TLorentzVector trakN_p4;
+  TLorentzVector trig_p4;
 
   Float_t MassErr;
   Float_t vProb;
@@ -104,10 +112,12 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
 
 DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet & iConfig):
 dimuonditrk_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuonditrks"))),
+triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
   dimuonditrk_tree = fs->make < TTree > ("dimuonditrkTree", "Tree of DiMuonDiTrak");
@@ -127,6 +137,9 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuonditrk_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
   dimuonditrk_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
+
+  dimuonditrk_tree->Branch("trigs_p4", &trigs_p4);
+  dimuonditrk_tree->Branch("trigs_filters", &trigs_filters);
 
   dimuonditrk_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   dimuonditrk_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
@@ -188,6 +201,9 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
 
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
   run       = iEvent.id().run();
   event     = iEvent.id().event();
   lumiblock = iEvent.id().luminosityBlock();
@@ -196,6 +212,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
 
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
   ndimuonditrk  = dimuonditrks->size();
 
   dimuonditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -203,6 +221,37 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   isBest = true;
+
+  for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
+
+    trig_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
+
+    if(unPackedTrigger.charge()==0) continue;
+
+    unPackedTrigger.unpackPathNames( names );
+    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+
+    bool filtered = false;
+    UInt_t thisFilter = 0;
+
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+    {
+      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
+    }
+
+    if(!filtered) continue;
+
+    trigs_filters.push_back(thisFilter);
+    trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
+    trigs_p4.push_back(trig_p4);
+
+  }
 
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {
