@@ -50,6 +50,7 @@ class TriggersByFilters:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   std::vector<std::string>  HLTFilters_;
 
 	UInt_t    run;
@@ -78,6 +79,7 @@ class TriggersByFilters:public edm::EDAnalyzer {
 TriggersByFilters::TriggersByFilters(const edm::ParameterSet & iConfig):
 triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 triggerResults(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
@@ -142,9 +144,6 @@ void TriggersByFilters::analyze(const edm::Event & iEvent, const edm::EventSetup
   numPrimaryVertices = 0;
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
 
-  edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
-
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
   trigger = 0;
@@ -159,7 +158,7 @@ void TriggersByFilters::analyze(const edm::Event & iEvent, const edm::EventSetup
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
-    if(unPackedTrigger.charge()==0) continue
+    if(unPackedTrigger.charge()==0) continue;
 
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
