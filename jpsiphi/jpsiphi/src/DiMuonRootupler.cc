@@ -237,6 +237,12 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   isBest = false;
 
+  trigs_filters.clear();
+  trigs_pt.clear();
+  trigs_eta.clear();
+  trigs_phi.clear();
+  trigs_m.clear();
+
   for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
 
@@ -259,14 +265,16 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         }
     }
 
-    if(!filtered) continue;
+    if(filtered)
+    {
+      trigs_filters.push_back(thisFilter);
+      trigs_pt.push_back(unPackedTrigger.pt());
+      trigs_eta.push_back(unPackedTrigger.eta());
+      trigs_phi.push_back(unPackedTrigger.phi());
+      trigs_m.push_back(unPackedTrigger.mass());
+    }
 
-    trigs_filters.push_back(thisFilter);
 
-    trigs_pt.push_back(unPackedTrigger.pt());
-    trigs_eta.push_back(unPackedTrigger.eta());
-    trigs_phi.push_back(unPackedTrigger.phi());
-    trigs_m.push_back(unPackedTrigger.mass());
 
   }
 
