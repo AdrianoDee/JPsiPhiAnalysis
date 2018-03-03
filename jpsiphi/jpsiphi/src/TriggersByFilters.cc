@@ -54,6 +54,7 @@ class TriggersByFilters:public edm::EDAnalyzer {
   edm::EDGetTokenT<edm::TriggerResults> triggerResults;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   std::vector<std::string>  HLTFilters_;
+  std::vector<std::string>  HLTs_;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -105,7 +106,8 @@ TriggersByFilters::TriggersByFilters(const edm::ParameterSet & iConfig):
 triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 triggerResults(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
 {
   edm::Service < TFileService > fs;
   trig_tree = fs->make < TTree > ("TriggerTree", "Tree of Trigger");
