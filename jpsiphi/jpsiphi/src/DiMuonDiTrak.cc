@@ -57,6 +57,8 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   typedef Candidate::LorentzVector LorentzVector;
 
+  Vertex thePrimaryV;
+
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(dimuons_,dimuon);
 
@@ -71,7 +73,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
-  ESHandle<MagneticField> magneticField;
+  edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
@@ -113,7 +115,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakCand->daughter("trakN"));
 
         const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP") ) );
-        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) ));
+        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) );
 
         std::vector<reco::TransientTrack> MuMuTT;
         MuMuTT.push_back(theTTBuilder->build(muonP)->innerTrack());
@@ -146,7 +148,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         if (!(mmttVertex.isValid()))
             continue;
 
-        LorentzVector mumutrktrk = trakP.p4() + trakN.p4() + muonP.p4() + muonN.p4();
+        LorentzVector mumutrktrk = trakP->p4() + trakN->p4() + muonP->p4() + muonN->p4();
 
         vChi2 = mmttVertex.totalChiSquared();
         vNDF  = mmttVertex.degreesOfFreedom();
@@ -164,7 +166,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
         AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
 
-        thePrimaryV = dimuontt->daughter("dimuon").userData<Vertex>("thePV");
+        thePrimaryV = mmttCand->daughter("dimuon").userData<Vertex>("thePV");
 
         //Lifetime calculations
         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
