@@ -159,6 +159,7 @@ process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',
 process.p = cms.Path(
                     process.triggerSelection *
                     process.unpackPatTriggers *
+                    process.softMuons *
                     process.DiMuonPAT *
                     process.DiMuonCounterJPsi *
                     process.DiTrakPAT *
