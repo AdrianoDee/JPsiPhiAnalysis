@@ -74,7 +74,6 @@ class DiMuonPAT : public edm::EDProducer {
 
   InvariantMassFromVertex massCalculator;
 
-
 };
 
 #endif

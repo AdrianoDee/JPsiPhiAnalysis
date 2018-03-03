@@ -1,4 +1,5 @@
 #include "../interface/DiMuon.h"
+#include "../interface/DiMuonVtxReProducer.h"
 
 DiMuonPAT::DiMuonPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons"))),
@@ -61,6 +62,8 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
+  TrackCollection muonLess;
+
   float DiMuonMassMax_ = dimuonMassCuts_[1];
   float DiMuonMassMin_ = dimuonMassCuts_[0];
 
@@ -82,7 +85,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
       cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
-      dca = -1.0; minDz = 999999.; dca = 1E20;
+      minDz = 999999.; dca = 1E20;
 
       pat::CompositeCandidate mumucand;
 
@@ -102,7 +105,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if ( !(mumucand.mass() < DiMuonMassMax_ && mumucand.mass() > DiMuonMassMin_) )
         continue;
 
-      vector<TransientTrack> mm_ttks;
+      std::vector<TransientTrack> mm_ttks;
       mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
       mm_ttks.push_back(theTTBuilder->build(mPos->track()));
 
@@ -184,6 +187,58 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       l_xy = vdiff.Perp();
       lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
+      //MuonLess PV
+
+      Vertex muonLessPV = Vertex();
+      muonLess.clear();
+      muonLess.reserve(thePrimaryV.tracksSize());
+
+      if( thePrimaryV.tracksSize()>2) {
+        // Primary vertex matched to the dimuon, now refit it removing the two muons
+        DiMuonVtxReProducer revertex(priVtxs, iEvent);
+        edm::Handle<reco::TrackCollection> pvtracks;
+        iEvent.getByToken(revtxtrks_,   pvtracks);
+        if( !pvtracks.isValid()) { std::cout << "pvtracks NOT valid " << std::endl; }
+        else {
+          edm::Handle<reco::BeamSpot> pvbeamspot;
+          iEvent.getByToken(revtxbs_, pvbeamspot);
+          if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
+
+          const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(mNeg.originalObject());
+          const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(mPos.originalObject());
+
+          if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
+
+            if( thePrimaryV.hasRefittedTracks() ) {
+
+              std::vector<reco::Track>::const_iterator itRefittedTrack = thePrimaryV.refittedTracks().begin();
+              std::vector<reco::Track>::const_iterator refittedTracksEnd = thePrimaryV.refittedTracks().end();
+              for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+              {
+                if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu1->track().key() ) continue;
+                if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu2->track().key() ) continue;
+
+                muonLess.push_back(*(thePrimaryV.originalTrack(*itRefittedTrack)));
+              }
+            }
+            else {
+              std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thePrimaryV.tracks_begin();
+              for( ; itPVtrack != thePrimaryV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+                if( itPVtrack->key() == rmu1->track().key() ) continue;
+                if( itPVtrack->key() == rmu2->track().key() ) continue;
+
+                muonLess.push_back(**itPVtrack);
+              }
+            }
+            if (muonLess.size()>1 && muonLess.size() < thePrimaryV.tracksSize()){
+              pvs = revertex.makeVertices(muonLess, *pvbeamspot, iSetup) ;
+              if (!pvs.empty()) {
+                muonLessPV = Vertex(pvs.front());
+              }
+            }
+          }
+        }
+      }
 
       mumucand.addUserFloat("vNChi2",vChi2/vNDF);
       mumucand.addUserFloat("vProb",vProb);
@@ -195,7 +250,9 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.addUserFloat("lErrxy",lErr_xy);
       mumucand.addUserFloat("cosAlpha",cosAlpha);
       mumucand.addUserData("thePV",Vertex(thePrimaryV));
+      mumucand.addUserData("theMuLessPV",Vertex(muonLessPV));
       mumucand.addUserData("theVertex",Vertex(ttVertex));
+
 
       mumuCollection->push_back(mumucand);
 
