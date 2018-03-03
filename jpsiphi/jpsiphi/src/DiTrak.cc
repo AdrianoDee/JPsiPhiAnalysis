@@ -201,16 +201,16 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       AlgebraicVector3 vDiff;
       vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
-      l_xy = vdiff.Perp();
-      lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
+      ctauPV = vdiff.Perp();
+      ctauErrPV = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
 
       mumucand.addUserFloat("vNChi2",vChi2/vNDF);
       mumucand.addUserFloat("vProb",vProb);
       mumucand.addUserFloat("DCA", dca );
       mumucand.addUserFloat("MassErr",MassWErr.error());
-      mumucand.addUserFloat("ctauPV",ppdlPV);
-      mumucand.addUserFloat("ctauErrPV",ppdlErrPV);
+      mumucand.addUserFloat("ctauPV",ctauPV);
+      mumucand.addUserFloat("ctauErrPV",ctauErrPV);
       mumucand.addUserFloat("cosAlpha",cosAlpha);
       mumucand.addUserData("thePV",Vertex(thePrimaryV));
       mumucand.addUserData("theVertex",Vertex(mumuVertex));
