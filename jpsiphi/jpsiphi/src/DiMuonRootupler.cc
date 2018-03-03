@@ -69,7 +69,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
-  
+
 	UInt_t    run;
 	ULong64_t event;
   UInt_t    lumiblock;
@@ -218,6 +218,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   numPrimaryVertices = 0;
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
+
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
   ndimuon  = 0;
 

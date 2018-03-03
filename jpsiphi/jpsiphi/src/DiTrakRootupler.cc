@@ -220,6 +220,8 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
 
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
   nditrak  = ditraks->size();
 
   ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
