@@ -50,7 +50,7 @@ class TriggersByFilters:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults;
-  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
+  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   std::vector<std::string>  HLTFilters_;
 
 	UInt_t    run;

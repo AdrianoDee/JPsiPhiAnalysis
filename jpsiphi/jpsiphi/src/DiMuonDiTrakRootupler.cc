@@ -198,16 +198,14 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  pat::CompositeCandidate *dimuon_cand, *ditrak_cand;
-
   bool already_stored = false;
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {
 
         dimuonditrak_p4.SetPtEtaPhiM(dimuonditrkCand->pt(),dimuonditrkCand->eta(),dimuonditrkCand->phi(),dimuonditrkCand->mass());
 
-        dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuon"));
-        ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("ditrak"));
+        const pat::CompositeCandidate *dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuon"));
+        const pat::CompositeCandidate *ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("ditrak"));
 
         dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
         ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(),ditrak_cand->eta(),ditrak_cand->phi(),ditrak_cand->mass());
