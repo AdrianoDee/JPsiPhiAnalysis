@@ -21,7 +21,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
 
 process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-2017-ditraktrigger.root'),
@@ -128,32 +128,38 @@ process.Triggers  = cms.EDAnalyzer('TriggersByFilters',
     TriggerInput     = cms.InputTag("unpackPatTriggers"),
     TriggerResults   = cms.InputTag("TriggerResults", "", "HLT"),
     PrimaryVertex    = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    Filters          = hltpaths,
-    HLTs             = filters
+    Filters          = filters,
+    HLTs             = hltpaths
 )
 
 process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
     dimuons             = cms.InputTag("DiMuonPAT"),
+    TriggerInput     = cms.InputTag("unpackPatTriggers"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
+    Filters          = filters
  )
 
 process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
     ditraks             = cms.InputTag("DiTrakPAT"),
+    TriggerInput     = cms.InputTag("unpackPatTriggers"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
+    Filters          = filters,
  )
 
 process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',
      dimuonditrks = cms.InputTag("DiMuonDiTrakPAT"),
+     TriggerInput     = cms.InputTag("unpackPatTriggers"),
      primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
      TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
      OnlyBest = cms.bool(False),
      HLTs = hltpaths,
+     Filters          = filters
   )
 
 process.p = cms.Path(
