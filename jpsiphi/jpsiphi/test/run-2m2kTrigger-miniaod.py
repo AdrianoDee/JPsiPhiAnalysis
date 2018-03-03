@@ -139,7 +139,7 @@ process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters          = filters
+    Filters          = filtersf
  )
 
 process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',

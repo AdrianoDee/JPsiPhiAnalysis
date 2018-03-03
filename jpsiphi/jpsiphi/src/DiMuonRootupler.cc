@@ -80,9 +80,11 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector dimuon_p4;
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
-  TLorentzVector trig_p4;
 
-  std::vector < TLorentzVector > trigs_p4;
+  std::vector < Float_t > trigs_pt;
+  std::vector < Float_t > trigs_eta;
+  std::vector < Float_t > trigs_phi;
+  std::vector < Float_t > trigs_m;
   std::vector < UInt_t > trigs_filters;
 
   Float_t MassErr;
@@ -128,7 +130,10 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   dimuon_tree->Branch("isBest",   &isBest,   "isBest/O");
 
-  dimuon_tree->Branch("trigs_p4", &trigs_p4);
+  dimuon_tree->Branch("trigs_pt",   &trigs_pt);
+  dimuon_tree->Branch("trigs_eta",   &trigs_eta);
+  dimuon_tree->Branch("trigs_phi",   &trigs_phi);
+  dimuon_tree->Branch("trigs_m",   &trigs_m);
   dimuon_tree->Branch("trigs_filters", &trigs_filters);
 
   dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
@@ -234,7 +239,6 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
-    trig_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
@@ -258,8 +262,11 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
     if(!filtered) continue;
 
     trigs_filters.push_back(thisFilter);
-    trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
-    trigs_p4.push_back(trig_p4);
+
+    trigs_pt.push_back(unPackedTrigger.pt());
+    trigs_eta.push_back(unPackedTrigger.eta());
+    trigs_phi.push_back(unPackedTrigger.phi());
+    trigs_m.push_back(unPackedTrigger.mass());
 
   }
 

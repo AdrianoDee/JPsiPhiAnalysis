@@ -78,9 +78,13 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	TLorentzVector ditrak_p4;
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
-  TLorentzVector trig_p4;
 
   std::vector < TLorentzVector > trigs_p4;
+
+  std::vector < Float_t > trigs_pt;
+  std::vector < Float_t > trigs_eta;
+  std::vector < Float_t > trigs_phi;
+  std::vector < Float_t > trigs_m;
   std::vector < UInt_t > trigs_filters;
 
   Bool_t isBest;
@@ -232,7 +236,6 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
   for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
-    trig_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
@@ -256,8 +259,10 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
     if(!filtered) continue;
 
     trigs_filters.push_back(thisFilter);
-    trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
-    trigs_p4.push_back(trig_p4);
+    trigs_pt.push_back(unPackedTrigger.pt());
+    trigs_eta.push_back(unPackedTrigger.eta());
+    trigs_phi.push_back(unPackedTrigger.phi());
+    trigs_m.push_back(unPackedTrigger.mass());
 
   }
 
