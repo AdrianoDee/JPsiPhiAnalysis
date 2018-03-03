@@ -67,9 +67,6 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   TrackCollection muonLess;
 
-  float DiMuonMassMax_ = dimuonMassCuts_[1];
-  float DiMuonMassMin_ = dimuonMassCuts_[0];
-
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;

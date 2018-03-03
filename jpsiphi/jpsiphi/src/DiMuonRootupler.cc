@@ -86,7 +86,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Float_t ctauErrPV;
   Float_t cosAlpha;
   Float_t lxyPV;
-  Float_t lxyErr;
+  Float_t lxyErrPV;
 
 	UInt_t numPrimaryVertices;
 
@@ -127,7 +127,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   dimuon_tree->Branch("ctauErrPV", &ctauErrPV,  "ctauErrPV/F");
   dimuon_tree->Branch("cosAlpha",  &cosAlpha,   "cosAlpha/F");
   dimuon_tree->Branch("lxy",       &lxyPV,      "lxy/F");
-  dimuon_tree->Branch("lxyErr",    &lxyErr,      "lxyErr/F");
+  dimuon_tree->Branch("lxyErrPV",    &lxyErrPV,      "lxyErr/F");
 
   dimuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
@@ -230,8 +230,9 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
         ctauPV = dimuonCand->userFloat("catuPV");
         ctauErrPV = dimuonCand->userFloat("catuErrPV");
-        lxy = dimuonCand->userFloat("lxy");
-        lErrxy = dimuonCand->userFloat("lErrxy");
+        lxyPV = dimuonCand->userFloat("lxy");
+        lxyErrPV = dimuonCand->userFloat("lErrxy");
+        
         cosAlpha = dimuonCand->userFloat("cosAlpha");
 
         charge = dimuonCand->charge();
