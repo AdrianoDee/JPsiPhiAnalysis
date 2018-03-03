@@ -103,7 +103,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if(posTrack.charge() <= 0 ) continue;
     if(posTrack.pt()<0.5) continue;
     if(fabs(posTrack.pdgId())!=211) continue;
-
+    if(!posTrack.hasTrackDetails()) continue;
 
     for (size_t j = 0; j < traks->size(); j++){
 
@@ -118,6 +118,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(negTrack.charge() >= 0 ) continue;
       if(negTrack.pt()<0.5) continue;
       if(fabs(negTrack.pdgId())!=211) continue;
+      if(!negTrack.hasTrackDetails()) continue;
 
       pat::CompositeCandidate TTCand = makeTTCandidate(posTrack,negTrack);
       vector<TransientVertex> pvs;
@@ -126,8 +127,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         continue;
 
       vector<TransientTrack> tt_ttks;
-      tt_ttks.push_back(theTTBuilder->build(negTrack.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-      tt_ttks.push_back(theTTBuilder->build(posTrack.track()));
+      tt_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+      tt_ttks.push_back(theTTBuilder->build(posTrack.bestTrack()));
 
       TransientVertex ttVertex = vtxFitter.vertex(tt_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( tt_ttks );
