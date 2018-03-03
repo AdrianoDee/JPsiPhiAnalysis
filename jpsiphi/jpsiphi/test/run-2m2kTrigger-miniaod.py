@@ -134,22 +134,22 @@ process.Triggers  = cms.EDAnalyzer('TriggersByFilters',
 
 process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
     dimuons             = cms.InputTag("DiMuonPAT"),
-    TriggerInput     = cms.InputTag("unpackPatTriggers"),
+    TriggerInput        = cms.InputTag("unpackPatTriggers"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters          = filtersf
+    Filters             = filters
  )
 
 process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
     ditraks             = cms.InputTag("DiTrakPAT"),
-    TriggerInput     = cms.InputTag("unpackPatTriggers"),
+    TriggerInput        = cms.InputTag("unpackPatTriggers"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters          = filters,
+    Filters             = filters,
  )
 
 process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',

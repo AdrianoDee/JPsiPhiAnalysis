@@ -79,8 +79,6 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
 
-  std::vector < TLorentzVector > trigs_p4;
-
   std::vector < Float_t > trigs_pt;
   std::vector < Float_t > trigs_eta;
   std::vector < Float_t > trigs_phi;
@@ -130,7 +128,10 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
 
-  ditrak_tree->Branch("trigs_p4", &trigs_p4);
+  ditrak_tree->Branch("trigs_pt",   &trigs_pt);
+  ditrak_tree->Branch("trigs_eta",   &trigs_eta);
+  ditrak_tree->Branch("trigs_phi",   &trigs_phi);
+  ditrak_tree->Branch("trigs_m",   &trigs_m);
   ditrak_tree->Branch("trigs_filters", &trigs_filters);
 
   ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
