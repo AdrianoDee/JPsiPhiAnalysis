@@ -74,9 +74,6 @@ class DiMuonDiTrakPAT : public edm::EDProducer {
   std::vector<double> DiTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
 
-  edm::EDGetTokenT<reco::TrackCollection> revtxtrks_;
-  edm::EDGetTokenT<reco::BeamSpot> revtxbs_;
-  
   InvariantMassFromVertex massCalculator;
 
 };

@@ -5,8 +5,8 @@ dimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::I
 ditraks_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiTraks"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
-DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts"))
+DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
+DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts"))
 {
   produces<pat::CompositeCandidateCollection>();
