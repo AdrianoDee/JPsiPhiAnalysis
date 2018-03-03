@@ -63,6 +63,10 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
+  ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
+
   std::unique_ptr<pat::CompositeCandidateCollection> mmttCollection(new pat::CompositeCandidateCollection);
 
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
