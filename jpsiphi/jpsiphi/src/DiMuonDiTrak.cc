@@ -118,8 +118,8 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) );
 
         std::vector<reco::TransientTrack> MuMuTT;
-        MuMuTT.push_back(theTTBuilder->build(muonP)->innerTrack());
-        MuMuTT.push_back(theTTBuilder->build(muonN)->innerTrack());
+        MuMuTT.push_back(theTTBuilder->build(muonP->innerTrack()));
+        MuMuTT.push_back(theTTBuilder->build(muonN->innerTrack()));
 
         if(!trakP->hasTrackDetails())
           continue;
@@ -166,7 +166,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
         AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
 
-        thePrimaryV = mmttCand->daughter("dimuon").userData<Vertex>("thePV");
+        thePrimaryV = mmttCand.daughter("dimuon").userData<Vertex>("thePV");
 
         //Lifetime calculations
         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
