@@ -2,8 +2,8 @@
 
 DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
 traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("Traks"))),
-thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses"))
 {
