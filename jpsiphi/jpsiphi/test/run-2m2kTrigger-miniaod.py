@@ -141,7 +141,7 @@ process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
  )
 
 process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
-    dimuons             = cms.InputTag("DiTrakPAT"),
+    ditraks             = cms.InputTag("DiTrakPAT"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
