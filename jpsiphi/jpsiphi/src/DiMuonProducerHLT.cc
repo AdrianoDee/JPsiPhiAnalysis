@@ -346,7 +346,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           if (resolveAmbiguity_) {
 
-
+            float minDz = 999999.;
             TwoTrackMinimumDistance ttmd;
             bool status = ttmd.calculate( GlobalTrajectoryParameters(
               GlobalPoint(mumuVertex.position().x(), mumuVertex.position().y(), mumuVertex.position().z()),
