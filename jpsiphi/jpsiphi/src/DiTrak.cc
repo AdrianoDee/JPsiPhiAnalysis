@@ -4,7 +4,7 @@ DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
 traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("Traks"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
+ditrakSelection_(iConfig.existsAs<std::string>("DiTrakCuts") ? iConfig.getParameter<std::string>("DiTrakCuts") : "")
 massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses"))
 {
   produces<pat::CompositeCandidateCollection>();
@@ -80,9 +80,6 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
-  float TrakTrakMassMax_ = ditrakMassCuts_[1];
-  float TrakTrakMassMin_ = ditrakMassCuts_[0];
-
   // ParticleMass trakP_mass = massTraks_[0];
   // ParticleMass trakN_mass = massTraks_[1];
 
@@ -123,8 +120,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       pat::CompositeCandidate trktrkcand = makeTTCandidate(posTrack,negTrack);
       vector<TransientVertex> pvs;
 
-      if ( !(trktrkcand.mass() < TrakTrakMassMax_ && trktrkcand.mass() > TrakTrakMassMin_) )
-        continue;
+      if(!ditrakSelection_(trktrkcand)) continue;
 
       vector<TransientTrack> tt_ttks;
       tt_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)

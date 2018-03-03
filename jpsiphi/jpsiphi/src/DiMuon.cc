@@ -5,7 +5,7 @@ DiMuonPAT::DiMuonPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("Muons"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-dimuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts"))
+dimuonSelection_(iConfig.existsAs<std::string>("DiMuonCuts") ? iConfig.getParameter<std::string>("DiMuonCuts") : "")
 {
   revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
   revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
@@ -107,8 +107,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.setP4(mumu);
       mumucand.setCharge(mNeg->charge()+mPos->charge());
 
-      if ( !(mumucand.mass() < DiMuonMassMax_ && mumucand.mass() > DiMuonMassMin_) )
-        continue;
+      if(!dimuonSelection_(mumucand)) continue;
 
       std::vector<TransientTrack> mm_ttks;
       mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
