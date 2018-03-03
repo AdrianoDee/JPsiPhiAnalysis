@@ -166,7 +166,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
         AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
 
-        thePrimaryV = mmttCand.daughter("dimuon")->userData<Vertex>("thePV");
+        thePrimaryV = dimuonCand->userData<Vertex>("thePV");
 
         //Lifetime calculations
         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
