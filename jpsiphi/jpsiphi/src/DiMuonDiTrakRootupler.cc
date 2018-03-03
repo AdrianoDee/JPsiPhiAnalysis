@@ -231,6 +231,12 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
   isBest = true;
 
+  trigs_filters.clear();
+  trigs_pt.clear();
+  trigs_eta.clear();
+  trigs_phi.clear();
+  trigs_m.clear();
+
   for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
