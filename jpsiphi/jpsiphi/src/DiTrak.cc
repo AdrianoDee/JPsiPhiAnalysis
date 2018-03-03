@@ -19,7 +19,7 @@ DiTrakPAT::~DiTrakPAT()
 
 }
 
-const pat::CompositeCandidate DiTrakPAT::maketrktrkcandidate(
+const pat::CompositeCandidate DiTrakPAT::makeTTCandidate(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN
                                          ){
@@ -120,7 +120,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(fabs(negTrack.pdgId())!=211) continue;
       if(!negTrack.hasTrackDetails()) continue;
 
-      pat::CompositeCandidate trktrkcand = maketrktrkcandidate(posTrack,negTrack);
+      pat::CompositeCandidate trktrkcand = makeTTCandidate(posTrack,negTrack);
       vector<TransientVertex> pvs;
 
       if ( !(trktrkcand.mass() < TrakTrakMassMax_ && trktrkcand.mass() > TrakTrakMassMin_) )
