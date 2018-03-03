@@ -224,7 +224,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     } // loop over second track
   }
-
+  
+  std::sort(trakCollection->begin(),trakCollection->end(),vPComparator_);
   iEvent.put(std::move(trakCollection));
 
 }

@@ -201,6 +201,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
   }
 
+  std::sort(mmttCollection->begin(),mmttCollection->end(),vPComparator_);
   iEvent.put(std::move(mmttCollection));
 
 }

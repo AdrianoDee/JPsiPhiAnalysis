@@ -260,6 +260,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
   }
 
+  std::sort(mumuCollection->begin(),mumuCollection->end(),vPComparator_);
   iEvent.put(std::move(mumuCollection));
 
 }

@@ -60,24 +60,24 @@ filters = cms.vstring(
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
-                                        triggerConditions = cms.vstring(hltpathsV),
-                                        hltResults = cms.InputTag( "TriggerResults", "", "HLT" ),
-                                        l1tResults = cms.InputTag( "" ),
-                                        throw = cms.bool(False)
-                                        )
+    triggerConditions = cms.vstring(hltpathsV),
+    hltResults = cms.InputTag( "TriggerResults", "", "HLT" ),
+    l1tResults = cms.InputTag( "" ),
+    throw = cms.bool(False)
+)
 
 process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
-  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
-  triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
-  unpackFilterLabels          = cms.bool( True )
+      patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
+      triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
+      unpackFilterLabels          = cms.bool( True )
 )
 
 
-process.JPsi2MuMuPAT = cms.EDProducer('DiMuonPAT',
-        Muons                       = cms.InputTag('slimmedMuons'),
-        BeamSpot                     = cms.InputTag('offlineBeamSpot'),
-        PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        DiMuonCuts                  = cms.string("2.9 < mass && mass < 3.3 && charge==0"),
+process.DiMuonPAT = cms.EDProducer('DiMuonPAT',
+    Muons                       = cms.InputTag('slimmedMuons'),
+    BeamSpot                     = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
+    DiMuonCuts                  = cms.string("2.9 < mass && mass < 3.3 && charge==0"),
 )
 
 
@@ -87,12 +87,12 @@ process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
     filter    = cms.bool(True)
 )
 
-process.Phi2KKPAT = cms.EDProducer('DiTrakPAT',
-        Traks                       = cms.InputTag('packedPFCandidates'),
-        BeamSpot                    = cms.InputTag('offlineBeamSpot'),
-        PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        DiTrakCuts                  = cms.string("0.93 < mass && mass < 1.32 && charge==0"),
-        TraksMasses                 = cms.vdouble(kaonmass,kaonmass)
+process.DiTrakPAT = cms.EDProducer('DiTrakPAT',
+    Traks                       = cms.InputTag('packedPFCandidates'),
+    BeamSpot                    = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex               = cms.InputTag('offlineSlimmedPrimaryVertices'),
+    DiTrakCuts                  = cms.string("0.93 < mass && mass < 1.32 && charge==0"),
+    TraksMasses                 = cms.vdouble(kaonmass,kaonmass)
 )
 
 
@@ -103,90 +103,58 @@ process.DiTrakCounterPhi = cms.EDFilter('CandViewCountFilter',
 )
 
 process.DiMuonDiTrakPAT = cms.EDProducer('DiMuonDiTrakPAT',
-        DiMuons             = cms.InputTag('DiMuonPAT'),
-        DiTraks             = cms.InputTag('DiTrakPAT'),
-        BeamSpot            = cms.InputTag('offlineBeamSpot'),
-        PrimaryVertex       = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        DiMuonCuts          = cms.vdouble(2.9,3.3),
-        DiTrakCuts          = cms.vdouble(0.9,1.3),
-        DiMuonDiTrakCuts    = cms.vdouble(4.0,6.0),
-        CandsMasses         = cms.vdouble(muonmass,muonmass,kaonmass,kaonmass)
+    DiMuons             = cms.InputTag('DiMuonPAT'),
+    DiTraks             = cms.InputTag('DiTrakPAT'),
+    BeamSpot            = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex       = cms.InputTag('offlineSlimmedPrimaryVertices'),
+    DiMuonCuts          = cms.vdouble(2.9,3.3),
+    DiTrakCuts          = cms.vdouble(0.9,1.3),
+    DiMuonDiTrakCuts    = cms.vdouble(4.0,6.0),
+    CandsMasses         = cms.vdouble(muonmass,muonmass,kaonmass,kaonmass)
 )
 
-process.DiTrakHLT  = cms.EDAnalyzer('DiTrakHLT',
-    PFCandidates        = cms.InputTag("packedPFCandidates"),
-    TriggerInput        = cms.InputTag("unpackPatTriggers"),
+process.Triggers  = cms.EDAnalyzer('TriggersByFilters',
+    TriggerInput     = cms.InputTag("unpackPatTriggers"),
+    TriggerResults   = cms.InputTag("TriggerResults", "", "HLT"),
+    PrimaryVertex    = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    Filters          = hltpaths,
+    HLTs             = filters
+)
+
+process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
+    dimuons             = cms.InputTag("DiMuonPAT"),
     primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
-    TrakTrakMassCuts    = cms.vdouble(0.5,1.5),
-    MassTraks           = cms.vdouble(kaonmass,kaonmass),
-    isMC                = cms.bool(False),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters             = filters
-)
-
-process.DiMuonDiTrakProducerHLT = cms.EDProducer('DiMuonDiTrakProducerHLT',
-    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
-    PFCandidates = cms.InputTag('packedPFCandidates'),
-    TriggerInput        = cms.InputTag("unpackPatTriggers"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-    DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
-    MaxDeltaRPt = cms.vdouble(0.01,2.0),
-    OnlyBest  = cms.bool(False),
-    Product = cms.string("DiMuonDiTrakCandidatesHLT"),
-    HLTs                = hltpaths,
-    Filters             = filters
-)
-
-process.DiMuonDiTrakKinematicFit = cms.EDProducer('DiMuonDiTrakKinematicFit',
-    DiMuonDiTrak        = cms.InputTag('DiMuonDiTrakProducerHLT','DiMuonDiTrakCandidatesHLT'),
-    DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
-    DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks           = cms.vdouble(kaonmass,kaonmass),         # traks masses
-    Product             = cms.string('DiMuonDiTrakCandidatesRef')
-)
-
-process.DiMuonDiTrakRootuplerHLT = cms.EDAnalyzer('DiMuonDiTrakRootuplerHLT',
-    dimuonditrk_cand = cms.InputTag('DiMuonDiTrakProducerHLT','DiMuonDiTrakCandidatesHLT'),
-    dimuonditrk_rf_cand = cms.InputTag("DiMuonDiTrakKinematicFit","DiMuonDiTrakCandidatesRef"),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(False),
-    OnlyBest = cms.bool(False),
-    HLTs = hltpaths,
-    Filters = filters,
-    TreeName = cms.string('JPsi Phi Tree')
-)
-
-process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootuplerHLT',
-    dimuons = cms.InputTag("JPsi2MuMuFilter"),
-    muons = cms.InputTag("slimmedMuonsWithTrigger"),
-    primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    dimuon_pdgid = cms.uint32(443),
-    dimuon_mass_cuts = cms.vdouble(2.8,3.3),
-    isMC = cms.bool(False),
-    OnlyBest = cms.bool(False),
-    OnlyGen = cms.bool(False),
-    HLTs = hltpaths
  )
 
-process.p = cms.Path(process.triggerSelection *
-                     process.slimmedMuonsWithTriggerSequence *
-                     process.unpackPatTriggers *
-                     # process.slimmedPFCandsWithTriggerSequence *
-                     process.softMuons *
-                     process.JPsi2MuMuPAT *
-                     process.JPsi2MuMuFilter*
-                     process.DiMuonCounterJPsi*
-                     process.DiMuonDiTrakProducerHLT *
-                     process.DiMuonDiTrakKinematicFit *
-                     process.DiMuonDiTrakRootuplerHLT *
-                     process.DiTrakHLT*
-                     process.DiMuonRootuplerHLT)
-                     # process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
+    dimuons             = cms.InputTag("DiTrakPAT"),
+    primaryVertices     = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
+    OnlyBest            = cms.bool(False),
+    HLTs                = hltpaths,
+ )
+
+ process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',
+     dimuonditrks = cms.InputTag("DiMuonDiTrakPAT"),
+     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+     OnlyBest = cms.bool(False),
+     HLTs = hltpaths,
+  )
+
+process.p = cms.Path(
+                    process.triggerSelection *
+                    process.unpackPatTriggers *
+                    process.DiMuonPAT *
+                    process.DiMuonCounterJPsi *
+                    process.DiTrakPAT *
+                    process.DiTrakCounterPhi *
+                    process.DiMuonDiTrakPAT *
+                    process.Triggers *
+                    process.DiMuonRootuplerHLT *
+                    process.DiTrakRootupler *
+                    process.DiMuonDiTrakRootupler
+                    )

@@ -77,6 +77,8 @@ class DiTrakRootupler:public edm::EDAnalyzer {
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
 
+  Bool_t isBest;
+
   Float_t MassErr;
   Float_t vProb;
   Float_t DCA;
@@ -113,6 +115,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   ditrak_tree->Branch("nditrak",    &nditrak,    "nditrak/i");
   ditrak_tree->Branch("trigger",  &trigger,  "trigger/i");
   ditrak_tree->Branch("charge",   &charge,   "charge/I");
+
+  ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
@@ -199,13 +203,14 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
 
-  nditrak  = 0;
+  nditrak  = ditraks.size();
 
   ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   trakP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   trakN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-  bool already_stored = false;
+  isBest = true;
+
   if ( ditraks.isValid() && !ditraks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
 
@@ -235,17 +240,13 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
         charge = ditrakCand->charge();
 
-        nditrak++;
+        ditrak_tree->Fill();   // be aware, we are storing all combinations
+
         if (OnlyBest_) break;
-        else {
-          ditrak_tree->Fill();   // be aware, we are storing all combinations
-          already_stored = true;
-        }
+        isBest = false;
     }
   }
 
-  if ( !already_stored )   // we have to make sure, we are not double storing an combination
-      if ( nditrak > 0 ) ditrak_tree->Fill();
 
 }
 
