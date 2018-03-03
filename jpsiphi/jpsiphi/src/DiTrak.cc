@@ -83,15 +83,15 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float TrakTrakMassMax_ = ditrakMassCuts_[1];
   float TrakTrakMassMin_ = ditrakMassCuts_[0];
 
-  ParticleMass trakP_mass = massTraks_[0];
-  ParticleMass trakN_mass = massTraks_[1];
+  // ParticleMass trakP_mass = massTraks_[0];
+  // ParticleMass trakN_mass = massTraks_[1];
 
   vector<double> ttMasses;
   ttMasses.push_back(massTraks_[0]);
   ttMasses.push_back(massTraks_[1]);
 
-  float trakP_sigma = trakP_mass*1.e-6;
-  float trakN_sigma = trakN_mass*1.e-6;
+  // float trakP_sigma = trakP_mass*1.e-6;
+  // float trakN_sigma = trakN_mass*1.e-6;
 
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
