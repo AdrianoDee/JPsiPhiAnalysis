@@ -235,8 +235,6 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
-    if(unPackedTrigger.charge()==0) continue;
-
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
@@ -252,13 +250,15 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
         }
     }
 
-    if(!filtered) continue;
+    if(filtered)
+    {
+      trigs_filters.push_back(thisFilter);
+      trigs_pt.push_back(unPackedTrigger.pt());
+      trigs_eta.push_back(unPackedTrigger.eta());
+      trigs_phi.push_back(unPackedTrigger.phi());
+      trigs_m.push_back(unPackedTrigger.mass());
+    }
 
-    trigs_filters.push_back(thisFilter);
-    trigs_pt.push_back(unPackedTrigger.pt());
-    trigs_eta.push_back(unPackedTrigger.eta());
-    trigs_phi.push_back(unPackedTrigger.phi());
-    trigs_m.push_back(unPackedTrigger.mass());
 
   }
 
