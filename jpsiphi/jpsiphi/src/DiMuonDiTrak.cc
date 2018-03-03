@@ -1,4 +1,5 @@
 #include "../interface/DiMuonDiTrak.h"
+#include "../interface/DiMuonVtxReProducer.h"
 
 DiMuonDiTrakPAT::DiMuonDiTrakPAT(const edm::ParameterSet& iConfig):
 dimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuons"))),
@@ -7,7 +8,8 @@ thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamS
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
-DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts"))
+DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts")),
+massCands_(iConfig.getParameter<std::vector<double>>("CandsMasses"))
 {
   produces<pat::CompositeCandidateCollection>();
 }
@@ -46,6 +48,12 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   using namespace edm;
   using namespace std;
   using namespace reco;
+
+  vector<double> fourMasses;
+  fourMasses.push_back( massCands_[0] );
+  fourMasses.push_back( massCands_[1] );
+  fourMasses.push_back( massCands_[2] );
+  fourMasses.push_back( massCands_[3] );
 
   typedef Candidate::LorentzVector LorentzVector;
 
@@ -96,20 +104,20 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
         minDz = 999999.;
 
-        pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
+        pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *ditrakCand);
 
-        if ( !(mmttCand->mass() < DiMuonDiTrakMassMax_  && mmttCand->mass() > DiMuonDiTrakMassMin_) )
+        if ( !(mmttCand.mass() < DiMuonDiTrakMassMax_  && mmttCand.mass() > DiMuonDiTrakMassMin_) )
           continue;
 
         const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakCand->daughter("trakP"));
         const pat::PackedCandidate *trakN = dynamic_cast<const pat::PackedCandidate*>(ditrakCand->daughter("trakN"));
 
-        const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP") ) )->innerTrack();
-        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) )->innerTrack();
+        const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP") ) );
+        const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) ));
 
         std::vector<reco::TransientTrack> MuMuTT;
-        MuMuTT.push_back(theTTBuilder->build(muonP));
-        MuMuTT.push_back(theTTBuilder->build(muonN));
+        MuMuTT.push_back(theTTBuilder->build(muonP)->innerTrack());
+        MuMuTT.push_back(theTTBuilder->build(muonN)->innerTrack());
 
         if(!trakP->hasTrackDetails())
           continue;
@@ -131,12 +139,14 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         Measurement1D MassWErr(mmttCand.mass(),-9999.);
         if ( field->nominalValue() > 0 )
-            MassWErr = massCalculator.invariantMass( VtxForInvMass, mmMasses );
+            MassWErr = massCalculator.invariantMass( VtxForInvMass, fourMasses );
         else
             mmttVertex = TransientVertex();                      // with no arguments it is invalid
 
         if (!(mmttVertex.isValid()))
             continue;
+
+        LorentzVector trktrk = posTrack.p4() + negTrack.p4();
 
         vChi2 = mmttVertex.totalChiSquared();
         vNDF  = mmttVertex.degreesOfFreedom();

@@ -59,8 +59,8 @@ class DiMuonDiTrakPAT : public edm::EDProducer {
   void beginJob() override ;
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endJob() override ;
-  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP,
-    const pat::PackedCandidate& trakN);
+  const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& dimuon,
+  				          const pat::CompositeCandidate& tt);
 
 
   // ----------member data ---------------------------
@@ -73,6 +73,7 @@ class DiMuonDiTrakPAT : public edm::EDProducer {
   std::vector<double> DiMuonMassCuts_;
   std::vector<double> DiTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
+  std::vector<double> massCands_;
 
   InvariantMassFromVertex massCalculator;
 
