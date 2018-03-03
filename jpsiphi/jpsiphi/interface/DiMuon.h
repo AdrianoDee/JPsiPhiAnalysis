@@ -11,7 +11,9 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 #include "CommonTools/Utils/interface/PtComparator.h"
+#include <CommonTools/UtilAlgos/interface/StringCutObjectSelector.h>
 
 // DataFormat includes
 #include "MagneticField/Engine/interface/MagneticField.h"
