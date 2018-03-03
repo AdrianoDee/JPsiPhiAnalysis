@@ -41,6 +41,7 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
+#include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
@@ -71,6 +72,7 @@ class DiTrakPAT : public edm::EDProducer {
   std::vector<double> ditrakMassCuts_;
   std::vector<double> massTraks_;
 
+  InvariantMassFromVertex massCalculator;
 
 };
 
