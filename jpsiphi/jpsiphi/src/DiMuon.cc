@@ -28,7 +28,7 @@ DiMuonPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> mumuCollection(new pat::CompositeCandidateCollection);
 
-  edm::Handle<std::vector<pat::Muon> > muons;
+  edm::Handle<edm::View<pat::Muon> > muons;
   iEvent.getByToken(muons_,muons);
 
   float DiMuonMassMax_ = dimuonMassCuts_[1];
