@@ -58,7 +58,6 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.getByToken(traks_,traks);
 
   Vertex thePrimaryV;
-  Vertex theBeamSpotV;
 
   ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
@@ -67,7 +66,6 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   BeamSpot bs = *theBeamSpot;
-  theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
 
   edm::Handle<VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
@@ -94,8 +92,6 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
-
-  Vertex thePrimaryV;
 
   for (size_t i = 0; i < traks->size(); i++)
   {
@@ -192,17 +188,17 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
 
       Measurement1D distXY = vdistXY.distance(Vertex(mumuVertex), thePrimaryV);
-      ppdlPV = distXY.value()*cosAlpha * mumucand.mass()/pperp.Perp();
+      ctauPV = distXY.value()*cosAlpha * mumucand.mass()/pperp.Perp();
 
       GlobalError v1e = (Vertex(mumuVertex)).error();
       GlobalError v2e = thePrimaryV.error();
       AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-      ppdlErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*mumucand.mass()/(pperp.Perp2());
+      ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*mumucand.mass()/(pperp.Perp2());
 
       AlgebraicVector3 vDiff;
       vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
-      ctauPV = vdiff.Perp();
-      ctauErrPV = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
+      l_xy = vdiff.Perp();
+      lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
 
       mumucand.addUserFloat("vNChi2",vChi2/vNDF);
@@ -211,6 +207,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mumucand.addUserFloat("MassErr",MassWErr.error());
       mumucand.addUserFloat("ctauPV",ctauPV);
       mumucand.addUserFloat("ctauErrPV",ctauErrPV);
+      mumucand.addUserFloat("lxy",l_xy);
+      mumucand.addUserFloat("lErrxy",lErr_xy);
       mumucand.addUserFloat("cosAlpha",cosAlpha);
       mumucand.addUserData("thePV",Vertex(thePrimaryV));
       mumucand.addUserData("theVertex",Vertex(mumuVertex));
