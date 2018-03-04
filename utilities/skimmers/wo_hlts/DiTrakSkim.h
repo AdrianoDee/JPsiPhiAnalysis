@@ -21,12 +21,22 @@
 
 #include "TLorentzVector.h"
 
+#include <TNtuple.h>
+#include <TString.h>
+#include <TSelector.h>
 
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include <bitset>
+#include <math>
 
 class DiTrakSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   TNtuple *outTuple;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<UInt_t> run = {fReader, "run"};
@@ -70,6 +80,16 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   bool MatchByDRDPt(const TLorentzVector t1, const TLorentzVector t2);
+   float DeltaR(const TLorentzVector t1, const TLorentzVector t2);
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
+   float M_PI = 3.14159265359;
+   float maxDPtRel = 2.0;
+   float maxDeltaR  = 0.01;
 
    ClassDef(DiTrakSkim,0);
 
