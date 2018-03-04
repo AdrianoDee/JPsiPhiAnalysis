@@ -132,7 +132,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   dimuon_tree->Branch("isBest",   &isBest,   "isBest/O");
 
-  if(addTrigger)
+  if(addTrigger_)
   {
     dimuon_tree->Branch("trigs_pt",   &trigs_pt);
     dimuon_tree->Branch("trigs_eta",   &trigs_eta);
