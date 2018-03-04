@@ -21,7 +21,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-2017-ditraktrigger.root'),
@@ -139,7 +139,8 @@ process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
-    Filters             = filters
+    Filters             = filters,
+    AddTriggers         = cms.bool(False)
  )
 
 process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
@@ -150,16 +151,18 @@ process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
     OnlyBest            = cms.bool(False),
     HLTs                = hltpaths,
     Filters             = filters,
+    AddTriggers         = cms.bool(False)
  )
 
 process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-     dimuonditrks = cms.InputTag("DiMuonDiTrakPAT"),
-     TriggerInput     = cms.InputTag("unpackPatTriggers"),
-     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-     OnlyBest = cms.bool(False),
-     HLTs = hltpaths,
-     Filters          = filters
+     dimuonditrks       = cms.InputTag("DiMuonDiTrakPAT"),
+     TriggerInput       = cms.InputTag("unpackPatTriggers"),
+     primaryVertices    = cms.InputTag("offlineSlimmedPrimaryVertices"),
+     TriggerResults     = cms.InputTag("TriggerResults", "", "HLT"),
+     OnlyBest           = cms.bool(False),
+     HLTs               = hltpaths,
+     Filters            = filters,
+     AddTriggers        = cms.bool(False)
   )
 
 process.p = cms.Path(

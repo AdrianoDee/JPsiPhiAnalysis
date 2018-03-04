@@ -114,6 +114,7 @@ dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< e
 triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+addTrigger_(iConfig.getParameter<bool>("AddTriggers")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
