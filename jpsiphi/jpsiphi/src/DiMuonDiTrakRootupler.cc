@@ -66,6 +66,7 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
+  bool addTrigger_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -118,6 +119,7 @@ dimuonditrk_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParamet
 triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+addTrigger_(iConfig.getParameter<bool>("AddTriggers")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
@@ -141,11 +143,14 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
   dimuonditrk_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
-  dimuonditrk_tree->Branch("trigs_pt",   &trigs_pt);
-  dimuonditrk_tree->Branch("trigs_eta",   &trigs_eta);
-  dimuonditrk_tree->Branch("trigs_phi",   &trigs_phi);
-  dimuonditrk_tree->Branch("trigs_m",   &trigs_m);
-  dimuonditrk_tree->Branch("trigs_filters", &trigs_filters);
+  if(addTrigger_)
+  {
+    dimuonditrk_tree->Branch("trigs_pt",   &trigs_pt);
+    dimuonditrk_tree->Branch("trigs_eta",   &trigs_eta);
+    dimuonditrk_tree->Branch("trigs_phi",   &trigs_phi);
+    dimuonditrk_tree->Branch("trigs_m",   &trigs_m);
+    dimuonditrk_tree->Branch("trigs_filters", &trigs_filters);
+  }
 
   dimuonditrk_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   dimuonditrk_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
@@ -237,6 +242,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
   trigs_phi.clear();
   trigs_m.clear();
 
+  if(addTrigger_)
+  {
   for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
@@ -267,6 +274,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
 
   }
+}
 
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {

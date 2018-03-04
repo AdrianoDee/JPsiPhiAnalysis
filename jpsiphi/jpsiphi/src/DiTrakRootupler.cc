@@ -64,6 +64,7 @@ class DiTrakRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
+  bool addTrigger_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -128,12 +129,14 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   ditrak_tree->Branch("isBest",   &isBest,   "isBest/O");
 
-  ditrak_tree->Branch("trigs_pt",   &trigs_pt);
-  ditrak_tree->Branch("trigs_eta",   &trigs_eta);
-  ditrak_tree->Branch("trigs_phi",   &trigs_phi);
-  ditrak_tree->Branch("trigs_m",   &trigs_m);
-  ditrak_tree->Branch("trigs_filters", &trigs_filters);
-
+  if(addTrigger_)
+  {
+    ditrak_tree->Branch("trigs_pt",   &trigs_pt);
+    ditrak_tree->Branch("trigs_eta",   &trigs_eta);
+    ditrak_tree->Branch("trigs_phi",   &trigs_phi);
+    ditrak_tree->Branch("trigs_m",   &trigs_m);
+    ditrak_tree->Branch("trigs_filters", &trigs_filters);
+  }
   ditrak_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   ditrak_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
   ditrak_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
@@ -241,40 +244,42 @@ void DiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   trigs_phi.clear();
   trigs_m.clear();
 
-  for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
+  if(addTrigger_)
+  {
+    for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
 
-    pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
+      pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
-    if(unPackedTrigger.charge()==0) continue;
+      if(unPackedTrigger.charge()==0) continue;
 
-    unPackedTrigger.unpackPathNames( names );
-    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+      unPackedTrigger.unpackPathNames( names );
+      unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
-    bool filtered = false;
-    UInt_t thisFilter = 0;
+      bool filtered = false;
+      UInt_t thisFilter = 0;
 
-    for (size_t i = 0; i < HLTFilters_.size(); i++)
-    {
-      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
-        {
-          thisFilter += (1<<i);
-          filtered = true;
-        }
+      for (size_t i = 0; i < HLTFilters_.size(); i++)
+      {
+        if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+          {
+            thisFilter += (1<<i);
+            filtered = true;
+          }
+      }
+
+      if(filtered)
+      {
+        trigs_filters.push_back(thisFilter);
+        trigs_pt.push_back(unPackedTrigger.pt());
+        trigs_eta.push_back(unPackedTrigger.eta());
+        trigs_phi.push_back(unPackedTrigger.phi());
+        trigs_m.push_back(unPackedTrigger.mass());
+      }
+
+
     }
-
-    if(filtered)
-    {
-      trigs_filters.push_back(thisFilter);
-      trigs_pt.push_back(unPackedTrigger.pt());
-      trigs_eta.push_back(unPackedTrigger.eta());
-      trigs_phi.push_back(unPackedTrigger.phi());
-      trigs_m.push_back(unPackedTrigger.mass());
-    }
-
-
-  }
-
+}
   if ( ditraks.isValid() && !ditraks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator ditrakCand = ditraks->begin(); ditrakCand != ditraks->end(); ++ditrakCand ) {
 

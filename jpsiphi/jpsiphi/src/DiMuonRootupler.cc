@@ -66,6 +66,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
+  bool addTrigger_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -130,11 +131,14 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   dimuon_tree->Branch("isBest",   &isBest,   "isBest/O");
 
-  dimuon_tree->Branch("trigs_pt",   &trigs_pt);
-  dimuon_tree->Branch("trigs_eta",   &trigs_eta);
-  dimuon_tree->Branch("trigs_phi",   &trigs_phi);
-  dimuon_tree->Branch("trigs_m",   &trigs_m);
-  dimuon_tree->Branch("trigs_filters", &trigs_filters);
+  if(addTrigger)
+  {
+    dimuon_tree->Branch("trigs_pt",   &trigs_pt);
+    dimuon_tree->Branch("trigs_eta",   &trigs_eta);
+    dimuon_tree->Branch("trigs_phi",   &trigs_phi);
+    dimuon_tree->Branch("trigs_m",   &trigs_m);
+    dimuon_tree->Branch("trigs_filters", &trigs_filters);
+  }
 
   dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
@@ -243,39 +247,39 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   trigs_phi.clear();
   trigs_m.clear();
 
-  for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
+  if(addTrigger_)
+  {
+    for ( size_t iTrigObj = 0; iTrigObj < trigs->size(); ++iTrigObj ) {
 
 
-    pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
+      pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
-    if(unPackedTrigger.charge()==0) continue;
+      if(unPackedTrigger.charge()==0) continue;
 
-    unPackedTrigger.unpackPathNames( names );
-    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+      unPackedTrigger.unpackPathNames( names );
+      unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
 
-    bool filtered = false;
-    UInt_t thisFilter = 0;
+      bool filtered = false;
+      UInt_t thisFilter = 0;
 
-    for (size_t i = 0; i < HLTFilters_.size(); i++)
-    {
-      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
-        {
-          thisFilter += (1<<i);
-          filtered = true;
-        }
+      for (size_t i = 0; i < HLTFilters_.size(); i++)
+      {
+        if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+          {
+            thisFilter += (1<<i);
+            filtered = true;
+          }
+      }
+
+      if(filtered)
+      {
+        trigs_filters.push_back(thisFilter);
+        trigs_pt.push_back(unPackedTrigger.pt());
+        trigs_eta.push_back(unPackedTrigger.eta());
+        trigs_phi.push_back(unPackedTrigger.phi());
+        trigs_m.push_back(unPackedTrigger.mass());
+      }
     }
-
-    if(filtered)
-    {
-      trigs_filters.push_back(thisFilter);
-      trigs_pt.push_back(unPackedTrigger.pt());
-      trigs_eta.push_back(unPackedTrigger.eta());
-      trigs_phi.push_back(unPackedTrigger.phi());
-      trigs_m.push_back(unPackedTrigger.mass());
-    }
-
-
-
   }
 
   if ( dimuons.isValid() && !dimuons->empty()) {
