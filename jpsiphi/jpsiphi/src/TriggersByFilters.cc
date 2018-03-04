@@ -180,13 +180,12 @@ void TriggersByFilters::analyze(const edm::Event & iEvent, const edm::EventSetup
         }
     }
 
-    if(!filtered) continue;
-
-    filter = thisFilter;
-    trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
-
-    trig_tree->Fill();
-
+    if(filtered)
+    {
+      filter = thisFilter;
+      trig_p4.SetPtEtaPhiM(unPackedTrigger.pt(),unPackedTrigger.eta(),unPackedTrigger.phi(),unPackedTrigger.mass());
+      trig_tree->Fill();
+    }
   }
 
 }
