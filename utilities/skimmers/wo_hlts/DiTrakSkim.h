@@ -29,7 +29,6 @@
 #include <TProofOutputFile.h>
 
 #include <bitset>
-#include <math>
 
 class DiTrakSkim : public TSelector {
 public :
