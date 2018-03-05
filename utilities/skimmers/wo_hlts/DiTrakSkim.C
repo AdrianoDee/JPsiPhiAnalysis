@@ -35,7 +35,7 @@ void DiTrakSkim::Begin(TTree * /*tree*/)
    // When running with PROOF Begin() is only called on the client.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString oPtion = GetOPtion();
+   TString option = GetOption();
 }
 
 void DiTrakSkim::SlaveBegin(TTree * /*tree*/)
@@ -44,7 +44,7 @@ void DiTrakSkim::SlaveBegin(TTree * /*tree*/)
    // When running with PROOF SlaveBegin() is called on each slave server.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString oPtion = GetOPtion();
+   TString option = GetOption();
 
    std::string outputString = "2Trak2TrigMatch_tree.root";
    OutFile = new TProofOutputFile( outputString.data() );
