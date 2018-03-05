@@ -122,7 +122,7 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
        {
          if(matchPos)
          {
-           if(DeltaR(*trakP_p4,trigPos) > DeltaR(*trakP_p4,filteredTrigs[i])
+           if(DeltaR(*trakP_p4,trigPos) > DeltaR(*trakP_p4,filteredTrigs[i]))
            {
              trigPos = filteredTrigs[i];
              matchP  = filteredIndex[i];
@@ -146,7 +146,7 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
        {
          if(matchNeg)
          {
-           if(DeltaR(*trakN_p4,trigNeg) > DeltaR(*trakN_p4,filteredTrigs[i])
+           if(DeltaR(*trakN_p4,trigNeg) > DeltaR(*trakN_p4,filteredTrigs[i]))
            {
              trigNeg = filteredTrigs[i];
              matchP  = filteredIndex[i];
@@ -198,7 +198,7 @@ void DiTrakSkim::SlaveTerminate()
    if (fOut)
    {
      fOut->cd();
-     gStyle->SetOPtStat(111111) ;
+     gStyle->SetOptStat(111111) ;
 
 
      outTuple->Write();
