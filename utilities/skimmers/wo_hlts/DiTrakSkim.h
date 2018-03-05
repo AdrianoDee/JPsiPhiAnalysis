@@ -87,7 +87,6 @@ public :
    TProofOutputFile *OutFile;
    TFile            *fOut;
 
-   float M_PI = 3.14159265359;
    float maxDPtRel = 2.0;
    float maxDeltaR  = 0.01;
 

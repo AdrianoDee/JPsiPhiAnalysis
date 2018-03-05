@@ -84,8 +84,6 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
    UInt_t matchP = 0, matchN = 0;
    fReader.SetEntry(entry);
 
-   bool trigMass = (*ditrig_p4).M() < 1.31 && (*ditrig_p4).M() > 0.94;
-
    std::bitset<16> theTrigger(*trigger);
 
    int triggerToTest = 0; //trigger-filter one to one
@@ -117,7 +115,7 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
      //tPos
      TLorentzVector trigPos, trigNeg;
 
-     for (size_t i = 0; i < filteredTrigs.GetSize(); i++)
+     for (size_t i = 0; i < filteredTrigs.size(); i++)
      {
 
        if(MatchByDRDPt(*trakP_p4,filteredTrigs[i]))
@@ -141,7 +139,7 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
      }
      //tNeg
 
-     for (size_t i = 0; i < filteredTrigs.GetSize(); i++)
+     for (size_t i = 0; i < filteredTrigs.size(); i++)
      {
 
        if(MatchByDRDPt(*trakN_p4,filteredTrigs[i]))
@@ -213,7 +211,7 @@ void DiTrakSkim::SlaveTerminate()
 
 }
 
-float DiTrakSkim::DeltaR(const TLorentzVector t1, const pat::TriggerObjectStandAlone t2)
+float DiTrakSkim::DeltaR(const TLorentzVector t1, const TLorentzVector t2)
 {
    float p1 = t1.Phi();
    float p2 = t2.Phi();
@@ -225,7 +223,7 @@ float DiTrakSkim::DeltaR(const TLorentzVector t1, const pat::TriggerObjectStandA
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiTrakSkim::MatchByDRDPt(const TLorentzVector t1, const pat::TriggerObjectStandAlone t2)
+bool DiTrakSkim::MatchByDRDPt(const TLorentzVector t1, const TLorentzVector t2)
 {
   return (fabs(t1.Pt()-t2.Pt())/t2.Pt()<maxDPtRel &&
         DeltaR(t1,t2) < maxDeltaR);
