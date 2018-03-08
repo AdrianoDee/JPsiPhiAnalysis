@@ -91,7 +91,7 @@ massvars    = RooArgList(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgList(tt_pt, mm_pt, mmtt_pt)
 extravars   = RooArgList(lxysig)
 
-theData = RooDataSet("theData","theData",theTre,RooArgSet(massvars,ptvars,extravars))
+theData = RooDataSet("theData","theData",theTree,RooArgSet(massvars,ptvars,extravars))
 
 
 c = TCanvas("canvas","canvas",1200,800)
