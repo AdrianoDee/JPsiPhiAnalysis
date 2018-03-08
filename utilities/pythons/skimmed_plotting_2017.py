@@ -101,7 +101,7 @@ if args.nonprompt:
     theData = theData.reduce("xL > 3.0")
     region = "_nprompt_"
 if args.prompt:
-    theData = theData.reduce("xL < 2.0")
+    theData = theData.reduce("xL < 1.5")
     region = "_promt_"
 
 if args.ptcuts is not None:
