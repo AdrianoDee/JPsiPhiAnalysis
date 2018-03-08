@@ -56,7 +56,7 @@ from ROOT.RooFit import PrintLevel
 
 # In[4]:
 
-filename = arts.input
+filename = args.input
 
 file_2Trk = TFile(filename,"READ")
 file_2Trk.ls()
