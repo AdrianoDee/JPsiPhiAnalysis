@@ -87,9 +87,9 @@ mmtt_pt = RooRealVar("xPt","xPt",0.0,ptmax)
 
 lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,50.0)
 
-massvars    = RooArgList(tt_mass, mm_mass, mmtt_mass)
-ptvars      = RooArgList(tt_pt, mm_pt, mmtt_pt)
-extravars   = RooArgList(lxysig)
+massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
+ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
+extravars   = RooArgSet(lxysig)
 
 theData = RooDataSet("theData","theData",theTree,RooArgSet(massvars,ptvars,extravars))
 
