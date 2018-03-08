@@ -18,8 +18,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--input', type=str, default="2mu2k_tree.root")
 # parser.add_argument('--binned', action='store_true')
-# parser.add_argument('--nonprompt', action='store_true')
-# parser.add_argument('--prompt', action='store_true')
+parser.add_argument('--nonprompt', action='store_true')
+parser.add_argument('--prompt', action='store_true')
 # parser.add_argument('--nofit', action='store_true')
 # parser.add_argument('--nofitkk', action='store_false')
 # parser.add_argument('--nofitb0', action='store_false')
@@ -27,7 +27,7 @@ parser.add_argument('--noplot', action='store_false')
 # parser.add_argument('--notrig', action='store_false')
 # parser.add_argument('--noreco', action='store_false')
 # parser.add_argument('--dosidebands', action='store_false')
-# parser.add_argument('--ptcuts', type=float, default=None)
+parser.add_argument('--ptcuts', type=float, default=None)
 
 #                    help='number of epochs')
 #parser.add_argument('--batch_size', type=int, default=64)
@@ -35,8 +35,6 @@ parser.add_argument('--noplot', action='store_false')
 args = parser.parse_args()
 
 debugging = args.debug
-binnedfit = args.binned
-
 
 region = "_overall_"
 cuts = "_"
