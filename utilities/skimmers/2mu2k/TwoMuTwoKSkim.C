@@ -60,7 +60,7 @@ void TwoMuTwoKSkim::SlaveBegin(TTree * /*tree*/)
   Phi_mean = 1.019723;
   Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:jpsiPt:phiPt");
+  outTuple = new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:mmPt:ttPt");
 
 }
 
@@ -82,9 +82,9 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   //
   // The return value is currently not used.
 
-  Float_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref_out;
+  Float_t run_out, evt_out, xM_out, ttM_out, mmM_out, xM_ref_out, ttM_ref_out, mmM_ref_out;
   Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
-  Float_t jpsiPt, phiPt;
+  Float_t mmPt, ttPt;
 
   fReader.SetEntry(entry);
 
@@ -104,12 +104,12 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     run_out =  *run;
     evt_out =  *event;
 
-    kkM_out = (*ditrak_p4).M();
-    mumuM_out= (*dimuon_p4).M();
+    ttM_out = (*ditrak_p4).M();
+    mmM_out= (*dimuon_p4).M();
     xM_out   = (*dimuonditrk_p4).M();
 
-    kkM_ref_out = (*ditrak_rf_p4).M();
-    mumuM_ref_out= (*dimuon_rf_p4).M();
+    ttM_ref_out = (*ditrak_rf_p4).M();
+    mmM_ref_out= (*dimuon_rf_p4).M();
     xM_ref_out   = (*dimuonditrk_rf_p4).M();
 
     xL_out = (*dimuonditrk_ctauPV)/(*dimuonditrk_ctauErrPV);
@@ -123,12 +123,12 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     muonn_pT_out = (*muonn_rf_p4).Pt();
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
     kaonp_pT_out = (*kaonn_rf_p4).Pt();
-     
-    jpsiPt = (*dimuon_p4).Pt(); 
-    phiPt = (*ditrak_p4).Pt();
-   
-    Float_t params[] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
-    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,jpsiPt,phiPt};
+
+    mmPt = (*dimuon_p4).Pt();
+    ttPt = (*ditrak_p4).Pt();
+
+    Float_t params[] = {run_out,evt_out,xM_out,ttM_out,mmM_out,xM_ref_out,ttM_ref_out,mmM_ref_out,
+    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,mmPt,ttPt};
 
     outTuple->Fill(params);
   }
