@@ -16,7 +16,7 @@ import math
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true')
-parser.add_argument('--inptu', type=str, default="2mu2k_tree.root")
+parser.add_argument('--input', type=str, default="2mu2k_tree.root")
 # parser.add_argument('--binned', action='store_true')
 # parser.add_argument('--nonprompt', action='store_true')
 # parser.add_argument('--prompt', action='store_true')
