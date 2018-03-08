@@ -75,8 +75,8 @@ file_2Mu = TFile(name_2Mu,"READ")
 file_2Mu.ls()
 mumuTree = (file_2Mu.Get("outuple"))
 
-phimin = 0.9
-phimax = 1.3
+phimin = 1.0
+phimax = 1.05
 
 jpsimin = 2.85
 jpsimax = 3.35
