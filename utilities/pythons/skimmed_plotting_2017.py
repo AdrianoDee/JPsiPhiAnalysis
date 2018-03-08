@@ -89,9 +89,10 @@ lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,50.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
+kinvars     = RooArgSet(massvars,ptvars)
 extravars   = RooArgSet(lxysig)
 
-theData = RooDataSet("theData","theData",theTree,RooArgSet(massvars,ptvars,extravars))
+theData = RooDataSet("theData","theData",theTree,RooArgSet(kinvars,extravars))
 
 
 c = TCanvas("canvas","canvas",1200,800)
