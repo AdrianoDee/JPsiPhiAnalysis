@@ -60,7 +60,7 @@ void TwoMuTwoKSkim::SlaveBegin(TTree * /*tree*/)
   Phi_mean = 1.019723;
   Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
+  outTuple = new TNtuple("outuple","outuple","run:evt:xM:kkM:mumuM:xM_ref:kkM_ref:mumuM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:jpsiPt:phiPt");
 
 }
 
@@ -84,6 +84,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
 
   Float_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref_out;
   Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
+  Float_t jpsiPt, phiPt;
 
   fReader.SetEntry(entry);
 
@@ -98,7 +99,7 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
 
   bool triggerBit = tt.test(0);
 
-  if(triggerBit)//theTrigger && jPT && phiM && triggerBit && jpsiM && cosAlpha && vertexP)
+  if(theTrigger)// && phiM && jpsiM)// && jPT && phiM && triggerBit && jpsiM && cosAlpha && vertexP)
   {
     run_out =  *run;
     evt_out =  *event;
@@ -122,9 +123,12 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
     muonn_pT_out = (*muonn_rf_p4).Pt();
     kaonn_pT_out = (*kaonp_rf_p4).Pt();
     kaonp_pT_out = (*kaonn_rf_p4).Pt();
-
-    Float_t params[18] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
-    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out};
+     
+    jpsiPt = (*dimuon_p4).Pt(); 
+    phiPt = (*ditrak_p4).Pt();
+   
+    Float_t params[] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
+    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,jpsiPt,phiPt};
 
     outTuple->Fill(params);
   }
