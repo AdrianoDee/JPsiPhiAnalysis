@@ -82,10 +82,10 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
    Float_t trigN_Pt, trigP_Pt;
    Float_t trakN_Pt, trakP_Pt;
    UInt_t matchP = 0, matchN = 0;
-   fReader.SetEntry(entry);
+
 
    std::bitset<16> theTrigger(*trigger);
-
+/*
    int triggerToTest = 0; //trigger-filter one to one
 
    TLorentzVector tP = (*trakP_p4);
@@ -184,7 +184,7 @@ Bool_t DiTrakSkim::Process(Long64_t entry)
      }
 
  }
-
+*/
    return kTRUE;
 }
 
