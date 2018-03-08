@@ -85,7 +85,7 @@ tt_pt = RooRealVar("ttPt","ttPt",0.0,ptmax)
 mm_pt = RooRealVar("mmPt","mmPt",0.0,ptmax)
 mmtt_pt = RooRealVar("xPt","xPt",0.0,ptmax)
 
-lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,200.0)
+lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,1000.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
