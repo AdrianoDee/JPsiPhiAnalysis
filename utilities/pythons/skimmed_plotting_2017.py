@@ -85,7 +85,7 @@ tt_pt = RooRealVar("ttPt","ttPt",0.0,ptmax)
 mm_pt = RooRealVar("mmPt","mmPt",0.0,ptmax)
 mmtt_pt = RooRealVar("xPt","xPt",0.0,ptmax)
 
-lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,50.0)
+lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,200.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
@@ -107,7 +107,7 @@ if args.prompt:
 if args.ptcuts is not None:
     theData = theData.reduce("trigp_pT > " + str(args.ptcuts))
     theData = theData.reduce("trign_pT > " + str(args.ptcuts))
-    cuts += "pt_" + str(args.ptcuts) + "_"
+    cuts += "P_t_" + str(args.ptcuts) + "_"
 #### #### Plotting variables
 #### TrakTrak Data
 
@@ -186,7 +186,7 @@ if args.noplot:
 
     ##PT hists
 
-    hist_tt_pt.SetTitle("Pt(KK)" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt_pt.SetTitle("P_t(KK)" + region + " ;M(KK) [GeV]; no. entries")
     hist_tt_pt.SetFillColor(ROOT.kBlue)
     hist_tt_pt.SetLineColor(ROOT.kBlue)
     hist_tt_pt.SetFillStyle(3003)
@@ -194,7 +194,7 @@ if args.noplot:
     c.SaveAs("tt_pt_histo" + region + ".png")
     c.SaveAs("tt_pt_histo" + region + ".root")
 
-    hist_mm_pt.SetTitle("Pt(#mu#mu)" + region + " ;Pt(#mu#mu) [GeV]; no. entries")
+    hist_mm_pt.SetTitle("P_t(#mu#mu)" + region + " ;Pt(#mu#mu) [GeV]; no. entries")
     hist_mm_pt.SetFillColor(ROOT.kGreen)
     hist_mm_pt.SetLineColor(ROOT.kGreen)
     hist_mm_pt.SetFillStyle(3003)
@@ -202,7 +202,7 @@ if args.noplot:
     c.SaveAs("mm_pt_histo" + region + ".png")
     c.SaveAs("mm_pt_histo" + region + ".root")
 
-    hist_tt_pt.SetTitle("Pt(#mu#muKK)" + region + " ;Pt(#mu#muKK) [GeV]; no. entries")
+    hist_tt_pt.SetTitle("P_t(#mu#muKK)" + region + " ;Pt(#mu#muKK) [GeV]; no. entries")
     hist_tt_pt.SetFillColor(ROOT.kRed)
     hist_tt_pt.SetLineColor(ROOT.kRed)
     hist_tt_pt.SetFillStyle(3003)
