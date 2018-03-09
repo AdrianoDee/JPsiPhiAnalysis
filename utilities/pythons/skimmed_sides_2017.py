@@ -119,7 +119,7 @@ if args.noplot:
     ttFrame = tt_mass.frame()
     theData.plotOn(ttFrame)
     ttFrame.Draw()
-    c.SaveAs("tt_mass" + region + ".png")
+    c.SaveAs("tt_mass" + cuts + ".png")
 
     #### MuMu Data
     print("MuMu data plotting . . .")
