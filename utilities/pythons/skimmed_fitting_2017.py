@@ -300,7 +300,7 @@ if args.nofit and args.nofitkk:
     c.SaveAs("kk_Phi_fit" + region + ".png")
     c.SaveAs("kk_Phi_fit" + region + ".root")
 
-if args.nofit and args.nob0fit:
+if args.nofit and args.nofitb0:
 
     bcanvas = TCanvas("bcanvas","bcanvas",1400,800)
 
@@ -372,7 +372,7 @@ if args.nofit and args.nob0fit:
     bcanvas.SaveAs("b0_MM" + region + ".root")
 
 
-if args.nofit and args.nob0fit:
+if args.nofit and args.nofitb0:
 
     jcanvas = TCanvas("jcanvas","jcanvas",1400,800)
 
