@@ -10,10 +10,10 @@
 
   TDSet* dataset = new TDSet("TTree", "JPsi Phi Tree", "rootuple");
   //
-  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mu2k_BCDEF_2017.root");
-
-  // dataset->Add("/Users/adrianodiflorio/Documents/Git/X4140/ProofLite/Y4140_testrootuple.root");
-  TString selector = "TwoMuTwoKSkim";
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mu2k_miniaod_17Nov2017_BCDEF_2017.root");
+  //dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mu2k_miniaod_07Aug17_BCDEFGH_2016.root");
+  
+  TString selector = "/lustre/home/adrianodif/jpsiphi/analysis/utilities/skimmers/2mu2k/TwoMuTwoKSkim";
   TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
 
   // Processing
