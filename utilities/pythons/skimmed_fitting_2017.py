@@ -215,6 +215,12 @@ if args.nofit and args.nofitkk:
 
     ## Phi fitting
 
+    traKFitData = theData.Clone("fitTrakData")
+
+    if binnedfit:
+        tt_mass.setBins(100)
+        traKFitData = trakData.binnedClone("binnedTrakData")
+
     phimean = 1.019
     gammavalue = 0.01
 
