@@ -220,7 +220,7 @@ if args.nofit and args.nofitkk:
 
     if binnedfit:
         tt_mass.setBins(100)
-        traKFitData = trakData.binnedClone("binnedTrakData")
+        traKFitData = theData.binnedClone("binnedTrakData")
 
     phimean = 1.019
     gammavalue = 0.01
@@ -289,7 +289,7 @@ if args.nofit and args.nofitkk:
     signallow = -3.*sigmaside_kk + kkMean.getValV()
     signalup = +3.*sigmaside_kk + kkMean.getValV()
 
-    trakData.plotOn(kkFrame)
+    traKFitData.plotOn(kkFrame)
 
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
     traKFitData.plotOn(kkFrame)
