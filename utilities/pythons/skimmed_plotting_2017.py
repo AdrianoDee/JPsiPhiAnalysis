@@ -128,7 +128,7 @@ if args.noplot:
     mumuFrame = mm_mass.frame()
     theData.plotOn(mumuFrame)
     mumuFrame.Draw()
-    c.SaveAs("mm_mass.png")
+    c.SaveAs("mm_mass_.png")
 
     #### X Data
     print("TrakTrakMuMu data plotting . . .")
