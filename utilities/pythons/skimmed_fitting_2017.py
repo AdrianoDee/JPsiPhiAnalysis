@@ -25,6 +25,7 @@ parser.add_argument('--nofitkk', action='store_false')
 parser.add_argument('--nofitb0', action='store_false')
 parser.add_argument('--nofitmm', action='store_false')
 parser.add_argument('--noplot', action='store_false')
+parser.add_argument('--numcpu',  type=int, default=4)
 # parser.add_argument('--notrig', action='store_false')
 # parser.add_argument('--noreco', action='store_false')
 # parser.add_argument('--dosidebands', action='store_false')
@@ -37,6 +38,7 @@ args = parser.parse_args()
 
 debugging = args.debug
 binnedfit = args.binned
+numcpus = args.numcpu
 
 region = "_overall_"
 cuts = "_"
@@ -275,7 +277,7 @@ if args.nofit and args.nofitkk:
         # nfit +=1
 
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
-        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(16),RooFit.Save())
+        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
 	nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
@@ -348,7 +350,7 @@ if args.nofit and args.nofitb0:
 
     nfit = 0
 
-    bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin+0.005,fitbZeromax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
+    bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin+0.005,fitbZeromax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
     bZeroFrame = mmtt_mass.frame(Range(fitbZeromin+0.005,fitbZeromax-0.005))
@@ -420,7 +422,7 @@ if args.nofit and args.nofitb0:
 
     nfit = 0
 
-    jPsiFit = pdf_tot.fitTo(jPsiFitData,Range(fitjPsimin+0.005,fitjPsimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
+    jPsiFit = pdf_tot.fitTo(jPsiFitData,Range(fitjPsimin+0.005,fitjPsimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
     jPsiFrame = mm_mass.frame(Range(fitjPsimin+0.005,fitjPsimax-0.005))
