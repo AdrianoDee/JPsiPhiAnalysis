@@ -61,7 +61,7 @@ void TwoMuKPiSkim::SlaveBegin(TTree * /*tree*/)
       Phi_mean = 1.019723;
       Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-      outTuple = new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT");
+      outTuple = new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:mmPt:ttPt");
 
 
 }
@@ -85,9 +85,10 @@ Bool_t TwoMuKPiSkim::Process(Long64_t entry)
    // The return value is currently not used.
    Float_t run_out, evt_out, xM_out, kkM_out, mumuM_out, xM_ref_out, kkM_ref_out, mumuM_ref_out;
    Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
+   Float_t jPt, pPt;
 
    fReader.SetEntry(entry);
-   
+
       bool phiM = (*ditrak_p4).M() > 1.00 && (*ditrak_p4).M() < 1.04;
    bool jpsiM = (*dimuon_p4).M() > 3.00 && (*dimuon_p4).M() < 3.20;
    bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.997;
@@ -97,9 +98,9 @@ Bool_t TwoMuKPiSkim::Process(Long64_t entry)
    bool theTrigger = (*trigger) > 0;
    bool isMatched = (*dimuon_triggerMatch)>0;
    bool isBest = (*isBestCandidate);
-   
+
    if(true)
-   if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT) 
+   if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT)
    {
      run_out =  *run;
      evt_out =  *event;
@@ -124,7 +125,7 @@ Bool_t TwoMuKPiSkim::Process(Long64_t entry)
      kaonp_pT_out = (*kaonn_rf_p4).Pt();
 
      Float_t params[18] = {run_out,evt_out,xM_out,kkM_out,mumuM_out,xM_ref_out,kkM_ref_out,mumuM_ref_out,
-     xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out};
+     xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,(*dimuon_p4).Pt(),(*ditrak_rf_p4).Pt()};
 
      outTuple->Fill(params);
    }
