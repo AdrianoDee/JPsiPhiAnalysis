@@ -298,8 +298,8 @@ if args.nofit and args.nofitkk:
 
     totIntegralBkg = kkBkg.analyticalIntegral(kkBkg.getAnalyticalIntegral(RooArgSet(tt_mass),RooArgSet(tt_mass)))
 
-    sigBkgEvts = signalIntegralBkg/totIntegralBkg*((nBkg.getValV()))
-    sidBkgEvts = (leftsideIntegralBkg+rightsideIntegralBkg)/totIntegralBkg*((nBkg.getValV()))
+    sigBkgEvts = signalIntegralBkg/totIntegralBkg*((nBkgKK.getValV()))
+    sidBkgEvts = (leftsideIntegralBkg+rightsideIntegralBkg)/totIntegralBkg*((nBkgKK.getValV()))
 
     leftsidedata = traKFitData.reduce("ttM<" + str(leftupside))
     leftsidedata = leftsidedata.reduce("ttM>" + str(leftlowside))
