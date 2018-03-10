@@ -1,6 +1,6 @@
 
 import ROOT
-from ROOT import TLine
+from ROOT import TLine, TLegend
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooFit
 from ROOT.RooFit import Layout
