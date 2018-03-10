@@ -290,10 +290,11 @@ if args.nofit and args.nofitkk:
     signallow = -3.*sigmaside_kk + kkMean.getValV()
     signalup = +3.*sigmaside_kk + kkMean.getValV()
 
-    traKFitData.plotOn(kkFrame)
-    
+
+
     kkbins = RooBinning(-15,15)
     kkbins.addUniform(30,fitphimin+0.005,fitphimax-0.005)
+    traKFitData.plotOn(kkFrame,RooFit.Binning(kkbins))
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
     traKFitData.plotOn(kkFrame,RooFit.Binning(kkbins))
     kkTot.paramOn(kkFrame,RooFit.Layout(0.57,0.99,0.65))
@@ -330,7 +331,7 @@ if args.nofit and args.nofitb0:
     c5 = RooRealVar("p5","p5",-0.000001,-10.,10.)
     c6 = RooRealVar("p6","p6",-0.000001,-0.01,0.01)
 
-    alpha = RooRealVar("#alpha","#alpha",-0.01,-0.5,-0.00001)
+    alpha = RooRealVar("#alpha","#alpha",-0.1,-10.0,-0.00001)
     polyset = RooArgList(c0,c1,c2,c3,c4,c5)
 
     gFraMMKK = RooRealVar("f_{gauss}","f_{gauss}",0.3,0.0,1.0)
