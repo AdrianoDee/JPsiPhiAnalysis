@@ -4,7 +4,7 @@ from ROOT import TLine
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooFit
 from ROOT.RooFit import Layout
-from ROOT import RooStats, gPad, RooAbsData, RooAbsReal
+from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
 from ROOT.RooAbsReal import Relative
 
 RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
@@ -219,14 +219,14 @@ if args.nofit and args.nofitkk:
     traKFitData = theData.Clone("fitTrakData")
 
     if binnedfit:
-        tt_mass.setBins(100)
+        tt_mass.setBins(30)
         traKFitData = theData.binnedClone("binnedTrakData")
 
     phimean = 1.019
     gammavalue = 0.01
 
-    fitphimin = 1.0
-    fitphimax = 1.04
+    fitphimin = 1.006
+    fitphimax = 1.034
 
     kkSigma = RooRealVar("#sigma","#sigma",0.0013)
     kkGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
@@ -239,11 +239,11 @@ if args.nofit and args.nofitkk:
     # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
     # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
 
-    a0 = RooRealVar("p0","p0",0.001,-2.,2.)
-    a1 = RooRealVar("p1","p1",0.001,-2.,2.)
-    a2 = RooRealVar("p2","p2",-0.00001,-2.,2.)
-    a3 = RooRealVar("p3","p3",-0.000001,-2,2.)
-    a4 = RooRealVar("p4","p4",-0.000001,-2.,2.)
+    a0 = RooRealVar("p0","p0",0.001,-10.,10.)
+    a1 = RooRealVar("p1","p1",0.001,-10.,10.)
+    a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
+    a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
+    a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
     # a5 = RooRealVar("a5","a5",-0.000001,-2.,2.)
     poliset = RooArgList(a0,a1,a2,a3,a4)
 
@@ -261,8 +261,8 @@ if args.nofit and args.nofitkk:
 
     nfit = 0
 
-    # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
-    # nfit +=1
+    #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
+    #nfit +=1
 
     if not debugging:
 
@@ -274,8 +274,9 @@ if args.nofit and args.nofitkk:
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
         # nfit +=1
 
-        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
-        nfit +=1
+        #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
+        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(16),RooFit.Save())
+	nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
 
@@ -290,9 +291,11 @@ if args.nofit and args.nofitkk:
     signalup = +3.*sigmaside_kk + kkMean.getValV()
 
     traKFitData.plotOn(kkFrame)
-
+    
+    kkbins = RooBinning(-15,15)
+    kkbins.addUniform(30,fitphimin+0.005,fitphimax-0.005)
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
-    traKFitData.plotOn(kkFrame)
+    traKFitData.plotOn(kkFrame,RooFit.Binning(kkbins))
     kkTot.paramOn(kkFrame,RooFit.Layout(0.57,0.99,0.65))
 
     kkFrame.Draw()
@@ -310,30 +313,32 @@ if args.nofit and args.nofitb0:
     fitbZeromax = 5.55
 
     if binnedfit:
-        mmtt_mass.setBins(100)
+        mmtt_mass.setBins(50)
         bZeroFitData = theData.binnedClone("binnedTrakData")
 
     bZeroFitData = (bZeroFitData.reduce("xM<5.55")).reduce("xM>5.15")
 
-    mean = RooRealVar("m_{L3}","m_{L3}",5.38,5.31,5.41);
+    mean = RooRealVar("m_{L3}","m_{L3}",5.35,5.2,5.4);
     sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.05);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
 
-    c0 = RooRealVar("p0","p0",0.001,-5.,5.)
-    c1 = RooRealVar("p1","p1",0.001,-4.,4.)
-    c2 = RooRealVar("p2","p2",-0.00001,-4.,4.)
-    c3 = RooRealVar("p3","p3",-0.000001,-4.,4.)
-    c4 = RooRealVar("p4","p4",-0.000001,-2.,2.)
-    c5 = RooRealVar("p5","p5",-0.000001)
+    c0 = RooRealVar("p0","p0",0.001,-10.,10.)
+    c1 = RooRealVar("p1","p1",0.001,-10.,10.)
+    c2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
+    c3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
+    c4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
+    c5 = RooRealVar("p5","p5",-0.000001,-10.,10.)
     c6 = RooRealVar("p6","p6",-0.000001,-0.01,0.01)
 
-    polyset = RooArgList(c0,c1,c2,c3,c4)
+    alpha = RooRealVar("#alpha","#alpha",-0.01,-0.5,-0.00001)
+    polyset = RooArgList(c0,c1,c2,c3,c4,c5)
 
     gFraMMKK = RooRealVar("f_{gauss}","f_{gauss}",0.3,0.0,1.0)
     nSigMMKK = RooRealVar("n_{sig}","n_{sig}",10000,0.,10E6)
     nBkgMMKK = RooRealVar("n_{bkg}","n_{bkg}",10000,0.,10E6)
 
-    pdf_bkg = RooChebychev("pdf_bkg","pdf_bkg",mmtt_mass,polyset)
+    ##pdf_bkg = RooChebychev("pdf_bkg","pdf_bkg",mmtt_mass,polyset)
+    pdf_bkg  = RooExponential("pdf_bkg","pdf_bkg",mmtt_mass,alpha)
     pdf_sig1 = RooGaussian("pdf_sig1","pdf_sig1",mmtt_mass,mean,sigma1)
     pdf_sig2 = RooGaussian("pdf_sig2","pdf_sig2",mmtt_mass,mean,sigma2)
 
@@ -386,7 +391,7 @@ if args.nofit and args.nofitb0:
         jPsiFitData = theData.binnedClone("binnedTrakData")
 
     mean = RooRealVar("m","m",3.09,3.06,3.1);
-    sigma = RooRealVar("#sigma","#sigma",0.002,0.001,0.1);
+    sigma = RooRealVar("#sigma","#sigma",0.01,0.001,0.1);
     # sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
 
     # c0 = RooRealVar("p0","p0",0.001,-5.,5.)
@@ -424,3 +429,6 @@ if args.nofit and args.nofitb0:
     pdf_tot.plotOn(jPsiFrame,RooFit.Normalization(1.0/float(nfit)))
     jPsiFitData.plotOn(jPsiFrame)
     pdf_tot.paramOn(jPsiFrame,RooFit.Layout(0.7,0.99,0.99))
+    jPsiFrame.Draw()
+    jcanvas.SaveAs("mm_fit" + region + ".png")
+    jcanvas.SaveAs("mm_fit" + region + ".root")
