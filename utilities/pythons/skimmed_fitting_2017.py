@@ -544,11 +544,3 @@ if args.nofit and args.nofitmm:
     jPsiFrame.Draw()
     jcanvas.SaveAs("mm_fit" + region + ".png")
     jcanvas.SaveAs("mm_fit" + region + ".root")
-
-if args.dosidebands:
-
-
-
-
-    # if not args.nofit or not args.nofitkk:
-    #     sigmavalue =
