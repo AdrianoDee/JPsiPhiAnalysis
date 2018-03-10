@@ -318,6 +318,9 @@ if args.nofit and args.nofitkk:
     leftsidehist.Scale(theRatio)
     rightsidehist.Scale(theRatio)
 
+    sidehist = leftsidehist.Clone()
+    sidehist.Add(rightsidehist)
+
     kkFrame = tt_mass.frame(Range(fitphimin+0.005,fitphimax-0.005))
 
     kkbins = RooBinning(-15,15)
@@ -357,12 +360,12 @@ if args.nofit and args.nofitkk:
     rightsidehist.SetFillStyle(3002)
 
     signalhist.Draw("EBar")
-    side.SetFillColor(kGreen)
+    sidehist.SetFillColor(kGreen)
     #rightsidehist.SetMarkerColor(kBlack)
-    side.SetMarkerStyle(ROOT.kFullCircle)
-    side.SetMarkerSize(0.5)
-    side.SetLineColor(kBlack)
-    side.SetFillStyle(3002)
+    sidehist.SetMarkerStyle(ROOT.kFullCircle)
+    sidehist.SetMarkerSize(0.5)
+    sidehist.SetLineColor(kBlack)
+    sidehist.SetFillStyle(3002)
     #sideCW = leftsidehist.Clone()
     #sideCW.Add(rightsidehist,+1.0)
     #sideCW.SetFillColor(kRed)
@@ -371,14 +374,14 @@ if args.nofit and args.nofitkk:
     #sideCW.Draw("SAMEBar")
     #rightsidehist.Draw("E0SAMEBar")
     #leftsidehist.Draw("E0SAMEBar")
-    side.Draw("E0SAMEBar")
+    sidehist.Draw("E0SAMEBar")
 
     legend = TLegend(0.75,0.45,0.99,0.75)
     legend.AddEntry(signalhist,"Signal region","f")
     #legend.AddEntry(signalhist,"Signal region (-3.0#sigma,+3.0#sigma)","f")
     #legend.AddEntry(rightsidehist,"R-sideband    (+4.0#sigma,+6.0#sigma)","f")
     #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
-    legend.AddEntry(side,"Sidebands ","f")
+    legend.AddEntry(sidehist,"Sidebands ","f")
     legend.Draw()
     c.SaveAs(signalhist.GetName() + "_sidebands.png")
 
