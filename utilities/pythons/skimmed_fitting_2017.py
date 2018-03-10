@@ -26,11 +26,9 @@ parser.add_argument('--nofitb0', action='store_false')
 parser.add_argument('--nofitmm', action='store_false')
 parser.add_argument('--noplot', action='store_false')
 parser.add_argument('--numcpu',  type=int, default=4)
-# parser.add_argument('--notrig', action='store_false')
-# parser.add_argument('--noreco', action='store_false')
-# parser.add_argument('--dosidebands', action='store_false')
+parser.add_argument('--nsignal', type=float, default=100000.)
 parser.add_argument('--ptcuts', type=float, default=None)
-
+parser.add_argument('--sigmaside', type=float, default=0.004247)
 #                    help='number of epochs')
 #parser.add_argument('--batch_size', type=int, default=64)
 #
@@ -39,6 +37,7 @@ args = parser.parse_args()
 debugging = args.debug
 binnedfit = args.binned
 numcpus = args.numcpu
+sigmaside_kk = args.sigmaside
 
 region = "_overall_"
 cuts = "_"
@@ -284,16 +283,6 @@ if args.nofit and args.nofitkk:
 
     kkFrame = tt_mass.frame(Range(fitphimin+0.005,fitphimax-0.005))
 
-    leftlowside_kk = -6.*sigmaside_kk + kkMean.getValV()
-    leftupside_kk = -4.*sigmaside_kk + kkMean.getValV()
-    rightlowside_kk = +4.*sigmaside_kk + kkMean.getValV()
-    rightupside_kk = +6.*sigmaside_kk + kkMean.getValV()
-
-    signallow = -3.*sigmaside_kk + kkMean.getValV()
-    signalup = +3.*sigmaside_kk + kkMean.getValV()
-
-
-
     kkbins = RooBinning(-15,15)
     kkbins.addUniform(30,fitphimin+0.005,fitphimax-0.005)
     traKFitData.plotOn(kkFrame)
@@ -322,8 +311,8 @@ if args.nofit and args.nofitb0:
     bZeroFitData = (bZeroFitData.reduce("xM<5.55")).reduce("xM>5.15")
 
     mean = RooRealVar("m_{L3}","m_{L3}",5.35,5.2,5.4);
-    sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.05);
-    sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
+    sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.1);
+    sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.0005,0.1);
 
     c0 = RooRealVar("p0","p0",0.001,-10.,10.)
     c1 = RooRealVar("p1","p1",0.001,-10.,10.)
@@ -437,3 +426,17 @@ if args.nofit and args.nofitmm:
     jPsiFrame.Draw()
     jcanvas.SaveAs("mm_fit" + region + ".png")
     jcanvas.SaveAs("mm_fit" + region + ".root")
+
+if args.dosidebands:
+
+    leftlowside_kk = -6.*sigmaside_kk + kkMean.getValV()
+    leftupside_kk = -4.*sigmaside_kk + kkMean.getValV()
+    rightlowside_kk = +4.*sigmaside_kk + kkMean.getValV()
+    rightupside_kk = +6.*sigmaside_kk + kkMean.getValV()
+
+    signallow = -3.*sigmaside_kk + kkMean.getValV()
+    signalup = +3.*sigmaside_kk + kkMean.getValV()
+
+
+    # if not args.nofit or not args.nofitkk:
+    #     sigmavalue =
