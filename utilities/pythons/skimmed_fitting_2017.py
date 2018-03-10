@@ -296,9 +296,9 @@ if args.nofit and args.nofitkk:
 
     kkbins = RooBinning(-15,15)
     kkbins.addUniform(30,fitphimin+0.005,fitphimax-0.005)
-    traKFitData.plotOn(kkFrame,RooFit.Binning(kkbins))
+    traKFitData.plotOn(kkFrame)
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
-    traKFitData.plotOn(kkFrame,RooFit.Binning(kkbins))
+    traKFitData.plotOn(kkFrame)
     kkTot.paramOn(kkFrame,RooFit.Layout(0.57,0.99,0.65))
 
     kkFrame.Draw()
@@ -346,7 +346,7 @@ if args.nofit and args.nofitb0:
     pdf_sig2 = RooGaussian("pdf_sig2","pdf_sig2",mmtt_mass,mean,sigma2)
 
     pdf_sig  = RooAddPdf("pdf_sig","pdf_sig",pdf_sig1,pdf_sig2,gFraMMKK)
-    pdf_tot = RooAddPdf("pdf_tot","pdf_tot",RooArgList(pdf_sig1,pdf_bkg),RooArgList(nSigMMKK,nBkgMMKK))
+    pdf_tot = RooAddPdf("pdf_tot","pdf_tot",RooArgList(pdf_sig,pdf_bkg),RooArgList(nSigMMKK,nBkgMMKK))
 
     nfit = 0
 
@@ -380,7 +380,7 @@ if args.nofit and args.nofitb0:
     bcanvas.SaveAs("b0_MM" + region + ".root")
 
 
-if args.nofit and args.nofitb0:
+if args.nofit and args.nofitmm:
 
     jcanvas = TCanvas("jcanvas","jcanvas",1400,800)
 
@@ -395,7 +395,7 @@ if args.nofit and args.nofitb0:
 
     mean = RooRealVar("m","m",3.09,3.06,3.1);
     sigma = RooRealVar("#sigma","#sigma",0.01,0.001,0.1);
-    # sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
+    sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
 
     # c0 = RooRealVar("p0","p0",0.001,-5.,5.)
     # c1 = RooRealVar("p1","p1",0.001,-4.,4.)
@@ -407,7 +407,7 @@ if args.nofit and args.nofitb0:
     #
     # polyset = RooArgList(c0,c1,c2,c3,c4)
 
-    # gFraMMKK = RooRealVar("f_{gauss}","f_{gauss}",0.3,0.0,1.0)
+    gFraMMKK = RooRealVar("f_{gauss}","f_{gauss}",0.3,0.0,1.0)
     # nSigMMKK = RooRealVar("n_{sig}","n_{sig}",10000,0.,10E6)
     # nBkgMMKK = RooRealVar("n_{bkg}","n_{bkg}",10000,0.,10E6)
     #
@@ -418,7 +418,9 @@ if args.nofit and args.nofitb0:
     # pdf_sig  = RooAddPdf("pdf_sig","pdf_sig",pdf_sig1,pdf_sig2,gFraMMKK)
     # pdf_tot = RooAddPdf("pdf_tot","pdf_tot",RooArgList(pdf_sig1,pdf_bkg),RooArgList(nSigMMKK,nBkgMMKK))
 
-    pdf_tot = RooGaussian("pdf_sig1","pdf_sig1",mm_mass,mean,sigma)
+    pdf_sig1 = RooGaussian("pdf_sig1","pdf_sig1",mm_mass,mean,sigma1)
+    pdf_sig2 = RooGaussian("pdf_sig2","pdf_sig2",mm_mass,mean,sigma2)
+    pdf_tot  = RooAddPdf("pdf_sig","pdf_sig",pdf_sig1,pdf_sig2,gFraMMKK)
 
     nfit = 0
 
