@@ -8,12 +8,12 @@
 
   // INPUT DATA SAMPLE ON LOCAL DISK
 
-  TDSet* dataset = new TDSet("TTree", "DiMuon KPi Tree", "rootupleKPi");
+  TDSet* dataset = new TDSet("TTree", "DiMuon PiK Tree", "rootuplePiK");
   //
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2mukpi_miniaod_17Nov2017_BCDEF_2017.root");
 
   // dataset->Add("/Users/adrianodiflorio/Documents/Git/X4140/ProofLite/Y4140_testrootuple.root");
-  TString selector = "/lustre/home/adrianodif/jpsiphi/analysis/utilities/skimmers/2mukpi/TwoMuKPiSkim";
+  TString selector = "/lustre/home/adrianodif/jpsiphi/analysis/utilities/skimmers/2mupik/TwoMuPiKSkim";
   TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
 
   // Processing

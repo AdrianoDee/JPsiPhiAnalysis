@@ -89,17 +89,21 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   fReader.SetEntry(entry);
 
   std::bitset<16> tt(*trigger);
-
-  bool phiM = (*ditrak_p4).M() > 1.00 && (*ditrak_p4).M() < 1.04;
+  std::bitset<16> dimuonTmatch(*dimuon_triggerMatch);
+  bool phiM = (*ditrak_p4).M() > 1.01 && (*ditrak_p4).M() < 1.03;
   bool jpsiM = (*dimuon_p4).M() > 3.00 && (*dimuon_p4).M() < 3.20;
-  bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.995;
-  bool vertexP = (*dimuonditrk_vProb) > 0.15;
-  bool jPT = (*dimuon_p4).Pt() > 2.0;
+  bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.997;
+  bool vertexP = (*dimuonditrk_vProb) > 0.2;
+  bool jPT = (*dimuon_p4).Pt() > 7.0;
+  bool pPT = (*ditrak_p4).Pt() > 1.0;
   bool theTrigger = (*trigger) > 0;
-
+  bool tMatchDimuon = dimuonTmatch.test(0);
+  bool isMatched = (*dimuon_triggerMatch)>0;
   bool triggerBit = tt.test(0);
-
-  if(theTrigger)// && phiM && jpsiM)// && jPT && phiM && triggerBit && jpsiM && cosAlpha && vertexP)
+  bool isBest = (*isBestCandidate);
+  if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT) 
+  //if(true)
+  //if(isBest )//&& phiM && jpsiM ) // && vertexP )// && cosAlpha) // && jPT && pPT)// && isMatched)
   {
     run_out =  *run;
     evt_out =  *event;
