@@ -281,10 +281,10 @@ if args.nofit and args.nofitkk:
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
 
-    leftlowside_kk = -6.*sigmaside_kk + kkMean.getValV()
-    leftupside_kk = -4.*sigmaside_kk + kkMean.getValV()
-    rightlowside_kk = +4.*sigmaside_kk + kkMean.getValV()
-    rightupside_kk = +6.*sigmaside_kk + kkMean.getValV()
+    leftlowside = -6.*sigmaside_kk + kkMean.getValV()
+    leftupside = -4.*sigmaside_kk + kkMean.getValV()
+    rightlowside = +4.*sigmaside_kk + kkMean.getValV()
+    rightupside = +6.*sigmaside_kk + kkMean.getValV()
 
     signallow = -3.*sigmaside_kk + kkMean.getValV()
     signalup = +3.*sigmaside_kk + kkMean.getValV()
@@ -301,11 +301,11 @@ if args.nofit and args.nofitkk:
     sigBkgEvts = signalIntegralBkg/totIntegralBkg*((nBkg.getValV()))
     sidBkgEvts = (leftsideIntegralBkg+rightsideIntegralBkg)/totIntegralBkg*((nBkg.getValV()))
 
-    leftsidedata = traKFitData.reduce("ttM<" + str(leftupside_kk))
-    leftsidedata = leftsidedata.reduce("ttM>" + str(leftlowside_kk))
+    leftsidedata = traKFitData.reduce("ttM<" + str(leftupside))
+    leftsidedata = leftsidedata.reduce("ttM>" + str(leftlowside))
 
-    rigthsidedata = traKFitData.reduce("ttM<" + str(rightupside_kk))
-    rigthsidedata = rigthsidedata.reduce("ttM>" + str(rightlowside_kk))
+    rigthsidedata = traKFitData.reduce("ttM<" + str(rightupside))
+    rigthsidedata = rigthsidedata.reduce("ttM>" + str(rightlowside))
 
     signaldata = traKFitData.reduce("ttM<" + str(signalup))
     signaldata = signaldata.reduce("ttM>" + str(signallow))
