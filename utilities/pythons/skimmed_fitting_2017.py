@@ -281,6 +281,43 @@ if args.nofit and args.nofitkk:
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
 
+    leftlowside_kk = -6.*sigmaside_kk + kkMean.getValV()
+    leftupside_kk = -4.*sigmaside_kk + kkMean.getValV()
+    rightlowside_kk = +4.*sigmaside_kk + kkMean.getValV()
+    rightupside_kk = +6.*sigmaside_kk + kkMean.getValV()
+
+    signallow = -3.*sigmaside_kk + kkMean.getValV()
+    signalup = +3.*sigmaside_kk + kkMean.getValV()
+
+    tt_mass.setRange("signalrange",signallow,signalup)
+    tt_mass.setRange("sideleftrange",leftlowside,leftupside)
+    tt_mass.setRange("siderightrange",rightlowside,rightupside)
+    signalIntegralBkg = kkBkg.analyticalIntegral(kkBkg.getAnalyticalIntegral(RooArgSet(tt_mass),RooArgSet(tt_mass)),"signalrange")
+    leftsideIntegralBkg = kkBkg.analyticalIntegral(kkBkg.getAnalyticalIntegral(RooArgSet(tt_mass),RooArgSet(tt_mass)),"sideleftrange")
+    rightsideIntegralBkg = kkBkg.analyticalIntegral(kkBkg.getAnalyticalIntegral(RooArgSet(tt_mass),RooArgSet(tt_mass)),"siderightrange")
+
+    totIntegralBkg = kkBkg.analyticalIntegral(kkBkg.getAnalyticalIntegral(RooArgSet(tt_mass),RooArgSet(tt_mass)))
+
+    sigBkgEvts = signalIntegralBkg/totIntegralBkg*((nBkg.getValV()))
+    sidBkgEvts = (leftsideIntegralBkg+rightsideIntegralBkg)/totIntegralBkg*((nBkg.getValV()))
+
+    leftsidedata = traKFitData.reduce("ttM<" + str(leftupside_kk))
+    leftsidedata = leftsidedata.reduce("ttM>" + str(leftlowside_kk))
+
+    rigthsidedata = traKFitData.reduce("ttM<" + str(rightupside_kk))
+    rigthsidedata = rigthsidedata.reduce("ttM>" + str(rightlowside_kk))
+
+    signaldata = traKFitData.reduce("ttM<" + str(signalup))
+    signaldata = signaldata.reduce("ttM>" + str(signallow))
+
+    signalhist    = (signaldata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_signal")
+    leftsidehist  = (leftsidedata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_left")
+    rightsidehist = (rigthsidedata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_right")
+    theRatio = sigBkgEvts/sidBkgEvts
+
+    leftsidehist.Scale(theRatio)
+    rightsidehist.Scale(theRatio)
+
     kkFrame = tt_mass.frame(Range(fitphimin+0.005,fitphimax-0.005))
 
     kkbins = RooBinning(-15,15)
@@ -294,6 +331,87 @@ if args.nofit and args.nofitkk:
 
     c.SaveAs("kk_Phi_fit" + region + ".png")
     c.SaveAs("kk_Phi_fit" + region + ".root")
+
+    signalhist.SetFillColor(kBlue)
+    signalhist.SetName("B_{0}^{s} Candidates Mass - CC")
+    signalhist.SetTitle("B_{0}^{s} Candidates Mass - CC; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
+    signalhist.GetYaxis().SetTitleOffset(1.3)
+    signalhist.SetMarkerColor(kBlue)
+    signalhist.SetFillStyle(3002)
+    signalhist.SetMarkerStyle(ROOT.kFullCircle)
+    signalhist.SetMarkerSize(0.5)
+    signalhist.SetLineColor(kBlue)
+
+    leftsidehist.SetFillColor(kRed)
+    #leftsidehist.SetMarkerColor(kBlack)
+    leftsidehist.SetFillStyle(3002)
+    leftsidehist.SetMarkerStyle(ROOT.kFullCircle)
+    leftsidehist.SetMarkerSize(0.5)
+    leftsidehist.SetLineColor(kBlack)
+
+    rightsidehist.SetFillColor(kGreen)
+    #rightsidehist.SetMarkerColor(kBlack)
+    rightsidehist.SetMarkerStyle(ROOT.kFullCircle)
+    rightsidehist.SetMarkerSize(0.5)
+    rightsidehist.SetLineColor(kBlack)
+    rightsidehist.SetFillStyle(3002)
+
+    signalhist.Draw("EBar")
+    side.SetFillColor(kGreen)
+    #rightsidehist.SetMarkerColor(kBlack)
+    side.SetMarkerStyle(ROOT.kFullCircle)
+    side.SetMarkerSize(0.5)
+    side.SetLineColor(kBlack)
+    side.SetFillStyle(3002)
+    #sideCW = leftsidehist.Clone()
+    #sideCW.Add(rightsidehist,+1.0)
+    #sideCW.SetFillColor(kRed)
+    #sideCW.SetFillStyle(3002)
+    #sideCW.Scale(2.0)
+    #sideCW.Draw("SAMEBar")
+    #rightsidehist.Draw("E0SAMEBar")
+    #leftsidehist.Draw("E0SAMEBar")
+    side.Draw("E0SAMEBar")
+
+    legend = TLegend(0.75,0.45,0.99,0.75)
+    legend.AddEntry(signalhist,"Signal region","f")
+    #legend.AddEntry(signalhist,"Signal region (-3.0#sigma,+3.0#sigma)","f")
+    #legend.AddEntry(rightsidehist,"R-sideband    (+4.0#sigma,+6.0#sigma)","f")
+    #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
+    legend.AddEntry(side,"Sidebands ","f")
+    legend.Draw()
+    c.SaveAs(signalhist.GetName() + "_sidebands.png")
+
+
+    # In[13]:
+
+
+    ROOT.gStyle.SetOptStat(0)
+    b0SideSub = signalhist.Clone()
+    b0SideSub.SetTitle("B_{0}^{s} Mass - #phi sides subtracted; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
+    b0SideSub.Add(leftsidehist,-1.0)
+    b0SideSub.Add(rightsidehist,-1.0)
+
+
+    # In[9]:
+
+
+    b0SideSub.SetFillColor(4004)
+    b0SideSub.SetFillStyle(3002)
+    b0SideSub.SetMarkerStyle(ROOT.kFullCircle)
+    b0SideSub.SetMarkerColor(kBlack)
+    b0SideSub.SetMarkerSize(0.8)
+    b0SideSub.SetLineColor(kBlack)
+    b0SideSub.Draw("E0")
+
+    linezero = TLine(b0SideSub.GetBinCenter(1),0.0,b0SideSub.GetBinCenter(b0SideSub.GetNbinsX()),0.0)
+    linezero.SetLineColor(kRed)
+    linezero.SetLineWidth(2)
+    linezero.SetLineStyle(kDotted)
+    linezero.Draw()
+    c.SaveAs(signalhist.GetName() + "_subtracted.png")
+
+
 
 if args.nofit and args.nofitb0:
 
@@ -429,13 +547,7 @@ if args.nofit and args.nofitmm:
 
 if args.dosidebands:
 
-    leftlowside_kk = -6.*sigmaside_kk + kkMean.getValV()
-    leftupside_kk = -4.*sigmaside_kk + kkMean.getValV()
-    rightlowside_kk = +4.*sigmaside_kk + kkMean.getValV()
-    rightupside_kk = +6.*sigmaside_kk + kkMean.getValV()
 
-    signallow = -3.*sigmaside_kk + kkMean.getValV()
-    signalup = +3.*sigmaside_kk + kkMean.getValV()
 
 
     # if not args.nofit or not args.nofitkk:
