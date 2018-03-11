@@ -226,12 +226,12 @@ if args.nofit and args.nofitkk:
     phimean = 1.019
     gammavalue = 0.01
 
-    fitphimin = 1.006
-    fitphimax = 1.034
+    fitphimin = 1.00
+    fitphimax = 1.04
 
     kkSigma = RooRealVar("#sigma","#sigma",0.0013)
     kkGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
-    kkMean = RooRealVar("mean","mean",phimean,phimean-0.007,phimean+0.007);
+    kkMean = RooRealVar("mean","mean",phimean,phimean-0.005,phimean+0.005);
 
     # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
     # B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
@@ -245,7 +245,7 @@ if args.nofit and args.nofitkk:
     a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
     a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
     a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
-    # a5 = RooRealVar("a5","a5",-0.000001,-2.,2.)
+    a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
     poliset = RooArgList(a0,a1,a2,a3,a4)
 
     # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
@@ -276,7 +276,7 @@ if args.nofit and args.nofitkk:
         # nfit +=1
 
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
-        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
 	nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
@@ -321,10 +321,10 @@ if args.nofit and args.nofitkk:
     sidehist = leftsidehist.Clone()
     sidehist.Add(rightsidehist)
 
-    kkFrame = tt_mass.frame(Range(fitphimin+0.005,fitphimax-0.005))
+    kkFrame = tt_mass.frame(Range(fitphimin,fitphimax))
 
     kkbins = RooBinning(-15,15)
-    kkbins.addUniform(30,fitphimin+0.005,fitphimax-0.005)
+    kkbins.addUniform(30,fitphimin,fitphimax)
     traKFitData.plotOn(kkFrame)
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
     traKFitData.plotOn(kkFrame)
