@@ -252,7 +252,8 @@ if args.nofit and args.nofitkk:
     nSigKK = RooRealVar("nSig","nSig",1E5,0.,10E6)
     nBkgKK = RooRealVar("nBkg","nBkg",5E5,0.,10E6)
 
-    kkSig = RooVoigtian("kkSig","kkSig",tt_mass,kkMean,kkGamma,kkSigma)
+    # kkSig = RooVoigtian("kkSig","kkSig",tt_mass,kkMean,kkGamma,kkSigma)
+    kkSig = RooGaussian("kkSig","kkSig",tt_mass,kkMean,kkGamma)#,kkSigma)
     #kkBkg = RooBernstein("kkBkg" , "kkBkg", tt_mass, RooArgList(B_1, B_2,B_3,B_4))#,B_5) )#,B_6))
     kkBkg = RooChebychev("kkBkg","Background",tt_mass,poliset)
     kkTot = RooAddPdf("kkTot","kkTot",RooArgList(kkSig,kkBkg),RooArgList(nSigKK,nBkgKK))
@@ -414,7 +415,22 @@ if args.nofit and args.nofitkk:
     linezero.Draw()
     c.SaveAs(signalhist.GetName() + "_subtracted.png")
 
+    splot   = RooStats.SPlot ( "sPlot","sPlot", theData, kkTot, RooArgList(nSigKK,nBkgKK))
 
+    dstree  = theData.store().tree()
+    dstree.GetEntryNumber(88)
+
+    sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 25, 4.00, 6.0)
+
+    sPlot_B0_hist.Sumw2()
+    sPlot_B0_hist.SetLineColor(2)
+    sPlot_B0_hist.SetMarkerColor(2);
+    sPlot_B0_hist.SetMinimum(0.)
+    dstree.Project('sPlot_B0_hist','xM','nSigKK_sw');
+
+    sPlot_B0_hist.Draw('e0');
+    c.SaveAs('b0_Splot_Phi.png')
+    c.SaveAs('b0_Splot_Phi.root')
 
 if args.nofit and args.nofitb0:
 
