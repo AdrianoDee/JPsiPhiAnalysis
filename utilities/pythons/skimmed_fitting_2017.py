@@ -426,7 +426,7 @@ if args.nofit and args.nofitkk:
     sPlot_B0_hist.SetLineColor(2)
     sPlot_B0_hist.SetMarkerColor(2);
     sPlot_B0_hist.SetMinimum(0.)
-    dstree.Project('sPlot_B0_hist','xM','nSigKK_sw');
+    dstree.Project('sPlot_B0_hist','xM','nSig_sw');
 
     sPlot_B0_hist.Draw('e0');
     c.SaveAs('b0_Splot_Phi.png')
