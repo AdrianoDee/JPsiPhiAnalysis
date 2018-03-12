@@ -249,8 +249,8 @@ if args.nofit and args.nofitkk:
     poliset = RooArgList(a0,a1,a2,a3,a4)
 
     # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
-    nSigKK = RooRealVar("nSig","nSig",1E5,0.,10E6)
-    nBkgKK = RooRealVar("nBkg","nBkg",5E5,0.,10E6)
+    nSigKK = RooRealVar("nSig","nSig",theData.numEntries()*0.3,0.0,theData.numEntries()*1.5)
+    nBkgKK = RooRealVar("nBkg","nBkg",theData.numEntries()*0.7,0.0,theData.numEntries()*1.5)
 
     # kkSig = RooVoigtian("kkSig","kkSig",tt_mass,kkMean,kkGamma,kkSigma)
     kkSig = RooGaussian("kkSig","kkSig",tt_mass,kkMean,kkGamma)#,kkSigma)
