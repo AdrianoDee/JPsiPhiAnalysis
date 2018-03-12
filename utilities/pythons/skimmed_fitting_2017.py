@@ -28,7 +28,7 @@ parser.add_argument('--noplot', action='store_false')
 parser.add_argument('--numcpu',  type=int, default=4)
 parser.add_argument('--nsignal', type=float, default=100000.)
 parser.add_argument('--ptcuts', type=float, default=None)
-parser.add_argument('--sigmaside', type=float, default=0.004247)
+parser.add_argument('--sigmaside', type=float, default=0.001)
 #                    help='number of epochs')
 #parser.add_argument('--batch_size', type=int, default=64)
 #
@@ -224,10 +224,10 @@ if args.nofit and args.nofitkk:
         traKFitData = theData.binnedClone("binnedTrakData")
 
     phimean = 1.019
-    gammavalue = 0.01
+    gammavalue = 0.0012
 
-    fitphimin = 1.00
-    fitphimax = 1.04
+    fitphimin = 1.01
+    fitphimax = 1.03
 
     kkSigma = RooRealVar("#sigma","#sigma",0.0013)
     kkGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
@@ -279,8 +279,13 @@ if args.nofit and args.nofitkk:
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
         kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
 	nfit +=1
+    else: 
+	nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
+    sigmaside_kk = kkGamma.getValV()
+    if debugging:
+	sigmaside_kk = 0.001
 
     leftlowside = -6.*sigmaside_kk + kkMean.getValV()
     leftupside = -4.*sigmaside_kk + kkMean.getValV()
@@ -302,20 +307,24 @@ if args.nofit and args.nofitkk:
     sigBkgEvts = signalIntegralBkg/totIntegralBkg*((nBkgKK.getValV()))
     sidBkgEvts = (leftsideIntegralBkg+rightsideIntegralBkg)/totIntegralBkg*((nBkgKK.getValV()))
 
-    leftsidedata = traKFitData.reduce("ttM<" + str(leftupside))
+    leftsidedata = theData.reduce("ttM<" + str(leftupside))
     leftsidedata = leftsidedata.reduce("ttM>" + str(leftlowside))
 
-    rigthsidedata = traKFitData.reduce("ttM<" + str(rightupside))
+    rigthsidedata = theData.reduce("ttM<" + str(rightupside))
     rigthsidedata = rigthsidedata.reduce("ttM>" + str(rightlowside))
 
-    signaldata = traKFitData.reduce("ttM<" + str(signalup))
+    signaldata = theData.reduce("ttM<" + str(signalup))
     signaldata = signaldata.reduce("ttM>" + str(signallow))
-
-    signalhist    = (signaldata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_signal")
-    leftsidehist  = (leftsidedata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_left")
-    rightsidehist = (rigthsidedata.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass_right")
+    
+    signalhist    = (signaldata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_signal")
+    leftsidehist  = (leftsidedata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_left")
+    rightsidehist = (rigthsidedata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_right")
     theRatio = sigBkgEvts/sidBkgEvts
-
+    
+    print(theRatio)
+    
+    print(signaldata.numEntries())
+    print(rigthsidedata.numEntries())
     leftsidehist.Scale(theRatio)
     rightsidehist.Scale(theRatio)
 
@@ -420,7 +429,7 @@ if args.nofit and args.nofitkk:
     dstree  = theData.store().tree()
     dstree.GetEntryNumber(88)
 
-    sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 25, 4.00, 6.0)
+    sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 2000, 4.00, 6.0)
 
     sPlot_B0_hist.Sumw2()
     sPlot_B0_hist.SetLineColor(2)
@@ -476,10 +485,10 @@ if args.nofit and args.nofitb0:
 
     nfit = 0
 
-    bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin+0.005,fitbZeromax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+    bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin,fitbZeromax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
-    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin+0.005,fitbZeromax-0.005))
+    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax))
 
     bZeroFitData.plotOn(bZeroFrame)
 
@@ -521,7 +530,7 @@ if args.nofit and args.nofitmm:
 
     mean = RooRealVar("m","m",3.09,3.06,3.1);
     sigma = RooRealVar("#sigma","#sigma",0.01,0.001,0.1);
-    sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.004,0.01);
+    sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.0011,0.001,0.1);
 
     # c0 = RooRealVar("p0","p0",0.001,-5.,5.)
     # c1 = RooRealVar("p1","p1",0.001,-4.,4.)
