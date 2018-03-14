@@ -32,6 +32,8 @@ public :
 
    std::vector<TH1F*> jspiCounters;
 
+   TH1F* jpsiAll;
+   
    int numtriggers = 16;
 
    // Readers to access the data (delete the ones you do not need).

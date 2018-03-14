@@ -63,9 +63,11 @@ void JPsiCount::SlaveBegin(TTree * /*tree*/)
    numtriggers = 16;
 
    for (int i = 0; i < numtriggers; i++) {
-     std::string name = "jpsi_vs_run " + std::to_string(i);
-     jspiCounters.push_back(new TH1F(name.data(),name.data()))
+     std::string name = "jpsi_vs_run_" + std::to_string(i);
+     jspiCounters.push_back(new TH1F(name.data(),name.data(),30000,290000,320000));
    }
+
+   jpsiAll = new TH1F("jpsi_vs_run_all","jpsi_vs_run_all",30000,290000,320000);
 
 }
 
@@ -87,6 +89,14 @@ Bool_t JPsiCount::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+   std::bitset<16> tt(*trigger);
+
+   jpsiAll->Fill(*run);
+
+   for (int i = 0; i < numtriggers; i++)
+     if(tt.test(i))
+      jspiCounters->Fill(*run);
+
    fReader.SetEntry(entry);
 
    return kTRUE;
@@ -97,6 +107,27 @@ void JPsiCount::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     for (int i = 0; i < numtriggers; i++)
+      jspiCounters->Write();
+
+     jpsiAll->Write();
+     
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
+
+
 
 }
 
