@@ -4,6 +4,7 @@
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
 
+
 // The following methods are defined in this file:
 //    Begin():        called every time a loop on the tree starts,
 //                    a convenient place to create your histograms.
@@ -18,15 +19,15 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// Root > T->Process("JPsiCount.C")
-// Root > T->Process("JPsiCount.C","some options")
-// Root > T->Process("JPsiCount.C+")
+// root> T->Process("JPsiCount.C")
+// root> T->Process("JPsiCount.C","some options")
+// root> T->Process("JPsiCount.C+")
 //
+
 
 #include "JPsiCount.h"
 #include <TH2.h>
 #include <TStyle.h>
-
 
 void JPsiCount::Begin(TTree * /*tree*/)
 {
@@ -35,7 +36,6 @@ void JPsiCount::Begin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
-
 }
 
 void JPsiCount::SlaveBegin(TTree * /*tree*/)
@@ -53,12 +53,10 @@ Bool_t JPsiCount::Process(Long64_t entry)
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
    // specifies which entry in the currently loaded tree is to be processed.
-   // It can be passed to either JPsiCount::GetEntry() or TBranch::GetEntry()
-   // to read either all or the required parts of the data. When processing
-   // keyed objects with PROOF, the object is already loaded and is available
-   // via the fObject pointer.
+   // When processing keyed objects with PROOF, the object is already loaded
+   // and is available via the fObject pointer.
    //
-   // This function should contain the "body" of the analysis. It can contain
+   // This function should contain the \"body\" of the analysis. It can contain
    // simple or elaborate selection criteria, run algorithms on the data
    // of the event and typically fill histograms.
    //
@@ -68,6 +66,7 @@ Bool_t JPsiCount::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+   fReader.SetEntry(entry);
 
    return kTRUE;
 }
