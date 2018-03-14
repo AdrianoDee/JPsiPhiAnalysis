@@ -13,6 +13,7 @@ import sys
 
 import argparse
 import math
+import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true')
@@ -29,18 +30,24 @@ parser.add_argument('--numcpu',  type=int, default=4)
 parser.add_argument('--nsignal', type=float, default=100000.)
 parser.add_argument('--ptcuts', type=float, default=None)
 parser.add_argument('--sigmaside', type=float, default=0.001)
+parser.add_argument('--signalside', type=float, default=3.0)
+parser.add_argument('--sidelow', type=float, default=4.0)
+parser.add_argument('--sidehigh', type=float, default=6.0)
+parser.add_argument('--binwise', type=int, default=None)
 #                    help='number of epochs')
 #parser.add_argument('--batch_size', type=int, default=64)
 #
 args = parser.parse_args()
 
-debugging = args.debug
-binnedfit = args.binned
-numcpus = args.numcpu
-sigmaside_kk = args.sigmaside
-
-region = "_overall_"
-cuts = "_"
+debugging       = args.debug
+binnedfit       = args.binned
+numcpus         = args.numcpu
+sigmaside_kk    = args.sigmaside
+signalside      = args.signalside
+sidelow         = args.sidelow
+sidehigh        = args.sidehigh
+region          = "_overall_"
+cuts            = "_"
 
 if(args.prompt and args.nonprompt):
     print("Exiting. Choose prompt or nonprompt.")
@@ -235,7 +242,7 @@ if args.nofit and args.nofitkk:
 
     kkSigma = RooRealVar("#sigma","#sigma",0.0013)
     kkGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
-    kkMean = RooRealVar("mean","mean",phimean,phimean-0.005,phimean+0.005);
+    kkMean = RooRealVar("m_{kk}","m_{kk}",phimean,phimean-0.005,phimean+0.005);
 
     # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
     # B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
@@ -282,22 +289,22 @@ if args.nofit and args.nofitkk:
 
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
         kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
-	nfit +=1
+	    nfit +=1
     else:
-	nfit +=1
+        nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
     sigmaside_kk = kkGamma.getValV()
     if debugging:
-	sigmaside_kk = 0.001
+	       sigmaside_kk = 0.001
 
-    leftlowside = -6.*sigmaside_kk + kkMean.getValV()
-    leftupside = -4.*sigmaside_kk + kkMean.getValV()
-    rightlowside = +4.*sigmaside_kk + kkMean.getValV()
-    rightupside = +6.*sigmaside_kk + kkMean.getValV()
+    leftlowside = -signalside.*sigmaside_kk + kkMean.getValV()
+    leftupside = -sidelow*sigmaside_kk + kkMean.getValV()
+    rightlowside = +sidehigh*sigmaside_kk + kkMean.getValV()
+    rightupside = +sidehigh*sigmaside_kk + kkMean.getValV()
 
-    signallow = -3.*sigmaside_kk + kkMean.getValV()
-    signalup = +3.*sigmaside_kk + kkMean.getValV()
+    signallow = -signalside*sigmaside_kk + kkMean.getValV()
+    signalup = +signalside*sigmaside_kk + kkMean.getValV()
 
     tt_mass.setRange("signalrange",signallow,signalup)
     tt_mass.setRange("sideleftrange",leftlowside,leftupside)
@@ -337,8 +344,8 @@ if args.nofit and args.nofitkk:
 
     kkFrame = tt_mass.frame(Range(fitphimin,fitphimax))
 
-    kkbins = RooBinning(-15,15)
-    kkbins.addUniform(30,fitphimin,fitphimax)
+    # kkbins = RooBinning(-15,15)
+    # kkbins.addUniform(30,fitphimin,fitphimax)
     traKFitData.plotOn(kkFrame)
     kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
     traKFitData.plotOn(kkFrame)
@@ -400,19 +407,11 @@ if args.nofit and args.nofitkk:
     c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".png")
     c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".root")
 
-
-    # In[13]:
-
-
     ROOT.gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
     b0SideSub.SetTitle("B_{0}^{s} Mass - #phi sides subtracted; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
     b0SideSub.Add(leftsidehist,-1.0)
     b0SideSub.Add(rightsidehist,-1.0)
-
-
-    # In[9]:
-
 
     b0SideSub.SetFillColor(4004)
     b0SideSub.SetFillStyle(3002)
@@ -463,7 +462,7 @@ if args.nofit and args.nofitb0:
 
     bZeroFitData = (bZeroFitData.reduce("xM<5.55")).reduce("xM>5.15")
 
-    mean = RooRealVar("m_{L3}","m_{L3}",5.35,5.2,5.4);
+    mean = RooRealVar("m_{#mu#mukk}","m_{#mu#mukk}",5.35,5.2,5.4);
     sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.1);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.0005,0.1);
 
@@ -521,6 +520,17 @@ if args.nofit and args.nofitb0:
     bcanvas.SaveAs("b0_MM" + region + ".png")
     bcanvas.SaveAs("b0_MM" + region + ".root")
 
+if args.binwise is not None:
+
+    _,bins,_ = plt.hist([],range=[xmin,xmax],bins=args.binwise)
+    for i in range(len(bins)-1):
+        lowedge = bins[i]
+        upedge  = bins[i+1]
+
+        thisData = theData.reduce("xM"<str(upedge)).reduce("xM">str(upedge))
+
+        print("Range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
+
 
 if args.nofit and args.nofitmm:
 
@@ -536,7 +546,7 @@ if args.nofit and args.nofitmm:
         jPsiFitData = theData.binnedClone("binnedTrakData")
 
     mean = RooRealVar("m","m",3.09,3.06,3.1);
-    sigma = RooRealVar("#sigma","#sigma",0.01,0.001,0.1);
+    sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.01,0.001,0.1);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.0011,0.001,0.1);
 
     # c0 = RooRealVar("p0","p0",0.001,-5.,5.)
