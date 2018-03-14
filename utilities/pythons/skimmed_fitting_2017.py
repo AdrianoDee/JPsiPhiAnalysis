@@ -506,8 +506,8 @@ if args.nofit and args.nofitb0:
     bZeroFitData.plotOn(bZeroFrame)
 
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)))
-    bZeroFitData.plotOn(bZeroFrame)
-    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99))
+    bZeroFitData.plotOn(bZeroFrame,Name("Data"))
+    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99),Name("Pdf"))
 
     bZeroFrame.Draw()
 
@@ -540,10 +540,11 @@ if args.nofit and args.nofitb0:
 
 if args.binwise is not None:
 
-    _,bins,_ = plt.hist([],range=[xmin,xmax],bins=args.binwise)
+    #_,bins,_ = plt.hist([],range=[xmin,xmax],bins=args.binwise)
+    step = (xmax - xmin)/(float(args.binwise))
     for i in range(len(bins)-1):
-        lowedge = bins[i]
-        upedge  = bins[i+1]
+        lowedge = step * i #bins[i]
+        upedge  = step * i + step#bins[i+1]
 
         thisData = theData.reduce("xM"<str(upedge)).reduce("xM">str(upedge))
 
