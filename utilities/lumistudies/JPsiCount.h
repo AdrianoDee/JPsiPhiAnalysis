@@ -8,6 +8,8 @@
 #ifndef JPsiCount_h
 #define JPsiCount_h
 
+#include <TH1F.h>
+#include <TH1.h>
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
@@ -15,6 +17,8 @@
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
 
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
@@ -25,6 +29,10 @@ class JPsiCount : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   std::vector<TH1F*> jspiCounters;
+
+   int numtriggers = 16;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<UInt_t> run = {fReader, "run"};
@@ -66,6 +74,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(JPsiCount,0);
 

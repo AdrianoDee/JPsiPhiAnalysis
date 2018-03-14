@@ -27,7 +27,11 @@
 
 #include "JPsiCount.h"
 #include <TH2.h>
+#include <TH1.h>
 #include <TStyle.h>
+
+#include <bitset>
+
 
 void JPsiCount::Begin(TTree * /*tree*/)
 {
@@ -45,6 +49,23 @@ void JPsiCount::SlaveBegin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
+
+   TString option = GetOption();
+
+   std::string outputString = "jpsi_vs_runs.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   numtriggers = 16;
+
+   for (int i = 0; i < numtriggers; i++) {
+     std::string name = "jpsi_vs_run " + std::to_string(i);
+     jspiCounters.push_back(new TH1F(name.data(),name.data()))
+   }
 
 }
 

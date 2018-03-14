@@ -543,8 +543,8 @@ if args.binwise is not None:
     #_,bins,_ = plt.hist([],range=[xmin,xmax],bins=args.binwise)
     step = (xmax - xmin)/(float(args.binwise))
     for i in range(args.binwise-1):
-        lowedge = step * i #bins[i]
-        upedge  = step * i + step #bins[i+1]
+        lowedge = step * i + xmin #bins[i]
+        upedge  = step * i + step + xmin #bins[i+1]
 
         thisData = theData.reduce("xM<" + str(upedge)).reduce("xM>" + str(upedge))
 
