@@ -546,7 +546,7 @@ if args.binwise is not None:
         lowedge = step * i #bins[i]
         upedge  = step * i + step #bins[i+1]
 
-        thisData = theData.reduce("xM"<str(upedge)).reduce("xM">str(upedge))
+        thisData = theData.reduce("xM<" + str(upedge)).reduce("xM>" + str(upedge))
 
         print("Range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 

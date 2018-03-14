@@ -102,8 +102,8 @@ Bool_t TwoMuTwoKSkim::Process(Long64_t entry)
   bool triggerBit = tt.test(0);
   bool isBest = (*isBestCandidate);
   if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT)
-  //if(true)
-  //if(isBest )//&& phiM && jpsiM ) // && vertexP )// && cosAlpha) // && jPT && pPT)// && isMatched)
+
+
   {
     run_out =  *run;
     evt_out =  *event;
