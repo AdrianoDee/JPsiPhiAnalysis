@@ -511,8 +511,8 @@ if args.nofit and args.nofitb0:
 
     bZeroFrame.Draw()
 
-    hpull = massFrame.pullHist("fitB0Data","pdf_tot")
-    pullframe = mass.frame(Title("Pull Distribution"))
+    hpull = bZeroFrame.pullHist("fitB0Data","pdf_tot")
+    pullframe = mmtt_mass.frame(Title("Pull Distribution"))
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
     ROOT.gStyle.SetTitleFontSize(0.07)
