@@ -279,7 +279,7 @@ if args.nofit and args.nofitkk:
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
         kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
 	nfit +=1
-    else: 
+    else:
 	nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
@@ -315,14 +315,14 @@ if args.nofit and args.nofitkk:
 
     signaldata = theData.reduce("ttM<" + str(signalup))
     signaldata = signaldata.reduce("ttM>" + str(signallow))
-    
+
     signalhist    = (signaldata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_signal")
     leftsidehist  = (leftsidedata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_left")
     rightsidehist = (rigthsidedata.createHistogram(mmtt_mass,mmtt_mass,200,100)).ProjectionX("hist_mmtt_mass_right")
     theRatio = sigBkgEvts/sidBkgEvts
-    
+
     print(theRatio)
-    
+
     print(signaldata.numEntries())
     print(rigthsidedata.numEntries())
     leftsidehist.Scale(theRatio)
@@ -393,7 +393,8 @@ if args.nofit and args.nofitkk:
     #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
     legend.AddEntry(sidehist,"Sidebands ","f")
     legend.Draw()
-    c.SaveAs(signalhist.GetName() + "_sidebands.png")
+    c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".png")
+    c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".root")
 
 
     # In[13]:
@@ -422,7 +423,9 @@ if args.nofit and args.nofitkk:
     linezero.SetLineWidth(2)
     linezero.SetLineStyle(kDotted)
     linezero.Draw()
-    c.SaveAs(signalhist.GetName() + "_subtracted.png")
+    c.SaveAs(signalhist.GetName() + "_subtracted" + region + ".png")
+    c.SaveAs(signalhist.GetName() + "_subtracted" + region + ".root")
+
 
     splot   = RooStats.SPlot ( "sPlot","sPlot", theData, kkTot, RooArgList(nSigKK,nBkgKK))
 
@@ -438,8 +441,8 @@ if args.nofit and args.nofitkk:
     dstree.Project('sPlot_B0_hist','xM','nSig_sw');
 
     sPlot_B0_hist.Draw('e0');
-    c.SaveAs('b0_Splot_Phi.png')
-    c.SaveAs('b0_Splot_Phi.root')
+    c.SaveAs('b0_Splot_Phi' + region + '.png')
+    c.SaveAs('b0_Splot_Phi' + region + '.root')
 
 if args.nofit and args.nofitb0:
 
