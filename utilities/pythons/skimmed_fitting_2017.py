@@ -78,7 +78,7 @@ bZeromin = 5.15
 bZeromax = 5.55
 
 ptmin = 0.0
-ptmax = 100.0
+ptmax = 10000.0
 
 tt_mass = RooRealVar("ttM","ttM",phimin,phimax)
 mm_mass = RooRealVar("mmM","mmM",jpsimin,jpsimax)
@@ -190,6 +190,7 @@ if args.noplot:
     ##PT hists
 
     hist_tt_pt.SetTitle("P_t(KK)" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
     hist_tt_pt.SetFillColor(ROOT.kBlue)
     hist_tt_pt.SetLineColor(ROOT.kBlue)
     hist_tt_pt.SetFillStyle(3003)
@@ -198,6 +199,7 @@ if args.noplot:
     c.SaveAs("tt_pt_histo" + region + ".root")
 
     hist_mm_pt.SetTitle("P_t(#mu#mu)" + region + " ;Pt(#mu#mu) [GeV]; no. entries")
+    hist_mm_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mm_pt.SetFillColor(ROOT.kGreen)
     hist_mm_pt.SetLineColor(ROOT.kGreen)
     hist_mm_pt.SetFillStyle(3003)
@@ -205,13 +207,14 @@ if args.noplot:
     c.SaveAs("mm_pt_histo" + region + ".png")
     c.SaveAs("mm_pt_histo" + region + ".root")
 
-    hist_tt_pt.SetTitle("P_t(#mu#muKK)" + region + " ;Pt(#mu#muKK) [GeV]; no. entries")
-    hist_tt_pt.SetFillColor(ROOT.kRed)
-    hist_tt_pt.SetLineColor(ROOT.kRed)
-    hist_tt_pt.SetFillStyle(3003)
-    hist_tt_pt.Draw()
-    c.SaveAs("tt_pt_histo" + region + ".png")
-    c.SaveAs("tt_pt_histo" + region + ".root")
+    hist_mmtt_pt.SetTitle("P_t(#mu#muKK)" + region + " ;Pt(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt_pt.GetXaxis().SetRangeUser(0.0,90.0)
+    hist_mmtt_pt.SetFillColor(ROOT.kRed)
+    hist_mmtt_pt.SetLineColor(ROOT.kRed)
+    hist_mmtt_pt.SetFillStyle(3003)
+    hist_mmtt_pt.Draw()
+    c.SaveAs("mmtt_pt_histo" + region + ".png")
+    c.SaveAs("mmtt_pt_histo" + region + ".root")
 
 if args.nofit and args.nofitkk:
 
