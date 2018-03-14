@@ -289,7 +289,7 @@ if args.nofit and args.nofitkk:
 
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
         kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
-	    nfit +=1
+        nfit +=1
     else:
         nfit +=1
 
@@ -298,7 +298,7 @@ if args.nofit and args.nofitkk:
     if debugging:
 	       sigmaside_kk = 0.001
 
-    leftlowside = -signalside.*sigmaside_kk + kkMean.getValV()
+    leftlowside = -signalside*sigmaside_kk + kkMean.getValV()
     leftupside = -sidelow*sigmaside_kk + kkMean.getValV()
     rightlowside = +sidehigh*sigmaside_kk + kkMean.getValV()
     rightupside = +sidehigh*sigmaside_kk + kkMean.getValV()
