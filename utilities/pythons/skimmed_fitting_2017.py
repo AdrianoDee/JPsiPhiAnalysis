@@ -180,6 +180,7 @@ if args.noplot:
     c.SaveAs("mm_mass_histo" + region + ".root")
 
     hist_tt.SetTitle("M(KK)" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt.GetXaxis().SetRangeUser(1.0,1.05)
     hist_tt.SetFillColor(ROOT.kBlue)
     hist_tt.SetLineColor(ROOT.kBlue)
     hist_tt.SetFillStyle(3002)
