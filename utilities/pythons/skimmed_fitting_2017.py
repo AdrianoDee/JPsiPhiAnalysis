@@ -451,6 +451,13 @@ if args.nofit and args.nofitb0:
 
     bcanvas = TCanvas("bcanvas","bcanvas",1400,800)
 
+    pullpad = TPad("pullpad","pullpad",0.0,0.05,1.0,0.33)
+    plotpad = TPad("histopad","histopad",0.0,0.35,1.0,1.0)
+    plotpad.SetFillStyle(4004)
+    pullpad.SetFillStyle(4004)
+    plotpad.Draw()
+    pullpad.Draw()
+
     bZeroFitData = theData.Clone("fitB0Data")
 
     fitbZeromin = 5.15
@@ -503,6 +510,17 @@ if args.nofit and args.nofitb0:
     pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99))
 
     bZeroFrame.Draw()
+
+    hpull = massFrame.pullHist("fitB0Data","pdf_tot")
+    pullframe = mass.frame(Title("Pull Distribution"))
+    #pullframe.GetXaxis().SetTitleSize(0.04)
+    #pullframe.GetYaxis().SetTitleSize(0.03)
+    ROOT.gStyle.SetTitleFontSize(0.07)
+    pullpad.cd()
+    pullframe.addPlotable(hpull,"P")
+    pullframe.Draw()
+
+    plotpad.cd()
 
     gPad.SetRightMargin(0.1)
     bcanvas.SaveAs("b0_fit" + region + ".png")
