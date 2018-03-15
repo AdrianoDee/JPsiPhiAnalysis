@@ -1,11 +1,9 @@
-from array import array
-
 import sys
-
 import argparse
 import math
 import matplotlib.pyplot as plt
 import os
+from array import array
 
 import ROOT
 
@@ -13,14 +11,16 @@ from ROOT import TLine, TLegend, TPad
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
 from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
-from ROOT.RooAbsReal import Relative
 from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf
 from ROOT import RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein,RooVoigtian
-from ROOT import RooFit
+from ROOT import RooFit, kTrue, kFalse, gStyle, kFullCircle
+
 from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, PrintLevel
 from ROOT.RooFit import Format, Label, Parameters, Range, LineColor, LineStyle, SelectVars
+
+from ROOT.RooAbsReal import Relative
 
 RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
 
@@ -173,16 +173,16 @@ if args.noplot:
     ##Masses hists
 
     hist_mmtt.SetTitle("M(#mu#muKK) " + region + " ;M(#mu#muKK) [GeV]; no. entries")
-    hist_mmtt.SetFillColor(ROOT.kRed)
-    hist_mmtt.SetLineColor(ROOT.kRed)
+    hist_mmtt.SetFillColor(kRed)
+    hist_mmtt.SetLineColor(kRed)
     hist_mmtt.SetFillStyle(3002)
     hist_mmtt.Draw()
     c.SaveAs(region + "/mmtt_mass_histo_" + region + ".png")
     c.SaveAs(region + "/mmtt_mass_histo_" + region + ".root")
 
     hist_mm.SetTitle("M(#mu#mu) " + region + " ;M(#mu#mu) [GeV]; no. entries")
-    hist_mm.SetFillColor(ROOT.kGreen)
-    hist_mm.SetLineColor(ROOT.kGreen)
+    hist_mm.SetFillColor(kGreen)
+    hist_mm.SetLineColor(kGreen)
     hist_mm.SetFillStyle(3002)
     hist_mm.Draw()
     c.SaveAs(region + "/mm_mass_histo_" + region + ".png")
@@ -190,8 +190,8 @@ if args.noplot:
 
     hist_tt.SetTitle("M(KK) " + region + " ;M(KK) [GeV]; no. entries")
     hist_tt.GetXaxis().SetRangeUser(1.0,1.05)
-    hist_tt.SetFillColor(ROOT.kBlue)
-    hist_tt.SetLineColor(ROOT.kBlue)
+    hist_tt.SetFillColor(kBlue)
+    hist_tt.SetLineColor(kBlue)
     hist_tt.SetFillStyle(3002)
     hist_tt.Draw()
     c.SaveAs(region + "/tt_mass_histo_" + region + ".png")
@@ -201,8 +201,8 @@ if args.noplot:
 
     hist_tt_pt.SetTitle("p_t(KK) " + region + " ;p_t(KK) [GeV]; no. entries")
     hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
-    hist_tt_pt.SetFillColor(ROOT.kBlue)
-    hist_tt_pt.SetLineColor(ROOT.kBlue)
+    hist_tt_pt.SetFillColor(kBlue)
+    hist_tt_pt.SetLineColor(kBlue)
     hist_tt_pt.SetFillStyle(3003)
     hist_tt_pt.Draw()
     c.SaveAs(region + "/tt_pt_histo_" + region + ".png")
@@ -210,8 +210,8 @@ if args.noplot:
 
     hist_mm_pt.SetTitle("p_t(#mu#mu) " + region + " ;p_t(#mu#mu) [GeV]; no. entries")
     hist_mm_pt.GetXaxis().SetRangeUser(0.0,90.0)
-    hist_mm_pt.SetFillColor(ROOT.kGreen)
-    hist_mm_pt.SetLineColor(ROOT.kGreen)
+    hist_mm_pt.SetFillColor(kGreen)
+    hist_mm_pt.SetLineColor(kGreen)
     hist_mm_pt.SetFillStyle(3003)
     hist_mm_pt.Draw()
     c.SaveAs(region + "/mm_pt_histo_" + region + ".png")
@@ -219,8 +219,8 @@ if args.noplot:
 
     hist_mmtt_pt.SetTitle("p_t(#mu#muKK) " + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
     hist_mmtt_pt.GetXaxis().SetRangeUser(0.0,90.0)
-    hist_mmtt_pt.SetFillColor(ROOT.kRed)
-    hist_mmtt_pt.SetLineColor(ROOT.kRed)
+    hist_mmtt_pt.SetFillColor(kRed)
+    hist_mmtt_pt.SetLineColor(kRed)
     hist_mmtt_pt.SetFillStyle(3003)
     hist_mmtt_pt.Draw()
     c.SaveAs(region + "/mmtt_pt_histo_" + region + ".png")
@@ -280,8 +280,8 @@ if args.nofit and args.nofitkk:
     kkBkg = RooChebychev("kkBkg","Background",tt_mass,poliset)
     kkTot = RooAddPdf("kkTot","kkTot",RooArgList(kkSig,kkBkg),RooArgList(nSigKK,nBkgKK))
 
-    kkGamma.setConstant(ROOT.kTRUE)
-    kkMean.setConstant(ROOT.kTRUE)
+    kkGamma.setConstant(kTrue)
+    kkMean.setConstant(kTrue)
 
     nfit = 0
 
@@ -290,11 +290,11 @@ if args.nofit and args.nofitkk:
 
     if not debugging:
 
-        kkMean.setConstant(ROOT.kFALSE)
+        kkMean.setConstant(kFalse)
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
         # nfit +=1
 
-        kkGamma.setConstant(ROOT.kFALSE)
+        kkGamma.setConstant(kFalse)
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
         # nfit +=1
 
@@ -372,7 +372,7 @@ if args.nofit and args.nofitkk:
     pullframe.SetAxisRange (-5.0,5.0,"Y")
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
-    ROOT.gStyle.SetTitleFontSize(0.07)
+    gStyle.SetTitleFontSize(0.07)
     pullframe.addPlotable(hpull,"P")
     pullframe.Draw()
 
@@ -396,20 +396,20 @@ if args.nofit and args.nofitkk:
     signalhist.GetYaxis().SetTitleOffset(1.3)
     signalhist.SetMarkerColor(kBlue)
     signalhist.SetFillStyle(3002)
-    signalhist.SetMarkerStyle(ROOT.kFullCircle)
+    signalhist.SetMarkerStyle(kFullCircle)
     signalhist.SetMarkerSize(0.5)
     signalhist.SetLineColor(kBlue)
 
     leftsidehist.SetFillColor(kRed)
     #leftsidehist.SetMarkerColor(kBlack)
     leftsidehist.SetFillStyle(3002)
-    leftsidehist.SetMarkerStyle(ROOT.kFullCircle)
+    leftsidehist.SetMarkerStyle(kFullCircle)
     leftsidehist.SetMarkerSize(0.5)
     leftsidehist.SetLineColor(kBlack)
 
     rightsidehist.SetFillColor(kGreen)
     #rightsidehist.SetMarkerColor(kBlack)
-    rightsidehist.SetMarkerStyle(ROOT.kFullCircle)
+    rightsidehist.SetMarkerStyle(kFullCircle)
     rightsidehist.SetMarkerSize(0.5)
     rightsidehist.SetLineColor(kBlack)
     rightsidehist.SetFillStyle(3002)
@@ -417,7 +417,7 @@ if args.nofit and args.nofitkk:
     signalhist.Draw("EBar")
     sidehist.SetFillColor(kGreen)
     #rightsidehist.SetMarkerColor(kBlack)
-    sidehist.SetMarkerStyle(ROOT.kFullCircle)
+    sidehist.SetMarkerStyle(kFullCircle)
     sidehist.SetMarkerSize(0.5)
     sidehist.SetLineColor(kBlack)
     sidehist.SetFillStyle(3002)
@@ -441,7 +441,7 @@ if args.nofit and args.nofitkk:
     kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".png")
     kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".root")
 
-    ROOT.gStyle.SetOptStat(0)
+    gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
     b0SideSub.SetTitle("#mu#muKK Mass - #phi sides subtracted " + region + "; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
     b0SideSub.Add(leftsidehist,-1.0)
@@ -449,7 +449,7 @@ if args.nofit and args.nofitkk:
 
     b0SideSub.SetFillColor(4004)
     b0SideSub.SetFillStyle(3002)
-    b0SideSub.SetMarkerStyle(ROOT.kFullCircle)
+    b0SideSub.SetMarkerStyle(kFullCircle)
     b0SideSub.SetMarkerColor(kBlack)
     b0SideSub.SetMarkerSize(0.8)
     b0SideSub.SetLineColor(kBlack)
@@ -532,6 +532,19 @@ if args.nofit and args.nofitb0:
 
     nfit = 0
 
+    if debugging:
+        mean.setConstant(kTrue)
+        sigma1.setConstant(kTrue)
+        sigma2.setConstant(kTrue)
+        gFraMMKK.setConstant(kTrue)
+        c0.setConstant(kTrue)
+        c1.setConstant(kTrue)
+        c2.setConstant(kTrue)
+        c3.setConstant(kTrue)
+        c4.setConstant(kTrue)
+        c5.setConstant(kTrue)
+        c6.setConstant(kTrue)
+
     bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin,fitbZeromax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
@@ -555,7 +568,7 @@ if args.nofit and args.nofitb0:
     pullframe.SetAxisRange (-5.0,5.0,"Y")
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
-    ROOT.gStyle.SetTitleFontSize(0.07)
+    gStyle.SetTitleFontSize(0.07)
     pullframe.addPlotable(hpull,"P")
     pullframe.Draw()
 
@@ -650,14 +663,14 @@ if args.binwise is not None:
         binwTot = RooAddPdf("binwTot","binwTot",RooArgList(binwSig,binwBkg),RooArgList(nSigBinW,nBkgBinW))
 
         if debugging:
-            binwGamma.setConstant(ROOT.kTRUE)
-            binwMean.setConstant(ROOT.kTRUE)
-            a0.setConstant(ROOT.kTRUE)
-            a1.setConstant(ROOT.kTRUE)
-            a2.setConstant(ROOT.kTRUE)
-            a3.setConstant(ROOT.kTRUE)
-            a4.setConstant(ROOT.kTRUE)
-            a5.setConstant(ROOT.kTRUE)
+            binwGamma.setConstant(kTrue)
+            binwMean.setConstant(kTrue)
+            a0.setConstant(kTrue)
+            a1.setConstant(kTrue)
+            a2.setConstant(kTrue)
+            a3.setConstant(kTrue)
+            a4.setConstant(kTrue)
+            a5.setConstant(kTrue)
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
         print(binw_x_hist.GetBinCenter(i+1))
@@ -681,7 +694,7 @@ if args.binwise is not None:
         pullframe.SetAxisRange (-5.0,5.0,"Y")
         #pullframe.GetXaxis().SetTitleSize(0.04)
         #pullframe.GetYaxis().SetTitleSize(0.03)
-        ROOT.gStyle.SetTitleFontSize(0.07)
+        gStyle.SetTitleFontSize(0.07)
         pullframe.addPlotable(hpull,"P")
         pullframe.Draw()
 
