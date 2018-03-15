@@ -91,15 +91,15 @@ bZeromax = 5.55
 ptmin = 0.0
 ptmax = 10000.0
 
-tt_mass = RooRealVar("ttM","ttM;m(KK)[GeV]",phimin,phimax)
-mm_mass = RooRealVar("mmM","mmM;m(#mu#mu)[GeV]",jpsimin,jpsimax)
-mmtt_mass = RooRealVar("xM","xM;m(#mu#muKK)[GeV]",xmin,xmax)
+tt_mass = RooRealVar("ttM","ttM" + region + "m(KK)[GeV]",phimin,phimax)
+mm_mass = RooRealVar("mmM","mmM" + region + "m(#mu#mu)[GeV]",jpsimin,jpsimax)
+mmtt_mass = RooRealVar("xM","xM" + region + "m(#mu#muKK)[GeV]",xmin,xmax)
 
-tt_pt = RooRealVar("ttPt","ttPt;p_{t}(KK)[GeV]",0.0,ptmax)
-mm_pt = RooRealVar("mmPt","mmPt;p{t}(#mu#mu)[GeV]",0.0,ptmax)
-mmtt_pt = RooRealVar("xPt","xPt;p_{t}(#mu#muKK)[GeV]",0.0,ptmax)
+tt_pt = RooRealVar("ttPt","ttPt" + region + "p_{t}(KK)[GeV]",0.0,ptmax)
+mm_pt = RooRealVar("mmPt","mmPt" + region + "p{t}(#mu#mu)[GeV]",0.0,ptmax)
+mmtt_pt = RooRealVar("xPt","xPt" + region + "p_{t}(#mu#muKK)[GeV]",0.0,ptmax)
 
-lxysig = RooRealVar("xL","l_{xy} sign.;l_{xy} / #sigma(l_{xy})",0.0,1000.0)
+lxysig = RooRealVar("xL","l_{xy} sign." + region + "l_{xy} / #sigma(l_{xy})",0.0,1000.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
@@ -172,7 +172,7 @@ if args.noplot:
 
     ##Masses hists
 
-    hist_mmtt.SetTitle("M(#mu#muKK)_" + region + " ;M(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt.SetTitle("M(#mu#muKK) " + region + " ;M(#mu#muKK) [GeV]; no. entries")
     hist_mmtt.SetFillColor(ROOT.kRed)
     hist_mmtt.SetLineColor(ROOT.kRed)
     hist_mmtt.SetFillStyle(3002)
@@ -180,7 +180,7 @@ if args.noplot:
     c.SaveAs(region + "/mmtt_mass_histo_" + region + ".png")
     c.SaveAs(region + "/mmtt_mass_histo_" + region + ".root")
 
-    hist_mm.SetTitle("M(#mu#mu)_" + region + " ;M(#mu#mu) [GeV]; no. entries")
+    hist_mm.SetTitle("M(#mu#mu) " + region + " ;M(#mu#mu) [GeV]; no. entries")
     hist_mm.SetFillColor(ROOT.kGreen)
     hist_mm.SetLineColor(ROOT.kGreen)
     hist_mm.SetFillStyle(3002)
@@ -188,7 +188,7 @@ if args.noplot:
     c.SaveAs(region + "/mm_mass_histo_" + region + ".png")
     c.SaveAs(region + "/mm_mass_histo_" + region + ".root")
 
-    hist_tt.SetTitle("M(KK)_" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt.SetTitle("M(KK) " + region + " ;M(KK) [GeV]; no. entries")
     hist_tt.GetXaxis().SetRangeUser(1.0,1.05)
     hist_tt.SetFillColor(ROOT.kBlue)
     hist_tt.SetLineColor(ROOT.kBlue)
@@ -199,7 +199,7 @@ if args.noplot:
 
     ##PT hists
 
-    hist_tt_pt.SetTitle("p_t(KK)_" + region + " ;p_t(KK) [GeV]; no. entries")
+    hist_tt_pt.SetTitle("p_t(KK) " + region + " ;p_t(KK) [GeV]; no. entries")
     hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
     hist_tt_pt.SetFillColor(ROOT.kBlue)
     hist_tt_pt.SetLineColor(ROOT.kBlue)
@@ -208,7 +208,7 @@ if args.noplot:
     c.SaveAs(region + "/tt_pt_histo_" + region + ".png")
     c.SaveAs(region + "/tt_pt_histo_" + region + ".root")
 
-    hist_mm_pt.SetTitle("p_t(#mu#mu)_" + region + " ;p_t(#mu#mu) [GeV]; no. entries")
+    hist_mm_pt.SetTitle("p_t(#mu#mu) " + region + " ;p_t(#mu#mu) [GeV]; no. entries")
     hist_mm_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mm_pt.SetFillColor(ROOT.kGreen)
     hist_mm_pt.SetLineColor(ROOT.kGreen)
@@ -217,7 +217,7 @@ if args.noplot:
     c.SaveAs(region + "/mm_pt_histo_" + region + ".png")
     c.SaveAs(region + "/mm_pt_histo_" + region + ".root")
 
-    hist_mmtt_pt.SetTitle("p_t(#mu#muKK)_" + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt_pt.SetTitle("p_t(#mu#muKK) " + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
     hist_mmtt_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mmtt_pt.SetFillColor(ROOT.kRed)
     hist_mmtt_pt.SetLineColor(ROOT.kRed)
@@ -391,8 +391,8 @@ if args.nofit and args.nofitkk:
     kcanvas.Clear()
 
     signalhist.SetFillColor(kBlue)
-    signalhist.SetName("B_{0}^{s} Candidates Mass - CC")
-    signalhist.SetTitle("B_{0}^{s} Candidates Mass - CC; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
+    signalhist.SetName("#mu#muKK Candidates Mass - " + region)
+    signalhist.SetTitle("#mu#muKK Candidates Mass - " + region + "; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
     signalhist.GetYaxis().SetTitleOffset(1.3)
     signalhist.SetMarkerColor(kBlue)
     signalhist.SetFillStyle(3002)
@@ -443,7 +443,7 @@ if args.nofit and args.nofitkk:
 
     ROOT.gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
-    b0SideSub.SetTitle("B_{0}^{s} Mass - #phi sides subtracted; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
+    b0SideSub.SetTitle("#mu#muKK Mass - #phi sides subtracted " + region + "; M(KK#mu#mu)[GeV]; candidates/" + str(signalhist.GetBinWidth(2)*1000)+ "MeV")
     b0SideSub.Add(leftsidehist,-1.0)
     b0SideSub.Add(rightsidehist,-1.0)
 
@@ -469,15 +469,15 @@ if args.nofit and args.nofitkk:
     dstree  = theData.store().tree()
     dstree.GetEntryNumber(88)
 
-    sPlot_B0_hist   = TH1F('sPlot_B0_hist','sPlot_B0_hist', 2000, 4.00, 6.0)
+    sPlot_B0_hist   = TH1F("sPlot_B0_hist","#mu#muKK sPlot - " + region + "; m(#mu#muKK) [GeV]", 2000, 4.00, 6.0)
 
     sPlot_B0_hist.Sumw2()
     sPlot_B0_hist.SetLineColor(2)
-    sPlot_B0_hist.SetMarkerColor(2);
+    sPlot_B0_hist.SetMarkerColor(2)
     sPlot_B0_hist.SetMinimum(0.)
-    dstree.Project('sPlot_B0_hist','xM','nSig_sw');
+    dstree.Project('sPlot_B0_hist','xM','nSig_sw')
 
-    sPlot_B0_hist.Draw('e0');
+    sPlot_B0_hist.Draw('e0')
     kcanvas.SaveAs('b0_Splot_Phi' + region + '.png')
     kcanvas.SaveAs('b0_Splot_Phi' + region + '.root')
 
@@ -539,7 +539,7 @@ if args.nofit and args.nofitb0:
 
     plotpad.cd()
 
-    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax),Title("B_0^s mass"))
+    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax),Title("B_0^s mass - " + region))
 
     bZeroFitData.plotOn(bZeroFrame)
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
@@ -660,12 +660,13 @@ if args.binwise is not None:
             a5.setConstant(ROOT.kTRUE)
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
+        print(binw_x_hist.GetBinCenter(i+1))
 
         binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
 
         plotpad.cd()
 
-        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "]"))
+        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "] - " + region ))
 
         thisData.plotOn(binwFrame,Name("Data"))
         binwTot.plotOn(binwFrame,RooFit.Normalization(1.0),Name("Pdf"))
@@ -698,8 +699,6 @@ if args.binwise is not None:
         bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + "_" + region + ".root")
 
         binw_x_hist.SetBinContent(i+1,nSigBinW.getValV())
-        print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
-        print(binw_x_hist.GetBinCenter(i))
 
     bwcanvas.Clear()
 
@@ -755,7 +754,7 @@ if args.nofit and args.nofitmm:
     jPsiFit = pdf_tot.fitTo(jPsiFitData,Range(fitjPsimin+0.005,fitjPsimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
-    jPsiFrame = mm_mass.frame(Range(fitjPsimin+0.005,fitjPsimax-0.005),Title("J/#Psi mass"))
+    jPsiFrame = mm_mass.frame(Range(fitjPsimin+0.005,fitjPsimax-0.005),Title("J/#Psi mass - " + region))
 
     jPsiFitData.plotOn(jPsiFrame)
 
