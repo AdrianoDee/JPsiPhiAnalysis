@@ -50,8 +50,6 @@ void JPsiCount::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
-   TString option = GetOption();
-
    std::string outputString = "jpsi_vs_runs.root";
    OutFile = new TProofOutputFile( outputString.data() );
    fOut = OutFile->OpenFile("RECREATE");
@@ -116,7 +114,7 @@ void JPsiCount::SlaveTerminate()
 
 
      for (int i = 0; i < numtriggers; i++)
-      jspiCounters->Write();
+      jspiCounters[i]->Write();
 
      jpsiAll->Write();
 
