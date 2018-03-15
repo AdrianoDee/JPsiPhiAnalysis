@@ -91,7 +91,7 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
   TLorentzVector trakP_p4;
   TLorentzVector trakN_p4;
 
-  UInt_t dimuon_triggerMatch,
+  UInt_t dimuon_triggerMatch;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Int_t dimuonditrk_charge;
