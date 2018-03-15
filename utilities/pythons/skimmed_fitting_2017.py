@@ -613,7 +613,7 @@ if args.binwise is not None:
     a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
     a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
     a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
-    poliset = RooArgList(a0,a1,a2,a3,a4)
+    poliset = RooArgList(a0,a1,a2,a3)#,a4)
 
     for i in range(args.binwise-1):
 
