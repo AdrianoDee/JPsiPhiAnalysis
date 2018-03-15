@@ -1,13 +1,13 @@
 /**
    \file
-   Declaration of DiMuonDiTrakProducerHLT
+   Declaration of DiMuonDiTrakProducerVertexHLT
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
 */
 
-#ifndef __DiMuonDiTrakProducerHLT_h_
-#define __DiMuonDiTrakProducerHLT_h_
+#ifndef __DiMuonDiTrakProducerVertexHLT_h_
+#define __DiMuonDiTrakProducerVertexHLT_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -31,10 +31,10 @@
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class DiMuonDiTrakProducerHLT : public edm::EDProducer {
+class DiMuonDiTrakProducerVertexHLT : public edm::EDProducer {
 
  public:
-  explicit DiMuonDiTrakProducerHLT(const edm::ParameterSet& ps);
+  explicit DiMuonDiTrakProducerVertexHLT(const edm::ParameterSet& ps);
 
  private:
 
@@ -85,4 +85,4 @@ class DiMuonDiTrakProducerHLT : public edm::EDProducer {
 
 };
 
-#endif // __DiMuonDiTrakProducerHLT_h_
+#endif // __DiMuonDiTrakProducerVertexHLT_h_

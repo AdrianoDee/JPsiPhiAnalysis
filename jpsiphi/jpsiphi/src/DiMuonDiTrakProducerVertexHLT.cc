@@ -53,7 +53,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
 
 
-  pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
+  pat::TriggerObjectStandAloneCollection filteredColl;//, matchedColl;
   std::vector< pat::PackedCandidate> filteredTracks;
   std::vector < UInt_t > filterResults;
 
@@ -83,34 +83,34 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   }
 
   //Matching
-
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakCollection->begin(), trakend=trakCollection->end(); trak!= trakend; ++trak)
-  {
-    bool matched = false;
-    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
-    {
-      if(MatchByDRDPt(*trak,*trigger))
-      {
-        if(matched)
-        {
-          if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,*trigger))
-          {
-            matchedColl.pop_back();
-            matchedColl.push_back(*trigger);
-
-          }
-        }
-
-        if(!matched)
-          {
-            filteredTracks.push_back(*trak);
-            matchedColl.push_back(*trigger);
-          }
-
-        matched = true;
-      }
-    }
-  }
+  //
+  // for (std::vector<pat::PackedCandidate>::const_iterator trak = trakCollection->begin(), trakend=trakCollection->end(); trak!= trakend; ++trak)
+  // {
+  //   bool matched = false;
+  //   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+  //   {
+  //     if(MatchByDRDPt(*trak,*trigger))
+  //     {
+  //       if(matched)
+  //       {
+  //         if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,*trigger))
+  //         {
+  //           matchedColl.pop_back();
+  //           matchedColl.push_back(*trigger);
+  //
+  //         }
+  //       }
+  //
+  //       if(!matched)
+  //         {
+  //           filteredTracks.push_back(*trak);
+  //           matchedColl.push_back(*trigger);
+  //         }
+  //
+  //       matched = true;
+  //     }
+  //   }
+  // }
 
 
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
@@ -141,7 +141,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
            if(MatchByDRDPt(posTrack,*trigger))
            {
              if(matched)
-               if(DeltaR(posTrack,matchedColl.back()) > DeltaR(posTrack,*trigger))
+               if(DeltaR(posTrack,posTrig) > DeltaR(posTrack,*trigger))
                 posTrig = *trigger;
              if(!matched)
                posTrig = *trigger;
@@ -174,7 +174,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              if(MatchByDRDPt(negTrack,*trigger))
              {
                if(matched)
-                 if(DeltaR(negTrack,matchedColl.back()) > DeltaR(negTrack,*trigger))
+                 if(DeltaR(negTrack,negTrig) > DeltaR(negTrack,*trigger))
                   negTrig = *trigger;
                if(!matched)
                  negTrig = *trigger;
@@ -295,7 +295,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
                 DiMuonTTCand.addUserInt("trakMatchP",isTriggerMatched(posTrig));
                 DiMuonTTCand.addUserInt("trakMatchN",0);
               }
-             // 
+             //
              // DiMuonTTCand.addUserInt("trakMatchP",isTriggerMatched(matchedColl[i]));
              // DiMuonTTCand.addUserInt("trakMatchN",isTriggerMatched(matchedColl[j]));
 
