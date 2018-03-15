@@ -7,6 +7,7 @@ from ROOT import RooFit
 from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, Format, Label, Parameters, Range, LineColor, LineStyle
 from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
 from ROOT.RooAbsReal import Relative
+from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
 
 RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
 from array import array
@@ -516,7 +517,6 @@ if args.nofit and args.nofitb0:
 
     bZeroFrame.Draw()
 
-
     pullpad.cd()
     hpull = bZeroFrame.pullHist("Data","Pdf")
     pullframe = mmtt_mass.frame(Title("Pull Distribution"),Range(fitbZeromin,fitbZeromax))
@@ -525,6 +525,16 @@ if args.nofit and args.nofitb0:
     ROOT.gStyle.SetTitleFontSize(0.07)
     pullframe.addPlotable(hpull,"P")
     pullframe.Draw()
+
+    lineup = TLine(fitbZeromin,4.0,fitbZeromax,4.0)
+    lineup.SetLineColor(kRed)
+    lineup.SetLineStyle(kDashed)
+    lineup.Draw()
+
+    linedw = TLine(fitbZeromin,-4.0,fitbZeromax,-4.0)
+    linedw.SetLineColor(kRed)
+    linedw.SetLineStyle(kDashed)
+    linedw.Draw()
 
     bcanvas.SaveAs("b0_fit" + region + ".png")
     bcanvas.SaveAs("b0_fit" + region + ".root")
