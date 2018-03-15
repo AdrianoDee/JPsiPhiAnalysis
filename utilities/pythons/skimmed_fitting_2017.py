@@ -168,9 +168,9 @@ if args.noplot:
     hist_mmtt      = (theData.createHistogram(mmtt_mass,mmtt_mass)).ProjectionX("hist_mmtt_mass")
     hist_mm        = (theData.createHistogram(mm_mass,mmtt_mass)).ProjectionX("hist_mm_mass")
     hist_tt        = (theData.createHistogram(tt_mass,mmtt_mass)).ProjectionX("hist_tt_mass")
-    hist_tt_pt     = (theData.createHistogram(mm_pt,mmtt_mass,40,100)).ProjectionX("hist_mm_pt")
-    hist_mm_pt     = (theData.createHistogram(tt_pt,mmtt_mass,180,100)).ProjectionX("hist_tt_pt")
-    hist_mmtt_pt   = (theData.createHistogram(mmtt_pt,mmtt_mass,180,100)).ProjectionX("hist_mmtt_pt")
+    hist_tt_pt     = (theData.createHistogram(mm_pt,mmtt_mass,int(ptmax)*2,100)).ProjectionX("hist_mm_pt")
+    hist_mm_pt     = (theData.createHistogram(tt_pt,mmtt_mass,int(ptmax)*2,100)).ProjectionX("hist_tt_pt")
+    hist_mmtt_pt   = (theData.createHistogram(mmtt_pt,mmtt_mass,int(ptmax)*2,100)).ProjectionX("hist_mmtt_pt")
 
     ##Masses hists
 
@@ -202,7 +202,7 @@ if args.noplot:
     ##PT hists
 
     hist_tt_pt.SetTitle("p_t(KK) " + region + " ;p_t(KK) [GeV]; no. entries")
-    hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
+    hist_tt_pt.GetXaxis().SetRangeUser(0.0,30.0)
     hist_tt_pt.SetFillColor(kBlue)
     hist_tt_pt.SetLineColor(kBlue)
     hist_tt_pt.SetFillStyle(3003)
