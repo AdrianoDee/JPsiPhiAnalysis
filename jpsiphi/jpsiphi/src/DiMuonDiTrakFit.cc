@@ -206,7 +206,7 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     TransientVertex mmttVertex = vtxFitter.vertex(MuMuTT);
     CachingVertex<5> VtxForInvMass = vtxFitter.vertex( MuMuTT );
 
-    Measurement1D MassWErr(dimuontt.mass(),-9999.);
+    Measurement1D MassWErr(dimuontt->mass(),-9999.);
     if ( field->nominalValue() > 0 )
         MassWErr = massCalculator.invariantMass( VtxForInvMass, fourMasses );
     else
@@ -239,28 +239,28 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
 
     Measurement1D distXY = vdistXY.distance(Vertex(mmttVertex), thePrimaryV);
-    ctauPV = distXY.value()*cosAlpha * dimuontt.mass()/pperp.Perp();
+    ctauPV = distXY.value()*cosAlpha * dimuontt->mass()/pperp.Perp();
 
     GlobalError v1e = (Vertex(mmttVertex)).error();
     GlobalError v2e = thePrimaryV.error();
     AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-    ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt.mass()/(pperp.Perp2());
+    ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt->mass()/(pperp.Perp2());
 
     AlgebraicVector3 vDiff;
     vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
     l_xy = vdiff.Perp();
     lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
-    dimuontt.addUserFloat("vNChi2",vChi2/vNDF);
-    dimuontt.addUserFloat("vProb",vProb);
-    dimuontt.addUserFloat("MassErr",MassWErr.error());
-    dimuontt.addUserFloat("ctauPV",ctauPV);
-    dimuontt.addUserFloat("ctauErrPV",ctauErrPV);
-    dimuontt.addUserFloat("lxy",l_xy);
-    dimuontt.addUserFloat("lErrxy",lErr_xy);
-    dimuontt.addUserFloat("cosAlpha",cosAlpha);
-    dimuontt.addUserData("thePV",Vertex(thePrimaryV));
-    dimuontt.addUserData("theVertex",Vertex(mmttVertex));
+    dimuontt->addUserFloat("vNChi2",vChi2/vNDF);
+    dimuontt->addUserFloat("vProb",vProb);
+    dimuontt->addUserFloat("MassErr",MassWErr.error());
+    dimuontt->addUserFloat("ctauPV",ctauPV);
+    dimuontt->addUserFloat("ctauErrPV",ctauErrPV);
+    dimuontt->addUserFloat("lxy",l_xy);
+    dimuontt->addUserFloat("lErrxy",lErr_xy);
+    dimuontt->addUserFloat("cosAlpha",cosAlpha);
+    dimuontt->addUserData("thePV",Vertex(thePrimaryV));
+    dimuontt->addUserData("theVertex",Vertex(mmttVertex));
 
     mmttCollectionVertex->push_back(dimuontt);
 
