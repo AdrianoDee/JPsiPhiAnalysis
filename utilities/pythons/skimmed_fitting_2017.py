@@ -649,7 +649,7 @@ if args.binwise is not None:
 
         thisData.plotOn(binwFrame,Name("Data"))
         # binwTot.plotOn(binwFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
-        traKFitData.plotOn(binwFrame)
+        thisData.plotOn(binwFrame)
         binwTot.paramOn(binwFrame,RooFit.Layout(0.57,0.99,0.65))
 
         binwFrame.Draw()
