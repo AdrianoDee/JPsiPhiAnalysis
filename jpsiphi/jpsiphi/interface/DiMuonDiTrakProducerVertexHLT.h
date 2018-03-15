@@ -91,7 +91,7 @@ class DiMuonDiTrakProducerVertexHLT : public edm::EDProducer {
 						    const pat::TriggerObjectStandAlone& t2);
   const pat::CompositeCandidate makeTTTriggerMixedCandidate(
                                                           const pat::PackedCandidate& trakP,
-                                                          const pat::TriggerObjectStandAlone& trakN)
+                                                          const pat::TriggerObjectStandAlone& trakN);
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
