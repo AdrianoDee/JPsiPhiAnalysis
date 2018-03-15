@@ -652,8 +652,8 @@ if args.binwise is not None:
         if debugging:
             binwGamma.setConstant(ROOT.kTRUE)
             binwMean.setConstant(ROOT.kTRUE)
-            a0.setConstant(ROOT.kTRUE) 
-            a1.setConstant(ROOT.kTRUE) 
+            a0.setConstant(ROOT.kTRUE)
+            a1.setConstant(ROOT.kTRUE)
             a2.setConstant(ROOT.kTRUE)
             a3.setConstant(ROOT.kTRUE)
             a4.setConstant(ROOT.kTRUE)
@@ -694,15 +694,17 @@ if args.binwise is not None:
         linedw.SetLineStyle(kDashed)
         linedw.Draw()
 
-        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
-        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
+        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + "_" + region + ".png")
+        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + "_" + region + ".root")
 
         binw_x_hist.SetBinContent(i+1,nSigBinW.getValV())
 
     bwcanvas.Clear()
 
-    bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
-    bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
+    binw_x_hist.Draw()
+
+    bwcanvas.SaveAs(region + "/binwise_xMass_"  + region + ".png")
+    bwcanvas.SaveAs(region + "/binwise_xMass_"  + region + ".root")
 
 if args.nofit and args.nofitmm:
 
