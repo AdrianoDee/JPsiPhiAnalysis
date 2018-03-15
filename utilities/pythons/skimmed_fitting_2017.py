@@ -355,7 +355,7 @@ if args.nofit and args.nofitkk:
 
     plotpad.cd()
 
-    kkFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#Phi mass"))
+    kkFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi mass"))
 
     # kkbins = RooBinning(-15,15)
     # kkbins.addUniform(30,fitphimin,fitphimax)
@@ -570,7 +570,7 @@ if args.nofit and args.nofitb0:
     bcanvas.SaveAs("b0_fit" + region + ".png")
     bcanvas.SaveAs("b0_fit" + region + ".root")
 
-    bZeroFrameTT = tt_mass.frame(Range(phimin,phimax),Title("#Phi from B_0^s mass"))
+    bZeroFrameTT = tt_mass.frame(Range(phimin,phimax),Title("#phi from B_0^s mass"))
     bZeroFitData.plotOn(bZeroFrameTT)
     bZeroFrameTT.Draw()
     bcanvas.SaveAs("b0_TT" + region + ".png")
@@ -589,46 +589,49 @@ if args.binwise is not None:
 
     scalingData = theData.Clone("binwiseData")
     bwcanvas = TCanvas("bwcanvas","bwcanvas",1200,800)
+
+    phimean = 1.019
+    gammavalue = 0.0012
+
+    fitphimin = 1.01
+    fitphimax = 1.03
+
+    binwSigma = RooRealVar("#sigma","#sigma",0.0013)
+    binwGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
+    binwMean = RooRealVar("m_{kk}","m_{kk}",phimean,phimean-0.005,phimean+0.005);
+
+    # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
+    # B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
+    # B_3     = RooRealVar ( "B_3"    , "B_3"    , 0.3  , -20   , 100   )
+    # B_4     = RooRealVar ( "B_4"    , "B_4"    , 0.3  , -20   , 100   )
+    # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
+    # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
+
+    a0 = RooRealVar("p0","p0",0.001,-10.,10.)
+    a1 = RooRealVar("p1","p1",0.001,-10.,10.)
+    a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
+    a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
+    a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
+    a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
+    poliset = RooArgList(a0,a1,a2,a3,a4)
+
     for i in range(args.binwise-1):
 
         bwcanvas.Clear()
 
+        pullpad = TPad("pullpad","pullpad",0.0,0.05,1.0,0.33)
+        plotpad = TPad("histopad","histopad",0.0,0.35,1.0,1.0)
+        plotpad.SetFillStyle(4004)
+        pullpad.SetFillStyle(4004)
+        plotpad.Draw()
+        pullpad.Draw()
+
         lowedge = step * i + xmin #bins[i]
         upedge  = step * i + step + xmin #bins[i+1]
 
-        print("xM<" + str(upedge))
-        print("xM>" + str(lowedge))
-        print(theData.numEntries())
         scalingData = scalingData.reduce("xM>" + str(lowedge))
 
         thisData = scalingData.reduce("xM<" + str(upedge))
-
-        print("Range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
-
-        phimean = 1.019
-        gammavalue = 0.0012
-
-        fitphimin = 1.01
-        fitphimax = 1.03
-
-        binwSigma = RooRealVar("#sigma","#sigma",0.0013)
-        binwGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
-        binwMean = RooRealVar("m_{kk}","m_{kk}",phimean,phimean-0.005,phimean+0.005);
-
-        # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
-        # B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
-        # B_3     = RooRealVar ( "B_3"    , "B_3"    , 0.3  , -20   , 100   )
-        # B_4     = RooRealVar ( "B_4"    , "B_4"    , 0.3  , -20   , 100   )
-        # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
-        # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
-
-        a0 = RooRealVar("p0","p0",0.001,-10.,10.)
-        a1 = RooRealVar("p1","p1",0.001,-10.,10.)
-        a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
-        a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
-        a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
-        a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
-        poliset = RooArgList(a0,a1,a2,a3,a4)
 
         # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
         nSigKK = RooRealVar("nSig","nSig",theData.numEntries()*0.3,0.0,thisData.numEntries()*1.5)
@@ -643,16 +646,39 @@ if args.binwise is not None:
         binwGamma.setConstant(ROOT.kTRUE)
         binwMean.setConstant(ROOT.kTRUE)
 
-        #binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+        print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 
-        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#Phi binw mass [" + str(lowedge) + "-" + str(upedge) + "]"))
+        binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+
+        plotpad.cd()
+
+        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "]"))
 
         thisData.plotOn(binwFrame,Name("Data"))
-        # binwTot.plotOn(binwFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
+        binwTot.plotOn(binwFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
         thisData.plotOn(binwFrame)
-        binwTot.paramOn(binwFrame,RooFit.Layout(0.57,0.99,0.65))
+        binwTot.paramOn(binwFrame,RooFit.Layout(0.75,0.99,0.99))
 
         binwFrame.Draw()
+
+        pullpad.cd()
+        hpull = bZeroFrame.pullHist("Data","Pdf")
+        pullframe = mmtt_mass.frame(Title("Pull Distribution"),Range(fitbZeromin,fitbZeromax))
+        #pullframe.GetXaxis().SetTitleSize(0.04)
+        #pullframe.GetYaxis().SetTitleSize(0.03)
+        ROOT.gStyle.SetTitleFontSize(0.07)
+        pullframe.addPlotable(hpull,"P")
+        pullframe.Draw()
+
+        lineup = TLine(fitbZeromin,4.0,fitbZeromax,4.0)
+        lineup.SetLineColor(kRed)
+        lineup.SetLineStyle(kDashed)
+        lineup.Draw()
+
+        linedw = TLine(fitbZeromin,-4.0,fitbZeromax,-4.0)
+        linedw.SetLineColor(kRed)
+        linedw.SetLineStyle(kDashed)
+        linedw.Draw()
 
         bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
         bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
