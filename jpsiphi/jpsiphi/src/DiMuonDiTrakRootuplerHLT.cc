@@ -391,7 +391,7 @@ void DiMuonDiTrakRootuplerHLT::analyze(const edm::Event& iEvent, const edm::Even
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
-      const pat::CompositeCandidate dimuonditrkTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
+      const pat::CompositeCandidate dimuonditrkTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
       dimuonTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
       ditrakTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
 
