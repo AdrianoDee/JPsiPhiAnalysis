@@ -27,6 +27,8 @@ DiMuonDiTrakProducerVertexHLT::DiMuonDiTrakProducerVertexHLT(const edm::Paramete
 
 void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
+  using namespace reco;
+
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
@@ -51,6 +53,10 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   float TrakTrakMassMin_ = TrakTrakMassCuts_[0];
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
+
+  float vProb, vNDF, vChi2;
+  float cosAlpha, ctauPV, ctauErrPV;
+  float l_xy, lErr_xy;
 
 
   pat::TriggerObjectStandAloneCollection filteredColl;//, matchedColl;
@@ -257,7 +263,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
              AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
 
-             thePrimaryV = *(dimuonCand->userData<Vertex>("thePV"));
+             thePrimaryV = *(dimuonCand->userData<reco::Vertex>("thePV"));
 
              //Lifetime calculations
              pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
