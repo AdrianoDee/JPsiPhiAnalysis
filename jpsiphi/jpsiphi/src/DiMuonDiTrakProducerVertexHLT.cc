@@ -158,7 +158,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
 // loop over second track candidate, negative charge
          // for (size_t j = 0; j < filteredTracks.size(); j++)
-         for (size_t i = 0; i < trakCollection->size(); i++)
+         for (size_t j = 0; j < trakCollection->size(); j++)
          {
 
            if (i == j) continue;
