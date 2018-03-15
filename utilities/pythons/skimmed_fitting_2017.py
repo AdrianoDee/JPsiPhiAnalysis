@@ -655,7 +655,7 @@ if args.binwise is not None:
         binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "]"))
 
         thisData.plotOn(binwFrame,Name("Data"))
-        binwTot.plotOn(binwFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
+        binwTot.plotOn(binwFrame,RooFit.Normalization(1.0),Name("Pdf"))
         thisData.plotOn(binwFrame)
         binwTot.paramOn(binwFrame,RooFit.Layout(0.75,0.99,0.99))
 
