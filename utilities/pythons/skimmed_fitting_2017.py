@@ -652,9 +652,12 @@ if args.binwise is not None:
         if debugging:
             binwGamma.setConstant(ROOT.kTRUE)
             binwMean.setConstant(ROOT.kTRUE)
-
-            for a in poliset:
-                a.setConstant(ROOT.kTRUE)
+            a0.setConstant(ROOT.kTRUE) 
+            a1.setConstant(ROOT.kTRUE) 
+            a2.setConstant(ROOT.kTRUE)
+            a3.setConstant(ROOT.kTRUE)
+            a4.setConstant(ROOT.kTRUE)
+            a5.setConstant(ROOT.kTRUE)
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 
