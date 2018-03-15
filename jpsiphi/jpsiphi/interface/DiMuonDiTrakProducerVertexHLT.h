@@ -77,6 +77,9 @@ class DiMuonDiTrakProducerVertexHLT : public edm::EDProducer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
 
+  std::vector<double> massCands_;
+
+
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
