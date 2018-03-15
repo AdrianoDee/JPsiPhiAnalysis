@@ -643,8 +643,8 @@ if args.binwise is not None:
         binwBkg = RooChebychev("binwBkg","Background",tt_mass,poliset)
         binwTot = RooAddPdf("binwTot","binwTot",RooArgList(binwSig,binwBkg),RooArgList(nSigKK,nBkgKK))
 
-        binwGamma.setConstant(ROOT.kTRUE)
-        binwMean.setConstant(ROOT.kTRUE)
+        # binwGamma.setConstant(ROOT.kTRUE)
+        # binwMean.setConstant(ROOT.kTRUE)
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 
