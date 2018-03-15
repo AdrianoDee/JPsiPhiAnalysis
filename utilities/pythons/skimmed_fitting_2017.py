@@ -15,7 +15,7 @@ from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf
 from ROOT import RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein,RooVoigtian
-from ROOT import RooFit, kTrue, kFalse, gStyle, kFullCircle
+from ROOT import RooFit, gStyle, kFullCircle
 
 from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, PrintLevel
 from ROOT.RooFit import Format, Label, Parameters, Range, LineColor, LineStyle, SelectVars
@@ -286,22 +286,22 @@ if args.nofit and args.nofitkk:
     #nfit +=1
 
     if debugging:
-        kkGamma.setConstant(kTrue)
-        kkMean.setConstant(kTrue)
-        kkSigma.setConstant(kTrue)
-        a0.setConstant(kTrue)
-        a1.setConstant(kTrue)
-        a2.setConstant(kTrue)
-        a3.setConstant(kTrue)
-        a4.setConstant(kTrue)
-        a5.setConstant(kTrue)
-        # a6.setConstant(kTrue)
+        kkGamma.setConstant(ROOT.kTrue)
+        kkMean.setConstant(ROOT.kTrue)
+        kkSigma.setConstant(ROOT.kTrue)
+        a0.setConstant(ROOT.kTrue)
+        a1.setConstant(ROOT.kTrue)
+        a2.setConstant(ROOT.kTrue)
+        a3.setConstant(ROOT.kTrue)
+        a4.setConstant(ROOT.kTrue)
+        a5.setConstant(ROOT.kTrue)
+        # a6.setConstant(ROOT.kTrue)
 
-        kkMean.setConstant(kFalse)
+        kkMean.setConstant(ROOT.kFalse)
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
         # nfit +=1
 
-        kkGamma.setConstant(kFalse)
+        kkGamma.setConstant(ROOT.kFalse)
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
         # nfit +=1
 
@@ -539,17 +539,17 @@ if args.nofit and args.nofitb0:
     nfit = 0
 
     if debugging:
-        mean.setConstant(kTrue)
-        sigma1.setConstant(kTrue)
-        sigma2.setConstant(kTrue)
-        gFraMMKK.setConstant(kTrue)
-        c0.setConstant(kTrue)
-        c1.setConstant(kTrue)
-        c2.setConstant(kTrue)
-        c3.setConstant(kTrue)
-        c4.setConstant(kTrue)
-        c5.setConstant(kTrue)
-        c6.setConstant(kTrue)
+        mean.setConstant(ROOT.kTrue)
+        sigma1.setConstant(ROOT.kTrue)
+        sigma2.setConstant(ROOT.kTrue)
+        gFraMMKK.setConstant(ROOT.kTrue)
+        c0.setConstant(ROOT.kTrue)
+        c1.setConstant(ROOT.kTrue)
+        c2.setConstant(ROOT.kTrue)
+        c3.setConstant(ROOT.kTrue)
+        c4.setConstant(ROOT.kTrue)
+        c5.setConstant(ROOT.kTrue)
+        c6.setConstant(ROOT.kTrue)
 
     bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin,fitbZeromax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
@@ -669,14 +669,14 @@ if args.binwise is not None:
         binwTot = RooAddPdf("binwTot","binwTot",RooArgList(binwSig,binwBkg),RooArgList(nSigBinW,nBkgBinW))
 
         if debugging:
-            binwGamma.setConstant(kTrue)
-            binwMean.setConstant(kTrue)
-            a0.setConstant(kTrue)
-            a1.setConstant(kTrue)
-            a2.setConstant(kTrue)
-            a3.setConstant(kTrue)
-            a4.setConstant(kTrue)
-            a5.setConstant(kTrue)
+            binwGamma.setConstant(ROOT.kTrue)
+            binwMean.setConstant(ROOT.kTrue)
+            a0.setConstant(ROOT.kTrue)
+            a1.setConstant(ROOT.kTrue)
+            a2.setConstant(ROOT.kTrue)
+            a3.setConstant(ROOT.kTrue)
+            a4.setConstant(ROOT.kTrue)
+            a5.setConstant(ROOT.kTrue)
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
         print(binw_x_hist.GetBinCenter(i+1))
