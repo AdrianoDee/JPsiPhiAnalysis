@@ -482,7 +482,7 @@ if args.nofit and args.nofitkk:
 
 if args.nofit and args.nofitb0:
 
-    bcanvas = TCanvas("bcanvas","bcanvas",1400,800)
+    bcanvas = TCanvas("bcanvas","bcanvas",1200,800)
 
     pullpad = TPad("pullpad","pullpad",0.0,0.05,1.0,0.33)
     plotpad = TPad("histopad","histopad",0.0,0.35,1.0,1.0)
@@ -544,7 +544,7 @@ if args.nofit and args.nofitb0:
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
     bZeroFitData.plotOn(bZeroFrame,Name("Data"))
 
-    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99))
+    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.85,0.99,0.99))
 
     bZeroFrame.Draw()
 
