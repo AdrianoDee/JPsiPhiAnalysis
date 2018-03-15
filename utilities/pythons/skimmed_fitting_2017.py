@@ -481,11 +481,11 @@ if args.nofit and args.nofitkk:
     sPlot_B0_hist.SetLineColor(2)
     sPlot_B0_hist.SetMarkerColor(2)
     sPlot_B0_hist.SetMinimum(0.)
-    dstree.Project('sPlot_B0_hist','xM','nSig_sw')
+    dstree.Project("sPlot_B0_hist","xM","nSig_sw")
 
-    sPlot_B0_hist.Draw('e0')
-    kcanvas.SaveAs('b0_Splot_Phi' + region + '.png')
-    kcanvas.SaveAs('b0_Splot_Phi' + region + '.root')
+    sPlot_B0_hist.Draw("e0")
+    kcanvas.SaveAs("b0_Splot_Phi" + region + ".png")
+    kcanvas.SaveAs("b0_Splot_Phi" + region + ".root")
 
 if args.nofit and args.nofitb0:
 
@@ -611,7 +611,7 @@ if args.binwise is not None:
     scalingData = theData.Clone("binwiseData")
     bwcanvas = TCanvas("bwcanvas","bwcanvas",1200,800)
 
-    binw_x_hist = TH1F("binw_x_hist","Binwise counts;m(#mu#mukk) [GeV]",int(args.binwise),xmin,xmax)
+    binw_x_hist = TH1F("binw_x_hist","Binwise counts - " + region + "; m(#mu#mukk) [GeV]",int(args.binwise),xmin,xmax)
 
     for i in range(args.binwise-1):
 
@@ -685,7 +685,7 @@ if args.binwise is not None:
 
         plotpad.cd()
 
-        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "] - " + region ))
+        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#phi binw mass [" + str(lowedge) + "-" + str(upedge) + "] - " + region))
 
         thisData.plotOn(binwFrame,Name("Data"))
         binwTot.plotOn(binwFrame,RooFit.Normalization(1.0),Name("Pdf"))
