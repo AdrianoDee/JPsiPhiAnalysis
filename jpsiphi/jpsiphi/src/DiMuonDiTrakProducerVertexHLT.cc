@@ -252,7 +252,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              if (!(mmttVertex.isValid()))
                  continue;
 
-             LorentzVector mumutrktrk = trakP->p4() + trakN->p4() + muonP->p4() + muonN->p4();
+             reco::Candidate::LorentzVector mumutrktrk = trakP->p4() + trakN->p4() + muonP->p4() + muonN->p4();
 
              vChi2 = mmttVertex.totalChiSquared();
              vNDF  = mmttVertex.degreesOfFreedom();
