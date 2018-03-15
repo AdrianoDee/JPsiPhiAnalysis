@@ -62,7 +62,6 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_Label;
-  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
@@ -84,12 +83,6 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
   TLorentzVector dimuonditrkTrigger_p4;
   TLorentzVector dimuonTrigger_p4;
   TLorentzVector ditrakTrigger_p4;
-
-  std::vector < Float_t > trigs_pt;
-  std::vector < Float_t > trigs_eta;
-  std::vector < Float_t > trigs_phi;
-  std::vector < Float_t > trigs_m;
-  std::vector < UInt_t > trigs_filters;
 
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
@@ -121,7 +114,6 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 
 DiMuonDiTrakVertexRootuplerHLT::DiMuonDiTrakVertexRootuplerHLT(const edm::ParameterSet & iConfig):
 dimuonditrk_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuonditrks"))),
-triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
@@ -216,9 +208,6 @@ UInt_t DiMuonDiTrakVertexRootuplerHLT::getTriggerBits(const edm::Event& iEvent )
 
 // ------------ method called for each event  ------------
 void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
-
-  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trigs;
-  iEvent.getByToken(triggers_,trigs);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrks;
   iEvent.getByToken(dimuonditrk_Label,dimuonditrks);
