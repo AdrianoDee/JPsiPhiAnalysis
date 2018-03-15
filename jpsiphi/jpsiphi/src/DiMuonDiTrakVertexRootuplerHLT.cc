@@ -96,10 +96,9 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
   TLorentzVector trakP_p4;
   TLorentzVector trakN_p4;
 
-  UInt_t dimuon_triggerMatch;
-  Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
-
   Int_t dimuonditrk_charge;
+
+  Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
   Double_t dimuonditrk_MassErr,dimuonditrk_lxy, dimuonditrk_lxyErr;
@@ -227,6 +226,9 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
+  edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
+  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+
   run       = iEvent.id().run();
   event     = iEvent.id().event();
   lumiblock = iEvent.id().luminosityBlock();
@@ -285,7 +287,6 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
         dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
         dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
-        dimuon_triggerMatch = DiMuonDiTrakRootuplerHLT::isTriggerMatched(dimuon_cand);
 
         muonP_tMatch  = dimuon_cand->userInt("tMatchP");
         muonN_tMatch  = dimuon_cand->userInt("tMatchN");
