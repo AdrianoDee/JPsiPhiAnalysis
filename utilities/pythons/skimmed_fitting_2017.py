@@ -698,6 +698,8 @@ if args.binwise is not None:
         bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + "_" + region + ".root")
 
         binw_x_hist.SetBinContent(i+1,nSigBinW.getValV())
+        print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
+        print(binw_x_hist.GetBinCenter(i))
 
     bwcanvas.Clear()
 
