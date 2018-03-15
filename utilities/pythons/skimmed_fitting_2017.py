@@ -509,7 +509,7 @@ if args.nofit and args.nofitb0:
     bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax))
 
     bZeroFitData.plotOn(bZeroFrame)
-    pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)))
+    pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
     bZeroFitData.plotOn(bZeroFrame,Name("Data"))
 
     pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99))
@@ -518,7 +518,7 @@ if args.nofit and args.nofitb0:
 
 
     pullpad.cd()
-    hpull = bZeroFrame.pullHist("fitB0Data","pdf_tot")
+    hpull = bZeroFrame.pullHist("Data","Pdf")
     pullframe = mmtt_mass.frame(Title("Pull Distribution"))
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
