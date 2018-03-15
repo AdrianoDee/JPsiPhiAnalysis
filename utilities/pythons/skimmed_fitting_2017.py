@@ -3,7 +3,7 @@ import ROOT
 from ROOT import TLine, TLegend, TPad
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooFit
-from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, Format, Label, Parameters, Range LineColor, LineStyle
+from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, Format, Label, Parameters, Range, LineColor, LineStyle
 from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
 from ROOT.RooAbsReal import Relative
 
