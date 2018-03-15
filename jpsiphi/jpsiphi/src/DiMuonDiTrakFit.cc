@@ -164,7 +164,7 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
   float cosAlpha, ctauPV, ctauErrPV;
   float l_xy, lErr_xy;
 
-  for (pat::CompositeCandidateCollection::const_iterator dimuontt=PsiTCandHandle->begin(); dimuontt!=PsiTCandHandle->end(); ++dimuontt) {
+  for (pat::CompositeCandidateCollection::iterator dimuontt=PsiTCandHandle->begin(); dimuontt!=PsiTCandHandle->end(); ++dimuontt) {
 
     const pat::CompositeCandidate *dimuonC = dynamic_cast<const pat::CompositeCandidate *>(dimuontt->daughter("dimuon"));
     const pat::CompositeCandidate *ditrakC = dynamic_cast<const pat::CompositeCandidate*>(dimuontt->daughter("ditrak"));
