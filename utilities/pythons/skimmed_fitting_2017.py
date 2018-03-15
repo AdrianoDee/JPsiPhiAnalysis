@@ -636,11 +636,11 @@ if args.binwise is not None:
         phimean = 1.019
         gammavalue = 0.0012
 
-        fitphimin = 1.01
-        fitphimax = 1.03
+        fitphimin = 1.00
+        fitphimax = 1.04
 
         binwSigma = RooRealVar("#sigma","#sigma",0.0013)
-        binwGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.0005,0.015)
+        binwGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.0005,0.01)
         binwMean = RooRealVar("m_{kk}","m_{kk}",phimean,phimean-0.005,phimean+0.005);
 
         # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
