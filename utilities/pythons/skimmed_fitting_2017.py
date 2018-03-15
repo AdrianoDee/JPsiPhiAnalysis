@@ -89,15 +89,15 @@ bZeromax = 5.55
 ptmin = 0.0
 ptmax = 10000.0
 
-tt_mass = RooRealVar("ttM","ttM",phimin,phimax)
-mm_mass = RooRealVar("mmM","mmM",jpsimin,jpsimax)
-mmtt_mass = RooRealVar("xM","xM",xmin,xmax)
+tt_mass = RooRealVar("ttM","ttM;m(KK)[GeV]",phimin,phimax)
+mm_mass = RooRealVar("mmM","mmM;m(#mu#mu)[GeV]",jpsimin,jpsimax)
+mmtt_mass = RooRealVar("xM","xM;m(#mu#muKK)[GeV]",xmin,xmax)
 
-tt_pt = RooRealVar("ttPt","ttPt",0.0,ptmax)
-mm_pt = RooRealVar("mmPt","mmPt",0.0,ptmax)
-mmtt_pt = RooRealVar("xPt","xPt",0.0,ptmax)
+tt_pt = RooRealVar("ttPt","ttPt;p_{t}(KK)[GeV]",0.0,ptmax)
+mm_pt = RooRealVar("mmPt","mmPt;p{t}(#mu#mu)[GeV]",0.0,ptmax)
+mmtt_pt = RooRealVar("xPt","xPt;p_{t}(#mu#muKK)[GeV]",0.0,ptmax)
 
-lxysig = RooRealVar("xL","l(xy) sign.;l(xy) sign.",0.0,1000.0)
+lxysig = RooRealVar("xL","l_{xy} sign.;l_{xy} / #sigma(l_{xy})",0.0,1000.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
@@ -128,7 +128,7 @@ if args.noplot:
     print("TrakTrak data plotting . . .")
 
     print("All : " + str(theData.numEntries()))
-    ttFrame = tt_mass.frame()
+    ttFrame = tt_mass.frame(Title("KK mass"))
     theData.plotOn(ttFrame)
     ttFrame.Draw()
     c.SaveAs("tt_mass" + cuts + ".png")
@@ -137,7 +137,7 @@ if args.noplot:
     print("MuMu data plotting . . .")
 
     print("All : " + str(theData.numEntries()))
-    mumuFrame = mm_mass.frame()
+    mumuFrame = mm_mass.frame(Title("KK mass"))
     theData.plotOn(mumuFrame)
     mumuFrame.Draw()
     c.SaveAs("mm_mass.png")
@@ -146,7 +146,7 @@ if args.noplot:
     print("TrakTrakMuMu data plotting . . .")
 
     print("All : " + str(theData.numEntries()))
-    mmttFrame = mmtt_mass.frame()
+    mmttFrame = mmtt_mass.frame(Title("#mu#muKK mass"))
     theData.plotOn(mmttFrame)
     mmttFrame.Draw()
     c.SaveAs("mmtt_mass" + region + ".png")
@@ -199,7 +199,7 @@ if args.noplot:
 
     ##PT hists
 
-    hist_tt_pt.SetTitle("P_t(KK)" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt_pt.SetTitle("p_t(KK)" + region + " ;p_t(KK) [GeV]; no. entries")
     hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
     hist_tt_pt.SetFillColor(ROOT.kBlue)
     hist_tt_pt.SetLineColor(ROOT.kBlue)
@@ -208,7 +208,7 @@ if args.noplot:
     c.SaveAs("tt_pt_histo" + region + ".png")
     c.SaveAs("tt_pt_histo" + region + ".root")
 
-    hist_mm_pt.SetTitle("P_t(#mu#mu)" + region + " ;Pt(#mu#mu) [GeV]; no. entries")
+    hist_mm_pt.SetTitle("p_t(#mu#mu)" + region + " ;p_t(#mu#mu) [GeV]; no. entries")
     hist_mm_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mm_pt.SetFillColor(ROOT.kGreen)
     hist_mm_pt.SetLineColor(ROOT.kGreen)
@@ -217,7 +217,7 @@ if args.noplot:
     c.SaveAs("mm_pt_histo" + region + ".png")
     c.SaveAs("mm_pt_histo" + region + ".root")
 
-    hist_mmtt_pt.SetTitle("P_t(#mu#muKK)" + region + " ;Pt(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt_pt.SetTitle("p_t(#mu#muKK)" + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
     hist_mmtt_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mmtt_pt.SetFillColor(ROOT.kRed)
     hist_mmtt_pt.SetLineColor(ROOT.kRed)
@@ -355,7 +355,7 @@ if args.nofit and args.nofitkk:
 
     plotpad.cd()
 
-    kkFrame = tt_mass.frame(Range(fitphimin,fitphimax))
+    kkFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#Phi mass"))
 
     # kkbins = RooBinning(-15,15)
     # kkbins.addUniform(30,fitphimin,fitphimax)
@@ -538,7 +538,7 @@ if args.nofit and args.nofitb0:
 
     plotpad.cd()
 
-    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax))
+    bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax),Title("B_0^s mass"))
 
     bZeroFitData.plotOn(bZeroFrame)
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
@@ -570,13 +570,13 @@ if args.nofit and args.nofitb0:
     bcanvas.SaveAs("b0_fit" + region + ".png")
     bcanvas.SaveAs("b0_fit" + region + ".root")
 
-    bZeroFrameTT = tt_mass.frame(Range(phimin,phimax))
+    bZeroFrameTT = tt_mass.frame(Range(phimin,phimax),Title("#Phi from B_0^s mass"))
     bZeroFitData.plotOn(bZeroFrameTT)
     bZeroFrameTT.Draw()
     bcanvas.SaveAs("b0_TT" + region + ".png")
     bcanvas.SaveAs("b0_TT" + region + ".root")
 
-    bZeroFrameMM = mm_mass.frame(Range(jpsimin,jpsimax))
+    bZeroFrameMM = mm_mass.frame(Range(jpsimin,jpsimax),Title("J/#Psi from B_0^s mass"))
     bZeroFitData.plotOn(bZeroFrameMM)
     bZeroFrameMM.Draw()
     bcanvas.SaveAs("b0_MM" + region + ".png")
@@ -647,7 +647,7 @@ if args.nofit and args.nofitmm:
     jPsiFit = pdf_tot.fitTo(jPsiFitData,Range(fitjPsimin+0.005,fitjPsimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
-    jPsiFrame = mm_mass.frame(Range(fitjPsimin+0.005,fitjPsimax-0.005))
+    jPsiFrame = mm_mass.frame(Range(fitjPsimin+0.005,fitjPsimax-0.005),Title("J/#Psi mass"))
 
     jPsiFitData.plotOn(jPsiFrame)
 
