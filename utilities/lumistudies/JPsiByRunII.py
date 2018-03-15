@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--json', type=str, default=x4140jsonfile,
                     help='input json file for brilcalc')
 parser.add_argument('--readbril', type=str, default=None,help='brilcalc lumi result to use as input')
-parser.add_argument('--histoname', type=str, default="JPsi_vs_run",help='input no. of JPsi vs run histogram name')
+parser.add_argument('--histoname', type=str, default="jpsi_vs_run_",help='input no. of JPsi vs run histogram name')
 parser.add_argument('--input', type=str, default="JPsiCount.root",help='input root file name')
 parser.add_argument('--hlts', nargs='+', help='Select different hlts suffixes (also a list, e.g. --hlts HLT8 HLT4)', required=False,default=None)
 parser.add_argument('--outbril', type=str, default="all_lumis.txt",help='brilcalc output txt')
@@ -216,7 +216,7 @@ def GetMuPerLumiHisto(histo,hlt):
          nmuperlumi = runcontent/lumi
          err=sqrt(runcontent)/lumi
 
-         print("run=%i #JPsi=%i lumi=%s  #JPsi per lumi=%s +/- %s"%(irun, runcontent,lumi,nmuperlumi,err))
+         # print("run=%i #JPsi=%i lumi=%s  #JPsi per lumi=%s +/- %s"%(irun, runcontent,lumi,nmuperlumi,err))
 
    histo_lumi.SetBinContent(ix,nmuperlumi)
    histo_lumi.SetBinError(ix,histo.GetBinError(ix)/lumi)
