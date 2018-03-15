@@ -80,6 +80,10 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
   TLorentzVector ditrak_p4;
   TLorentzVector dimuon_p4;
 
+  TLorentzVector dimuonditrkTrigger_p4;
+  TLorentzVector dimuonTrigger_p4;
+  TLorentzVector ditrakTrigger_p4;
+
   std::vector < Float_t > trigs_pt;
   std::vector < Float_t > trigs_eta;
   std::vector < Float_t > trigs_phi;
@@ -96,7 +100,7 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 
   Int_t dimuonditrk_charge;
 
-  Double_t dimuonditrk_vProb,  dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
+  Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
   Double_t dimuonditrk_MassErr,dimuonditrk_lxy, dimuonditrk_lxyErr;
 
   Int_t noXCandidates;
