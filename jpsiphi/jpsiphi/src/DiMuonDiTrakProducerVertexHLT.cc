@@ -15,10 +15,9 @@ DiMuonDiTrakProducerVertexHLT::DiMuonDiTrakProducerVertexHLT(const edm::Paramete
   MaxDeltaRPt_(iConfig.getParameter<std::vector<double>>("MaxDeltaRPt")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
-  HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
+  HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   massCands_(iConfig.getParameter<std::vector<double>>("CandsMasses"))
-
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
