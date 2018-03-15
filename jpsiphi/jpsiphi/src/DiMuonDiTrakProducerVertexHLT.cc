@@ -146,10 +146,10 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
          {
            if(MatchByDRDPt(posTrack,*trigger))
            {
-             if(matched)
+             if(posMatched)
                if(DeltaR(posTrack,posTrig) > DeltaR(posTrack,*trigger))
                 posTrig = *trigger;
-             if(!matched)
+             if(!posMatched)
                posTrig = *trigger;
 
              posMatched = true;
@@ -179,10 +179,10 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
            {
              if(MatchByDRDPt(negTrack,*trigger))
              {
-               if(matched)
+               if(negMatched)
                  if(DeltaR(negTrack,negTrig) > DeltaR(negTrack,*trigger))
                   negTrig = *trigger;
-               if(!matched)
+               if(!negMatched)
                  negTrig = *trigger;
 
                negMatched = true;
