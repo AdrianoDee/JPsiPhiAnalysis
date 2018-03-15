@@ -519,7 +519,7 @@ if args.nofit and args.nofitb0:
 
     pullpad.cd()
     hpull = bZeroFrame.pullHist("Data","Pdf")
-    pullframe = mmtt_mass.frame(Title("Pull Distribution"))
+    pullframe = mmtt_mass.frame(Title("Pull Distribution"),Range(fitbZeromin,fitbZeromax))
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
     ROOT.gStyle.SetTitleFontSize(0.07)
