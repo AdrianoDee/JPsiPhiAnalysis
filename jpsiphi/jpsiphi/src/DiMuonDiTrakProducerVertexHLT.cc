@@ -43,6 +43,13 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
+  edm::ESHandle<TransientTrackBuilder> theTTBuilder;
+  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
+  KalmanVertexFitter vtxFitter(true);
+
+  edm::ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
