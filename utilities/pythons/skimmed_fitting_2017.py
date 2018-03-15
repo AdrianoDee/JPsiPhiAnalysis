@@ -650,7 +650,7 @@ if args.binwise is not None:
 
         print("Fitting range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 
-        binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+        binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(1), RooFit.NumCPU(numcpus),RooFit.Save())
 
         plotpad.cd()
 
