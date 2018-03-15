@@ -14,7 +14,7 @@ import sys
 import argparse
 import math
 import matplotlib.pyplot as plt
-c
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--input', type=str, default="2mu2k_tree.root")
