@@ -86,6 +86,7 @@ Bool_t JPsiCount::Process(Long64_t entry)
    // Use fStatus to set the return value of TTree::Process().
    //
    // The return value is currently not used.
+   fReader.SetEntry(entry);
 
    std::bitset<16> tt(*trigger);
 
@@ -94,8 +95,6 @@ Bool_t JPsiCount::Process(Long64_t entry)
    for (int i = 0; i < numtriggers; i++)
      if(tt.test(i))
       jspiCounters[i]->Fill(*run);
-
-   fReader.SetEntry(entry);
 
    return kTRUE;
 }
