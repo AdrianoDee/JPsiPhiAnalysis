@@ -1,5 +1,6 @@
 
 import ROOT
+fromo ROOT
 from ROOT import TLine, TLegend, TPad
 from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
 from ROOT import RooFit
@@ -501,28 +502,30 @@ if args.nofit and args.nofitb0:
     bZeroFit = pdf_tot.fitTo(bZeroFitData,Range(fitbZeromin,fitbZeromax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
     nfit += 1
 
+    gPad.SetRightMargin(0.1)
+
+    plotpad.cd()
+
     bZeroFrame = mmtt_mass.frame(Range(fitbZeromin,fitbZeromax))
 
     bZeroFitData.plotOn(bZeroFrame)
-
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)))
     bZeroFitData.plotOn(bZeroFrame,Name("Data"))
-    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99),Name("Pdf"))
+
+    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.7,0.99,0.99))
 
     bZeroFrame.Draw()
 
+
+    pullpad.cd()
     hpull = bZeroFrame.pullHist("fitB0Data","pdf_tot")
     pullframe = mmtt_mass.frame(Title("Pull Distribution"))
     #pullframe.GetXaxis().SetTitleSize(0.04)
     #pullframe.GetYaxis().SetTitleSize(0.03)
     ROOT.gStyle.SetTitleFontSize(0.07)
-    pullpad.cd()
     pullframe.addPlotable(hpull,"P")
     pullframe.Draw()
 
-    plotpad.cd()
-
-    gPad.SetRightMargin(0.1)
     bcanvas.SaveAs("b0_fit" + region + ".png")
     bcanvas.SaveAs("b0_fit" + region + ".root")
 
