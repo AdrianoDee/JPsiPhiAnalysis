@@ -274,8 +274,8 @@ if args.nofit and args.nofitkk:
     nSigKK = RooRealVar("nSig","nSig",theData.numEntries()*0.3,0.0,theData.numEntries()*1.5)
     nBkgKK = RooRealVar("nBkg","nBkg",theData.numEntries()*0.7,0.0,theData.numEntries()*1.5)
 
-    # kkSig = RooVoigtian("kkSig","kkSig",tt_mass,kkMean,kkGamma,kkSigma)
-    kkSig = RooGaussian("kkSig","kkSig",tt_mass,kkMean,kkGamma)#,kkSigma)
+    kkSig = RooVoigtian("kkSig","kkSig",tt_mass,kkMean,kkGamma,kkSigma)
+    #kkSig = RooGaussian("kkSig","kkSig",tt_mass,kkMean,kkGamma)#,kkSigma)
     #kkBkg = RooBernstein("kkBkg" , "kkBkg", tt_mass, RooArgList(B_1, B_2,B_3,B_4))#,B_5) )#,B_6))
     kkBkg = RooChebychev("kkBkg","Background",tt_mass,poliset)
     kkTot = RooAddPdf("kkTot","kkTot",RooArgList(kkSig,kkBkg),RooArgList(nSigKK,nBkgKK))
@@ -587,18 +587,75 @@ if args.binwise is not None:
     #_,bins,_ = plt.hist([],range=[xmin,xmax],bins=args.binwise)
     step = (xmax - xmin)/(float(args.binwise))
 
+    scalingData = theData.Clone("binwiseData")
+    bwcanvas = TCanvas("bwcanvas","bwcanvas",1200,800)
     for i in range(args.binwise-1):
+
+        bwcanvas.Clear()
+
         lowedge = step * i + xmin #bins[i]
         upedge  = step * i + step + xmin #bins[i+1]
 
         print("xM<" + str(upedge))
         print("xM>" + str(lowedge))
         print(theData.numEntries())
+        scalingData = scalingData.reduce("xM>" + str(lowedge))
 
-        thisData = theData.reduce("xM<" + str(upedge)).reduce("xM>" + str(lowedge))
+        thisData = scalingData.reduce("xM<" + str(upedge))
 
         print("Range " + str(lowedge) + " - " + str(upedge) + " : " + str(thisData.numEntries()))
 
+        phimean = 1.019
+        gammavalue = 0.0012
+
+        fitphimin = 1.01
+        fitphimax = 1.03
+
+        binwSigma = RooRealVar("#sigma","#sigma",0.0013)
+        binwGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)
+        binwMean = RooRealVar("m_{kk}","m_{kk}",phimean,phimean-0.005,phimean+0.005);
+
+        # B_1     = RooRealVar ( "B_1"    , "B_1 "    , 0.3  , -20   , 100   )
+        # B_2     = RooRealVar ( "B_2"    , "B_2"    , 0.3  , -20   , 100   )
+        # B_3     = RooRealVar ( "B_3"    , "B_3"    , 0.3  , -20   , 100   )
+        # B_4     = RooRealVar ( "B_4"    , "B_4"    , 0.3  , -20   , 100   )
+        # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
+        # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
+
+        a0 = RooRealVar("p0","p0",0.001,-10.,10.)
+        a1 = RooRealVar("p1","p1",0.001,-10.,10.)
+        a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
+        a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
+        a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
+        a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
+        poliset = RooArgList(a0,a1,a2,a3,a4)
+
+        # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
+        nSigKK = RooRealVar("nSig","nSig",theData.numEntries()*0.3,0.0,thisData.numEntries()*1.5)
+        nBkgKK = RooRealVar("nBkg","nBkg",theData.numEntries()*0.7,0.0,thisData.numEntries()*1.5)
+
+        binwSig = RooVoigtian("binwSig","binwSig",tt_mass,binwMean,binwGamma,binwSigma)
+        #binwSig = RooGaussian("binwSig","binwSig",tt_mass,binwMean,binwGamma)#,binwSigma)
+        #binwBkg = RooBernstein("binwBkg" , "binwBkg", tt_mass, RooArgList(B_1, B_2,B_3,B_4))#,B_5) )#,B_6))
+        binwBkg = RooChebychev("binwBkg","Background",tt_mass,poliset)
+        binwTot = RooAddPdf("binwTot","binwTot",RooArgList(binwSig,binwBkg),RooArgList(nSigKK,nBkgKK))
+
+        binwGamma.setConstant(ROOT.kTRUE)
+        binwMean.setConstant(ROOT.kTRUE)
+
+        #binwfit = binwTot.fitTo(thisData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+
+        binwFrame = tt_mass.frame(Range(fitphimin,fitphimax),Title("#Phi binw mass [" + str(lowedge) + "-" + str(upedge) + "]"))
+
+        traKFitData.plotOn(binwFrame,Name("Data"))
+        # binwTot.plotOn(binwFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
+        traKFitData.plotOn(binwFrame)
+        binwTot.paramOn(binwFrame,RooFit.Layout(0.57,0.99,0.65))
+
+        binwFrame.Draw()
+
+        bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
+        bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
 
 if args.nofit and args.nofitmm:
 
