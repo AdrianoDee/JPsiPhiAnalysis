@@ -48,6 +48,7 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
+#include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
 
 #include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
 #include "TMath.h"
@@ -85,6 +86,9 @@ class DiMuonDiTrakKinematicFit : public edm::EDProducer {
   std::vector<double> DiMuonTTMassCuts_;
   std::vector<double> MassTraks_;
   std::string Product_name_;
+  std::vector<double> massCands_;
+
+  InvariantMassFromVertex massCalculator;
 
   template<typename T>
   struct GreaterByVProb {
@@ -113,6 +117,7 @@ DiMuonDiTrakKinematicFit::DiMuonDiTrakKinematicFit(const edm::ParameterSet& iCon
   DiMuonTTMassCuts_   = iConfig.getParameter<std::vector<double>>("DiMuonTrakTrakMassCuts");
   MassTraks_          = iConfig.getParameter<std::vector<double>>("MassTraks");
   Product_name_       = iConfig.getParameter<std::string>("Product");
+  massCands_          = iConfig.getParameter<std::vector<double>>("CandsMasses");
 
 // kinematic refit collections
   produces<pat::CompositeCandidateCollection>(Product_name_);
@@ -131,6 +136,12 @@ DiMuonDiTrakKinematicFit::~DiMuonDiTrakKinematicFit() {
 
 // ------------ method called to produce the data  ------------
 void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
+
+  vector<double> fourMasses;
+  fourMasses.push_back( massCands_[0] );
+  fourMasses.push_back( massCands_[1] );
+  fourMasses.push_back( massCands_[2] );
+  fourMasses.push_back( massCands_[3] );
 
   // Grab paramenters
   edm::Handle<pat::CompositeCandidateCollection> PsiTCandHandle;
@@ -195,7 +206,7 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     TransientVertex mmttVertex = vtxFitter.vertex(MuMuTT);
     CachingVertex<5> VtxForInvMass = vtxFitter.vertex( MuMuTT );
 
-    Measurement1D MassWErr(mmttCand.mass(),-9999.);
+    Measurement1D MassWErr(dimuontt.mass(),-9999.);
     if ( field->nominalValue() > 0 )
         MassWErr = massCalculator.invariantMass( VtxForInvMass, fourMasses );
     else
@@ -228,30 +239,30 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
     cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
 
     Measurement1D distXY = vdistXY.distance(Vertex(mmttVertex), thePrimaryV);
-    ctauPV = distXY.value()*cosAlpha * mmttCand.mass()/pperp.Perp();
+    ctauPV = distXY.value()*cosAlpha * dimuontt.mass()/pperp.Perp();
 
     GlobalError v1e = (Vertex(mmttVertex)).error();
     GlobalError v2e = thePrimaryV.error();
     AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-    ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*mmttCand.mass()/(pperp.Perp2());
+    ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt.mass()/(pperp.Perp2());
 
     AlgebraicVector3 vDiff;
     vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
     l_xy = vdiff.Perp();
     lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
-    mmttCand.addUserFloat("vNChi2",vChi2/vNDF);
-    mmttCand.addUserFloat("vProb",vProb);
-    mmttCand.addUserFloat("MassErr",MassWErr.error());
-    mmttCand.addUserFloat("ctauPV",ctauPV);
-    mmttCand.addUserFloat("ctauErrPV",ctauErrPV);
-    mmttCand.addUserFloat("lxy",l_xy);
-    mmttCand.addUserFloat("lErrxy",lErr_xy);
-    mmttCand.addUserFloat("cosAlpha",cosAlpha);
-    mmttCand.addUserData("thePV",Vertex(thePrimaryV));
-    mmttCand.addUserData("theVertex",Vertex(mmttVertex));
+    dimuontt.addUserFloat("vNChi2",vChi2/vNDF);
+    dimuontt.addUserFloat("vProb",vProb);
+    dimuontt.addUserFloat("MassErr",MassWErr.error());
+    dimuontt.addUserFloat("ctauPV",ctauPV);
+    dimuontt.addUserFloat("ctauErrPV",ctauErrPV);
+    dimuontt.addUserFloat("lxy",l_xy);
+    dimuontt.addUserFloat("lErrxy",lErr_xy);
+    dimuontt.addUserFloat("cosAlpha",cosAlpha);
+    dimuontt.addUserData("thePV",Vertex(thePrimaryV));
+    dimuontt.addUserData("theVertex",Vertex(mmttVertex));
 
-    mmttCollectionVertex->push_back(mmttCand);
+    mmttCollectionVertex->push_back(dimuontt);
 
   }
 // End kinematic fit
