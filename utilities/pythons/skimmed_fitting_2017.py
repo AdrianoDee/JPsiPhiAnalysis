@@ -60,6 +60,7 @@ region          = "overall"
 cuts            = "_"
 filename        = args.input
 bZeroMass       = args.b0mass
+
 if(args.prompt and args.nonprompt):
     print("Exiting. Choose prompt or nonprompt.")
     sys.exit()
@@ -249,8 +250,8 @@ if args.nofit and args.nofitkk:
     phimean = 1.019
     gammavalue = 0.0012
 
-    fitphimin = 1.01
-    fitphimax = 1.03
+    fitphimin = 1.00
+    fitphimax = 1.04
 
     kkSigma = RooRealVar("#sigma","#sigma",0.0013)
     kkGamma = RooRealVar("#Gamma","#Gamma",gammavalue,0.001,0.015)

@@ -119,7 +119,7 @@ void JPsiCount::SlaveTerminate()
       jspiCounters->Write();
 
      jpsiAll->Write();
-     
+
      OutFile->Print();
      fOutput->Add(OutFile);
      gDirectory = savedir;
