@@ -71,21 +71,10 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
   unpackFilterLabels          = cms.bool( True )
 )
 
-process.softMuons = cms.EDFilter('PATMuonSelector',
-   src = cms.InputTag('slimmedMuonsWithTrigger'),
-   cut = cms.string('muonID(\"TMOneStationTight\")'
-                    ' && abs(innerTrack.dxy) < 0.3'
-                    ' && abs(innerTrack.dz)  < 20.'
-                    ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
-                    ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
-                    ' && innerTrack.quality(\"highPurity\")'
-   ),
-   filter = cms.bool(True)
-)
 
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerHLTPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -131,8 +120,8 @@ process.DiMuonDiTrakProducerHLT = cms.EDProducer('DiMuonDiTrakProducerHLT',
     PFCandidates = cms.InputTag('packedPFCandidates'),
     TriggerInput        = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
+    DiMuonMassCuts = cms.vdouble(2.88,3.32),      # J/psi mass window 3.096916 +/- 0.150
+    TrakTrakMassCuts = cms.vdouble(0.93,1.32),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
     MaxDeltaRPt = cms.vdouble(0.01,2.0),

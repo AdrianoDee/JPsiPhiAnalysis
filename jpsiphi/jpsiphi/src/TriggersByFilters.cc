@@ -163,7 +163,7 @@ void TriggersByFilters::analyze(const edm::Event & iEvent, const edm::EventSetup
 
     pat::TriggerObjectStandAlone unPackedTrigger( trigs->at( iTrigObj ) );
 
-    if(unPackedTrigger.charge()==0) continue;
+    // if(unPackedTrigger.charge()==0) continue;
 
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
