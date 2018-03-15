@@ -544,7 +544,7 @@ if args.nofit and args.nofitb0:
     pdf_tot.plotOn(bZeroFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
     bZeroFitData.plotOn(bZeroFrame,Name("Data"))
 
-    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.85,0.99,0.99))
+    pdf_tot.paramOn(bZeroFrame,RooFit.Layout(0.78,0.99,0.99))
 
     bZeroFrame.Draw()
 
