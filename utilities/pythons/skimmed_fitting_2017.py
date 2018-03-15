@@ -15,8 +15,9 @@ from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
 from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
 from ROOT.RooAbsReal import Relative
 from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
-from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
-from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
+from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf
+from ROOT import RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
+from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein,RooVoigtian
 from ROOT import RooFit
 from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, PrintLevel
 from ROOT.RooFit import Format, Label, Parameters, Range, LineColor, LineStyle, SelectVars
