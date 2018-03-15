@@ -91,7 +91,7 @@ Bool_t JPsiCount::Process(Long64_t entry)
 
    std::bitset<16> tt(*trigger);
 
-   jpsiAll->Fill(*run);
+   jpsiAll->Fill(float(*run));
 
    for (int i = 0; i < numtriggers; i++)
      if(tt.test(i))
