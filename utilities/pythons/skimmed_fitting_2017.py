@@ -636,8 +636,8 @@ if args.binwise is not None:
         thisData = scalingData.reduce("xM<" + str(upedge))
 
         # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
-        nSigBinW = RooRealVar("nSig_{bw}","nSig_{bw}",theData.numEntries()*0.3,0.0,thisData.numEntries()*1.5)
-        nBkgBinW = RooRealVar("nBkg_{bw}","nBkg_{bw}",theData.numEntries()*0.7,0.0,thisData.numEntries()*1.5)
+        nSigBinW = RooRealVar("nSig_{bw}","nSig_{bw}",scalingData.numEntries()*0.3,0.0,scalingData.numEntries())
+        nBkgBinW = RooRealVar("nBkg_{bw}","nBkg_{bw}",scalingData.numEntries()*0.7,0.0,scalingData.numEntries())
 
         binwSig = RooVoigtian("binwSig","binwSig",tt_mass,binwMean,binwGamma,binwSigma)
         #binwSig = RooGaussian("binwSig","binwSig",tt_mass,binwMean,binwGamma)#,binwSigma)
