@@ -247,9 +247,6 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 
   isBest = true;
 
-  pat::CompositeCandidate *dimuonTrigger_cand, *ditrakTrigger_cand;
-
-
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {
 
@@ -274,8 +271,8 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         trakN_p4.SetPtEtaPhiM(tM.pt(),tM.eta(),tM.phi(),tM.mass());
 
         const pat::CompositeCandidate *dimuonditrkTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuonTTTrigger"));
-        dimuonTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
-        ditrakTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
+        const pat::CompositeCandidate *dimuonTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
+        const pat::CompositeCandidate *ditrakTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
 
         dimuonditrkTrigger_p4.SetPtEtaPhiM(dimuonditrkTrigger_cand->pt(),dimuonditrkTrigger_cand->eta(),dimuonditrkTrigger_cand->phi(),dimuonditrkTrigger_cand->mass());
         dimuonTrigger_p4.SetPtEtaPhiM(dimuonTrigger_cand->pt(),dimuonTrigger_cand->eta(),dimuonTrigger_cand->phi(),dimuonTrigger_cand->mass());
