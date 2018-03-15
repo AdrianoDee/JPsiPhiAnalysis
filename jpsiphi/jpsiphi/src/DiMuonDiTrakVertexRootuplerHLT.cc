@@ -264,7 +264,7 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         trakP_p4.SetPtEtaPhiM(tP.pt(),tP.eta(),tP.phi(),tP.mass());
         trakN_p4.SetPtEtaPhiM(tM.pt(),tM.eta(),tM.phi(),tM.mass());
 
-        dimuonditrkTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
+        dimuonditrkTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuonTTTrigger"));
         dimuonTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
         ditrakTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
 
@@ -282,19 +282,19 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 
         muonP_tMatch  = dimuon_cand->userInt("tMatchP");
         muonN_tMatch  = dimuon_cand->userInt("tMatchN");
-        trakP_tMatch  = dimuonditrk_cand.userInt("trakMatchP");
-        trakN_tMatch  = dimuonditrk_cand.userInt("trakMatchN");
+        trakP_tMatch  = dimuonditrkCand->userInt("trakMatchP");
+        trakN_tMatch  = dimuonditrkCand->userInt("trakMatchN");
 
         dimuonditrk_MassErr = -1.0;
         if (dimuonditrkCand->hasUserFloat("MassErr"))
           dimuonditrk_MassErr = dimuonditrkCand->userFloat("MassErr");
 
-        dimuonditrk_vProb     = dimuonditrk_rf_cand.userFloat("vProb");
-        dimuonditrk_vChi2     = dimuonditrk_rf_cand.userFloat("vChi2");
-        dimuonditrk_cosAlpha  = dimuonditrk_rf_cand.userFloat("cosAlpha");
-        dimuonditrk_ctauPV    = dimuonditrk_rf_cand.userFloat("ctauPV");
-        dimuonditrk_ctauErrPV = dimuonditrk_rf_cand.userFloat("ctauErrPV");
-        dimuonditrk_charge    = dimuonditrk_cand.charge();
+        dimuonditrk_vProb     = dimuonditrkCand->userFloat("vProb");
+        dimuonditrk_vChi2     = dimuonditrkCand->userFloat("vChi2");
+        dimuonditrk_cosAlpha  = dimuonditrkCand->userFloat("cosAlpha");
+        dimuonditrk_ctauPV    = dimuonditrkCand->userFloat("ctauPV");
+        dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
+        dimuonditrk_charge    = dimuonditrkCand->charge();
 
         dimuonditrk_tree->Fill();
         isBest = false;
