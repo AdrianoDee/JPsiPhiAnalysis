@@ -1,21 +1,27 @@
-
-import ROOT
-
-from ROOT import TLine, TLegend, TPad
-from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
-from ROOT import RooFit
-from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, Format, Label, Parameters, Range, LineColor, LineStyle
-from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
-from ROOT.RooAbsReal import Relative
-from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
-
-RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
 from array import array
+
 import sys
 
 import argparse
 import math
 import matplotlib.pyplot as plt
+import os
+
+import ROOT
+
+from ROOT import TLine, TLegend, TPad
+from ROOT import TFile,TH1,TH1F,TCanvas,TNtuple,TTreeReader,TTreeReaderValue
+from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
+from ROOT import RooStats, gPad, RooAbsData, RooAbsReal, RooBinning
+from ROOT.RooAbsReal import Relative
+from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta
+from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
+from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
+from ROOT import RooFit
+from ROOT.RooFit import Layout, Components, Title, Name, Normalization, Layout, PrintLevel
+from ROOT.RooFit import Format, Label, Parameters, Range, LineColor, LineStyle, SelectVars
+
+RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true')
@@ -48,27 +54,22 @@ sigmaside_kk    = args.sigmaside
 signalside      = args.signalside
 sidelow         = args.sidelow
 sidehigh        = args.sidehigh
-region          = "_overall_"
+region          = "overall"
 cuts            = "_"
+filename        = args.input
 
 if(args.prompt and args.nonprompt):
     print("Exiting. Choose prompt or nonprompt.")
     sys.exit()
 else:
     if args.nonprompt:
-        region = "_nprompt_"
+        region = "nprompt"
     if args.prompt:
-        region = "_promt_"
+        region = "promt"
 
-from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
-from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta,RooVoigtian,RooArgSet
-from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,SelectVars
-from ROOT import RooDataSet,RooFormulaVar,RooLinkedList,RooBernstein
-from ROOT.RooFit import PrintLevel
+if not os.path.isdir(region):
+    os.makedirs(region)
 
-# In[4]:
-
-filename = args.input
 
 file_2Trk = TFile(filename,"READ")
 file_2Trk.ls()
@@ -111,10 +112,8 @@ c = TCanvas("canvas","canvas",1200,800)
 
 if args.nonprompt:
     theData = theData.reduce("xL > 3.0")
-    region = "_nprompt_"
 if args.prompt:
     theData = theData.reduce("xL < 1.5")
-    region = "_promt_"
 
 if args.ptcuts is not None:
     theData = theData.reduce("trigp_pT > " + str(args.ptcuts))
@@ -131,7 +130,7 @@ if args.noplot:
     ttFrame = tt_mass.frame(Title("KK mass"))
     theData.plotOn(ttFrame)
     ttFrame.Draw()
-    c.SaveAs("tt_mass" + cuts + ".png")
+    c.SaveAs(region + "/tt_mass" + cuts + ".png")
 
     #### MuMu Data
     print("MuMu data plotting . . .")
@@ -140,7 +139,7 @@ if args.noplot:
     mumuFrame = mm_mass.frame(Title("KK mass"))
     theData.plotOn(mumuFrame)
     mumuFrame.Draw()
-    c.SaveAs("mm_mass.png")
+    c.SaveAs(region + "/mm_mass.png")
 
     #### X Data
     print("TrakTrakMuMu data plotting . . .")
@@ -149,7 +148,7 @@ if args.noplot:
     mmttFrame = mmtt_mass.frame(Title("#mu#muKK mass"))
     theData.plotOn(mmttFrame)
     mmttFrame.Draw()
-    c.SaveAs("mmtt_mass" + region + ".png")
+    c.SaveAs(region + "/mmtt_mass_" + region + ".png")
 
     #### X lxy Data
     print("TrakTrakMuMu data plotting . . .")
@@ -158,7 +157,7 @@ if args.noplot:
     lxyFrame = lxysig.frame()
     theData.plotOn(lxyFrame)
     lxyFrame.Draw()
-    c.SaveAs("lxy" + region + ".png")
+    c.SaveAs(region + "/lxy_" + region + ".png")
 
 
     ##Plotting
@@ -172,59 +171,59 @@ if args.noplot:
 
     ##Masses hists
 
-    hist_mmtt.SetTitle("M(#mu#muKK)" + region + " ;M(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt.SetTitle("M(#mu#muKK)_" + region + " ;M(#mu#muKK) [GeV]; no. entries")
     hist_mmtt.SetFillColor(ROOT.kRed)
     hist_mmtt.SetLineColor(ROOT.kRed)
     hist_mmtt.SetFillStyle(3002)
     hist_mmtt.Draw()
-    c.SaveAs("mmtt_mass_histo" + region + ".png")
-    c.SaveAs("mmtt_mass_histo" + region + ".root")
+    c.SaveAs(region + "/mmtt_mass_histo_" + region + ".png")
+    c.SaveAs(region + "/mmtt_mass_histo_" + region + ".root")
 
-    hist_mm.SetTitle("M(#mu#mu)" + region + " ;M(#mu#mu) [GeV]; no. entries")
+    hist_mm.SetTitle("M(#mu#mu)_" + region + " ;M(#mu#mu) [GeV]; no. entries")
     hist_mm.SetFillColor(ROOT.kGreen)
     hist_mm.SetLineColor(ROOT.kGreen)
     hist_mm.SetFillStyle(3002)
     hist_mm.Draw()
-    c.SaveAs("mm_mass_histo" + region + ".png")
-    c.SaveAs("mm_mass_histo" + region + ".root")
+    c.SaveAs(region + "/mm_mass_histo_" + region + ".png")
+    c.SaveAs(region + "/mm_mass_histo_" + region + ".root")
 
-    hist_tt.SetTitle("M(KK)" + region + " ;M(KK) [GeV]; no. entries")
+    hist_tt.SetTitle("M(KK)_" + region + " ;M(KK) [GeV]; no. entries")
     hist_tt.GetXaxis().SetRangeUser(1.0,1.05)
     hist_tt.SetFillColor(ROOT.kBlue)
     hist_tt.SetLineColor(ROOT.kBlue)
     hist_tt.SetFillStyle(3002)
     hist_tt.Draw()
-    c.SaveAs("tt_mass_histo" + region + ".png")
-    c.SaveAs("tt_mass_histo" + region + ".root")
+    c.SaveAs(region + "/tt_mass_histo_" + region + ".png")
+    c.SaveAs(region + "/tt_mass_histo_" + region + ".root")
 
     ##PT hists
 
-    hist_tt_pt.SetTitle("p_t(KK)" + region + " ;p_t(KK) [GeV]; no. entries")
+    hist_tt_pt.SetTitle("p_t(KK)_" + region + " ;p_t(KK) [GeV]; no. entries")
     hist_tt_pt.GetXaxis().SetRangeUser(0.0,20.0)
     hist_tt_pt.SetFillColor(ROOT.kBlue)
     hist_tt_pt.SetLineColor(ROOT.kBlue)
     hist_tt_pt.SetFillStyle(3003)
     hist_tt_pt.Draw()
-    c.SaveAs("tt_pt_histo" + region + ".png")
-    c.SaveAs("tt_pt_histo" + region + ".root")
+    c.SaveAs(region + "/tt_pt_histo_" + region + ".png")
+    c.SaveAs(region + "/tt_pt_histo_" + region + ".root")
 
-    hist_mm_pt.SetTitle("p_t(#mu#mu)" + region + " ;p_t(#mu#mu) [GeV]; no. entries")
+    hist_mm_pt.SetTitle("p_t(#mu#mu)_" + region + " ;p_t(#mu#mu) [GeV]; no. entries")
     hist_mm_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mm_pt.SetFillColor(ROOT.kGreen)
     hist_mm_pt.SetLineColor(ROOT.kGreen)
     hist_mm_pt.SetFillStyle(3003)
     hist_mm_pt.Draw()
-    c.SaveAs("mm_pt_histo" + region + ".png")
-    c.SaveAs("mm_pt_histo" + region + ".root")
+    c.SaveAs(region + "/mm_pt_histo_" + region + ".png")
+    c.SaveAs(region + "/mm_pt_histo_" + region + ".root")
 
-    hist_mmtt_pt.SetTitle("p_t(#mu#muKK)" + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
+    hist_mmtt_pt.SetTitle("p_t(#mu#muKK)_" + region + " ;p_t(#mu#muKK) [GeV]; no. entries")
     hist_mmtt_pt.GetXaxis().SetRangeUser(0.0,90.0)
     hist_mmtt_pt.SetFillColor(ROOT.kRed)
     hist_mmtt_pt.SetLineColor(ROOT.kRed)
     hist_mmtt_pt.SetFillStyle(3003)
     hist_mmtt_pt.Draw()
-    c.SaveAs("mmtt_pt_histo" + region + ".png")
-    c.SaveAs("mmtt_pt_histo" + region + ".root")
+    c.SaveAs(region + "/mmtt_pt_histo_" + region + ".png")
+    c.SaveAs(region + "/mmtt_pt_histo_" + region + ".root")
 
 if args.nofit and args.nofitkk:
 
@@ -386,8 +385,8 @@ if args.nofit and args.nofitkk:
     linedw.SetLineStyle(kDashed)
     linedw.Draw()
 
-    kcanvas.SaveAs("kk_Phi_fit" + region + ".png")
-    kcanvas.SaveAs("kk_Phi_fit" + region + ".root")
+    kcanvas.SaveAs(region + "/kk_Phi_fit_" + region + ".png")
+    kcanvas.SaveAs(region + "/kk_Phi_fit_" + region + ".root")
     kcanvas.Clear()
 
     signalhist.SetFillColor(kBlue)
@@ -438,8 +437,8 @@ if args.nofit and args.nofitkk:
     #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
     legend.AddEntry(sidehist,"Sidebands ","f")
     legend.Draw()
-    kcanvas.SaveAs(signalhist.GetName() + "_sidebands" + region + ".png")
-    kcanvas.SaveAs(signalhist.GetName() + "_sidebands" + region + ".root")
+    kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".png")
+    kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".root")
 
     ROOT.gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
@@ -460,8 +459,8 @@ if args.nofit and args.nofitkk:
     linezero.SetLineWidth(2)
     linezero.SetLineStyle(kDotted)
     linezero.Draw()
-    kcanvas.SaveAs(signalhist.GetName() + "_subtracted" + region + ".png")
-    kcanvas.SaveAs(signalhist.GetName() + "_subtracted" + region + ".root")
+    kcanvas.SaveAs(signalhist.GetName() + "_subtracted_" + region + ".png")
+    kcanvas.SaveAs(signalhist.GetName() + "_subtracted_" + region + ".root")
 
 
     splot   = RooStats.SPlot ( "sPlot","sPlot", theData, kkTot, RooArgList(nSigKK,nBkgKK))
@@ -569,20 +568,20 @@ if args.nofit and args.nofitb0:
     linedw.SetLineStyle(kDashed)
     linedw.Draw()
 
-    bcanvas.SaveAs("b0_fit" + region + ".png")
-    bcanvas.SaveAs("b0_fit" + region + ".root")
+    bcanvas.SaveAs(region + "/b0_fit_" + region + ".png")
+    bcanvas.SaveAs(region + "/b0_fit_" + region + ".root")
 
     bZeroFrameTT = tt_mass.frame(Range(phimin,phimax),Title("#phi from B_0^s mass"))
     bZeroFitData.plotOn(bZeroFrameTT)
     bZeroFrameTT.Draw()
-    bcanvas.SaveAs("b0_TT" + region + ".png")
-    bcanvas.SaveAs("b0_TT" + region + ".root")
+    bcanvas.SaveAs(region + "/b0_TT_" + region + ".png")
+    bcanvas.SaveAs(region + "/b0_TT_" + region + ".root")
 
     bZeroFrameMM = mm_mass.frame(Range(jpsimin,jpsimax),Title("J/#Psi from B_0^s mass"))
     bZeroFitData.plotOn(bZeroFrameMM)
     bZeroFrameMM.Draw()
-    bcanvas.SaveAs("b0_MM" + region + ".png")
-    bcanvas.SaveAs("b0_MM" + region + ".root")
+    bcanvas.SaveAs(region + "/b0_MM_" + region + ".png")
+    bcanvas.SaveAs(region + "/b0_MM_" + region + ".root")
 
 if args.binwise is not None:
 
@@ -592,8 +591,7 @@ if args.binwise is not None:
     scalingData = theData.Clone("binwiseData")
     bwcanvas = TCanvas("bwcanvas","bwcanvas",1200,800)
 
-
-
+    binw_x_hist = TH1F("binw_x_hist","Binwise counts;m(#mu#mukk) [GeV]",int(args.binwise),xmin,xmax)
 
     for i in range(args.binwise-1):
 
@@ -688,8 +686,15 @@ if args.binwise is not None:
         linedw.SetLineStyle(kDashed)
         linedw.Draw()
 
-        bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
-        bwcanvas.SaveAs("binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
+        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
+        bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
+
+        binw_x_hist.SetBinContent(i+1,nSigBinW.getValV())
+
+    bwcanvas.Clear()
+
+    bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".png")
+    bwcanvas.SaveAs(region + "/binwise_phi_xM_"  + str(lowedge) + "_" + str(upedge) + ".root")
 
 if args.nofit and args.nofitmm:
 
@@ -746,5 +751,5 @@ if args.nofit and args.nofitmm:
     jPsiFitData.plotOn(jPsiFrame)
     pdf_tot.paramOn(jPsiFrame,RooFit.Layout(0.7,0.99,0.99))
     jPsiFrame.Draw()
-    jcanvas.SaveAs("mm_fit" + region + ".png")
-    jcanvas.SaveAs("mm_fit" + region + ".root")
+    jcanvas.SaveAs(region + "/mm_fit_" + region + ".png")
+    jcanvas.SaveAs(region + "/mm_fit_" + region + ".root")
