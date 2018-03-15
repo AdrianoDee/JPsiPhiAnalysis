@@ -49,7 +49,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   using namespace std;
   using namespace reco;
 
-  vector<double> fourMasses;
+  std::vector<double> fourMasses;
   fourMasses.push_back( massCands_[0] );
   fourMasses.push_back( massCands_[1] );
   fourMasses.push_back( massCands_[2] );
