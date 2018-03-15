@@ -43,6 +43,7 @@ parser.add_argument('--signalside', type=float, default=3.0)
 parser.add_argument('--sidelow', type=float, default=4.0)
 parser.add_argument('--sidehigh', type=float, default=6.0)
 parser.add_argument('--binwise', type=int, default=None)
+parser.add_argument('--b0mass', type=float, default=5.35)
 #                    help='number of epochs')
 #parser.add_argument('--batch_size', type=int, default=64)
 #
@@ -58,7 +59,7 @@ sidehigh        = args.sidehigh
 region          = "overall"
 cuts            = "_"
 filename        = args.input
-
+bZeroMass       = args.b0mass
 if(args.prompt and args.nonprompt):
     print("Exiting. Choose prompt or nonprompt.")
     sys.exit()
@@ -509,7 +510,7 @@ if args.nofit and args.nofitb0:
 
     bZeroFitData = (bZeroFitData.reduce("xM<5.55")).reduce("xM>5.15")
 
-    mean = RooRealVar("m_{#mu#mukk}","m_{#mu#mukk}",5.35,5.2,5.4);
+    mean = RooRealVar("m_{#mu#mukk}","m_{#mu#mukk}",bZeroMass,bZeroMass-0.1,bZeroMass+1.0);
     sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.1);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.0005,0.1);
 
