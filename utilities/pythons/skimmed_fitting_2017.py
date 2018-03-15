@@ -230,6 +230,15 @@ if args.nofit and args.nofitkk:
 
     ## Phi fitting
 
+    kcanvas = TCanvas("kcanvas","kcanvas",1400,800)
+
+    pullpad = TPad("pullpad","pullpad",0.0,0.05,1.0,0.33)
+    plotpad = TPad("histopad","histopad",0.0,0.35,1.0,1.0)
+    plotpad.SetFillStyle(4004)
+    pullpad.SetFillStyle(4004)
+    plotpad.Draw()
+    pullpad.Draw()
+
     traKFitData = theData.Clone("fitTrakData")
 
     if binnedfit:
@@ -344,19 +353,41 @@ if args.nofit and args.nofitkk:
     sidehist = leftsidehist.Clone()
     sidehist.Add(rightsidehist)
 
+    plotpad.cd()
+
     kkFrame = tt_mass.frame(Range(fitphimin,fitphimax))
 
     # kkbins = RooBinning(-15,15)
     # kkbins.addUniform(30,fitphimin,fitphimax)
-    traKFitData.plotOn(kkFrame)
-    kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)))
+    traKFitData.plotOn(kkFrame,Name("Data"))
+    kkTot.plotOn(kkFrame,RooFit.Normalization(1.0/float(nfit)),Name("Pdf"))
     traKFitData.plotOn(kkFrame)
     kkTot.paramOn(kkFrame,RooFit.Layout(0.57,0.99,0.65))
 
     kkFrame.Draw()
 
-    c.SaveAs("kk_Phi_fit" + region + ".png")
-    c.SaveAs("kk_Phi_fit" + region + ".root")
+    pullpad.cd()
+    hpull = bZeroFrame.pullHist("Data","Pdf")
+    pullframe = mmtt_mass.frame(Title("Pull Distribution"),Range(fitphimin,fitphimax))
+    #pullframe.GetXaxis().SetTitleSize(0.04)
+    #pullframe.GetYaxis().SetTitleSize(0.03)
+    ROOT.gStyle.SetTitleFontSize(0.07)
+    pullframe.addPlotable(hpull,"P")
+    pullframe.Draw()
+
+    lineup = TLine(fitphimin,4.0,fitphimax,4.0)
+    lineup.SetLineColor(kRed)
+    lineup.SetLineStyle(kDashed)
+    lineup.Draw()
+
+    linedw = TLine(fitphimin,-4.0,fitphimax,-4.0)
+    linedw.SetLineColor(kRed)
+    linedw.SetLineStyle(kDashed)
+    linedw.Draw()
+
+    kcanvas.SaveAs("kk_Phi_fit" + region + ".png")
+    kcanvas.SaveAs("kk_Phi_fit" + region + ".root")
+    kcanvas.Clear()
 
     signalhist.SetFillColor(kBlue)
     signalhist.SetName("B_{0}^{s} Candidates Mass - CC")
@@ -406,8 +437,8 @@ if args.nofit and args.nofitkk:
     #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
     legend.AddEntry(sidehist,"Sidebands ","f")
     legend.Draw()
-    c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".png")
-    c.SaveAs(signalhist.GetName() + "_sidebands" + region + ".root")
+    kcanvas.SaveAs(signalhist.GetName() + "_sidebands" + region + ".png")
+    kcanvas.SaveAs(signalhist.GetName() + "_sidebands" + region + ".root")
 
     ROOT.gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
@@ -428,8 +459,8 @@ if args.nofit and args.nofitkk:
     linezero.SetLineWidth(2)
     linezero.SetLineStyle(kDotted)
     linezero.Draw()
-    c.SaveAs(signalhist.GetName() + "_subtracted" + region + ".png")
-    c.SaveAs(signalhist.GetName() + "_subtracted" + region + ".root")
+    kcanvas.SaveAs(signalhist.GetName() + "_subtracted" + region + ".png")
+    kcanvas.SaveAs(signalhist.GetName() + "_subtracted" + region + ".root")
 
 
     splot   = RooStats.SPlot ( "sPlot","sPlot", theData, kkTot, RooArgList(nSigKK,nBkgKK))
@@ -446,8 +477,8 @@ if args.nofit and args.nofitkk:
     dstree.Project('sPlot_B0_hist','xM','nSig_sw');
 
     sPlot_B0_hist.Draw('e0');
-    c.SaveAs('b0_Splot_Phi' + region + '.png')
-    c.SaveAs('b0_Splot_Phi' + region + '.root')
+    kcanvas.SaveAs('b0_Splot_Phi' + region + '.png')
+    kcanvas.SaveAs('b0_Splot_Phi' + region + '.root')
 
 if args.nofit and args.nofitb0:
 
