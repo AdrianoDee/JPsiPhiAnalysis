@@ -93,7 +93,7 @@ Bool_t JPsiCount::Process(Long64_t entry)
 
    for (int i = 0; i < numtriggers; i++)
      if(tt.test(i))
-      jspiCounters->Fill(*run);
+      jspiCounters[i]->Fill(*run);
 
    fReader.SetEntry(entry);
 
