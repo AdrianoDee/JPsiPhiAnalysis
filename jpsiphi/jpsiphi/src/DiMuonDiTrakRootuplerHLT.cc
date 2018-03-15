@@ -342,7 +342,7 @@ void DiMuonDiTrakRootuplerHLT::analyze(const edm::Event& iEvent, const edm::Even
   if (dimuonditrk_rf_cand_handle.isValid() && dimuonditrk_cand_handle.isValid()) {
 
     pat::CompositeCandidate dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    pat::CompositeCandidate *dimuonTrigger_cand, *ditrakTrigger_cand;
+    pat::CompositeCandidate *dimuonditrkTrigger_cand, *dimuonTrigger_cand, *ditrakTrigger_cand;
 
     noXCandidates = (Int_t)(dimuonditrk_rf_cand_handle->size());
     //Refitted Handle
@@ -391,7 +391,7 @@ void DiMuonDiTrakRootuplerHLT::analyze(const edm::Event& iEvent, const edm::Even
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
-      const pat::CompositeCandidate dimuonditrkTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
+      dimuonditrkTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuonTTTrigger"));
       dimuonTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
       ditrakTrigger_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
 
