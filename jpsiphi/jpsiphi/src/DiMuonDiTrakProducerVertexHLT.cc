@@ -252,7 +252,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              if (!(mmttVertex.isValid()))
                  continue;
 
-             reco::Candidate::LorentzVector mumutrktrk = trakP->p4() + trakN->p4() + muonP->p4() + muonN->p4();
+             // reco::Candidate::LorentzVector DiMuonTTCand. = trakP->p4() + trakN->p4() + muonP->p4() + muonN->p4();
 
              vChi2 = mmttVertex.totalChiSquared();
              vNDF  = mmttVertex.degreesOfFreedom();
@@ -265,8 +265,8 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
              vtx.SetXYZ(mmttVertex.position().x(),mmttVertex.position().y(),0);
              vtx3D.SetXYZ(mmttVertex.position().x(),mmttVertex.position().y(),mmttVertex.position().z());
-             TVector3 pperp(mumutrktrk.px(), mumutrktrk.py(), 0);
-             TVector3 pperp3D(mumutrktrk.px(), mumutrktrk.py(), mumutrktrk.pz());
+             TVector3 pperp(DiMuonTTCand.px(), DiMuonTTCand.py(), 0);
+             TVector3 pperp3D(DiMuonTTCand.px(), DiMuonTTCand.py(), DiMuonTTCand.pz());
              AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
              AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
 
