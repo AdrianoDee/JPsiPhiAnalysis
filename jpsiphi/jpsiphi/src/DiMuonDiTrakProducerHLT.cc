@@ -183,19 +183,19 @@ void DiMuonDiTrakProducerHLT::produce(edm::Event& iEvent, const edm::EventSetup&
              }
            }
 
-           if (!(negTrig || posTrig))
+           if (!(negMatched || posMatched))
             continue;
 
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
            // pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j]);
            pat::CompositeCandidate TTTrigger;
 
-           if(negTrig && posTrig)
+           if(negMatched && posMatched)
             TTTrigger = makeTTTriggerCandidate(posTrig,negTrig);
            else
-            if(negTrig)
+            if(negMatched)
               TTTrigger = makeTTTriggerMixedCandidate(posTrack,negTrig);
-            else if(posTrig)
+            else if(posMatched)
               TTTrigger = makeTTTriggerMixedCandidate(negTrack,posTrig);
 
            if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
