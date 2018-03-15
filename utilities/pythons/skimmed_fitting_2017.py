@@ -262,12 +262,12 @@ if args.nofit and args.nofitkk:
     # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
     # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
 
-    a0 = RooRealVar("p0","p0",0.001,-10.,10.)
-    a1 = RooRealVar("p1","p1",0.001,-10.,10.)
-    a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
-    a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
-    a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
-    a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
+    a0 = RooRealVar("p_0","p_0",0.001,-10.,10.)
+    a1 = RooRealVar("p_1","p_1",0.001,-10.,10.)
+    a2 = RooRealVar("p_2","p_2",-0.00001,-10.,10.)
+    a3 = RooRealVar("p_3","p_3",-0.000001,-10.,10.)
+    a4 = RooRealVar("p_4","p_4",-0.000001,-10.,10.)
+    a5 = RooRealVar("p_5","p_5",-0.000001,-10.,10.)
     poliset = RooArgList(a0,a1,a2,a3,a4)
 
     # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
@@ -280,15 +280,22 @@ if args.nofit and args.nofitkk:
     kkBkg = RooChebychev("kkBkg","Background",tt_mass,poliset)
     kkTot = RooAddPdf("kkTot","kkTot",RooArgList(kkSig,kkBkg),RooArgList(nSigKK,nBkgKK))
 
-    kkGamma.setConstant(kTrue)
-    kkMean.setConstant(kTrue)
-
     nfit = 0
 
     #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
     #nfit +=1
 
-    if not debugging:
+    if debugging:
+        kkGamma.setConstant(kTrue)
+        kkMean.setConstant(kTrue)
+        kkSigma.setConstant(kTrue)
+        a0.setConstant(kTrue)
+        a1.setConstant(kTrue)
+        a2.setConstant(kTrue)
+        a3.setConstant(kTrue)
+        a4.setConstant(kTrue)
+        a5.setConstant(kTrue)
+        # a6.setConstant(kTrue)
 
         kkMean.setConstant(kFalse)
         # kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005),RooFit.PrintLevel(-1), RooFit.NumCPU(7),RooFit.Save())
@@ -299,10 +306,9 @@ if args.nofit and args.nofitkk:
         # nfit +=1
 
         #kkfit = kkTot.fitTo(traKFitData,Range(fitphimin+0.005,fitphimax-0.005), RooFit.NumCPU(7),RooFit.Save())
-        kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
-        nfit +=1
-    else:
-        nfit +=1
+
+    kkfit = kkTot.fitTo(traKFitData,Range(fitphimin,fitphimax),RooFit.PrintLevel(-1), RooFit.NumCPU(numcpus),RooFit.Save())
+    nfit +=1
 
     sigmaside_kk = math.sqrt(kkGamma.getValV()**2 + kkSigma.getValV()**2)
     sigmaside_kk = kkGamma.getValV()
@@ -507,13 +513,13 @@ if args.nofit and args.nofitb0:
     sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.002,0.0005,0.1);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.004,0.0005,0.1);
 
-    c0 = RooRealVar("p0","p0",0.001,-10.,10.)
-    c1 = RooRealVar("p1","p1",0.001,-10.,10.)
-    c2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
-    c3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
-    c4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
-    c5 = RooRealVar("p5","p5",-0.000001,-10.,10.)
-    c6 = RooRealVar("p6","p6",-0.000001,-0.01,0.01)
+    c0 = RooRealVar("p_0","p_0",0.001,-10.,10.)
+    c1 = RooRealVar("p_1","p_1",0.001,-10.,10.)
+    c2 = RooRealVar("p_2","p_2",-0.00001,-10.,10.)
+    c3 = RooRealVar("p_3","p_3",-0.000001,-10.,10.)
+    c4 = RooRealVar("p_4","p_4",-0.000001,-10.,10.)
+    c5 = RooRealVar("p_5","p_5",-0.000001,-10.,10.)
+    c6 = RooRealVar("p_6","p_6",-0.000001,-0.01,0.01)
 
     alpha = RooRealVar("#alpha","#alpha",-0.1,-10.0,-0.00001)
     polyset = RooArgList(c0,c1,c2,c3,c4,c5)
@@ -644,12 +650,12 @@ if args.binwise is not None:
         # B_5     = RooRealVar ( "B_5"    , "B_5"    , 0.3  , -20   , 100   )
         # B_6     = RooRealVar ( "B_6"    , "B_6"    , 0.3  , -20   , 100   )
 
-        a0 = RooRealVar("p0","p0",0.001,-10.,10.)
-        a1 = RooRealVar("p1","p1",0.001,-10.,10.)
-        a2 = RooRealVar("p2","p2",-0.00001,-10.,10.)
-        a3 = RooRealVar("p3","p3",-0.000001,-10.,10.)
-        a4 = RooRealVar("p4","p4",-0.000001,-10.,10.)
-        a5 = RooRealVar("a5","a5",-0.000001,-10.,10.)
+        a0 = RooRealVar("p_0","p_0",0.001,-10.,10.)
+        a1 = RooRealVar("p_1","p_1",0.001,-10.,10.)
+        a2 = RooRealVar("p_2","p_2",-0.00001,-10.,10.)
+        a3 = RooRealVar("p_3","p_3",-0.000001,-10.,10.)
+        a4 = RooRealVar("p_4","p_4",-0.000001,-10.,10.)
+        a5 = RooRealVar("p_5","p_5",-0.000001,-10.,10.)
         poliset = RooArgList(a0,a1,a2,a3,a4)
 
         # gaussFrac = RooRealVar("s","fraction of component 1 in kkSig",0.3,0.0,1.0)
@@ -737,13 +743,13 @@ if args.nofit and args.nofitmm:
     sigma1 = RooRealVar("#sigma_{1}","#sigma_{1}",0.01,0.001,0.1);
     sigma2 = RooRealVar("#sigma_{2}","#sigma_{2}",0.0011,0.001,0.1);
 
-    # c0 = RooRealVar("p0","p0",0.001,-5.,5.)
-    # c1 = RooRealVar("p1","p1",0.001,-4.,4.)
-    # c2 = RooRealVar("p2","p2",-0.00001,-4.,4.)
-    # c3 = RooRealVar("p3","p3",-0.000001,-4.,4.)
-    # c4 = RooRealVar("p4","p4",-0.000001,-2.,2.)
-    # c5 = RooRealVar("p5","p5",-0.000001)
-    # c6 = RooRealVar("p6","p6",-0.000001,-0.01,0.01)
+    # c0 = RooRealVar("p_0","p_0",0.001,-5.,5.)
+    # c1 = RooRealVar("p_1","p_1",0.001,-4.,4.)
+    # c2 = RooRealVar("p_2","p_2",-0.00001,-4.,4.)
+    # c3 = RooRealVar("p_3","p_3",-0.000001,-4.,4.)
+    # c4 = RooRealVar("p_4","p_4",-0.000001,-2.,2.)
+    # c5 = RooRealVar("p_5","p_5",-0.000001)
+    # c6 = RooRealVar("p_6","p_6",-0.000001,-0.01,0.01)
     #
     # polyset = RooArgList(c0,c1,c2,c3,c4)
 
