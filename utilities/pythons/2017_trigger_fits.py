@@ -179,6 +179,8 @@ if args.noplot:
     c.SaveAs("lxy" + region + ".png")
 
     mmttcuts = [4.0,4.2,4.3,4.4,4.6,4.8,5.0]
+    trigcands = []
+    patcands = []
 
     hist_mmtt      = (mmttData.createHistogram(mmtt_mass,mmtt_mass_trig)).ProjectionX("hist_mmtt")
     hist_mmtt_trig = (mmttData.createHistogram(mmtt_mass,mmtt_mass_trig)).ProjectionY("hist_mmtt_trig")
@@ -186,14 +188,19 @@ if args.noplot:
     mmtt_all      = hist_mmtt.Integral(0, hist_mmtt.GetNbinsX())
     mmtt_trig_all = hist_mmtt_trig.Integral(0, hist_mmtt_trig.GetNbinsX())
     print("####TRIGGER")
-    for i in range(len(mmttcuts)-1) :
+    for i in range(len(mmttcuts)) :
         integral = hist_mmtt_trig.Integral(hist_mmtt_trig.FindBin(mmttcuts[i]), hist_mmtt_trig.GetNbinsX())
-        print("#No. cands. > " + str(mmttcuts[i]) + "] : " + str(integral) + " fraction : " +  str(integral/mmtt_trig_all))
-
+        print("#No. cands. > " + str(mmttcuts[i]) + " : " + str(integral) + " fraction : " +  str(integral/mmtt_trig_all))
+        trigcands.append(integral)
+        
+    print(trigcands)
     print("####PAT")
-    for i in range(len(mmttcuts)-1) :
+    for i in range(len(mmttcuts)) :
         integral = hist_mmtt.Integral(hist_mmtt.FindBin(mmttcuts[i]), hist_mmtt.GetNbinsX())
-        print("#No. cands. > " + str(mmttcuts[i]) + "] : " + str(integral) + " fraction : " +  str(integral/mmtt_all))
+        print("#No. cands. > " + str(mmttcuts[i]) + " : " + str(integral) + " fraction : " +  str(integral/mmtt_all))
+        patcands.append(integral)
+
+    print(patcands)
 
     hist_mmtt_trig.SetTitle("M(#mu#muKK) - L3 " + region + " ;M(#mu#muKK)_{L3} [GeV]; no. entries")
     hist_mmtt_trig.SetFillColor(ROOT.kRed)
