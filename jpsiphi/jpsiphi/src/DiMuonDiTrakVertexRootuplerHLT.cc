@@ -171,7 +171,11 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
   dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
   dimuonditrk_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
-  dimuonditrk_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
+
+  dimuonditrk_tree->Branch("muonP_tMatch", &muonP_tMatch, "muonP_tMatch/I");
+  dimuonditrk_tree->Branch("muonN_tMatch", &muonN_tMatch, "muonN_tMatch/I");
+  dimuonditrk_tree->Branch("trakP_tMatch", &trakP_tMatch, "trakP_tMatch/I");
+  dimuonditrk_tree->Branch("trakN_tMatch", &trakN_tMatch, "trakN_tMatch/I");
 
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
@@ -241,6 +245,9 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 
   isBest = true;
 
+  pat::CompositeCandidate *dimuonditrkTrigger_cand, *dimuonTrigger_cand, *ditrakTrigger_cand;
+
+
   if ( dimuonditrks.isValid() && !dimuonditrks->empty()) {
     for ( pat::CompositeCandidateCollection::const_iterator dimuonditrkCand = dimuonditrks->begin(); dimuonditrkCand != dimuonditrks->end(); ++dimuonditrkCand ) {
 
@@ -295,6 +302,7 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         dimuonditrk_ctauPV    = dimuonditrkCand->userFloat("ctauPV");
         dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
         dimuonditrk_charge    = dimuonditrkCand->charge();
+
 
         dimuonditrk_tree->Fill();
         isBest = false;

@@ -29,6 +29,14 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
   using namespace reco;
 
+  Vertex thePrimaryV;
+
+  std::vector<double> fourMasses;
+  fourMasses.push_back( massCands_[0] );
+  fourMasses.push_back( massCands_[1] );
+  fourMasses.push_back( massCands_[2] );
+  fourMasses.push_back( massCands_[3] );
+
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
