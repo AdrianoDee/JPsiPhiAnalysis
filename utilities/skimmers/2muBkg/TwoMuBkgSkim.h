@@ -16,8 +16,33 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
-// Headers needed by this particular selector
-#include "TLorentzVector.h"
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
+#include <TLorentzVector.h>
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <map>
 
 
 
@@ -25,6 +50,8 @@ class TwoMuBkgSkim : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   TNtuple *outTuple;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -91,6 +118,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(TwoMuBkgSkim,0);
 

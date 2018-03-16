@@ -28,6 +28,7 @@
 #include "TwoMuBkgSkim.h"
 #include <TH2.h>
 #include <TStyle.h>
+#include <bitset>
 
 void TwoMuBkgSkim::Begin(TTree * /*tree*/)
 {
@@ -45,6 +46,17 @@ void TwoMuBkgSkim::SlaveBegin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
+
+   std::string outputString = "2muBkg_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   outTuple = new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:mmPt:ttPt");
+
 
 }
 
@@ -68,6 +80,60 @@ Bool_t TwoMuBkgSkim::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   Float_t run_out, evt_out, xM_out, ttM_out, mmM_out, xM_ref_out, ttM_ref_out, mmM_ref_out;
+   Float_t xL_out, xPt_out, xEta_out, xVtx_out, xCos_out, xHlt_out,muonp_pT_out, muonn_pT_out, kaonn_pT_out, kaonp_pT_out;
+   Float_t mmPt, ttPt;
+
+   fReader.SetEntry(entry);
+
+   std::bitset<16> tt(*trigger);
+   std::bitset<16> dimuonTmatch(*dimuon_triggerMatch);
+   bool phiM = (*ditrak_p4).M() > 1.01 && (*ditrak_p4).M() < 1.03;
+   bool jpsiM = (*dimuon_p4).M() > 3.00 && (*dimuon_p4).M() < 3.20;
+   bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.997;
+   bool vertexP = (*dimuonditrk_vProb) > 0.2;
+   bool jPT = (*dimuon_p4).Pt() > 7.0;
+   bool pPT = (*ditrak_p4).Pt() > 1.0;
+   bool theTrigger = (*trigger) > 0;
+   bool tMatchDimuon = dimuonTmatch.test(0);
+   bool isMatched = (*dimuon_triggerMatch)>0;
+   bool triggerBit = tt.test(0);
+   bool isBest = (*isBestCandidate);
+   // if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT)
+   if(true)
+   {
+     run_out =  *run;
+     evt_out =  *event;
+
+     ttM_out = (*ditrak_p4).M();
+     mmM_out= (*dimuon_p4).M();
+     xM_out   = (*dimuonditrk_p4).M();
+
+     ttM_ref_out = (*ditrak_rf_p4).M();
+     mmM_ref_out= (*dimuon_rf_p4).M();
+     xM_ref_out   = (*dimuonditrk_rf_p4).M();
+
+     xL_out = (*dimuonditrk_ctauPV)/(*dimuonditrk_ctauErrPV);
+     xPt_out = (*dimuonditrk_rf_p4).Pt();
+     xEta_out = (*dimuonditrk_rf_p4).Eta();
+     xVtx_out = *dimuonditrk_vProb;
+     xCos_out = *dimuonditrk_cosAlpha;
+     xHlt_out = *trigger;
+
+     muonp_pT_out = (*muonp_rf_p4).Pt();
+     muonn_pT_out = (*muonn_rf_p4).Pt();
+     kaonn_pT_out = (*kaonp_rf_p4).Pt();
+     kaonp_pT_out = (*kaonn_rf_p4).Pt();
+
+     mmPt = (*dimuon_p4).Pt();
+     ttPt = (*ditrak_p4).Pt();
+
+     Float_t params[] = {run_out,evt_out,xM_out,ttM_out,mmM_out,xM_ref_out,ttM_ref_out,mmM_ref_out,
+     xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,mmPt,ttPt};
+
+     outTuple->Fill(params);
+   }
+
    return kTRUE;
 }
 
@@ -76,6 +142,21 @@ void TwoMuBkgSkim::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
 
 }
 
