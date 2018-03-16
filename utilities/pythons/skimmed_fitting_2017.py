@@ -68,7 +68,7 @@ else:
     if args.nonprompt:
         region = "nprompt"
     if args.prompt:
-        region = "promt"
+        region = "prompt"
 
 if not os.path.isdir(region):
     os.makedirs(region)
