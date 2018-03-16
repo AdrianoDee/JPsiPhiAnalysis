@@ -446,8 +446,8 @@ if args.nofit and args.nofitkk:
     #legend.AddEntry(leftsidehist,"L-sideband    (-6.0#sigma,-4.0#sigma)","f")
     legend.AddEntry(sidehist,"Sidebands ","f")
     legend.Draw()
-    kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".png")
-    kcanvas.SaveAs(signalhist.GetName() + "_sidebands_" + region + ".root")
+    kcanvas.SaveAs(region + "/b0s_sidebands_" + region + ".png")
+    kcanvas.SaveAs(region + "/b0s_sidebands_" + region + ".root")
 
     gStyle.SetOptStat(0)
     b0SideSub = signalhist.Clone()
@@ -468,8 +468,8 @@ if args.nofit and args.nofitkk:
     linezero.SetLineWidth(2)
     linezero.SetLineStyle(kDotted)
     linezero.Draw()
-    kcanvas.SaveAs(signalhist.GetName() + "_subtracted_" + region + ".png")
-    kcanvas.SaveAs(signalhist.GetName() + "_subtracted_" + region + ".root")
+    kcanvas.SaveAs(region +"/b0s_subtracted_" + region + ".png")
+    kcanvas.SaveAs(region +"/b0s_subtracted_" + region + ".root")
 
 
     splot   = RooStats.SPlot ( "sPlot","sPlot", theData, kkTot, RooArgList(nSigKK,nBkgKK))
@@ -486,8 +486,8 @@ if args.nofit and args.nofitkk:
     dstree.Project("sPlot_B0_hist","xM","nSig_sw")
 
     sPlot_B0_hist.Draw("e0")
-    kcanvas.SaveAs("b0_Splot_Phi" + region + ".png")
-    kcanvas.SaveAs("b0_Splot_Phi" + region + ".root")
+    kcanvas.SaveAs(region +"/b0_Splot_Phi" + region + ".png")
+    kcanvas.SaveAs(region +"/b0_Splot_Phi" + region + ".root")
 
 if args.nofit and args.nofitb0:
 
