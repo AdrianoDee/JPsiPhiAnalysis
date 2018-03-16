@@ -78,8 +78,8 @@ file_2Trk = TFile(filename,"READ")
 file_2Trk.ls()
 theTree = (file_2Trk.Get("outuple"))
 
-phimin = 0.96
-phimax = 1.07
+phimin = 0.9
+phimax = 1.1
 
 jpsimin = 2.85
 jpsimax = 3.35
