@@ -375,7 +375,7 @@ if args.nofit and args.nofitkk:
     kkFrame.Draw()
 
     pullpad.cd()
-    hpull = bZeroFrame.pullHist("Data","Pdf")
+    hpull = kkFrame.pullHist("Data","Pdf")
     pullframe = mmtt_mass.frame(Title("Pull Distribution"),Range(fitphimin,fitphimax))
     pullframe.SetAxisRange (-5.0,5.0,"Y")
     #pullframe.GetXaxis().SetTitleSize(0.04)
