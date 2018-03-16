@@ -101,7 +101,7 @@ tt_pt = RooRealVar("ttPt","ttPt" + region + "p_{t}(KK)[GeV]",0.0,ptmax)
 mm_pt = RooRealVar("mmPt","mmPt" + region + "p{t}(#mu#mu)[GeV]",0.0,ptmax)
 mmtt_pt = RooRealVar("xPt","xPt" + region + "p_{t}(#mu#muKK)[GeV]",0.0,ptmax)
 
-lxysig = RooRealVar("xL","l_{xy} sign." + region + "l_{xy} / #sigma(l_{xy})",0.0,1000.0)
+lxysig = RooRealVar("xL","l_{xy} sign." + region + "l_{xy} / #sigma(l_{xy})",-1000.0,1000.0)
 
 massvars    = RooArgSet(tt_mass, mm_mass, mmtt_mass)
 ptvars      = RooArgSet(tt_pt, mm_pt, mmtt_pt)
