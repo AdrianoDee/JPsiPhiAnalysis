@@ -317,9 +317,9 @@ if args.nofit and args.nofitkk:
     if debugging:
 	       sigmaside_kk = 0.001
 
-    leftlowside = -signalside*sigmaside_kk + kkMean.getValV()
+    leftlowside = -sidehigh*sigmaside_kk + kkMean.getValV()
     leftupside = -sidelow*sigmaside_kk + kkMean.getValV()
-    rightlowside = +sidehigh*sigmaside_kk + kkMean.getValV()
+    rightlowside = +sidelow*sigmaside_kk + kkMean.getValV()
     rightupside = +sidehigh*sigmaside_kk + kkMean.getValV()
 
     signallow = -signalside*sigmaside_kk + kkMean.getValV()
