@@ -26,6 +26,7 @@
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/TrackReco/interface/Track.h"
 
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
@@ -269,6 +270,10 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
         cosAlpha = dimuonditrkCand->userFloat("cosAlpha");
 
         charge = dimuonditrkCand->charge();
+
+        const reco::Track *posTrack = ionia->userData<reco::Track>("recoTrackP");
+
+        std::cout << posTrack.recHitsSize() << std::endl;
 
         dimuonditrk_tree->Fill();
         isBest = false;
