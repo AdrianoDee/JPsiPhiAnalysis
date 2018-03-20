@@ -271,9 +271,9 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 
         charge = dimuonditrkCand->charge();
 
-        const reco::Track *posTrack = ionia->userData<reco::Track>("recoTrackP");
+        const reco::Track *posTrack = dimuonditrkCand->userData<reco::Track>("recoTrackP");
 
-        std::cout << posTrack.recHitsSize() << std::endl;
+        std::cout << posTrack->recHitsSize() << std::endl;
 
         dimuonditrk_tree->Fill();
         isBest = false;
