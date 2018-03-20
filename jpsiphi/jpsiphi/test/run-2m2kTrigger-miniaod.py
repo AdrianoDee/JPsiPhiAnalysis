@@ -124,13 +124,6 @@ process.DiMuonDiTrakPAT = cms.EDProducer('DiMuonDiTrakPAT',
     CandsMasses         = cms.vdouble(muonmass,muonmass,kaonmass,kaonmass)
 )
 
-process.Triggers  = cms.EDAnalyzer('TriggersByFilters',
-    TriggerInput     = cms.InputTag("unpackPatTriggers"),
-    TriggerResults   = cms.InputTag("TriggerResults", "", "HLT"),
-    PrimaryVertex    = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    Filters          = filters,
-    HLTs             = hltpaths
-)
 
 process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootupler',
     dimuons             = cms.InputTag("DiMuonPAT"),
@@ -154,7 +147,7 @@ process.DiTrakRootupler = cms.EDAnalyzer('DiTrakRootupler',
     AddTriggers         = cms.bool(False)
  )
 
-process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootupler',
+process.DiMuonDiTrakRootupler = cms.EDAnalyzer('DiMuonDiTrakRootuplerML',
      dimuonditrks       = cms.InputTag("DiMuonDiTrakPAT"),
      TriggerInput       = cms.InputTag("unpackPatTriggers"),
      primaryVertices    = cms.InputTag("offlineSlimmedPrimaryVertices"),
