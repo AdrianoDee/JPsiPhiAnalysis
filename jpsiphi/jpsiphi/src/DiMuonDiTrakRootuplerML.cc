@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonDiTrakVertexRootuplerHLT
-// Class:      DiMuonDiTrakVertexRootuplerHLT
+// Package:    DiMuonDiTrakRootupler
+// Class:      DiMuonDiTrakRootupler
 //
 // Description: DiMuonDiTrak  rootupler
 //
@@ -38,10 +38,10 @@
 // class declaration
 //
 
-class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
+class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
       public:
-	explicit DiMuonDiTrakVertexRootuplerHLT(const edm::ParameterSet &);
-	~DiMuonDiTrakVertexRootuplerHLT() override;
+	explicit DiMuonDiTrakRootupler(const edm::ParameterSet &);
+	~DiMuonDiTrakRootupler() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -62,9 +62,11 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_Label;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 
+  bool addTrigger_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -80,25 +82,25 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
   TLorentzVector ditrak_p4;
   TLorentzVector dimuon_p4;
 
-  TLorentzVector dimuonditrkTrigger_p4;
-  TLorentzVector dimuonTrigger_p4;
-  TLorentzVector ditrakTrigger_p4;
+  std::vector < Float_t > trigs_pt;
+  std::vector < Float_t > trigs_eta;
+  std::vector < Float_t > trigs_phi;
+  std::vector < Float_t > trigs_m;
+  std::vector < UInt_t > trigs_filters;
 
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
   TLorentzVector trakP_p4;
   TLorentzVector trakN_p4;
 
-  Int_t dimuonditrk_charge;
-
-  Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
-
-  Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
-  Double_t dimuonditrk_MassErr,dimuonditrk_lxy, dimuonditrk_lxyErr;
-
-  Int_t noXCandidates;
-
-  UInt_t muonN_tMatch, muonP_tMatch, trakN_tMatch, trakP_tMatch;
+  Float_t MassErr;
+  Float_t vProb;
+  Float_t DCA;
+  Float_t ctauPV;
+  Float_t ctauErrPV;
+  Float_t cosAlpha;
+  Float_t lxyPV;
+  Float_t lxyErrPV;
 
   Bool_t isBest;
 
@@ -112,10 +114,12 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 // constructors and destructor
 //
 
-DiMuonDiTrakVertexRootuplerHLT::DiMuonDiTrakVertexRootuplerHLT(const edm::ParameterSet & iConfig):
+DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet & iConfig):
 dimuonditrk_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuonditrks"))),
+triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+addTrigger_(iConfig.getParameter<bool>("AddTriggers")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
@@ -134,52 +138,36 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   dimuonditrk_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
+
   dimuonditrk_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
   dimuonditrk_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
+
   dimuonditrk_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   dimuonditrk_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
   dimuonditrk_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
 
-  dimuonditrk_tree->Branch("dimuonditrkTrigger_p4",   "TLorentzVector", &dimuonditrkTrigger_p4);
-  dimuonditrk_tree->Branch("ditrakTrigger_p4",     "TLorentzVector", &ditrakTrigger_p4);
-  dimuonditrk_tree->Branch("dimuonTrigger_p4",     "TLorentzVector", &dimuonTrigger_p4);
-
-  //2mu+2Trk vertexing
-  dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
-  dimuonditrk_tree->Branch("dimuonditrk_vChi2",      &dimuonditrk_vChi2,        "dimuonditrk_vChi2/D");
-  dimuonditrk_tree->Branch("dimuonditrk_cosAlpha",   &dimuonditrk_cosAlpha,     "dimuonditrk_cosAlpha/D");
-  dimuonditrk_tree->Branch("dimuonditrk_ctauPV",     &dimuonditrk_ctauPV,       "dimuonditrk_ctauPV/D");
-  dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
-  dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
-  dimuonditrk_tree->Branch("dimuonditrk_lxy",        &dimuonditrk_lxy,      "dimuonditrk_charge/F");
-  dimuonditrk_tree->Branch("dimuonditrk_lxyErr",     &dimuonditrk_lxyErr,      "dimuonditrk_lxyErr/F");
-  dimuonditrk_tree->Branch("dimuonditrk_MassErr",     &dimuonditrk_MassErr,      "dimuonditrk_MassErr/F");
-
-  dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
-  dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
-  dimuonditrk_tree->Branch("dimuon_DCA",          &dimuon_DCA,          "dimuon_DCA/D");
-  dimuonditrk_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
-  dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
-  dimuonditrk_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
-
-  dimuonditrk_tree->Branch("muonP_tMatch", &muonP_tMatch, "muonP_tMatch/I");
-  dimuonditrk_tree->Branch("muonN_tMatch", &muonN_tMatch, "muonN_tMatch/I");
-  dimuonditrk_tree->Branch("trakP_tMatch", &trakP_tMatch, "trakP_tMatch/I");
-  dimuonditrk_tree->Branch("trakN_tMatch", &trakN_tMatch, "trakN_tMatch/I");
+  dimuonditrk_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
+  dimuonditrk_tree->Branch("vProb",     &vProb,      "vProb/F");
+  dimuonditrk_tree->Branch("DCA",       &DCA,        "DCA/F");
+  dimuonditrk_tree->Branch("ctauPV",    &ctauPV,     "ctauPV/F");
+  dimuonditrk_tree->Branch("ctauErrPV", &ctauErrPV,  "ctauErrPV/F");
+  dimuonditrk_tree->Branch("cosAlpha",  &cosAlpha,   "cosAlpha/F");
+  dimuonditrk_tree->Branch("lxy",       &lxyPV,      "lxy/F");
+  dimuonditrk_tree->Branch("lxyErrPV",    &lxyErrPV,      "lxyErr/F");
 
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
 
 }
 
-DiMuonDiTrakVertexRootuplerHLT::~DiMuonDiTrakVertexRootuplerHLT() {}
+DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
 
 //
 // member functions
 //
 
-UInt_t DiMuonDiTrakVertexRootuplerHLT::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonDiTrakRootupler::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -207,16 +195,19 @@ UInt_t DiMuonDiTrakVertexRootuplerHLT::getTriggerBits(const edm::Event& iEvent )
 }
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+
+  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trigs;
+  iEvent.getByToken(triggers_,trigs);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrks;
   iEvent.getByToken(dimuonditrk_Label,dimuonditrks);
 
+  edm::Handle<reco::VertexCollection> primaryVertices_handle;
+  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
-
-  edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
 
   run       = iEvent.id().run();
   event     = iEvent.id().event();
@@ -233,6 +224,8 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
   dimuonditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  trakP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  trakN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   isBest = true;
 
@@ -259,41 +252,27 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         trakP_p4.SetPtEtaPhiM(tP.pt(),tP.eta(),tP.phi(),tP.mass());
         trakN_p4.SetPtEtaPhiM(tM.pt(),tM.eta(),tM.phi(),tM.mass());
 
-        const pat::CompositeCandidate *dimuonditrkTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkCand->daughter("dimuonTTTrigger"));
-        const pat::CompositeCandidate *dimuonTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("dimuon"));
-        const pat::CompositeCandidate *ditrakTrigger_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrkTrigger_cand->daughter("ditrak"));
-
-        dimuonditrkTrigger_p4.SetPtEtaPhiM(dimuonditrkTrigger_cand->pt(),dimuonditrkTrigger_cand->eta(),dimuonditrkTrigger_cand->phi(),dimuonditrkTrigger_cand->mass());
-        dimuonTrigger_p4.SetPtEtaPhiM(dimuonTrigger_cand->pt(),dimuonTrigger_cand->eta(),dimuonTrigger_cand->phi(),dimuonTrigger_cand->mass());
-        ditrakTrigger_p4.SetPtEtaPhiM(ditrakTrigger_cand->pt(),ditrakTrigger_cand->eta(),ditrakTrigger_cand->phi(),ditrakTrigger_cand->mass());
-
-        dimuon_vProb        = dimuon_cand->userFloat("vProb");
-        dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
-        dimuon_DCA          = dimuon_cand->userFloat("DCA");
-        dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
-        dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
-        dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
-
-        muonP_tMatch  = dimuon_cand->userInt("tMatchP");
-        muonN_tMatch  = dimuon_cand->userInt("tMatchN");
-        trakP_tMatch  = dimuonditrkCand->userInt("trakMatchP");
-        trakN_tMatch  = dimuonditrkCand->userInt("trakMatchN");
-
-        dimuonditrk_MassErr = -1.0;
+        MassErr = -1.0;
         if (dimuonditrkCand->hasUserFloat("MassErr"))
-          dimuonditrk_MassErr = dimuonditrkCand->userFloat("MassErr");
+          MassErr = dimuonditrkCand->userFloat("MassErr");
+        vProb = dimuonditrkCand->userFloat("vProb");
 
-        dimuonditrk_vProb     = dimuonditrkCand->userFloat("vProb");
-        dimuonditrk_vChi2     = dimuonditrkCand->userFloat("vChi2");
-        dimuonditrk_cosAlpha  = dimuonditrkCand->userFloat("cosAlpha");
-        dimuonditrk_ctauPV    = dimuonditrkCand->userFloat("ctauPV");
-        dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
-        dimuonditrk_charge    = dimuonditrkCand->charge();
+        DCA = -1.;
+        if (dimuonditrkCand->hasUserFloat("DCA"))
+          DCA = dimuonditrkCand->userFloat("DCA");
 
+        ctauPV = dimuonditrkCand->userFloat("ctauPV");
+        ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
+        lxyPV = dimuonditrkCand->userFloat("lxy");
+        lxyErrPV = dimuonditrkCand->userFloat("lErrxy");
+
+        cosAlpha = dimuonditrkCand->userFloat("cosAlpha");
+
+        charge = dimuonditrkCand->charge();
 
         dimuonditrk_tree->Fill();
         isBest = false;
-        if (OnlyBest_) break;
+
     }
   }
 
@@ -301,25 +280,25 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakVertexRootuplerHLT::beginJob() {}
+void DiMuonDiTrakRootupler::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakVertexRootuplerHLT::endJob() {}
+void DiMuonDiTrakRootupler::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakVertexRootuplerHLT::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakVertexRootuplerHLT::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakVertexRootuplerHLT::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakVertexRootuplerHLT::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakVertexRootuplerHLT::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -328,4 +307,4 @@ void DiMuonDiTrakVertexRootuplerHLT::fillDescriptions(edm::ConfigurationDescript
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakVertexRootuplerHLT);
+DEFINE_FWK_MODULE(DiMuonDiTrakRootupler);

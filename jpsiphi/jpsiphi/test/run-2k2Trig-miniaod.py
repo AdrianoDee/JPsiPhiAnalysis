@@ -123,7 +123,7 @@ process.DiMuonDiTrakProducerVertexHLT = cms.EDProducer('DiMuonDiTrakProducerVert
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts          = cms.vdouble(2.88,3.32),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts        = cms.vdouble(0.93,1.32),  # phi mass window 1.019461 +/- .015
-    DiMuonDiTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    DiMuonDiTrakMassCuts    = cms.vdouble(5.1,5.8),            # b-hadron mass window
     MassTraks               = cms.vdouble(kaonmass,kaonmass),         # traks masses
     MaxDeltaRPt             = cms.vdouble(0.01,2.0),
     OnlyBest                = cms.bool(False),
@@ -153,18 +153,6 @@ process.DiMuonDiTrakVertexRootuplerHLT = cms.EDAnalyzer('DiMuonDiTrakVertexRootu
 )
 
 
-process.DiMuonRootuplerHLT = cms.EDAnalyzer('DiMuonRootuplerHLT',
-    dimuons = cms.InputTag("JPsi2MuMuFilter"),
-    muons = cms.InputTag("slimmedMuonsWithTrigger"),
-    primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    dimuon_pdgid = cms.uint32(443),
-    dimuon_mass_cuts = cms.vdouble(2.8,3.3),
-    isMC = cms.bool(False),
-    OnlyBest = cms.bool(False),
-    OnlyGen = cms.bool(False),
-    HLTs = hltpaths
- )
 
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
