@@ -219,12 +219,12 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       trktrkcand.addUserData("thePV",Vertex(thePrimaryV));
       trktrkcand.addUserData("theVertex",Vertex(ttVertex));
 
-      if(negTrack.bestTrack()->extra())
+      if(!(negTrack.bestTrack()->extra()==nullptr))
         trktrkcand.addUserFloat("numRecHitsP",negTrack.bestTrack()->recHitsSize());
       else
         trktrkcand.addUserFloat("numRecHitsP",-1.0);
 
-      if(posTrack.bestTrack()->extra())
+      if(!(posTrack.bestTrack()->extra()==nullptr))
         trktrkcand.addUserFloat("numRecHitsP",posTrack.bestTrack()->recHitsSize());
       else
        trktrkcand.addUserFloat("numRecHitsP",posTrack.bestTrack()->recHitsSize());
