@@ -122,7 +122,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if(!ditrakSelection_(trktrkcand)) continue;
 
-      vector<TransientTrack> tt_ttks;
+      std::vector<TransientTrack> tt_ttks;
       tt_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
       tt_ttks.push_back(theTTBuilder->build(posTrack.bestTrack()));
 
@@ -220,8 +220,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       trktrkcand.addUserData("theVertex",Vertex(ttVertex));
 
 
-      trktrkcand.addUserFloat("numRecHitsP",negTrack.bestTrack()->recHitsSize());
-      trktrkcand.addUserFloat("numRecHitsN",posTrack.bestTrack()->recHitsSize());
+      trktrkcand.addUserFloat("numRecHitsP",tt_ttks[0].recHitsSize());
+      trktrkcand.addUserFloat("numRecHitsN",tt_ttks[1].recHitsSize());
 
       trakCollection->push_back(trktrkcand);
 
