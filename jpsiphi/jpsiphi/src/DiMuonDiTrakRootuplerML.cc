@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonDiTrakRootupler
-// Class:      DiMuonDiTrakRootupler
+// Package:    DiMuonDiTrakRootuplerML
+// Class:      DiMuonDiTrakRootuplerML
 //
 // Description: DiMuonDiTrak  rootupler
 //
@@ -39,10 +39,10 @@
 // class declaration
 //
 
-class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
+class DiMuonDiTrakRootuplerML:public edm::EDAnalyzer {
       public:
-	explicit DiMuonDiTrakRootupler(const edm::ParameterSet &);
-	~DiMuonDiTrakRootupler() override;
+	explicit DiMuonDiTrakRootuplerML(const edm::ParameterSet &);
+	~DiMuonDiTrakRootuplerML() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -115,7 +115,7 @@ class DiMuonDiTrakRootupler:public edm::EDAnalyzer {
 // constructors and destructor
 //
 
-DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet & iConfig):
+DiMuonDiTrakRootuplerML::DiMuonDiTrakRootuplerML(const edm::ParameterSet & iConfig):
 dimuonditrk_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuonditrks"))),
 triggers_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
@@ -162,13 +162,13 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
 }
 
-DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
+DiMuonDiTrakRootuplerML::~DiMuonDiTrakRootuplerML() {}
 
 //
 // member functions
 //
 
-UInt_t DiMuonDiTrakRootupler::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonDiTrakRootuplerML::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -196,7 +196,7 @@ UInt_t DiMuonDiTrakRootupler::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonDiTrakRootuplerML::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trigs;
   iEvent.getByToken(triggers_,trigs);
@@ -285,25 +285,25 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event & iEvent, const edm::EventS
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakRootupler::beginJob() {}
+void DiMuonDiTrakRootuplerML::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakRootupler::endJob() {}
+void DiMuonDiTrakRootuplerML::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootuplerML::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootuplerML::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootuplerML::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakRootuplerML::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonDiTrakRootuplerML::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -312,4 +312,4 @@ void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions & de
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakRootuplerML);
+DEFINE_FWK_MODULE(DiMuonDiTrakRootuplerMLML);
