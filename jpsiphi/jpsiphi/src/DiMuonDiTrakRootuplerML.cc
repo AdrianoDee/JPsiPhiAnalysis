@@ -105,7 +105,7 @@ class DiMuonDiTrakRootuplerML:public edm::EDAnalyzer {
 
   Bool_t isBest;
 
-	UInt_t numPrimaryVertices;
+	UInt_t numPrimaryVertices,numRecHitsP,numRecHitsN;
 
 	TTree *dimuonditrk_tree;
 
@@ -158,6 +158,8 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("lxyErrPV",    &lxyErrPV,      "lxyErr/F");
 
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
+  dimuonditrk_tree->Branch("numRecHitsP", &numRecHitsP, "numRecHitsP/i");
+  dimuonditrk_tree->Branch("numRecHitsN", &numRecHitsN, "numRecHitsN/i");
 
 
 }
@@ -271,9 +273,12 @@ void DiMuonDiTrakRootuplerML::analyze(const edm::Event & iEvent, const edm::Even
 
         charge = dimuonditrkCand->charge();
 
-        const reco::Track *posTrack = dimuonditrkCand->userData<reco::Track>("recoTrackP");
+        numRecHitsP = ditrak_cand->userFloat("numRecHitsP");
+        numRecHitsN = ditrak_cand->userFloat("numRecHitsN");
 
-        std::cout << posTrack->recHitsSize() << std::endl;
+        // const reco::Track *poslsTrack = dimuonditrkCand->userData<reco::Track>("recoTrackP");
+
+        // std::cout << posTrack->recHitsSize() << std::endl;
 
         dimuonditrk_tree->Fill();
         isBest = false;
