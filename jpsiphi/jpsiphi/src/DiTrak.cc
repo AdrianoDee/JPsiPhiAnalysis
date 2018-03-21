@@ -220,8 +220,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       trktrkcand.addUserData("theVertex",Vertex(ttVertex));
 
 
-      trktrkcand.addUserData("recoTrackP",negTrack.bestTrack()->pt());
-      trktrkcand.addUserData("recoTrackN",posTrack.bestTrack()->pt());
+      trktrkcand.addUserFloat("recoTrackP",negTrack.bestTrack()->pt());
+      trktrkcand.addUserFloat("recoTrackN",posTrack.bestTrack()->pt());
 
       trakCollection->push_back(trktrkcand);
 
