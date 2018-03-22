@@ -284,7 +284,7 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
           dimuonditrk_MassErr = dimuonditrkCand->userFloat("MassErr");
 
         dimuonditrk_vProb     = dimuonditrkCand->userFloat("vProb");
-        dimuonditrk_vChi2     = dimuonditrkCand->userFloat("vChi2");
+        dimuonditrk_vChi2     = dimuonditrkCand->userFloat("vNChi2");
         dimuonditrk_cosAlpha  = dimuonditrkCand->userFloat("cosAlpha");
         dimuonditrk_ctauPV    = dimuonditrkCand->userFloat("ctauPV");
         dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
