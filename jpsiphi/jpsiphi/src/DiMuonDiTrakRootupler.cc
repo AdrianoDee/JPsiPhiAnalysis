@@ -357,8 +357,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuonditrk_ctauErrPV = dimuonditrk_rf_cand.userFloat("ctauErrPV");
       dimuonditrk_charge    = dimuonditrk_cand.charge();
 
-      tPMatch = dimuonditrk_rf_cand.userInt("tPMatch");
-      tNMatch = dimuonditrk_rf_cand.userInt("tNMatch");
+      tPMatch = dimuonditrk_cand.userInt("tPMatch");
+      tNMatch = dimuonditrk_cand.userInt("tNMatch");
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
       dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("dimuon")->pt(),dimuonditrk_rf_cand.daughter("dimuon")->eta(),
