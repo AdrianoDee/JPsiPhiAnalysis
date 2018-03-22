@@ -467,11 +467,6 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserFloat("DCA", dca );
               ///end DCA
 
-              if (addMuonlessPrimaryVertex_)
-              mumucand.addUserData("muonlessPV",Vertex(thePrimaryV));
-
-
-
               // lifetime using PV
               float cosAlpha, cosAlpha3D, ppdlPV, ppdlErrPV, l_xyz, l_xy, lErr_xyz, lErr_xy;
 
