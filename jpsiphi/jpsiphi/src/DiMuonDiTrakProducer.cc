@@ -1,22 +1,5 @@
 #include "../interface/DiMuonDiTrakProducer.h"
 
-UInt_t DiMuonDiTrakProducer::isTriggerMatched(const pat::CompositeCandidate *diTrig_Candidate) {
-  const pat::TriggerObjectStandAlone* trig1 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trigP"));
-  const pat::TriggerObjectStandAlone* trig2 = dynamic_cast<const pat::TriggerObjectStandAlone*>(diTrig_Candidate->daughter("trigN"));
-  UInt_t matched = 0;  // if no list is given, is not matched
-
-  // if matched a given trigger, set the bit, in the same order as listed
-  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-
-    if(std::find((trig1->filterLabels()).begin(),(trig1->filterLabels()).end(),HLTFilters_[iTr])!=(trig1->filterLabels()).end())
-      if(std::find((trig2->filterLabels()).begin(),(trig2->filterLabels()).end(),HLTFilters_[iTr])!=(trig2->filterLabels()).end())
-        matched += (1<<iTr);
-
-  }
-
-  return matched;
-}
-
 float DiMuonDiTrakProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
