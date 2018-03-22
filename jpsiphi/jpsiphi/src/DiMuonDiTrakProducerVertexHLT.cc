@@ -80,7 +80,6 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   std::vector< pat::PackedCandidate> filteredTracks;
   std::vector < UInt_t > filterResults;
 
-  std::cout << "Debug :" << debug++ << std::endl;
   //Get the filtered trigger objects
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
@@ -136,7 +135,6 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
   //   }
   // }
 
-  std::cout << "Debug :" << debug++ << std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
@@ -145,10 +143,10 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
 // loop on track candidates, make DiMuonT candidate, positive charge
        // for (size_t i = 0; i < filteredTracks.size(); i++)
-       std::cout << "Debug : 1." << debug++ << std::endl;
+
        for (size_t i = 0; i < trakCollection->size(); i++)
        {
-         std::cout << "Debug : 2." << debug++ << std::endl;
+
          // auto posTrack = filteredTracks[i];
          auto posTrack = trakCollection->at(i);
          if(posTrack.charge()<=0) continue;
@@ -179,7 +177,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
          // for (size_t j = 0; j < filteredTracks.size(); j++)
          for (size_t j = 0; j < trakCollection->size(); j++)
          {
-           std::cout << "Debug : 3." << debug++ << std::endl;
+
            if (i == j) continue;
            // auto negTrack = filteredTracks[j];
            auto negTrack = trakCollection->at(j);
@@ -232,7 +230,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
            const pat::Muon *muonP = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonP") ) );
            const pat::Muon *muonN = (dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muonN") ) );
-           std::cout << "Debug : 4." << debug++ << std::endl;
+
            std::vector<reco::TransientTrack> MuMuTT;
            MuMuTT.push_back(theTTBuilder->build(muonP->innerTrack()));
            MuMuTT.push_back(theTTBuilder->build(muonN->innerTrack()));
@@ -274,14 +272,14 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              TVector3 vtx,vtx3D;
              TVector3 pvtx,pvtx3D;
              VertexDistanceXY vdistXY;
-             std::cout << "Debug : 5." << debug++ << std::endl;
+
              vtx.SetXYZ(mmttVertex.position().x(),mmttVertex.position().y(),0);
              vtx3D.SetXYZ(mmttVertex.position().x(),mmttVertex.position().y(),mmttVertex.position().z());
              TVector3 pperp(DiMuonTTCand.px(), DiMuonTTCand.py(), 0);
              TVector3 pperp3D(DiMuonTTCand.px(), DiMuonTTCand.py(), DiMuonTTCand.pz());
              AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
              AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
-             std::cout << "Debug : 6." << debug++ << std::endl;
+
              thePrimaryV = *(dimuonCand->userData<reco::Vertex>("thePV"));
 
              //Lifetime calculations
@@ -291,19 +289,19 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
              Measurement1D distXY = vdistXY.distance(Vertex(mmttVertex), thePrimaryV);
              ctauPV = distXY.value()*cosAlpha * DiMuonTTCand.mass()/pperp.Perp();
-             std::cout << "Debug : 7." << debug++ << std::endl;
+
              GlobalError v1e = (Vertex(mmttVertex)).error();
              GlobalError v2e = thePrimaryV.error();
              AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
              ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*DiMuonTTCand.mass()/(pperp.Perp2());
-             std::cout << "Debug : 8." << debug++ << std::endl;
+
              AlgebraicVector3 vDiff;
              vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
              l_xy = vdiff.Perp();
              lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
              DiMuonTTCand.addDaughter(DiMuonTTTriggerCand,"dimuonTTTrigger");
-             std::cout << "Debug : 9." << debug++ << std::endl;
+
              if(negMatched && posMatched)
               {
                 DiMuonTTCand.addUserInt("trakMatchP",isTriggerMatched(posTrig));
