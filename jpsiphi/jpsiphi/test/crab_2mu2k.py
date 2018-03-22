@@ -24,7 +24,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T2_US_Wisconsin',
 
  'T3_CH_PSI', 'T3_CN_PKU', 'T3_CO_Uniandes',
- 'T3_ES_Oviedo', 'T3_FR_IPNL', 'T3_GR_IASA', 'T3_HU_Debrecen',
+ 'T3_ES_Oviedo', 'T3_GR_IASA', 'T3_HU_Debrecen',
  'T3_IN_PUHEP', 'T3_IN_TIFRCloud','T3_IT_*', 'T3_KR_*', 'T3_MX_*', 'T3_RU_*',
  #'T3_TW*', #Taiwan gives some troubles with file fetching
  'T3_UK_*', 'T3_US_Baylor','T3_US_Colorado', 'T3_US_Cornell',
@@ -100,4 +100,4 @@ config.section_('Site')
 config.Site.storageSite         = 'T2_IT_Bari'
 #config.Site.blacklist          = ['T2_IN_TIFR','T2_US_Vanderbilt']
 config.Site.whitelist           = sites
-config.Site.blacklist           = ['T1*', 'T3_US_UMiss']
+config.Site.blacklist           = ['T1*', 'T3_US_UMiss', 'T3_FR_IPNL']
