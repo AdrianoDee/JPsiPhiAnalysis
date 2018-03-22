@@ -253,6 +253,8 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
             patPsiT.addUserFloat("cosAlpha",cosAlpha);
             patPsiT.addUserFloat("ctauPV",ctauPV);
             patPsiT.addUserFloat("ctauErrPV",ctauErrPV);
+            patPsiT.addUserFloat("tPMatch",PsiTCandHandle->userInt("tPMatch"););
+            patPsiT.addUserFloat("tNMatch",PsiTCandHandle->userInt("tNMatch"););
 
             patPsiT.addUserInt("bIndex",indexPsiT);
 
