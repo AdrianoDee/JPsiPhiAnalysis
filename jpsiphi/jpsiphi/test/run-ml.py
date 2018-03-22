@@ -2,6 +2,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
 input_file = "file:049F2D32-26F2-E711-A162-00266CFFC664.root"
+input_file = "root://cms-xrd-global.cern.ch//store/data/Run2017F/Charmonium/RECO/PromptReco-v1/000/305/040/00000/0A96ADE7-E8B1-E711-8730-02163E01A45C.root"
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
