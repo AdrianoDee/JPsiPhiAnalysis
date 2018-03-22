@@ -1,5 +1,5 @@
-#ifndef JpsiPhiAnalysis_DiMuonDiTrak_h
-#define JpsiPhiAnalysis_DiMuonDiTrak_h
+#ifndef JpsiPhiAnalysis_DiMuonDiTrak_ML_h
+#define JpsiPhiAnalysis_DiMuonDiTrak_ML_h
 
 
 // system include files
@@ -56,10 +56,10 @@ struct GreaterByVProb {
   }
 };
 
-class DiMuonDiTrakPAT : public edm::EDProducer {
+class DiMuonDiTrakML : public edm::EDProducer {
  public:
-  explicit DiMuonDiTrakPAT(const edm::ParameterSet&);
-  ~DiMuonDiTrakPAT() override;
+  explicit DiMuonDiTrakML(const edm::ParameterSet&);
+  ~DiMuonDiTrakML() override;
 
  private:
   void beginJob() override ;
