@@ -57,9 +57,9 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
-  const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
+  pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
-  const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
+  pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);

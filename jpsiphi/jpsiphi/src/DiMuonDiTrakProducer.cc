@@ -210,7 +210,7 @@ bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::
   return false;
 }
 
-const pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
+pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
                                           const pat::CompositeCandidate& dimuon,
 				          const pat::CompositeCandidate& tt
                                          ){
@@ -228,7 +228,7 @@ const pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
 
 }
 
-const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTCandidate(
+pat::CompositeCandidate DiMuonDiTrakProducer::makeTTCandidate(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN
                                          ){
