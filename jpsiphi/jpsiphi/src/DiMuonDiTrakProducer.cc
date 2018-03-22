@@ -45,8 +45,8 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  product_name_(iConfig.getParameter<std::string>("Product"))
+  product_name_(iConfig.getParameter<std::string>("Product")),
+  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -56,18 +56,18 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
 
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
-  
+
 }
 
-void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& esetup){
+void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& esetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
-  event.getByToken(DiMuonCollection_,dimuon);
+  iEvent.getByToken(DiMuonCollection_,dimuon);
 
   edm::Handle<std::vector<pat::PackedCandidate> > trak;
-  event.getByToken(TrakCollection_,trak);
+  iEvent.getByToken(TrakCollection_,trak);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
   iEvent.getByToken(TriggerCollection_,trig);
@@ -200,7 +200,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& ese
   if ( ncombo != DiMuonTTCandColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTT ("<<DiMuonTTCandColl->size()<<")"<< std::endl;
   if ( !dimuon->empty() )  ndimuon++;
   if ( ncombo > 0 ) nreco++;
-  event.put(std::move(DiMuonTTCandColl),product_name_);
+  iEvent.put(std::move(DiMuonTTCandColl),product_name_);
   nevents++;
 }
 
