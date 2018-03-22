@@ -35,23 +35,28 @@ bool DiMuonDiTrakProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat
 }
 
 
-DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& ps):
-  DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("DiMuon"))),
-  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(ps.getParameter<edm::InputTag>("PFCandidates"))),
+DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
+  DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
+  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-  DiMuonMassCuts_(ps.getParameter<std::vector<double>>("DiMuonMassCuts")),
-  TrakTrakMassCuts_(ps.getParameter<std::vector<double>>("TrakTrakMassCuts")),
-  DiMuonDiTrakMassCuts_(ps.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
-  MassTraks_(ps.getParameter<std::vector<double>>("MassTraks")),
-  OnlyBest_(ps.getParameter<bool>("OnlyBest")),
-  product_name_(ps.getParameter<std::string>("Product"))
+  DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
+  TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
+  DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
+  MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
+  OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+  product_name_(iConfig.getParameter<std::string>("Product"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
   nevents = 0;
   ndimuon = 0;
   nreco = 0;
+
+  maxDeltaR = 0.01;
+  maxDPtRel = 2.0;
+  
 }
 
 void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& esetup){
@@ -83,9 +88,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& ese
   pat::TriggerObjectStandAloneCollection filteredColl;
   std::vector < UInt_t > filterResults,filters;
 
-  for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
+  for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
 
-    pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
+    pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
 
     unPackedTrigger.unpackPathNames( names );
     unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
@@ -107,7 +112,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& event, const edm::EventSetup& ese
     }
   }
 
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
+  for (std::vector<pat::PackedCandidate>::const_iterator trak = trak->begin(), trakend=trak->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)

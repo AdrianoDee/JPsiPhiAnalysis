@@ -53,6 +53,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   std::vector<double> MassTraks_;
   bool OnlyBest_;
   std::string product_name_;
+  std::vector<std::string>  HLTFilters_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
@@ -63,6 +64,9 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+
+  float maxDeltaR;
+  float maxDPtRel;
 
   int candidates;
   int nevents;
