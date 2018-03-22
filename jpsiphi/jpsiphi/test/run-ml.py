@@ -66,9 +66,9 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-process.ditrakdimuon = cms.EDFilter("DiMuonDiTrakML",
-                                        Muons   = cms.InputTag( "generalTracks" ),
-                                        Track   = cms.InputTag( "muons" )
+process.ditrakdimuon = cms.EDProducer("DiMuonDiTrakML",
+                                        Muons   = cms.InputTag( "muons" ),
+                                        Tracks   = cms.InputTag( "generalTracks" )
                                         )
 
 

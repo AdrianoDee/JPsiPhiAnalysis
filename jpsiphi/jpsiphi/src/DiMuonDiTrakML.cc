@@ -3,7 +3,7 @@
 
 DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
-traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Track")))
+traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks")))
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
