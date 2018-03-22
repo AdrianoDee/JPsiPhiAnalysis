@@ -95,18 +95,18 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
     }
   }
 
-  for (std::vector<pat::PackedCandidate>::const_iterator trak = trak->begin(), trakend=trak->end(); trak!= trakend; ++trak)
+  for (std::vector<pat::PackedCandidate>::const_iterator t = trak->begin(), trakend=trak->end(); t!= trakend; ++t)
   {
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
   for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
     {
       auto thisTrig = filteredColl.at(iTrigObj);
-      if(MatchByDRDPt(*trak,filteredColl[iTrigObj]))
+      if(MatchByDRDPt(*t,filteredColl[iTrigObj]))
       {
         if(matched)
         {
-          if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,thisTrig))
+          if(DeltaR(*t,matchedColl.back()) > DeltaR(*t,thisTrig))
           {
             filters.pop_back();
             filters.push_back(filterResults[iTrigObj]);
