@@ -175,6 +175,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
                      # process.slimmedPFCandsWithTriggerSequence *
+                     process.unpackPatTriggers *
                      process.softMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
