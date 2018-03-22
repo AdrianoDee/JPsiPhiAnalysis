@@ -1,7 +1,7 @@
 #include "../interface/DiMuonDiTrak.h"
 #include "../interface/DiMuonVtxReProducer.h"
 
-DiMuonDiTrakPAT::DiMuonDiTrakPAT(const edm::ParameterSet& iConfig):
+DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Track"))),
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
@@ -15,7 +15,7 @@ traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Trac
 }
 
 
-DiMuonDiTrakPAT::~DiMuonDiTrakPAT()
+DiMuonDiTrakML::~DiMuonDiTrakML()
 {
 
   // do anything here that needs to be done at desctruction time
@@ -25,7 +25,7 @@ DiMuonDiTrakPAT::~DiMuonDiTrakPAT()
 
 
 void
-DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
+DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(traks_,tracks);
@@ -45,14 +45,14 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method called once each job just before starting event loop  ------------
 void
-DiMuonDiTrakPAT::beginJob()
+DiMuonDiTrakML::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void
-DiMuonDiTrakPAT::endJob() {
+DiMuonDiTrakML::endJob() {
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakPAT);
+DEFINE_FWK_MODULE(DiMuonDiTrakML);
