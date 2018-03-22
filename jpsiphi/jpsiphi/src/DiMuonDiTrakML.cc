@@ -33,10 +33,12 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<reco::MuonCollection> muons;
   iEvent.getByToken(muons_,muons);
 
+  int max = 0;
   for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-    std::cout<<itTrack->recHitsSize()<<std::endl;
+    max = std::max(max,itTrack->numberOfValidHits());
 
-
+  std::cout<<max<<std::endl;
+  //loop on
   // std::sort(mmttCollection->begin(),mmttCollection->end(),vPComparator_);
   // iEvent.put(std::move(mmttCollection));
 
