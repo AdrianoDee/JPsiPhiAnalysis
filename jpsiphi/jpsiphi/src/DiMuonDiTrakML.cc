@@ -1,4 +1,5 @@
 #include "../interface/DiMuonDiTrakML.h"
+#include "../interface/DiMuonVtxReProducer.h"
 
 DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
