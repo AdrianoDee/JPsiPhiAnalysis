@@ -281,7 +281,7 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
              TVector3 pperp3D(DiMuonTTCand.px(), DiMuonTTCand.py(), DiMuonTTCand.pz());
              AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
              AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
-
+             std::cout << "Debug : 6." << debug++ << std::endl;
              thePrimaryV = *(dimuonCand->userData<reco::Vertex>("thePV"));
 
              //Lifetime calculations
@@ -291,19 +291,19 @@ void DiMuonDiTrakProducerVertexHLT::produce(edm::Event& iEvent, const edm::Event
 
              Measurement1D distXY = vdistXY.distance(Vertex(mmttVertex), thePrimaryV);
              ctauPV = distXY.value()*cosAlpha * DiMuonTTCand.mass()/pperp.Perp();
-
+             std::cout << "Debug : 7." << debug++ << std::endl;
              GlobalError v1e = (Vertex(mmttVertex)).error();
              GlobalError v2e = thePrimaryV.error();
              AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
              ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*DiMuonTTCand.mass()/(pperp.Perp2());
-
+             std::cout << "Debug : 8." << debug++ << std::endl;
              AlgebraicVector3 vDiff;
              vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
              l_xy = vdiff.Perp();
              lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
              DiMuonTTCand.addDaughter(DiMuonTTTriggerCand,"dimuonTTTrigger");
-             std::cout << "Debug : 6." << debug++ << std::endl;
+             std::cout << "Debug : 9." << debug++ << std::endl;
              if(negMatched && posMatched)
               {
                 DiMuonTTCand.addUserInt("trakMatchP",isTriggerMatched(posTrig));
