@@ -470,7 +470,7 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               if (addMuonlessPrimaryVertex_)
               mumucand.addUserData("muonlessPV",Vertex(thePrimaryV));
 
-              mumucand.addUserData("PVwithmuons",Vertex(theOriginalPV));
+
 
               // lifetime using PV
               float cosAlpha, cosAlpha3D, ppdlPV, ppdlErrPV, l_xyz, l_xy, lErr_xyz, lErr_xy;
@@ -507,10 +507,8 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserFloat("ppdlErrPV",ppdlErrPV);
               mumucand.addUserFloat("cosAlpha",cosAlpha);
               mumucand.addUserFloat("cosAlpha3D",cosAlpha3D);
-
               mumucand.addUserFloat("l_xy",l_xy);
               mumucand.addUserFloat("lErr_xy",lErr_xy);
-
               mumucand.addUserFloat("l_xyz",l_xyz);
               mumucand.addUserFloat("lErr_xyz",lErr_xyz);
 
@@ -549,56 +547,19 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserFloat("ppdlErrBS",ppdlErrBS);
               mumucand.addUserFloat("cosAlphaBS",cosAlphaBS);
               mumucand.addUserFloat("cosAlphaBS3D",cosAlphaBS3D);
-
               mumucand.addUserFloat("l_xyBS",l_xyBS);
               mumucand.addUserFloat("lErr_xyBS",lErr_xyBS);
-
               mumucand.addUserFloat("l_xyzBS",l_xyzBS);
               mumucand.addUserFloat("lErr_xyzBS",lErr_xyzBS);
-
               mumucand.addUserData("commonVertex",Vertex(mumuVertex));
+              mumucand.addUserData("muonlessPV",Vertex(thePrimaryV));
+              mumucand.addUserData("thePV",Vertex(theOriginalPV));
 
-            } else {
+            } else
+                continue;
 
-              continue;
 
-              mumucand.addUserFloat("vNChi2",-1);
-              mumucand.addUserFloat("vProb", -1);
 
-              mumucand.addUserFloat("ppdlPV",-100);
-              mumucand.addUserFloat("ppdlErrPV",-100);
-              mumucand.addUserFloat("cosAlpha",-100);
-              mumucand.addUserFloat("cosAlpha3D",-100);
-
-              mumucand.addUserFloat("l_xy",-100);
-              mumucand.addUserFloat("lErr_xy",-100);
-
-              mumucand.addUserFloat("l_xyz",-100);
-              mumucand.addUserFloat("lErr_xyz",-100);
-
-              mumucand.addUserFloat("ppdlBS",-100);
-              mumucand.addUserFloat("ppdlErrBS",-100);
-              mumucand.addUserFloat("cosAlphaBS",-100);
-              mumucand.addUserFloat("cosAlphaBS3D",-100);
-
-              mumucand.addUserFloat("l_xyBS",-100);
-              mumucand.addUserFloat("lErr_xyBS",-100);
-
-              mumucand.addUserFloat("l_xyzBS",-100);
-              mumucand.addUserFloat("lErr_xyzBS",-100);
-
-              mumucand.addUserFloat("DCA", -1 );
-
-              if (addCommonVertex_) {
-                mumucand.addUserData("commonVertex",Vertex());
-              }
-              if (addMuonlessPrimaryVertex_) {
-                mumucand.addUserData("muonlessPV",Vertex());
-              } else {
-                mumucand.addUserData("PVwithmuons",Vertex());
-              }
-
-            }
 
             //Muon mass Vertex Refit
             float refittedMass = -1.0, mumuVtxCL = -1.0;
