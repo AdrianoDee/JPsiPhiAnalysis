@@ -85,7 +85,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
 
-  pat::TriggerObjectStandAloneCollection filteredColl;
+  pat::TriggerObjectStandAloneCollection filteredColl,matchedColl;
   std::vector < UInt_t > filterResults,filters;
 
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
@@ -118,14 +118,17 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
   for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
     {
+      auto thisTrig = filteredColl.at(iTrigObj);
       if(MatchByDRDPt(*trak,filteredColl[iTrigObj]))
       {
         if(matched)
         {
-          if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,filteredColl[iTrigObj))
+          if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,thisTrig))
           {
             filters.pop_back();
             filters.push_back(filterResults[iTrigObj]);
+            matchedColl.pop_back();
+            matchedColl.push_back(thisTrig);
 
           }
         }
@@ -133,6 +136,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
         if(!matched)
           {
             filters.push_back(filterResults[iTrigObj]);
+            matchedColl.push_back(thisTrig);
           }
 
         matched = true;
