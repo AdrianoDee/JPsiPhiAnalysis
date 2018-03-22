@@ -118,6 +118,8 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   Double_t track_KP_d0, track_KP_d0Err, track_KP_dz, track_KP_dxy;
   Int_t track_KP_nvsh, track_KP_nvph;
 
+  UInt_t tPMatch, tNMatch;
+
   Int_t track_KN_nvsh, track_KN_nvph;
 
   Int_t dimuonditrk_rf_bindx;
@@ -207,7 +209,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("muonp_rf_p4",   "TLorentzVector", &muonp_rf_p4);
         dimuonditrk_tree->Branch("muonn_rf_p4",   "TLorentzVector", &muonn_rf_p4);
         dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
-        dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
+        dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4)
 
         //2mu vertexing
         dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
@@ -226,6 +228,8 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
         dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
 
+        dimuonditrk_tree->Branch("tPMatch",     &tPMatch,       "tPMatch/I");
+        dimuonditrk_tree->Branch("tNMatch",     &tNMatch,       "tNMatch/I");
         //Muon flags
         dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
         dimuonditrk_tree->Branch("muonP_isSoft",        &muonP_isSoft,        "muonP_isSoft/O");
@@ -352,6 +356,9 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuonditrk_ctauPV    = dimuonditrk_rf_cand.userFloat("ctauPV");
       dimuonditrk_ctauErrPV = dimuonditrk_rf_cand.userFloat("ctauErrPV");
       dimuonditrk_charge    = dimuonditrk_cand.charge();
+
+      tPMatch = dimuonditrk_rf_cand.userInt("tPMatch");
+      tNMatch = dimuonditrk_rf_cand.userInt("tNMatch");
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
       dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("dimuon")->pt(),dimuonditrk_rf_cand.daughter("dimuon")->eta(),

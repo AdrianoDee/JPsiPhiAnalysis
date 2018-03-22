@@ -86,7 +86,11 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-
+process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ),
+  triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
+  unpackFilterLabels          = cms.bool( True )
+)
 process.softMuons = cms.EDFilter('PATMuonSelector',
    src = cms.InputTag('slimmedMuonsWithTrigger'),
    cut = cms.string('muonID(\"TMOneStationTight\")'
@@ -123,12 +127,15 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
+    TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
     OnlyBest  = cms.bool(False),
-    Product = cms.string("DiMuonDiTrakCandidates")
+    Product = cms.string("DiMuonDiTrakCandidates"),
+    Filters = filters
 )
 
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
