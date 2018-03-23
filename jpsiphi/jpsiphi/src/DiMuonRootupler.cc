@@ -291,7 +291,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         } else dimuon_pdgId = 0;
       }  // if ( p_id
     } // for (size
-    if ( ! dimuon_pdgId ) std::cout << "DiMuonRootupler: does not found the given decay " << run << "," << event << std::endl; // sanity check
+    if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
