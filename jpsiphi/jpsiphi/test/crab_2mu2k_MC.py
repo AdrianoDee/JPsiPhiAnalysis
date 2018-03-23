@@ -66,7 +66,7 @@ config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2mu2k_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = 'miniaod_2mu2k_bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
 config.General.transferLogs     = False
 
 config.section_('JobType')
