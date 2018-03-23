@@ -1,7 +1,9 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
+gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
+input_file = gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -9,8 +11,9 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v10')
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -21,7 +24,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1500))
 
 process.TFileService = cms.Service("TFileService",
         fileName = cms.string('rootuple-2017-dimuonditrak.root'),
@@ -111,7 +114,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(False),
+        addMCTruth                  = cms.bool(True),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
@@ -166,13 +169,13 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(443),
                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-                          isMC = cms.bool(False),
+                          isMC = cms.bool(True),
                           OnlyBest = cms.bool(False),
                           OnlyGen = cms.bool(False),
                           HLTs = hltpaths
                           )
 
-process.p = cms.Path(process.triggerSelection *
+process.p = cms.Path(#process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
                      # process.slimmedPFCandsWithTriggerSequence *
                      process.unpackPatTriggers *

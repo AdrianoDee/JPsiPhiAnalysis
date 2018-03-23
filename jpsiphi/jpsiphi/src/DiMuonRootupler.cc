@@ -166,6 +166,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
      dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
   }
+
   genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
