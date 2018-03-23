@@ -250,7 +250,9 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
         dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
 
-        if (isMC_ || OnlyGen_) {
+        int pdgid_ = 0;
+
+        if (isMC_ ) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
            dimuonditrk_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
