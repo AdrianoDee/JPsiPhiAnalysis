@@ -39,7 +39,8 @@ datasetnames = {
 "B" : datasetbase + '/Run2017B-17Nov2017-v1/MINIAOD',
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
-"E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD'
+"E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
+"bbar": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'
 }
 
 
