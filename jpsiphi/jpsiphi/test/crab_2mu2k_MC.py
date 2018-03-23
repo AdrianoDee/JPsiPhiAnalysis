@@ -43,7 +43,7 @@ runNumber = [
 ''
 ]
 
-run = 'F'
+run = 'bbar'
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
