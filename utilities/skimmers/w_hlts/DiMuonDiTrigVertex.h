@@ -59,7 +59,7 @@ public :
    TTreeReaderValue<Double_t> dimuonditrk_ctauPV = {fReader, "dimuonditrk_ctauPV"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauErrPV = {fReader, "dimuonditrk_ctauErrPV"};
    TTreeReaderValue<Int_t> dimuonditrk_charge = {fReader, "dimuonditrk_charge"};
-   TTreeReaderValue<Float_t> dimuonditrk_charge = {fReader, "dimuonditrk_lxy"};
+   TTreeReaderValue<Float_t> dimuonditrk_lxy = {fReader, "dimuonditrk_lxy"};
    TTreeReaderValue<Float_t> dimuonditrk_lxyErr = {fReader, "dimuonditrk_lxyErr"};
    TTreeReaderValue<Float_t> dimuonditrk_MassErr = {fReader, "dimuonditrk_MassErr"};
    TTreeReaderValue<Double_t> dimuon_vProb = {fReader, "dimuon_vProb"};
