@@ -46,6 +46,16 @@ void DiMuonDiTrigVertex::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2Trak2Trig_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   outTuple = new TNtuple("outuple","outuple","run:ttM:trigtrigM:trigp_pT:trign_pT:matchOne:matchTwo");
+
 }
 
 Bool_t DiMuonDiTrigVertex::Process(Long64_t entry)
@@ -66,7 +76,14 @@ Bool_t DiMuonDiTrigVertex::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+   Float_t run_out, ttM, trigtrigM;
+   Float_t trigp_pT, trign_pT;
+   UInt_t matchOne, matchTwo;
    fReader.SetEntry(entry);
+
+   bool phiMass = (*ditrakTrigger_p4).M() > 0.9 && (*ditrakTrigger_p4).M() < 1.3;
+   bool jpsiMass = (*dimuonTrigger_p4).M() > 2.88 && (*dimuonTrigger_p4).M() < 3.32;
+   bool xMass = (*dimuonditrkTrigger_p4).M() > 4.0 && (*dimuonditrkTrigger_p4).M() < 6.0;
 
    return kTRUE;
 }
@@ -76,6 +93,22 @@ void DiMuonDiTrigVertex::SlaveTerminate()
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
+
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
+
 
 }
 
