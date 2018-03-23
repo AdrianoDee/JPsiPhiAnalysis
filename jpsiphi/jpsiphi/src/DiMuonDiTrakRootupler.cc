@@ -128,7 +128,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
 
   Bool_t isBestCandidate;
 
-  Int_t          gen_dimuonditrk_pdgId;
+  Int_t          gen_dimuonditrk_pdgId, mother_pdgId;
   TLorentzVector gen_dimuonditrk_p4;
   TLorentzVector gen_dimuon_p4;
   TLorentzVector gen_ditrak_p4;
@@ -252,11 +252,11 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         if (isMC_ || OnlyGen_) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
-           dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
-           dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
-           dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-           dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
-           dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
+           dimuonditrk_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
+           dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
+           dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
+           dimuonditrk_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
+           dimuonditrk_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
         }
 
         //Track flags
