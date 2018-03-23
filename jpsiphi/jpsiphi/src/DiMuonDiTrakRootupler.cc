@@ -255,8 +255,8 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
            dimuonditrk_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-           dimuonditrk_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
-           dimuonditrk_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
+           dimuonditrk_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonp_p4);
+           dimuonditrk_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonn_p4);
         }
 
         //Track flags
