@@ -182,7 +182,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-        treeName_(iConfig.getParameter<std::string>("TreeName"))
+        treeName_(iConfig.getParameter<std::string>("TreeName")),
 {
 	      edm::Service<TFileService> fs;
         dimuonditrk_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
@@ -249,6 +249,15 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
         dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
+
+        if (isMC_ || OnlyGen_) {
+           std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+           dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
+           dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
+           dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
+           dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
+           dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
+        }
 
         //Track flags
 
