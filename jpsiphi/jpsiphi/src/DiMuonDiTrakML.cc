@@ -31,6 +31,11 @@ DiMuonDiTrakML::~DiMuonDiTrakML()
 void
 DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+
+  vector<double> mmMasses;
+  mmMasses.push_back( 0.1056583715 );
+  mmMasses.push_back( 0.1056583715 );
+
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(traks_,tracks);
 
@@ -89,8 +94,8 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mu2.SetXYZM(mPos->track()->px(),mPos->track()->py(),mPos->track()->pz(),muon_mass);
 
       mumuP4=mu1+mu2;
-      mumucand.setP4(mumu);
-      mumucand.setCharge(mNeg->charge()+mPos->charge());
+      // mumucand.setP4(mumu);
+      // mumucand.setCharge(mNeg->charge()+mPos->charge());
 
       if(mumu.M() < DiMuonMassCuts_[1]) continue;
       if(mumu.M() > DiMuonMassCuts_[0]) continue;
@@ -118,12 +123,12 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(posTrack->charge()<=0.0) continue;
-        if(!(posTrack.isNonnull())) continue;
+        if(!(posTrack->isNonnull())) continue;
 
         for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
         {
           if(negTrack->charge()>=0.0) continue;
-          if(!(negTrack.isNonnull())) continue;
+          if(!(negTrack->isNonnull())) continue;
 
 
         }
