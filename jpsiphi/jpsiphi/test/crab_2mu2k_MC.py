@@ -35,11 +35,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 
 datasetnames = {
 
-"F" :  datasetbase + '/Run2017F-17Nov2017-v1/MINIAOD',
-"B" : datasetbase + '/Run2017B-17Nov2017-v1/MINIAOD',
-"C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
-"D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
-"E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD'
+"bbar": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'
 }
 
 
@@ -86,8 +82,8 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 6
-config.Data.splitting           = 'LumiBased'
+config.Data.unitsPerJob         = 5
+config.Data.splitting           = 'FileBased'
 config.Data.runRange            = runNum
 config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'
