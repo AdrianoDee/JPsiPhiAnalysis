@@ -76,18 +76,18 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
-    if (!(mPos->bestTrack()->isNonnull())) continue;
-    if (!(mPos->innerTrack()->isNonnull())) continue;
+    // if (!(mPos->bestTrack()->isNonnull())) continue;
+    // if (!(mPos->innerTrack()->isNonnull())) continue;
 
     for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
-      if (!(mNeg->bestTrack()->isNonnull())) continue;
-      if (!(mNeg->innerTrack()->isNonnull())) continue;
+      // if (!(mNeg->bestTrack()->isNonnull())) continue;
+      // if (!(mNeg->innerTrack()->isNonnull())) continue;
 
       std::vector<TransientVertex> vDiMuon;
 
-      Candidate::LorentzVector mumu = mNeg->p4() + mPos->p4();
+      // Candidate::LorentzVector mumu = mNeg->p4() + mPos->p4();
 
       TLorentzVector mu1, mu2,mumuP4;
 
@@ -98,8 +98,8 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       // mumucand.setP4(mumu);
       // mumucand.setCharge(mNeg->charge()+mPos->charge());
 
-      if(mumu.M() < DiMuonMassCuts_[1]) continue;
-      if(mumu.M() > DiMuonMassCuts_[0]) continue;
+      if(mumuP4.M() < DiMuonMassCuts_[1]) continue;
+      if(mumuP4.M() > DiMuonMassCuts_[0]) continue;
 
       std::vector<reco::TransientTrack> mm_ttks;
 
