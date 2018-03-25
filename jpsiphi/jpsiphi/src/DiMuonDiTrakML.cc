@@ -32,7 +32,7 @@ void
 DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-  vector<double> mmMasses;
+  std::vector<double> mmMasses;
   mmMasses.push_back( 0.1056583715 );
   mmMasses.push_back( 0.1056583715 );
 
@@ -42,15 +42,15 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<reco::MuonCollection> muons;
   iEvent.getByToken(muons_,muons);
 
-  Vertex thePrimaryV;
+  reco::Vertex thePrimaryV;
 
-  ESHandle<MagneticField> magneticField;
+  edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
-  BeamSpot bs = *theBeamSpot;
+  reco::BeamSpot bs = *theBeamSpot;
 
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
@@ -84,9 +84,9 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (!(mNeg->bestTrack().isNonnull())) continue;
       if (!(mNeg->innerTrack().isNonnull())) continue;
 
-      vector<TransientVertex> vDiMuon;
+      std::vector<TransientVertex> vDiMuon;
 
-      LorentzVector mumu = mNeg->p4() + mPos->p4();
+      Candidate::LorentzVector mumu = mNeg->p4() + mPos->p4();
 
       TLorentzVector mu1, mu2,mumuP4;
 
