@@ -56,7 +56,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
   if ( priVtxs->begin() != priVtxs->end() ) {
-    thePrimaryV = Vertex(*(priVtxs->begin()));
+    thePrimaryV = reco::Vertex(*(priVtxs->begin()));
   }
   else {
     thePrimaryV = reco::Vertex(bs.position(), bs.covariance3D());
