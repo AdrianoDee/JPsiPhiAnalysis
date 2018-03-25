@@ -58,7 +58,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     thePrimaryV = Vertex(*(priVtxs->begin()));
   }
   else {
-    thePrimaryV = Vertex(bs.position(), bs.covariance3D());
+    thePrimaryV = reco::Vertex(bs.position(), bs.covariance3D());
   }
 
 
@@ -75,14 +75,14 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
-    if (!(mPos->bestTrack().isNonnull())) continue;
-    if (!(mPos->innerTrack().isNonnull())) continue;
+    if (!(mPos->bestTrack()->isNonnull())) continue;
+    if (!(mPos->innerTrack()->isNonnull())) continue;
 
     for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
-      if (!(mNeg->bestTrack().isNonnull())) continue;
-      if (!(mNeg->innerTrack().isNonnull())) continue;
+      if (!(mNeg->bestTrack()->isNonnull())) continue;
+      if (!(mNeg->innerTrack()->isNonnull())) continue;
 
       std::vector<TransientVertex> vDiMuon;
 
