@@ -100,12 +100,12 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(mumu.M() < DiMuonMassCuts_[1]) continue;
       if(mumu.M() > DiMuonMassCuts_[0]) continue;
 
-      std::vector<TransientTrack> mm_ttks;
+      std::vector<reco::TransientTrack> mm_ttks;
 
       mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
       mm_ttks.push_back(theTTBuilder->build(mPos->track()));
 
-      TransientVertex mumuVertex = vtxFitter.vertex(mm_ttks);
+      reco::TransientVertex mumuVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
 
       Measurement1D MassWErr(mPos->mass(),-9999.);
@@ -123,12 +123,12 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(posTrack->charge()<=0.0) continue;
-        if(!(posTrack->isNonnull())) continue;
+        // if(!(posTrack->isNonnull())) continue;
 
         for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
         {
           if(negTrack->charge()>=0.0) continue;
-          if(!(negTrack->isNonnull())) continue;
+          // if(!(negTrack->isNonnull())) continue;
 
 
         }
