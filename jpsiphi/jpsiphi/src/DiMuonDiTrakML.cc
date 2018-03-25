@@ -142,9 +142,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   }
     for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-      for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-        for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-    max = std::max(max,itTrack->numberOfValidHits());
+          max = std::max(max,int(itTrack->numberOfValidHits()));
 
   std::cout<<max<<std::endl;
   //loop on
