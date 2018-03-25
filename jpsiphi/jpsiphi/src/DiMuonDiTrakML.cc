@@ -121,6 +121,9 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       vChi2 = mumuVertex.totalChiSquared();
       vNDF  = mumuVertex.degreesOfFreedom();
       vProb = TMath::Prob(vChi2,(int)vNDF);
+
+      if(vProb < 0.0) continue;
+      
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(posTrack->charge()<=0.0) continue;
