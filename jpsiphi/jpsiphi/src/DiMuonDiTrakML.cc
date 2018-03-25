@@ -7,7 +7,7 @@ traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Trac
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
+DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts"))
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
