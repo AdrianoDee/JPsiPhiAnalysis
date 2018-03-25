@@ -16,6 +16,7 @@ DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 // massCands_(iConfig.getParameter<std::vector<double>>("CandsMasses"))
 {
   // produces<pat::CompositeCandidateCollection>();
+  muon_mass = 0.1056583715;
 }
 
 

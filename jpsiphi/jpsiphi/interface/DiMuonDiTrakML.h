@@ -85,6 +85,8 @@ class DiMuonDiTrakML : public edm::EDProducer {
 
   GreaterByVProb<pat::CompositeCandidate> vPComparator_;
 
+  float muon_mass;
+
 };
 
 #endif
