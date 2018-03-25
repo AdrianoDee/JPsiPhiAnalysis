@@ -105,7 +105,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       mm_ttks.push_back(theTTBuilder->build(mNeg->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
       mm_ttks.push_back(theTTBuilder->build(mPos->track()));
 
-      reco::TransientVertex mumuVertex = vtxFitter.vertex(mm_ttks);
+      TransientVertex mumuVertex = vtxFitter.vertex(mm_ttks);
       CachingVertex<5> VtxForInvMass = vtxFitter.vertex( mm_ttks );
 
       Measurement1D MassWErr(mPos->mass(),-9999.);
