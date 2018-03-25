@@ -48,11 +48,11 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
-  edm::Handle<BeamSpot> theBeamSpot;
+  edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   BeamSpot bs = *theBeamSpot;
 
-  edm::Handle<VertexCollection> priVtxs;
+  edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
   if ( priVtxs->begin() != priVtxs->end() ) {
     thePrimaryV = Vertex(*(priVtxs->begin()));
