@@ -79,6 +79,8 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   if(run.Get())
+   {
    std::bitset<16> tMuonOne(*muonN_tMatch);
    std::bitset<16> tMuonTwo(*muonP_tMatch);
    std::bitset<16> tKaonOne(*trakN_tMatch);
@@ -90,17 +92,17 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    int triggerToTest = 0;
 
-   float run_out = float(*run);
-   float xM      = float((*dimuonditrak_p4).M());
-   float ttM     = float((*ditrak_p4).M());
-   float mmM     = float((*dimuon_p4).M());
-   // float params[16] = {float(*run),float((*dimuonditrak_p4).M()),float((*ditrak_p4).M()),float((*dimuon_p4).M()),float((*dimuonditrkTrigger_p4).M()),float((*dimuonTrigger_p4).M()),
-   // float((*ditrakTrigger_p4).M()),float(traktrakHLT),float(trakHLT),float(phiHLT),float(*muonN_tMatch),float(*muonP_tMatch),float(*trakN_tMatch),float(*trakP_tMatch),float(*dimuonditrk_vProb),float(*dimuonditrk_lxy)/float(*dimuonditrk_lxyErr)};
+   // // float run_out = float(*run);
+   // float xM      = float((*dimuonditrak_p4).M());
+   // float ttM     = float((*ditrak_p4).M());
+   // float mmM     = float((*dimuon_p4).M());
+   float params[16] = {float(*run),float((*dimuonditrak_p4).M()),float((*ditrak_p4).M()),float((*dimuon_p4).M()),float((*dimuonditrkTrigger_p4).M()),float((*dimuonTrigger_p4).M()),
+     float((*ditrakTrigger_p4).M()),float(traktrakHLT),float(trakHLT),float(phiHLT),float(*muonN_tMatch),float(*muonP_tMatch),float(*trakN_tMatch),float(*trakP_tMatch),float(*dimuonditrk_vProb),float(*dimuonditrk_lxy)/float(*dimuonditrk_lxyErr)};
 
    if(phiHLT || traktrakHLT || trakHLT)
-    triggerToTest++;
-     // outTuple->Fill(params);
-
+    // triggerToTest++;
+     outTuple->Fill(params);
+   }
 
    return kTRUE;
 }
