@@ -54,7 +54,7 @@ void TwoMuonTwoTrigVertex::SlaveBegin(TTree * /*tree*/)
      Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
    }
 
-   outTuple = new TNtuple("outuple","outuple","run:xM:ttM:mmM:xTrigM:ttTrigM:mmTrigM:muonp_pT:muonn_pT:kaonp_pT:kaonn_pT:matchMN:matchMP:matchKN:matchKP:vProb:lxysig");
+   outTuple = new TNtuple("outuple","outuple","run:xM:ttM:mmM:xTrigM:ttTrigM:mmTrigM:traktrakHLT:trakHLT:phiHLT:matchMN:matchMP:matchKN:matchKP:vProb:lxysig");
 
 
 }
@@ -79,12 +79,21 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
-   std::bitset<16> tOne(*muonN_tMatch);
-   std::bitset<16> tTwo(*muonP_tMatch);
-   std::bitset<16> tThree(*trakN_tMatch);
-   std::bitset<16> tFour(*trakP_tMatch);
+   std::bitset<16> tMuonOne(*muonN_tMatch);
+   std::bitset<16> tMuonTwo(*muonP_tMatch);
+   std::bitset<16> tKaonOne(*trakN_tMatch);
+   std::bitset<16> tKaonTwo(*trakP_tMatch);
+
+   bool phiHLT      = tMuonOne.test(0) && tMuonTwo.test(0) && tKaonOne.test(0) && tKaonTwo.test(0);
+   bool traktrakHLT = tMuonOne.test(1) && tMuonTwo.test(1) && tKaonOne.test(1) && tKaonTwo.test(1);
+   bool trakHLT     = tMuonOne.test(2) && tMuonTwo.test(2) && (tKaonOne.test(2) || tKaonTwo.test(2));
 
    int triggerToTest = 0;
+
+   if(phiHLT || traktrakHLT || trakHLT)
+     outTuple->Fill((*run),(*dimuonditrak_p4).M(),(*ditrak_p4),M(),(*dimuon).M(),(*dimuonditrkTrigger_p4),M(),(*dimuonTrigger_p4).M(),
+     (*ditrakTrigger_p4).M(),float(traktrakHLT),float(trakHLT),float(phiHLT),(*muonN_tMatch),(*muonP_tMatch),(*trakN_tMatch),(*trakP_tMatch),(*dimuonditrk_vProb),(*dimuonditrk_lxy)/(*dimuonditrk_lxyErr));
+  
 
    return kTRUE;
 }
@@ -109,7 +118,7 @@ void TwoMuonTwoTrigVertex::SlaveTerminate()
      fOut->Close();
 
    }
-   
+
 }
 
 void TwoMuonTwoTrigVertex::Terminate()
