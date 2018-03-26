@@ -68,6 +68,8 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   float s = (*dimuonditrk_vProb);
+
    return kTRUE;
 }
 
