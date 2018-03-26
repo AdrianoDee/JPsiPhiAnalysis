@@ -29,7 +29,8 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
-  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
+  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+  isMC_(iConfig.getParameter<bool>("IsMC"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -143,7 +144,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
 
          if(posTrack.charge()==0) continue;
          if(posTrack.pt()<0.5) continue;
-	       if(fabs(posTrack.pdgId())!=211) continue;
+	       if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
 
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2) || posTrack.charge() < 0 ) continue;
@@ -155,7 +156,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
 
            if(negTrack.charge()==0) continue;
            if(negTrack.pt()<0.5) continue;
-  	       if(fabs(negTrack.pdgId())!=211) continue;
+
+  	       if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
 
            if (i == j) continue;
