@@ -351,8 +351,6 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     //Refitted Handle
     for (unsigned int i=0; i< dimuonditrk_rf_cand_handle->size(); i++){
 
-
-
       dimuonditrk_rf_cand   = dimuonditrk_rf_cand_handle->at(i);
       dimuonditrk_rf_bindx = dimuonditrk_rf_cand.userInt("bIndex");
 
@@ -454,7 +452,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       dimuon_triggerMatch = DiMuonDiTrakRootupler::isTriggerMatched(dimuon_cand);
 
       dimuonditrk_tree->Fill();
-
+      std::cout << i << std::endl;
       if (OnlyBest_) break;
       else if(i==0)
       isBestCandidate = false;
