@@ -90,7 +90,7 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    int triggerToTest = 0;
 
-   float params[16] = {float(*run),float(*dimuonditrak_p4).M(),float(*ditrak_p4).M(),float(*dimuon_p4).M(),float(*dimuonditrkTrigger_p4).M(),float(*dimuonTrigger_p4).M(),
+   float params[16] = {float(*run),float((*dimuonditrak_p4).M()),float((*ditrak_p4).M()),float((*dimuon_p4).M()),float((*dimuonditrkTrigger_p4).M()),float((*dimuonTrigger_p4).M()),
    (*ditrakTrigger_p4).M(),float(traktrakHLT),float(trakHLT),float(phiHLT),float(*muonN_tMatch),float(*muonP_tMatch),float(*trakN_tMatch),float(*trakP_tMatch),float(*dimuonditrk_vProb),float(*dimuonditrk_lxy)/float(*dimuonditrk_lxyErr)};
 
    if(phiHLT || traktrakHLT || trakHLT)
