@@ -138,7 +138,8 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
     OnlyBest  = cms.bool(False),
     Product = cms.string("DiMuonDiTrakCandidates"),
-    Filters = filters
+    Filters = filters,
+    IsMC = cms.bool(True),
 )
 
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
