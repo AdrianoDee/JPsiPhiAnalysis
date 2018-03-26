@@ -230,9 +230,6 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 
   ndimuonditrk  = dimuonditrks->size();
 
-  dimuonditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   isBest = true;
 
