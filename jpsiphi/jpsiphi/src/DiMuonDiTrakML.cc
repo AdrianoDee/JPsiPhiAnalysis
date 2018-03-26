@@ -70,7 +70,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   int max = 0;
 
   float vProb, vNDF, vChi2, minDz = 999999.;
-  float vProb_mumu, vNDF_mumu, vChi2_mumu, minDz = 999999.;
+  float vProb_mumu, vNDF_mumu, vChi2_mumu;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
 
