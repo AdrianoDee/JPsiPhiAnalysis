@@ -19,12 +19,22 @@
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
+#include <TNtuple.h>
+#include <TString.h>
+#include <TSelector.h>
+
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include <bitset>
 
 
 class TwoMuonTwoTrigVertex : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   TNtuple *outTuple;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<UInt_t> run = {fReader, "run"};
@@ -49,7 +59,7 @@ public :
    TTreeReaderValue<Double_t> dimuonditrk_cosAlpha = {fReader, "dimuonditrk_cosAlpha"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauPV = {fReader, "dimuonditrk_ctauPV"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauErrPV = {fReader, "dimuonditrk_ctauErrPV"};
-   TTreeReaderValue<Int_t> dimuonditrk_charge = {fReader, "dimuonditrk_charge"};
+   TTreeReaderValue<Int_t> dimuonditrk_lxy = {fReader, "dimuonditrk_charge"};
    TTreeReaderValue<Float_t> dimuonditrk_charge = {fReader, "dimuonditrk_lxy"};
    TTreeReaderValue<Float_t> dimuonditrk_lxyErr = {fReader, "dimuonditrk_lxyErr"};
    TTreeReaderValue<Float_t> dimuonditrk_MassErr = {fReader, "dimuonditrk_MassErr"};
@@ -81,6 +91,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(TwoMuonTwoTrigVertex,0);
 

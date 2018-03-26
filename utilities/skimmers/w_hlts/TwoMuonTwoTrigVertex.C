@@ -46,6 +46,17 @@ void TwoMuonTwoTrigVertex::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2Trak2MuonVertexTrig_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   outTuple = new TNtuple("outuple","outuple","run:xM:ttM:mmM:xTrigM:ttTrigM:mmTrigM:muonp_pT:muonn_pT:kaonp_pT:kaonn_pT:matchMN:matchMP:matchKN:matchKP:vProb:lxysig");
+
+
 }
 
 Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
@@ -68,7 +79,12 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
-   float s = (*dimuonditrk_vProb);
+   std::bitset<16> tOne(*muonN_tMatch);
+   std::bitset<16> tTwo(*muonP_tMatch);
+   std::bitset<16> tThree(*trakN_tMatch);
+   std::bitset<16> tFour(*trakP_tMatch);
+
+   int triggerToTest = 0;
 
    return kTRUE;
 }
@@ -79,6 +95,21 @@ void TwoMuonTwoTrigVertex::SlaveTerminate()
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 
+   TDirectory *savedir = gDirectory;
+   if (fOut)
+   {
+     fOut->cd();
+     gStyle->SetOptStat(111111) ;
+
+
+     outTuple->Write();
+     OutFile->Print();
+     fOutput->Add(OutFile);
+     gDirectory = savedir;
+     fOut->Close();
+
+   }
+   
 }
 
 void TwoMuonTwoTrigVertex::Terminate()
