@@ -70,6 +70,7 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   int max = 0;
 
   float vProb, vNDF, vChi2, minDz = 999999.;
+  float vProb_mumu, vNDF_mumu, vChi2_mumu, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
 
@@ -118,12 +119,12 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (!(mumuVertex.isValid()))
           continue;
 
-      vChi2 = mumuVertex.totalChiSquared();
-      vNDF  = mumuVertex.degreesOfFreedom();
-      vProb = TMath::Prob(vChi2,(int)vNDF);
+      vChi2_mumu = mumuVertex.totalChiSquared();
+      vNDF_mumu  = mumuVertex.degreesOfFreedom();
+      vProb_mumu = TMath::Prob(vChi2_mumu,(int)vNDF_mumu);
 
-      if(vProb < 0.0) continue;
-      
+      if(vProb_mumu < 0.0) continue;
+
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(posTrack->charge()<=0.0) continue;
