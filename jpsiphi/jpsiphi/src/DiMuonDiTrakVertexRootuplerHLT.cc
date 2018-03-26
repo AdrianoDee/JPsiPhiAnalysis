@@ -152,7 +152,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("dimuonditrk_ctauPV",     &dimuonditrk_ctauPV,       "dimuonditrk_ctauPV/D");
   dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
   dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
-  dimuonditrk_tree->Branch("dimuonditrk_lxy",        &dimuonditrk_lxy,      "dimuonditrk_charge/F");
+  dimuonditrk_tree->Branch("dimuonditrk_lxy",        &dimuonditrk_lxy,      "dimuonditrk_lxy/F");
   dimuonditrk_tree->Branch("dimuonditrk_lxyErr",     &dimuonditrk_lxyErr,      "dimuonditrk_lxyErr/F");
   dimuonditrk_tree->Branch("dimuonditrk_MassErr",     &dimuonditrk_MassErr,      "dimuonditrk_MassErr/F");
 
