@@ -90,9 +90,11 @@ Bool_t TwoMuonTwoTrigVertex::Process(Long64_t entry)
 
    int triggerToTest = 0;
 
+   float params[16] = {(*run),(*dimuonditrak_p4).M(),(*ditrak_p4).M(),(*dimuon_p4).M(),(*dimuonditrkTrigger_p4).M(),(*dimuonTrigger_p4).M(),
+   (*ditrakTrigger_p4).M(),float(traktrakHLT),float(trakHLT),float(phiHLT),(*muonN_tMatch),(*muonP_tMatch),(*trakN_tMatch),(*trakP_tMatch),(*dimuonditrk_vProb),(*dimuonditrk_lxy)/(*dimuonditrk_lxyErr)}
+
    if(phiHLT || traktrakHLT || trakHLT)
-     outTuple->Fill((*run),(*dimuonditrak_p4).M(),(*ditrak_p4).M(),(*dimuon_p4).M(),(*dimuonditrkTrigger_p4).M(),(*dimuonTrigger_p4).M(),
-     (*ditrakTrigger_p4).M(),float(traktrakHLT),float(trakHLT),float(phiHLT),(*muonN_tMatch),(*muonP_tMatch),(*trakN_tMatch),(*trakP_tMatch),(*dimuonditrk_vProb),(*dimuonditrk_lxy)/(*dimuonditrk_lxyErr));
+     outTuple->Fill(params);
 
 
    return kTRUE;
