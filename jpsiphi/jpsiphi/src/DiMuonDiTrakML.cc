@@ -127,13 +127,13 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
-        if(posTrack==nullptr) continue;
+        if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
         // if(!(posTrack->isNonnull())) continue;
 
         for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
         {
-          if(negTrack==nullptr) continue;
+          if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
           // if(!(negTrack->isNonnull())) continue;
 
