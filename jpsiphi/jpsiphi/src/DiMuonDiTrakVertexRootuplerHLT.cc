@@ -91,7 +91,7 @@ class DiMuonDiTrakVertexRootuplerHLT:public edm::EDAnalyzer {
 
   Int_t dimuonditrk_charge;
 
-  Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
+  Double_t dimuon_vProb, dimuon_vNChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
   Double_t dimuonditrk_MassErr,dimuonditrk_lxy, dimuonditrk_lxyErr;
@@ -129,7 +129,6 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 
   dimuonditrk_tree->Branch("ndimuonditrk",    &ndimuonditrk,    "ndimuonditrk/i");
   dimuonditrk_tree->Branch("trigger",  &trigger,  "trigger/i");
-  dimuonditrk_tree->Branch("charge",   &charge,   "charge/I");
 
   dimuonditrk_tree->Branch("isBest",   &isBest,   "isBest/O");
 
@@ -157,7 +156,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("dimuonditrk_MassErr",     &dimuonditrk_MassErr,      "dimuonditrk_MassErr/F");
 
   dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
-  dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
+  dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vNChi2,        "dimuon_vNChi2/D");
   dimuonditrk_tree->Branch("dimuon_DCA",          &dimuon_DCA,          "dimuon_DCA/D");
   dimuonditrk_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
   dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
@@ -230,6 +229,16 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
 
   ndimuonditrk  = dimuonditrks->size();
 
+  dimuonditrak_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  dimuon_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  muonP_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  muonN_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  ditrak_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  trakP_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  trakN_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  dimuonditrkTrigger_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  ditrakTrigger_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+  dimuonTrigger_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
 
   isBest = true;
 
@@ -265,7 +274,7 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         ditrakTrigger_p4.SetPtEtaPhiM(ditrakTrigger_cand->pt(),ditrakTrigger_cand->eta(),ditrakTrigger_cand->phi(),ditrakTrigger_cand->mass());
 
         dimuon_vProb        = dimuon_cand->userFloat("vProb");
-        dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
+        dimuon_vNChi2        = dimuon_cand->userFloat("vNChi2");
         dimuon_DCA          = dimuon_cand->userFloat("DCA");
         dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
         dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
@@ -285,8 +294,10 @@ void DiMuonDiTrakVertexRootuplerHLT::analyze(const edm::Event & iEvent, const ed
         dimuonditrk_cosAlpha  = dimuonditrkCand->userFloat("cosAlpha");
         dimuonditrk_ctauPV    = dimuonditrkCand->userFloat("ctauPV");
         dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
+        dimuonditrk_ctauErrPV = dimuonditrkCand->userFloat("ctauErrPV");
+        dimuonditrk_lxyErr    = dimuonditrkCand->userFloat("lErrxy");
+        dimuonditrk_lxy       = dimuonditrkCand->userFloat("lxy");
         dimuonditrk_charge    = dimuonditrkCand->charge();
-
 
         dimuonditrk_tree->Fill();
         isBest = false;
