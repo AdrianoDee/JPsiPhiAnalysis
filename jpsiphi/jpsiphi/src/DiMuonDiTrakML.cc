@@ -1,5 +1,7 @@
 #include "../interface/DiMuonDiTrakML.h"
 #include "../interface/DiMuonVtxReProducer.h"
+#include "DataFormats/TrackerRecHit2D/interface/SiPixelRecHit.h"
+#include "DataFormats/TrackerRecHit2D/interface/TrackerSingleRecHit.h"
 
 DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
@@ -32,6 +34,7 @@ DiMuonDiTrakML::~DiMuonDiTrakML()
 void
 DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  std::vector<int> pixelDets{0,1,2,3,14,15,16,29,30,31};
 
   std::vector<double> mmMasses;
   mmMasses.push_back( 0.1056583715 );
@@ -77,14 +80,14 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
-    // if (!(mPos->bestTrack()->isNonnull())) continue;
-    // if (!(mPos->innerTrack()->isNonnull())) continue;
+    if (!(mPos->bestTrackRef().isNonnull())) continue;
+    if (!(mPos->innerTrack().isNonnull())) continue;
 
     for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
-      // if (!(mNeg->bestTrack()->isNonnull())) continue;
-      // if (!(mNeg->innerTrack()->isNonnull())) continue;
+      if (!(mNeg->bestTrackRef().isNonnull())) continue;
+      if (!(mNeg->innerTrack().isNonnull())) continue;
 
       std::vector<TransientVertex> vDiMuon;
 
@@ -147,10 +150,44 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
   }
-    for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-          max = std::max(max,int(itTrack->numberOfValidHits()));
+  
+  
+  for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
+    { 
+	int noPixels= 0;
+	std::cout<<"On "<< itTrack->found() ;
+    for ( trackingRecHit_iterator recHit = itTrack->recHitsBegin();recHit != itTrack->recHitsEnd(); ++recHit )
+	{
+		if(!(*recHit))
+                continue;
 
-  std::cout<<max<<std::endl;
+                if (!((*recHit)->isValid()))
+                continue;
+
+                if(!((*recHit)->hasPositionAndError()))
+                continue;
+		
+		TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
+//    BaseTrackerRecHit const * bhit = dynamic_cast<BaseTrackerRecHit const *>(recHit); 
+		
+		DetId detid = (*recHit)->geographicalId();
+		unsigned int subdetid = detid.subdetId();	
+	
+	        
+	        //if(!(siPix))
+	        //continue;
+std::cout << " In" << std::endl;		
+    	 if(detid.det() != DetId::Tracker) continue;
+	 if (!((subdetid==1) || (subdetid==2))) continue;
+        
+
+			noPixels++;	
+	}
+	std::cout << " n. pixels = " << noPixels<<std::endl;
+
+	     max = std::max(max,noPixels);
+}
+  std::cout<<"Max = " << max<<std::endl;
   //loop on
   // std::sort(mmttCollection->begin(),mmttCollection->end(),vPComparator_);
   // iEvent.put(std::move(mmttCollection));
