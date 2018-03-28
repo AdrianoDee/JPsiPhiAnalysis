@@ -1,4 +1,4 @@
-#include "../interface/DiMuonDiTrakML.h"
+//#include "../interface/DiMuonDiTrakML.h"
 #include "../interface/DiMuonVtxReProducer.h"
 #include "DataFormats/TrackerRecHit2D/interface/SiPixelRecHit.h"
 #include "DataFormats/TrackerRecHit2D/interface/TrackerSingleRecHit.h"
@@ -7,6 +7,10 @@
 #include "DataFormats/TrackerRecHit2D/interface/SiStripRecHit1D.h"
 #include "DataFormats/TrackerRecHit2D/interface/SiStripRecHit2D.h"
 #include <TH2F.h>
+
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TLorentzVector.h"
+#include "TTree.h"
 
 
 DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
@@ -156,87 +160,89 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
   }
-	int padHalfSize = 8;
-	int padSize = padHalfSize*2;
-int maxpix = 0;
-  for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-    {
-	int noPixels= 0,noStripOne = 0, noStripTwo = 0;
-	int counter = 0;
-	float clusterSize = 0.0;
-//	std::cout<<"On "<< itTrack->found() ;   
-	for ( trackingRecHit_iterator recHit = (*itTrack).recHitsBegin();recHit != (*itTrack).recHitsEnd(); ++recHit )
-	{
-		counter++;
-/*		 if(!(*recHit))
-                 continue;
-     
-                 if (!((*recHit)->isValid()))
-                 continue;
-    
-                 if(!((*recHit)->hasPositionAndError()))
-                 continue;
-*/
-		TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
-//    BaseTrackerRecHit const * bhit = dynamic_cast<BaseTrackerRecHit const *>(recHit);
-		
-		DetId detid = (*recHit)->geographicalId();
-		unsigned int subdetid = detid.subdetId();
 
-
-	        //if(!(siPix))
-	        //continue;
-	        //
-
-    	 if(detid.det() != DetId::Tracker) continue;
-//	 if (!((subdetid==1) || (subdetid==2))) continue;
-// 	 if()
-		if (dynamic_cast<SiPixelRecHit const *>(hit))
-		{		noPixels++;
-				clusterSize += float(dynamic_cast<SiPixelRecHit const *>(hit)->cluster()->size());
-				clusterSize /= float(counter);
-		
-		auto clust = dynamic_cast<SiPixelRecHit const *>(hit)->cluster();
-		TH2F hClust("hClust","hClust",
-              padSize,
-              clust->x()-padHalfSize,
-              clust->x()+padHalfSize,
-              padSize,
-              clust->y()-padHalfSize,
-              clust->y()+padHalfSize);
-
-		for (int nx = 0; nx < padSize; ++nx)
-              for (int ny = 0; ny < padSize; ++ny)
-              hClust.SetBinContent(nx,ny,0.0);
-
-              for (int k = 0; k < clust->size(); ++k)
-              hClust.SetBinContent(hClust.FindBin((float)clust->pixel(k).x, (float)clust->pixel(k).y),(float)clust->pixel(k).adc);
-
-		for (int ny = padSize; ny>0; --ny)
-              {
-                for(int nx = 0; nx<padSize; nx++)
-                {
-                  int n = (ny+2)*(padSize + 2) - 2 -2 - nx - padSize; //see TH2 reference for clarification
-       
-       //          std::cout << hClust.GetBinContent(n) << " ";
-		}
-              }	
-	//	std::cout << std::endl;
-		
-		}
-		if (dynamic_cast<SiStripRecHit1D const *>(hit))
-		noStripOne++;
-
-	if (dynamic_cast<SiStripRecHit2D const *>(hit))
-			noStripTwo++;
-		
-	}
-//	std::cout << " n. pixels = " << noPixels<< " 1DStrips = " << noStripOne << " 2DStrips = " << noStripTwo<< " clustsize : "<< clusterSize <<std::endl;
-	
-	     max = std::max(max,int(itTrack->found()));
-		maxpix = std::max(maxpix,noPixels);
-}
-  std::cout<<"Max = " << max<< " Max pixels " << maxpix << std::endl;
+// 	int padHalfSize = 8;
+// 	int padSize = padHalfSize*2;
+//   int maxpix = 0;
+//
+//   for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
+//     {
+// 	int noPixels= 0,noStripOne = 0, noStripTwo = 0;
+// 	int counter = 0;
+// 	float clusterSize = 0.0;
+// //	std::cout<<"On "<< itTrack->found() ;
+// 	for ( trackingRecHit_iterator recHit = (*itTrack).recHitsBegin();recHit != (*itTrack).recHitsEnd(); ++recHit )
+// 	{
+// 		counter++;
+// /*		 if(!(*recHit))
+//                  continue;
+//
+//                  if (!((*recHit)->isValid()))
+//                  continue;
+//
+//                  if(!((*recHit)->hasPositionAndError()))
+//                  continue;
+// */
+// 		TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
+// //    BaseTrackerRecHit const * bhit = dynamic_cast<BaseTrackerRecHit const *>(recHit);
+//
+// 		DetId detid = (*recHit)->geographicalId();
+// 		unsigned int subdetid = detid.subdetId();
+//
+//
+// 	        //if(!(siPix))
+// 	        //continue;
+// 	        //
+//
+//     	 if(detid.det() != DetId::Tracker) continue;
+// //	 if (!((subdetid==1) || (subdetid==2))) continue;
+// // 	 if()
+// 		if (dynamic_cast<SiPixelRecHit const *>(hit))
+// 		{		noPixels++;
+// 				clusterSize += float(dynamic_cast<SiPixelRecHit const *>(hit)->cluster()->size());
+// 				clusterSize /= float(counter);
+//
+// 		auto clust = dynamic_cast<SiPixelRecHit const *>(hit)->cluster();
+// 		TH2F hClust("hClust","hClust",
+//               padSize,
+//               clust->x()-padHalfSize,
+//               clust->x()+padHalfSize,
+//               padSize,
+//               clust->y()-padHalfSize,
+//               clust->y()+padHalfSize);
+//
+// 		for (int nx = 0; nx < padSize; ++nx)
+//               for (int ny = 0; ny < padSize; ++ny)
+//               hClust.SetBinContent(nx,ny,0.0);
+//
+//               for (int k = 0; k < clust->size(); ++k)
+//               hClust.SetBinContent(hClust.FindBin((float)clust->pixel(k).x, (float)clust->pixel(k).y),(float)clust->pixel(k).adc);
+//
+// 		for (int ny = padSize; ny>0; --ny)
+//               {
+//                 for(int nx = 0; nx<padSize; nx++)
+//                 {
+//                   int n = (ny+2)*(padSize + 2) - 2 -2 - nx - padSize; //see TH2 reference for clarification
+//
+//        //          std::cout << hClust.GetBinContent(n) << " ";
+// 		}
+//               }
+// 	//	std::cout << std::endl;
+//
+// 		}
+// 		if (dynamic_cast<SiStripRecHit1D const *>(hit))
+// 		noStripOne++;
+//
+// 	if (dynamic_cast<SiStripRecHit2D const *>(hit))
+// 			noStripTwo++;
+//
+// 	}
+// //	std::cout << " n. pixels = " << noPixels<< " 1DStrips = " << noStripOne << " 2DStrips = " << noStripTwo<< " clustsize : "<< clusterSize <<std::endl;
+//
+// 	     max = std::max(max,int(itTrack->found()));
+// 		maxpix = std::max(maxpix,noPixels);
+// }
+//   std::cout<<"Max = " << max<< " Max pixels " << maxpix << std::endl;
   //loop on
   // std::sort(mmttCollection->begin(),mmttCollection->end(),vPComparator_);
   // iEvent.put(std::move(mmttCollection));
