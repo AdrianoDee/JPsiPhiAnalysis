@@ -123,15 +123,6 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   edm::Service < TFileService > fs;
   dimuonditrk_tree = fs->make < TTree > ("dimuonditrkTree", "Tree of DiMuonDiTrak");
 
-  dimuonditrk_tree->Branch("run",      &run,      "run/i");
-  dimuonditrk_tree->Branch("event",    &event,    "event/l");
-  dimuonditrk_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
-
-  dimuonditrk_tree->Branch("ndimuonditrk",    &ndimuonditrk,    "ndimuonditrk/i");
-  dimuonditrk_tree->Branch("trigger",  &trigger,  "trigger/i");
-
-  dimuonditrk_tree->Branch("isBest",   &isBest,   "isBest/O");
-
   dimuonditrk_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
   dimuonditrk_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   dimuonditrk_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
@@ -143,6 +134,18 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("dimuonditrkTrigger_p4",   "TLorentzVector", &dimuonditrkTrigger_p4);
   dimuonditrk_tree->Branch("ditrakTrigger_p4",     "TLorentzVector", &ditrakTrigger_p4);
   dimuonditrk_tree->Branch("dimuonTrigger_p4",     "TLorentzVector", &dimuonTrigger_p4);
+
+  
+  dimuonditrk_tree->Branch("run",      &run,      "run/i");
+  dimuonditrk_tree->Branch("event",    &event,    "event/l");
+  dimuonditrk_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
+
+
+
+  dimuonditrk_tree->Branch("ndimuonditrk",    &ndimuonditrk,    "ndimuonditrk/i");
+  dimuonditrk_tree->Branch("trigger",  &trigger,  "trigger/i");
+
+  dimuonditrk_tree->Branch("isBest",   &isBest,   "isBest/O");
 
   //2mu+2Trk vertexing
   dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
