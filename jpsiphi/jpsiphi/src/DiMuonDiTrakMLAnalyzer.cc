@@ -134,7 +134,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   mmMasses.push_back( 0.1056583715 );
   kMasses.push_back( 0.493677 );
   kMasses.push_back( 0.493677 );
-  
+
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(traks_,tracks);
 
@@ -223,6 +223,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
       if(vProb_mumu < 0.0) continue;
 
+      int pv_index = -1;
+
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(!(posTrack->extra())) continue;
@@ -291,7 +293,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	    TwoTrackMinimumDistance ttmd;
     	    bool status = ttmd.calculate( GlobalTrajectoryParameters(
                                                                          GlobalPoint(myVertex.position().x(), myVertex.position().y(), myVertex.position().z()),
-                                                                         GlobalVector(myPhi.px(),myPhi.py(),myPhi.pz()),TrackCharge(0),&(*magneticField)),
+                                                                         GlobalVector(kkP4->Px(),kkP4->Py(),kkP4->Pz()),TrackCharge(0),&(*magneticField)),
     					  GlobalTrajectoryParameters(
     								     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
     								     GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
@@ -309,7 +311,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	      }
     	  } else {
                 minDz = -1;
-                pv_index = which_vertex;
+                pv_index = 0;
                 thePrimaryV = (*priVtxs)[which_vertex];
                 extrapZ = thePrimaryV.position().z();
               }
