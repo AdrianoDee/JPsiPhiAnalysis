@@ -125,6 +125,8 @@ UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 // ------------ method called for each event  ------------
 void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
+  using namespace reco;
+  
   std::vector<int> pixelDets{0,1,2,3,14,15,16,29,30,31};
 
   std::vector<double> mmMasses;
