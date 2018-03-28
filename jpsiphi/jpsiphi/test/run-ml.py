@@ -67,7 +67,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-process.ditrakdimuon = cms.EDAnalyzer("DiMuonDiTrakML",
+process.ditrakdimuon = cms.EDAnalyzer("DiMuonDiTrakMLAnalyzer",
                                         Muons           = cms.InputTag( "muons" ),
                                         Tracks          = cms.InputTag( "generalTracks" ),
                                         BeamSpot        = cms.InputTag("offlineBeamSpot"),
