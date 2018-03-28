@@ -312,7 +312,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	  } else {
                 minDz = -1;
                 pv_index = 0;
-                thePrimaryV = (*priVtxs)[which_vertex];
+                thePrimaryV = (*priVtxs)[0];
                 extrapZ = thePrimaryV.position().z();
               }
       //
