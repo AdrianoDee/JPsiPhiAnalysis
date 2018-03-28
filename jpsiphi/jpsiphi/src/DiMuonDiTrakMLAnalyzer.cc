@@ -232,22 +232,28 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(!(negTrack->extra().isNonnull())) continue;
           // if(!(negTrack->isNonnull())) continue;
 
+          TLorentzVector kNeg, kPos, kkP4;
 
-          float deltaphi  = posTrack->p4().Phi() - it2->p4().Phi();
+          kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),muon_mass);
+          kPos.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),muon_mass);
+
+          kkP4=kNeg+kPos;
+
+          float deltaphi  = kPos.Phi() - kNeg.Phi();
           while (deltaphi < -M_PI) deltaphi += 2*M_PI;
           while (deltaphi >  M_PI) deltaphi -= 2*M_PI;
-          float deltaeta  = posTrack->p4().Eta() - it2->p4().Eta();
+          float deltaeta  = kPos.Eta() - kNeg.Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
       //     pat::CompositeCandidate myPhi;
       //     vector<TransientVertex> vDiKaon;
       //
-      //     TLorentzVector k1, k2, kkP4;
+      //     TLorentzVector kNeg, kPos, kkP4;
       //
-      //     k1.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),muon_mass);
-      //     k2.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),muon_mass);
+      //     kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),muon_mass);
+      //     kPos.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),muon_mass);
       //
-      //     kkP4=k1+k2;
+      //     kkP4=kNeg+kPos;
       //     // mumucand.setP4(mumu);
       //     // mumucand.setCharge(mNeg->charge()+mPos->charge());
       //
@@ -349,12 +355,12 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	//   myPhi.addUserFloat("sumPTPV", (float) sumPTPV);
       //
     	//   ///DCA
-    	//   TrajectoryStateClosestToPoint k1TS = t_tks[0].impactPointTSCP();
-    	//   TrajectoryStateClosestToPoint k2TS = t_tks[1].impactPointTSCP();
+    	//   TrajectoryStateClosestToPoint kNegTS = t_tks[0].impactPointTSCP();
+    	//   TrajectoryStateClosestToPoint kPosTS = t_tks[1].impactPointTSCP();
     	//   float dca = 1E20;
-    	//   if (k1TS.isValid() && k2TS.isValid()) {
+    	//   if (kNegTS.isValid() && kPosTS.isValid()) {
     	//     ClosestApproachInRPhi cApp;
-    	//     cApp.calculate(k1TS.theState(), k2TS.theState());
+    	//     cApp.calculate(kNegTS.theState(), kPosTS.theState());
     	//     if (cApp.status() ) dca = cApp.distance();
     	//   }
     	//   myPhi.addUserFloat("DCA", dca );
