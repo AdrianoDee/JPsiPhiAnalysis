@@ -73,6 +73,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::TrackCollection> traks_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
+  edm::EDGetTokenT<edm::TriggerResults> triggerResults_;
   std::vector<double> DiMuonMassCuts_;
   std::vector<double> DiTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
@@ -114,7 +115,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 
 	UInt_t numPrimaryVertices;
 
-	TTree *ditrak_tree;
+	TTree *ml_tree;
 
   InvariantMassFromVertex massCalculator;
 
