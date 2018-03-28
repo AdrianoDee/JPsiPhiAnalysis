@@ -19,6 +19,23 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 
+#include <DataFormats/TrackReco/interface/TrackFwd.h>
+#include <DataFormats/TrackReco/interface/Track.h>
+#include <DataFormats/PatCandidates/interface/UserData.h>
+#include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "TrackingTools/Records/interface/TransientTrackRecord.h"
+#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+#include "TrackingTools/IPTools/interface/IPTools.h"
+#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
+#include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
+#include "MagneticField/Engine/interface/MagneticField.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "TMath.h"
+#include "Math/VectorUtil.h"
+#include "TVector3.h"
+
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
@@ -91,5 +108,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	UInt_t numPrimaryVertices;
 
 	TTree *ditrak_tree;
+
+  InvariantMassFromVertex massCalculator;
 
 };

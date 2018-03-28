@@ -28,6 +28,8 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 
+#include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
+
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
