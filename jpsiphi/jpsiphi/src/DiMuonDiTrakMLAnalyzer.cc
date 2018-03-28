@@ -233,10 +233,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           // if(!(negTrack->isNonnull())) continue;
 
 
-          float deltaphi  = it->p4().Phi() - it2->p4().Phi();
+          float deltaphi  = posTrack->p4().Phi() - it2->p4().Phi();
           while (deltaphi < -M_PI) deltaphi += 2*M_PI;
           while (deltaphi >  M_PI) deltaphi -= 2*M_PI;
-          float deltaeta  = it->p4().Eta() - it2->p4().Eta();
+          float deltaeta  = posTrack->p4().Eta() - it2->p4().Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
       //     pat::CompositeCandidate myPhi;
@@ -254,14 +254,14 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       //     if(kkP4.M() < DiTrakMassCuts_[1]) continue;
       //     if(kkP4.M() > DiTrakMassCuts_[0]) continue;
       //
-      //     if (!(it->track().isNonnull() && it2->track().isNonnull())) continue;
+      //     if (!(posTrack->track().isNonnull() && it2->track().isNonnull())) continue;
       //
       //     // ---- fit vertex using Tracker tracks (if they have tracks) ----
-      //     if (it->track().isNonnull() && it2->track().isNonnull()) {
+      //     if (posTrack->track().isNonnull() && it2->track().isNonnull()) {
       //
     	// //build the dikaon secondary vertex
     	// vector<TransientTrack> t_tks;
-    	// t_tks.push_back(theTTBuilder->build(it->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+    	// t_tks.push_back(theTTBuilder->build(posTrack->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
     	// t_tks.push_back(theTTBuilder->build(it2->track())); // otherwise the vertex will have transient refs inside.
     	// TransientVertex myVertex = vtxFitter.vertex(t_tks);
       //

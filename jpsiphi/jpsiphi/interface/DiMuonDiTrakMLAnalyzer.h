@@ -67,10 +67,15 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 
 	// ----------member data ---------------------------
 	std::string file_name;
-	edm::EDGetTokenT<pat::CompositeCandidateCollection> ditrak_Label;
-  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> triggers_;
-  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  edm::EDGetTokenT<reco::MuonCollection> muons_;
+  edm::EDGetTokenT<reco::TrackCollection> traks_;
+  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
+  std::vector<double> DiMuonMassCuts_;
+  std::vector<double> DiTrakMassCuts_;
+  std::vector<double> DiMuonDiTrakMassCuts_;
+  std::vector<double> massCands_;
+
 
   bool addTrigger_;
   bool OnlyBest_;
