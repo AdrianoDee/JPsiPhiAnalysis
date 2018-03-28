@@ -67,13 +67,14 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         throw = cms.bool(False)
                                         )
 
-process.ditrakdimuon = cms.EDProducer("DiMuonDiTrakML",
+process.ditrakdimuon = cms.EDAnalyzer("DiMuonDiTrakML",
                                         Muons           = cms.InputTag( "muons" ),
                                         Tracks          = cms.InputTag( "generalTracks" ),
                                         BeamSpot        = cms.InputTag("offlineBeamSpot"),
                                         PrimaryVertex   = cms.InputTag("offlinePrimaryVertices"),
                                         DiMuonCuts      = cms.vdouble(2.9,3.3),
                                         DiTrakCuts      = cms.vdouble(1.0,1.05),
+                                        TriggerResults     = cms.InputTag("TriggerResults", "", "HLT"),
                                         )
 
 
