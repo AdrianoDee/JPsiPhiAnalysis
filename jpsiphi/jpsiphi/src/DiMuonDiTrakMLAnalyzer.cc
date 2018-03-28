@@ -282,7 +282,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         VertexDistanceXY vdistXY;
 
     	  vtx.SetXYZ(myVertex.position().x(),myVertex.position().y(),0);
-    	  TVector3 pperp(phi.px(), phi.py(), 0);
+    	  TVector3 pperp(kkP4.Px(), kkP4.Py(), 0);
     	  AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
     	  float minDz = 99999.;
@@ -293,7 +293,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	    TwoTrackMinimumDistance ttmd;
     	    bool status = ttmd.calculate( GlobalTrajectoryParameters(
                                                                          GlobalPoint(myVertex.position().x(), myVertex.position().y(), myVertex.position().z()),
-                                                                         GlobalVector(kkP4->Px(),kkP4->Py(),kkP4->Pz()),TrackCharge(0),&(*magneticField)),
+                                                                         GlobalVector(kkP4.Px(),kkP4.Py(),kkP4.Pz()),TrackCharge(0),&(*magneticField)),
     					  GlobalTrajectoryParameters(
     								     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
     								     GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
