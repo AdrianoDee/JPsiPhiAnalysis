@@ -259,8 +259,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       //
     	//build the dikaon secondary vertex
     	std::vector<reco::TransientTrack> t_tks;
-    	t_tks.push_back(theTTBuilder->build(*posTrack);  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-    	t_tks.push_back(theTTBuilder->build(*negTrack); // otherwise the vertex will have transient refs inside.
+    	t_tks.push_back(theTTBuilder->build(*posTrack));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+    	t_tks.push_back(theTTBuilder->build(*negTrack)); // otherwise the vertex will have transient refs inside.
     	TransientVertex myVertex = vtxFitter.vertex(t_tks);
 
     	CachingVertex<5> VtxForInvMass = vtxFitter.vertex( t_tks );
