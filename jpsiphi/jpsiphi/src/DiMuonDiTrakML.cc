@@ -150,38 +150,38 @@ DiMuonDiTrakML::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
   }
-  
-  
+
+
   for(reco::TrackCollection::const_iterator itTrack = tracks->begin();itTrack != tracks->end(); ++itTrack )
-    { 
+    {
 	int noPixels= 0;
 	std::cout<<"On "<< itTrack->found() ;
-    for ( trackingRecHit_iterator recHit = itTrack->recHitsBegin();recHit != itTrack->recHitsEnd(); ++recHit )
+    for ( trackingRecHit_iterator recHit = (*itTrack)->recHitsBegin();recHit != (*itTrack)->recHitsEnd(); ++recHit )
 	{
-		if(!(*recHit))
-                continue;
+		// if(!(*recHit))
+    //             continue;
+    //
+    //             if (!((*recHit)->isValid()))
+    //             continue;
+    //
+    //             if(!((*recHit)->hasPositionAndError()))
+    //             continue;
 
-                if (!((*recHit)->isValid()))
-                continue;
-
-                if(!((*recHit)->hasPositionAndError()))
-                continue;
-		
 		TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
-//    BaseTrackerRecHit const * bhit = dynamic_cast<BaseTrackerRecHit const *>(recHit); 
-		
+//    BaseTrackerRecHit const * bhit = dynamic_cast<BaseTrackerRecHit const *>(recHit);
+
 		DetId detid = (*recHit)->geographicalId();
-		unsigned int subdetid = detid.subdetId();	
-	
-	        
+		unsigned int subdetid = detid.subdetId();
+
+
 	        //if(!(siPix))
 	        //continue;
-std::cout << " In" << std::endl;		
+std::cout << " In" << std::endl;
     	 if(detid.det() != DetId::Tracker) continue;
 	 if (!((subdetid==1) || (subdetid==2))) continue;
-        
 
-			noPixels++;	
+
+			noPixels++;
 	}
 	std::cout << " n. pixels = " << noPixels<<std::endl;
 
