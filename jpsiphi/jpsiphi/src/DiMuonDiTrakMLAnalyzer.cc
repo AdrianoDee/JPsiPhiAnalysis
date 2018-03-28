@@ -14,7 +14,7 @@
 // constructors and destructor
 //
 
-DiMuonDiTrakML::DiMuonDiTrakML(const edm::ParameterSet& iConfig):
+DiMuonDiTrakMLAnalyzer::DiMuonDiTrakMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
@@ -71,13 +71,13 @@ DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts"))
 
 }
 
-DiMuonDiTrakMLAnalyzer::~DiMuonDiTrakMLAnalyzer() {}
+DiMuonDiTrakMLAnalyzerAnalyzer::~DiMuonDiTrakMLAnalyzerAnalyzer() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* DiMuonDiTrakMLAnalyzer::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonDiTrakMLAnalyzerAnalyzer::GetAncestor(const reco::Candidate* p) {
    if (p->numberOfMothers()) {
       if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
       else return p->mother(0);
@@ -94,7 +94,7 @@ const reco::Candidate* DiMuonDiTrakMLAnalyzer::GetAncestor(const reco::Candidate
 */
 
 
-UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonDiTrakMLAnalyzerAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -122,7 +122,7 @@ UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonDiTrakMLAnalyzerAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   std::vector<int> pixelDets{0,1,2,3,14,15,16,29,30,31};
 
@@ -499,25 +499,25 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakMLAnalyzer::beginJob() {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakMLAnalyzer::endJob() {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakMLAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakMLAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakMLAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonDiTrakMLAnalyzerAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonDiTrakMLAnalyzerAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -526,4 +526,4 @@ void DiMuonDiTrakMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & d
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakMLAnalyzer);
+DEFINE_FWK_MODULE(DiMuonDiTrakMLAnalyzerAnalyzer);
