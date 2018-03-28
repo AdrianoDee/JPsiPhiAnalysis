@@ -223,7 +223,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
       if(vProb_mumu < 0.0) continue;
 
-      int pv_index = -1;
+      // int pv_index = -1;
 
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
@@ -299,19 +299,19 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     								     GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
     	    if (status) extrapZ=ttmd.points().first.z();
 
-    	      int ii_pv = -1;
+    	      // int ii_pv = -1;
     	      for (VertexCollection::const_iterator itv = priVtxs->begin(), itvend = priVtxs->end(); itv != itvend; ++itv) {
-    		ii_pv++;
+    		// ii_pv++;
     		float deltaZ = fabs(extrapZ - itv->position().z()) ;
     		if ( deltaZ < minDz ) {
     		  minDz = deltaZ;
     		  thePrimaryV = Vertex(*itv);
-    		  pv_index = ii_pv;
+    		  // pv_index = ii_pv;
     		}
     	      }
     	  } else {
                 minDz = -1;
-                pv_index = 0;
+                // pv_index = 0;
                 thePrimaryV = (*priVtxs)[0];
                 extrapZ = thePrimaryV.position().z();
               }
