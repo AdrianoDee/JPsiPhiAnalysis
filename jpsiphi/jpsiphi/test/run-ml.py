@@ -25,7 +25,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2017-ditraktrigger.root'),
+        fileName = cms.string('rootuple-2017-ml.root'),
 )
 
 kaonmass = 0.493677

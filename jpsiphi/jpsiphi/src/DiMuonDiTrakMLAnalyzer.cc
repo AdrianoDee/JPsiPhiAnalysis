@@ -246,85 +246,69 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           float deltaeta  = kPos.Eta() - kNeg.Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
-      //     pat::CompositeCandidate myPhi;
-      //     vector<TransientVertex> vDiKaon;
+          if(kkP4.M() < DiTrakMassCuts_[1]) continue;
+          if(kkP4.M() > DiTrakMassCuts_[0]) continue;
+
+
       //
-      //     TLorentzVector kNeg, kPos, kkP4;
+    	//build the dikaon secondary vertex
+    	vector<TransientTrack> t_tks;
+    	t_tks.push_back(theTTBuilder->build(posTrack);  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+    	t_tks.push_back(theTTBuilder->build(negTrack); // otherwise the vertex will have transient refs inside.
+    	TransientVertex myVertex = vtxFitter.vertex(t_tks);
+
+    	CachingVertex<5> VtxForInvMass = vtxFitter.vertex( t_tks );
       //
-      //     kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),muon_mass);
-      //     kPos.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),muon_mass);
+            Measurement1D MassWErr(phi.M(),-9999.);
+            if ( field->nominalValue() > 0 ) MassWErr = massCalculator.invariantMass( VtxForInvMass, kMasses );
+            else myVertex = TransientVertex();                   // this is an invalid vertex by definition
       //
-      //     kkP4=kNeg+kPos;
-      //     // mumucand.setP4(mumu);
-      //     // mumucand.setCharge(mNeg->charge()+mPos->charge());
       //
-      //     if(kkP4.M() < DiTrakMassCuts_[1]) continue;
-      //     if(kkP4.M() > DiTrakMassCuts_[0]) continue;
-      //
-      //     if (!(posTrack->track().isNonnull() && it2->track().isNonnull())) continue;
-      //
-      //     // ---- fit vertex using Tracker tracks (if they have tracks) ----
-      //     if (posTrack->track().isNonnull() && it2->track().isNonnull()) {
-      //
-    	// //build the dikaon secondary vertex
-    	// vector<TransientTrack> t_tks;
-    	// t_tks.push_back(theTTBuilder->build(posTrack->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-    	// t_tks.push_back(theTTBuilder->build(it2->track())); // otherwise the vertex will have transient refs inside.
-    	// TransientVertex myVertex = vtxFitter.vertex(t_tks);
-      //
-    	// CachingVertex<5> VtxForInvMass = vtxFitter.vertex( t_tks );
-      //
-      //       Measurement1D MassWErr(phi.M(),-9999.);
-      //       if ( field->nominalValue() > 0 ) MassWErr = massCalculator.invariantMass( VtxForInvMass, kMasses );
-      //       else myVertex = TransientVertex();                   // this is an invalid vertex by definition
-      //
-    	// myPhi.addUserFloat("MassErr",MassWErr.error());
-      //
-    	// if (myVertex.isValid()) {
-    	//   float vChi2 = myVertex.totalChiSquared();
-    	//   float vNDF  = myVertex.degreesOfFreedom();
-    	//   float vProb(TMath::Prob(vChi2,(int)vNDF));
-      //
-    	//   myPhi.addUserFloat("vNChi2",vChi2/vNDF);
-    	//   myPhi.addUserFloat("vProb",vProb);
-      //
-    	//   TVector3 vtx;
-      //         TVector3 pvtx;
-      //         VertexDistanceXY vdistXY;
-      //
-    	//   vtx.SetXYZ(myVertex.position().x(),myVertex.position().y(),0);
-    	//   TVector3 pperp(phi.px(), phi.py(), 0);
-    	//   AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-      //
-    	//   float minDz = 99999.;
-    	//   float extrapZ=-9E20;
-      //
-    	//   if (resolveAmbiguity_) {
-    	//     TwoTrackMinimumDistance ttmd;
-    	//     bool status = ttmd.calculate( GlobalTrajectoryParameters(
-      //                                                                    GlobalPoint(myVertex.position().x(), myVertex.position().y(), myVertex.position().z()),
-      //                                                                    GlobalVector(myPhi.px(),myPhi.py(),myPhi.pz()),TrackCharge(0),&(*magneticField)),
-    	// 				  GlobalTrajectoryParameters(
-    	// 							     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
-    	// 							     GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
-    	//     if (status) extrapZ=ttmd.points().first.z();
-      //
-    	//       int ii_pv = -1;
-    	//       for (VertexCollection::const_iterator itv = priVtxs->begin(), itvend = priVtxs->end(); itv != itvend; ++itv) {
-    	// 	ii_pv++;
-    	// 	float deltaZ = fabs(extrapZ - itv->position().z()) ;
-    	// 	if ( deltaZ < minDz ) {
-    	// 	  minDz = deltaZ;
-    	// 	  thePrimaryV = Vertex(*itv);
-    	// 	  pv_index = ii_pv;
-    	// 	}
-    	//       }
-    	//   } else {
-      //           minDz = -1;
-      //           pv_index = which_vertex;
-      //           thePrimaryV = (*priVtxs)[which_vertex];
-      //           extrapZ = thePrimaryV.position().z();
-      //         }
+    	if (myVertex.isValid()) {
+    	  float vChi2 = myVertex.totalChiSquared();
+    	  float vNDF  = myVertex.degreesOfFreedom();
+    	  float vProb(TMath::Prob(vChi2,(int)vNDF));
+
+        if(vProb < 0.01) continue;
+
+    	  TVector3 vtx;
+        TVector3 pvtx;
+        VertexDistanceXY vdistXY;
+
+    	  vtx.SetXYZ(myVertex.position().x(),myVertex.position().y(),0);
+    	  TVector3 pperp(phi.px(), phi.py(), 0);
+    	  AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+
+    	  float minDz = 99999.;
+    	  float extrapZ=-9E20;
+        bool resolveAmbiguity_ = true;
+
+    	  if (resolveAmbiguity_) {
+    	    TwoTrackMinimumDistance ttmd;
+    	    bool status = ttmd.calculate( GlobalTrajectoryParameters(
+                                                                         GlobalPoint(myVertex.position().x(), myVertex.position().y(), myVertex.position().z()),
+                                                                         GlobalVector(myPhi.px(),myPhi.py(),myPhi.pz()),TrackCharge(0),&(*magneticField)),
+    					  GlobalTrajectoryParameters(
+    								     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
+    								     GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+    	    if (status) extrapZ=ttmd.points().first.z();
+
+    	      int ii_pv = -1;
+    	      for (VertexCollection::const_iterator itv = priVtxs->begin(), itvend = priVtxs->end(); itv != itvend; ++itv) {
+    		ii_pv++;
+    		float deltaZ = fabs(extrapZ - itv->position().z()) ;
+    		if ( deltaZ < minDz ) {
+    		  minDz = deltaZ;
+    		  thePrimaryV = Vertex(*itv);
+    		  pv_index = ii_pv;
+    		}
+    	      }
+    	  } else {
+                minDz = -1;
+                pv_index = which_vertex;
+                thePrimaryV = (*priVtxs)[which_vertex];
+                extrapZ = thePrimaryV.position().z();
+              }
       //
       //         myPhi.addUserInt("oniaPV",which_vertex);
     	//   myPhi.addUserInt("iPV",pv_index);
@@ -406,7 +390,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       //         // ---- If here push back to output ----
       //         phiOutput->push_back(myPhi);
       //
-    	// }
+    	}
 
 
         }
