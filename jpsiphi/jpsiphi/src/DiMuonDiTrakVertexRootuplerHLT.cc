@@ -135,11 +135,10 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   dimuonditrk_tree->Branch("ditrakTrigger_p4",     "TLorentzVector", &ditrakTrigger_p4);
   dimuonditrk_tree->Branch("dimuonTrigger_p4",     "TLorentzVector", &dimuonTrigger_p4);
 
-  
+
   dimuonditrk_tree->Branch("run",      &run,      "run/i");
   dimuonditrk_tree->Branch("event",    &event,    "event/l");
   dimuonditrk_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
-
 
 
   dimuonditrk_tree->Branch("ndimuonditrk",    &ndimuonditrk,    "ndimuonditrk/i");
