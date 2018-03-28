@@ -126,13 +126,15 @@ UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   using namespace reco;
-  
+
   std::vector<int> pixelDets{0,1,2,3,14,15,16,29,30,31};
 
-  std::vector<double> mmMasses;
+  std::vector<double> mmMasses,kMasses;
   mmMasses.push_back( 0.1056583715 );
   mmMasses.push_back( 0.1056583715 );
-
+  kMasses.push_back( 0.493677 );
+  kMasses.push_back( 0.493677 );
+  
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(traks_,tracks);
 
@@ -261,7 +263,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
     	CachingVertex<5> VtxForInvMass = vtxFitter.vertex( t_tks );
       //
-            Measurement1D MassWErr(phi.M(),-9999.);
+            Measurement1D MassWErr(kkP4.M(),-9999.);
             if ( field->nominalValue() > 0 ) MassWErr = massCalculator.invariantMass( VtxForInvMass, kMasses );
             else myVertex = TransientVertex();                   // this is an invalid vertex by definition
       //
