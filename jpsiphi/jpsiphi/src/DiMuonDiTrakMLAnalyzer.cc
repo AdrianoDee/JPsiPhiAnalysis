@@ -207,13 +207,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
-    if (!(mPos->bestTrackRef().isNonnull())) continue;
+    // if (!(mPos->bestTrackRef().isNonnull())) continue;
     if (!(mPos->innerTrack().isNonnull())) continue;
 
     for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
-      if (!(mNeg->bestTrackRef().isNonnull())) continue;
+      // if (!(mNeg->bestTrackRef().isNonnull())) continue;
       if (!(mNeg->innerTrack().isNonnull())) continue;
 
       if(mNeg==mPos) continue;
@@ -233,8 +233,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       // mumucand.setP4(mumu);
       // mumucand.setCharge(mNeg->charge()+mPos->charge());
 
-      if(mumuP4.M() < DiMuonMassCuts_[1]) continue;
-      if(mumuP4.M() > DiMuonMassCuts_[0]) continue;
+      if(mumuP4.M() > DiMuonMassCuts_[1]) continue;
+      if(mumuP4.M() < DiMuonMassCuts_[0]) continue;
 
       std::vector<reco::TransientTrack> mm_ttks;
 
@@ -303,8 +303,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           float deltaeta  = kPos.Eta() - kNeg.Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
-          if(kkP4.M() < DiTrakMassCuts_[1]) continue;
-          if(kkP4.M() > DiTrakMassCuts_[0]) continue;
+          if(kkP4.M() > DiTrakMassCuts_[1]) continue;
+          if(kkP4.M() < DiTrakMassCuts_[0]) continue;
 
 
           //
