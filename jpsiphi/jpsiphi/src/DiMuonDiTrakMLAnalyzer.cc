@@ -42,12 +42,15 @@ return false;
 DiMuonDiTrakMLAnalyzer::DiMuonDiTrakMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
+triggerEvent_(consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("TriggerEvent"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
-DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
+DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
@@ -59,7 +62,7 @@ DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
   muon_mass = 0.1056583715;
   cands = 0;
   dimuoncands = 0;
-
+  trigger = 0;
   edm::Service < TFileService > fs;
   ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
 
@@ -67,6 +70,7 @@ DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
   ml_tree->Branch("event",    &event,    "event/l");
   ml_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
 
+  ml_tree->Branch("trigger",  &trigger,  "trigger/i");
 
   ml_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
   ml_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
@@ -173,6 +177,36 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   edm::Handle<reco::MuonCollection> muons;
   iEvent.getByToken(muons_,muons);
 
+  edm::Handle<trigger::TriggerEvent> triggerEvent;
+  iEvent.getByToken(triggerEvent_,triggerEvent);
+
+  trigger = 0;
+
+  if (triggerResults_handle.isValid())
+    trigger = getTriggerBits(iEvent,triggerResults_handle);
+  else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
+  std::vector < UInt_t > filterResults;
+  trigger::TriggerObjectCollection filteredColl;
+
+  const trigger::size_type nFilters(triggerEvent->sizeFilters());
+
+  for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
+  {
+    //get the filter name
+    std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+    //search for this filter in the one we want
+    if(std::find(HLTFilters_.begin(),HLTFilters_.end(),filterTag)==HLTFilters_.end())
+      continue;
+    trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
+    const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
+
+    for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+    {
+      trigger::size_type objKey = objectKeys.at(iKey);
+      filteredColl.push_bacj(triggerObjects[objKey]);
+    }
+  }
   reco::Vertex thePrimaryV;
 
   edm::ESHandle<MagneticField> magneticField;
