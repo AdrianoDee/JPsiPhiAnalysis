@@ -354,7 +354,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	    cApp.calculate(kNegTS.theState(), kPosTS.theState());
     	    if (cApp.status() ) dca = cApp.distance();
     	  }
-        if(DCA > 1.0) continue;
+        if(dca > 1.0) continue;
 
     	//   myPhi.addUserFloat("DCA", dca );
     	//   ///end DCA
