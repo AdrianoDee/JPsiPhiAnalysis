@@ -13,6 +13,7 @@
 #include "DataFormats/PatCandidates/interface/UserData.h"
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
@@ -92,6 +93,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	std::string file_name;
   edm::EDGetTokenT<reco::MuonCollection> muons_;
   edm::EDGetTokenT<reco::TrackCollection> traks_;
+  edm::EDGetTokenT<trigger::TriggerEvent> triggerEvent_
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_;
@@ -104,6 +106,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   float muon_mass;
   bool addTrigger_;
   bool OnlyBest_;
+  int trigger;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
 
