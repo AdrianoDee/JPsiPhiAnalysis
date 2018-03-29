@@ -191,7 +191,9 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
   std::vector < UInt_t > filterResults;
   trigger::TriggerObjectCollection filteredColl;
-
+  reco::MuonCollection filteredMuons;
+  reco::TrackCollection filteredTracks;
+  std::vector<unsigned int> muonTrigs,trackTrigs;
   const trigger::size_type nFilters(triggerEvent->sizeFilters());
 
   for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
@@ -210,6 +212,69 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       filteredColl.push_back(triggerObjects[objKey]);
     }
   }
+
+
+  for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
+  {
+    bool matched = false;
+    // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+    // {
+    for (size_t i = 0; i < filteredColl.size(); i++)
+    {
+      if(MatchByDRDPt(*muon,filteredColl[i]))
+      {
+        if(matched)
+        {
+          if(DeltaR(*muon,filteredColl[matchedColl.back()]) > DeltaR(*muon,filteredColl[i]))
+          {
+            muonTrigs.pop_back();
+            muonTrigs.push_back(i);
+
+          }
+        }
+
+        if(!matched)
+          {
+            filteredTracks.push_back(*muon);
+            muonTrigs.push_back(i);
+          }
+
+        matched = true;
+      }
+    }
+  }
+
+  for(reco::TrackCollection::const_iterator trak = tracks->begin();trak != tracks->end(); ++trak )
+  {
+    bool matched = false;
+    // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+    // {
+    for (size_t i = 0; i < filteredColl.size(); i++)
+    {
+      if(MatchByDRDPt(*trak,filteredColl[i]))
+      {
+        if(matched)
+        {
+          if(DeltaR(*trak,filteredColl[matchedColl.back()]) > DeltaR(*trak,filteredColl[i]))
+          {
+            trackTrigs.pop_back();
+            trackTrigs.push_back(i);
+
+          }
+        }
+
+        if(!matched)
+          {
+            filteredMuons.push_back(*trak);
+            trackTrigs.push_back(i);
+          }
+
+        matched = true;
+      }
+    }
+  }
+
+
   reco::Vertex thePrimaryV;
 
   edm::ESHandle<MagneticField> magneticField;
@@ -241,13 +306,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
 
-  for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
+  for(reco::MuonCollection::const_iterator mPos = filteredMuons->begin();mPos != filteredMuons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
     // if (!(mPos->bestTrackRef().isNonnull())) continue;
     if (!(mPos->innerTrack().isNonnull())) continue;
 
-    for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
+    for(reco::MuonCollection::const_iterator mNeg = filteredMuons->begin();mNeg != filteredMuons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
       // if (!(mNeg->bestTrackRef().isNonnull())) continue;
@@ -298,7 +363,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       dimuoncands++;
       // int pv_index = -1;
 
-      for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
+      for(reco::TrackCollection::const_iterator posTrack = filteredTracks->begin();posTrack != filteredTracks->end(); ++posTrack )
       {
         if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
@@ -312,7 +377,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         // if(!(posTrack->isNonnull())) continue;
 
 
-        for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
+        for(reco::TrackCollection::const_iterator negTrack = filteredTracks->begin();negTrack != filteredTracks->end(); ++negTrack )
         {
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
