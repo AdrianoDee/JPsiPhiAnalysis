@@ -84,7 +84,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	void endRun(edm::Run const &, edm::EventSetup const &) override;
 	void beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) override;
 	void endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) override;
-  UInt_t getTriggerBits(const edm::Event& iEvent );
+  UInt_t getTriggerBits(const edm::Event& iEvent);
 
   bool IsTheSame(const reco::Muon& mu, const reco::Track& tk);
   bool IsTheSame( const reco::Track& tk1,  const reco::Track& tk2);
