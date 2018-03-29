@@ -180,6 +180,9 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   edm::Handle<trigger::TriggerEvent> triggerEvent;
   iEvent.getByToken(triggerEvent_,triggerEvent);
 
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_ , triggerResults_handle);
+
   trigger = 0;
 
   if (triggerResults_handle.isValid())
