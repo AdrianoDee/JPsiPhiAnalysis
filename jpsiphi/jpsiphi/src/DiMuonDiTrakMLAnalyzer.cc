@@ -414,9 +414,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
                 std::vector<reco::TransientTrack> MuMuKK;
                 // reco::TrackRef The4Tks[4]={,mNeg->innerTrack(),(*posTrack).extra(),(*negTrack).extra()};
+                reco::TrackRef  the2MuTks[2] = {mPos->innerTrack(),mNeg->innerTrack()};
 
-                MuMuKK.push_back(theTTBuilder->build(&(mPos->innerTrack()))); // Mu+
-                MuMuKK.push_back(theTTBuilder->build(&(mNeg->innerTrack())); // Mu-
+                MuMuKK.push_back(theTTBuilder->build(&the2MuTks[0]); // Mu+
+                MuMuKK.push_back(theTTBuilder->build(&the2MuTks[1]; // Mu-
                 MuMuKK.push_back(theTTBuilder->build(*posTrack); // K+
                 MuMuKK.push_back(theTTBuilder->build(*negTrack); // K+
 
