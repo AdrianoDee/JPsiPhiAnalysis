@@ -436,7 +436,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 allDaughters.push_back(pFactory.particle (MuMuKK[3], kMass, float(0), float(0), kSigma));
 
                 KinematicConstrainedVertexFitter constVertexFitter;
-                MultiTrackKinematicConstraint *mumu_c = new  TwoTrackMassKinematicConstraint(mass_);
+                MultiTrackKinematicConstraint *mumu_c = new  TwoTrackMassKinematicConstraint(DiMuonMass_);
                 RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
 
                 if (allTree->isEmpty()) continue;
