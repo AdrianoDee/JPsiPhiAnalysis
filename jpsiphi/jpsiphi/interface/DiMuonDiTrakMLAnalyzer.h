@@ -106,7 +106,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   float muon_mass;
   bool addTrigger_;
   bool OnlyBest_;
-  int trigger;
+
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
 
