@@ -367,11 +367,11 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	  TVector3 vdiff = vtx - pvtx;
     	  double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
     	  Measurement1D distXY = vdistXY.distance(Vertex(myVertex), thePrimaryV);
-    	  double ctauPV = distXY.value()*cosAlpha * myPhi.mass()/pperp.Perp();
+    	  double ctauPV = distXY.value()*cosAlpha * kkP4.M()/pperp.Perp();
     	  GlobalError v1e = (Vertex(myVertex)).error();
     	  GlobalError v2e = thePrimaryV.error();
         AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-    	  double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*myPhi.mass()/(pperp.Perp2());
+    	  double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kkP4.M()/(pperp.Perp2());
 
       //
     	//   myPhi.addUserFloat("ppdlPV",ctauPV);
@@ -383,11 +383,11 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	//   vdiff = vtx - pvtx;
     	//   cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
     	//   distXY = vdistXY.distance(Vertex(myVertex), theBeamSpotV);
-    	//   double ctauBS = distXY.value()*cosAlpha*myPhi.mass()/pperp.Perp();
+    	//   double ctauBS = distXY.value()*cosAlpha*kkP4.M()/pperp.Perp();
     	//   GlobalError v1eB = (Vertex(myVertex)).error();
     	//   GlobalError v2eB = theBeamSpotV.error();
       //         AlgebraicSymMatrix33 vXYeB = v1eB.matrix()+ v2eB.matrix();
-    	//   double ctauErrBS = sqrt(ROOT::Math::Similarity(vpperp,vXYeB))*myPhi.mass()/(pperp.Perp2());
+    	//   double ctauErrBS = sqrt(ROOT::Math::Similarity(vpperp,vXYeB))*kkP4.M()/(pperp.Perp2());
       //
     	//   myPhi.addUserFloat("ppdlBS",ctauBS);
       //         myPhi.addUserFloat("ppdlErrBS",ctauErrBS);
