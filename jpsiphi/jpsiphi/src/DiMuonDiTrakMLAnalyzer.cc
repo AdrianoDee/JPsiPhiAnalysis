@@ -58,6 +58,8 @@ DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
   // produces<pat::CompositeCandidateCollection>();
   muon_mass = 0.1056583715;
   cands = 0;
+  dimuoncands = 0;
+
   edm::Service < TFileService > fs;
   ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
 
@@ -256,7 +258,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       vProb_mumu = TMath::Prob(vChi2_mumu,(int)vNDF_mumu);
 
       if(vProb_mumu < 0.0) continue;
-
+      dimuoncands++;
       // int pv_index = -1;
 
       for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
@@ -403,6 +405,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   cApp.calculate(kNegTS.theState(), kPosTS.theState());
                   if (cApp.status() ) dca = cApp.distance();
                 }
+
                 if(dca > 1000000000000000000) continue;
 
                 //   myPhi.addUserFloat("DCA", dca );
@@ -612,6 +615,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     void DiMuonDiTrakMLAnalyzer::endJob() {
 
       std::cout << "No. candidates : "<<cands<<std::endl;
+      std::cout << "No. dimuoncand : "<<dimuoncands<<std::endl;
     }
 
     // ------------ method called when starting to processes a run  ------------
