@@ -67,6 +67,10 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	void beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) override;
 	void endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) override;
 
+  bool IsTheSame(const reco::Muon& mu, const reco::Track& tk);
+  bool IsTheSame( const reco::Track& tk1,  const reco::Track& tk2);
+  bool IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2);
+
 	// ----------member data ---------------------------
 	std::string file_name;
   edm::EDGetTokenT<reco::MuonCollection> muons_;
