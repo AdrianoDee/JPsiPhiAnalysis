@@ -75,6 +75,7 @@ process.ditrakdimuon = cms.EDAnalyzer("DiMuonDiTrakMLAnalyzer",
                                         DiMuonCuts      = cms.vdouble(2.9,3.3),
                                         DiTrakCuts      = cms.vdouble(1.0,1.05),
                                         TriggerResults     = cms.InputTag("TriggerResults", "", "HLT"),
+                                        DiMuonMass = cms.double(3.0916)
                                         )
 
 
