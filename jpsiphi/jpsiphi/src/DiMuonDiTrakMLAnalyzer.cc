@@ -609,7 +609,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     void DiMuonDiTrakMLAnalyzer::beginJob() {}
 
     // ------------ method called once each job just after ending the event loop  ------------
-    void DiMuonDiTrakMLAnalyzer::endJob() {}
+    void DiMuonDiTrakMLAnalyzer::endJob() {
+
+      std::cout << "No. candidates : "<<cands<<std::endl;
+    }
 
     // ------------ method called when starting to processes a run  ------------
     void DiMuonDiTrakMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}

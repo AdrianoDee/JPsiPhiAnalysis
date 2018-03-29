@@ -107,6 +107,8 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
 
+  int cands;
+  
 	UInt_t    run;
 	ULong64_t event;
   UInt_t    lumiblock;
