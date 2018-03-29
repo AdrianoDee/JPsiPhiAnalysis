@@ -192,17 +192,17 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   std::vector < UInt_t > filterResults;
   trigger::TriggerObjectCollection filteredColl;
 
-  const trigger::size_type nFilters(triggerEvent->sizeFilters());
+  const trigger::size_type nFilters(triggerEvent.sizeFilters());
 
   for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
   {
     //get the filter name
-    std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+    std::string filterTag = triggerEvent.filterTag(iFilter).encode();
     //search for this filter in the one we want
     if(std::find(HLTFilters_.begin(),HLTFilters_.end(),filterTag)==HLTFilters_.end())
       continue;
-    trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
-    const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
+    trigger::Keys objectKeys = triggerEvent.filterKeys(iFilter);
+    const trigger::TriggerObjectCollection& triggerObjects(triggerEvent.getObjects());
 
     for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
     {
