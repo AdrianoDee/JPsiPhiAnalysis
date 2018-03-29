@@ -65,6 +65,10 @@ DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
   ml_tree->Branch("event",    &event,    "event/l");
   ml_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
 
+
+  ml_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
+  ml_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
+  ml_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
   //
   // ml_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
   // ml_tree->Branch("trigger",  &trigger,  "trigger/i");
@@ -440,6 +444,35 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
 
                 if (allTree->isEmpty()) continue;
+
+                allTree->movePointerToTheTop();
+                RefCountedKinematicParticle TheParticle = allTree->currentParticle();
+                RefCountedKinematicVertex TheVertex = allTree->currentDecayVertex();
+                float mmkk_ma_fit = 14000.;
+                float mmkk_vp_fit = -9999.;
+                float mmkk_x2_fit = 10000.;
+                if (TheParticle->currentState().isValid()) {
+                    mmkk_ma_fit = TheParticle->currentState().mass();
+                    mmkk_x2_fit = TheVertex->chiSquared();
+                    mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
+                }
+                if ( mmkk_ma_fit < 5.15 || mmkk_ma_fit > 5.55 || mmkk_vp_fit < 0.005 ) continue;
+                VertexDistanceXY vdistXY;
+                float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
+                float mmkk_py_fit = TheParticle->currentState().kinematicParameters().momentum().y();
+                float mmkk_pz_fit = TheParticle->currentState().kinematicParameters().momentum().z();
+                float mmkk_en_fit = sqrt(mmkk_ma_fit*mmkk_ma_fit+mmkk_px_fit*mmkk_px_fit+mmkk_py_fit*mmkk_py_fit+mmkk_pz_fit*mmkk_pz_fit);
+                float mmkk_vx_fit = TheVertex->position().x();
+                float mmkk_vy_fit = TheVertex->position().y();
+                float mmkk_vz_fit = TheVertex->position().z();
+
+                reco::CompositeCandidate recoMMKK(0.,math::XYZTLorentzVector(mmkk_px_fit,mmkk_py_fit,mmkk_pz_fit,mmkk_en_fit),
+                                                     math::XYZPoint(mmkk_vx_fit,mmkk_vy_fit,mmkk_vz_fit));
+                pat::CompositeCandidate patMMKK(recoMMKK);
+
+                dimuonditrak_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
+                dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
                 //
                 //   myPhi.addUserFloat("ppdlPV",ctauPV);

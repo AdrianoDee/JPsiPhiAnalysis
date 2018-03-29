@@ -115,6 +115,8 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	TLorentzVector ditrak_p4;
 	TLorentzVector trakP_p4;
 	TLorentzVector trakN_p4;
+  TLorentzVector dimuonditrak_p4;
+  TLorentzVector dimuon_p4;
 
   std::vector < Float_t > trigs_pt;
   std::vector < Float_t > trigs_eta;
