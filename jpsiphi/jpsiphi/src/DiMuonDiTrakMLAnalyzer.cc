@@ -277,7 +277,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         {
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
-          if(negTrak->pt() < 0.5) continue;
+          if(negTrack->pt() < 0.5) continue;
 
           if(!(negTrack->extra().isNonnull())) continue;
           if(negTrack==posTrack) continue;
