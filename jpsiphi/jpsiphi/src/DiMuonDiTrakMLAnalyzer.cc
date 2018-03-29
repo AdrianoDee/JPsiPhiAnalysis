@@ -421,6 +421,25 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 MuMuKK.push_back(theTTBuilder->build(*posTrack)); // K+
                 MuMuKK.push_back(theTTBuilder->build(*negTrack)); // K+
 
+                KinematicParticleFactoryFromTransientTrack pFactory;
+
+                const ParticleMass mMass(0.1056583745);
+                float mSigma = mMass*1E-6;
+                const ParticleMass kMass(0.493677);
+                float kSigma = kMass*1E-6;
+
+                std::vector<RefCountedKinematicParticle> allDaughters;
+                allDaughters.push_back(pFactory.particle (MuMuKK[0], mMass, float(0), float(0), mSigma));
+                allDaughters.push_back(pFactory.particle (MuMuKK[1], mMass, float(0), float(0), mSigma));
+                allDaughters.push_back(pFactory.particle (MuMuKK[2], kMass, float(0), float(0), kSigma));
+                allDaughters.push_back(pFactory.particle (MuMuKK[3], kMass, float(0), float(0), kSigma));
+
+                KinematicConstrainedVertexFitter constVertexFitter;
+                MultiTrackKinematicConstraint *mumu_c = new  TwoTrackMassKinematicConstraint(mass_);
+                RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
+
+                if (allTree->isEmpty()) continue;
+                
                 //
                 //   myPhi.addUserFloat("ppdlPV",ctauPV);
                 //         myPhi.addUserFloat("ppdlErrPV",ctauErrPV);
