@@ -93,7 +93,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	std::string file_name;
   edm::EDGetTokenT<reco::MuonCollection> muons_;
   edm::EDGetTokenT<reco::TrackCollection> traks_;
-  edm::EDGetTokenT<trigger::TriggerEvent> triggerEvent_
+  edm::EDGetTokenT<trigger::TriggerEvent> triggerEvent_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_;
