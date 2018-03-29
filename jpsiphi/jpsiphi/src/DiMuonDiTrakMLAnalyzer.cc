@@ -186,7 +186,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   trigger = 0;
 
   if (triggerResults_handle.isValid())
-    trigger = getTriggerBits(iEvent,triggerResults_handle);
+    trigger = getTriggerBits(iEvent);//,triggerResults_handle);
   else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
   std::vector < UInt_t > filterResults;
