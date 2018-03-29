@@ -54,6 +54,8 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
+
 #include "TLorentzVector.h"
 #include "TTree.h"
 
