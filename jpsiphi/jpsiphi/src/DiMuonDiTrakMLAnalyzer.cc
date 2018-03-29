@@ -204,7 +204,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
     {
       trigger::size_type objKey = objectKeys.at(iKey);
-      filteredColl.push_bacj(triggerObjects[objKey]);
+      filteredColl.push_back(triggerObjects[objKey]);
     }
   }
   reco::Vertex thePrimaryV;
