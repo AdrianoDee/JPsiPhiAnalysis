@@ -263,6 +263,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       {
         if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
+        if(posTrack->pt() < 0.5) continue;
+
         if(!(posTrack->extra().isNonnull())) continue;
 
         if(IsTheSame(*mPos,*posTrack)) continue;
@@ -270,10 +272,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
         // if(!(posTrack->isNonnull())) continue;
 
+
         for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
         {
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
+          if(negTrak->pt() < 0.5) continue;
+
           if(!(negTrack->extra().isNonnull())) continue;
           if(negTrack==posTrack) continue;
           // if(!(negTrack->isNonnull())) continue;
