@@ -346,14 +346,16 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	//   myPhi.addUserFloat("sumPTPV", (float) sumPTPV);
       //
     	//   ///DCA
-    	//   TrajectoryStateClosestToPoint kNegTS = t_tks[0].impactPointTSCP();
-    	//   TrajectoryStateClosestToPoint kPosTS = t_tks[1].impactPointTSCP();
-    	//   float dca = 1E20;
-    	//   if (kNegTS.isValid() && kPosTS.isValid()) {
-    	//     ClosestApproachInRPhi cApp;
-    	//     cApp.calculate(kNegTS.theState(), kPosTS.theState());
-    	//     if (cApp.status() ) dca = cApp.distance();
-    	//   }
+    	  TrajectoryStateClosestToPoint kNegTS = t_tks[0].impactPointTSCP();
+    	  TrajectoryStateClosestToPoint kPosTS = t_tks[1].impactPointTSCP();
+    	  float dca = 1E20;
+    	  if (kNegTS.isValid() && kPosTS.isValid()) {
+    	    ClosestApproachInRPhi cApp;
+    	    cApp.calculate(kNegTS.theState(), kPosTS.theState());
+    	    if (cApp.status() ) dca = cApp.distance();
+    	  }
+        if(DCA > 1.0) continue;
+
     	//   myPhi.addUserFloat("DCA", dca );
     	//   ///end DCA
       //
@@ -361,22 +363,23 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     	//   npvtracks = thePrimaryV.nTracks();
       //
     	//   // lifetime using PV
-      //         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-    	//   TVector3 vdiff = vtx - pvtx;
-    	//   double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-    	//   Measurement1D distXY = vdistXY.distance(Vertex(myVertex), thePrimaryV);
-    	//   double ctauPV = distXY.value()*cosAlpha * myPhi.mass()/pperp.Perp();
-    	//   GlobalError v1e = (Vertex(myVertex)).error();
-    	//   GlobalError v2e = thePrimaryV.error();
-      //         AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-    	//   double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*myPhi.mass()/(pperp.Perp2());
+        pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+    	  TVector3 vdiff = vtx - pvtx;
+    	  double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+    	  Measurement1D distXY = vdistXY.distance(Vertex(myVertex), thePrimaryV);
+    	  double ctauPV = distXY.value()*cosAlpha * myPhi.mass()/pperp.Perp();
+    	  GlobalError v1e = (Vertex(myVertex)).error();
+    	  GlobalError v2e = thePrimaryV.error();
+        AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+    	  double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*myPhi.mass()/(pperp.Perp2());
+
       //
     	//   myPhi.addUserFloat("ppdlPV",ctauPV);
       //         myPhi.addUserFloat("ppdlErrPV",ctauErrPV);
     	//   myPhi.addUserFloat("cosAlpha",cosAlpha);
       //
     	//   // lifetime using BS
-      //         pvtx.SetXYZ(theBeamSpotV.position().x(),theBeamSpotV.position().y(),0);
+      //   pvtx.SetXYZ(theBeamSpotV.position().x(),theBeamSpotV.position().y(),0);
     	//   vdiff = vtx - pvtx;
     	//   cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
     	//   distXY = vdistXY.distance(Vertex(myVertex), theBeamSpotV);
