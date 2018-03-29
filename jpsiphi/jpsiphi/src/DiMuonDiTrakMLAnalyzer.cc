@@ -46,7 +46,8 @@ thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamS
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts"))
+DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
+DiMuonMass_(iConfig.getParameter<double>("DiMuonMass"))
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
@@ -439,7 +440,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
 
                 if (allTree->isEmpty()) continue;
-                
+
                 //
                 //   myPhi.addUserFloat("ppdlPV",ctauPV);
                 //         myPhi.addUserFloat("ppdlErrPV",ctauErrPV);
