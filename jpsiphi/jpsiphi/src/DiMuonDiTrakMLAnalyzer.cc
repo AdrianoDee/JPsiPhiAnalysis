@@ -457,7 +457,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
                 }
                 if ( mmkk_ma_fit < 5.15 || mmkk_ma_fit > 5.55 || mmkk_vp_fit < 0.005 ) continue;
-                VertexDistanceXY vdistXY;
+                // VertexDistanceXY vdistXY;
                 float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
                 float mmkk_py_fit = TheParticle->currentState().kinematicParameters().momentum().y();
                 float mmkk_pz_fit = TheParticle->currentState().kinematicParameters().momentum().z();
