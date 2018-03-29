@@ -413,7 +413,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kkP4.M()/(pperp.Perp2());
 
                 std::vector<reco::TransientTrack> MuMuKK;
-                reco::TrackRef The4Tks[4]={ mPos->innerTrack(),mNeg->innerTrack(),(*posTrack),(*negTrack)};
+                reco::TrackRef The4Tks[4]={ mPos->innerTrack(),mNeg->innerTrack(),(*posTrack)->extra(),(*negTrack)->extra()};
 
                 MuMuKK.push_back(theTTBuilder->build(&The4Tks[0])); // Mu+
                 MuMuKK.push_back(theTTBuilder->build(&The4Tks[1])); // Mu-
