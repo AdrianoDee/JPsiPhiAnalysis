@@ -18,6 +18,7 @@ bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& 
   double DeltaEta = fabs(mu1.eta()-mu2.eta());
   double DeltaP   = fabs(mu1.p()-mu2.p());
   if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
+
   return false;
 }
 
@@ -25,14 +26,16 @@ bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& 
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
   if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
+
   return false;
 }
 
-bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2) {
-
+bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
+{
 double DeltaEta = fabs(tk1.eta()-tk2.eta());
 double DeltaP   = fabs(tk1.p()-tk2.p());
 if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
+
 return false;
 }
 
@@ -410,10 +413,12 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kkP4.M()/(pperp.Perp2());
 
                 std::vector<reco::TransientTrack> MuMuKK;
-                MuMuKK.push_back((*theB).build(&The4Tks[0])); // Mu+
-                MuMuKK.push_back((*theB).build(&The4Tks[1])); // Mu-
-                MuMuKK.push_back((*theB).build(&The4Tks[2])); // K+
-                MuMuKK.push_back((*theB).build(&The4Tks[3])); // K+
+                reco::TrackRef The4Tks[4]={ mPos->innerTrack(),mNeg->innerTrack(),(*posTrack),(*negTrack)};
+
+                MuMuKK.push_back(theTTBuilder->build(&The4Tks[0])); // Mu+
+                MuMuKK.push_back(theTTBuilder->build(&The4Tks[1])); // Mu-
+                MuMuKK.push_back(theTTBuilder->build(&The4Tks[2])); // K+
+                MuMuKK.push_back(theTTBuilder->build(&The4Tks[3])); // K+
 
                 //
                 //   myPhi.addUserFloat("ppdlPV",ctauPV);
