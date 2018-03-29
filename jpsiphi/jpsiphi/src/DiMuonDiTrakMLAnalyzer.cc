@@ -28,7 +28,9 @@ bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& 
   return false;
 }
 
-bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)  double DeltaEta = fabs(tk1.eta()-tk2.eta());
+bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2) {
+
+double DeltaEta = fabs(tk1.eta()-tk2.eta());
 double DeltaP   = fabs(tk1.p()-tk2.p());
 if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 return false;
