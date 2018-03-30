@@ -245,7 +245,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       {
         if(matched)
         {
-          if(DeltaR(*muon,filteredColl[muonTrigs.back()]) > DeltaR(*muon,filteredColl[i]))
+          if(DeltaR(*muon,filteredColl[matchedColl.back()]) > DeltaR(*muon,filteredColl[i]))
           {
             muonTrigs.pop_back();
             muonTrigs.push_back(i);
@@ -255,7 +255,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
         if(!matched)
           {
-            filteredTracks.push_back(*muon);
+            filteredMuons.push_back(*muon);
             muonTrigs.push_back(i);
           }
 
@@ -285,7 +285,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
         if(!matched)
           {
-            filteredMuons.push_back(*trak);
+            filteredTracks.push_back(*trak);
             trackTrigs.push_back(i);
           }
 
@@ -383,7 +383,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       dimuoncands++;
       // int pv_index = -1;
 
-      for(reco::TrackCollection::const_iterator posTrack = filteredTracks->begin();posTrack != filteredTracks->end(); ++posTrack )
+      for(reco::TrackCollection::const_iterator posTrack = filteredTracks.begin();posTrack != filteredTracks.end(); ++posTrack )
       {
         if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
@@ -397,7 +397,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         // if(!(posTrack->isNonnull())) continue;
 
 
-        for(reco::TrackCollection::const_iterator negTrack = filteredTracks->begin();negTrack != filteredTracks->end(); ++negTrack )
+        for(reco::TrackCollection::const_iterator negTrack = filteredTracks.begin();negTrack != filteredTracks.end(); ++negTrack )
         {
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
