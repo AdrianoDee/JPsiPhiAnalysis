@@ -82,6 +82,7 @@ thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("Pr
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
+DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
@@ -226,121 +227,121 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     trigger = getTriggerBits(iEvent);//,triggerResults_handle);
   else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
-  std::vector < UInt_t > filterResults;
-  trigger::TriggerObjectCollection filteredColl;
-  reco::MuonCollection filteredMuons;
-  reco::TrackCollection filteredTracks;
-  std::vector<unsigned int> muonTrigs,trackTrigs,bufferBit,theFilterBit;
-
-  const trigger::size_type nFilters(triggerEvent->sizeFilters());
-  const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
-
-  for(size_t i = 0; i < triggerObjects.size(); i++)
-    bufferBit.push_back(0);
-
-  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
-  {
-
-    for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
-    {
-      //get the filter name
-      std::string filterTag = triggerEvent->filterTag(iFilter).encode();
-      trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
-
-      //search for this filter in the one we want
-      if(filterTag!=HLTFilters_[iTr])
-        continue;
-
-        std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
-
-
-
-
-      for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
-      {
-        trigger::size_type objKey = objectKeys.at(iKey);
-        bufferBit[objKey] += (1<<iTr);
-        // filteredColl.push_back(triggerObjects[objKey]);
-      }
-    }
-
-  }
-
-  for(size_t i = 0; i < triggerObjects.size(); i++)
-  {
-    if(bufferBit[i]!=0)
-    {
-      std::cout << "Trigger obj with " << triggerObjects[i].pt() << " - " << triggerObjects[i].eta() << " - filt : " << bufferBit[i] << std::endl;
-      filteredColl.push_back(triggerObjects[i]);
-      theFilterBit.push_back(bufferBit[i]);
-    }
-  }
-
-  for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
-  {
-    bool matched = false;
-    // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
-    // {
-    for (size_t i = 0; i < filteredColl.size(); i++)
-    {
-      if(MatchByDRDPt(*muon,filteredColl[i]))
-      {
-        if(matched)
-        {
-          if(DeltaR(*muon,filteredColl[muonTrigs.back()]) > DeltaR(*muon,filteredColl[i]))
-          {
-            muonTrigs.pop_back();
-            muonTrigs.push_back(i);
-
-          }
-        }
-
-        if(!matched)
-          {
-            filteredMuons.push_back(*muon);
-            muonTrigs.push_back(i);
-          }
-
-        matched = true;
-      }
-    }
-  }
-
-  for(reco::TrackCollection::const_iterator trak = tracks->begin();trak != tracks->end(); ++trak )
-  {
-    bool matched = false;
-    // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
-    // {
-    for (size_t i = 0; i < filteredColl.size(); i++)
-    {
-      if(MatchByDRDPt(*trak,filteredColl[i]))
-      {
-        if(matched)
-        {
-          if(DeltaR(*trak,filteredColl[trackTrigs.back()]) > DeltaR(*trak,filteredColl[i]))
-          {
-            trackTrigs.pop_back();
-            trackTrigs.push_back(i);
-
-          }
-        }
-
-        if(!matched)
-          {
-            filteredTracks.push_back(*trak);
-            trackTrigs.push_back(i);
-          }
-
-        matched = true;
-      }
-
-    }
-
-    if(!matched)
-    {
-      trackTrigs.push_back(-1);
-      filteredTracks.push_back(*trak);
-    }
+  // std::vector < UInt_t > filterResults;
+  // trigger::TriggerObjectCollection filteredColl;
+  // reco::MuonCollection filteredMuons;
+  // reco::TrackCollection filteredTracks;
+  // std::vector<unsigned int> muonTrigs,trackTrigs,bufferBit,theFilterBit;
+  //
+  // const trigger::size_type nFilters(triggerEvent->sizeFilters());
+  // const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
+  //
+  // for(size_t i = 0; i < triggerObjects.size(); i++)
+  //   bufferBit.push_back(0);
+  //
+  // for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
+  // {
+  //
+  //   for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
+  //   {
+  //     //get the filter name
+  //     std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+  //     trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
+  //
+  //     //search for this filter in the one we want
+  //     if(filterTag!=HLTFilters_[iTr])
+  //       continue;
+  //
+  //       std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
+  //
+  //
+  //
+  //
+  //     for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+  //     {
+  //       trigger::size_type objKey = objectKeys.at(iKey);
+  //       bufferBit[objKey] += (1<<iTr);
+  //       // filteredColl.push_back(triggerObjects[objKey]);
+  //     }
+  //   }
+  //
+  // }
+  //
+  // for(size_t i = 0; i < triggerObjects.size(); i++)
+  // {
+  //   if(bufferBit[i]!=0)
+  //   {
+  //     std::cout << "Trigger obj with " << triggerObjects[i].pt() << " - " << triggerObjects[i].eta() << " - filt : " << bufferBit[i] << std::endl;
+  //     filteredColl.push_back(triggerObjects[i]);
+  //     theFilterBit.push_back(bufferBit[i]);
+  //   }
+  // }
+  //
+  // for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
+  // {
+  //   bool matched = false;
+  //   // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+  //   // {
+  //   for (size_t i = 0; i < filteredColl.size(); i++)
+  //   {
+  //     if(MatchByDRDPt(*muon,filteredColl[i]))
+  //     {
+  //       if(matched)
+  //       {
+  //         if(DeltaR(*muon,filteredColl[muonTrigs.back()]) > DeltaR(*muon,filteredColl[i]))
+  //         {
+  //           muonTrigs.pop_back();
+  //           muonTrigs.push_back(i);
+  //
+  //         }
+  //       }
+  //
+  //       if(!matched)
+  //         {
+  //           filteredMuons.push_back(*muon);
+  //           muonTrigs.push_back(i);
+  //         }
+  //
+  //       matched = true;
+  //     }
+  //   }
+  // }
+  //
+  // for(reco::TrackCollection::const_iterator trak = tracks->begin();trak != tracks->end(); ++trak )
+  // {
+  //   bool matched = false;
+  //   // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+  //   // {
+  //   for (size_t i = 0; i < filteredColl.size(); i++)
+  //   {
+  //     if(MatchByDRDPt(*trak,filteredColl[i]))
+  //     {
+  //       if(matched)
+  //       {
+  //         if(DeltaR(*trak,filteredColl[trackTrigs.back()]) > DeltaR(*trak,filteredColl[i]))
+  //         {
+  //           trackTrigs.pop_back();
+  //           trackTrigs.push_back(i);
+  //
+  //         }
+  //       }
+  //
+  //       if(!matched)
+  //         {
+  //           filteredTracks.push_back(*trak);
+  //           trackTrigs.push_back(i);
+  //         }
+  //
+  //       matched = true;
+  //     }
+  //
+  //   }
+  //
+  //   if(!matched)
+  //   {
+  //     trackTrigs.push_back(-1);
+  //     filteredTracks.push_back(*trak);
+  //   }
   }
 
 
@@ -577,7 +578,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   if (cApp.status() ) dca = cApp.distance();
                 }
 
-                if(dca > 1000000000000000000) continue;
+                if(dca > 1E12) continue;
 
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
@@ -635,7 +636,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     mmkk_x2_fit = TheVertex->chiSquared();
                     mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
                 }
-                if ( mmkk_ma_fit < 5.15 || mmkk_ma_fit > 5.55 || mmkk_vp_fit < 0.005 ) continue;
+                if ( mmkk_ma_fit < DiMuonDiTrakMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrakMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
                 cands++;
                 // VertexDistanceXY vdistXY;
                 float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
