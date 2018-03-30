@@ -327,11 +327,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
         matched = true;
       }
+
+    }
+
     if(!mathched)
     {
       trackTrigs.push_back(-1);
       filteredTracks.push_back(0);
-    }
     }
   }
 
