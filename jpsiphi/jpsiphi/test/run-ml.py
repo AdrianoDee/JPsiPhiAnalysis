@@ -31,8 +31,9 @@ process.TFileService = cms.Service("TFileService",
 kaonmass = 0.493677
 pionmass = 0.13957061
 muonmass = 0.1056583715;
+jpsimass = 3.096916;
 
-process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
+# process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
@@ -43,8 +44,8 @@ charmoniumHLT = [
 'HLT_DoubleMu4_JpsiTrk_Displaced'
 # 'HLT_DoubleMu4_Jpsi_Displaced',
 # 'HLT_DoubleMu4_3_Jpsi_Displaced',
-# 'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-# 'HLT_Dimuon25_Jpsi',
+'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+'HLT_Dimuon25_Jpsi',
 ]
 
 hltList = charmoniumHLT #muoniaHLT
@@ -68,18 +69,18 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         )
 
 process.ditrakdimuon = cms.EDAnalyzer("DiMuonDiTrakMLAnalyzer",
-                                        Muons           = cms.InputTag( "muons" ),
-                                        Tracks          = cms.InputTag( "generalTracks" ),
-                                        TriggerEvent    = cms.InputTag("hltTriggerSummaryAOD"),
-                                        BeamSpot        = cms.InputTag("offlineBeamSpot"),
-                                        PrimaryVertex   = cms.InputTag("offlinePrimaryVertices"),
-                                        DiMuonCuts      = cms.vdouble(2.9,3.3),
-                                        DiTrakCuts      = cms.vdouble(1.0,1.04),
-                                        DiMuonDiTrakCuts      = cms.vdouble(1.0,1.04),
-                                        TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
-                                        DiMuonMass      = cms.double(3.0916),
-                                        HLTs            = hltpaths,
-                                        Filters         = filters
+                                        Muons            = cms.InputTag( "muons" ),
+                                        Tracks           = cms.InputTag( "generalTracks" ),
+                                        TriggerEvent     = cms.InputTag("hltTriggerSummaryAOD"),
+                                        BeamSpot         = cms.InputTag("offlineBeamSpot"),
+                                        PrimaryVertex    = cms.InputTag("offlinePrimaryVertices"),
+                                        DiMuonCuts       = cms.vdouble(2.9,3.3),
+                                        DiTrakCuts       = cms.vdouble(1.0,1.04),
+                                        DiMuonDiTrakCuts = cms.vdouble(1.0,1.04),
+                                        TriggerResults   = cms.InputTag("TriggerResults", "", "HLT"),
+                                        DiMuonMass       = cms.double(jpsimass),
+                                        HLTs             = hltpaths,
+                                        Filters          = filters
                                         )
 
 
