@@ -330,7 +330,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
     }
 
-    if(!mathched)
+    if(!matched)
     {
       trackTrigs.push_back(-1);
       filteredTracks.push_back(*trak);
