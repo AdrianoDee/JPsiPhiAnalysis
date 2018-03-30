@@ -39,7 +39,7 @@ if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 return false;
 }
 
-float DiMuonDiTrakMLAnalyzer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -50,7 +50,7 @@ float DiMuonDiTrakMLAnalyzer::DeltaR(const pat::PackedCandidate t1, const pat::T
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::TriggerObject t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
