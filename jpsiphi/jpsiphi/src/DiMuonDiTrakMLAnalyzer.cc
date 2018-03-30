@@ -251,6 +251,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
       trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
 
+      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys << std::endl
+
       for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
       {
         trigger::size_type objKey = objectKeys.at(iKey);
@@ -263,11 +265,14 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
   for(size_t i = 0; i < triggerObjects.size(); i++)
   {
+    std::cout << "Trigger obj with " << triggerObjects[i].pt() << " - " << triggerObjects[i].eta() << " - filt : " << bufferBit[i];
     if(bufferBit[i]!=0)
     {
+      std::cout << " - filtered ";
       filteredColl.push_back(triggerObjects[i]);
       theFilterBit.push_back(bufferBit[i]);
     }
+    std::cout <<  std::endl;
   }
 
   for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
