@@ -235,7 +235,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   const trigger::size_type nFilters(triggerEvent->sizeFilters());
   const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
 
-  for(int i = 0; i < triggerObjects.size(); i++)
+  for(size_t i = 0; i < triggerObjects.size(); i++)
     bufferBit.push_back(0);
 
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
@@ -261,7 +261,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
   }
 
-  for(int i = 0; i < triggerObjects.size(); i++)
+  for(size_t i = 0; i < triggerObjects.size(); i++)
   {
     if(bufferBit[i]!=0)
     {
