@@ -82,7 +82,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   trigger = 0;
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
-  
+
   edm::Service < TFileService > fs;
   ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
 
