@@ -326,13 +326,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
 
-  for(reco::MuonCollection::const_iterator mPos = filteredMuons->begin();mPos != filteredMuons->end(); ++mPos )
+  for(reco::MuonCollection::const_iterator mPos = filteredMuons.begin();mPos != filteredMuons.end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
     // if (!(mPos->bestTrackRef().isNonnull())) continue;
     if (!(mPos->innerTrack().isNonnull())) continue;
 
-    for(reco::MuonCollection::const_iterator mNeg = filteredMuons->begin();mNeg != filteredMuons->end(); ++mNeg )
+    for(reco::MuonCollection::const_iterator mNeg = filteredMuons.begin();mNeg != filteredMuons.end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
       // if (!(mNeg->bestTrackRef().isNonnull())) continue;
