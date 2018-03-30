@@ -230,26 +230,45 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   trigger::TriggerObjectCollection filteredColl;
   reco::MuonCollection filteredMuons;
   reco::TrackCollection filteredTracks;
-  std::vector<unsigned int> muonTrigs,trackTrigs;
+  std::vector<unsigned int> muonTrigs,trackTrigs,bufferBit,theFilterBit;
+
   const trigger::size_type nFilters(triggerEvent->sizeFilters());
+  const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
 
-  for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
+  for(int i = 0; i < triggerObjects.size(); i++)
+    bufferBit.push_back(0);
+
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ )
   {
-    //get the filter name
-    std::string filterTag = triggerEvent->filterTag(iFilter).encode();
-    //search for this filter in the one we want
-    if(std::find(HLTFilters_.begin(),HLTFilters_.end(),filterTag)==HLTFilters_.end())
-      continue;
-    trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
-    const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
 
-    for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+    for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
     {
-      trigger::size_type objKey = objectKeys.at(iKey);
-      filteredColl.push_back(triggerObjects[objKey]);
+      //get the filter name
+      std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+      //search for this filter in the one we want
+      if(filterTag!=HLTFilters_[iTr])
+        continue;
+
+      trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
+
+      for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+      {
+        trigger::size_type objKey = objectKeys.at(iKey);
+        bufferBit[objKey] += (1<<iTr);
+        // filteredColl.push_back(triggerObjects[objKey]);
+      }
     }
+
   }
 
+  for(int i = 0; i < triggerObjects.size(); i++)
+  {
+    if(bufferBit[i]!=0)
+    {
+      filteredColl.push_back(triggerObjects[i]);
+      theFilterBit.push_back(bufferBit[i]);
+    }
+  }
 
   for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
   {
@@ -308,6 +327,11 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
         matched = true;
       }
+    if(!mathched)
+    {
+      trackTrigs.push_back(-1);
+      filteredTracks.push_back(0);
+    }
     }
   }
 
@@ -343,13 +367,13 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
 
-  for(reco::MuonCollection::const_iterator mPos = filteredMuons.begin();mPos != filteredMuons.end(); ++mPos )
+  for(reco::MuonCollection::const_iterator mPos = muons->begin();mPos != muons->end(); ++mPos )
   {
     if(mPos->charge()<=0.0) continue;
     // if (!(mPos->bestTrackRef().isNonnull())) continue;
     if (!(mPos->innerTrack().isNonnull())) continue;
 
-    for(reco::MuonCollection::const_iterator mNeg = filteredMuons.begin();mNeg != filteredMuons.end(); ++mNeg )
+    for(reco::MuonCollection::const_iterator mNeg = muons->begin();mNeg != muons->end(); ++mNeg )
     {
       if(mNeg->charge()>=0.0) continue;
       // if (!(mNeg->bestTrackRef().isNonnull())) continue;
@@ -400,7 +424,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       dimuoncands++;
       // int pv_index = -1;
 
-      for(reco::TrackCollection::const_iterator posTrack = filteredTracks.begin();posTrack != filteredTracks.end(); ++posTrack )
+      for(reco::TrackCollection::const_iterator posTrack = tracks->begin();posTrack != tracks->end(); ++posTrack )
       {
         if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
@@ -414,7 +438,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         // if(!(posTrack->isNonnull())) continue;
 
 
-        for(reco::TrackCollection::const_iterator negTrack = filteredTracks.begin();negTrack != filteredTracks.end(); ++negTrack )
+        for(reco::TrackCollection::const_iterator negTrack = tracks->begin();negTrack != tracks->end(); ++negTrack )
         {
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
