@@ -44,7 +44,7 @@ datasetnames = {
 
 
 runNumber = [
-'305388-309000'
+
 ]
 
 run = 'F'
@@ -60,7 +60,7 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 
 dataset = filter(None, datasetName.split('/'))
 
-jobdir = 'miniaod_2k2Trig_' + run
+jobdir = 'ml_kclassifier' + run
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
@@ -70,11 +70,11 @@ config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2k2Trig_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = 'ml_kclassifier' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/hltstudies/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2k2Trig-miniaod.py'
+config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/mlstudies/CMSSW_9_4_4/src/jpsiphi/jpsiphi/test/run-ml.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
