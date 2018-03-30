@@ -56,6 +56,23 @@ bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::Trigg
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
+bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const reco::Muon t1, const pat::TriggerObject t2)
+{
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+	DeltaR(t1,t2) < maxDeltaR);
+}
+
+float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObject t2)
+{
+   float p1 = t1.phi();
+   float p2 = t2.phi();
+   float e1 = t1.eta();
+   float e2 = t2.eta();
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+   return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
 DiMuonDiTrakMLAnalyzer::DiMuonDiTrakMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
