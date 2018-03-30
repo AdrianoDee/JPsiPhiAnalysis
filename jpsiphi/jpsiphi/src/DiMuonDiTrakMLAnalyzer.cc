@@ -246,11 +246,12 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       //get the filter name
       std::string filterTag = triggerEvent->filterTag(iFilter).encode();
       trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
-      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
 
       //search for this filter in the one we want
       if(filterTag!=HLTFilters_[iTr])
         continue;
+
+        std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
 
 
 
@@ -267,14 +268,12 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
   for(size_t i = 0; i < triggerObjects.size(); i++)
   {
-    std::cout << "Trigger obj with " << triggerObjects[i].pt() << " - " << triggerObjects[i].eta() << " - filt : " << bufferBit[i];
     if(bufferBit[i]!=0)
     {
-      std::cout << " - filtered ";
+      std::cout << "Trigger obj with " << triggerObjects[i].pt() << " - " << triggerObjects[i].eta() << " - filt : " << bufferBit[i] << std::endl;
       filteredColl.push_back(triggerObjects[i]);
       theFilterBit.push_back(bufferBit[i]);
     }
-    std::cout <<  std::endl;
   }
 
   for(reco::MuonCollection::const_iterator muon = muons->begin();muon != muons->end(); ++muon )
