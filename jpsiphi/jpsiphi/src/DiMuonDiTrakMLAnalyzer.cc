@@ -245,7 +245,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       {
         if(matched)
         {
-          if(DeltaR(*muon,filteredColl[matchedColl.back()]) > DeltaR(*muon,filteredColl[i]))
+          if(DeltaR(*muon,filteredColl[muonTrigs.back()]) > DeltaR(*muon,filteredColl[i]))
           {
             muonTrigs.pop_back();
             muonTrigs.push_back(i);
