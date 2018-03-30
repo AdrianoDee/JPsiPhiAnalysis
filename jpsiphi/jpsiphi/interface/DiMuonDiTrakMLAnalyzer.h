@@ -89,6 +89,10 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   bool IsTheSame( const reco::Track& tk1,  const reco::Track& tk2);
   bool IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2);
 
+  float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+
+
 	// ----------member data ---------------------------
 	std::string file_name;
   edm::EDGetTokenT<reco::MuonCollection> muons_;
@@ -106,6 +110,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   float muon_mass;
   bool addTrigger_;
   bool OnlyBest_;
+  float maxDeltaR, maxDPtRel;
 
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;

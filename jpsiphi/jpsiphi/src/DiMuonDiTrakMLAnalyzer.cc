@@ -39,6 +39,23 @@ if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 return false;
 }
 
+float DiMuonDiTrakMLAnalyzer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   float p1 = t1.phi();
+   float p2 = t2.phi();
+   float e1 = t1.eta();
+   float e2 = t2.eta();
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+   return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
+bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+	DeltaR(t1,t2) < maxDeltaR);
+}
+
 DiMuonDiTrakMLAnalyzer::DiMuonDiTrakMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
@@ -63,6 +80,9 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   cands = 0;
   dimuoncands = 0;
   trigger = 0;
+  maxDeltaR = 0.01;
+  maxDPtRel = 2.0;
+  
   edm::Service < TFileService > fs;
   ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
 
