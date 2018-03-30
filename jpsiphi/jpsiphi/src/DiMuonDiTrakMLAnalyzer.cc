@@ -245,13 +245,15 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     {
       //get the filter name
       std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+      trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
+      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
+
       //search for this filter in the one we want
       if(filterTag!=HLTFilters_[iTr])
         continue;
 
-      trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
 
-      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl;
+
 
       for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
       {
