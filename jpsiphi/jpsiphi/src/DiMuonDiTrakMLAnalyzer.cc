@@ -251,7 +251,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
       trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
 
-      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys << std::endl
+      std::cout << "Fiter : " << filterTag << " with trig objs = "<< objectKeys.size() << std::endl
 
       for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
       {
