@@ -89,8 +89,8 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   bool IsTheSame( const reco::Track& tk1,  const reco::Track& tk2);
   bool IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2);
 
-  float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
-  bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaR(const reco::Track t1, const pat::TriggerObjectStandAlone t2);
+  bool MatchByDRDPt(const reco::Track t1, const pat::TriggerObjectStandAlone t2);
 
 
 	// ----------member data ---------------------------
