@@ -120,44 +120,44 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
   //Positive Track Clusters
 
-  // std::string histname;
-  //
-  // for(int i = 0; i < numPixels; ++i)
-  // {
-  //   histname = "clusterHit_" + std::to_string(i) + "_pos_hist";
-  //   hitClustersPos.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
-  // }
-  //
-  // for(int i = 0; i < numPixels; ++i)
-  //   for (int nx = 0; nx < padSize; ++nx)
-  //     for (int ny = 0; ny < padSize; ++ny)
-  //       hitClustersPos[i]->SetBinContent(nx,ny,0.0);
-  //
-  //
-  // for(int i = 0; i < numPixels; ++i)
-  // {
-  //   histname = "clusterHit_" + std::to_string(i) + "_pos";
-  //   ml_tree->Branch(histname.data(),"TH2F",hitClustersPos[i],32000,0);
-  // }
-  //
-  // //Negative Track Clusters
-  // for(int i = 0; i < numPixels; ++i)
-  // {
-  //   histname = "clusterHit_" + std::to_string(i) + "_neg_hist";
-  //   hitClustersNeg.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
-  // }
-  //
-  // for(int i = 0; i < numPixels; ++i)
-  //   for (int nx = 0; nx < padSize; ++nx)
-  //     for (int ny = 0; ny < padSize; ++ny)
-  //       hitClustersNeg[i]->SetBinContent(nx,ny,0.0);
-  //
-  //
-  // for(int i = 0; i < numPixels; ++i)
-  // {
-  //   histname = "clusterHit_" + std::to_string(i) + "_neg";
-  //   ml_tree->Branch(histname.data(),"TH2F",hitClustersNeg[i],32000,0);
-  // }
+  std::string histname;
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_pos_hist";
+    hitClustersPos.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  }
+
+  for(int i = 0; i < numPixels; ++i)
+    for (int nx = 0; nx < padSize; ++nx)
+      for (int ny = 0; ny < padSize; ++ny)
+        hitClustersPos[i]->SetBinContent(nx,ny,0.0);
+
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_pos";
+    ml_tree->Branch(histname.data(),"TH2F",hitClustersPos[i],32000,0);
+  }
+
+  //Negative Track Clusters
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_neg_hist";
+    hitClustersNeg.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  }
+
+  for(int i = 0; i < numPixels; ++i)
+    for (int nx = 0; nx < padSize; ++nx)
+      for (int ny = 0; ny < padSize; ++ny)
+        hitClustersNeg[i]->SetBinContent(nx,ny,0.0);
+
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_neg";
+    ml_tree->Branch(histname.data(),"TH2F",hitClustersNeg[i],32000,0);
+  }
 
   //
   // ml_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
@@ -388,7 +388,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   //     trackTrigs.push_back(-1);
   //     filteredTracks.push_back(*trak);
   //   }
-  }
+  // }
 
 
   reco::Vertex thePrimaryV;
