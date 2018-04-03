@@ -17,26 +17,24 @@
 bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2){
   double DeltaEta = fabs(mu1.eta()-mu2.eta());
   double DeltaP   = fabs(mu1.p()-mu2.p());
-  if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 
-  return false;
+  return (DeltaEta < 0.02 && DeltaP < 0.02);
+
 }
 
 bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& tk){
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
-  if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 
-  return false;
+  return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
 bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
 {
 double DeltaEta = fabs(tk1.eta()-tk2.eta());
 double DeltaP   = fabs(tk1.p()-tk2.p());
-if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
 
-return false;
+return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
 float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
@@ -97,6 +95,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 {
   // produces<pat::CompositeCandidateCollection>();
   muon_mass = 0.1056583715;
+  kaon_mass = 0.493677;
   cands = 0;
   dimuoncands = 0;
   trigger = 0;
@@ -250,10 +249,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   std::vector<int> pixelDets{0,1,2,3,14,15,16,29,30,31};
 
   std::vector<double> mmMasses,kMasses;
-  mmMasses.push_back( 0.1056583715 );
-  mmMasses.push_back( 0.1056583715 );
-  kMasses.push_back( 0.493677 );
-  kMasses.push_back( 0.493677 );
+  mmMasses.push_back( muon_mass );
+  mmMasses.push_back( muon_mass );
+  kMasses.push_back( kaon_mass );
+  kMasses.push_back( kaon_mass );
 
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(traks_,tracks);
@@ -510,8 +509,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
           TLorentzVector kNeg, kPos, kkP4;
 
-          kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),muon_mass);
-          kPos.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),muon_mass);
+          kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),kaon_mass);
+          kPos.SetXYZM(posTrack->px(),posTrack->py(),posTrack->pz(),kaon_mass);
 
           kkP4=kNeg+kPos;
 
@@ -544,7 +543,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
             float vNDF  = myVertex.degreesOfFreedom();
             float vProb(TMath::Prob(vChi2,(int)vNDF));
 
-            if(vProb < 0.01) continue;
+            if(vProb < 0.00) continue;
 
             TVector3 vtx;
             TVector3 pvtx;
@@ -654,9 +653,9 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
                 KinematicParticleFactoryFromTransientTrack pFactory;
 
-                const ParticleMass mMass(0.1056583745);
+                const ParticleMass mMass(muon_mass);
                 float mSigma = mMass*1E-6;
-                const ParticleMass kMass(0.493677);
+                const ParticleMass kMass(kaon_mass);
                 float kSigma = kMass*1E-6;
 
                 std::vector<RefCountedKinematicParticle> allDaughters;
@@ -700,7 +699,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 dimuonditrak_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                
+
                 int posPixels = 0, negPixels = 0;
 
                 for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )

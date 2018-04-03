@@ -112,7 +112,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   std::vector<double> massCands_;
   double DiMuonMass_;
 
-  float muon_mass;
+  float muon_mass, kaon_mass;
   bool addTrigger_;
   bool OnlyBest_;
   float maxDeltaR, maxDPtRel;
