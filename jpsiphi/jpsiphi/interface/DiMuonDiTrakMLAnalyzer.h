@@ -23,6 +23,8 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/GeometryVector/interface/GlobalPoint.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/TrackerRecHit2D/interface/TrackerSingleRecHit.h"
+#include "DataFormats/TrackerRecHit2D/interface/SiPixelRecHit.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
