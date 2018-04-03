@@ -700,11 +700,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 dimuonditrak_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-
-
-                for (int k = 0; k < clusters[j]->size(); ++k)
-                hClust->SetBinContent(hClust.FindBin((float)clusters[j]->pixel(k).x, (float)clusters[j]->pixel(k).y),(float)clusters[j]->pixel(k).adc);
-
+                
                 int posPixels = 0, negPixels = 0;
 
                 for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )
