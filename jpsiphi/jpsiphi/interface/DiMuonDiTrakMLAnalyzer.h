@@ -117,8 +117,9 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
+  int HalfPadSize_, NumPixels_;
 
-  int cands, dimuoncands, numPixels;
+  int cands, dimuoncands, numPixels, padSize;
 
 	UInt_t    run;
 	ULong64_t event;

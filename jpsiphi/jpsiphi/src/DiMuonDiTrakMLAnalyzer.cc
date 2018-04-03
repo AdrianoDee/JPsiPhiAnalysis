@@ -86,8 +86,8 @@ DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-HalfPadSize_(iConfig.existsAs<int>("HalfPadSize") ? iConfig.getParameter<std::string>("HalfPadSize") : 8),
-NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<std::string>("NumPixelHits") : 2)
+HalfPadSize_(iConfig.existsAs<int>("HalfPadSize") ? iConfig.getParameter<int>("HalfPadSize") : 8),
+NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("NumPixelHits") : 2)
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
@@ -131,7 +131,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<std::str
   for(int i = 0; i < numPixels; ++i)
     for (int nx = 0; nx < padSize; ++nx)
       for (int ny = 0; ny < padSize; ++ny)
-        hitClustersPos[i].SetBinContent(nx,ny,0.0);
+        hitClustersPos[i]->SetBinContent(nx,ny,0.0);
 
 
   for(int i = 0; i < numPixels; ++i)
@@ -150,7 +150,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<std::str
   for(int i = 0; i < numPixels; ++i)
     for (int nx = 0; nx < padSize; ++nx)
       for (int ny = 0; ny < padSize; ++ny)
-        hitClustersNeg[i].SetBinContent(nx,ny,0.0);
+        hitClustersNeg[i]->SetBinContent(nx,ny,0.0);
 
 
   for(int i = 0; i < numPixels; ++i)
@@ -703,7 +703,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
 
                 for (int k = 0; k < clusters[j]->size(); ++k)
-                hClust.SetBinContent(hClust.FindBin((float)clusters[j]->pixel(k).x, (float)clusters[j]->pixel(k).y),(float)clusters[j]->pixel(k).adc);
+                hClust->SetBinContent(hClust.FindBin((float)clusters[j]->pixel(k).x, (float)clusters[j]->pixel(k).y),(float)clusters[j]->pixel(k).adc);
 
                 int posPixels = 0, negPixels = 0;
                 for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )
@@ -722,7 +722,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     	auto clust = pixHit->cluster();
 
                       for (int k = 0; k < clust->size(); ++k)
-                        hClust.SetBinContent(hClust.FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
+                        hClust->SetBinContent(hClust.FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
 
                   }
 
@@ -822,10 +822,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
       //
       // 		for (int nx = 0; nx < padSize; ++nx)
       //               for (int ny = 0; ny < padSize; ++ny)
-      //               hClust.SetBinContent(nx,ny,0.0);
+      //               hClust->SetBinContent(nx,ny,0.0);
       //
       //               for (int k = 0; k < clust->size(); ++k)
-      //               hClust.SetBinContent(hClust.FindBin((float)clust->pixel(k).x, (float)clust->pixel(k).y),(float)clust->pixel(k).adc);
+      //               hClust->SetBinContent(hClust.FindBin((float)clust->pixel(k).x, (float)clust->pixel(k).y),(float)clust->pixel(k).adc);
       //
       // 		for (int ny = padSize; ny>0; --ny)
       //               {
