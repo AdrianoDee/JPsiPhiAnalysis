@@ -59,6 +59,7 @@
 
 #include "TLorentzVector.h"
 #include "TTree.h"
+#include "TH2F.h"
 
 //
 // class declaration
@@ -117,7 +118,7 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
 
-  int cands,dimuoncands;
+  int cands, dimuoncands, numPixels;
 
 	UInt_t    run;
 	ULong64_t event;
@@ -150,6 +151,8 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
   Float_t lxyErrPV;
 
 	UInt_t numPrimaryVertices;
+
+  std::vector<TH2F *> hitClustersPos,hitClustersNeg;
 
 	TTree *ml_tree;
 

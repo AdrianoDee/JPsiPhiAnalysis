@@ -85,7 +85,9 @@ DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
 DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
-HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+HalfPadSize_(iConfig.existsAs<int>("HalfPadSize") ? iConfig.getParameter<std::string>("HalfPadSize") : 8),
+NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<std::string>("NumPixelHits") : 2)
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
@@ -100,6 +102,8 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   trigger = 0;
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
+  numPixels = NumPixels_;
+  padSize = HalfPadSize_*2;
 
   edm::Service < TFileService > fs;
   ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
@@ -113,6 +117,48 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   ml_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
   ml_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
   ml_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
+
+  //Positive Track Clusters
+
+  std::string histname;
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_pos_hist";
+    hitClustersPos.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  }
+
+  for(int i = 0; i < numPixels; ++i)
+    for (int nx = 0; nx < padSize; ++nx)
+      for (int ny = 0; ny < padSize; ++ny)
+        hitClustersPos[i].SetBinContent(nx,ny,0.0);
+
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_pos";
+    ml_tree->Branch(histname.data(),"TH2F",hitClustersPos[i],32000,0);
+  }
+
+  //Negative Track Clusters
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_neg_hist";
+    hitClustersNeg.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  }
+
+  for(int i = 0; i < numPixels; ++i)
+    for (int nx = 0; nx < padSize; ++nx)
+      for (int ny = 0; ny < padSize; ++ny)
+        hitClustersNeg[i].SetBinContent(nx,ny,0.0);
+
+
+  for(int i = 0; i < numPixels; ++i)
+  {
+    histname = "clusterHit_" + std::to_string(i) + "_neg";
+    ml_tree->Branch(histname.data(),"TH2F",hitClustersNeg[i],32000,0);
+  }
+
   //
   // ml_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
   // ml_tree->Branch("trigger",  &trigger,  "trigger/i");
@@ -655,6 +701,36 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
+
+                for (int k = 0; k < clusters[j]->size(); ++k)
+                hClust.SetBinContent(hClust.FindBin((float)clusters[j]->pixel(k).x, (float)clusters[j]->pixel(k).y),(float)clusters[j]->pixel(k).adc);
+
+                int posPixels = 0, negPixels = 0;
+                for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )
+                {
+                  TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
+
+              		DetId detid = (*recHit)->geographicalId();
+              		unsigned int subdetid = detid.subdetId();
+
+                	if(detid.det() != DetId::Tracker) continue;
+                	if (!((subdetid==1) || (subdetid==2))) continue;
+
+                  const SiPixelRecHit* pixHit = dynamic_cast<SiPixelRecHit const *>(hit);
+              		if (pixHit)
+                  {
+                    	auto clust = pixHit->cluster();
+
+                      for (int k = 0; k < clust->size(); ++k)
+                        hClust.SetBinContent(hClust.FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
+
+                  }
+
+
+                }
+
+                ml_tree->Fill();
+
                 //
                 //   myPhi.addUserFloat("ppdlPV",ctauPV);
                 //         myPhi.addUserFloat("ppdlErrPV",ctauErrPV);
@@ -693,7 +769,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         }
 
       }
-
+      //
       // 	int padHalfSize = 8;
       // 	int padSize = padHalfSize*2;
       //   int maxpix = 0;
