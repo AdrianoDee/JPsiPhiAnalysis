@@ -120,44 +120,44 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
   //Positive Track Clusters
 
-  std::string histname;
-
-  for(int i = 0; i < numPixels; ++i)
-  {
-    histname = "clusterHit_" + std::to_string(i) + "_pos_hist";
-    hitClustersPos.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
-  }
-
-  for(int i = 0; i < numPixels; ++i)
-    for (int nx = 0; nx < padSize; ++nx)
-      for (int ny = 0; ny < padSize; ++ny)
-        hitClustersPos[i]->SetBinContent(nx,ny,0.0);
-
-
-  for(int i = 0; i < numPixels; ++i)
-  {
-    histname = "clusterHit_" + std::to_string(i) + "_pos";
-    ml_tree->Branch(histname.data(),"TH2F",hitClustersPos[i],32000,0);
-  }
-
-  //Negative Track Clusters
-  for(int i = 0; i < numPixels; ++i)
-  {
-    histname = "clusterHit_" + std::to_string(i) + "_neg_hist";
-    hitClustersNeg.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
-  }
-
-  for(int i = 0; i < numPixels; ++i)
-    for (int nx = 0; nx < padSize; ++nx)
-      for (int ny = 0; ny < padSize; ++ny)
-        hitClustersNeg[i]->SetBinContent(nx,ny,0.0);
-
-
-  for(int i = 0; i < numPixels; ++i)
-  {
-    histname = "clusterHit_" + std::to_string(i) + "_neg";
-    ml_tree->Branch(histname.data(),"TH2F",hitClustersNeg[i],32000,0);
-  }
+  // std::string histname;
+  //
+  // for(int i = 0; i < numPixels; ++i)
+  // {
+  //   histname = "clusterHit_" + std::to_string(i) + "_pos_hist";
+  //   hitClustersPos.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  // }
+  //
+  // for(int i = 0; i < numPixels; ++i)
+  //   for (int nx = 0; nx < padSize; ++nx)
+  //     for (int ny = 0; ny < padSize; ++ny)
+  //       hitClustersPos[i]->SetBinContent(nx,ny,0.0);
+  //
+  //
+  // for(int i = 0; i < numPixels; ++i)
+  // {
+  //   histname = "clusterHit_" + std::to_string(i) + "_pos";
+  //   ml_tree->Branch(histname.data(),"TH2F",hitClustersPos[i],32000,0);
+  // }
+  //
+  // //Negative Track Clusters
+  // for(int i = 0; i < numPixels; ++i)
+  // {
+  //   histname = "clusterHit_" + std::to_string(i) + "_neg_hist";
+  //   hitClustersNeg.push_back(new TH2F(histname.data(),histname.data(),padSize,-HalfPadSize_,HalfPadSize_,padSize,-HalfPadSize_,HalfPadSize_));
+  // }
+  //
+  // for(int i = 0; i < numPixels; ++i)
+  //   for (int nx = 0; nx < padSize; ++nx)
+  //     for (int ny = 0; ny < padSize; ++ny)
+  //       hitClustersNeg[i]->SetBinContent(nx,ny,0.0);
+  //
+  //
+  // for(int i = 0; i < numPixels; ++i)
+  // {
+  //   histname = "clusterHit_" + std::to_string(i) + "_neg";
+  //   ml_tree->Branch(histname.data(),"TH2F",hitClustersNeg[i],32000,0);
+  // }
 
   //
   // ml_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
@@ -706,6 +706,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 hClust->SetBinContent(hClust.FindBin((float)clusters[j]->pixel(k).x, (float)clusters[j]->pixel(k).y),(float)clusters[j]->pixel(k).adc);
 
                 int posPixels = 0, negPixels = 0;
+
                 for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )
                 {
                   TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
@@ -719,13 +720,38 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   const SiPixelRecHit* pixHit = dynamic_cast<SiPixelRecHit const *>(hit);
               		if (pixHit)
                   {
+
                     	auto clust = pixHit->cluster();
 
                       for (int k = 0; k < clust->size(); ++k)
-                        hClust->SetBinContent(hClust.FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
+                        hitClustersPos[posPixels]->SetBinContent(hitClustersPos[posPixels]->FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
 
+                      posPixels++;
                   }
 
+                }
+
+                for ( trackingRecHit_iterator recHit = (*negTrack).recHitsBegin();recHit != (*negTrack).recHitsEnd(); ++recHit )
+                {
+                  TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
+
+              		DetId detid = (*recHit)->geographicalId();
+              		unsigned int subdetid = detid.subdetId();
+
+                	if(detid.det() != DetId::Tracker) continue;
+                	if (!((subdetid==1) || (subdetid==2))) continue;
+
+                  const SiPixelRecHit* pixHit = dynamic_cast<SiPixelRecHit const *>(hit);
+              		if (pixHit)
+                  {
+
+                    	auto clust = pixHit->cluster();
+
+                      for (int k = 0; k < clust->size(); ++k)
+                        hitClustersNeg[negPixels]->SetBinContent(hitClustersNeg[posPixels]->FindBin((float)clust->pixel(k).x-clust->x(), (float)clust->pixel(k).y - clust->y()),(float)clust->pixel(k).adc);
+
+                      negPixels++;
+                  }
 
                 }
 
