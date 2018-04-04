@@ -507,6 +507,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(IsTheSame(*mPos,*negTrack)) continue;
           if(IsTheSame(*mNeg,*negTrack)) continue;
 
+          std::cout << "Valid tracks"<<std::endl;
+
           TLorentzVector kNeg, kPos, kkP4;
 
           kNeg.SetXYZM(negTrack->px(),negTrack->py(),negTrack->pz(),kaon_mass);
@@ -523,6 +525,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(kkP4.M() > DiTrakMassCuts_[1]) continue;
           if(kkP4.M() < DiTrakMassCuts_[0]) continue;
 
+          std::cout << "DiTrakMassCut"<<std::endl;
 
           //
           //build the dikaon secondary vertex
@@ -544,7 +547,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
             float vProb(TMath::Prob(vChi2,(int)vNDF));
 
             if(vProb < 0.00) continue;
-
+            std::cout << "VProb"<<std::endl;
             TVector3 vtx;
             TVector3 pvtx;
             VertexDistanceXY vdistXY;
@@ -623,8 +626,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   if (cApp.status() ) dca = cApp.distance();
                 }
 
-                if(dca > 1E12) continue;
-
+                if(dca > 1E21) continue;
+                std::cout << "DCA tracks"<<std::endl;
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
                 //
@@ -669,7 +672,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
 
                 if (allTree->isEmpty()) continue;
-
+                std::cout << "Tree"<<std::endl;
                 allTree->movePointerToTheTop();
                 RefCountedKinematicParticle TheParticle = allTree->currentParticle();
                 RefCountedKinematicVertex TheVertex = allTree->currentDecayVertex();
