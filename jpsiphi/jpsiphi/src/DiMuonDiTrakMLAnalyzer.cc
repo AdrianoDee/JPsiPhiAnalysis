@@ -80,7 +80,7 @@ thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("Pr
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
 DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
-DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
+DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -507,7 +507,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(IsTheSame(*mPos,*negTrack)) continue;
           if(IsTheSame(*mNeg,*negTrack)) continue;
 
-          std::cout << "Valid tracks"<<std::endl;
+          // std::cout << "Valid tracks"<<std::endl;
 
           TLorentzVector kNeg, kPos, kkP4;
 
