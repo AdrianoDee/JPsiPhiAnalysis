@@ -525,7 +525,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(kkP4.M() > DiTrakMassCuts_[1]) continue;
           if(kkP4.M() < DiTrakMassCuts_[0]) continue;
 
-          std::cout << "DiTrakMassCut"<<std::endl;
+          // std::cout << "DiTrakMassCut"<<std::endl;
 
           //
           //build the dikaon secondary vertex
@@ -547,7 +547,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
             float vProb(TMath::Prob(vChi2,(int)vNDF));
 
             if(vProb < 0.00) continue;
-            std::cout << "VProb"<<std::endl;
+            // std::cout << "VProb"<<std::endl;
             TVector3 vtx;
             TVector3 pvtx;
             VertexDistanceXY vdistXY;
@@ -627,7 +627,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 }
 
                 if(dca > 1E21) continue;
-                std::cout << "DCA tracks"<<std::endl;
+                // std::cout << "DCA tracks"<<std::endl;
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
                 //
@@ -685,7 +685,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
                 }
 
-                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
+                // std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
 
                 if ( mmkk_ma_fit < DiMuonDiTrakMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrakMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
                 cands++;
