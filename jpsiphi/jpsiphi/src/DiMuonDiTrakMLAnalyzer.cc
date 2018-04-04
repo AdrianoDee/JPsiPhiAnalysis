@@ -685,10 +685,11 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
                 }
 
-                // std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
+                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
 
                 if ( mmkk_ma_fit < DiMuonDiTrakMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrakMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
                 cands++;
+                std::cout << cands << std::endl;
                 // VertexDistanceXY vdistXY;
                 float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
                 float mmkk_py_fit = TheParticle->currentState().kinematicParameters().momentum().y();
@@ -706,6 +707,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
+                std::cout<< "Done summing tracks"<<std::endl;
                 int posPixels = 0, negPixels = 0;
 
                 for ( trackingRecHit_iterator recHit = (*posTrack).recHitsBegin();recHit != (*posTrack).recHitsEnd(); ++recHit )
@@ -731,7 +733,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   }
 
                 }
-
+                std::cout<< "Pos  tracks"<<std::endl;
                 for ( trackingRecHit_iterator recHit = (*negTrack).recHitsBegin();recHit != (*negTrack).recHitsEnd(); ++recHit )
                 {
                   TrackerSingleRecHit const * hit= dynamic_cast<TrackerSingleRecHit const *>(*recHit);
@@ -755,7 +757,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   }
 
                 }
-
+                std::cout<< "Neg  tracks"<<std::endl;
                 ml_tree->Fill();
 
                 //
