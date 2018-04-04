@@ -672,7 +672,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 RefCountedKinematicTree allTree = constVertexFitter.fit(allDaughters,mumu_c);
 
                 if (allTree->isEmpty()) continue;
-                std::cout << "Tree"<<std::endl;
+
                 allTree->movePointerToTheTop();
                 RefCountedKinematicParticle TheParticle = allTree->currentParticle();
                 RefCountedKinematicVertex TheVertex = allTree->currentDecayVertex();
@@ -684,6 +684,9 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                     mmkk_x2_fit = TheVertex->chiSquared();
                     mmkk_vp_fit = ChiSquaredProbability(mmkk_x2_fit,TheVertex->degreesOfFreedom());
                 }
+
+                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
+
                 if ( mmkk_ma_fit < DiMuonDiTrakMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrakMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
                 cands++;
                 // VertexDistanceXY vdistXY;
