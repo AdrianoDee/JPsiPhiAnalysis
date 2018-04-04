@@ -733,7 +733,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                       posPixels++;
                   }
 
-                  if(posPixels>numPixels) break;
+                  if(posPixels>=numPixels) break;
 
                 }
                 std::cout<< "Pos  tracks"<<std::endl;
@@ -758,7 +758,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
 
                       negPixels++;
                   }
-                  if(negPixels>numPixels) break;
+                  if(negPixels>=numPixels) break;
                 }
                 std::cout<< "Neg  tracks"<<std::endl;
                 ml_tree->Fill();
