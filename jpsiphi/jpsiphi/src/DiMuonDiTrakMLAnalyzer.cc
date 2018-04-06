@@ -1,12 +1,12 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonDiTrakMLAnalyzer
-// Class:      DiMuonDiTrakMLAnalyzer
+// Package:    DiMuonDitrackMLAnalyzer
+// Class:      DiMuonDitrackMLAnalyzer
 //
 // Author:  Adriano Di Florio
 //
 
-#include "../interface/DiMuonDiTrakMLAnalyzer.h"
+#include "../interface/DiMuonDitrackMLAnalyzer.h"
 #include "../interface/DiMuonVtxReProducer.h"
 
 
@@ -14,7 +14,7 @@
 // constructors and destructor
 //
 
-bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2){
+bool DiMuonDitrackMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2){
   double DeltaEta = fabs(mu1.eta()-mu2.eta());
   double DeltaP   = fabs(mu1.p()-mu2.p());
 
@@ -22,14 +22,14 @@ bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& 
 
 }
 
-bool DiMuonDiTrakMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& tk){
+bool DiMuonDitrackMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& tk){
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
 
   return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
-bool DiMuonDiTrakMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
+bool DiMuonDitrackMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
 {
 double DeltaEta = fabs(tk1.eta()-tk2.eta());
 double DeltaP   = fabs(tk1.p()-tk2.p());
@@ -37,7 +37,7 @@ double DeltaP   = fabs(tk1.p()-tk2.p());
 return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
-float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
+float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -48,19 +48,19 @@ float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObj
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::TriggerObject t2)
+bool DiMuonDitrackMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::TriggerObject t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
-bool DiMuonDiTrakMLAnalyzer::MatchByDRDPt(const reco::Muon t1, const pat::TriggerObject t2)
+bool DiMuonDitrackMLAnalyzer::MatchByDRDPt(const reco::Muon t1, const pat::TriggerObject t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
-float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObject t2)
+float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObject t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -71,16 +71,16 @@ float DiMuonDiTrakMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObje
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-DiMuonDiTrakMLAnalyzer::DiMuonDiTrakMLAnalyzer(const edm::ParameterSet& iConfig):
+DiMuonDitrackMLAnalyzer::DiMuonDitrackMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
-traks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
+tracks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
 triggerEvent_(consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("TriggerEvent"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
-DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts")),
+DitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DitrackCuts")),
+DiMuonDitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDitrackCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -89,8 +89,8 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-// DiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrakCuts")),
-// DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakCuts")),
+// DitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DitrackCuts")),
+// DiMuonDitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDitrackCuts")),
 // massCands_(iConfig.getParameter<std::vector<double>>("CandsMasses"))
 {
   // produces<pat::CompositeCandidateCollection>();
@@ -105,7 +105,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   padSize = HalfPadSize_*2;
 
   edm::Service < TFileService > fs;
-  ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrakDiMuon");
+  ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DitrackDiMuon");
 
   ml_tree->Branch("run",      &run,      "run/i");
   ml_tree->Branch("event",    &event,    "event/l");
@@ -113,10 +113,85 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
   ml_tree->Branch("trigger",  &trigger,  "trigger/i");
 
-  ml_tree->Branch("dimuonditrak_p4", "TLorentzVector", &dimuonditrak_p4);
-  ml_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
+  ml_tree->Branch("dimuonditrack_p4", "TLorentzVector", &dimuonditrack_p4);
+  ml_tree->Branch("ditrack_p4", "TLorentzVector", &ditrack_p4);
   ml_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
 
+  ml_tree->Branch("trackN_p4", "TLorentzVector", &trackN_p4);
+  ml_tree->Branch("trackP_p4", "TLorentzVector", &trackP_p4);
+  ml_tree->Branch("muonN_p4", "TLorentzVector", &muonN_p4);
+  ml_tree->Branch("muonP_p4", "TLorentzVector", &muonP_p4);
+
+  ml_tree->Branch("track_kN", "Track", &track_kN);
+  ml_tree->Branch("track_kP", "Track", &track_kP);
+  ml_tree->Branch("track_mN", "Track", &track_mN);
+  ml_tree->Branch("track_mP", "Track", &track_mP);
+
+  ml_tree->Branch("dimuonditrack_ref_p4", "TLorentzVector", &dimuonditrack_ref_p4);
+  ml_tree->Branch("ditrack_ref_p4", "TLorentzVector", &ditrack_ref_p4);
+  ml_tree->Branch("dimuon_ref_p4", "TLorentzVector", &dimuon_ref_p4);
+
+  ml_tree->Branch("trackN_ref_p4", "TLorentzVector", &trackN_ref_p4);
+  ml_tree->Branch("trackP_ref_p4", "TLorentzVector", &trackP_ref_p4);
+  ml_tree->Branch("muonN_ref_p4", "TLorentzVector", &muonN_ref_p4);
+  ml_tree->Branch("muonP_ref_p4", "TLorentzVector", &muonP_ref_p4);
+
+  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+  ml_tree->Branch("ditrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+
+  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+  ml_tree->Branch("ditrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+
+  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+  ml_tree->Branch("ditrack_vProb",        &ditrack_vProb,       "ditrack_vProb/F");
+
+  ml_tree->Branch("dimuonditrack_lxy",  &dimuonditrack_lxy, "dimuonditrack_lxy/F");
+  ml_tree->Branch("dimuon_lxy",         &dimuon_lxy,        "dimuon_lxy/F");
+  ml_tree->Branch("ditrack_lxy",        &dimuon_lxy,        "dimuon_lxy/F");
+
+  ml_tree->Branch("dimuonditrack_lxyErr",  &dimuonditrack_lxyErr, "dimuonditrack_lxyErr/F");
+  ml_tree->Branch("dimuon_lxyErr",         &dimuon_lxyErr,        "dimuon_lxyErr/F");
+  ml_tree->Branch("ditrack_lxyErr",        &dimuon_lxyErr,        "dimuon_lxyErr/F");
+
+  ml_tree->Branch("dimuonditrack_lxyBS",  &dimuonditrack_lxyBS, "dimuonditrack_lxyBS/F");
+  ml_tree->Branch("dimuon_lxyBS",         &dimuon_lxyBS,        "dimuon_lxyBS/F");
+  ml_tree->Branch("ditrack_lxyBS",        &dimuon_lxyBS,       "dimuon_lxyBS/F");
+
+  ml_tree->Branch("dimuonditrack_lxyBSErr",  &dimuonditrack_lxyBSErr, "dimuonditrack_lxyBSErr/F");
+  ml_tree->Branch("dimuon_lxyBSErr",         &dimuon_lxyBSErr,        "dimuon_lxyBSErr/F");
+  ml_tree->Branch("ditrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
+
+  ml_tree->Branch("dimuonditrack_vX",  &dimuonditrack_vX, "dimuonditrack_vX/F");
+  ml_tree->Branch("dimuonditrack_vY",  &dimuonditrack_vY, "dimuonditrack_vY/F");
+  ml_tree->Branch("dimuonditrack_vZ",  &dimuonditrack_vZ, "dimuonditrack_vZ/F");
+
+  ml_tree->Branch("ditrack_vX",  &ditrack_vX, "ditrack_vX/F");
+  ml_tree->Branch("ditrack_vY",  &ditrack_vY, "ditrack_vY/F");
+  ml_tree->Branch("ditrack_vZ",  &ditrack_vZ, "ditrack_vZ/F");
+
+  ml_tree->Branch("dimuon_vX",  &dimuon_vX, "dimuon_vX/F");
+  ml_tree->Branch("dimuon_vY",  &dimuon_vY, "dimuon_vY/F");
+  ml_tree->Branch("dimuon_vZ",  &dimuon_vZ, "dimuon_vZ/F");
+
+  ml_tree->Branch("dimuon_lxyBSErr",         &dimuon_lxyBSErr,        "dimuon_lxyBSErr/F");
+  ml_tree->Branch("ditrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
+
+  ml_tree->Branch("ditrack_DCA",    &ditrack_DCA, "ditrack_DCA/F");
+  ml_tree->Branch("dimuon_DCA",     &dimuon_DCA,  "dimuon_DCA/F");
+
+  ml_tree->Branch("PVX",  &PVX, "PVX/F");
+  ml_tree->Branch("PVY",  &PVY, "PVY/F");
+  ml_tree->Branch("PVZ",  &PVZ, "PVZ/F");
+
+  ml_tree->Branch("BSX",  &BSX, "BSX/F");
+  ml_tree->Branch("BSY",  &BSY, "BSY/F");
+  ml_tree->Branch("BSZ",  &BSZ, "BSZ/F");
+
+
+  "trk_pt", "trk_eta", "trk_lambda", "trk_dxy", "trk_dz", "trk_dxyClosestPV", "trk_dzClosestPVClamped", "trk_ptErr","trk_etaErr", "trk_lambdaErr", "trk_dxyErr", "trk_dzErr", "trk_nChi2", "trk_ndof", "trk_nInvalid", "trk_nPixel", "trk_nStrip", "trk_nPixelLay", "trk_nStripLay", "trk_n3DLay", "trk_nLostLay", "trk_algo"
   //Positive Track Clusters
 
   std::string histname;
@@ -159,7 +234,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   }
 
   //
-  // ml_tree->Branch("nditrak",  &nditrak,    "nditrak/i");
+  // ml_tree->Branch("nditrack",  &nditrack,    "nditrack/i");
   // ml_tree->Branch("trigger",  &trigger,  "trigger/i");
   // ml_tree->Branch("charge",   &charge,   "charge/I");
   //
@@ -173,9 +248,9 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   //   ml_tree->Branch("trigs_m",   &trigs_m);
   //   ml_tree->Branch("trigs_filters", &trigs_filters);
   // }
-  // ml_tree->Branch("ditrak_p4", "TLorentzVector", &ditrak_p4);
-  // ml_tree->Branch("trakP_p4",  "TLorentzVector", &trakP_p4);
-  // ml_tree->Branch("trakN_p4",  "TLorentzVector", &trakN_p4);
+  // ml_tree->Branch("ditrack_p4", "TLorentzVector", &ditrack_p4);
+  // ml_tree->Branch("trackP_p4",  "TLorentzVector", &trackP_p4);
+  // ml_tree->Branch("trackN_p4",  "TLorentzVector", &trackN_p4);
   //
   // ml_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
   // ml_tree->Branch("vProb",     &vProb,      "vProb/F");
@@ -191,13 +266,13 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
 }
 
-DiMuonDiTrakMLAnalyzer::~DiMuonDiTrakMLAnalyzer() {}
+DiMuonDitrackMLAnalyzer::~DiMuonDitrackMLAnalyzer() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* DiMuonDiTrakMLAnalyzer::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonDitrackMLAnalyzer::GetAncestor(const reco::Candidate* p) {
   if (p->numberOfMothers()) {
     if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
     else return p->mother(0);
@@ -214,7 +289,7 @@ ex. 1 = pass 0
 */
 
 
-UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonDitrackMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -242,7 +317,7 @@ UInt_t DiMuonDiTrakMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   using namespace reco;
 
@@ -255,7 +330,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   kMasses.push_back( kaon_mass );
 
   edm::Handle<reco::TrackCollection> tracks;
-  iEvent.getByToken(traks_,tracks);
+  iEvent.getByToken(tracks_,tracks);
 
   edm::Handle<reco::MuonCollection> muons;
   iEvent.getByToken(muons_,muons);
@@ -352,18 +427,18 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   //   }
   // }
   //
-  // for(reco::TrackCollection::const_iterator trak = tracks->begin();trak != tracks->end(); ++trak )
+  // for(reco::TrackCollection::const_iterator track = tracks->begin();track != tracks->end(); ++track )
   // {
   //   bool matched = false;
   //   // for (TriggerObjectCollection::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
   //   // {
   //   for (size_t i = 0; i < filteredColl.size(); i++)
   //   {
-  //     if(MatchByDRDPt(*trak,filteredColl[i]))
+  //     if(MatchByDRDPt(*track,filteredColl[i]))
   //     {
   //       if(matched)
   //       {
-  //         if(DeltaR(*trak,filteredColl[trackTrigs.back()]) > DeltaR(*trak,filteredColl[i]))
+  //         if(DeltaR(*track,filteredColl[trackTrigs.back()]) > DeltaR(*track,filteredColl[i]))
   //         {
   //           trackTrigs.pop_back();
   //           trackTrigs.push_back(i);
@@ -373,7 +448,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   //
   //       if(!matched)
   //         {
-  //           filteredTracks.push_back(*trak);
+  //           filteredTracks.push_back(*track);
   //           trackTrigs.push_back(i);
   //         }
   //
@@ -385,7 +460,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
   //   if(!matched)
   //   {
   //     trackTrigs.push_back(-1);
-  //     filteredTracks.push_back(*trak);
+  //     filteredTracks.push_back(*track);
   //   }
   // }
 
@@ -483,6 +558,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
         if(!(posTrack->extra())) continue;
         if(posTrack->charge()<=0.0) continue;
         if(posTrack->pt() < 0.5) continue;
+        if(!(posTrack->quality(reco::TrackBase::highPurity))) continue;
 
         if(!(posTrack->extra().isNonnull())) continue;
 
@@ -497,6 +573,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           if(!(negTrack->extra())) continue;
           if(negTrack->charge()>=0.0) continue;
           if(negTrack->pt() < 0.5) continue;
+          if(!(negTrack->quality(reco::TrackBase::highPurity))) continue;
 
           if(!(negTrack->extra().isNonnull())) continue;
           if(negTrack==posTrack) continue;
@@ -522,10 +599,10 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
           float deltaeta  = kPos.Eta() - kNeg.Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
-          if(kkP4.M() > DiTrakMassCuts_[1]) continue;
-          if(kkP4.M() < DiTrakMassCuts_[0]) continue;
+          if(kkP4.M() > DitrackMassCuts_[1]) continue;
+          if(kkP4.M() < DitrackMassCuts_[0]) continue;
 
-          // std::cout << "DiTrakMassCut"<<std::endl;
+          // std::cout << "DitrackMassCut"<<std::endl;
 
           //
           //build the dikaon secondary vertex
@@ -586,6 +663,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   thePrimaryV = (*priVtxs)[0];
                   extrapZ = thePrimaryV.position().z();
                 }
+
                 //
                 //         myPhi.addUserInt("oniaPV",which_vertex);
                 //   myPhi.addUserInt("iPV",pv_index);
@@ -626,7 +704,7 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                   if (cApp.status() ) dca = cApp.distance();
                 }
 
-                if(dca > 1E21) continue;
+
                 // std::cout << "DCA tracks"<<std::endl;
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
@@ -686,8 +764,8 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                 }
 
 
-                if ( mmkk_ma_fit < DiMuonDiTrakMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrakMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
-                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrakMassCuts_[0] << " - " << DiMuonDiTrakMassCuts_[1] <<std::endl;
+                if ( mmkk_ma_fit < DiMuonDitrackMassCuts_[0] || mmkk_ma_fit > DiMuonDitrackMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
+                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDitrackMassCuts_[0] << " - " << DiMuonDitrackMassCuts_[1] <<std::endl;
 
                 cands++;
                 std::cout << cands << std::endl;
@@ -704,9 +782,88 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
                                                      math::XYZPoint(mmkk_vx_fit,mmkk_vy_fit,mmkk_vz_fit));
                 pat::CompositeCandidate patMMKK(recoMMKK);
 
-                dimuonditrak_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
+                bool child = PsiTTree->movePointerToTheFirstChild();
+                RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
+                if (!child) break;
+                float m1_ma_fit = fitMu1->currentState().mass();
+                int   m1_ch_fit = fitMu1->currentState().particleCharge();
+                float m1_px_fit = fitMu1->currentState().kinematicParameters().momentum().x();
+                float m1_py_fit = fitMu1->currentState().kinematicParameters().momentum().y();
+                float m1_pz_fit = fitMu1->currentState().kinematicParameters().momentum().z();
+                float m1_en_fit = sqrt(m1_ma_fit*m1_ma_fit+m1_px_fit*m1_px_fit+m1_py_fit*m1_py_fit+m1_pz_fit*m1_pz_fit);
+                reco::CompositeCandidate recoMu1(m1_ch_fit,math::XYZTLorentzVector(m1_px_fit,m1_py_fit,m1_pz_fit,m1_en_fit),
+                                                 math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
+                pat::CompositeCandidate patMu1(recoMu1);
+    // get second muon
+                child = PsiTTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitMu2 = PsiTTree->currentParticle();
+                if (!child) break;
+                float m2_ma_fit = fitMu2->currentState().mass();
+                int   m2_ch_fit = fitMu2->currentState().particleCharge();
+                float m2_px_fit = fitMu2->currentState().kinematicParameters().momentum().x();
+                float m2_py_fit = fitMu2->currentState().kinematicParameters().momentum().y();
+                float m2_pz_fit = fitMu2->currentState().kinematicParameters().momentum().z();
+                float m2_en_fit = sqrt(m2_ma_fit*m2_ma_fit+m2_px_fit*m2_px_fit+m2_py_fit*m2_py_fit+m2_pz_fit*m2_pz_fit);
+                reco::CompositeCandidate recoMu2(m2_ch_fit,math::XYZTLorentzVector(m2_px_fit,m2_py_fit,m2_pz_fit,m2_en_fit),
+                                                 math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
+                pat::CompositeCandidate patMu2(recoMu2);
+
+    // Define psi from two muons
+    	          pat::CompositeCandidate psi;
+    	          psi.addDaughter(patMu1,"muon1");
+                psi.addDaughter(patMu2,"muon2");
+                psi.setP4(patMu1.p4()+patMu2.p4());
+    // get kaon
+                child = PsiTTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
+                if (!child) break;
+                float tk_ma_fit = fitTrk->currentState().mass();
+                int   tk_ch_fit = fitTrk->currentState().particleCharge();
+                float tk_px_fit = fitTrk->currentState().kinematicParameters().momentum().x();
+                float tk_py_fit = fitTrk->currentState().kinematicParameters().momentum().y();
+                float tk_pz_fit = fitTrk->currentState().kinematicParameters().momentum().z();
+                float tk_en_fit = sqrt(tk_ma_fit*tk_ma_fit+tk_px_fit*tk_px_fit+tk_py_fit*tk_py_fit+tk_pz_fit*tk_pz_fit);
+                reco::CompositeCandidate recoTk(tk_ch_fit,math::XYZTLorentzVector(tk_px_fit,tk_py_fit,tk_pz_fit,tk_en_fit),
+                                                 math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
+                pat::CompositeCandidate patTk(recoTk);
+
+    // get kaon2
+                child = PsiTTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
+                if (!child) break;
+                float tk2_ma_fit = fitTrk2->currentState().mass();
+                int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
+                float tk2_px_fit = fitTrk2->currentState().kinematicParameters().momentum().x();
+                float tk2_py_fit = fitTrk2->currentState().kinematicParameters().momentum().y();
+                float tk2_pz_fit = fitTrk2->currentState().kinematicParameters().momentum().z();
+                float tk2_en_fit = sqrt(tk2_ma_fit*tk2_ma_fit+tk2_px_fit*tk2_px_fit+tk2_py_fit*tk2_py_fit+tk2_pz_fit*tk2_pz_fit);
+                reco::CompositeCandidate recoTk2(tk2_ch_fit,math::XYZTLorentzVector(tk2_px_fit,tk2_py_fit,tk2_pz_fit,tk2_en_fit),
+                                                 math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
+                pat::CompositeCandidate patTk2(recoTk2);
+
+                TLorentzVector kNegRef, kPosRef, kkP4Ref;
+
+                pat::CompositeCandidate phi;
+                phi.addDaughter(patTk,"trackP");
+                phi.addDaughter(patTk2,"trackN");
+                phi.setP4(patTk.p4()+patTk2.p4());
+
+                patPsiT.addDaughter(psi,"dimuon");
+                patPsiT.addDaughter(phi,"ditrack");
+
+                dimuon_vProb = vProb_mumu;
+
+                dimuonditrack_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+                dimuonditrack_ref_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
+                dimuon_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                ditrack_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
                 std::cout<< "Done summing tracks"<<std::endl;
                 int posPixels = 0, negPixels = 0;
@@ -889,29 +1046,29 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     }
 
     // ------------ method called once each job just before starting event loop  ------------
-    void DiMuonDiTrakMLAnalyzer::beginJob() {}
+    void DiMuonDitrackMLAnalyzer::beginJob() {}
 
     // ------------ method called once each job just after ending the event loop  ------------
-    void DiMuonDiTrakMLAnalyzer::endJob() {
+    void DiMuonDitrackMLAnalyzer::endJob() {
 
       std::cout << "No. candidates : "<<cands<<std::endl;
       std::cout << "No. dimuoncand : "<<dimuoncands<<std::endl;
     }
 
     // ------------ method called when starting to processes a run  ------------
-    void DiMuonDiTrakMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
+    void DiMuonDitrackMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
     // ------------ method called when ending the processing of a run  ------------
-    void DiMuonDiTrakMLAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
+    void DiMuonDitrackMLAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
 
     // ------------ method called when starting to processes a luminosity block  ------------
-    void DiMuonDiTrakMLAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+    void DiMuonDitrackMLAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
     // ------------ method called when ending the processing of a luminosity block  ------------
-    void DiMuonDiTrakMLAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+    void DiMuonDitrackMLAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
     // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-    void DiMuonDiTrakMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+    void DiMuonDitrackMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
       //The following says we do not know what parameters are allowed so do no validation
       // Please change this to state exactly what you do use, even if it is no parameters
       edm::ParameterSetDescription desc;
@@ -920,4 +1077,4 @@ void DiMuonDiTrakMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Event
     }
 
     //define this as a plug-in
-    DEFINE_FWK_MODULE(DiMuonDiTrakMLAnalyzer);
+    DEFINE_FWK_MODULE(DiMuonDitrackMLAnalyzer);

@@ -66,11 +66,12 @@
 //
 // class declaration
 //
+using namespace reco;
 
-class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
+class DiMuonDitrackMLAnalyzer:public edm::EDAnalyzer {
       public:
-	explicit DiMuonDiTrakMLAnalyzer(const edm::ParameterSet &);
-	~DiMuonDiTrakMLAnalyzer() override;
+	explicit DiMuonDitrackMLAnalyzer(const edm::ParameterSet &);
+	~DiMuonDitrackMLAnalyzer() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -101,14 +102,14 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	// ----------member data ---------------------------
 	std::string file_name;
   edm::EDGetTokenT<reco::MuonCollection> muons_;
-  edm::EDGetTokenT<reco::TrackCollection> traks_;
+  edm::EDGetTokenT<reco::TrackCollection> tracks_;
   edm::EDGetTokenT<trigger::TriggerEvent> triggerEvent_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_;
   std::vector<double> DiMuonMassCuts_;
-  std::vector<double> DiTrakMassCuts_;
-  std::vector<double> DiMuonDiTrakMassCuts_;
+  std::vector<double> DitrackMassCuts_;
+  std::vector<double> DiMuonDitrackMassCuts_;
   std::vector<double> massCands_;
   double DiMuonMass_;
 
@@ -126,15 +127,19 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 	UInt_t    run;
 	ULong64_t event;
   UInt_t    lumiblock;
-  UInt_t    nditrak;
+  UInt_t    nditrack;
   UInt_t    trigger;
   Int_t     charge;
 
-	TLorentzVector ditrak_p4;
-	TLorentzVector trakP_p4;
-	TLorentzVector trakN_p4;
-  TLorentzVector dimuonditrak_p4;
-  TLorentzVector dimuon_p4;
+  TLorentzVector dimuonditrack_p4;
+	TLorentzVector ditrack_p4,trackP_p4,trackN_p4;
+  TLorentzVector dimuon_p4,muonP_p4,muonN_p4;
+
+  TLorentzVector dimuonditrack_ref_p4;
+	TLorentzVector ditrack_ref_p4,trackP_ref_p4,trackN_ref_p4;
+  TLorentzVector dimuon_ref_p4,muonP_ref_p4,muonN_ref_p4;
+
+  reco::Track track_kN, track_kP, track_mN, track_mP;
 
   std::vector < Float_t > trigs_pt;
   std::vector < Float_t > trigs_eta;
@@ -144,14 +149,12 @@ class DiMuonDiTrakMLAnalyzer:public edm::EDAnalyzer {
 
   Bool_t isBest;
 
-  Float_t MassErr;
-  Float_t vProb;
-  Float_t DCA;
-  Float_t ctauPV;
-  Float_t ctauErrPV;
-  Float_t cosAlpha;
-  Float_t lxyPV;
-  Float_t lxyErrPV;
+  Float_t dimuon_vProb, ditrack_vProb,dimuonditrack_vProb;
+  Float_t dimuon_DCA,ditrack_DCA;
+  Float_t cosAlpha, lxyPV, lxyErrPV;
+  Float_t dimuon_cosAlpha, dimuon_lxyPV, dimuon_lxyErrPV;
+  Float_t ditrack_cosAlpha, ditrack_lxyPV, ditrack_lxyErrPV;
+  Float_t vX,vY,vZ;
 
 	UInt_t numPrimaryVertices;
 
