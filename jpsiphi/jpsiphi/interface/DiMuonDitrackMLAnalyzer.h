@@ -68,10 +68,10 @@
 //
 using namespace reco;
 
-class DiMuonDitrackMLAnalyzer:public edm::EDAnalyzer {
+class DiMuonDiTrackMLAnalyzer:public edm::EDAnalyzer {
       public:
-	explicit DiMuonDitrackMLAnalyzer(const edm::ParameterSet &);
-	~DiMuonDitrackMLAnalyzer() override;
+	explicit DiMuonDiTrackMLAnalyzer(const edm::ParameterSet &);
+	~DiMuonDiTrackMLAnalyzer() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -108,8 +108,8 @@ class DiMuonDitrackMLAnalyzer:public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_;
   std::vector<double> DiMuonMassCuts_;
-  std::vector<double> DitrackMassCuts_;
-  std::vector<double> DiMuonDitrackMassCuts_;
+  std::vector<double> DiTrackMassCuts_;
+  std::vector<double> DiMuonDiTrackMassCuts_;
   std::vector<double> massCands_;
   double DiMuonMass_;
 
@@ -127,16 +127,16 @@ class DiMuonDitrackMLAnalyzer:public edm::EDAnalyzer {
 	UInt_t    run;
 	ULong64_t event;
   UInt_t    lumiblock;
-  UInt_t    nditrack;
+  UInt_t    nDiTrack;
   UInt_t    trigger;
   Int_t     charge;
 
-  TLorentzVector dimuonditrack_p4;
-	TLorentzVector ditrack_p4,trackP_p4,trackN_p4;
+  TLorentzVector dimuonDiTrack_p4;
+	TLorentzVector DiTrack_p4,trackP_p4,trackN_p4;
   TLorentzVector dimuon_p4,muonP_p4,muonN_p4;
 
-  TLorentzVector dimuonditrack_ref_p4;
-	TLorentzVector ditrack_ref_p4,trackP_ref_p4,trackN_ref_p4;
+  TLorentzVector dimuonDiTrack_ref_p4;
+	TLorentzVector DiTrack_ref_p4,trackP_ref_p4,trackN_ref_p4;
   TLorentzVector dimuon_ref_p4,muonP_ref_p4,muonN_ref_p4;
 
   reco::Track track_kN, track_kP, track_mN, track_mP;
@@ -149,11 +149,11 @@ class DiMuonDitrackMLAnalyzer:public edm::EDAnalyzer {
 
   Bool_t isBest;
 
-  Float_t dimuon_vProb, ditrack_vProb,dimuonditrack_vProb;
-  Float_t dimuon_DCA,ditrack_DCA;
+  Float_t dimuon_vProb, DiTrack_vProb,dimuonDiTrack_vProb;
+  Float_t dimuon_DCA,DiTrack_DCA;
   Float_t cosAlpha, lxyPV, lxyErrPV;
   Float_t dimuon_cosAlpha, dimuon_lxyPV, dimuon_lxyErrPV;
-  Float_t ditrack_cosAlpha, ditrack_lxyPV, ditrack_lxyErrPV;
+  Float_t DiTrack_cosAlpha, DiTrack_lxyPV, DiTrack_lxyErrPV;
   Float_t vX,vY,vZ;
 
 	UInt_t numPrimaryVertices;
