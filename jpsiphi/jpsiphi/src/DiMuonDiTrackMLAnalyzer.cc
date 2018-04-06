@@ -772,18 +772,18 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
 
                 cands++;
                 std::cout << cands << std::endl;
-    //             // VertexDistanceXY vdistXY;
-    //             float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
-    //             float mmkk_py_fit = TheParticle->currentState().kinematicParameters().momentum().y();
-    //             float mmkk_pz_fit = TheParticle->currentState().kinematicParameters().momentum().z();
-    //             float mmkk_en_fit = sqrt(mmkk_ma_fit*mmkk_ma_fit+mmkk_px_fit*mmkk_px_fit+mmkk_py_fit*mmkk_py_fit+mmkk_pz_fit*mmkk_pz_fit);
-    //             float mmkk_vx_fit = TheVertex->position().x();
-    //             float mmkk_vy_fit = TheVertex->position().y();
-    //             float mmkk_vz_fit = TheVertex->position().z();
-    //
-    //             reco::CompositeCandidate recoMMKK(0.,math::XYZTLorentzVector(mmkk_px_fit,mmkk_py_fit,mmkk_pz_fit,mmkk_en_fit),
-    //                                                  math::XYZPoint(mmkk_vx_fit,mmkk_vy_fit,mmkk_vz_fit));
-    //             pat::CompositeCandidate patMMKK(recoMMKK);
+                // VertexDistanceXY vdistXY;
+                float mmkk_px_fit = TheParticle->currentState().kinematicParameters().momentum().x();
+                float mmkk_py_fit = TheParticle->currentState().kinematicParameters().momentum().y();
+                float mmkk_pz_fit = TheParticle->currentState().kinematicParameters().momentum().z();
+                float mmkk_en_fit = sqrt(mmkk_ma_fit*mmkk_ma_fit+mmkk_px_fit*mmkk_px_fit+mmkk_py_fit*mmkk_py_fit+mmkk_pz_fit*mmkk_pz_fit);
+                float mmkk_vx_fit = TheVertex->position().x();
+                float mmkk_vy_fit = TheVertex->position().y();
+                float mmkk_vz_fit = TheVertex->position().z();
+
+                reco::CompositeCandidate recoMMKK(0.,math::XYZTLorentzVector(mmkk_px_fit,mmkk_py_fit,mmkk_pz_fit,mmkk_en_fit),
+                                                     math::XYZPoint(mmkk_vx_fit,mmkk_vy_fit,mmkk_vz_fit));
+                pat::CompositeCandidate patMMKK(recoMMKK);
     //
     //             bool child = allTree->movePointerToTheFirstChild();
     //             RefCountedKinematicParticle fitMu1 = allTree->currentParticle();
