@@ -1,12 +1,12 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonDitrackMLAnalyzer
-// Class:      DiMuonDitrackMLAnalyzer
+// Package:    DiMuonDiTrackMLAnalyzer
+// Class:      DiMuonDiTrackMLAnalyzer
 //
 // Author:  Adriano Di Florio
 //
 
-#include "../interface/DiMuonDitrackMLAnalyzer.h"
+#include "../interface/DiMuonDiTrackMLAnalyzer.h"
 #include "../interface/DiMuonVtxReProducer.h"
 
 
@@ -14,7 +14,7 @@
 // constructors and destructor
 //
 
-bool DiMuonDitrackMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2){
+bool DiMuonDiTrackMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon& mu2){
   double DeltaEta = fabs(mu1.eta()-mu2.eta());
   double DeltaP   = fabs(mu1.p()-mu2.p());
 
@@ -22,14 +22,14 @@ bool DiMuonDitrackMLAnalyzer::IsTheSame(const reco::Muon& mu1, const reco::Muon&
 
 }
 
-bool DiMuonDitrackMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& tk){
+bool DiMuonDiTrackMLAnalyzer::IsTheSame(const reco::Muon& mu, const reco::Track& tk){
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
 
   return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
-bool DiMuonDitrackMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
+bool DiMuonDiTrackMLAnalyzer::IsTheSame( const reco::Track& tk1,  const reco::Track& tk2)
 {
 double DeltaEta = fabs(tk1.eta()-tk2.eta());
 double DeltaP   = fabs(tk1.p()-tk2.p());
@@ -37,7 +37,7 @@ double DeltaP   = fabs(tk1.p()-tk2.p());
 return (DeltaEta < 0.02 && DeltaP < 0.02);
 }
 
-float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
+float DiMuonDiTrackMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerObject t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -48,19 +48,19 @@ float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Track t1, const pat::TriggerOb
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiMuonDitrackMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::TriggerObject t2)
+bool DiMuonDiTrackMLAnalyzer::MatchByDRDPt(const reco::Track t1, const pat::TriggerObject t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
-bool DiMuonDitrackMLAnalyzer::MatchByDRDPt(const reco::Muon t1, const pat::TriggerObject t2)
+bool DiMuonDiTrackMLAnalyzer::MatchByDRDPt(const reco::Muon t1, const pat::TriggerObject t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
-float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObject t2)
+float DiMuonDiTrackMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObject t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -71,7 +71,7 @@ float DiMuonDitrackMLAnalyzer::DeltaR(const reco::Muon t1, const pat::TriggerObj
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-DiMuonDitrackMLAnalyzer::DiMuonDitrackMLAnalyzer(const edm::ParameterSet& iConfig):
+DiMuonDiTrackMLAnalyzer::DiMuonDiTrackMLAnalyzer(const edm::ParameterSet& iConfig):
 muons_(consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("Muons"))),
 tracks_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("Tracks"))),
 triggerEvent_(consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("TriggerEvent"))),
@@ -79,8 +79,8 @@ thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamS
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 triggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-DitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DitrackCuts")),
-DiMuonDitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDitrackCuts")),
+DiTrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrackCuts")),
+DiMuonDiTrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrackCuts")),
 DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -89,8 +89,8 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 // thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonCuts")),
-// DitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DitrackCuts")),
-// DiMuonDitrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDitrackCuts")),
+// DiTrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiTrackCuts")),
+// DiMuonDiTrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrackCuts")),
 // massCands_(iConfig.getParameter<std::vector<double>>("CandsMasses"))
 {
   // produces<pat::CompositeCandidateCollection>();
@@ -105,7 +105,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   padSize = HalfPadSize_*2;
 
   edm::Service < TFileService > fs;
-  ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DitrackDiMuon");
+  ml_tree = fs->make < TTree > ("DiMuonDiTrackML", "Tree of DiTrackDiMuon");
 
   ml_tree->Branch("run",      &run,      "run/i");
   ml_tree->Branch("event",    &event,    "event/l");
@@ -113,8 +113,8 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
   ml_tree->Branch("trigger",  &trigger,  "trigger/i");
 
-  ml_tree->Branch("dimuonditrack_p4", "TLorentzVector", &dimuonditrack_p4);
-  ml_tree->Branch("ditrack_p4", "TLorentzVector", &ditrack_p4);
+  ml_tree->Branch("dimuonDiTrack_p4", "TLorentzVector", &dimuonDiTrack_p4);
+  ml_tree->Branch("DiTrack_p4", "TLorentzVector", &DiTrack_p4);
   ml_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
 
   ml_tree->Branch("trackN_p4", "TLorentzVector", &trackN_p4);
@@ -127,8 +127,8 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   ml_tree->Branch("track_mN", "Track", &track_mN);
   ml_tree->Branch("track_mP", "Track", &track_mP);
 
-  ml_tree->Branch("dimuonditrack_ref_p4", "TLorentzVector", &dimuonditrack_ref_p4);
-  ml_tree->Branch("ditrack_ref_p4", "TLorentzVector", &ditrack_ref_p4);
+  ml_tree->Branch("dimuonDiTrack_ref_p4", "TLorentzVector", &dimuonDiTrack_ref_p4);
+  ml_tree->Branch("DiTrack_ref_p4", "TLorentzVector", &DiTrack_ref_p4);
   ml_tree->Branch("dimuon_ref_p4", "TLorentzVector", &dimuon_ref_p4);
 
   ml_tree->Branch("trackN_ref_p4", "TLorentzVector", &trackN_ref_p4);
@@ -136,50 +136,50 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   ml_tree->Branch("muonN_ref_p4", "TLorentzVector", &muonN_ref_p4);
   ml_tree->Branch("muonP_ref_p4", "TLorentzVector", &muonP_ref_p4);
 
-  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuonDiTrack_vProb",  &dimuonDiTrack_vProb, "dimuonDiTrack_vProb/F");
   ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
-  ml_tree->Branch("ditrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+  ml_tree->Branch("DiTrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
 
-  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuonDiTrack_vProb",  &dimuonDiTrack_vProb, "dimuonDiTrack_vProb/F");
   ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
-  ml_tree->Branch("ditrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
+  ml_tree->Branch("DiTrack_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
 
-  ml_tree->Branch("dimuonditrack_vProb",  &dimuonditrack_vProb, "dimuonditrack_vProb/F");
+  ml_tree->Branch("dimuonDiTrack_vProb",  &dimuonDiTrack_vProb, "dimuonDiTrack_vProb/F");
   ml_tree->Branch("dimuon_vProb",         &dimuon_vProb,        "dimuon_vProb/F");
-  ml_tree->Branch("ditrack_vProb",        &ditrack_vProb,       "ditrack_vProb/F");
+  ml_tree->Branch("DiTrack_vProb",        &DiTrack_vProb,       "DiTrack_vProb/F");
 
-  ml_tree->Branch("dimuonditrack_lxy",  &dimuonditrack_lxy, "dimuonditrack_lxy/F");
+  ml_tree->Branch("dimuonDiTrack_lxy",  &dimuonDiTrack_lxy, "dimuonDiTrack_lxy/F");
   ml_tree->Branch("dimuon_lxy",         &dimuon_lxy,        "dimuon_lxy/F");
-  ml_tree->Branch("ditrack_lxy",        &dimuon_lxy,        "dimuon_lxy/F");
+  ml_tree->Branch("DiTrack_lxy",        &dimuon_lxy,        "dimuon_lxy/F");
 
-  ml_tree->Branch("dimuonditrack_lxyErr",  &dimuonditrack_lxyErr, "dimuonditrack_lxyErr/F");
+  ml_tree->Branch("dimuonDiTrack_lxyErr",  &dimuonDiTrack_lxyErr, "dimuonDiTrack_lxyErr/F");
   ml_tree->Branch("dimuon_lxyErr",         &dimuon_lxyErr,        "dimuon_lxyErr/F");
-  ml_tree->Branch("ditrack_lxyErr",        &dimuon_lxyErr,        "dimuon_lxyErr/F");
+  ml_tree->Branch("DiTrack_lxyErr",        &dimuon_lxyErr,        "dimuon_lxyErr/F");
 
-  ml_tree->Branch("dimuonditrack_lxyBS",  &dimuonditrack_lxyBS, "dimuonditrack_lxyBS/F");
+  ml_tree->Branch("dimuonDiTrack_lxyBS",  &dimuonDiTrack_lxyBS, "dimuonDiTrack_lxyBS/F");
   ml_tree->Branch("dimuon_lxyBS",         &dimuon_lxyBS,        "dimuon_lxyBS/F");
-  ml_tree->Branch("ditrack_lxyBS",        &dimuon_lxyBS,       "dimuon_lxyBS/F");
+  ml_tree->Branch("DiTrack_lxyBS",        &dimuon_lxyBS,       "dimuon_lxyBS/F");
 
-  ml_tree->Branch("dimuonditrack_lxyBSErr",  &dimuonditrack_lxyBSErr, "dimuonditrack_lxyBSErr/F");
+  ml_tree->Branch("dimuonDiTrack_lxyBSErr",  &dimuonDiTrack_lxyBSErr, "dimuonDiTrack_lxyBSErr/F");
   ml_tree->Branch("dimuon_lxyBSErr",         &dimuon_lxyBSErr,        "dimuon_lxyBSErr/F");
-  ml_tree->Branch("ditrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
+  ml_tree->Branch("DiTrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
 
-  ml_tree->Branch("dimuonditrack_vX",  &dimuonditrack_vX, "dimuonditrack_vX/F");
-  ml_tree->Branch("dimuonditrack_vY",  &dimuonditrack_vY, "dimuonditrack_vY/F");
-  ml_tree->Branch("dimuonditrack_vZ",  &dimuonditrack_vZ, "dimuonditrack_vZ/F");
+  ml_tree->Branch("dimuonDiTrack_vX",  &dimuonDiTrack_vX, "dimuonDiTrack_vX/F");
+  ml_tree->Branch("dimuonDiTrack_vY",  &dimuonDiTrack_vY, "dimuonDiTrack_vY/F");
+  ml_tree->Branch("dimuonDiTrack_vZ",  &dimuonDiTrack_vZ, "dimuonDiTrack_vZ/F");
 
-  ml_tree->Branch("ditrack_vX",  &ditrack_vX, "ditrack_vX/F");
-  ml_tree->Branch("ditrack_vY",  &ditrack_vY, "ditrack_vY/F");
-  ml_tree->Branch("ditrack_vZ",  &ditrack_vZ, "ditrack_vZ/F");
+  ml_tree->Branch("DiTrack_vX",  &DiTrack_vX, "DiTrack_vX/F");
+  ml_tree->Branch("DiTrack_vY",  &DiTrack_vY, "DiTrack_vY/F");
+  ml_tree->Branch("DiTrack_vZ",  &DiTrack_vZ, "DiTrack_vZ/F");
 
   ml_tree->Branch("dimuon_vX",  &dimuon_vX, "dimuon_vX/F");
   ml_tree->Branch("dimuon_vY",  &dimuon_vY, "dimuon_vY/F");
   ml_tree->Branch("dimuon_vZ",  &dimuon_vZ, "dimuon_vZ/F");
 
   ml_tree->Branch("dimuon_lxyBSErr",         &dimuon_lxyBSErr,        "dimuon_lxyBSErr/F");
-  ml_tree->Branch("ditrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
+  ml_tree->Branch("DiTrack_lxyBSErr",        &dimuon_lxyBSErr,       "dimuon_lxyBSErr/F");
 
-  ml_tree->Branch("ditrack_DCA",    &ditrack_DCA, "ditrack_DCA/F");
+  ml_tree->Branch("DiTrack_DCA",    &DiTrack_DCA, "DiTrack_DCA/F");
   ml_tree->Branch("dimuon_DCA",     &dimuon_DCA,  "dimuon_DCA/F");
 
   ml_tree->Branch("PVX",  &PVX, "PVX/F");
@@ -234,7 +234,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   }
 
   //
-  // ml_tree->Branch("nditrack",  &nditrack,    "nditrack/i");
+  // ml_tree->Branch("nDiTrack",  &nDiTrack,    "nDiTrack/i");
   // ml_tree->Branch("trigger",  &trigger,  "trigger/i");
   // ml_tree->Branch("charge",   &charge,   "charge/I");
   //
@@ -248,7 +248,7 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
   //   ml_tree->Branch("trigs_m",   &trigs_m);
   //   ml_tree->Branch("trigs_filters", &trigs_filters);
   // }
-  // ml_tree->Branch("ditrack_p4", "TLorentzVector", &ditrack_p4);
+  // ml_tree->Branch("DiTrack_p4", "TLorentzVector", &DiTrack_p4);
   // ml_tree->Branch("trackP_p4",  "TLorentzVector", &trackP_p4);
   // ml_tree->Branch("trackN_p4",  "TLorentzVector", &trackN_p4);
   //
@@ -266,13 +266,13 @@ NumPixels_(iConfig.existsAs<int>("NumPixelHits") ? iConfig.getParameter<int>("Nu
 
 }
 
-DiMuonDitrackMLAnalyzer::~DiMuonDitrackMLAnalyzer() {}
+DiMuonDiTrackMLAnalyzer::~DiMuonDiTrackMLAnalyzer() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* DiMuonDitrackMLAnalyzer::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonDiTrackMLAnalyzer::GetAncestor(const reco::Candidate* p) {
   if (p->numberOfMothers()) {
     if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
     else return p->mother(0);
@@ -289,7 +289,7 @@ ex. 1 = pass 0
 */
 
 
-UInt_t DiMuonDitrackMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonDiTrackMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -317,7 +317,7 @@ UInt_t DiMuonDitrackMLAnalyzer::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   using namespace reco;
 
@@ -599,10 +599,10 @@ void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
           float deltaeta  = kPos.Eta() - kNeg.Eta();
           float deltar    = sqrt(pow(deltaphi,2) + pow(deltaeta,2));
 
-          if(kkP4.M() > DitrackMassCuts_[1]) continue;
-          if(kkP4.M() < DitrackMassCuts_[0]) continue;
+          if(kkP4.M() > DiTrackMassCuts_[1]) continue;
+          if(kkP4.M() < DiTrackMassCuts_[0]) continue;
 
-          // std::cout << "DitrackMassCut"<<std::endl;
+          // std::cout << "DiTrackMassCut"<<std::endl;
 
           //
           //build the dikaon secondary vertex
@@ -764,8 +764,8 @@ void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 }
 
 
-                if ( mmkk_ma_fit < DiMuonDitrackMassCuts_[0] || mmkk_ma_fit > DiMuonDitrackMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
-                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDitrackMassCuts_[0] << " - " << DiMuonDitrackMassCuts_[1] <<std::endl;
+                if ( mmkk_ma_fit < DiMuonDiTrackMassCuts_[0] || mmkk_ma_fit > DiMuonDiTrackMassCuts_[1] || mmkk_vp_fit < 0.01 ) continue;
+                std::cout << "Tree "<<mmkk_ma_fit<<" "<< DiMuonDiTrackMassCuts_[0] << " - " << DiMuonDiTrackMassCuts_[1] <<std::endl;
 
                 cands++;
                 std::cout << cands << std::endl;
@@ -849,21 +849,21 @@ void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 phi.setP4(patTk.p4()+patTk2.p4());
 
                 patPsiT.addDaughter(psi,"dimuon");
-                patPsiT.addDaughter(phi,"ditrack");
+                patPsiT.addDaughter(phi,"DiTrack");
 
                 dimuon_vProb = vProb_mumu;
 
-                dimuonditrack_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
+                dimuonDiTrack_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                DiTrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                DiTrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                DiTrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-                dimuonditrack_ref_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
+                dimuonDiTrack_ref_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-                ditrack_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+                DiTrack_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
                 std::cout<< "Done summing tracks"<<std::endl;
                 int posPixels = 0, negPixels = 0;
@@ -1046,29 +1046,29 @@ void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
     }
 
     // ------------ method called once each job just before starting event loop  ------------
-    void DiMuonDitrackMLAnalyzer::beginJob() {}
+    void DiMuonDiTrackMLAnalyzer::beginJob() {}
 
     // ------------ method called once each job just after ending the event loop  ------------
-    void DiMuonDitrackMLAnalyzer::endJob() {
+    void DiMuonDiTrackMLAnalyzer::endJob() {
 
       std::cout << "No. candidates : "<<cands<<std::endl;
       std::cout << "No. dimuoncand : "<<dimuoncands<<std::endl;
     }
 
     // ------------ method called when starting to processes a run  ------------
-    void DiMuonDitrackMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
+    void DiMuonDiTrackMLAnalyzer::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
     // ------------ method called when ending the processing of a run  ------------
-    void DiMuonDitrackMLAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
+    void DiMuonDiTrackMLAnalyzer::endRun(edm::Run const &, edm::EventSetup const &) {}
 
     // ------------ method called when starting to processes a luminosity block  ------------
-    void DiMuonDitrackMLAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+    void DiMuonDiTrackMLAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
     // ------------ method called when ending the processing of a luminosity block  ------------
-    void DiMuonDitrackMLAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+    void DiMuonDiTrackMLAnalyzer::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
     // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-    void DiMuonDitrackMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+    void DiMuonDiTrackMLAnalyzer::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
       //The following says we do not know what parameters are allowed so do no validation
       // Please change this to state exactly what you do use, even if it is no parameters
       edm::ParameterSetDescription desc;
@@ -1077,4 +1077,4 @@ void DiMuonDitrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
     }
 
     //define this as a plug-in
-    DEFINE_FWK_MODULE(DiMuonDitrackMLAnalyzer);
+    DEFINE_FWK_MODULE(DiMuonDiTrackMLAnalyzer);
