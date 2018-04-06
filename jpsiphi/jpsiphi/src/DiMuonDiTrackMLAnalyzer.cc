@@ -707,7 +707,8 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                   if (cApp.status() ) dca = cApp.distance();
                 }
 
-
+                if (dca>1E22) continue;
+                
                 // std::cout << "DCA tracks"<<std::endl;
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
