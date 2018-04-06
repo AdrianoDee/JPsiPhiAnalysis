@@ -63,9 +63,6 @@
 #include "TTree.h"
 #include "TH2F.h"
 
-//
-// class declaration
-//
 using namespace reco;
 
 class DiMuonDiTrackMLAnalyzer:public edm::EDAnalyzer {
