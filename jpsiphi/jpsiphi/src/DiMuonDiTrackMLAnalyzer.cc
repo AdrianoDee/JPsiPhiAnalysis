@@ -785,8 +785,8 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                                                      math::XYZPoint(mmkk_vx_fit,mmkk_vy_fit,mmkk_vz_fit));
                 pat::CompositeCandidate patMMKK(recoMMKK);
 
-                bool child = PsiTTree->movePointerToTheFirstChild();
-                RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
+                bool child = allTree->movePointerToTheFirstChild();
+                RefCountedKinematicParticle fitMu1 = allTree->currentParticle();
                 if (!child) break;
                 float m1_ma_fit = fitMu1->currentState().mass();
                 int   m1_ch_fit = fitMu1->currentState().particleCharge();
@@ -798,8 +798,8 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                                                  math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
                 pat::CompositeCandidate patMu1(recoMu1);
     // get second muon
-                child = PsiTTree->movePointerToTheNextChild();
-                RefCountedKinematicParticle fitMu2 = PsiTTree->currentParticle();
+                child = allTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitMu2 = allTree->currentParticle();
                 if (!child) break;
                 float m2_ma_fit = fitMu2->currentState().mass();
                 int   m2_ch_fit = fitMu2->currentState().particleCharge();
@@ -817,8 +817,8 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 psi.addDaughter(patMu2,"muon2");
                 psi.setP4(patMu1.p4()+patMu2.p4());
     // get kaon
-                child = PsiTTree->movePointerToTheNextChild();
-                RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
+                child = allTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitTrk = allTree->currentParticle();
                 if (!child) break;
                 float tk_ma_fit = fitTrk->currentState().mass();
                 int   tk_ch_fit = fitTrk->currentState().particleCharge();
@@ -831,8 +831,8 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 pat::CompositeCandidate patTk(recoTk);
 
     // get kaon2
-                child = PsiTTree->movePointerToTheNextChild();
-                RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
+                child = allTree->movePointerToTheNextChild();
+                RefCountedKinematicParticle fitTrk2 = allTree->currentParticle();
                 if (!child) break;
                 float tk2_ma_fit = fitTrk2->currentState().mass();
                 int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
