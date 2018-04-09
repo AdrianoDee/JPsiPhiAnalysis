@@ -568,6 +568,7 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
         if(IsTheSame(*mPos,*posTrack)) continue;
         if(IsTheSame(*mNeg,*posTrack)) continue;
 
+
         // if(!(posTrack->isNonnull())) continue;
 
 
@@ -622,6 +623,9 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
           //
           //
           if (myVertex.isValid()) {
+
+
+
             float vChi2 = myVertex.totalChiSquared();
             float vNDF  = myVertex.degreesOfFreedom();
             float vProb(TMath::Prob(vChi2,(int)vNDF));
@@ -708,7 +712,7 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 }
 
                 if (dca>1E22) continue;
-                
+
                 // std::cout << "DCA tracks"<<std::endl;
                 //   myPhi.addUserFloat("DCA", dca );
                 //   ///end DCA
@@ -868,6 +872,10 @@ void DiMuonDiTrackMLAnalyzer::analyze(const edm::Event & iEvent, const edm::Even
                 dimuonDiTrack_ref_p4.SetPtEtaPhiM(recoMMKK.pt(),recoMMKK.eta(),recoMMKK.phi(),recoMMKK.mass());
                 dimuon_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
                 DiTrack_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+                track_kN = (*negTrack);
+                track_kP = (*posTrack);
+
 
                 std::cout<< "Done summing tracks"<<std::endl;
                 int posPixels = 0, negPixels = 0;
