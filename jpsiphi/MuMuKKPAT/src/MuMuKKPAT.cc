@@ -1457,7 +1457,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                               cout <<"XLessPV_tracksPtSq = " <<vertexHigherPtSquared.sumPtSquared(XLessPV) <<endl ;
                               cout <<"XLessPV_removedTracksPtSq = " <<removedTrksPtSq <<endl ;
                               cout <<"X_pvs->size() = " <<X_pvs.size() <<endl ;
-                              cout <<"priVtx_z = " << priVtx_Z <<endl ;
                               cout <<"priVtx_tracks = " <<priVtx_tracks <<endl ;
                               cout <<"tracksPtSq_pV = " <<tracksPtSq_pV <<endl ;
                               cout <<"recVtxs->size() = " <<recVtxs->size() <<endl ;
