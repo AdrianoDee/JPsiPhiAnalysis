@@ -174,7 +174,7 @@ trigRes(0), trigNames(0), L1TT(0), MatchTriggerNames(0),
 nMu(0), nMuMu(0), nX(0), nKK(0),
 nX_pre0(0), nX_pre1(0), nX_pre2(0), nX_pre3(0), nX_pre4(0), nX_pre5(0), nX_pre6(0), nX_pre7(0), nX_pre8(0), nX_pre9(0), nX_pre10(0), nX_pre11(0), nX_pre12(0), nX_pre13(0), nX_pre14(0), nX_pre15(0),
 
-n_pV(0), priVtx_X(0), priVtx_Y(0), priVtx_Z(0), priVtx_XE(0), priVtx_YE(0), priVtx_ZE(0), priVtx_NormChi2(0), priVtx_Chi2(0), priVtx_CL(0), priVtx_tracks(0), tracksPtSq_pV(0),
+n_pV(0),tracksPtSq_pV(0),
 /// indices
 mu1Idx(0), mu2Idx(0), MuMuType(0), ka1Idx(0), ka2Idx(0),
 X_MuMuIdx(0), X_ka1Idx(0), X_ka2Idx(0),
@@ -441,18 +441,18 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
-  RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
+  // RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
   n_pV = thePrimaryVtx_multiplicity ;
-  priVtx_X = (thePrimaryVtx.position().x()) ;
-  priVtx_Y = (thePrimaryVtx.position().y()) ;
-  priVtx_Z = (thePrimaryVtx.position().z()) ;
-  priVtx_XE = (thePrimaryVtx.xError()) ;
-  priVtx_YE = (thePrimaryVtx.yError()) ;
-  priVtx_ZE = (thePrimaryVtx.zError()) ;
-  priVtx_NormChi2 = (thePrimaryVtx.normalizedChi2()) ;
-  priVtx_Chi2 = thePrimaryVtx.chi2() ;
-  priVtx_CL = ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) ;
-  priVtx_tracks = thePrimaryVtx.tracksSize() ;
+  // priVtx_X = (thePrimaryVtx.position().x()) ;
+  // priVtx_Y = (thePrimaryVtx.position().y()) ;
+  // priVtx_Z = (thePrimaryVtx.position().z()) ;
+  // priVtx_XE = (thePrimaryVtx.xError()) ;
+  // priVtx_YE = (thePrimaryVtx.yError()) ;
+  // priVtx_ZE = (thePrimaryVtx.zError()) ;
+  // priVtx_NormChi2 = (thePrimaryVtx.normalizedChi2()) ;
+  // priVtx_Chi2 = thePrimaryVtx.chi2() ;
+  // priVtx_CL = ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) ;
+  // priVtx_tracks = thePrimaryVtx.tracksSize() ;
   VertexHigherPtSquared vertexHigherPtSquared ;
   tracksPtSq_pV = vertexHigherPtSquared.sumPtSquared(thePrimaryVtx) ;
 
@@ -1939,9 +1939,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             if (Debug_) cout <<"after MC stuff clear" <<endl ;
             /// Primary Vertex
             n_pV = 0;
-            priVtx_X = 0; priVtx_Y = 0; priVtx_Z = 0 ;
-            priVtx_XE = 0; priVtx_YE = 0; priVtx_ZE = 0 ;
-            priVtx_NormChi2 = 0; priVtx_Chi2 = 0; priVtx_CL = 0; priVtx_tracks = 0; tracksPtSq_pV = 0 ;
+            tracksPtSq_pV = 0 ;
+            // priVtx_X = 0; priVtx_Y = 0; priVtx_Z = 0 ;
+            // priVtx_XE = 0; priVtx_YE = 0; priVtx_ZE = 0 ;
+            // priVtx_NormChi2 = 0; priVtx_Chi2 = 0; priVtx_CL = 0; priVtx_tracks = 0;
             /// MuMu cand & KK cand
             MuMuMass->clear(); MuMuVtx_CL->clear(); MuMuVtx_Chi2->clear();
             MuMuPx->clear(); MuMuPy->clear(); MuMuPz->clear();
@@ -2052,7 +2053,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           {
             edm::Service<TFileService> fs;
 
-            mumukktree = fs->make<TTree>("X_data", "X(4140) Data");
+            mumukktree = fs->make<TTree>("JPsi/Phi Tree", "MuMuKK Data");
 
             mumukktree->Branch("TrigRes", &trigRes);
             mumukktree->Branch("TrigNames", &trigNames);

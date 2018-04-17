@@ -160,10 +160,11 @@ private:
   /// counters for X
   unsigned int          nMu, nMuMu, nX, nKK;
   unsigned int          nX_pre0, nX_pre1, nX_pre2, nX_pre3, nX_pre4, nX_pre5, nX_pre6, nX_pre7, nX_pre8, nX_pre9, nX_pre10, nX_pre11, nX_pre12, nX_pre13, nX_pre14, nX_pre15;
-  int                   priVtx_n;
-  float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
-  int                   priVtx_tracks;
-  float                 priVtx_tracksPtSq;
+  int                   n_pV;
+  Vertex *pV, *bS;
+  // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
+  // int                   priVtx_tracks;
+  float                 tracksPtSq_pV;
   /// Indices
   vector<int>           *mu1Idx, *mu2Idx;
   vector<int>           *MuMuType;
