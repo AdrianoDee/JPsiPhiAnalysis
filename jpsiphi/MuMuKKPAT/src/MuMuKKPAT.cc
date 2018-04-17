@@ -174,7 +174,7 @@ trigRes(0), trigNames(0), L1TT(0), MatchTriggerNames(0),
 nMu(0), nMuMu(0), nX(0), nKK(0),
 nX_pre0(0), nX_pre1(0), nX_pre2(0), nX_pre3(0), nX_pre4(0), nX_pre5(0), nX_pre6(0), nX_pre7(0), nX_pre8(0), nX_pre9(0), nX_pre10(0), nX_pre11(0), nX_pre12(0), nX_pre13(0), nX_pre14(0), nX_pre15(0),
 
-priVtx_n(0), priVtx_X(0), priVtx_Y(0), priVtx_Z(0), priVtx_XE(0), priVtx_YE(0), priVtx_ZE(0), priVtx_NormChi2(0), priVtx_Chi2(0), priVtx_CL(0), priVtx_tracks(0), priVtx_tracksPtSq(0),
+n_Pv(0), priVtx_X(0), priVtx_Y(0), priVtx_Z(0), priVtx_XE(0), priVtx_YE(0), priVtx_ZE(0), priVtx_NormChi2(0), priVtx_Chi2(0), priVtx_CL(0), priVtx_tracks(0), priVtx_tracksPtSq(0),
 /// indices
 mu1Idx(0), mu2Idx(0), MuMuType(0), ka1Idx(0), ka2Idx(0),
 X_MuMuIdx(0), X_ka1Idx(0), X_ka2Idx(0),
@@ -316,6 +316,7 @@ MuMuKKPAT::~MuMuKKPAT()
 void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   /// get event content information
+
   bool decayChainOK = false;
   runNum = iEvent.id().run();
   evtNum = iEvent.id().event();
@@ -327,7 +328,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<IdealMagneticFieldRecord>().get(bFieldHandle);
 
   /// first get HLT results
-  map<string,int> HLTPreScaleMap;
+  std::map<string,int> HLTPreScaleMap;
   edm::Handle<edm::TriggerResults> hltresults;
   try {
     iEvent.getByLabel(hlTriggerResults_, hltresults);
@@ -441,7 +442,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   KalmanVertexFitter vtxFitter(true);
 
   RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
-  priVtx_n = thePrimaryVtx_multiplicity ;
+  n_Pv = thePrimaryVtx_multiplicity ;
   priVtx_X = (thePrimaryVtx.position().x()) ;
   priVtx_Y = (thePrimaryVtx.position().y()) ;
   priVtx_Z = (thePrimaryVtx.position().z()) ;
@@ -1937,7 +1938,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             }
             if (Debug_) cout <<"after MC stuff clear" <<endl ;
             /// Primary Vertex
-            priVtx_n = 0;
+            n_Pv = 0;
             priVtx_X = 0; priVtx_Y = 0; priVtx_Z = 0 ;
             priVtx_XE = 0; priVtx_YE = 0; priVtx_ZE = 0 ;
             priVtx_NormChi2 = 0; priVtx_Chi2 = 0; priVtx_CL = 0; priVtx_tracks = 0; priVtx_tracksPtSq = 0 ;
@@ -2060,17 +2061,18 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             X_One_Tree_->Branch("evtNum", &evtNum,"evtNum/i");
             X_One_Tree_->Branch("runNum", &runNum,"runNum/i");
             X_One_Tree_->Branch("lumiNum", &lumiNum, "lumiNum/i");
-            X_One_Tree_->Branch("priVtx_n", &priVtx_n, "priVtx_n/i");
-            X_One_Tree_->Branch("priVtx_X", &priVtx_X, "priVtx_X/f");
-            X_One_Tree_->Branch("priVtx_Y", &priVtx_Y, "priVtx_Y/f");
-            X_One_Tree_->Branch("priVtx_Z", &priVtx_Z, "priVtx_Z/f");
-            X_One_Tree_->Branch("priVtx_XE", &priVtx_XE, "priVtx_XE/f");
-            X_One_Tree_->Branch("priVtx_YE", &priVtx_YE, "priVtx_YE/f");
-            X_One_Tree_->Branch("priVtx_ZE", &priVtx_ZE, "priVtx_ZE/f");
-            X_One_Tree_->Branch("priVtx_NormChi2",&priVtx_NormChi2, "priVtx_NormChi2/f");
-            X_One_Tree_->Branch("priVtx_Chi2",&priVtx_Chi2, "priVtx_Chi2/f");
-            X_One_Tree_->Branch("priVtx_CL",&priVtx_CL, "priVtx_CL/f");
-            X_One_Tree_->Branch("priVtx_tracks", &priVtx_tracks, "priVtx_tracks/i");
+            X_One_Tree_->Branch("n_Pv", &n_Pv, "n_Pv/f")
+            X_One_Tree_->Branch("pV", "reco::Vertex", &pV);
+            // X_One_Tree_->Branch("priVtx_X", &priVtx_X, "priVtx_X/f");
+            // X_One_Tree_->Branch("priVtx_Y", &priVtx_Y, "priVtx_Y/f");
+            // X_One_Tree_->Branch("priVtx_Z", &priVtx_Z, "priVtx_Z/f");
+            // X_One_Tree_->Branch("priVtx_XE", &priVtx_XE, "priVtx_XE/f");
+            // X_One_Tree_->Branch("priVtx_YE", &priVtx_YE, "priVtx_YE/f");
+            // X_One_Tree_->Branch("priVtx_ZE", &priVtx_ZE, "priVtx_ZE/f");
+            // X_One_Tree_->Branch("priVtx_NormChi2",&priVtx_NormChi2, "priVtx_NormChi2/f");
+            // X_One_Tree_->Branch("priVtx_Chi2",&priVtx_Chi2, "priVtx_Chi2/f");
+            // X_One_Tree_->Branch("priVtx_CL",&priVtx_CL, "priVtx_CL/f");
+            // X_One_Tree_->Branch("priVtx_tracks", &priVtx_tracks, "priVtx_tracks/i");
             X_One_Tree_->Branch("priVtx_tracksPtSq", &priVtx_tracksPtSq, "priVtx_tracksPtSq/f");
             /// MC Analysis
             if (doMC) {
