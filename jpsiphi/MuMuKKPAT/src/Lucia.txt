@@ -1,0 +1,1612 @@
+// -*- C++ -*-
+//
+// Package:    JPsiPhiKPAT
+// Class:      JPsiPhiKPAT
+// 
+/**\class JPsiPhiKPAT JPsiPhiKPAT.cc myAnalyzers/JPsiPhiKPAT/src/JPsiPhiKPAT.cc
+ 
+Description: <one line class summary>
+Make rootTuple for JPsiPiPi reconstruction
+ 
+Implementation:
+<Notes on implementation>
+*/
+//
+// Original Author:  Keith Ulmer   keith.ulmer@colorado.edu
+//
+//
+
+
+// system include files
+#include <memory>
+
+// user include files
+#include "../interface/JPsiPhiKPAT.h"
+#include "../interface/VertexReProducer.h"
+//#include "DataFormats/Candidate/interface/OverlapChecker.h"
+
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
+#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
+
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "DataFormats/Common/interface/Handle.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GtFdlWord.h"
+#include "FWCore/Common/interface/TriggerNames.h"
+
+#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+//#include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
+
+#include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
+#include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
+#include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
+#include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
+
+#include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
+
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "TrackingTools/Records/interface/TransientTrackRecord.h"
+#include "TrackingTools/TransientTrack/interface/TransientTrack.h"
+#include "MagneticField/Engine/interface/MagneticField.h"
+
+#include "DataFormats/Common/interface/RefToBase.h"
+#include "DataFormats/Candidate/interface/ShallowCloneCandidate.h"
+//#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/Candidate/interface/CandMatchMap.h"
+#include "DataFormats/Math/interface/Error.h"
+#include "DataFormats/Math/interface/LorentzVector.h"
+#include "DataFormats/Math/interface/Point3D.h"
+#include "DataFormats/Math/interface/Vector3D.h"
+
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/MuonReco/interface/MuonSelectors.h"
+#include "DataFormats/PatCandidates/interface/GenericParticle.h"
+
+#include "DataFormats/Common/interface/ValueMap.h"
+#include "DataFormats/TrackReco/interface/DeDxData.h"
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TVector3.h"
+
+#include <vector>
+#include <utility>
+
+
+//
+// constants, enums and typedefs
+//
+
+typedef math::Error<3>::type CovarianceMatrix;
+typedef ROOT::Math::SVector<double, 3> SVector3;
+typedef ROOT::Math::SMatrix<double, 3, 3, ROOT::Math::MatRepSym<double, 3> > SMatrixSym3D;
+//
+// static data member definitions
+//
+
+//
+// constructors and destructor
+//
+JPsiPhiKPAT::JPsiPhiKPAT(const edm::ParameterSet& iConfig)
+  :
+  hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
+  inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
+  vtxSample( iConfig.getUntrackedParameter<std::string>("VtxSample",std::string("offlinePrimaryVertices")) ), 
+  ///// 
+  doData( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
+  doMC( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
+  MCParticle( iConfig.getUntrackedParameter<int>("MonteCarloParticleId", 20443) ), //20443 X, 100443 Psi(2S), 9120443 X from B
+  ////////
+  doJPsiMassConst( iConfig.getUntrackedParameter<bool>("DoJPsiMassConstraint", false) ),
+
+  MuMinPixHits(iConfig.getUntrackedParameter<int>("MinMuPixelHits", 0)),
+  MuMinSiHits(iConfig.getUntrackedParameter<int>("MinMuSiHits", 0)),
+  MuMaxNormChi(iConfig.getUntrackedParameter<double>("MaxMuNormChi2", 1000)),
+  MuMaxD0(iConfig.getUntrackedParameter<double>("MaxMuD0", 1000)),
+  MuMinPt(iConfig.getUntrackedParameter<double>("MinMuPt", 0)),
+
+  JPsiMinMass(iConfig.getUntrackedParameter<double>("MinJPsiMass", 3.)),
+  JPsiMaxMass(iConfig.getUntrackedParameter<double>("MaxJPsiMass", 4.)),
+
+  PhiMinMass(iConfig.getUntrackedParameter<double>("MinPhiMass", 3.)),
+  PhiMaxMass(iConfig.getUntrackedParameter<double>("MaxPhiMass", 4.)),
+
+  TrMinPixHits(iConfig.getUntrackedParameter<int>("MinTrPixelHits", 0)),
+  TrMinSiHits(iConfig.getUntrackedParameter<int>("MinTrSiHits", 0)),
+  TrMinPt(iConfig.getUntrackedParameter<double>("MinTrPt", 0)),
+  TrMaxNormChi2(iConfig.getUntrackedParameter<double>("MaxTrNormChi2", 10)),
+
+  JPsiTrackMaxDR(iConfig.getUntrackedParameter<double>("MaxJPsiTrackDR", 1)),
+  BchTrackMaxDR(iConfig.getUntrackedParameter<double>("MaxBchTrackDR", 1.1)),
+  UseBchDR(iConfig.getUntrackedParameter<bool>("UseBchDR", false)),
+
+  JPsiPhiKMinMass(iConfig.getUntrackedParameter<double>("MinJPsiPhiKMass", 0)),
+  JPsiPhiKMaxMass(iConfig.getUntrackedParameter<double>("MaxJPsiPhiKMass", 10)),
+
+  resolveAmbiguity_(iConfig.getUntrackedParameter<bool>("resolvePileUpAmbiguity",true)),
+  addBchLessPrimaryVertex_(iConfig.getUntrackedParameter<bool>("addBchLessPrimaryVertex",true)),
+  TriggersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
+  Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",false)),
+
+  Y_One_Tree_(0),
+
+  runNum(0), evtNum(0), lumiNum(0),
+
+  doubleMuonsEvents(0),
+
+  trigRes(0), trigNames(0), L1TT(0), MatchTriggerNames(0), 
+
+  nMCB(0),
+  nB(0), nJPsi(0), nPhi(0), nMu(0), nTrk(0),
+  priVtxX(0), priVtxY(0), priVtxZ(0), priVtxXE(0), priVtxYE(0), priVtxZE(0), priVtxNormChi2(0), priVtxChi2(0), priVtxCL(0),
+
+  // indices
+  jpsiIdx(0), phiIdx(0), k1Idx(0), k2Idx(0), k3Idx(0),  mu1Idx(0), mu2Idx(0),
+
+  // MC Analysis
+  MCjpsiPx(0), MCjpsiPy(0), MCjpsiPz(0),
+  MCphiPx(0), MCphiPy(0), MCphiPz(0),
+  MCkaonPx(0), MCkaonPy(0), MCkaonPz(0),
+
+  // generic muons
+  muPx(0), muPy(0), muPz(0), muChi2(0), muNDF(0), muCharge(0),
+  muD0(0), muDz(0), muDzVtx(0), muDxyVtx(0),
+  muType(0), muQual(0), 
+  muGlChi2(0), muGlNDF(0),
+  mufHits(0), muFirstBarrel(0), muFirstEndCap(0),
+  muPhits(0), muShits(0), muGlMuonHits(0), 
+
+  // generic tracks
+  trPx(0), trPy(0), trPz(0), trE(0),
+  trNDF(0), trPhits(0), trShits(0), trChi2(0),
+
+  trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
+  trDzVtx(0), trDxyVtx(0),
+  trD0(0), trD0E(0), trDz(0), trCharge(0),
+
+  tr_nsigdedx(0), tr_dedx(0), tr_dedxMass(0), tr_theo(0), tr_sigma(0),
+
+  // J/Psi
+  jpsiMass(0), jpsiPx(0), jpsiPy(0), jpsiPz(0),
+  jpsiVtxCL(0), jpsiVtxChi2(0),
+  jpsiDecayVtxX(0), jpsiDecayVtxY(0), jpsiDecayVtxZ(0), jpsiDecayVtxXE(0), jpsiDecayVtxYE(0), jpsiDecayVtxZE(0),
+  jpsiCTauPV(0), jpsiCTauPVE(0), jpsiFL(0), jpsiFLE(0),
+  JPsiMuonTrigMatch(0),
+
+  // muons after J/Psi fit
+  mu1Px(0), mu1Py(0), mu1Pz(0), mu1Chi2(0), mu1NDF(0),
+  mu2Px(0), mu2Py(0), mu2Pz(0), mu2Chi2(0), mu2NDF(0),
+
+  // Phi
+  phiMass(0), phiPx(0), phiPy(0), phiPz(0),
+  phiVtxCL(0), phiVtxChi2(0),
+  phiDecayVtxX(0), phiDecayVtxY(0), phiDecayVtxZ(0), phiDecayVtxXE(0), phiDecayVtxYE(0), phiDecayVtxZE(0),
+
+  // kaons after Phi fit
+  k1Px(0), k1Py(0), k1Pz(0), k1Chi2(0), k1NDF(0),
+  k2Px(0), k2Py(0), k2Pz(0), k2Chi2(0), k2NDF(0),
+
+  // B charged
+  bMass(0), bVtxCL(0), bVtxChi2(0), bCharge(0), bPx(0), bPy(0), bPz(0), bPxE(0), bPyE(0), bPzE(0), 
+  bDecayVtxX(0), bDecayVtxY(0), bDecayVtxZ(0), bDecayVtxXE(0), bDecayVtxYE(0), bDecayVtxZE(0),
+  PriVtxBCorrX(0), PriVtxBCorrY(0), PriVtxBCorrZ(0), PriVtxBCorrXE(0), PriVtxBCorrYE(0), PriVtxBCorrZE(0),  PriVtxBCorrChi2(0),PriVtxBCorrCL(0),
+  bLxyPV(0), bCosAlphaPV(0), bCTauPV(0),  bLxyBS(0), bCosAlphaBS(0), bCTauBS(0), 
+  bCTauPVE(0), bCTauBSE(0), bLxyPVE(0),  bLxyBSE(0),
+
+  //// Muons and tracks after B charged Cand fit
+  k1fitPx(0), k1fitPy(0), k1fitPz(0), k1fitE(0),
+  k2fitPx(0), k2fitPy(0), k2fitPz(0), k2fitE(0), 
+  k3fitPx(0), k3fitPy(0), k3fitPz(0), k3fitE(0), 
+  mu1fitPx(0), mu1fitPy(0), mu1fitPz(0), mu1fitE(0),
+  mu2fitPx(0), mu2fitPy(0), mu2fitPz(0), mu2fitE(0)
+
+{
+  //string DoubleMu0 = "HLT_DoubleMu0"; 
+  //TriggersForMatching.push_back(DoubleMu0);
+  //string DoubleMu0_Quark = "HLT_DoubleMuO_Quarkonium_V1";
+  //TriggersForMatching.push_back(DoubleMu0_Quark);
+  //now do what ever initialization is needed
+}
+
+
+JPsiPhiKPAT::~JPsiPhiKPAT()
+{
+  // do anything here that needs to be done at desctruction time
+  // (e.g. close files, deallocate resources etc.)
+	
+}
+
+
+//
+// member functions
+//
+
+// ------------ method called to for each event  ------------
+void JPsiPhiKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+{	
+  // get event content information
+  bool decayChainOK = false;
+	
+  runNum = iEvent.id().run();
+  evtNum = iEvent.id().event();
+  lumiNum = iEvent.id().luminosityBlock();
+	
+  ESHandle<MagneticField> bFieldHandle;
+  iSetup.get<IdealMagneticFieldRecord>().get(bFieldHandle);
+	
+  // first get HLT results
+  edm::Handle<edm::TriggerResults> hltresults;
+  try {
+    iEvent.getByLabel(hlTriggerResults_,hltresults);
+  }
+  catch ( ... ) {
+    cout << "Couldn't get handle on HLT Trigger!" << endl;
+  }
+  if (!hltresults.isValid()) {
+    cout << "No Trigger Results!" << endl;
+  } 
+  else {
+    int ntrigs=hltresults->size();
+    if (ntrigs==0){
+      cout << "No trigger name given in TriggerResults of the input " << endl;
+    } 
+		
+    // get hold of trigger names - based on TriggerResults object!
+    edm::TriggerNames triggerNames_;
+    //     triggerNames_.init(*hltresults); 
+    triggerNames_ = iEvent.triggerNames(*hltresults);
+	
+    int ntriggers = TriggersForMatching_.size();
+    for (int MatchTrig=0; MatchTrig<ntriggers; MatchTrig++){
+      MatchingTriggerResult[MatchTrig]= 0;
+    }
+
+    for (int itrig=0; itrig< ntrigs; itrig++) {
+      string trigName = triggerNames_.triggerName(itrig);
+      int hltflag = (*hltresults)[itrig].accept();
+      //      if(hltflag)  cout << trigName << " " <<hltflag <<endl;
+      trigRes->push_back(hltflag);
+      trigNames->push_back(trigName);
+      
+      int ntriggers = TriggersForMatching_.size();
+      for (int MatchTrig=0; MatchTrig<ntriggers; MatchTrig++){
+	if (TriggersForMatching_[MatchTrig]== triggerNames_.triggerName(itrig)){
+	  MatchingTriggerResult[MatchTrig]= hltflag;
+	  break;
+	}
+      }
+    }
+    //int ntriggers = TriggersForMatching_.size();
+    for (int MatchTrig=0; MatchTrig<ntriggers; MatchTrig++){
+      //      cout << TriggersForMatching_[MatchTrig]<<endl;
+      MatchTriggerNames->push_back(TriggersForMatching_[MatchTrig]);
+    }
+  }
+  
+	
+  // get L1 trigger info
+	
+  edm::ESHandle<L1GtTriggerMenu> menuRcd;
+  iSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
+
+  //const L1GtTriggerMenu* menu = menuRcd.product();
+	
+  edm::Handle< L1GlobalTriggerReadoutRecord > gtRecord;
+  iEvent.getByLabel( edm::InputTag("gtDigis"), gtRecord);
+  const DecisionWord dWord = gtRecord->decisionWord();  
+	
+  const TechnicalTriggerWord ttWord = gtRecord->technicalTriggerWord();
+  for(unsigned int l1i=0; l1i!=ttWord.size(); ++l1i){
+    L1TT->push_back(ttWord.at(l1i));
+  }
+	
+  Vertex thePrimaryVtx;
+  Vertex theBeamSpotVtx;
+  math::XYZPoint RefVtx;
+	
+  reco::BeamSpot beamSpot;
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+  if ( beamSpotHandle.isValid() ) {beamSpot = *beamSpotHandle; 
+    theBeamSpotVtx = Vertex(beamSpot.position(), beamSpot.covariance3D());
+  }
+  else cout << "No beam spot available from EventSetup" << endl;
+	
+	
+  Handle<VertexCollection> recVtxs;
+  iEvent.getByLabel(vtxSample, recVtxs);
+  unsigned int nVtxTrks = 0;
+  if ( recVtxs->begin() != recVtxs->end() ) {
+    if (addBchLessPrimaryVertex_ || resolveAmbiguity_){
+      thePrimaryVtx = Vertex(*(recVtxs->begin()));
+    }
+    else {
+      for (reco::VertexCollection::const_iterator vtx = recVtxs->begin();
+	   vtx != recVtxs->end(); ++vtx){
+	if (nVtxTrks < vtx->tracksSize() ) {
+	  nVtxTrks = vtx->tracksSize();
+	  thePrimaryVtx = Vertex(*vtx);
+	}				
+      }
+    }
+  }
+  else {
+    thePrimaryVtx = Vertex(beamSpot.position(), beamSpot.covariance3D());
+  }
+	
+  RefVtx = thePrimaryVtx.position();
+	
+	
+	
+  priVtxX=( thePrimaryVtx.position().x());
+  priVtxY=( thePrimaryVtx.position().y());
+  priVtxZ=( thePrimaryVtx.position().z());
+  priVtxXE=( thePrimaryVtx.xError());	
+  priVtxYE=( thePrimaryVtx.yError());
+  priVtxZE=( thePrimaryVtx.zError());
+  priVtxNormChi2=( thePrimaryVtx.normalizedChi2());
+  priVtxChi2= thePrimaryVtx.chi2();
+  priVtxCL = ChiSquaredProbability((double)(thePrimaryVtx.chi2()),(double)(thePrimaryVtx.ndof()));
+	
+  //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // try reconstruction without fitting modules
+  //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  //cout << "Going to read cleanPatTrackCands" << endl;	
+  Handle< vector<pat::GenericParticle> > thePATTrackHandle;
+  iEvent.getByLabel("cleanPatTrackCands", thePATTrackHandle);
+	
+  Handle< vector<pat::Muon> > thePATMuonHandle;
+  iEvent.getByLabel("patMuonsWithTrigger", thePATMuonHandle);
+	
+  Handle<reco::DeDxDataValueMap> elossCollection;
+  energyLoss=0;
+  iexception_dedx=0;
+  try{
+    iEvent.getByLabel("dedxHarmonic2", elossCollection);
+    energyLoss = elossCollection.product();
+  }catch ( cms::Exception& ex ) {
+    if(evtNum<100)edm::LogError("Analyzer") <<"Warning can't get collection with label : elossCollection";
+    iexception_dedx=1;
+  }
+	
+   if (Debug_){
+    cout << "starting event with " << thePATTrackHandle->size() << " tracks, and " << thePATMuonHandle->size() << " muons" << endl;
+     }
+   // the following limit has been rised from 1000 to 3000 and to 10000
+  if((thePATMuonHandle->size()) * (thePATTrackHandle->size()) > 10000)
+    {
+     cout << "To many Muons: " << thePATMuonHandle->size() << " and Tracks " << thePATTrackHandle->size() << endl;
+    }
+  //
+  /////// check MC truth
+  if (doMC) {	 
+      Handle<GenParticleCollection> genParticles;
+      iEvent.getByLabel("genParticles", genParticles);
+
+      cout << "########### GenParticles Analysis ###########" << endl;
+      float jpsiPx=0., jpsiPy=0., jpsiPz=0., phiPx=0., phiPy=0., phiPz=0., kaonPx=0., kaonPy=0., kaonPz = 0.;
+
+      for (size_t i = 0; i < genParticles->size(); ++ i) {
+	const reco::GenParticle & p = (*genParticles)[i];
+	int pdgid = abs(p.pdgId());
+	int dauNum=p.numberOfDaughters();
+	
+	  // check if there is a B whitch has 3 daughters
+	  if (pdgid==521 && dauNum==3) {
+	    bool jpsiOK = false, phiOK = false, kaonOK = false;
+
+	    for(int j=0; j<dauNum; ++j) {
+	      const Candidate *dau = p.daughter(j);
+	      //	  cout << "dauPdgId = " << dau->pdgId() << endl;
+	      
+	      // check if one of B daughters is a J/Psi whitch has 2 muons as daughters
+	      if(dau->pdgId()==443) {
+		jpsiPx=dau->px(); jpsiPy=dau->py(); jpsiPz=dau->pz();
+		int jpsiDauNum=dau->numberOfDaughters();
+		//  cout << "jpsiDauNum = " << jpsiDauNum << endl;
+		int muNum = 0;	
+		for(int k=0; k<jpsiDauNum; ++k) {
+		  const Candidate *grandDau = dau->daughter(k); 
+		  //  cout << "grandDauPdgId = " << grandDau->pdgId() << endl;
+		  if(abs(grandDau->pdgId())==13) muNum++;
+		}
+		
+		if(muNum==2) {jpsiOK = true;}		   
+	      } // end check if one of B daughters is a J/Psi
+	 
+	      // check if one of B daughters is a Phi decaying in two kaons
+	      if(dau->pdgId()==333)
+		    {
+		      phiPx=dau->px();
+		      phiPy=dau->py();
+		      phiPz=dau->pz();
+		      int phiDauNum=dau->numberOfDaughters();
+		      // cout << "phiDauNum = " << phiDauNum << endl;
+		      int muNum = 0;	
+		      for(int k=0; k<phiDauNum; ++k) 
+			{
+			  const Candidate *grandDau = dau->daughter(k); 
+			  //			  cout << "grandDauPdgId = " << grandDau->pdgId() << endl;
+			  if(abs(grandDau->pdgId())==321) muNum++;
+			}
+
+		      if(muNum==2) { phiOK = true; }
+		    }
+		  // check if one of B daughters is a Kaon
+		  if(abs(dau->pdgId())==321) {
+		    kaonPx=dau->px(); kaonPy=dau->py(); kaonPz=dau->pz();
+		    kaonOK = true;
+		  }
+		  
+	    } // end loop on B daughters
+	    
+	    //   cout << "jpsiOK = " << jpsiOK << ", phiOK = " << phiOK << ", kaonOK = " << kaonOK << endl;
+	    
+	    if( jpsiOK && phiOK && kaonOK) {
+	      ++nMCB;		  
+	      MCjpsiPx->push_back(jpsiPx);
+	      MCjpsiPy->push_back(jpsiPy);
+	      MCjpsiPz->push_back(jpsiPz);
+	      MCphiPx->push_back(phiPx);
+		MCphiPy->push_back(phiPy);
+		MCphiPz->push_back(phiPz);
+		MCkaonPx->push_back(kaonPx);
+		MCkaonPy->push_back(kaonPy);
+		MCkaonPz->push_back(kaonPz);
+		decayChainOK = true;
+	    }
+	    // cout << "decayChainOK = " << decayChainOK << endl;
+	  }
+      }
+  }
+  // reconstruction only for events with B decaying in J/Psi+Phi+K
+  if((doMC && decayChainOK) || doData)
+    {
+      if (thePATMuonHandle->size() >= 2)  
+	{	
+	  doubleMuonsEvents++;
+	  //cout << "########### Reconstruction ###########" << endl;
+	  
+	  //get B and J/Psi cands
+	  for ( std::vector<pat::Muon>::const_iterator Muon1 = thePATMuonHandle->begin();
+		Muon1 != thePATMuonHandle->end(); ++Muon1) {
+	    // push back all muon information
+	    ++nMu;
+	    const reco::Muon* rmu1 = dynamic_cast<const reco::Muon * >(Muon1->originalObject());
+	    muPx->push_back(rmu1->px());
+	    muPy->push_back(rmu1->py());
+	    muPz->push_back(rmu1->pz());
+	    muCharge->push_back(rmu1->charge());
+	    //	    cout << "muon px = " << rmu1->px() << ", charge = " << rmu1->charge() << endl;
+			
+	    if(rmu1->track().isNull())  	continue;     
+
+	      muD0->push_back(rmu1->track()->d0());
+	      muDz->push_back(rmu1->track()->dz());
+	      muChi2->push_back(rmu1->track()->chi2());
+	      muNDF->push_back(rmu1->track()->ndof());
+	      muPhits->push_back(rmu1->track()->hitPattern().numberOfValidPixelHits());
+	      muShits->push_back(rmu1->track()->hitPattern().numberOfValidStripHits());
+
+	      muDzVtx->push_back(rmu1->track()->dz(RefVtx));
+	      muDxyVtx->push_back(rmu1->track()->dxy(RefVtx));
+		  
+	      mufHits->push_back((1.0*rmu1->track()->found())/ (rmu1->track()->found()+ rmu1->track()->lost() 
+								+ rmu1->track()->trackerExpectedHitsInner().numberOfHits() 
+								+ rmu1->track()->trackerExpectedHitsOuter().numberOfHits() ) );
+	      muFirstBarrel->push_back(rmu1->track()->hitPattern().hasValidHitInFirstPixelBarrel());
+	      muFirstEndCap->push_back(rmu1->track()->hitPattern().hasValidHitInFirstPixelEndcap());
+
+	    if (rmu1->globalTrack().isNull())
+	      {
+	       if (Debug_) 
+		 {
+		   cout << "no global track for " << std::distance(thePATMuonHandle->begin(), Muon1) << " filling defaults" << endl;
+		 }
+	       //	    
+	      } else {
+	              muGlChi2->push_back(rmu1->globalTrack()->chi2());
+		      muGlNDF->push_back(rmu1->globalTrack()->ndof());
+		      muGlMuonHits->push_back(rmu1->globalTrack()->hitPattern().numberOfValidMuonHits());
+	    }
+	    //
+	    muType->push_back(rmu1->type());
+	    int qm = 0;
+	    for(int qi=1; qi!= 24; ++qi){
+	      if(muon::isGoodMuon(*rmu1, muon::SelectionType(qi))){
+		qm += 1<<qi;
+	      }
+	    }
+	    muQual->push_back(qm);
+			
+	    //check for muon1
+	    TrackRef muTrack1 = Muon1->track();
+	    if ( muTrack1.isNull() ) 	continue;      
+	    // cuts on muon1
+	    if (rmu1->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits
+		|| rmu1->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits
+		|| rmu1->track()->chi2()/rmu1->track()->ndof() > MuMaxNormChi
+		|| fabs(rmu1->track()->dxy(RefVtx)) > MuMaxD0
+		|| rmu1->pt() < MuMinPt )	      continue;
+	    
+			
+	    //next check for muon2
+	    for ( std::vector<pat::Muon>::const_iterator Muon2 = Muon1+1;
+		  Muon2 != thePATMuonHandle->end(); ++Muon2) {
+	      //checks for muon2
+	      if(Muon2->charge() * Muon1->charge() > 0) continue;
+	      //
+	      const reco::Muon* rmu2 = dynamic_cast<const reco::Muon * >(Muon2->originalObject());	 
+	      if(muon::overlap(*rmu1, *rmu2))	  continue;	
+	      //
+	      TrackRef muTrack2 = Muon2->track();
+	      if ( muTrack2.isNull() )    continue;	
+	      // cuts on muon2
+	      if (rmu2->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits
+		  || rmu2->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits
+		  || rmu2->track()->chi2()/rmu1->track()->ndof() > MuMaxNormChi
+		  || fabs(rmu2->track()->dxy(RefVtx)) > MuMaxD0
+		  || rmu1->pt() < MuMinPt )		continue;
+	      
+	      //Get The J/Psi information				
+	      TransientTrack muon1TT( muTrack1, &(*bFieldHandle) );
+	      TransientTrack muon2TT( muTrack2, &(*bFieldHandle) );
+
+	      if( !muon1TT.isValid() || !muon2TT.isValid() ) continue;
+			
+	      KinematicParticleFactoryFromTransientTrack pFactory;
+				
+	      //The mass of a muon and the insignificant mass sigma 
+	      //to avoid singularities in the covariance matrix.
+	      ParticleMass muon_mass = 0.10565837; //pdg mass
+	      float muon_sigma = muon_mass*1.e-6;				
+	      //initial chi2 and ndf before kinematic fits.
+	      float chi = 0.;
+	      float ndf = 0.;
+
+	      vector<RefCountedKinematicParticle> muons;
+	      muons.push_back( pFactory.particle( muon1TT, muon_mass, chi, ndf, muon_sigma));
+	      muons.push_back( pFactory.particle( muon2TT, muon_mass, chi, ndf, muon_sigma));
+				
+	      KinematicParticleVertexFitter JPsiFitter;   
+	      RefCountedKinematicTree JPsiVertexFitTree;
+	      JPsiVertexFitTree = JPsiFitter.fit(muons); 
+	      if (!JPsiVertexFitTree->isValid()) 	  continue; 
+	
+	      JPsiVertexFitTree->movePointerToTheTop();				
+	      RefCountedKinematicParticle JPsiCand_fromFit = JPsiVertexFitTree->currentParticle();
+	      RefCountedKinematicVertex JPsiCand_vertex_fromFit = JPsiVertexFitTree->currentDecayVertex();
+
+	      if (!JPsiCand_vertex_fromFit->vertexIsValid())     continue;
+				
+	      JPsiVertexFitTree->movePointerToTheFirstChild();
+	      RefCountedKinematicParticle Mu1Cand_fromFit = JPsiVertexFitTree->currentParticle();  
+	      JPsiVertexFitTree->movePointerToTheNextChild();
+	      RefCountedKinematicParticle Mu2Cand_fromFit = JPsiVertexFitTree->currentParticle();
+				
+	      KinematicParameters Mu1Cand_KP = Mu1Cand_fromFit->currentState().kinematicParameters();
+	      KinematicParameters Mu2Cand_KP = Mu2Cand_fromFit->currentState().kinematicParameters();
+				
+	      //Fill the Psi' vectors
+	      if ( JPsiCand_fromFit->currentState().mass() < 2.6 || JPsiCand_fromFit->currentState().mass() > 3.6){
+		continue;
+	      }
+	      jpsiMass->push_back( JPsiCand_fromFit->currentState().mass() );
+				
+	      jpsiDecayVtxX->push_back( JPsiCand_vertex_fromFit->position().x() );
+	      jpsiDecayVtxY->push_back( JPsiCand_vertex_fromFit->position().y() );
+	      jpsiDecayVtxZ->push_back( JPsiCand_vertex_fromFit->position().z() );
+				
+	      jpsiDecayVtxXE->push_back( sqrt( JPsiCand_vertex_fromFit->error().cxx()) );
+	      jpsiDecayVtxYE->push_back( sqrt( JPsiCand_vertex_fromFit->error().cyy()) );
+	      jpsiDecayVtxZE->push_back( sqrt( JPsiCand_vertex_fromFit->error().czz()) );
+	      jpsiVtxCL->push_back( ChiSquaredProbability((double)( JPsiCand_vertex_fromFit->chiSquared()),(double)( JPsiCand_vertex_fromFit->degreesOfFreedom())) );
+	      jpsiVtxChi2->push_back( JPsiCand_vertex_fromFit->chiSquared() );
+				
+	      jpsiPx->push_back( Mu1Cand_KP.momentum().x() + Mu2Cand_KP.momentum().x() );
+	      jpsiPy->push_back( Mu1Cand_KP.momentum().y() + Mu2Cand_KP.momentum().y() );
+	      jpsiPz->push_back( Mu1Cand_KP.momentum().z() + Mu2Cand_KP.momentum().z() );
+
+	      mu1Idx->push_back(std::distance(thePATMuonHandle->begin(), Muon1)); 
+	      mu2Idx->push_back(std::distance(thePATMuonHandle->begin(), Muon2));
+				
+	      mu1Px->push_back( Mu1Cand_KP.momentum().x());
+	      mu1Py->push_back( Mu1Cand_KP.momentum().y());
+	      mu1Pz->push_back( Mu1Cand_KP.momentum().z());
+	      mu1Chi2->push_back( Mu1Cand_fromFit->chiSquared());
+	      mu1NDF->push_back( Mu1Cand_fromFit->degreesOfFreedom());
+
+	      mu2Px->push_back( Mu2Cand_KP.momentum().x());
+	      mu2Py->push_back( Mu2Cand_KP.momentum().y());
+	      mu2Pz->push_back( Mu2Cand_KP.momentum().z());
+	      mu2Chi2->push_back( Mu2Cand_fromFit->chiSquared());
+	      mu2NDF->push_back( Mu2Cand_fromFit->degreesOfFreedom());
+
+ 
+	      // added by asli
+	      std::vector<double> mumuVtxEVec;
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().cxx() );
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().cyx() );
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().cyy() );
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().czx() );
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().czy() );
+	      mumuVtxEVec.push_back( JPsiCand_vertex_fromFit->error().czz() );
+	      
+	      SMatrixSym3D mumuVtxCov(mumuVtxEVec.begin(), mumuVtxEVec.end());
+	      SMatrixSym3D totalCovMuMu = mumuVtxCov + beamSpot.covariance3D();
+	      SVector3 mumudistanceVector2DD( JPsiCand_vertex_fromFit->position().x() - beamSpot.x0(), JPsiCand_vertex_fromFit->position().y() - beamSpot.y0(), 0. );
+	      double mumurVtxMag2DD = ROOT::Math::Mag(mumudistanceVector2DD);
+	      //	      mumurVtxMag2D->push_back(mumurVtxMag2DD);
+	      double mumusigmaRvtxMag2DD = sqrt(ROOT::Math::Similarity(totalCovMuMu, mumudistanceVector2DD)) / mumurVtxMag2DD;
+	      //	      mumusigmaRvtxMag2D->push_back(mumusigmaRvtxMag2DD);
+	      //float mumuFLSigFloat = (mumurVtxMag2DD/mumusigmaRvtxMag2DD);
+	      //	      mumuVtxCL->push_back( ChiSquaredProbability((double)(psi_vFit_vertex_noMC->chiSquared()),(double)(psi_vFit_vertex_noMC->degreesOfFreedom())));
+	      jpsiFL->push_back( mumurVtxMag2DD );
+	      jpsiFLE->push_back( mumusigmaRvtxMag2DD );
+// 	      if( mumuFLSigFloat > 3.)
+// 		cout << "jpsiFLSig = " << mumuFLSigFloat << endl;
+	      // finish added by asli	      
+	      ////////////////////////////////////////////////////////////////
+	      // define a primary vertex in the  proper mode (as for B vertex)
+	      ////////////////////////////////////////////////////////////////						
+	      //											
+	      vector<TransientVertex> pvs_jp;
+	      if (addBchLessPrimaryVertex_) 
+		{
+		 VertexReProducer revertex_jp(recVtxs, iEvent);
+		 Handle<TrackCollection> pvtracks_jp;   
+		 iEvent.getByLabel(revertex_jp.inputTracks(),   pvtracks_jp);
+		 Handle<BeamSpot>        pvbeamspot_jp;
+		 iEvent.getByLabel(revertex_jp.inputBeamSpot(), pvbeamspot_jp);
+		 //
+		 if (pvbeamspot_jp.id() != beamSpotHandle.id()) 
+		   edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer. (THIS IS WHILE DOING J/PSI)";
+		 //    
+		 const reco::Muon *rmu_jp_1 = dynamic_cast<const reco::Muon *>(Muon1->originalObject());
+		 const reco::Muon *rmu_jp_2 = dynamic_cast<const reco::Muon *>(Muon2->originalObject());
+		 //
+		 if (rmu_jp_1 != 0 && rmu_jp_2 != 0 && rmu_jp_1->track().id() == pvtracks_jp.id() && rmu_jp_2->track().id() == pvtracks_jp.id() ) 
+		   { 
+		    TrackCollection JPsiLess;
+		    JPsiLess.reserve(pvtracks_jp->size());
+		    for (size_t i = 0, n = pvtracks_jp->size(); i < n; ++i) 
+		       {
+		        if (i == rmu_jp_1->track().key()) continue;
+			if (i == rmu_jp_2->track().key()) continue;
+			JPsiLess.push_back((*pvtracks_jp)[i]);
+		       }
+		    pvs_jp = revertex_jp.makeVertices(JPsiLess, *pvbeamspot_jp, iSetup) ;
+		   if (!pvs_jp.empty()) 
+		     {
+		       Vertex JPsiLessPV = Vertex(pvs_jp.front());
+		       thePrimaryVtx = JPsiLessPV;
+		     }
+		   }
+		}
+	      //				
+	      if (resolveAmbiguity_) 
+		{
+		 float minDz = 999999.;
+		 if (!addBchLessPrimaryVertex_) 
+		   {
+		    for (VertexCollection::const_iterator itv = recVtxs->begin(), itvend = recVtxs->end(); itv != itvend; ++itv)
+		       {
+			float deltaZ = fabs((*JPsiCand_vertex_fromFit).position().z() - itv->position().z()) ;
+		       	if ( deltaZ < minDz ) 
+			  {
+			    minDz = deltaZ;    
+			    thePrimaryVtx = Vertex(*itv);
+			  }
+		       }
+		   } else {
+			   for (vector<TransientVertex>::iterator itv2 = pvs_jp.begin(), itvend2 = pvs_jp.end(); itv2 != itvend2; ++itv2)
+			      {
+			       float deltaZ = fabs((*JPsiCand_vertex_fromFit).position().z() - itv2->position().z()) ;
+			       if ( deltaZ < minDz ) 
+				 {
+				  minDz = deltaZ;    
+				  Vertex JPsiLessPV = Vertex(*itv2); 
+				  thePrimaryVtx = JPsiLessPV;
+				 }
+			      }
+		 }
+		} 
+	      //
+	      TVector3 jpsi_vtx;
+	      jpsi_vtx.SetXYZ((*JPsiCand_vertex_fromFit).position().x(), (*JPsiCand_vertex_fromFit).position().y(), 0);
+	      //				
+	      TVector3 pvtx_jp;
+	      pvtx_jp.SetXYZ(thePrimaryVtx.position().x(),thePrimaryVtx.position().y(),0);
+	      //		
+	      VertexDistanceXY jpsi_vdistXY;
+	      //										
+	      TVector3 jpsi_pperp(JPsiCand_fromFit->currentState().globalMomentum().x(), JPsiCand_fromFit->currentState().globalMomentum().y(), 0);
+	      AlgebraicVector jpsi_vpperp(3);
+	      jpsi_vpperp[0] = jpsi_pperp.x();
+	      jpsi_vpperp[1] = jpsi_pperp.y();
+	      jpsi_vpperp[2] = 0.;
+	      //				
+	      TVector3 jpsi_vdiff = jpsi_vtx - pvtx_jp;
+	      double jpsi_cosAlpha = jpsi_vdiff.Dot(jpsi_pperp)/(jpsi_vdiff.Perp()*jpsi_pperp.Perp());
+	      Measurement1D jpsi_distXY = jpsi_vdistXY.distance(Vertex(*JPsiCand_vertex_fromFit), Vertex(thePrimaryVtx));
+	      double jpsi_ctauPV = jpsi_distXY.value()*jpsi_cosAlpha*JPsiCand_fromFit->currentState().mass()/jpsi_pperp.Perp();
+	      //
+	      GlobalError jpsi_vtx_err = (Vertex(*JPsiCand_vertex_fromFit)).error();
+	      GlobalError pvtx_jp_err = thePrimaryVtx.error();
+	      AlgebraicSymMatrix jpsi_vXY_err = jpsi_vtx_err.matrix()+ pvtx_jp_err.matrix();
+	      double jpsi_ctauPV_err = sqrt(jpsi_vXY_err.similarity(jpsi_vpperp))*JPsiCand_fromFit->currentState().mass()/(jpsi_pperp.Perp2());
+	      //
+	      jpsiCTauPV->push_back(jpsi_ctauPV);
+	      jpsiCTauPVE->push_back(jpsi_ctauPV_err);
+// 	      if( jpsi_ctauPV/jpsi_ctauPV_err < 3.)
+// 		cout << "jpsiCTauPVSig = " << jpsi_ctauPV/jpsi_ctauPV_err << endl;
+	      //
+	      ///////////////
+	      //
+	      // 	      int ntriggers =  TriggersForMatching_.size();
+// 	      for (int MatchTrig=0; MatchTrig < ntriggers; MatchTrig++){
+
+// 		//cout << "result " << MatchingTriggerResult[MatchTrig] << " " << TriggersForMatching_[MatchTrig] <<endl;
+// 		if (MatchingTriggerResult[MatchTrig]!=0){
+// 		  const pat::TriggerObjectStandAloneCollection mu1HLTMatches = Muon1->triggerObjectMatchesByFilter(FiltersForMatching_[MatchTrig]  );
+// 		  const pat::TriggerObjectStandAloneCollection mu2HLTMatches = Muon2->triggerObjectMatchesByFilter(FiltersForMatching_[MatchTrig]  );
+// 		  bool pass1 = mu1HLTMatches.size() > 0;
+// 		  bool pass2 = mu2HLTMatches.size() > 0;
+	   
+// 		  if ((pass1) && (pass2))
+// 		    JPsiMuonTrigMatch->push_back(true);
+	     
+// 		  else
+// 		    JPsiMuonTrigMatch->push_back(false);
+// 		}
+// 		else
+// 		  JPsiMuonTrigMatch->push_back(false);
+//	      }
+				
+ 	      ++nJPsi;
+ 	      muons.clear();
+	      //////////////////////////////////////////////////////////////////////
+				
+	      if ( thePATTrackHandle->size() < 3) 	  continue;	
+	      /////// cuts on J/Psi mass window
+	      if ( jpsiMass->at(nJPsi-1) < JPsiMinMass || jpsiMass->at(nJPsi-1) > JPsiMaxMass)	  continue;	
+	      //
+	      // check and cuts on the 1st kaon
+	      for ( vector<pat::GenericParticle>::const_iterator Track1 = thePATTrackHandle->begin();
+		    Track1 != thePATTrackHandle->end(); ++Track1 ) {
+	   
+		++nTrk;
+
+		if( Track1->track().isNull() ) continue; 
+
+		pat::GenericParticle tr = *Track1;
+
+		trPx->push_back(tr.px());
+		trPy->push_back(tr.py());
+		trPz->push_back(tr.pz());
+		trE->push_back(tr.energy());
+
+		//cout << "kaon1 px = " << tr.px() << ", charge = " << tr.charge() << endl;
+			
+		trNDF->push_back(tr.track()->ndof());
+		trPhits->push_back(tr.track()->hitPattern().numberOfValidPixelHits());
+		trShits->push_back(tr.track()->hitPattern().numberOfValidStripHits());
+		trChi2->push_back(tr.track()->chi2());
+		
+		trD0->push_back(tr.track()->d0());
+		trD0E->push_back(tr.track()->d0Error());
+		trDz->push_back(tr.track()->dz());
+		trCharge->push_back(tr.charge());
+		
+		float hits = (1.0*tr.track()->found() )/ (tr.track()->found()+ tr.track()->lost() + tr.track()->trackerExpectedHitsInner().numberOfHits() + tr.track()->trackerExpectedHitsOuter().numberOfHits());
+		trfHits->push_back(hits);
+		trFirstBarrel->push_back(tr.track()->hitPattern().hasValidHitInFirstPixelBarrel());
+		trFirstEndCap->push_back(tr.track()->hitPattern().hasValidHitInFirstPixelEndcap());
+		trDzVtx->push_back(tr.track()->dz(RefVtx));
+		trDxyVtx->push_back(tr.track()->dxy(RefVtx));
+		
+// 		double theo =0.;
+// 		double sigma =0.;
+		
+// 		tr_nsigdedx->push_back(nsigmaofdedx(tr.track(),theo,sigma));
+// 		tr_dedx->push_back(getEnergyLoss(tr.track()));
+// 		tr_dedxMass->push_back(GetMass(tr.track()));
+// 		tr_theo->push_back(theo);
+// 		tr_sigma->push_back(sigma);
+							
+		//check track doesn't overlap with the J/Psi candidate tracks
+		if (Track1->track().key()==rmu1->track().key() || Track1->track().key()==rmu2->track().key()) 	      continue;
+	    
+		///// cuts on charged tracks	
+		if( Track1->track()->hitPattern().numberOfValidPixelHits() < TrMinPixHits
+		    ||  Track1->track()->hitPattern().numberOfValidStripHits() < TrMinSiHits 
+		    ||  Track1->track()->chi2()/ Track1->track()->ndof() > TrMaxNormChi2
+		    ||  Track1->pt() < TrMinPt) 	      continue;
+	    				      
+		// check and cuts on the 2nd kaon
+		for ( vector<pat::GenericParticle>::const_iterator Track2 = Track1+1;
+		      Track2 != thePATTrackHandle->end(); ++Track2 ) 
+		  {
+		    if( Track2->track().isNull() ) continue; 
+
+		    if( Track1->charge() * Track2->charge() > 0) continue;
+		    //
+		    //cout << "kaon2 px = " << Track2->px() << endl;
+		    //check track doesn't overlap with the J/Psi candidate tracks
+		    if (Track2->track().key()==rmu1->track().key() || Track2->track().key()==rmu2->track().key() || Track2->track().key()==Track1->track().key()) continue; 
+						
+		    ///// cuts on charged tracks	
+		    if ( Track2->track()->hitPattern().numberOfValidPixelHits() < TrMinPixHits
+			 ||  Track2->track()->hitPattern().numberOfValidStripHits() < TrMinSiHits  
+			 ||  Track2->track()->chi2()/ Track2->track()->ndof() > TrMaxNormChi2
+			 ||  Track2->pt() < TrMinPt) 		continue;	      
+						
+
+		    //Get the Phi information				
+		    TransientTrack kaon1TT( Track1->track(), &(*bFieldHandle) );
+		    TransientTrack kaon2TT( Track2->track(), &(*bFieldHandle) );
+				
+		    if( !kaon1TT.isValid() || !kaon2TT.isValid() ) continue;
+
+		    const ParticleMass kaon_mass = 0.493677;
+		    float kaon_sigma = kaon_mass*1.e-6;
+						
+		    vector<RefCountedKinematicParticle> kaons;
+		    kaons.push_back( pFactory.particle( kaon1TT, kaon_mass, chi, ndf, kaon_sigma));
+		    kaons.push_back( pFactory.particle( kaon2TT, kaon_mass, chi, ndf, kaon_sigma));
+		    
+		    KinematicParticleVertexFitter PhiFitter;   
+		    RefCountedKinematicTree PhiVertexFitTree;
+		    PhiVertexFitTree = PhiFitter.fit(kaons); 
+		    if (!PhiVertexFitTree->isValid()) 	  continue; 
+	
+		    PhiVertexFitTree->movePointerToTheTop();				
+		    RefCountedKinematicParticle PhiCand_fromFit = PhiVertexFitTree->currentParticle();
+		    RefCountedKinematicVertex PhiCand_vertex_fromFit = PhiVertexFitTree->currentDecayVertex();
+
+		    if (!PhiCand_vertex_fromFit->vertexIsValid())     continue;
+				
+		    PhiVertexFitTree->movePointerToTheFirstChild();
+		    RefCountedKinematicParticle Kaon1Cand_fromFit = PhiVertexFitTree->currentParticle(); 
+		    PhiVertexFitTree->movePointerToTheNextChild();
+		    RefCountedKinematicParticle Kaon2Cand_fromFit = PhiVertexFitTree->currentParticle();
+				
+		    KinematicParameters Kaon1Cand_KP = Kaon1Cand_fromFit->currentState().kinematicParameters();
+		    KinematicParameters Kaon2Cand_KP = Kaon2Cand_fromFit->currentState().kinematicParameters();
+				
+		    //Fill the J/Psi vectors
+		    if ( PhiCand_fromFit->currentState().mass() < PhiMinMass || PhiCand_fromFit->currentState().mass() > PhiMaxMass)     continue;
+		    
+		    phiMass->push_back( PhiCand_fromFit->currentState().mass() );
+				
+		    phiDecayVtxX->push_back( PhiCand_vertex_fromFit->position().x() );
+		    phiDecayVtxY->push_back( PhiCand_vertex_fromFit->position().y() );
+		    phiDecayVtxZ->push_back( PhiCand_vertex_fromFit->position().z() );
+		    
+		    phiDecayVtxXE->push_back( sqrt( PhiCand_vertex_fromFit->error().cxx()) );
+		    phiDecayVtxYE->push_back( sqrt( PhiCand_vertex_fromFit->error().cyy()) );
+		    phiDecayVtxZE->push_back( sqrt( PhiCand_vertex_fromFit->error().czz()) );
+		    phiVtxCL->push_back( ChiSquaredProbability((double)( PhiCand_vertex_fromFit->chiSquared()),(double)( PhiCand_vertex_fromFit->degreesOfFreedom())) );
+		    phiVtxChi2->push_back( PhiCand_vertex_fromFit->chiSquared() );
+				
+		    phiPx->push_back( Kaon1Cand_KP.momentum().x() + Kaon2Cand_KP.momentum().x() );
+		    phiPy->push_back( Kaon1Cand_KP.momentum().y() + Kaon2Cand_KP.momentum().y() );
+		    phiPz->push_back( Kaon1Cand_KP.momentum().z() + Kaon2Cand_KP.momentum().z() );
+		    
+		    k1Idx->push_back(std::distance(thePATTrackHandle->begin(), Track1)); 
+		    k2Idx->push_back(std::distance(thePATTrackHandle->begin(), Track2));
+		    
+		    k1Px->push_back( Kaon1Cand_KP.momentum().x());
+		    k1Py->push_back( Kaon1Cand_KP.momentum().y());
+		    k1Pz->push_back( Kaon1Cand_KP.momentum().z());
+		    k1Chi2->push_back( Kaon1Cand_fromFit->chiSquared());
+		    k1NDF->push_back( Kaon1Cand_fromFit->degreesOfFreedom());
+
+		    k2Px->push_back( Kaon2Cand_KP.momentum().x());
+		    k2Py->push_back( Kaon2Cand_KP.momentum().y());
+		    k2Pz->push_back( Kaon2Cand_KP.momentum().z());
+		    k2Chi2->push_back( Kaon2Cand_fromFit->chiSquared());
+		    k2NDF->push_back( Kaon2Cand_fromFit->degreesOfFreedom());
+	    				      
+		    ++nPhi;
+		    kaons.clear();
+		    //////////////////////////////////////////////////////////////////////
+		    // check and cuts on the 3rd kaon
+		    for ( vector<pat::GenericParticle>::const_iterator Track3 = thePATTrackHandle->begin();
+			  Track3 != thePATTrackHandle->end(); ++Track3 ) 
+		      {
+			if( Track3->track().isNull() ) continue; 
+			//check track doesn't overlap with the J/Psi candidate tracks
+			if( Track3->track().key()==rmu1->track().key() || Track3->track().key()==rmu2->track().key())	continue;	      
+			//check track doesn't overlap with the Phi candidate tracks
+			if( Track3->track().key()==Track1->track().key() || Track3->track().key()==Track2->track().key()) continue;	      
+						
+			//cout << "kaon3 px = " << Track3->px() << endl;
+			///// cuts on charged tracks	
+			if ( Track3->track()->hitPattern().numberOfValidPixelHits() < TrMinPixHits
+			     ||  Track3->track()->hitPattern().numberOfValidStripHits() < TrMinSiHits 
+			     ||  Track3->track()->chi2()/ Track3->track()->ndof() > TrMaxNormChi2
+			     ||  Track3->pt() < TrMinPt)  continue;	      
+						
+			/////// cuts on tracks' Delta R								
+			math::XYZTLorentzVector JPsi = (rmu1->p4() + rmu2->p4());
+			math::XYZTLorentzVector Phi = (Track1->p4() + Track2->p4());
+			math::XYZTLorentzVector B = (rmu1->p4() + rmu2->p4() + Track1->p4() + Track2->p4() + Track3->p4()); 
+			//
+			float JPsiK1DR = sqrt(pow(JPsi.eta() - Track1->p4().eta(),2) + pow(JPsi.phi() - Track1->p4().phi(),2));
+			float JPsiK2DR = sqrt(pow(JPsi.eta() - Track2->p4().eta(),2) + pow(JPsi.phi() - Track2->p4().phi(),2));
+			float JPsiK3DR = sqrt(pow(JPsi.eta() - Track3->p4().eta(),2) + pow(JPsi.phi() - Track3->p4().phi(),2));
+		  
+			float BK1DR = sqrt(pow(B.eta() - Track1->p4().eta(),2) + pow(B.phi() - Track1->p4().phi(),2));
+			float BK2DR = sqrt(pow(B.eta() - Track2->p4().eta(),2) + pow(B.phi() - Track2->p4().phi(),2));
+			float BK3DR = sqrt(pow(B.eta() - Track3->p4().eta(),2) + pow(B.phi() - Track3->p4().phi(),2));
+
+			if (UseBchDR)
+			  {
+			    if (BK1DR > BchTrackMaxDR || BK2DR > BchTrackMaxDR || BK3DR > BchTrackMaxDR ) continue; 
+			  }
+			else 
+			  {
+			    if(JPsiK1DR > JPsiTrackMaxDR || JPsiK2DR > JPsiTrackMaxDR || JPsiK3DR > JPsiTrackMaxDR ) continue; 
+			  }
+		  
+		  
+			////////// cuts on J/Psi+phi+k mass window
+			if(((rmu1->p4() + rmu2->p4() + Track1->p4() + Track2->p4() + Track3->p4()).M() >= JPsiPhiKMaxMass )
+			   || ((rmu1->p4() + rmu2->p4() + Track1->p4() + Track2->p4() + Track3->p4()).M() < JPsiPhiKMinMass)) continue;
+						
+			//cout << "BEFORE FIT: Invariant mass of JPsi+Phi+K = " << (rmu1->p4() + rmu2->p4() + Track1->p4() + Track2->p4() + Track3->p4()).M() << endl;
+			//	cout << "BEFORE FIT: Invariant mass of JPsi = " << (rmu1->p4() + rmu2->p4()).M() << endl;
+			//	cout << "BEFORE FIT: Invariant mass of Phi = " << (Track1->p4() + Track2->p4()).M() << endl;
+			//	cout << "Muon1 px = " << rmu1->px() << ", Muon2 px = " << rmu2->px() << endl;
+			//	cout << "Kaon1 px = " << Track1->px() << ", Kaon2 px = " << Track2->px()  << ", Kaon3 px = " << Track3->px() << endl;
+
+			//have two oppositely charged muons, and two oppositely charged tracks: try to vertex them
+			TransientTrack kaon3TT( Track3->track(), &(*bFieldHandle) );						
+
+			if( !kaon3TT.isValid() ) continue;				
+			// Do mass constraint for Psi' cand and do mass constrained vertex fit
+			// creating the constraint with a small sigma to put in the resulting covariance 
+			// matrix in order to avoid singularities
+			//
+			vector<RefCountedKinematicParticle> bDaughters;
+			bDaughters.push_back(pFactory.particle( muon1TT, muon_mass, chi, ndf, muon_sigma));
+			bDaughters.push_back(pFactory.particle( muon2TT, muon_mass, chi, ndf, muon_sigma));
+			bDaughters.push_back(pFactory.particle( kaon1TT, kaon_mass, chi, ndf, kaon_sigma));
+			bDaughters.push_back(pFactory.particle( kaon2TT, kaon_mass, chi, ndf, kaon_sigma));
+			bDaughters.push_back(pFactory.particle( kaon3TT, kaon_mass, chi, ndf, kaon_sigma));
+						
+			RefCountedKinematicTree BVertexFitTree;
+
+			if(doJPsiMassConst)
+			  {
+			    ParticleMass jpsi_mass = 3.096916;
+			    MultiTrackKinematicConstraint * JPsi = new TwoTrackMassKinematicConstraint(jpsi_mass);
+			    KinematicConstrainedVertexFitter BFitter;
+			    BVertexFitTree = BFitter.fit(bDaughters, JPsi);	
+			  } 
+			else 
+			  {
+			    KinematicParticleVertexFitter BFitter;
+			    BVertexFitTree = BFitter.fit(bDaughters);
+			  }
+
+			if (!BVertexFitTree->isValid())		continue;	      
+			BVertexFitTree->movePointerToTheTop();
+			RefCountedKinematicParticle BCand_fromFit = BVertexFitTree->currentParticle();
+			RefCountedKinematicVertex BCand_vertex_fromFit = BVertexFitTree->currentDecayVertex();	      
+			//
+			if (!BCand_vertex_fromFit->vertexIsValid())     continue;
+	      
+			if ( BCand_vertex_fromFit->chiSquared()<0 || BCand_vertex_fromFit->chiSquared()>10000 )	continue;
+	      
+			if ( BCand_fromFit->currentState().mass() > 100 ) continue;
+	      
+			// fill candidate variables now
+			if (BCand_fromFit->currentState().mass() < 5. || BCand_fromFit->currentState().mass() > 5.6) continue;
+
+			bMass->push_back( BCand_fromFit->currentState().mass());			
+			//	cout << "AFTER FIT: Invariant mass of JPsi+Phi+K = " << BCand_fromFit->currentState().mass() << endl;
+
+			bPx->push_back( BCand_fromFit->currentState().globalMomentum().x());
+			bPy->push_back( BCand_fromFit->currentState().globalMomentum().y());
+			bPz->push_back( BCand_fromFit->currentState().globalMomentum().z());
+						
+			bPxE->push_back( sqrt( BCand_fromFit->currentState().kinematicParametersError().matrix()(3,3)));
+			bPyE->push_back( sqrt( BCand_fromFit->currentState().kinematicParametersError().matrix()(4,4)));
+			bPzE->push_back( sqrt( BCand_fromFit->currentState().kinematicParametersError().matrix()(5,5)));
+			
+			bVtxCL->push_back( ChiSquaredProbability((double)(BCand_vertex_fromFit->chiSquared()),(double)(BCand_vertex_fromFit->degreesOfFreedom())) );
+			bVtxChi2->push_back( BCand_vertex_fromFit->chiSquared() );
+			bDecayVtxX->push_back((*BCand_vertex_fromFit).position().x());
+			bDecayVtxY->push_back((*BCand_vertex_fromFit).position().y());
+			bDecayVtxZ->push_back((*BCand_vertex_fromFit).position().z());
+			bDecayVtxXE->push_back(sqrt((*BCand_vertex_fromFit).error().cxx()));
+			bDecayVtxYE->push_back(sqrt((*BCand_vertex_fromFit).error().cyy()));
+			bDecayVtxZE->push_back(sqrt((*BCand_vertex_fromFit).error().czz()));
+						
+			BVertexFitTree->movePointerToTheFirstChild();
+			RefCountedKinematicParticle Mu1Cand_fromFit =  BVertexFitTree->currentParticle();
+			BVertexFitTree->movePointerToTheNextChild();
+			RefCountedKinematicParticle Mu2Cand_fromFit = BVertexFitTree->currentParticle();
+			BVertexFitTree->movePointerToTheNextChild();
+			RefCountedKinematicParticle K1Cand_fromFit = BVertexFitTree->currentParticle();
+			BVertexFitTree->movePointerToTheNextChild();
+			RefCountedKinematicParticle K2Cand_fromFit = BVertexFitTree->currentParticle();
+			BVertexFitTree->movePointerToTheNextChild();
+			RefCountedKinematicParticle K3Cand_fromFit = BVertexFitTree->currentParticle();
+						
+			mu1fitPx->push_back( Mu1Cand_fromFit->currentState().globalMomentum().x());
+			mu1fitPy->push_back( Mu1Cand_fromFit->currentState().globalMomentum().y());
+			mu1fitPz->push_back( Mu1Cand_fromFit->currentState().globalMomentum().z());
+			mu1fitE->push_back( Mu1Cand_fromFit->currentState().kinematicParameters().energy());
+	      
+			mu2fitPx->push_back( Mu2Cand_fromFit->currentState().globalMomentum().x());
+			mu2fitPy->push_back( Mu2Cand_fromFit->currentState().globalMomentum().y());
+			mu2fitPz->push_back( Mu2Cand_fromFit->currentState().globalMomentum().z());
+			mu2fitE->push_back( Mu2Cand_fromFit->currentState().kinematicParameters().energy());
+	    
+			k1fitPx->push_back( K1Cand_fromFit->currentState().globalMomentum().x());
+			k1fitPy->push_back( K1Cand_fromFit->currentState().globalMomentum().y());
+			k1fitPz->push_back( K1Cand_fromFit->currentState().globalMomentum().z());
+			k1fitE->push_back( K1Cand_fromFit->currentState().kinematicParameters().energy());
+		  
+			k2fitPx->push_back( K2Cand_fromFit->currentState().globalMomentum().x());
+			k2fitPy->push_back( K2Cand_fromFit->currentState().globalMomentum().y());
+			k2fitPz->push_back( K2Cand_fromFit->currentState().globalMomentum().z());
+			k2fitE->push_back( K2Cand_fromFit->currentState().kinematicParameters().energy());
+								  
+			k3fitPx->push_back( K3Cand_fromFit->currentState().globalMomentum().x());
+			k3fitPy->push_back( K3Cand_fromFit->currentState().globalMomentum().y());
+			k3fitPz->push_back( K3Cand_fromFit->currentState().globalMomentum().z());
+			k3fitE->push_back( K3Cand_fromFit->currentState().kinematicParameters().energy());
+
+			//	cout << "Muon1 px = " << Mu1Cand_fromFit->currentState().globalMomentum().x() 
+			//     << ", Muon2 px = " << Mu2Cand_fromFit->currentState().globalMomentum().x() << endl;
+			//	cout << "Kaon1 px = " << K1Cand_fromFit->currentState().globalMomentum().x()
+			//     << ", Kaon2 px = " << K2Cand_fromFit->currentState().globalMomentum().x()
+			//     << ", Kaon3 px = " << K3Cand_fromFit->currentState().globalMomentum().x() << endl;
+
+						
+			///////////////////////////////////						
+			//											
+			vector<TransientVertex> pvs;
+			if (addBchLessPrimaryVertex_) 
+			  {
+			    VertexReProducer revertex(recVtxs, iEvent);
+			    Handle<TrackCollection> pvtracks;   
+			    iEvent.getByLabel(revertex.inputTracks(),   pvtracks);
+			    Handle<BeamSpot>        pvbeamspot;
+			    iEvent.getByLabel(revertex.inputBeamSpot(), pvbeamspot);
+			    //
+			    if (pvbeamspot.id() != beamSpotHandle.id()) 
+			      edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
+			    //
+			    const reco::Muon *rmu_1 = dynamic_cast<const reco::Muon *>(Muon1->originalObject());
+			    const reco::Muon *rmu_2 = dynamic_cast<const reco::Muon *>(Muon2->originalObject());
+			    //
+			    if (rmu_1 != 0 && rmu_2 != 0 && rmu_1->track().id() == pvtracks.id() && rmu_2->track().id() == pvtracks.id() 
+				&& Track1->track().id() ==  pvtracks.id() && Track2->track().id() ==  pvtracks.id() && Track3->track().id() ==  pvtracks.id()) { 
+			      TrackCollection BLess;
+			      BLess.reserve(pvtracks->size());
+			      for (size_t i = 0, n = pvtracks->size(); i < n; ++i) {
+				if (i == rmu_1->track().key()) continue;
+				if (i == rmu_2->track().key()) continue;
+				if (i == Track1->track().key()) continue;
+				if (i == Track2->track().key()) continue;
+				if (i == Track3->track().key()) continue;
+				BLess.push_back((*pvtracks)[i]);
+			      }
+			      pvs = revertex.makeVertices(BLess, *pvbeamspot, iSetup) ;
+			      if (!pvs.empty()) 
+				{
+				  Vertex BLessPV = Vertex(pvs.front());
+				  thePrimaryVtx = BLessPV;
+				}
+			    }
+			  }
+			//				
+			if (resolveAmbiguity_) {
+			  float minDz = 999999.;
+			  if (!addBchLessPrimaryVertex_) {
+			    for(VertexCollection::const_iterator itv = recVtxs->begin(), itvend = recVtxs->end(); itv != itvend; ++itv)
+			      {
+				float deltaZ = fabs((*BCand_vertex_fromFit).position().z() - itv->position().z()) ;
+				if ( deltaZ < minDz ) 
+				  {
+				    minDz = deltaZ;    
+				    thePrimaryVtx = Vertex(*itv);
+				  }
+			      }
+			  } else {
+			    for(vector<TransientVertex>::iterator itv2 = pvs.begin(), itvend2 = pvs.end(); itv2 != itvend2; ++itv2)
+			      {
+				float deltaZ = fabs((*BCand_vertex_fromFit).position().z() - itv2->position().z()) ;
+				if ( deltaZ < minDz ) {
+				  minDz = deltaZ;    
+				  Vertex BLessPV = Vertex(*itv2); 
+				  thePrimaryVtx = BLessPV;
+				}
+			      }
+			  }
+			} 
+			//						
+			PriVtxBCorrX->push_back( thePrimaryVtx.position().x());
+			PriVtxBCorrY->push_back( thePrimaryVtx.position().y());
+			PriVtxBCorrZ->push_back( thePrimaryVtx.position().z());
+			PriVtxBCorrXE->push_back( thePrimaryVtx.xError());
+			PriVtxBCorrYE->push_back( thePrimaryVtx.yError());
+			PriVtxBCorrZE->push_back( thePrimaryVtx.zError());
+			PriVtxBCorrCL->push_back( ChiSquaredProbability((double)(thePrimaryVtx.chi2()),(double)(thePrimaryVtx.ndof())) );
+			PriVtxBCorrChi2->push_back( thePrimaryVtx.chi2());
+			//			
+			///////////////////////////////////////////////////////////////////////////////
+			TVector3 b_vtx;
+			b_vtx.SetXYZ((*BCand_vertex_fromFit).position().x(), (*BCand_vertex_fromFit).position().y(), 0);
+						
+ 			TVector3 pvtx;
+ 			pvtx.SetXYZ(thePrimaryVtx.position().x(),thePrimaryVtx.position().y(),0);
+						
+			VertexDistanceXY b_vdistXY;
+												
+			TVector3 b_pperp(BCand_fromFit->currentState().globalMomentum().x(), BCand_fromFit->currentState().globalMomentum().y(), 0);
+			AlgebraicVector b_vpperp(3);
+			b_vpperp[0] = b_pperp.x();
+			b_vpperp[1] = b_pperp.y();
+			b_vpperp[2] = 0.;
+						
+			TVector3 b_vdiff = b_vtx - pvtx;
+			double b_cosAlpha = b_vdiff.Dot(b_pperp)/(b_vdiff.Perp()*b_pperp.Perp());
+			Measurement1D b_distXY = b_vdistXY.distance(Vertex(*BCand_vertex_fromFit), Vertex(thePrimaryVtx));
+			double b_ctauPV = b_distXY.value()*b_cosAlpha*BCand_fromFit->currentState().mass()/b_pperp.Perp();
+						
+			GlobalError b_vtx_err = (Vertex(*BCand_vertex_fromFit)).error();
+			GlobalError pvtx_err = thePrimaryVtx.error();
+			AlgebraicSymMatrix b_vXY_err = b_vtx_err.matrix()+ pvtx_err.matrix();
+			double b_ctauPV_err = sqrt(b_vXY_err.similarity(b_vpperp))*BCand_fromFit->currentState().mass()/(b_pperp.Perp2());
+			float b_lxyPV = b_vdiff.Dot(b_pperp)/b_pperp.Mag();
+			double b_lxyPV_err = sqrt(b_vXY_err.similarity(b_vpperp));  						
+
+			bCosAlphaPV->push_back(b_cosAlpha);
+			bCTauPV->push_back(b_ctauPV);
+			bCTauPVE->push_back(b_ctauPV_err);
+			bLxyPV->push_back(b_lxyPV);
+			bLxyPVE->push_back(b_lxyPV_err);			
+			
+			//Lifetime BS
+			pvtx.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), 0);
+			b_vdiff = b_vtx - pvtx;
+			b_cosAlpha = b_vdiff.Dot(b_pperp)/(b_vdiff.Perp()*b_pperp.Perp());
+			b_distXY = b_vdistXY.distance(Vertex(*BCand_vertex_fromFit), Vertex(theBeamSpotVtx));
+			double b_ctauBS = b_distXY.value()*b_cosAlpha*BCand_fromFit->currentState().mass()/b_pperp.Perp();
+			GlobalError b_vtx_err1 = (Vertex(*BCand_vertex_fromFit)).error();
+			GlobalError pvtx_err1 = theBeamSpotVtx.error();
+			AlgebraicSymMatrix b_vXY_err1 = b_vtx_err1.matrix()+ pvtx_err1.matrix();
+			double b_ctauBS_err = sqrt(b_vXY_err1.similarity(b_vpperp))*BCand_fromFit->currentState().mass()/(b_pperp.Perp2());
+			float b_lxyBS = b_vdiff.Dot(b_pperp)/b_pperp.Mag();
+			double b_lxyBS_err = sqrt(b_vXY_err1.similarity(b_vpperp)); 
+						
+			bCosAlphaBS->push_back(b_cosAlpha);
+			bCTauBS->push_back(b_ctauBS);
+			bCTauBSE->push_back(b_ctauBS_err);
+			bLxyBS->push_back(b_lxyBS);
+			bLxyBSE->push_back(b_lxyBS_err);
+ 
+			jpsiIdx->push_back(nJPsi-1);
+			phiIdx->push_back(nPhi-1);
+			k3Idx->push_back(std::distance(thePATTrackHandle->begin(), Track3));
+						
+			nB++;
+						
+			bDaughters.clear();
+		      }// 3rd loop over tracks 
+		  }// 2nd loop over tracks 
+	      }// 1st loop over tracks
+	    }// 2nd loop over muons (look for mu-)
+	  }//first loop over muons (look for mu+)
+	} // if there are two muons
+    } // end if(decayChainOK)
+  
+  // AT THE END OF THE EVENT fill the tree and clear the vectors
+  // ===========================================================
+  //	
+  Y_One_Tree_->Fill();  
+  //
+  //
+  // trigger stuff
+  trigRes->clear(); trigNames->clear(); L1TT->clear(); MatchTriggerNames->clear(); 
+  //
+  // event numbers
+  runNum = 0; evtNum=0; lumiNum=0;
+  //
+  // counters
+  doubleMuonsEvents = 0;
+  nMCB = 0;
+  nB = 0; nJPsi = 0; nPhi = 0; nMu =0; nTrk = 0;
+  //
+  // Primary Vertex	
+  priVtxX = 0; priVtxY = 0; priVtxZ = 0; 
+  priVtxXE = 0; priVtxYE = 0; priVtxZE = 0; 
+  priVtxNormChi2 = 0; priVtxChi2 = 0; priVtxCL = 0;
+  //
+  // indices
+  jpsiIdx->clear(); phiIdx->clear(); k1Idx->clear(); k2Idx->clear(); k3Idx->clear(); mu1Idx->clear(); mu2Idx->clear();
+  //
+//   // MC Analysis
+  if (doMC) {	 
+    MCjpsiPx->clear(); MCjpsiPy->clear(); MCjpsiPz->clear(); 
+    MCphiPx->clear(); MCphiPy->clear(); MCphiPz->clear(); 
+    MCkaonPx->clear(); MCkaonPy->clear(); MCkaonPz->clear(); 
+  }
+
+  // generic muons
+  muPx->clear(); muPy->clear(); muPz->clear(); 
+  muD0->clear(); muDz->clear(); muChi2->clear(); muGlChi2->clear();
+  mufHits->clear(); muFirstBarrel->clear(); muFirstEndCap->clear();
+  muDzVtx->clear(); muDxyVtx->clear();
+  muNDF->clear(); muGlNDF->clear(); muPhits->clear(); muShits->clear(); muGlMuonHits->clear(); muType->clear(); 
+  muQual->clear(); muCharge->clear();
+  //
+  // generic tracks	
+  trPx->clear(); trPy->clear(); trPz->clear(); trE->clear();	
+  trNDF->clear(); trPhits->clear(); trShits->clear(); trChi2->clear();
+  trD0->clear(); trD0E->clear(); trDz->clear(); trCharge->clear();
+  trfHits->clear(); trFirstBarrel->clear(); trFirstEndCap->clear();
+  trDzVtx->clear(); trDxyVtx->clear();
+  tr_nsigdedx->clear(); tr_dedx->clear(); tr_dedxMass->clear(); tr_theo->clear(); tr_sigma->clear();
+  //
+  // J/Psi cand
+  jpsiMass->clear(); jpsiVtxCL->clear(); jpsiVtxChi2->clear(); 
+  jpsiPx->clear(); jpsiPy->clear(); jpsiPz->clear();
+  jpsiDecayVtxX->clear(); jpsiDecayVtxY->clear(); jpsiDecayVtxZ->clear();
+  jpsiDecayVtxXE->clear(); jpsiDecayVtxYE->clear(); jpsiDecayVtxZE->clear();
+  jpsiCTauPV->clear(); jpsiCTauPVE->clear(); jpsiFL->clear(); jpsiFLE->clear();
+  JPsiMuonTrigMatch->clear();
+  //
+  // muons from J/Psi fit
+  mu1Px->clear(); mu1Py->clear(); mu1Pz->clear(); mu1Chi2->clear(); mu1NDF->clear();
+  mu2Px->clear(); mu2Py->clear(); mu2Pz->clear(); mu2Chi2->clear(); mu2NDF->clear();
+  //
+  // Phi cand
+  phiMass->clear(); phiVtxCL->clear(); phiVtxChi2->clear(); 
+  phiPx->clear(); phiPy->clear(); phiPz->clear();
+  phiDecayVtxX->clear(); phiDecayVtxY->clear(); phiDecayVtxZ->clear();
+  phiDecayVtxXE->clear(); phiDecayVtxYE->clear(); phiDecayVtxZE->clear();
+  //
+  // kaons from Phi fit
+  k1Px->clear(); k1Py->clear(); k1Pz->clear(); k1Chi2->clear(); k1NDF->clear();
+  k2Px->clear(); k2Py->clear(); k2Pz->clear(); k2Chi2->clear(); k2NDF->clear();
+  //
+  // B cand	
+  bMass->clear(); bVtxCL->clear(); bVtxChi2->clear(); 
+  bPx->clear(); bPy->clear(); bPz->clear(); 
+  bPxE->clear(); bPyE->clear(); bPzE->clear();
+  bDecayVtxX->clear(); bDecayVtxY->clear(); bDecayVtxZ->clear(); 
+  bDecayVtxXE->clear(); bDecayVtxYE->clear(); bDecayVtxZE->clear(); 
+  //
+  // Primary Vertex with "B correction"
+  PriVtxBCorrX->clear(); PriVtxBCorrY->clear(); PriVtxBCorrZ->clear(); 
+  PriVtxBCorrXE->clear(); PriVtxBCorrYE->clear(); PriVtxBCorrZE->clear();  
+  PriVtxBCorrChi2->clear(); PriVtxBCorrCL->clear();
+  //
+  // B lifetime
+  bLxyPV->clear(); bCosAlphaPV->clear(); bCTauPV->clear(); bCTauPVE->clear(); bLxyPVE->clear(); 
+  bLxyBS->clear(); bCosAlphaBS->clear(); bCTauBS->clear(); bCTauBSE->clear(); bLxyBSE->clear(); 
+  //
+  // muons and tracks after B Cand fit
+  k1fitPx->clear(); k1fitPy->clear(); k1fitPz->clear(); k1fitE->clear();
+  k2fitPx->clear(); k2fitPy->clear(); k2fitPz->clear(); k2fitE->clear();
+  k3fitPx->clear(); k3fitPy->clear(); k3fitPz->clear(); k3fitE->clear();
+  mu1fitPx->clear(); mu1fitPy->clear(); mu1fitPz->clear(); mu1fitE->clear();
+  mu2fitPx->clear(); mu2fitPy->clear(); mu2fitPz->clear(); mu2fitE->clear();
+	
+}// analyze
+
+
+// ------------ method called once each job just before starting event loop  ------------
+void JPsiPhiKPAT::beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup){
+  //   bool changed = true;
+  //   proccessName_="HLT";
+  //   hltConfig_.init(iRun,iSetup,proccessName_,changed);
+}
+
+
+void JPsiPhiKPAT::beginJob()
+{
+  edm::Service<TFileService> fs;
+	
+  Y_One_Tree_ = fs->make<TTree>("Y_data", "");
+
+  Y_One_Tree_->Branch("TrigRes", &trigRes);
+  Y_One_Tree_->Branch("TrigNames", &trigNames);
+  Y_One_Tree_->Branch("MatchTriggerNames", &MatchTriggerNames);
+  Y_One_Tree_->Branch("L1TrigRes", &L1TT);
+  //
+  Y_One_Tree_->Branch("evtNum",&evtNum,"evtNum/i");
+  Y_One_Tree_->Branch("runNum",&runNum,"runNum/i");
+  Y_One_Tree_->Branch("lumiNum", &lumiNum, "lumiNum/i");
+
+  Y_One_Tree_->Branch("doubleMuonsEvents",&doubleMuonsEvents,"doubleMuonsEvents/i");
+  // Primary Vertex
+  Y_One_Tree_->Branch("PriVtxX",&priVtxX, "priVtxX/f");
+  Y_One_Tree_->Branch("PriVtxY",&priVtxY, "priVtxY/f");
+  Y_One_Tree_->Branch("PriVtxZ",&priVtxZ, "priVtxZ/f");
+  Y_One_Tree_->Branch("PriVtxXErr",&priVtxXE, "priVtxXE/f");
+  Y_One_Tree_->Branch("PriVtxYErr",&priVtxYE, "priVtxYE/f");
+  Y_One_Tree_->Branch("PriVtxZErr",&priVtxZE, "priVtxZE/f");
+  Y_One_Tree_->Branch("PriVtxNormChi2",&priVtxNormChi2, "priVtxNormChi2/f");
+  Y_One_Tree_->Branch("PriVtxChi2",&priVtxChi2, "priVtxChi2/f");
+  Y_One_Tree_->Branch("PriVtxCL",&priVtxCL, "priVtxCL/f");
+  // MC Analysis
+  if (doMC)
+    {	 
+      Y_One_Tree_->Branch("nMCB",&nMCB,"nMCB/i");
+      Y_One_Tree_->Branch("MCjpsiPx",&MCjpsiPx);
+      Y_One_Tree_->Branch("MCjpsiPy",&MCjpsiPy);
+      Y_One_Tree_->Branch("MCjpsiPz",&MCjpsiPz);
+      Y_One_Tree_->Branch("MCphiPx",&MCphiPx);
+      Y_One_Tree_->Branch("MCphiPy",&MCphiPy);
+      Y_One_Tree_->Branch("MCphiPz",&MCphiPz);
+      Y_One_Tree_->Branch("MCkaonPx",&MCkaonPx);
+      Y_One_Tree_->Branch("MCkaonPy",&MCkaonPy);
+      Y_One_Tree_->Branch("MCkaonPz",&MCkaonPz);
+    }
+  // Generic muons
+  Y_One_Tree_->Branch("nMu", &nMu, "nMu/i");
+  Y_One_Tree_->Branch("muPx",&muPx);
+  Y_One_Tree_->Branch("muPy",&muPy);
+  Y_One_Tree_->Branch("muPz",&muPz);
+  Y_One_Tree_->Branch("muD0",&muD0);
+  Y_One_Tree_->Branch("muDz",&muDz);
+  Y_One_Tree_->Branch("muChi2",&muChi2);
+  Y_One_Tree_->Branch("muNDF",&muNDF);
+  Y_One_Tree_->Branch("muPhits",&muPhits);
+  Y_One_Tree_->Branch("muShits",&muShits);
+  Y_One_Tree_->Branch("muGlChi2",&muGlChi2);
+  Y_One_Tree_->Branch("muGlNDF",&muGlNDF);
+  Y_One_Tree_->Branch("muGlMuonHits",&muGlMuonHits);
+  Y_One_Tree_->Branch("muType",&muType);
+  Y_One_Tree_->Branch("muQual",&muQual);
+  Y_One_Tree_->Branch("muCharge", &muCharge);
+  //
+  Y_One_Tree_->Branch("mufHits", &mufHits);
+  Y_One_Tree_->Branch("muFirstBarrel", &muFirstBarrel);
+  Y_One_Tree_->Branch("muFirstEndCap", &muFirstEndCap);
+  Y_One_Tree_->Branch("muDzVtx", &muDzVtx);
+  Y_One_Tree_->Branch("muDxyVtx", &muDxyVtx);
+  // Generic tracks
+  //
+  Y_One_Tree_->Branch("nTrk", &nTrk, "nTrk/i");
+  //
+  Y_One_Tree_->Branch("trackPx", &trPx);
+  Y_One_Tree_->Branch("trackPy", &trPy);
+  Y_One_Tree_->Branch("trackPz", &trPz);
+  Y_One_Tree_->Branch("trackEnergy", &trE);
+  Y_One_Tree_->Branch("trackNDF", &trNDF);
+  Y_One_Tree_->Branch("trackPhits", &trPhits);
+  Y_One_Tree_->Branch("trackShits", &trShits);
+  Y_One_Tree_->Branch("trackChi2", &trChi2);
+  Y_One_Tree_->Branch("trackD0", &trD0);
+  Y_One_Tree_->Branch("trackD0Err", &trD0E);
+  Y_One_Tree_->Branch("trackDz", &trDz);
+  Y_One_Tree_->Branch("trackCharge", &trCharge);
+  Y_One_Tree_->Branch("trackfHits", &trfHits);
+  Y_One_Tree_->Branch("trackFirstBarrel", &trFirstBarrel);
+  Y_One_Tree_->Branch("trackFirstEndCap", &trFirstEndCap);
+  Y_One_Tree_->Branch("trackDzVtx", &trDzVtx);
+  Y_One_Tree_->Branch("trackDxyVtx", &trDxyVtx);
+  //
+  Y_One_Tree_->Branch("tr_nsigdedx", &tr_nsigdedx);
+  Y_One_Tree_->Branch("tr_dedx", &tr_dedx);
+  Y_One_Tree_->Branch("tr_dedxMass", &tr_dedxMass);
+  Y_One_Tree_->Branch("tr_theo", &tr_theo);
+  Y_One_Tree_->Branch("tr_sigma", &tr_sigma);
+  // Indices
+  Y_One_Tree_->Branch("JPsiIdx", &jpsiIdx);
+  Y_One_Tree_->Branch("PhiIdx", &phiIdx);
+  Y_One_Tree_->Branch("k1Idx", &k1Idx);
+  Y_One_Tree_->Branch("k2Idx", &k2Idx);
+  Y_One_Tree_->Branch("k3Idx", &k3Idx);
+  Y_One_Tree_->Branch("mu1Idx",&mu1Idx);
+  Y_One_Tree_->Branch("mu2Idx",&mu2Idx);
+  // J/Psi
+  Y_One_Tree_->Branch("nJPsi",&nJPsi,"nJPsi/i");
+  Y_One_Tree_->Branch("JPsiMass",&jpsiMass);
+  Y_One_Tree_->Branch("JPsiVtxCL",&jpsiVtxCL);
+  Y_One_Tree_->Branch("JPsiVtxChi2",&jpsiVtxChi2);
+  Y_One_Tree_->Branch("JPsiPx",&jpsiPx);
+  Y_One_Tree_->Branch("JPsiPy",&jpsiPy);
+  Y_One_Tree_->Branch("JPsiPz",&jpsiPz);
+  Y_One_Tree_->Branch("JPsiCTauPV", &jpsiCTauPV);
+  Y_One_Tree_->Branch("JPsiCTauPVErr", &jpsiCTauPVE);
+  Y_One_Tree_->Branch("JPsiFL", &jpsiFL);
+  Y_One_Tree_->Branch("JPsiFLErr", &jpsiFLE);
+  Y_One_Tree_->Branch("JPsiDecayVtxX",&jpsiDecayVtxX);
+  Y_One_Tree_->Branch("JPsiDecayVtxY",&jpsiDecayVtxY);
+  Y_One_Tree_->Branch("JPsiDecayVtxZ",&jpsiDecayVtxZ);
+  Y_One_Tree_->Branch("JPsiDecayVtxXErr",&jpsiDecayVtxXE);
+  Y_One_Tree_->Branch("JPsiDecayVtxYErr",&jpsiDecayVtxYE);
+  Y_One_Tree_->Branch("JPsiDecayVtxZErr",&jpsiDecayVtxZE);
+  // muons from J/Psi fit
+  Y_One_Tree_->Branch("mu1Px",&mu1Px);
+  Y_One_Tree_->Branch("mu1Py",&mu1Py);
+  Y_One_Tree_->Branch("mu1Pz",&mu1Pz);
+  Y_One_Tree_->Branch("mu1Chi2",&mu1Chi2);
+  Y_One_Tree_->Branch("mu1NDF",&mu1NDF);
+  Y_One_Tree_->Branch("mu2Px",&mu2Px);
+  Y_One_Tree_->Branch("mu2Py",&mu2Py);
+  Y_One_Tree_->Branch("mu2Pz",&mu2Pz);
+  Y_One_Tree_->Branch("mu2Chi2",&mu2Chi2);
+  Y_One_Tree_->Branch("mu2NDF",&mu2NDF);
+  Y_One_Tree_->Branch("JPsiMuonTrigMatch",&JPsiMuonTrigMatch);
+  // Phi
+  Y_One_Tree_->Branch("nPhi",&nPhi,"nPhi/i");
+  Y_One_Tree_->Branch("PhiMass",&phiMass);
+  Y_One_Tree_->Branch("PhiVtxCL",&phiVtxCL);
+  Y_One_Tree_->Branch("PhiVtxChi2",&phiVtxChi2);
+  Y_One_Tree_->Branch("PhiPx",&phiPx);
+  Y_One_Tree_->Branch("PhiPy",&phiPy);
+  Y_One_Tree_->Branch("PhiPz",&phiPz);
+  Y_One_Tree_->Branch("PhiDecayVtxX",&phiDecayVtxX);
+  Y_One_Tree_->Branch("PhiDecayVtxY",&phiDecayVtxY);
+  Y_One_Tree_->Branch("PhiDecayVtxZ",&phiDecayVtxZ);
+  Y_One_Tree_->Branch("PhiDecayVtxXErr",&phiDecayVtxXE);
+  Y_One_Tree_->Branch("PhiDecayVtxYErr",&phiDecayVtxYE);
+  Y_One_Tree_->Branch("PhiDecayVtxZErr",&phiDecayVtxZE);
+  // Kaons from Phi fit
+  Y_One_Tree_->Branch("k1Px",&k1Px);
+  Y_One_Tree_->Branch("k1Py",&k1Py);
+  Y_One_Tree_->Branch("k1Pz",&k1Pz);
+  Y_One_Tree_->Branch("k1Chi2",&k1Chi2);
+  Y_One_Tree_->Branch("k1NDF",&k1NDF);
+  Y_One_Tree_->Branch("k2Px",&k2Px);
+  Y_One_Tree_->Branch("k2Py",&k2Py);
+  Y_One_Tree_->Branch("k2Pz",&k2Pz);
+  Y_One_Tree_->Branch("k2Chi2",&k2Chi2);
+  Y_One_Tree_->Branch("k2NDF",&k2NDF);
+  // B Cand
+  Y_One_Tree_->Branch("nB",&nB,"nB/i");
+  Y_One_Tree_->Branch("BMass",&bMass);
+  Y_One_Tree_->Branch("BVtxCL",&bVtxCL);
+  Y_One_Tree_->Branch("BVtxChi2",&bVtxChi2);
+  Y_One_Tree_->Branch("BPx",&bPx);
+  Y_One_Tree_->Branch("BPy",&bPy);
+  Y_One_Tree_->Branch("BPz",&bPz);
+  Y_One_Tree_->Branch("BPxErr",&bPxE);
+  Y_One_Tree_->Branch("BPyErr",&bPyE);
+  Y_One_Tree_->Branch("BPzErr",&bPzE);
+  Y_One_Tree_->Branch("BDecayVtxX",&bDecayVtxX);
+  Y_One_Tree_->Branch("BDecayVtxY",&bDecayVtxY);
+  Y_One_Tree_->Branch("BDecayVtxZ",&bDecayVtxZ);
+  Y_One_Tree_->Branch("BDecayVtxXErr",&bDecayVtxXE);
+  Y_One_Tree_->Branch("BDecayVtxYErr",&bDecayVtxYE);
+  Y_One_Tree_->Branch("BDecayVtxZErr",&bDecayVtxZE);
+  //
+  Y_One_Tree_->Branch("BLxyPV", &bLxyPV);
+  Y_One_Tree_->Branch("BLxyPVErr", &bLxyPVE);
+  Y_One_Tree_->Branch("BCosAlphaPV", &bCosAlphaPV);
+  Y_One_Tree_->Branch("BCTauPV", &bCTauPV);
+  Y_One_Tree_->Branch("BCTauPVErr", &bCTauPVE);
+  Y_One_Tree_->Branch("BLxyBS", &bLxyBS);
+  Y_One_Tree_->Branch("BLxyBSErr", &bLxyBSE);
+  Y_One_Tree_->Branch("BCosAlphaBS", &bCosAlphaBS);
+  Y_One_Tree_->Branch("BCTauBS", &bCTauBS);
+  Y_One_Tree_->Branch("BCTauBSErr", &bCTauBSE);
+  //	
+  Y_One_Tree_->Branch("PriVtxBCorrX",&PriVtxBCorrX);
+  Y_One_Tree_->Branch("PriVtxBCorrY",&PriVtxBCorrY);
+  Y_One_Tree_->Branch("PriVtxBCorrZ",&PriVtxBCorrZ);
+  Y_One_Tree_->Branch("PriVtxBCorrXErr",&PriVtxBCorrXE);
+  Y_One_Tree_->Branch("PriVtxBCorrYErr",&PriVtxBCorrYE);
+  Y_One_Tree_->Branch("PriVtxBCorrZErr",&PriVtxBCorrZE);
+  Y_One_Tree_->Branch("PriVtxBCorrChi2",&PriVtxBCorrChi2);
+  Y_One_Tree_->Branch("PriVtxBCorrCL",&PriVtxBCorrCL);
+  // Kaons and muons from B fit
+  Y_One_Tree_->Branch("Kaon1Px", &k1fitPx);
+  Y_One_Tree_->Branch("Kaon1Py", &k1fitPy);
+  Y_One_Tree_->Branch("Kaon1Pz", &k1fitPz);
+  Y_One_Tree_->Branch("Kaon1E", &k1fitE);
+  //
+  Y_One_Tree_->Branch("Kaon2Px", &k2fitPx);
+  Y_One_Tree_->Branch("Kaon2Py", &k2fitPy);
+  Y_One_Tree_->Branch("Kaon2Pz", &k2fitPz);
+  Y_One_Tree_->Branch("Kaon2E", &k2fitE);
+  //
+  Y_One_Tree_->Branch("Kaon3Px", &k3fitPx);
+  Y_One_Tree_->Branch("Kaon3Py", &k3fitPy);
+  Y_One_Tree_->Branch("Kaon3Pz", &k3fitPz);
+  Y_One_Tree_->Branch("Kaon3E", &k3fitE);
+  //
+  Y_One_Tree_->Branch("Muon1Px", &mu1fitPx);
+  Y_One_Tree_->Branch("Muon1Py", &mu1fitPy);
+  Y_One_Tree_->Branch("Muon1Pz", &mu1fitPz);
+  Y_One_Tree_->Branch("Muon1E", &mu1fitE);
+  //
+  Y_One_Tree_->Branch("Muon2Px", &mu2fitPx);
+  Y_One_Tree_->Branch("Muon2Py", &mu2fitPy);
+  Y_One_Tree_->Branch("Muon2Pz", &mu2fitPz);
+  Y_One_Tree_->Branch("Muon2E", &mu2fitE);
+}// begin Job
+
+// ------------ method called once each job just after ending the event loop  ------------
+void 
+JPsiPhiKPAT::endJob() {
+  Y_One_Tree_->GetDirectory()->cd();
+  Y_One_Tree_->Write();
+}//endjob
+
+double JPsiPhiKPAT::getSigmaOfLogdEdx(double logde)
+{
+	return 0.3;
+}
+
+float JPsiPhiKPAT::getEnergyLoss(const reco::TrackRef & track)
+{
+	if(iexception_dedx==1)return 9999.;
+	//   const DeDxDataValueMap & eloss = *energyLoss;
+	const reco::DeDxDataValueMap & eloss = *energyLoss;
+	return eloss[track].dEdx();
+}
+
+double JPsiPhiKPAT::nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma)
+{  
+	
+	//   ch = (track->charge() > 0 ? 0 : 1);
+    
+	// no usable dE/dx if p > 2
+	
+	double  nsigma=99;
+	if(iexception_dedx==1)return nsigma;
+	
+	//   if(track->p() > 2) return nsigma;
+	
+	double m  = 0.13957; 
+	double bg = track->p() / m;
+	
+	theo = getLogdEdx(bg);
+	
+	// !!!!!!
+	int nhitr = track->numberOfValidHits();
+	
+	double meas = log(getEnergyLoss(track));
+	sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
+	//   double errdedxTrk = eloss[trk1Ref].dEdxError();
+	if(sigma>0)nsigma=(meas-theo)/sigma;
+	return nsigma;
+}
+
+
+double JPsiPhiKPAT::getLogdEdx(double bg)
+{
+	const double a =  3.25 ;
+	const double b =  0.288;
+	const double c = -0.852;
+	
+	double beta = bg/sqrt(bg*bg + 1);
+	double dedx = log( a/(beta*beta) + b * log(bg) + c );
+	
+    return dedx;
+	
+}
+
+
+double JPsiPhiKPAT::GetMass(const reco::TrackRef & track){
+	double P = track->p();
+	double C = 2.625;
+	double K = 2.495;
+	double I = getEnergyLoss(track);
+	return sqrt((I-C)/K)*P;
+}
+
+
+
+//define this as a plug-in
+DEFINE_FWK_MODULE(JPsiPhiKPAT);
+
