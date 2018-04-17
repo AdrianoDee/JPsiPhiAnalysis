@@ -402,6 +402,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   Vertex thePrimaryVtx, theBeamSpotVtx;
   math::XYZPoint RefVtx;
+
   Int_t thePrimaryVtx_multiplicity = -1 ;
 
   reco::BeamSpot beamSpot;
@@ -442,6 +443,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   KalmanVertexFitter vtxFitter(true);
 
   // RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
+  pV = thePrimaryVtx;
   n_pV = thePrimaryVtx_multiplicity ;
   // priVtx_X = (thePrimaryVtx.position().x()) ;
   // priVtx_Y = (thePrimaryVtx.position().y()) ;
