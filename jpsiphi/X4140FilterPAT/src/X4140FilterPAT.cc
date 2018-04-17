@@ -34,7 +34,7 @@
 // class declaration
 //
 
-class X4140FilterPAT : public edm::EDProducer {
+class X4140FilterPAT : public edm::EDFilter {
    public:
       explicit X4140FilterPAT(const edm::ParameterSet&);
       ~X4140FilterPAT();
