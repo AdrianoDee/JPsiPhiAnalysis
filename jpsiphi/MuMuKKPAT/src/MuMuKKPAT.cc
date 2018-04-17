@@ -2066,7 +2066,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("lumiNum", &lumiNum, "lumiNum/i");
 
             mumukktree->Branch("pV", "reco::Vertex", &pV);
-            mumukktree->Branch("n_pV", &n_pV, "n_pV/f")
+            mumukktree->Branch("n_pV", &n_pV, "n_pV/f");
             mumukktree->Branch("tracksPtSq_pV", &tracksPtSq_pV, "tracksPtSq_pV/f");
 
             // mumukktree->Branch("priVtx_X", &priVtx_X, "priVtx_X/f");
