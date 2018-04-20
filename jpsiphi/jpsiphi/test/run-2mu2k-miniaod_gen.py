@@ -102,7 +102,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
                           isMC = cms.bool(True),
                           OnlyBest = cms.bool(True),
-                          OnlyGen = cms.bool(False),
+                          OnlyGen = cms.bool(True),
                           HLTs = hltpaths
                           )
 
