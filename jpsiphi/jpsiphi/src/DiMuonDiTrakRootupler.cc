@@ -259,7 +259,6 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         if (isMC_ ) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
-           dimuonditrk_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
            dimuonditrk_tree->Branch("gen_muonp_p4",  "TLorentzVector",  &gen_muonp_p4);
@@ -449,10 +448,10 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
         //mother_pdgId  = GetAncestor(adimuon)->pdgId();
         break;
-      } else dimuon_pdgId = 0;
+      } else gen_dimuonditrk_pdgId = 0;
     }  // if ( p_id
   } // for (size
-  if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+  if ( gen_dimuonditrk_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
 }  // end if isMC
 
 
