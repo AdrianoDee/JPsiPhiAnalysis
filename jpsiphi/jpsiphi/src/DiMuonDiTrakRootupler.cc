@@ -72,6 +72,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
   bool isMC_,OnlyBest_,OnlyGen_ ;
+  UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
@@ -373,12 +374,12 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
       int foundit = 1;
+      bool jpsi = false, phi = false;
       gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
       for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
 
         const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
         const reco::Candidate * d = &(*packed)[j];
-        bool jpsi = false, phi = false;
 
         if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && (aditrkdimu==motherInPrunedCollection) ) {
           gen_dimuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
