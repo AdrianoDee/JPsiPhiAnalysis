@@ -71,7 +71,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_;
-  bool isMC_,OnlyBest_;
+  bool isMC_,OnlyBest_,OnlyGen_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
@@ -180,6 +180,9 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+        OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
+        pdgid_(iConfig.getParameter<bool>("Mother_pdg")),
+        pdgid_(iConfig.getParameter<bool>("Daughter_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         treeName_(iConfig.getParameter<std::string>("TreeName"))
@@ -266,6 +269,9 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         dimuonditrk_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/O");
 
+        genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
+        packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
+
 }
 
 DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
@@ -340,6 +346,46 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   isBestCandidate = true;
 
 // grabbing dimuontt information
+
+edm::Handle<reco::GenParticleCollection> pruned;
+iEvent.getByToken(genCands_, pruned);
+
+// Packed particles are all the status 1. The navigation to pruned is possible (the other direction should be made by hand)
+edm::Handle<pat::PackedGenParticleCollection> packed;
+iEvent.getByToken(packCands_,  packed);
+
+
+if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+  for (size_t i=0; i<pruned->size(); i++) {
+    const reco::Candidate *adimuon = &(*pruned)[i];
+    if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
+      int foundit = 1;
+      dimuon_pdgId = adimuon->pdgId();
+      for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
+        const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
+        const reco::Candidate * d = &(*packed)[j];
+        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
+          gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+          foundit++;
+        }
+        if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
+          gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+          foundit++;
+        }
+        if ( foundit == 3 ) break;
+      }
+      if ( foundit == 3 ) {
+        gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
+        mother_pdgId  = GetAncestor(adimuon)->pdgId();
+        break;
+      } else dimuon_pdgId = 0;
+    }  // if ( p_id
+  } // for (size
+  if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+}  // end if isMC
+
+
+if(!OnlyGen_)
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!dimuonditrk_rf_cand_handle.isValid()) std::cout<< "No dimuonditrk_rf information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit

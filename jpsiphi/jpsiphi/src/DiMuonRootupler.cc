@@ -101,6 +101,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
   Int_t mother_pdgId;
   Int_t dimuon_pdgId;
+  TLorentzVector gen_mother_p4;
 	TLorentzVector gen_dimuon_p4;
 	TLorentzVector gen_muonP_p4;
 	TLorentzVector gen_muonM_p4;
@@ -162,6 +163,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
+     dimuon_tree->Branch("gen_mother_p4", "TLorentzVector",  &gen_mother_p4);
      dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
      dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
      dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
@@ -254,6 +256,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_mother_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
@@ -287,6 +290,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         if ( foundit == 3 ) {
           gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
           mother_pdgId  = GetAncestor(adimuon)->pdgId();
+          auto mother = GetAncestor(adimuon);
+          gen_mother_p4.SetPtEtaPhiM(mother->pt(),mother->eta(),mother->phi(),mother->mass());
           break;
         } else dimuon_pdgId = 0;
       }  // if ( p_id
