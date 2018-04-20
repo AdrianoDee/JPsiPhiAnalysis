@@ -92,7 +92,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         )
 
 
-process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
+process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootuplerGEN',
                           dimuons = cms.InputTag("nothing"),
                           muons = cms.InputTag("replaceme"),
                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
