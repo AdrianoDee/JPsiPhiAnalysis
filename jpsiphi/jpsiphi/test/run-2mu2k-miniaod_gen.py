@@ -106,5 +106,4 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           HLTs = hltpaths
                           )
 
-process.p = cms.Path(process.triggerSelection *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+process.p = cms.Path(process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
