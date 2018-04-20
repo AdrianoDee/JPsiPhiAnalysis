@@ -106,7 +106,7 @@ class DiMuonRootuplerGEN:public edm::EDAnalyzer {
 	TLorentzVector gen_muonP_p4;
 	TLorentzVector gen_muonM_p4;
 
-  edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
+  edm::EDGetTokenT<std::vector<reco::GenParticle>> genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 
 };
