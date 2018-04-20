@@ -64,7 +64,7 @@ class DiMuonRootuplerGEN:public edm::EDAnalyzer {
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuon_Label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  pdgid_;
+  int  pdgid_, pdgid_mother;
   std::vector<double> DimuonMassCuts_;
 	bool isMC_;
   bool OnlyBest_;
@@ -102,6 +102,7 @@ class DiMuonRootuplerGEN:public edm::EDAnalyzer {
   Int_t mother_pdgId;
   Int_t dimuon_pdgId;
   TLorentzVector gen_mother_p4;
+  TLorentzVector gen_b_p4;
 	TLorentzVector gen_dimuon_p4;
 	TLorentzVector gen_muonP_p4;
 	TLorentzVector gen_muonM_p4;
@@ -120,6 +121,7 @@ dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< e
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
+pdgid_mother(iConfig.getParameter<uint32_t>("mother_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
@@ -163,6 +165,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      std::cout << "DiMuonRootuplerGEN::DiMuonRootuplerGEN: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
+     dimuon_tree->Branch("gen_b_p4", "TLorentzVector",  &gen_b_p4);
      dimuon_tree->Branch("gen_mother_p4", "TLorentzVector",  &gen_mother_p4);
      dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
      dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
@@ -255,6 +258,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_mother_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -271,10 +275,8 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
 
   if ( (isMC_ || OnlyGen_) && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
-
       const reco::Candidate *adimuon = &(*pruned)[i];
-      std::cout << i << " - " << abs(adimuon->pdgId()) << std::endl;
-      if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
+      if ( (abs(adimuon->pdgId()) == pdgid_) ) {
         int foundit = 1;
         dimuon_pdgId = adimuon->pdgId();
         for ( size_t j=0; j<pruned->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
@@ -302,6 +304,14 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
       }  // if ( p_id
     } // for (size
     if ( dimuon_pdgId ) std::cout << "DiMuonRootuplerGEN: found the given decay " << run << "," << event << std::endl; // sanity check
+
+    for (size_t i=0; i<pruned->size(); i++) {
+      const reco::Candidate *ab = &(*pruned)[i];
+      if ( (abs(ab->pdgId()) == pdgid_mother) )
+        gen_b_p4.SetPtEtaPhiM(ab->pt(),ab->eta(),ab->phi(),ab->mass());
+    }
+
+
   }  // end if isMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
