@@ -271,7 +271,9 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
 
   if ( (isMC_ || OnlyGen_) && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
+
       const reco::Candidate *adimuon = &(*pruned)[i];
+      std::cout << i << " - " << abs(adimuon->pdgId()) << std::endl;
       if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
         int foundit = 1;
         dimuon_pdgId = adimuon->pdgId();
