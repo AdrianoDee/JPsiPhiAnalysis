@@ -262,9 +262,9 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
            dimuonditrk_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-           dimuonditrk_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonp_p4);
+           dimuonditrk_tree->Branch("gen_muonp_p4",  "TLorentzVector",  &gen_muonp_p4);
            dimuonditrk_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonn_p4);
-           dimuonditrk_tree->Branch("gen_kaonP_p4",  "TLorentzVector",  &gen_kaonP_p4);
+           dimuonditrk_tree->Branch("gen_kaonp_p4",  "TLorentzVector",  &gen_kaonp_p4);
            dimuonditrk_tree->Branch("gen_kaonN_p4",  "TLorentzVector",  &gen_kaonN_p4);
         }
 
@@ -360,13 +360,21 @@ iEvent.getByToken(packCands_,  packed);
 
 //
 // if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-//   gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//   gen_muonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
 //   foundit++;
 // }
 // if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-//   gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//   gen_muonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
 //   foundit++;
 // }
+
+gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_muonp_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_muonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_kaonp_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_kaonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 //Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
@@ -394,12 +402,12 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
             if ( motherInPrunedCollection != nullptr && (d->pdgId() == 13 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
             {
-              gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+              gen_muonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
               founditjpsi++;
             }
             if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection ,) ) {
-              gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+              gen_muonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
               founditjpsi++;
             }
@@ -421,12 +429,12 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
             if ( motherInPrunedCollection != nullptr && (d->pdgId() == -321 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
             {
-              gen_kaonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+              gen_kaonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
               founditjphi++;
             }
             if ( motherInPrunedCollection != nullptr && (d->pdgId() == 321 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection ,) ) {
-              gen_kaonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+              gen_kaonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
               founditjphi++;
             }
