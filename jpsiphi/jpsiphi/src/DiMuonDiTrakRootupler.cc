@@ -70,7 +70,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_;
+  int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
   bool isMC_,OnlyBest_,OnlyGen_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -354,36 +354,36 @@ iEvent.getByToken(genCands_, pruned);
 edm::Handle<pat::PackedGenParticleCollection> packed;
 iEvent.getByToken(packCands_,  packed);
 
-
-if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
-  for (size_t i=0; i<pruned->size(); i++) {
-    const reco::Candidate *adimuon = &(*pruned)[i];
-    if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
-      int foundit = 1;
-      dimuon_pdgId = adimuon->pdgId();
-      for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
-        const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
-        const reco::Candidate * d = &(*packed)[j];
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
-          gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-          foundit++;
-        }
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
-          gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-          foundit++;
-        }
-        if ( foundit == 3 ) break;
-      }
-      if ( foundit == 3 ) {
-        gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
-        mother_pdgId  = GetAncestor(adimuon)->pdgId();
-        break;
-      } else dimuon_pdgId = 0;
-    }  // if ( p_id
-  } // for (size
-  if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
-}  // end if isMC
-
+//
+// if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+//   for (size_t i=0; i<pruned->size(); i++) {
+//     const reco::Candidate *aditrkdimu = &(*pruned)[i];
+//     if ( (abs(aditrkdimu->pdgId()) == pdgid_) && (aditrkdimu->status() == 2) ) {
+//       int foundit = 1;
+//       dimuon_pdgId = aditrkdimu->pdgId();
+//       for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
+//         const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
+//         const reco::Candidate * d = &(*packed)[j];
+//         if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
+//           gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//           foundit++;
+//         }
+//         if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
+//           gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//           foundit++;
+//         }
+//         if ( foundit == 3 ) break;
+//       }
+//       if ( foundit == 3 ) {
+//         gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
+//         mother_pdgId  = GetAncestor(adimuon)->pdgId();
+//         break;
+//       } else dimuon_pdgId = 0;
+//     }  // if ( p_id
+//   } // for (size
+//   if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+// }  // end if isMC
+//
 
 if(!OnlyGen_)
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
