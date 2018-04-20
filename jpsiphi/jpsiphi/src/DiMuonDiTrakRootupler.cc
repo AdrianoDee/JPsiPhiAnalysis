@@ -71,7 +71,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_, ;
+  bool isMC_,OnlyBest_,OnlyGen_ ;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
