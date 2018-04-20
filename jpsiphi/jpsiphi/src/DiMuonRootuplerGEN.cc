@@ -265,7 +265,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
   gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   // Pruned particles are the one containing "important" stuff
-  edm::Handle<reco::GenParticleCollection> pruned;
+  edm::Handle<std::vector<reco::GenParticle>> pruned;
   iEvent.getByToken(genCands_, pruned);
 
   // Packed particles are all the status 1. The navigation to pruned is possible (the other direction should be made by hand)
@@ -275,6 +275,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
 
   if ( (isMC_ || OnlyGen_) && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
+      std::cout<< i;
       const reco::Candidate *adimuon = &(*pruned)[i];
       if ( (abs(adimuon->pdgId()) == pdgid_) ) {
         int foundit = 1;
