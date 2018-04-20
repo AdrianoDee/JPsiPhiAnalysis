@@ -169,7 +169,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
   }
 
-  genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
+  genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"GenParticles");
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
@@ -279,7 +279,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
           if(j==i) continue;
 
           const reco::Candidate * motherInPrunedCollection = (*pruned)[j].mother(0);
-          const reco::Candidate * d = &(*packed)[j];
+          const reco::Candidate * d = &(*pruned)[j];
           if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
             gen_muonM_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
             foundit++;
