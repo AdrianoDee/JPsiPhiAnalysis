@@ -71,7 +71,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_;
+  bool isMC_,OnlyGen_, OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
@@ -181,8 +181,8 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-        pdgid_(iConfig.getParameter<bool>("Mother_pdg")),
-        pdgid_(iConfig.getParameter<bool>("Daughter_pdg")),
+        // pdgid_(iConfig.getParameter<bool>("Mother_pdg")),
+        // pdgid_(iConfig.getParameter<bool>("Daughter_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         treeName_(iConfig.getParameter<std::string>("TreeName"))
