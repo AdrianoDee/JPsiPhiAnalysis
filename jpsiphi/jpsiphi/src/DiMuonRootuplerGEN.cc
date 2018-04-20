@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
-// Package:    DiMuonRootupler
-// Class:      DiMuonRootupler
+// Package:    DiMuonRootuplerGEN
+// Class:      DiMuonRootuplerGEN
 //
 // Description: Dimuon(mu+ mu-)  producer
 //
@@ -38,10 +38,10 @@
 // class declaration
 //
 
-class DiMuonRootupler:public edm::EDAnalyzer {
+class DiMuonRootuplerGEN:public edm::EDAnalyzer {
       public:
-	explicit DiMuonRootupler(const edm::ParameterSet &);
-	~DiMuonRootupler() override;
+	explicit DiMuonRootuplerGEN(const edm::ParameterSet &);
+	~DiMuonRootuplerGEN() override;
 
 	static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
 
@@ -115,7 +115,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 // constructors and destructor
 //
 
-DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
+DiMuonRootuplerGEN::DiMuonRootuplerGEN(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
 primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -160,7 +160,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+     std::cout << "DiMuonRootuplerGEN::DiMuonRootuplerGEN: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      dimuon_tree->Branch("gen_mother_p4", "TLorentzVector",  &gen_mother_p4);
@@ -173,13 +173,13 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
-DiMuonRootupler::~DiMuonRootupler() {}
+DiMuonRootuplerGEN::~DiMuonRootuplerGEN() {}
 
 //
 // member functions
 //
 
-const reco::Candidate* DiMuonRootupler::GetAncestor(const reco::Candidate* p) {
+const reco::Candidate* DiMuonRootuplerGEN::GetAncestor(const reco::Candidate* p) {
    if (p->numberOfMothers()) {
       if  ((p->mother(0))->pdgId() == p->pdgId()) return GetAncestor(p->mother(0));
       else return p->mother(0);
@@ -188,7 +188,7 @@ const reco::Candidate* DiMuonRootupler::GetAncestor(const reco::Candidate* p) {
 }
 
 //Check recursively if any ancestor of particle is the given one
-bool DiMuonRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonRootuplerGEN::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
    if (ancestor == particle ) return true;
    for (size_t i=0; i< particle->numberOfMothers(); i++) {
       if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -203,7 +203,7 @@ bool DiMuonRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Ca
    ex. 1 = pass 0
 */
 
-UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
+UInt_t DiMuonRootuplerGEN::getTriggerBits(const edm::Event& iEvent ) {
 
   UInt_t trigger = 0;
 
@@ -231,7 +231,7 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
 }
 
 // ------------ method called for each event  ------------
-void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
+void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
   edm::Handle<pat::CompositeCandidateCollection> dimuons;
   iEvent.getByToken(dimuon_Label,dimuons);
@@ -299,7 +299,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         } else dimuon_pdgId = 0;
       }  // if ( p_id
     } // for (size
-    if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+    if ( dimuon_pdgId ) std::cout << "DiMuonRootuplerGEN: found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
@@ -343,7 +343,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         }
       }
     } //..else {
-      //std::cout << "DiMuonRootupler: (" << run << "," << event << ") -> ";
+      //std::cout << "DiMuonRootuplerGEN: (" << run << "," << event << ") -> ";
 
   }  // !OnlyGen_
 
@@ -355,25 +355,25 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonRootupler::beginJob() {}
+void DiMuonRootuplerGEN::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonRootupler::endJob() {}
+void DiMuonRootuplerGEN::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonRootupler::beginRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootuplerGEN::beginRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonRootupler::endRun(edm::Run const &, edm::EventSetup const &) {}
+void DiMuonRootuplerGEN::endRun(edm::Run const &, edm::EventSetup const &) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonRootupler::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootuplerGEN::beginLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonRootupler::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
+void DiMuonRootuplerGEN::endLuminosityBlock(edm::LuminosityBlock const &, edm::EventSetup const &) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonRootupler::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+void DiMuonRootuplerGEN::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
 	//The following says we do not know what parameters are allowed so do no validation
 	// Please change this to state exactly what you do use, even if it is no parameters
 	edm::ParameterSetDescription desc;
@@ -382,4 +382,4 @@ void DiMuonRootupler::fillDescriptions(edm::ConfigurationDescriptions & descript
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonRootupler);
+DEFINE_FWK_MODULE(DiMuonRootuplerGEN);
