@@ -169,7 +169,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
   }
 
-  genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"GenParticles");
+  genCands_ = consumes<vector<reco::GenParticle> >((edm::InputTag)"genParticles");
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
@@ -245,7 +245,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
 
   numPrimaryVertices = 0;
   if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
-  trigger = getTriggerBits(iEvent);
+  // trigger = getTriggerBits(iEvent);
 
   dimuon_pdgId = 0;
   mother_pdgId = 0;
