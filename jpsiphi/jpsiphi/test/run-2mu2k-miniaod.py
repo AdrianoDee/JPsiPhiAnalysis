@@ -3,7 +3,9 @@ process = cms.Process('PSIKK')
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
-input_file = gen_file
+mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
+
+input_file = mc_file #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -143,11 +145,11 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
 )
 
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
-    DiMuonDiTrak        = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    DiMuonMass          = cms.double(3.096916),              # J/psi mass in GeV
+    DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks           = cms.vdouble(kaonmass,kaonmass),         # traks masses
-    Product             = cms.string('DiMuonDiTrakCandidatesRef')
+    MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    Product                   = cms.string('DiMuonDiTrakCandidatesRef')
 )
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
