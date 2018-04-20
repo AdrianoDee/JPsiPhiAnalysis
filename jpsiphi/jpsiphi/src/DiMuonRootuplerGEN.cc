@@ -309,6 +309,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
       const reco::Candidate *ab = &(*pruned)[i];
       if ( (abs(ab->pdgId()) == pdgid_mother) )
         gen_b_p4.SetPtEtaPhiM(ab->pt(),ab->eta(),ab->phi(),ab->mass());
+        std::cout << "DiMuonRootuplerGEN: found the given particle " << pdgid_mother << " at " << run << "," << event << std::endl;
     }
 
 
