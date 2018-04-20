@@ -263,9 +263,9 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
            dimuonditrk_tree->Branch("gen_muonp_p4",  "TLorentzVector",  &gen_muonp_p4);
-           dimuonditrk_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonn_p4);
+           dimuonditrk_tree->Branch("gen_muonn_p4",  "TLorentzVector",  &gen_muonn_p4);
            dimuonditrk_tree->Branch("gen_kaonp_p4",  "TLorentzVector",  &gen_kaonp_p4);
-           dimuonditrk_tree->Branch("gen_kaonN_p4",  "TLorentzVector",  &gen_kaonN_p4);
+           dimuonditrk_tree->Branch("gen_kaonn_p4",  "TLorentzVector",  &gen_kaonn_p4);
         }
 
         //Track flags
@@ -420,7 +420,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
           gen_ditrak_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
           phi = true;
           foundit++;
-          int founditjphi = 1;
+          int founditphi = 1;
           for ( size_t k=0; k<packed->size(); k++ ) {
 
             if(k==j) continue;
@@ -431,21 +431,21 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
             {
               gen_kaonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
-              founditjphi++;
+              founditphi++;
             }
             if ( motherInPrunedCollection != nullptr && (d->pdgId() == 321 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection ,) ) {
               gen_kaonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
               foundit++;
-              founditjphi++;
+              founditphi++;
             }
 
             if(founditphi==3) break;
           }
 
         }
-        if ( foundit == 6 && jpsi == true && phi = true ) break;
+        if ( foundit == 6 && jpsi == true && phi == true ) break;
       }
-      if ( foundit == 6 && jpsi == true && phi = true ) {
+      if ( foundit == 6 && jpsi == true && phi == true ) {
         gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
         //mother_pdgId  = GetAncestor(adimuon)->pdgId();
         break;
