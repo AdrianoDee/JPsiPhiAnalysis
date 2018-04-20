@@ -434,9 +434,9 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
           }
 
         }
-        if ( foundit == 6 && jpsi == True && phi = True ) break;
+        if ( foundit == 6 && jpsi == true && phi = true ) break;
       }
-      if ( foundit == 6 && jpsi == True && phi = True ) {
+      if ( foundit == 6 && jpsi == true && phi = true ) {
         gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
         //mother_pdgId  = GetAncestor(adimuon)->pdgId();
         break;
