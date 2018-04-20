@@ -4,7 +4,7 @@ process = cms.Process('PSIKK')
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
-
+mc_file = "file:08A70447-9315-E711-AD3E-0CC47A78A340.root"
 input_file = mc_file #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
@@ -161,6 +161,9 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     isMC = cms.bool(True),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
+    Mother_pdg = cms.uint32(531),
+    JPsi_pdg = cms.uint32(443),
+    Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
     TreeName = cms.string('JPsi Phi Tree')
