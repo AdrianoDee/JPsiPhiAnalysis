@@ -131,6 +131,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
 
   Int_t          gen_dimuonditrk_pdgId;
   TLorentzVector gen_dimuonditrk_p4;
+  TLorentzVector gen_b_p4;
   TLorentzVector gen_dimuon_p4;
   TLorentzVector gen_ditrak_p4;
   TLorentzVector gen_muonp_p4;
@@ -261,6 +262,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
+           dimuonditrk_tree->Branch("gen_b_p4", "TLorentzVector",  &gen_b_p4);
            dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
            dimuonditrk_tree->Branch("gen_muonp_p4",  "TLorentzVector",  &gen_muonp_p4);
            dimuonditrk_tree->Branch("gen_muonn_p4",  "TLorentzVector",  &gen_muonn_p4);
@@ -375,6 +377,7 @@ gen_muonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_kaonp_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_kaonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 //Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
@@ -385,6 +388,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       int foundit = 1;
       bool jpsi = false, phi = false;
       gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
+      gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
       for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
 
         std::cout << "jpsi "<< j << " - " ;
