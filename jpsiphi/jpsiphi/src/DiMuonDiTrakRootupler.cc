@@ -139,7 +139,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_kaonn_p4;
 
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
-  edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
+  edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 };
 
@@ -273,7 +273,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         dimuonditrk_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/O");
 
-        genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
+        genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
         packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 
 }
@@ -351,7 +351,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
 // grabbing dimuontt information
 
-edm::Handle<reco::GenParticleCollection> pruned;
+edm::Handle< std::vector <reco::GenParticle> > pruned;
 iEvent.getByToken(genCands_, pruned);
 
 // Packed particles are all the status 1. The navigation to pruned is possible (the other direction should be made by hand)
