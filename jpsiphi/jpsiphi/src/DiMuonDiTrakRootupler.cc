@@ -382,17 +382,17 @@ gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 //Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
-    std::cout << "Valid"<<std::endl;
+    // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
-      std::cout << i << " - " ;
+      // std::cout << i << " - " ;
       int foundit = 1;
       bool jpsi = false, phi = false;
       gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
       gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
       for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
 
-        std::cout << "jpsi "<< j << " - " ;
+        // std::cout << "jpsi "<< j << " - " ;
         const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
         const reco::Candidate * d = &(*packed)[j];
 
@@ -405,7 +405,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
             if(k==j) continue;
 
-            std::cout << "jpsi "<< k << " - " ;
+            // std::cout << "jpsi "<< k << " - " ;
             const reco::Candidate * secondMotherInPrunedCollection = (*packed)[k].mother(0);
 
             if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == 13 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
@@ -429,10 +429,10 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
           phi = true;
           foundit++;
           int founditphi = 1;
-          std::cout << "phi "<< j << " - " ;
+          // std::cout << "phi "<< j << " - " ;
           for ( size_t k=0; k<packed->size(); k++ ) {
 
-            std::cout << "phi "<< k << " - " ;
+            // std::cout << "phi "<< k << " - " ;
 
             if(k==j) continue;
 
