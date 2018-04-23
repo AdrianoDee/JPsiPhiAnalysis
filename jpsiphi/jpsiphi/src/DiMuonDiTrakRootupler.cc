@@ -382,7 +382,7 @@ gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 //Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
-    std::cout << "Valid" << std::endl;
+    std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
       std::cout << i << " - " ;
