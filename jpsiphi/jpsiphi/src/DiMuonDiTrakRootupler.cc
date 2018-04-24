@@ -379,6 +379,8 @@ gen_kaonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
+gen_dimuonditrk_pdgId = 0;
+
 //Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
@@ -390,13 +392,13 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       bool jpsi = false, phi = false;
       gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
       gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
-      for ( size_t j=0; j<packed->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
+      for ( size_t j=0; j<pruned->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
 
         // std::cout << "jpsi "<< j << " - " ;
         const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
         const reco::Candidate * d = &(*packed)[j];
 
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && (aditrkdimu==motherInPrunedCollection) ) {
+        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
           gen_dimuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
           jpsi = true;
           foundit++;
@@ -424,7 +426,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
           }
 
         }
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && (aditrkdimu==motherInPrunedCollection) ) {
+        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
           gen_ditrak_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
           phi = true;
           foundit++;
@@ -457,6 +459,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         if ( foundit == 6 && jpsi == true && phi == true ) break;
       }
       if ( foundit == 6 && jpsi == true && phi == true ) {
+        std::cout << "Found" << std::endl;
         gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
         //mother_pdgId  = GetAncestor(adimuon)->pdgId();
         break;
