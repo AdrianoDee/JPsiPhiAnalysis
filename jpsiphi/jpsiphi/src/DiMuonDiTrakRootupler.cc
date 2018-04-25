@@ -149,6 +149,14 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_kaonp_p4;
   TLorentzVector gen_kaonn_p4;
 
+  TLorentzVector gen_b4_p4
+  TLorentzVector gen_d1_p4
+  TLorentzVector gen_d2_p4
+  TLorentzVector gen_gd1_p4
+  TLorentzVector gen_gd2_p4
+  TLorentzVector gen_gd3_p4
+  TLorentzVector gen_gd4_p4
+
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
@@ -380,28 +388,43 @@ iEvent.getByToken(packCands_,  packed);
 //   foundit++;
 // }
 
+gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_muonp_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_muonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_kaonp_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_kaonn_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
 gen_b_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+gen_b4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_d1_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_d2_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_gd1_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_gd2_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_gd3_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
 
 gen_dimuonditrk_pdgId = 0;
 
-//Looking for mother pdg
 if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
     // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
+    if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2))
+      gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
+
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2) && (aditrkdimu->numberOfDaughters() > 1) && (aditrkdimu->numberOfDaughters() < 7) ) {
       //asking for decay (status==2) && two daughters
       bool goToJPsi = false;
       bool goToPhi = false;
 
+      bool muP = false, muN = false, kP = false, kN = false;
+
       int noDaughters = 0, noGDaughters = 0;
+      int theJpsi, thePhi, theMuP, theMuN, theKP, theKN;
 
       std::vector<const reco::Candidate *> daughters,gdaughters;
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
@@ -409,6 +432,17 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         const reco::Candidate * daughter = aditrkdimu->daughter(j);
         if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
         std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
+
+        if(daughter->pdgId() == 443)
+        {
+          goToJPsi=true;
+          theJPsi = j;
+        }
+        if(daughter->pdgId() == 333)
+        {
+          thePhi = j;
+          goToPhi=true;
+        }
 
         daughters.push_back(daughter);
 
@@ -420,108 +454,153 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
         if(daughters[j]->status() != 2) continue;
 
-        for(size_t k = 0; k <daughters[k]->numberOfDaughters(); ++k)
+        for(size_t k = 0; k <daughters[j]->numberOfDaughters(); ++k)
         {
-          const reco::Candidate * gdaughter = aditrkdimu->daughter(k);
+          const reco::Candidate * gdaughter = daughters[j]->daughter(k);
           if(gdaughter->mother(gdaughter->numberOfMothers()-1) != daughters[j]) continue;
           std::cout << "GrandDaughter no. " << k << " - id : " << gdaughter->pdgId() << std::endl;
           gdaughters.push_back(gdaughter);
+
+          if(goToPhi && goToJPsi)
+          {
+            if(gdaughter->pdgId()==-13)
+            {
+              theMuP = j;
+              muP=true;
+            }
+            if(gdaughter->pdgId()==13)
+            {
+              theMuN = j;
+              muN=true;
+            }
+            if(gdaughter->pdgId()==321)
+            {
+              theKP = j;
+              kP=true;
+            }
+            if(gdaughter->pdgId()==-321)
+            {
+              theKN = j;
+              kN=true;
+            }
+          }
 
           ++noGDaughters;
         }
       }
 
+      if(noDaughters == 2 && noGDaughters == 4)
+      {
+        gen_b4_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
+        gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
+        gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
+        gen_gd1_p4.SetPtEtaPhiM(gdaughters[0]->pt(),gdaughters[0]->eta(),gdaughters[0]->phi(),gdaughters[0]->mass());
+        gen_gd2_p4.SetPtEtaPhiM(gdaughters[1]->pt(),gdaughters[1]->eta(),gdaughters[1]->phi(),gdaughters[1]->mass());
+        gen_gd3_p4.SetPtEtaPhiM(gdaughters[2]->pt(),gdaughters[2]->eta(),gdaughters[2]->phi(),gdaughters[2]->mass());
+        gen_gd4_p4.SetPtEtaPhiM(gdaughters[3]->pt(),gdaughters[3]->eta(),gdaughters[3]->phi(),gdaughters[3]->mass());
+      }
+
+      if(muP && muN && kP && kN)
+      {
+        gen_dimuonditrk_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
+        gen_dimuon_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
+        gen_ditrak_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
+        gen_muonn_p4.SetPtEtaPhiM(gdaughters[theMuN]->pt(),gdaughters[theMuN]->eta(),gdaughters[theMuN]->phi(),gdaughters[theMuN]->mass());
+        gen_muonp_p4.SetPtEtaPhiM(gdaughters[theMuP]->pt(),gdaughters[theMuP]->eta(),gdaughters[theMuP]->phi(),gdaughters[theMuP]->mass());
+        gen_kaonn_p4.SetPtEtaPhiM(gdaughters[theKN]->pt(),gdaughters[theKN]->eta(),gdaughters[theKN]->phi(),gdaughters[theKN]->mass());
+        gen_kaonp_p4.SetPtEtaPhiM(gdaughters[theKP]->pt(),gdaughters[theKP]->eta(),gdaughters[theKP]->phi(),gdaughters[theKP]->mass());
+        gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
     }
   } // for (size
 }  // end if isMC
 
-
-if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
-  for (size_t i=0; i<pruned->size(); i++) {
-    // std::cout << "Valid"<<std::endl;
-    const reco::Candidate *aditrkdimu = &(*pruned)[i];
-    if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
-      // std::cout << i << " - " ;
-      int foundit = 1;
-      bool jpsi = false, phi = false;
-      gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
-      gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
-      for ( size_t j=0; j<pruned->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
-
-        // std::cout << "jpsi "<< j << " - " ;
-        const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
-        const reco::Candidate * d = &(*packed)[j];
-
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
-          gen_dimuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-          jpsi = true;
-          foundit++;
-          int founditjpsi = 1;
-          for ( size_t k=0; k<packed->size(); k++ ) {
-
-            if(k==j) continue;
-
-            // std::cout << "jpsi "<< k << " - " ;
-            const reco::Candidate * secondMotherInPrunedCollection = (*packed)[k].mother(0);
-
-            if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == 13 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
-            {
-              gen_muonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-              foundit++;
-              founditjpsi++;
-            }
-            if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection) ) {
-              gen_muonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-              foundit++;
-              founditjpsi++;
-            }
-
-            if(founditjpsi==3) break;
-          }
-
-        }
-        if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
-          gen_ditrak_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-          phi = true;
-          foundit++;
-          int founditphi = 1;
-          // std::cout << "phi "<< j << " - " ;
-          for ( size_t k=0; k<packed->size(); k++ ) {
-
-            // std::cout << "phi "<< k << " - " ;
-
-            if(k==j) continue;
-
-            const reco::Candidate * secondMotherInPrunedCollection = (*packed)[k].mother(0);
-
-            if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == -321 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
-            {
-              gen_kaonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-              foundit++;
-              founditphi++;
-            }
-            if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == 321 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection) ) {
-              gen_kaonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
-              foundit++;
-              founditphi++;
-            }
-
-            if(founditphi==3) break;
-          }
-
-        }
-        if ( foundit == 6 && jpsi == true && phi == true ) break;
-      }
-      if ( foundit == 6 && jpsi == true && phi == true ) {
-        std::cout << "Found" << std::endl;
-        gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
-        //mother_pdgId  = GetAncestor(adimuon)->pdgId();
-        break;
-      } else gen_dimuonditrk_pdgId = 0;
-    }  // if ( p_id
-  } // for (size
-  if ( gen_dimuonditrk_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
-}
+//
+// if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+//   for (size_t i=0; i<pruned->size(); i++) {
+//     // std::cout << "Valid"<<std::endl;
+//     const reco::Candidate *aditrkdimu = &(*pruned)[i];
+//     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
+//       // std::cout << i << " - " ;
+//       int foundit = 1;
+//       bool jpsi = false, phi = false;
+//       gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
+//       gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
+//       for ( size_t j=0; j<pruned->size(); j++ ) { //get the pointer to the first survied ancestor of a given packed GenParticle in the prunedCollection
+//
+//         // std::cout << "jpsi "<< j << " - " ;
+//         const reco::Candidate * motherInPrunedCollection = (*packed)[j].mother(0);
+//         const reco::Candidate * d = &(*packed)[j];
+//
+//         if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
+//           gen_dimuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//           jpsi = true;
+//           foundit++;
+//           int founditjpsi = 1;
+//           for ( size_t k=0; k<packed->size(); k++ ) {
+//
+//             if(k==j) continue;
+//
+//             // std::cout << "jpsi "<< k << " - " ;
+//             const reco::Candidate * secondMotherInPrunedCollection = (*packed)[k].mother(0);
+//
+//             if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == 13 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
+//             {
+//               gen_muonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//               foundit++;
+//               founditjpsi++;
+//             }
+//             if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection) ) {
+//               gen_muonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//               foundit++;
+//               founditjpsi++;
+//             }
+//
+//             if(founditjpsi==3) break;
+//           }
+//
+//         }
+//         if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  443 ) && isAncestor(aditrkdimu,motherInPrunedCollection) ) {
+//           gen_ditrak_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//           phi = true;
+//           foundit++;
+//           int founditphi = 1;
+//           // std::cout << "phi "<< j << " - " ;
+//           for ( size_t k=0; k<packed->size(); k++ ) {
+//
+//             // std::cout << "phi "<< k << " - " ;
+//
+//             if(k==j) continue;
+//
+//             const reco::Candidate * secondMotherInPrunedCollection = (*packed)[k].mother(0);
+//
+//             if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == -321 ) && isAncestor(motherInPrunedCollection , secondMotherInPrunedCollection) )
+//             {
+//               gen_kaonn_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//               foundit++;
+//               founditphi++;
+//             }
+//             if ( secondMotherInPrunedCollection != nullptr && (d->pdgId() == 321 ) && isAncestor(motherInPrunedCollection, secondMotherInPrunedCollection) ) {
+//               gen_kaonp_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//               foundit++;
+//               founditphi++;
+//             }
+//
+//             if(founditphi==3) break;
+//           }
+//
+//         }
+//         if ( foundit == 6 && jpsi == true && phi == true ) break;
+//       }
+//       if ( foundit == 6 && jpsi == true && phi == true ) {
+//         std::cout << "Found" << std::endl;
+//         gen_dimuonditrk_p4 = gen_dimuon_p4 + gen_ditrak_p4;   // this should take into account FSR
+//         //mother_pdgId  = GetAncestor(adimuon)->pdgId();
+//         break;
+//       } else gen_dimuonditrk_pdgId = 0;
+//     }  // if ( p_id
+//   } // for (size
+//   if ( gen_dimuonditrk_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+// }
 
 if(!OnlyGen_)
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
