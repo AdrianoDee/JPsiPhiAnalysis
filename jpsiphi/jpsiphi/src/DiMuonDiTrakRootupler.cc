@@ -398,12 +398,39 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2) && (aditrkdimu->numberOfDaughters() > 1) && (aditrkdimu->numberOfDaughters() < 7) ) {
       //asking for decay (status==2) && two daughters
+      bool goToJPsi = false;
+      bool goToPhi = false;
 
+      int noDaughters = 0, noGDaughters = 0;
+
+      std::vector<reco::Candidate *> daughters,gdaughters;
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
       {
         const reco::Candidate * daughter = aditrkdimu->daughter(j);
+        if(daughter.mother(0) != aditrkdimu) continue;
         std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
+
+        daughters.push_back(daughter);
+
+        ++noDaughters;
+
       }
+
+      for (size_t j = 0; j < daughters.size(); j++) {
+
+        if(daughters[j]->status() != 2) continue;
+
+        for(size_t k = 0; k <daughters[k]->numberOfDaughters(); ++k)
+        {
+          const reco::Candidate * gdaughter = aditrkdimu->daughter(k);
+          if(daughter.mother(0) != aditrkdimu) continue;
+          std::cout << "GrandDaughter no. " << k << " - id : " << gdaughter->pdgId() << std::endl;
+          gdaughters.push_back(gdaughter);
+
+          ++noGDaughters;
+        }
+      }
+
     }
   } // for (size
 }  // end if isMC
