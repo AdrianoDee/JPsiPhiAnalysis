@@ -4,7 +4,7 @@ process = cms.Process('PSIKK')
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
-mc_file = "file:08A70447-9315-E711-AD3E-0CC47A78A340.root"
+mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
 input_file = mc_file #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
