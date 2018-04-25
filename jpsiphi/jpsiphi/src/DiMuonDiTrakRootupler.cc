@@ -403,7 +403,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
       int noDaughters = 0, noGDaughters = 0;
 
-      std::vector<reco::Candidate *> daughters,gdaughters;
+      std::vector<const reco::Candidate *> daughters,gdaughters;
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
       {
         const reco::Candidate * daughter = aditrkdimu->daughter(j);
