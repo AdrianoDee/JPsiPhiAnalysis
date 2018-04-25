@@ -149,14 +149,16 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_kaonp_p4;
   TLorentzVector gen_kaonn_p4;
 
-  TLorentzVector gen_b4_p4
-  TLorentzVector gen_d1_p4
-  TLorentzVector gen_d2_p4
-  TLorentzVector gen_gd1_p4
-  TLorentzVector gen_gd2_p4
-  TLorentzVector gen_gd3_p4
-  TLorentzVector gen_gd4_p4
-
+  TLorentzVector gen_b4_p4;
+  TLorentzVector gen_d1_p4;
+  TLorentzVector gen_d2_p4;
+  TLorentzVector gen_gd1_p4;
+  TLorentzVector gen_gd2_p4;
+  TLorentzVector gen_gd3_p4;
+  TLorentzVector gen_gd4_p4;
+  TLorentzVector gen_gd5_p4;
+  TLorentzVector gen_gd6_p4;
+  
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
@@ -405,7 +407,8 @@ gen_gd1_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd2_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd3_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-
+gen_gd5_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 gen_dimuonditrk_pdgId = 0;
 
@@ -486,7 +489,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         }
       }
 
-      if(noDaughters == 2 && noGDaughters == 4)
+      if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi)
       {
 
         for (size_t j = 0; j < daughters.size(); j++)
@@ -498,10 +501,16 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         gen_b4_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
         gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
         gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
+
         gen_gd1_p4.SetPtEtaPhiM(gdaughters[0]->pt(),gdaughters[0]->eta(),gdaughters[0]->phi(),gdaughters[0]->mass());
         gen_gd2_p4.SetPtEtaPhiM(gdaughters[1]->pt(),gdaughters[1]->eta(),gdaughters[1]->phi(),gdaughters[1]->mass());
         gen_gd3_p4.SetPtEtaPhiM(gdaughters[2]->pt(),gdaughters[2]->eta(),gdaughters[2]->phi(),gdaughters[2]->mass());
         gen_gd4_p4.SetPtEtaPhiM(gdaughters[3]->pt(),gdaughters[3]->eta(),gdaughters[3]->phi(),gdaughters[3]->mass());
+
+        if(noGDaughters > 4)
+          gen_gd5_p4.SetPtEtaPhiM(gdaughters[4]->pt(),gdaughters[4]->eta(),gdaughters[4]->phi(),gdaughters[4]->mass());
+        if(noGDaughters > 5)
+          gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
       }
 
       if(muP && muN && kP && kN)
