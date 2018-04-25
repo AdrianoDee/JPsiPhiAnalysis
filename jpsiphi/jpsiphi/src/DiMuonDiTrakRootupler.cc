@@ -9,6 +9,16 @@
 
 */
 
+// Gen Particles
+// 0 : an empty entry with no meaningful information and therefore to be skipped unconditionally
+// 1 : a final-state particle, i.e. a particle that is not decayed further by the generator
+// 2 : decayed Standard Model hadron or tau or mu lepton, excepting virtual intermediate states thereof (i.e. the particle must undergo a normal decay, not e.g. a shower branching).
+// 3 : a documentation entry
+// 4 : an incoming beam particle
+// 5-10 : undefined, reserved for future standards
+// 11-200: an intermediate (decayed/branched/...) particle that does not fulfill the criteria of status code 2, with a generator-dependent classification of its nature.
+// 201- : at the disposal of the user, in particular for event tracking in the detector
+
 // system include files
 #include <memory>
 
@@ -386,6 +396,23 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
     // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
+    if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2) && (aditrkdimu->numberOfDaughters() > 1) && (aditrkdimu->numberOfDaughters() < 7) ) {
+      //asking for decay (status==2) && two daughters
+
+      for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
+      {
+        const reco::Candidate * daughter = aditrkdimu.daughter(j);
+        std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
+      }
+    }
+  } // for (size
+}  // end if isMC
+
+
+if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+  for (size_t i=0; i<pruned->size(); i++) {
+    // std::cout << "Valid"<<std::endl;
+    const reco::Candidate *aditrkdimu = &(*pruned)[i];
     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) ) {
       // std::cout << i << " - " ;
       int foundit = 1;
@@ -467,8 +494,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     }  // if ( p_id
   } // for (size
   if ( gen_dimuonditrk_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
-}  // end if isMC
-
+}
 
 if(!OnlyGen_)
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
