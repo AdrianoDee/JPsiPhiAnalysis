@@ -427,7 +427,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       bool muP = false, muN = false, kP = false, kN = false;
 
       int noDaughters = 0, noGDaughters = 0;
-      int theJPsi, thePhi, theMuP, theMuN, theKP, theKN;
+      int theJPsi = 0, thePhi = 0, theMuP = 0, theMuN = 0, theKP = 0, theKN = 0;
 
       std::vector<const reco::Candidate *> daughters,gdaughters;
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
