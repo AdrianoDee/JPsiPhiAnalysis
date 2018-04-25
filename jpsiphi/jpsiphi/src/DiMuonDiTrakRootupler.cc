@@ -401,7 +401,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
       {
-        const reco::Candidate * daughter = aditrkdimu.daughter(j);
+        const reco::Candidate * daughter = aditrkdimu->daughter(j);
         std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
       }
     }
