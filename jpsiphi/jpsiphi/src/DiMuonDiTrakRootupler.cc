@@ -158,7 +158,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_gd4_p4;
   TLorentzVector gen_gd5_p4;
   TLorentzVector gen_gd6_p4;
-  
+
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
@@ -427,7 +427,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       bool muP = false, muN = false, kP = false, kN = false;
 
       int noDaughters = 0, noGDaughters = 0;
-      int theJpsi, thePhi, theMuP, theMuN, theKP, theKN;
+      int theJPsi, thePhi, theMuP, theMuN, theKP, theKN;
 
       std::vector<const reco::Candidate *> daughters,gdaughters;
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
