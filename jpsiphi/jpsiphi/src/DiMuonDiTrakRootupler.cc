@@ -431,8 +431,6 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       {
         const reco::Candidate * daughter = aditrkdimu->daughter(j);
         if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
-        std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
-
         if(daughter->pdgId() == 443)
         {
           goToJPsi=true;
@@ -458,7 +456,6 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         {
           const reco::Candidate * gdaughter = daughters[j]->daughter(k);
           if(gdaughter->mother(gdaughter->numberOfMothers()-1) != daughters[j]) continue;
-          std::cout << "GrandDaughter no. " << k << " - id : " << gdaughter->pdgId() << std::endl;
           gdaughters.push_back(gdaughter);
 
           if(goToPhi && goToJPsi)
@@ -491,6 +488,13 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
       if(noDaughters == 2 && noGDaughters == 4)
       {
+
+        for (size_t j = 0; j < daughters.size(); j++)
+          std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
+
+        for (size_t j = 0; j < gdaughters.size(); j++)
+          std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
+
         gen_b4_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
         gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
         gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
@@ -502,6 +506,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
       if(muP && muN && kP && kN)
       {
+
         gen_dimuonditrk_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
         gen_dimuon_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
         gen_ditrak_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
