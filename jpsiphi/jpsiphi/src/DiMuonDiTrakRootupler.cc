@@ -407,7 +407,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
       {
         const reco::Candidate * daughter = aditrkdimu->daughter(j);
-        if(daughter.mother(0) != aditrkdimu) continue;
+        if(daughter->mother(0) != aditrkdimu) continue;
         std::cout << "Daughter no. " << j << " - id : " << daughter->pdgId() << std::endl;
 
         daughters.push_back(daughter);
@@ -423,7 +423,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         for(size_t k = 0; k <daughters[k]->numberOfDaughters(); ++k)
         {
           const reco::Candidate * gdaughter = aditrkdimu->daughter(k);
-          if(daughter.mother(0) != aditrkdimu) continue;
+          if(gdaughter->mother(0) != daughters[j]) continue;
           std::cout << "GrandDaughter no. " << k << " - id : " << gdaughter->pdgId() << std::endl;
           gdaughters.push_back(gdaughter);
 
