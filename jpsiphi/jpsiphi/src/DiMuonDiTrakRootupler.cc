@@ -526,6 +526,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
     }
   } // for (size
+}
 }  // end if isMC
 
 //
