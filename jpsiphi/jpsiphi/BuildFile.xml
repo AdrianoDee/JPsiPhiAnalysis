@@ -7,7 +7,7 @@
 <use   name="rootcore"/>
 <use   name="roofit"/>
 <use   name="PhysicsTools/UtilAlgos"/>
-<use   name="DataFormats/​Math"/>
+<use   name="DataFormats/Math"/>
 <use   name="DataFormats/Candidate"/>
 <use   name="DataFormats/VertexReco"/>
 <use   name="DataFormats/TrackReco"/>
