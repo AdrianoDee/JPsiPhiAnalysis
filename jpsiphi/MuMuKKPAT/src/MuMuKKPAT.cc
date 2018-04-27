@@ -1455,7 +1455,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               ////////////////// fill X candidate variables //////////////////
 
-              int   xcand_ch_fit = KKCand_fromFit->currentState().charge();
               float xcand_ma_fit = XCand_fromMCFit->currentState().mass();
               int   xcand_ch_fit = XCand_fromMCFit->currentState().particleCharge();
               float xcand_px_fit = XCand_fromMCFit->currentState().kinematicParameters().momentum().x();
@@ -1493,7 +1492,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               RefCountedKinematicParticle x_kaonN_fromMCFit = XVertexFitTree->currentParticle();
               /// muon1 & muon2
 
-              int   x_muonP_ch_fit = KKCand_fromFit->currentState().charge();
               float x_muonP_ma_fit = x_muonP_fromMCFit->currentState().mass();
               int   x_muonP_ch_fit = x_muonP_fromMCFit->currentState().particleCharge();
               float x_muonP_px_fit = x_muonP_fromMCFit->currentState().kinematicParameters().momentum().x();
@@ -1505,7 +1503,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(x_muonP_vx_fit,x_muonP_vy_fit,x_muonP_vz_fit),443);
               pat::CompositeCandidate pat_X_muonP(reco_X_muonP);
 
-              int   x_muonN_ch_fit = KKCand_fromFit->currentState().charge();
               float x_muonN_ma_fit = x_muonN_fromMCFit->currentState().mass();
               int   x_muonN_ch_fit = x_muonN_fromMCFit->currentState().particleCharge();
               float x_muonN_px_fit = x_muonN_fromMCFit->currentState().kinematicParameters().momentum().x();
@@ -1517,7 +1514,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(x_muonN_vx_fit,x_muonN_vy_fit,x_muonN_vz_fit),443);
               pat::CompositeCandidate pat_X_muonN(reco_X_muonN);
 
-              int   x_kaonP_ch_fit = KKCand_fromFit->currentState().charge();
               float x_kaonP_ma_fit = x_kaonP_fromMCFit->currentState().mass();
               int   x_kaonP_ch_fit = x_kaonP_fromMCFit->currentState().particleCharge();
               float x_kaonP_px_fit = x_kaonP_fromMCFit->currentState().kinematicParameters().momentum().x();
@@ -1529,7 +1525,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(x_kaonP_vx_fit,x_kaonP_vy_fit,x_kaonP_vz_fit),443);
               pat::CompositeCandidate pat_X_kaonP(reco_X_kaonP);
 
-              int   x_kaonN_ch_fit = KKCand_fromFit->currentState().charge();
               float x_kaonN_ma_fit = x_kaonN_fromMCFit->currentState().mass();
               int   x_kaonN_ch_fit = x_kaonN_fromMCFit->currentState().particleCharge();
               float x_kaonN_px_fit = x_kaonN_fromMCFit->currentState().kinematicParameters().momentum().x();
