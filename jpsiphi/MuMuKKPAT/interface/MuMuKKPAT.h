@@ -167,7 +167,7 @@ private:
   Vertex pV, bS;
   reco::TrackCollection tracks;
   std::vector<Vertex> corrPVs, mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlphaXLessPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
-  std::vector<LorentzVector> mumu_p4, muP_p4,muNeg_p4;
+  std::vector<math::XYZTLorentzVector> mumu_p4, muP_p4,muNeg_p4;
   reco::CompositeCandidateCollection ref_pat_Jpsi, ref_pat_muneg, ref_pat_mupos;
   reco::CompositeCandidateCollection ref_pat_Phi, ref_pat_kneg, ref_pat_kpos;
   reco::CompositeCandidateCollection pat_Jpsi, pat_muneg, pat_mupos;
