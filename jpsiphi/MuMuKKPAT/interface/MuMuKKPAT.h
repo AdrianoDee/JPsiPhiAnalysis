@@ -163,6 +163,12 @@ private:
   int                   n_pV;
 
   Vertex pV, bS;
+  reco::TrackCollection tracks;
+  std::vector<Vertex> mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
+  std::vector<reco::LorentzVector> mumu_p4, muP_p4,muNeg_p4;
+  reco::CompositeCandidateCollection ref_pat_Jpsi, ref_pat_muneg, ref_pat_mupos;
+  reco::CompositeCandidateCollection ref_pat_Phi, ref_pat_kneg, ref_pat_kpos;
+  reco::CompositeCandidateCollection pat_Jpsi, pat_muneg, pat_mupos;
   // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
   int                   priVtx_tracks;
   float                 tracksPtSq_pV;
@@ -214,19 +220,20 @@ private:
   vector<int>           *nMatchedStations;
   vector<int>           *muType, *muQual, *muTrack, *muNOverlap, *muNSharingSegWith;
   /// Generic tracks
-  vector<float>         *trNotRef, *trRef;
-  vector<float>         *trPx, *trPy, *trPz, *trE;
-  vector<int>           *trNDF, *trPhits, *trShits;
-  vector<float>         *trChi2;
-  vector<float>         *trD0, *trD0E, *trCharge;
-  vector<float>         *trfHits;
-  vector<bool>          *trFirstBarrel, *trFirstEndCap;
-  vector<float>         *trDzVtx, *trDxyVtx;
-  vector<int>           *trQualityHighPurity, *trQualityTight;
-  vector<double>        *tr_nsigdedx;
-  vector<float>         *tr_dedx, *tr_dedxMass, *tr_theo, *tr_sigma;
-  vector<float>         *tr_dedx_byHits, *tr_dedxErr_byHits ;
-  vector<int>           *tr_saturMeas_byHits, *tr_Meas_byHits ;
+  // vector<float>         *trNotRef, *trRef;
+  // vector<float>         *trPx, *trPy, *trPz, *trE;
+  // vector<int>           *trNDF, *trPhits, *trShits;
+  // vector<float>         *trChi2;
+  // vector<float>         *trD0, *trD0E, *trCharge;
+  // vector<float>         *trfHits;
+  // vector<bool>          *trFirstBarrel, *trFirstEndCap;
+  // vector<float>         *trDzVtx, *trDxyVtx;
+  // vector<int>           *trQualityHighPurity, *trQualityTight;
+  // vector<double>        *tr_nsigdedx;
+  // vector<float>         *tr_dedx, *tr_dedxMass, *tr_theo, *tr_sigma;
+  // vector<float>         *tr_dedx_byHits, *tr_dedxErr_byHits ;
+  // vector<int>           *tr_saturMeas_byHits, *tr_Meas_byHits ;
+
   /// MuMu cand & KK cand
   vector<float>         *MuMuMass, *MuMuPx, *MuMuPy, *MuMuPz;
   vector<float>         *MuMuVtx_CL, *MuMuVtx_Chi2;
