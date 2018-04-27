@@ -206,13 +206,13 @@ muGlDzVtx(0), muGlDxyVtx(0),
 nMatchedStations(0),
 muType(0), muQual(0), muTrack(0), muNOverlap(0), muNSharingSegWith(0),
 /// generic tracks
-trNotRef(0), trRef(0),
-trPx(0), trPy(0), trPz(0), trE(0),
-trNDF(0), trPhits(0), trShits(0), trChi2(0),
-trD0(0), trD0E(0), trCharge(0),
-trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
-trDzVtx(0), trDxyVtx(0),
-trQualityHighPurity(0), trQualityTight(0),
+// trNotRef(0), trRef(0),
+// trPx(0), trPy(0), trPz(0), trE(0),
+// trNDF(0), trPhits(0), trShits(0), trChi2(0),
+// trD0(0), trD0E(0), trCharge(0),
+// trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
+// trDzVtx(0), trDxyVtx(0),
+// trQualityHighPurity(0), trQualityTight(0),
 tr_nsigdedx(0), tr_dedx(0), tr_dedxMass(0), tr_theo(0), tr_sigma(0),
 tr_dedx_byHits(0), tr_dedxErr_byHits(0), tr_saturMeas_byHits(0), tr_Meas_byHits(0),
 /// MuMu cand & KK cand
@@ -2350,26 +2350,26 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             }
             /// generic tracks
             mumukktree->Branch("tracks", "reco::TrackCollection", &tracks);
-            mumukktree->Branch("trNotRef", &trNotRef);
-            mumukktree->Branch("trRef", &trRef);
-            mumukktree->Branch("trackPx", &trPx);
-            mumukktree->Branch("trackPy", &trPy);
-            mumukktree->Branch("trackPz", &trPz);
-            mumukktree->Branch("trackEnergy", &trE);
-            mumukktree->Branch("trackNDF", &trNDF);
-            mumukktree->Branch("trackPhits", &trPhits);
-            mumukktree->Branch("trackShits", &trShits);
-            mumukktree->Branch("trackChi2", &trChi2);
-            mumukktree->Branch("trackD0", &trD0);
-            mumukktree->Branch("trackD0Err", &trD0E);
-            mumukktree->Branch("trackCharge", &trCharge);
-            mumukktree->Branch("TrackHighPurity", &trQualityHighPurity);
-            mumukktree->Branch("TrackTight", &trQualityTight);
-            mumukktree->Branch("trackfHits", &trfHits);
-            mumukktree->Branch("trackFirstBarrel", &trFirstBarrel);
-            mumukktree->Branch("trackFirstEndCap", &trFirstEndCap);
-            mumukktree->Branch("trackDzVtx", &trDzVtx);
-            mumukktree->Branch("trackDxyVtx", &trDxyVtx);
+            // mumukktree->Branch("trNotRef", &trNotRef);
+            // mumukktree->Branch("trRef", &trRef);
+            // mumukktree->Branch("trackPx", &trPx);
+            // mumukktree->Branch("trackPy", &trPy);
+            // mumukktree->Branch("trackPz", &trPz);
+            // mumukktree->Branch("trackEnergy", &trE);
+            // mumukktree->Branch("trackNDF", &trNDF);
+            // mumukktree->Branch("trackPhits", &trPhits);
+            // mumukktree->Branch("trackShits", &trShits);
+            // mumukktree->Branch("trackChi2", &trChi2);
+            // mumukktree->Branch("trackD0", &trD0);
+            // mumukktree->Branch("trackD0Err", &trD0E);
+            // mumukktree->Branch("trackCharge", &trCharge);
+            // mumukktree->Branch("TrackHighPurity", &trQualityHighPurity);
+            // mumukktree->Branch("TrackTight", &trQualityTight);
+            // mumukktree->Branch("trackfHits", &trfHits);
+            // mumukktree->Branch("trackFirstBarrel", &trFirstBarrel);
+            // mumukktree->Branch("trackFirstEndCap", &trFirstEndCap);
+            // mumukktree->Branch("trackDzVtx", &trDzVtx);
+            // mumukktree->Branch("trackDxyVtx", &trDxyVtx);
             mumukktree->Branch("tr_nsigdedx", &tr_nsigdedx);
             mumukktree->Branch("tr_dedx", &tr_dedx);
             mumukktree->Branch("tr_dedxMass", &tr_dedxMass);

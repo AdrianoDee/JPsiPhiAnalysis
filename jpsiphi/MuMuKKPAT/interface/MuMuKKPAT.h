@@ -231,10 +231,10 @@ private:
   // std::vector<bool>          *trFirstBarrel, *trFirstEndCap;
   // std::vector<float>         *trDzVtx, *trDxyVtx;
   // std::vector<int>           *trQualityHighPurity, *trQualityTight;
-  // std::vector<double>        *tr_nsigdedx;
-  // std::vector<float>         *tr_dedx, *tr_dedxMass, *tr_theo, *tr_sigma;
-  // std::vector<float>         *tr_dedx_byHits, *tr_dedxErr_byHits ;
-  // std::vector<int>           *tr_saturMeas_byHits, *tr_Meas_byHits ;
+  std::vector<double>        *tr_nsigdedx;
+  std::vector<float>         *tr_dedx, *tr_dedxMass, *tr_theo, *tr_sigma;
+  std::vector<float>         *tr_dedx_byHits, *tr_dedxErr_byHits ;
+  std::vector<int>           *tr_saturMeas_byHits, *tr_Meas_byHits ;
 
   /// MuMu cand & KK cand
   std::vector<float>         *MuMuMass, *MuMuPx, *MuMuPy, *MuMuPz;
