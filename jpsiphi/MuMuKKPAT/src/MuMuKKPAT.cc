@@ -226,10 +226,10 @@ KKVtx_CL(0), KKVtx_Chi2(0),
 KKDecayVtx_X(0), KKDecayVtx_Y(0), KKDecayVtx_Z(0),
 KKDecayVtx_XE(0), KKDecayVtx_YE(0), KKDecayVtx_ZE(0),
 /// muons after JPsi (MuMu) fit &kaons after Phi (KK) fit
-mu1_MuMu_Px(0), mu1_MuMu_Py(0), mu1_MuMu_Pz(0), mu1_MuMu_Chi2(0), mu1_MuMu_NDF(0),
-mu2_MuMu_Px(0), mu2_MuMu_Py(0), mu2_MuMu_Pz(0), mu2_MuMu_Chi2(0), mu2_MuMu_NDF(0),
-ka1_KK_Px(0), ka1_KK_Py(0), ka1_KK_Pz(0), ka1_KK_Chi2(0), ka1_KK_NDF(0),
-ka2_KK_Px(0), ka2_KK_Py(0), ka2_KK_Pz(0), ka2_KK_Chi2(0), ka2_KK_NDF(0),
+muPos_MuMu_Px(0), muPos_MuMu_Py(0), muPos_MuMu_Pz(0), muPos_MuMu_Chi2(0), muPos_MuMu_NDF(0),
+muNeg_MuMu_Px(0), muNeg_MuMu_Py(0), muNeg_MuMu_Pz(0), muNeg_MuMu_Chi2(0), muNeg_MuMu_NDF(0),
+kaPos_KK_Px(0), kaPos_KK_Py(0), kaPos_KK_Pz(0), kaPos_KK_Chi2(0), kaPos_KK_NDF(0),
+kaonNeg_KK_Px(0), kaonNeg_KK_Py(0), kaonNeg_KK_Pz(0), kaonNeg_KK_Chi2(0), kaonNeg_KK_NDF(0),
 // DR_MuMu_K1(0), DR_MuMu_K2(0), DR_MuMuKK_K1(0), DR_MuMuKK_K2(0),
 /// Primary Vertex with "MuMu correction"
 mumuLessPvs_n(0),
@@ -995,10 +995,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           MuMuVtx_CL->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
           MuMuVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
 
-          mu1_MuMu_Chi2->push_back( MuPosCand_fromFit->chiSquared());
-          mu1_MuMu_NDF->push_back( MuPosCand_fromFit->degreesOfFreedom());
-          mu2_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
-          mu2_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
+          muPos_MuMu_Chi2->push_back( MuPosCand_fromFit->chiSquared());
+          muPos_MuMu_NDF->push_back( MuPosCand_fromFit->degreesOfFreedom());
+          muNeg_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
+          muNeg_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
 
           // mumu_p4->push_back();
           //
@@ -1018,16 +1018,16 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           // mu2Idx->push_back(std::distance(thePATMuonHandle->begin(), negMuon));
           //
           // ////////////////// JPsi (MuMu) fit //////////////////
-          // mu1_MuMu_Px->push_back( Mu1Cand_KP.momentum().x()); /// SEMRA for JPsi
-          // mu1_MuMu_Py->push_back( Mu1Cand_KP.momentum().y());
-          // mu1_MuMu_Pz->push_back( Mu1Cand_KP.momentum().z());
-          // mu1_MuMu_Chi2->push_back( MuPosCand_fromFit->chiSquared());
-          // mu1_MuMu_NDF->push_back( MuPosCand_fromFit->degreesOfFreedom());
-          // mu2_MuMu_Px->push_back( Mu2Cand_KP.momentum().x());
-          // mu2_MuMu_Py->push_back( Mu2Cand_KP.momentum().y());
-          // mu2_MuMu_Pz->push_back( Mu2Cand_KP.momentum().z());
-          // mu2_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
-          // mu2_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
+          // muPos_MuMu_Px->push_back( Mu1Cand_KP.momentum().x()); /// SEMRA for JPsi
+          // muPos_MuMu_Py->push_back( Mu1Cand_KP.momentum().y());
+          // muPos_MuMu_Pz->push_back( Mu1Cand_KP.momentum().z());
+          // muPos_MuMu_Chi2->push_back( MuPosCand_fromFit->chiSquared());
+          // muPos_MuMu_NDF->push_back( MuPosCand_fromFit->degreesOfFreedom());
+          // muNeg_MuMu_Px->push_back( Mu2Cand_KP.momentum().x());
+          // muNeg_MuMu_Py->push_back( Mu2Cand_KP.momentum().y());
+          // muNeg_MuMu_Pz->push_back( Mu2Cand_KP.momentum().z());
+          // muNeg_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
+          // muNeg_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
 
 
           Int_t dimuonType = 0;   //0 nothing,  1 J/psi  , 2 psi(2S)
@@ -1253,10 +1253,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
 
-              ka1_KK_Chi2->push_back( KaPosCand_fromFit->chiSquared());
-              ka1_KK_NDF->push_back( KaPosCand_fromFit->degreesOfFreedom());
-              ka2_KK_Chi2->push_back( KaNegCand_fromFit->chiSquared());
-              ka2_KK_NDF->push_back( KaNegCand_fromFit->degreesOfFreedom());
+              kaPos_KK_Chi2->push_back( KaPosCand_fromFit->chiSquared());
+              kaPos_KK_NDF->push_back( KaPosCand_fromFit->degreesOfFreedom());
+              kaonNeg_KK_Chi2->push_back( KaNegCand_fromFit->chiSquared());
+              kaonNeg_KK_NDF->push_back( KaNegCand_fromFit->degreesOfFreedom());
               //
               // KKMass->push_back( KKCand_fromFit->currentState().mass() );
               // KKDecayVtx_X->push_back( KKCand_vertex_fromFit->position().x() );
@@ -1273,13 +1273,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // ka2Idx->push_back(std::distance(theKaonRefittedPATTrackHandle->begin(), trackNeg));
               //
               // ////////////////// Phi (KK) fit //////////////////
-              // ka1_KK_Px->push_back( Ka1Cand_KP.momentum().x());
-              // ka1_KK_Py->push_back( Ka1Cand_KP.momentum().y());
-              // ka1_KK_Pz->push_back( Ka1Cand_KP.momentum().z());
+              // kaPos_KK_Px->push_back( Ka1Cand_KP.momentum().x());
+              // kaPos_KK_Py->push_back( Ka1Cand_KP.momentum().y());
+              // kaPos_KK_Pz->push_back( Ka1Cand_KP.momentum().z());
               //
-              // ka2_KK_Px->push_back( Ka2Cand_KP.momentum().x());
-              // ka2_KK_Py->push_back( Ka2Cand_KP.momentum().y());
-              // ka2_KK_Pz->push_back( Ka2Cand_KP.momentum().z());
+              // kaonNeg_KK_Px->push_back( Ka2Cand_KP.momentum().x());
+              // kaonNeg_KK_Py->push_back( Ka2Cand_KP.momentum().y());
+              // kaonNeg_KK_Pz->push_back( Ka2Cand_KP.momentum().z());
               //
 
               ++nKK;
@@ -1541,14 +1541,14 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(x_kaonN_vx_fit,x_kaonN_vy_fit,x_kaonN_vz_fit),443);
               pat::CompositeCandidate pat_X_kaonN(reco_X_kaonN);
 
-              // mu1Px_MuMuKK->push_back( mu1_MuMuKK->currentState().globalMomentum().x() );
-              // mu1Py_MuMuKK->push_back( mu1_MuMuKK->currentState().globalMomentum().y() );
-              // mu1Pz_MuMuKK->push_back( mu1_MuMuKK->currentState().globalMomentum().z() );
-              // mu1E_MuMuKK->push_back( mu1_MuMuKK->currentState().kinematicParameters().energy() );
-              // mu2Px_MuMuKK->push_back( mu2_MuMuKK->currentState().globalMomentum().x() );
-              // mu2Py_MuMuKK->push_back( mu2_MuMuKK->currentState().globalMomentum().y() );
-              // mu2Pz_MuMuKK->push_back( mu2_MuMuKK->currentState().globalMomentum().z() );
-              // mu2E_MuMuKK->push_back( mu2_MuMuKK->currentState().kinematicParameters().energy() );
+              // mu1Px_MuMuKK->push_back( muPos_MuMuKK->currentState().globalMomentum().x() );
+              // mu1Py_MuMuKK->push_back( muPos_MuMuKK->currentState().globalMomentum().y() );
+              // mu1Pz_MuMuKK->push_back( muPos_MuMuKK->currentState().globalMomentum().z() );
+              // mu1E_MuMuKK->push_back( muPos_MuMuKK->currentState().kinematicParameters().energy() );
+              // mu2Px_MuMuKK->push_back( muNeg_MuMuKK->currentState().globalMomentum().x() );
+              // mu2Py_MuMuKK->push_back( muNeg_MuMuKK->currentState().globalMomentum().y() );
+              // mu2Pz_MuMuKK->push_back( muNeg_MuMuKK->currentState().globalMomentum().z() );
+              // mu2E_MuMuKK->push_back( muNeg_MuMuKK->currentState().kinematicParameters().energy() );
               // /// kaonPos & kaonNeg
               // k1Px_MuMuKK->push_back( k1_MuMuKK->currentState().globalMomentum().x() );
               // k1Py_MuMuKK->push_back( k1_MuMuKK->currentState().globalMomentum().y() );
@@ -2176,11 +2176,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             KKDecayVtx_X->clear(); KKDecayVtx_Y->clear(); KKDecayVtx_Z->clear();
             KKDecayVtx_XE->clear(); KKDecayVtx_YE->clear(); KKDecayVtx_ZE->clear();
             /// muons from JPsi (MuMu) fit & kaons from Phi (KK) fit
-            mu1_MuMu_Px->clear(); mu1_MuMu_Py->clear(); mu1_MuMu_Pz->clear(); mu1_MuMu_Chi2->clear(); mu1_MuMu_NDF->clear();
-            mu2_MuMu_Px->clear(); mu2_MuMu_Py->clear(); mu2_MuMu_Pz->clear(); mu2_MuMu_Chi2->clear(); mu2_MuMu_NDF->clear();
+            muPos_MuMu_Px->clear(); muPos_MuMu_Py->clear(); muPos_MuMu_Pz->clear(); muPos_MuMu_Chi2->clear(); muPos_MuMu_NDF->clear();
+            muNeg_MuMu_Px->clear(); muNeg_MuMu_Py->clear(); muNeg_MuMu_Pz->clear(); muNeg_MuMu_Chi2->clear(); muNeg_MuMu_NDF->clear();
             MuMuType->clear();
-            ka1_KK_Px->clear(); ka1_KK_Py->clear(); ka1_KK_Pz->clear(); ka1_KK_Chi2->clear(); ka1_KK_NDF->clear();
-            ka2_KK_Px->clear(); ka2_KK_Py->clear();  ka2_KK_Pz->clear(); ka2_KK_Chi2->clear(); ka2_KK_NDF->clear();
+            kaPos_KK_Px->clear(); kaPos_KK_Py->clear(); kaPos_KK_Pz->clear(); kaPos_KK_Chi2->clear(); kaPos_KK_NDF->clear();
+            kaonNeg_KK_Px->clear(); kaonNeg_KK_Py->clear();  kaonNeg_KK_Pz->clear(); kaonNeg_KK_Chi2->clear(); kaonNeg_KK_NDF->clear();
             DR_MuMu_K1->clear(); DR_MuMu_K2->clear(); DR_MuMuKK_K1->clear(); DR_MuMuKK_K2->clear();
             /// Primary Vertex with "MuMu correction"
             mumuLessPvs_n->clear();
@@ -2437,16 +2437,16 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             /// muons from JPsi (MuMu) fit
             mumukktree->Branch("mu1Idx",&mu1Idx);
             mumukktree->Branch("mu2Idx",&mu2Idx);
-            mumukktree->Branch("mu1Px_MuMu",&mu1_MuMu_Px);
-            mumukktree->Branch("mu1Py_MuMu",&mu1_MuMu_Py);
-            mumukktree->Branch("mu1Pz_MuMu",&mu1_MuMu_Pz);
-            mumukktree->Branch("mu1Chi2_MuMu",&mu1_MuMu_Chi2);
-            mumukktree->Branch("mu1NDF_MuMu",&mu1_MuMu_NDF);
-            mumukktree->Branch("mu2Px_MuMu",&mu2_MuMu_Px);
-            mumukktree->Branch("mu2Py_MuMu",&mu2_MuMu_Py);
-            mumukktree->Branch("mu2Pz_MuMu",&mu2_MuMu_Pz);
-            mumukktree->Branch("mu2Chi2_MuMu",&mu2_MuMu_Chi2);
-            mumukktree->Branch("mu2NDF_MuMu",&mu2_MuMu_NDF);
+            mumukktree->Branch("mu1Px_MuMu",&muPos_MuMu_Px);
+            mumukktree->Branch("mu1Py_MuMu",&muPos_MuMu_Py);
+            mumukktree->Branch("mu1Pz_MuMu",&muPos_MuMu_Pz);
+            mumukktree->Branch("mu1Chi2_MuMu",&muPos_MuMu_Chi2);
+            mumukktree->Branch("mu1NDF_MuMu",&muPos_MuMu_NDF);
+            mumukktree->Branch("mu2Px_MuMu",&muNeg_MuMu_Px);
+            mumukktree->Branch("mu2Py_MuMu",&muNeg_MuMu_Py);
+            mumukktree->Branch("mu2Pz_MuMu",&muNeg_MuMu_Pz);
+            mumukktree->Branch("mu2Chi2_MuMu",&muNeg_MuMu_Chi2);
+            mumukktree->Branch("mu2NDF_MuMu",&muNeg_MuMu_NDF);
             mumukktree->Branch("MuMuType",&MuMuType);
             mumukktree->Branch("MuMuMuonTrigMatch",&MuMuMuonTrigMatch);
             /// Primary Vertex with "MuMu correction"
@@ -2478,16 +2478,16 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             /// kaons from Phi (KK) fit
             mumukktree->Branch("ka1Idx",&ka1Idx);
             mumukktree->Branch("ka2Idx",&ka2Idx);
-            mumukktree->Branch("ka1Px_KK",&ka1_KK_Px);
-            mumukktree->Branch("ka1Py_KK",&ka1_KK_Py);
-            mumukktree->Branch("ka1Pz_KK",&ka1_KK_Pz);
-            mumukktree->Branch("ka1Chi2_KK",&ka1_KK_Chi2);
-            mumukktree->Branch("ka1NDF_KK",&ka1_KK_NDF);
-            mumukktree->Branch("ka2Px_KK",&ka2_KK_Px);
-            mumukktree->Branch("ka2Py_KK",&ka2_KK_Py);
-            mumukktree->Branch("ka2Pz_KK",&ka2_KK_Pz);
-            mumukktree->Branch("ka2Chi2_KK",&ka2_KK_Chi2);
-            mumukktree->Branch("ka2NDF_KK",&ka2_KK_NDF);
+            mumukktree->Branch("ka1Px_KK",&kaPos_KK_Px);
+            mumukktree->Branch("ka1Py_KK",&kaPos_KK_Py);
+            mumukktree->Branch("ka1Pz_KK",&kaPos_KK_Pz);
+            mumukktree->Branch("ka1Chi2_KK",&kaPos_KK_Chi2);
+            mumukktree->Branch("ka1NDF_KK",&kaPos_KK_NDF);
+            mumukktree->Branch("ka2Px_KK",&kaonNeg_KK_Px);
+            mumukktree->Branch("ka2Py_KK",&kaonNeg_KK_Py);
+            mumukktree->Branch("ka2Pz_KK",&kaonNeg_KK_Pz);
+            mumukktree->Branch("ka2Chi2_KK",&kaonNeg_KK_Chi2);
+            mumukktree->Branch("ka2NDF_KK",&kaonNeg_KK_NDF);
             // mumukktree->Branch("DR_MuMu_K1",&DR_MuMu_K1);
             // mumukktree->Branch("DR_MuMu_K2",&DR_MuMu_K2);
             // mumukktree->Branch("DR_MuMuKK_K1",&DR_MuMuKK_K1);
