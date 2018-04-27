@@ -245,18 +245,18 @@ private:
   std::vector<float>         *KKVtx_CL, *KKVtx_Chi2;
   std::vector<float>         *KKDecayVtx_X, *KKDecayVtx_Y, *KKDecayVtx_Z, *KKDecayVtx_XE, *KKDecayVtx_YE, *KKDecayVtx_ZE;
   /// Muons after JPsi (MuMu) fit & Kaons after Phi (KK) fit
-  std::vector<float>         *mu1_MuMu_Px, *mu1_MuMu_Py, *mu1_MuMu_Pz ;
-  std::vector<float>         *mu1_MuMu_Chi2 ;
-  std::vector<int>           *mu1_MuMu_NDF ;
-  std::vector<float>         *mu2_MuMu_Px, *mu2_MuMu_Py, *mu2_MuMu_Pz ;
-  std::vector<float>         *mu2_MuMu_Chi2 ;
-  std::vector<int>           *mu2_MuMu_NDF ;
-  std::vector<float>         *ka1_KK_Px, *ka1_KK_Py, *ka1_KK_Pz ;
-  std::vector<float>         *ka1_KK_Chi2 ;
-  std::vector<int>           *ka1_KK_NDF ;
-  std::vector<float>         *ka2_KK_Px, *ka2_KK_Py, *ka2_KK_Pz ;
-  std::vector<float>         *ka2_KK_Chi2 ;
-  std::vector<int>           *ka2_KK_NDF ;
+  std::vector<float>         *muPos_MuMu_Px, *muPos_MuMu_Py, *muPos_MuMu_Pz ;
+  std::vector<float>         *muPos_MuMu_Chi2 ;
+  std::vector<int>           *muPos_MuMu_NDF ;
+  std::vector<float>         *muNeg_MuMu_Px, *muNeg_MuMu_Py, *muNeg_MuMu_Pz ;
+  std::vector<float>         *muNeg_MuMu_Chi2 ;
+  std::vector<int>           *muNeg_MuMu_NDF ;
+  std::vector<float>         *kaPos_KK_Px, *kaPos_KK_Py, *kaPos_KK_Pz ;
+  std::vector<float>         *kaPos_KK_Chi2 ;
+  std::vector<int>           *kaPos_KK_NDF ;
+  std::vector<float>         *kaNeg_KK_Px, *kaNeg_KK_Py, *kaNeg_KK_Pz ;
+  std::vector<float>         *kaNeg_KK_Chi2 ;
+  std::vector<int>           *kaNeg_KK_NDF ;
   std::vector<float>         *DR_MuMu_K1, *DR_MuMu_K2, *DR_MuMuKK_K1, *DR_MuMuKK_K2;
   /// Primary Vertex with "MuMu correction"
   std::vector<int>           *PriVtxMuMuCorr_n;
@@ -275,15 +275,15 @@ private:
   std::vector<float>         *mu1Px_MuMuKK, *mu1Py_MuMuKK, *mu1Pz_MuMuKK, *mu1E_MuMuKK ;
   std::vector<float>         *mu2Px_MuMuKK, *mu2Py_MuMuKK, *mu2Pz_MuMuKK, *mu2E_MuMuKK ;
   std::vector<float>         *k1Px_MuMuKK, *k1Py_MuMuKK, *k1Pz_MuMuKK, *k1E_MuMuKK ;
-  std::vector<double>        *kaon1_nsigdedx;
-  std::vector<float>         *kaon1_dedx, *kaon1_dedxMass, *kaon1_theo, *kaon1_sigma ;
-  std::vector<float>         *kaon1_dedx_byHits, *kaon1_dedxErr_byHits ;
-  std::vector<int>           *kaon1_saturMeas_byHits, *kaon1_Meas_byHits ;
+  std::vector<double>        *kaonPos_nsigdedx;
+  std::vector<float>         *kaonPos_dedx, *kaonPos_dedxMass, *kaonPos_theo, *kaonPos_sigma ;
+  std::vector<float>         *kaonPos_dedx_byHits, *kaonPos_dedxErr_byHits ;
+  std::vector<int>           *kaonPos_saturMeas_byHits, *kaonPos_Meas_byHits ;
   std::vector<float>         *k2Px_MuMuKK, *k2Py_MuMuKK, *k2Pz_MuMuKK, *k2E_MuMuKK ;
-  std::vector<double>        *kaon2_nsigdedx;
-  std::vector<float>         *kaon2_dedx, *kaon2_dedxMass, *kaon2_theo, *kaon2_sigma ;
-  std::vector<float>         *kaon2_dedx_byHits, *kaon2_dedxErr_byHits ;
-  std::vector<int>           *kaon2_saturMeas_byHits, *kaon2_Meas_byHits ;
+  std::vector<double>        *kaonNeg_nsigdedx;
+  std::vector<float>         *kaonNeg_dedx, *kaonNeg_dedxMass, *kaonNeg_theo, *kaonNeg_sigma ;
+  std::vector<float>         *kaonNeg_dedx_byHits, *kaonNeg_dedxErr_byHits ;
+  std::vector<int>           *kaonNeg_saturMeas_byHits, *kaonNeg_Meas_byHits ;
   /// Primary Vertex with largest B0_cos(alpha)
   std::vector<int>           *PriVtx_XCosAlpha_n;
   std::vector<float>         *PriVtx_XCosAlpha_X, *PriVtx_XCosAlpha_Y, *PriVtx_XCosAlpha_Z ;
@@ -329,12 +329,12 @@ private:
   std::vector<double>        *xCosAlphaPVX, *xCTauPVX, *xCTauPVXE, *xLxyPVX, *xLxyPVXE, *xLxyzPVX, *xLxyzPVXE ;
   std::vector<float>	        *xCTauPVX_3D, *xCTauPVX_3D_err;
   /// dxy, dz, dxyE, dzE for kaons from PV, BS, B0LessPV
-  std::vector<float>         *kaon1_dxy_PV, *kaon1_dz_PV, *kaon2_dxy_PV, *kaon2_dz_PV;
-  std::vector<float>         *kaon1_dxy_BS, *kaon1_dz_BS, *kaon2_dxy_BS, *kaon2_dz_BS;
-  std::vector<float>         *kaon1_dxy_XLessPV, *kaon1_dz_XLessPV, *kaon2_dxy_XLessPV, *kaon2_dz_XLessPV;
-  std::vector<float>         *kaon1_dxyE, *kaon1_dzE, *kaon2_dxyE, *kaon2_dzE;
+  std::vector<float>         *kaonPos_dxy_PV, *kaonPos_dz_PV, *kaonNeg_dxy_PV, *kaonNeg_dz_PV;
+  std::vector<float>         *kaonPos_dxy_BS, *kaonPos_dz_BS, *kaonNeg_dxy_BS, *kaonNeg_dz_BS;
+  std::vector<float>         *kaonPos_dxy_XLessPV, *kaonPos_dz_XLessPV, *kaonNeg_dxy_XLessPV, *kaonNeg_dz_XLessPV;
+  std::vector<float>         *kaonPos_dxyE, *kaonPos_dzE, *kaonNeg_dxyE, *kaonNeg_dzE;
 
-  std::vector<bool>          *Kaon1FromPV, *Kaon2FromPV;
+  std::vector<bool>          *kaonPosFromPV, *kaonNegFromPV;
 };
 
 #endif
