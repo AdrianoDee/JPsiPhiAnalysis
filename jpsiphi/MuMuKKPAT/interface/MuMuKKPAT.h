@@ -251,12 +251,12 @@ private:
   std::vector<float>         *muNeg_MuMu_Px, *muNeg_MuMu_Py, *muNeg_MuMu_Pz ;
   std::vector<float>         *muNeg_MuMu_Chi2 ;
   std::vector<int>           *muNeg_MuMu_NDF ;
-  std::vector<float>         *kaPos_KK_Px, *kaPos_KK_Py, *kaPos_KK_Pz ;
-  std::vector<float>         *kaPos_KK_Chi2 ;
-  std::vector<int>           *kaPos_KK_NDF ;
-  std::vector<float>         *kaNeg_KK_Px, *kaNeg_KK_Py, *kaNeg_KK_Pz ;
-  std::vector<float>         *kaNeg_KK_Chi2 ;
-  std::vector<int>           *kaNeg_KK_NDF ;
+  std::vector<float>         *kaonPos_KK_Px, *kaonPos_KK_Py, *kaonPos_KK_Pz ;
+  std::vector<float>         *kaonPos_KK_Chi2 ;
+  std::vector<int>           *kaonPos_KK_NDF ;
+  std::vector<float>         *kaonNeg_KK_Px, *kaonNeg_KK_Py, *kaonNeg_KK_Pz ;
+  std::vector<float>         *kaonNeg_KK_Chi2 ;
+  std::vector<int>           *kaonNeg_KK_NDF ;
   std::vector<float>         *DR_MuMu_K1, *DR_MuMu_K2, *DR_MuMuKK_K1, *DR_MuMuKK_K2;
   /// Primary Vertex with "MuMu correction"
   std::vector<int>           *PriVtxMuMuCorr_n;
