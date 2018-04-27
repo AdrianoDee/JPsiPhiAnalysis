@@ -78,6 +78,8 @@
 #include <string>
 #include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
 #include "RecoVertex/PrimaryVertexProducer/interface/VertexHigherPtSquared.h"
+
+#include "DataFormats/Math/interface/LorentzVector.h"
 //#include "DataFormats/PatCandidates/interface/GenericParticle.h" // for namespace pat
 
 ///
@@ -164,7 +166,7 @@ private:
 
   Vertex pV, bS;
   reco::TrackCollection tracks;
-  std::vector<Vertex> mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
+  std::vector<Vertex> corrPVs, mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlphaXLessPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
   std::vector<reco::LorentzVector> mumu_p4, muP_p4,muNeg_p4;
   reco::CompositeCandidateCollection ref_pat_Jpsi, ref_pat_muneg, ref_pat_mupos;
   reco::CompositeCandidateCollection ref_pat_Phi, ref_pat_kneg, ref_pat_kpos;
