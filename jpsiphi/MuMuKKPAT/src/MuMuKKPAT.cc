@@ -936,6 +936,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           MuMuVertexFitTree->movePointerToTheNextChild();
           RefCountedKinematicParticle MuNegCand_fromFit = MuMuVertexFitTree->currentParticle();
 
+          double dimuontt_vx_fit = MuMuCand_vertex_fromFit->position().x();
+          double dimuontt_vy_fit = MuMuCand_vertex_fromFit->position().y();
+          double dimuontt_vz_fit = MuMuCand_vertex_fromFit->position().z();
+
           ////////////////// fill the MuMu vectors //////////////////
           if (MuMuCand_fromFit->currentState().mass() < JPsiMinMass  ||  MuMuCand_fromFit->currentState().mass() > JPsiMaxMass)
           continue ;
@@ -962,7 +966,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
 
           reco::CompositeCandidate reco_ref_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),
-                                                   math::XYZPoint(muonPos_vx_fit,muonPos_vy_fit,muonPos_vz_fit),-13);
+                                                   math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),-13);
           pat::CompositeCandidate pat_ref_PM(reco_ref_PM);
 
 
@@ -974,7 +978,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
 
           reco::CompositeCandidate reco_ref_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),
-                                                   math::XYZPoint(muonNeg_vx_fit,muonNeg_vy_fit,muonNeg_vz_fit),13);
+                                                   math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
 
           pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
@@ -1191,6 +1195,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               KKVertexFitTree->movePointerToTheNextChild();
               RefCountedKinematicParticle kaonNegCand_fromFit = KKVertexFitTree->currentParticle();
 
+              double ditrack_vx_fit = KKCand_vertex_fromFit->position().x();
+              double ditrack_vy_fit = KKCand_vertex_fromFit->position().y();
+              double ditrack_vz_fit = KKCand_vertex_fromFit->position().z();
 
               ////////////////// fill the KK vectors //////////////////
               if (KKCand_fromFit->currentState().mass() < KKMinMass  ||  KKCand_fromFit->currentState().mass() > KKMaxMass)
@@ -1217,7 +1224,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float kaonPos_en_fit = sqrt(kaonPos_ma_fit*kaonPos_ma_fit+kaonPos_px_fit*kaonPos_px_fit+kaonPos_py_fit*kaonPos_py_fit+kaonPos_pz_fit*kaonPos_pz_fit);
 
               reco::CompositeCandidate reco_ref_PK(kaonPos_ch_fit,math::XYZTLorentzVector(kaonPos_px_fit,kaonPos_py_fit,kaonPos_pz_fit,kaonPos_en_fit),
-                                                       math::XYZPoint(kaonPos_vx_fit,kaonPos_vy_fit,kaonPos_vz_fit),-13);
+                                                       math::XYZPoint(ditrack_vx_fit,ditrack_vy_fit,ditrack_vz_fit),-13);
               pat::CompositeCandidate pat_ref_PK(reco_ref_PK);
 
 
@@ -1230,7 +1237,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
 
               reco::CompositeCandidate reco_ref_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
-                                                       math::XYZPoint(kaonNeg_vx_fit,kaonNeg_vy_fit,kaonNeg_vz_fit),13);
+                                                       math::XYZPoint(ditrack_vx_fit,ditrack_vy_fit,ditrack_vz_fit),13);
 
               pat::CompositeCandidate pat_ref_NK(reco_ref_NK);
 
@@ -1458,6 +1465,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float xcand_pz_fit = XCand_fromMCFit->currentState().kinematicParameters().momentum().z();
               float xcand_en_fit = sqrt(xcand_ma_fit*xcand_ma_fit+xcand_px_fit*xcand_px_fit+xcand_py_fit*xcand_py_fit+xcand_pz_fit*xcand_pz_fit);
 
+              double xcand_vx_fit = XCand_vertex_fromMCFit->position().x();
+              double xcand_vy_fit = XCand_vertex_fromMCFit->position().y();
+              double xcand_vz_fit = XCand_vertex_fromMCFit->position().z();
+
               reco::CompositeCandidate reco_X(xcand_ch_fit,math::XYZTLorentzVector(xcand_px_fit,xcand_py_fit,xcand_pz_fit,xcand_en_fit),
                                                        math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),443);
               pat::CompositeCandidate pat_X(reco_X);
@@ -1496,7 +1507,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float x_muonP_en_fit = sqrt(x_muonP_ma_fit*x_muonP_ma_fit+x_muonP_px_fit*x_muonP_px_fit+x_muonP_py_fit*x_muonP_py_fit+x_muonP_pz_fit*x_muonP_pz_fit);
 
               reco::CompositeCandidate reco_X_muonP(x_muonP_ch_fit,math::XYZTLorentzVector(x_muonP_px_fit,x_muonP_py_fit,x_muonP_pz_fit,x_muonP_en_fit),
-                                                       math::XYZPoint(x_muonP_vx_fit,x_muonP_vy_fit,x_muonP_vz_fit),443);
+                                                       math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),-13);
               pat::CompositeCandidate pat_X_muonP(reco_X_muonP);
 
               float x_muonN_ma_fit = x_muonN_fromMCFit->currentState().mass();
@@ -1507,7 +1518,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float x_muonN_en_fit = sqrt(x_muonN_ma_fit*x_muonN_ma_fit+x_muonN_px_fit*x_muonN_px_fit+x_muonN_py_fit*x_muonN_py_fit+x_muonN_pz_fit*x_muonN_pz_fit);
 
               reco::CompositeCandidate reco_X_muonN(x_muonN_ch_fit,math::XYZTLorentzVector(x_muonN_px_fit,x_muonN_py_fit,x_muonN_pz_fit,x_muonN_en_fit),
-                                                       math::XYZPoint(x_muonN_vx_fit,x_muonN_vy_fit,x_muonN_vz_fit),443);
+                                                       math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),13);
               pat::CompositeCandidate pat_X_muonN(reco_X_muonN);
 
               float x_kaonP_ma_fit = x_kaonP_fromMCFit->currentState().mass();
@@ -1518,7 +1529,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float x_kaonP_en_fit = sqrt(x_kaonP_ma_fit*x_kaonP_ma_fit+x_kaonP_px_fit*x_kaonP_px_fit+x_kaonP_py_fit*x_kaonP_py_fit+x_kaonP_pz_fit*x_kaonP_pz_fit);
 
               reco::CompositeCandidate reco_X_kaonP(x_kaonP_ch_fit,math::XYZTLorentzVector(x_kaonP_px_fit,x_kaonP_py_fit,x_kaonP_pz_fit,x_kaonP_en_fit),
-                                                       math::XYZPoint(x_kaonP_vx_fit,x_kaonP_vy_fit,x_kaonP_vz_fit),443);
+                                                       math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),321);
               pat::CompositeCandidate pat_X_kaonP(reco_X_kaonP);
 
               float x_kaonN_ma_fit = x_kaonN_fromMCFit->currentState().mass();
@@ -1529,7 +1540,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float x_kaonN_en_fit = sqrt(x_kaonN_ma_fit*x_kaonN_ma_fit+x_kaonN_px_fit*x_kaonN_px_fit+x_kaonN_py_fit*x_kaonN_py_fit+x_kaonN_pz_fit*x_kaonN_pz_fit);
 
               reco::CompositeCandidate reco_X_kaonN(x_kaonN_ch_fit,math::XYZTLorentzVector(x_kaonN_px_fit,x_kaonN_py_fit,x_kaonN_pz_fit,x_kaonN_en_fit),
-                                                       math::XYZPoint(x_kaonN_vx_fit,x_kaonN_vy_fit,x_kaonN_vz_fit),443);
+                                                       math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),-321);
               pat::CompositeCandidate pat_X_kaonN(reco_X_kaonN);
 
               // mu1Px_MuMuKK->push_back( muPos_MuMuKK->currentState().globalMomentum().x() );
