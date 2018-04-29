@@ -945,6 +945,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           float dimuon_px_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().x();
           float dimuon_py_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().y();
           float dimuon_pz_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().z();
+          float dimuon_vx_fit = MuMuCand_fromFit->currentState().kinematicParameters().vertex().x();
           float dimuon_en_fit = sqrt(dimuon_ma_fit*dimuon_ma_fit+dimuon_px_fit*dimuon_px_fit+dimuon_py_fit*dimuon_py_fit+dimuon_pz_fit*dimuon_pz_fit);
 
           reco::CompositeCandidate reco_ref_JPsi(dimuon_ch_fit,math::XYZTLorentzVector(dimuon_px_fit,dimuon_py_fit,dimuon_pz_fit,dimuon_en_fit),
