@@ -940,7 +940,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           if (MuMuCand_fromFit->currentState().mass() < JPsiMinMass  ||  MuMuCand_fromFit->currentState().mass() > JPsiMaxMass)
           continue ;
 
-          int   dimuontt_ch_fit = MuMuCand_fromFit->currentState().charge();
           float dimuon_ma_fit = MuMuCand_fromFit->currentState().mass();
           int   dimuon_ch_fit = MuMuCand_fromFit->currentState().particleCharge();
           float dimuon_px_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().x();
@@ -954,7 +953,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
 
 
-          int   dimuontt_ch_fit = MuPosCand_fromFit->currentState().charge();
           float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
           int   muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
           float muonPos_px_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().x();
@@ -967,9 +965,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           pat::CompositeCandidate pat_ref_PM(reco_ref_PM);
 
 
-
-
-          int   muonNeg_ch_fit = MuNegCand_fromFit->currentState().charge();
           float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
           int   muonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
           float muonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
@@ -1200,7 +1195,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               if (KKCand_fromFit->currentState().mass() < KKMinMass  ||  KKCand_fromFit->currentState().mass() > KKMaxMass)
               continue ;
 
-              int   ditrack_ch_fit = KKCand_fromFit->currentState().charge();
               float ditrack_ma_fit = MuMuCand_fromFit->currentState().mass();
               int   ditrack_ch_fit = MuMuCand_fromFit->currentState().particleCharge();
               float ditrack_px_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().x();
@@ -1214,7 +1208,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
 
 
-              int   kaonPos_ch_fit = kaonPosCand_fromFit->currentState().charge();
               float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
               int   kaonPos_ch_fit = kaonPosCand_fromFit->currentState().particleCharge();
               float kaonPos_px_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().x();
@@ -1227,7 +1220,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               pat::CompositeCandidate pat_ref_PK(reco_ref_PK);
 
 
-              int   kaonNeg_ch_fit = kaonNegCand_fromFit->currentState().charge();
+
               float kaonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
               int   kaonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
               float kaonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
