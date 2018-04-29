@@ -936,9 +936,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           MuMuVertexFitTree->movePointerToTheNextChild();
           RefCountedKinematicParticle MuNegCand_fromFit = MuMuVertexFitTree->currentParticle();
 
-          double dimuontt_vx_fit = MuMuCand_vertex_fromFit->position().x();
-          double dimuontt_vy_fit = MuMuCand_vertex_fromFit->position().y();
-          double dimuontt_vz_fit = MuMuCand_vertex_fromFit->position().z();
+          double dimuon_vx_fit = MuMuCand_vertex_fromFit->position().x();
+          double dimuon_vy_fit = MuMuCand_vertex_fromFit->position().y();
+          double dimuon_vz_fit = MuMuCand_vertex_fromFit->position().z();
 
           ////////////////// fill the MuMu vectors //////////////////
           if (MuMuCand_fromFit->currentState().mass() < JPsiMinMass  ||  MuMuCand_fromFit->currentState().mass() > JPsiMaxMass)
