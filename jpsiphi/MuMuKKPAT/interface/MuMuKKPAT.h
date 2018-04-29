@@ -229,7 +229,7 @@ private:
   // std::vector<float>         *trD0, *trD0E, *trCharge;
   // std::vector<float>         *trfHits;
   // std::vector<bool>          *trFirstBarrel, *trFirstEndCap;
-  // std::vector<float>         *trDzVtx, *trDxyVtx;
+  std::vector<float>         *trDzVtx, *trDxyVtx;
   // std::vector<int>           *trQualityHighPurity, *trQualityTight;
   std::vector<double>        *tr_nsigdedx;
   std::vector<float>         *tr_dedx, *tr_dedxMass, *tr_theo, *tr_sigma;

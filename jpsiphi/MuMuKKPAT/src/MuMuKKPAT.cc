@@ -211,7 +211,7 @@ muType(0), muQual(0), muTrack(0), muNOverlap(0), muNSharingSegWith(0),
 // trNDF(0), trPhits(0), trShits(0), trChi2(0),
 // trD0(0), trD0E(0), trCharge(0),
 // trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
-// trDzVtx(0), trDxyVtx(0),
+trDzVtx(0), trDxyVtx(0),
 // trQualityHighPurity(0), trQualityTight(0),
 tr_nsigdedx(0), tr_dedx(0), tr_dedxMass(0), tr_theo(0), tr_sigma(0),
 tr_dedx_byHits(0), tr_dedxErr_byHits(0), tr_saturMeas_byHits(0), tr_Meas_byHits(0),
@@ -2370,8 +2370,8 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             // mumukktree->Branch("trackfHits", &trfHits);
             // mumukktree->Branch("trackFirstBarrel", &trFirstBarrel);
             // mumukktree->Branch("trackFirstEndCap", &trFirstEndCap);
-            // mumukktree->Branch("trackDzVtx", &trDzVtx);
-            // mumukktree->Branch("trackDxyVtx", &trDxyVtx);
+            mumukktree->Branch("trackDzVtx", &trDzVtx);
+            mumukktree->Branch("trackDxyVtx", &trDxyVtx);
             mumukktree->Branch("tr_nsigdedx", &tr_nsigdedx);
             mumukktree->Branch("tr_dedx", &tr_dedx);
             mumukktree->Branch("tr_dedxMass", &tr_dedxMass);
