@@ -381,7 +381,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       if ( hltresults->accept(i) ) { //  save trigger info only for accepted paths
         /// get the prescale from the HLTConfiguration, initialized at beginRun
         int prescale = hltConfig_.prescaleValue(iEvent,iSetup,triggerNames_.triggerNames().at(i));
-        if (Debug_) std::std::cout<<" HLT===> "<<triggerNames_.triggerNames().at(i)<<" prescale ="<<prescale<<std::std::endl;
+        if (Debug_) std::cout<<" HLT===> "<<triggerNames_.triggerNames().at(i)<<" prescale ="<<prescale<<std::endl;
         HLTPreScaleMap[triggerNames_.triggerNames().at(i)] = prescale;
       }
     }
@@ -467,16 +467,16 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   Handle< std::vector<pat::GenericParticle> > theKaonRefittedPATTrackHandle;
   iEvent.getByLabel("cleanPatTrackKaonCands", theKaonRefittedPATTrackHandle); /// container of tracks with kaon mass hypothesis
 
-  for ( std::vector<pat::GenericParticle>::const_iterator TrackNotRefitted = thePATTrackHandle->begin(); TrackNotRefitted != thePATTrackHandle->end(); ++TrackNotRefitted ) {
-    for ( std::vector<pat::GenericParticle>::const_iterator TrackRefitted = theKaonRefittedPATTrackHandle->begin(); TrackRefitted != theKaonRefittedPATTrackHandle->end(); ++TrackRefitted ) {
-      if ( TrackNotRefitted->track().key() == TrackRefitted->track().key() ) {
-        trNotRef->push_back( TrackNotRefitted->p() ) ;
-        trRef->push_back( TrackRefitted->p() ) ;
-        break ;
-      }
-    }
-    break ;
-  }
+  // for ( std::vector<pat::GenericParticle>::const_iterator TrackNotRefitted = thePATTrackHandle->begin(); TrackNotRefitted != thePATTrackHandle->end(); ++TrackNotRefitted ) {
+  //   for ( std::vector<pat::GenericParticle>::const_iterator TrackRefitted = theKaonRefittedPATTrackHandle->begin(); TrackRefitted != theKaonRefittedPATTrackHandle->end(); ++TrackRefitted ) {
+  //     if ( TrackNotRefitted->track().key() == TrackRefitted->track().key() ) {
+  //       trNotRef->push_back( TrackNotRefitted->p() ) ;
+  //       trRef->push_back( TrackRefitted->p() ) ;
+  //       break ;
+  //     }
+  //   }
+  //   break ;
+  // }
 
   Handle< std::vector<pat::Muon> > thePATMuonHandle;
   iEvent.getByLabel("patMuonsWithTrigger", thePATMuonHandle);
@@ -705,10 +705,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
       if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
+      bool CollectTracks_ = fa
       ////////////////// filling track tree //////////////////
       if(CollectTracks_)
         {
-        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle->begin(); iTr != thePATTrackHandle->end(); ++iTr ) {
+        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandl.begin(); iTr != thePATTrackHandl.end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
           tracks->puhs_back(tr.track());
 
