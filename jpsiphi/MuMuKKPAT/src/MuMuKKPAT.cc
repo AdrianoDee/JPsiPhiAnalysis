@@ -706,10 +706,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
       if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
       bool CollectTracks_ = false;
+
       ////////////////// filling track tree //////////////////
       if(CollectTracks_)
         {
-        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandl.begin(); iTr != thePATTrackHandl.end(); ++iTr ) {
+        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle.begin(); iTr != thePATTrackHandle.end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
           tracks->puhs_back(tr.track());
 
