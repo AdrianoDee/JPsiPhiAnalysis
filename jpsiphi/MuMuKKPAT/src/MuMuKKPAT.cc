@@ -705,7 +705,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
       if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
-      bool CollectTracks_ = fa
+      bool CollectTracks_ = false;
       ////////////////// filling track tree //////////////////
       if(CollectTracks_)
         {

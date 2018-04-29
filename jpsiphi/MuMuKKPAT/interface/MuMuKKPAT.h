@@ -259,7 +259,7 @@ private:
   std::vector<int>           *kaonNeg_KK_NDF ;
   std::vector<float>         *DR_MuMu_K1, *DR_MuMu_K2, *DR_MuMuKK_K1, *DR_MuMuKK_K2;
   /// Primary Vertex with "MuMu correction"
-  std::vector<int>           *PriVtxMuMuCorr_n;
+  std::vector<int>           *PriVtxMuMuCorr_n, mumuLessPvs_n;
   std::vector<float>         *PriVtxMuMuCorr_X, *PriVtxMuMuCorr_Y, *PriVtxMuMuCorr_Z ;
   std::vector<double>        *PriVtxMuMuCorr_EX, *PriVtxMuMuCorr_EY, *PriVtxMuMuCorr_EZ ;
   std::vector<float>	        *PriVtxMuMuCorr_Chi2, *PriVtxMuMuCorr_CL;
