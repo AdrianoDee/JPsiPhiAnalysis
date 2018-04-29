@@ -713,17 +713,17 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           pat::GenericParticle tr = *iTr;
           tracks->puhs_back(tr.track());
 
-          trPx->push_back(tr.px());
-          trPy->push_back(tr.py());
-          trPz->push_back(tr.pz());
-          trE->push_back(tr.energy());
+          // trPx->push_back(tr.px());
+          // trPy->push_back(tr.py());
+          // trPz->push_back(tr.pz());
+          // trE->push_back(tr.energy());
           // trPhits->push_back(tr.track()->hitPattern().numberOfValidPixelHits());
           // trShits->push_back(tr.track()->hitPattern().numberOfValidStripHits());
           // trChi2->push_back(tr.track()->chi2());
           // trNDF->push_back(tr.track()->ndof());
           // trD0->push_back(tr.track()->d0());
           // trD0E->push_back(tr.track()->d0Error());
-          trCharge->push_back(tr.charge());
+          // trCharge->push_back(tr.charge());
           // float hits = (1.0*tr.track()->found() )/ (tr.track()->found()+ tr.track()->lost() + tr.track()->trackerExpectedHitsInner().numberOfHits() + tr.track()->trackerExpectedHitsOuter().numberOfHits());
           // trfHits->push_back(hits);
           // trFirstBarrel->push_back(tr.track()->hitPattern().hasValidHitInFirstPixelBarrel());
