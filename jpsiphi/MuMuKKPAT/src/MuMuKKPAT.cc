@@ -710,7 +710,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
       ////////////////// filling track tree //////////////////
       if(CollectTracks_)
         {
-        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle.begin(); iTr != thePATTrackHandle.end(); ++iTr ) {
+        for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle->begin(); iTr != thePATTrackHandle->end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
           tracks->puhs_back(tr.track());
 
