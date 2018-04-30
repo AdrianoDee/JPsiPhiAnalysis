@@ -154,16 +154,15 @@ JPsiMinMass(iConfig.getUntrackedParameter<double>("MinJPsiMass", 2.8)),
 JPsiMaxMass(iConfig.getUntrackedParameter<double>("MaxJPsiMass", 3.4)),
 PhiMinMass(iConfig.getUntrackedParameter<double>("MinPhiMass", 0.97)),
 PhiMaxMass(iConfig.getUntrackedParameter<double>("MaxPhiMass", 1.07)),
-JPsiPhiMaxXMass(iConfig.getUntrackedParameter<double>("MaxJPsiPhiXMass", 4.35)),
-JPsiPhiMinB0Mass(iConfig.getUntrackedParameter<double>("MinJPsiPhiB0Mass", 5.1)),
-JPsiPhiMaxB0Mass(iConfig.getUntrackedParameter<double>("MaxJPsiPhiB0Mass", 5.6)),
+XMassMin(iConfig.getUntrackedParameter<double>("XMassMin", 4.0)),
+XMassMax(iConfig.getUntrackedParameter<double>("XMassMax", 6.0)),
 MuMuTrackMaxDR(iConfig.getUntrackedParameter<double>("MaxMuMuTrackDR", 1)),
 
 XTrackMaxDR(iConfig.getUntrackedParameter<double>("MaxXCandTrackDR", 1.1)),
 UseXDR(iConfig.getUntrackedParameter<bool>("UseXDR", false)),
 MuMuKKMinB0Mass(iConfig.getUntrackedParameter<double>("MinMuMuKKB0Mass", 0)),
 MuMuKKMaxB0Mass(iConfig.getUntrackedParameter<double>("MaxMuMuKKB0Mass", 10)),
-MuMuKKMaxXMass(iConfig.getUntrackedParameter<double>("MaxMuMuKKXMass", 10)),
+// MuMuKKMaxXMass(iConfig.getUntrackedParameter<double>("MaxMuMuKKXMass", 10)),
 addXlessPrimaryVertex_(iConfig.getUntrackedParameter<bool>("addXlessPrimaryVertex", true)),
 
 Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true)),
@@ -299,9 +298,9 @@ kaonPosFromPV(0), kaonNegFromPV(0)
   MuMuMaxMass = JPsiMaxMass;
   KKMinMass = PhiMinMass;
   KKMaxMass = PhiMaxMass;
-  MuMuKKMinB0Mass = JPsiPhiMinB0Mass;
-  MuMuKKMaxB0Mass = JPsiPhiMaxB0Mass;
-  MuMuKKMaxXMass = JPsiPhiMaxXMass;
+  MinXMass = XMassMin;
+  MaxXMass = XMassMax;
+
 }
 
 MuMuKKPAT::~MuMuKKPAT()
@@ -988,7 +987,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           ref_muneg.push_back(pat_ref_NM);
 
           Jpsi_p4.push_back(recoNegMuon->p4() + recoPosMuon->p4());
-          mupos_p4.push_back(recoPosMuon->p4(););
+          mupos_p4.push_back(recoPosMuon->p4());
           muneg_p4.push_back(recoNegMuon->p4());
 
           MuMuVtx_CL->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
@@ -1243,7 +1242,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               ref_kaonneg.push_back(reco_ref_NK);
 
               Phi_p4.push_back(trackPos->p4() + trackNeg->p4());
-              kpos_p4.push_back(trackPos->p4(););
+              kpos_p4.push_back(trackPos->p4());
               kneg_p4.push_back(trackNeg->p4());
 
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
@@ -1306,7 +1305,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               math::XYZTLorentzVector xCand = trackPos->p4() + trackNeg->p4() + MuMu;
               ////////////////// cuts on MuMuKK mass window for B0 //////////////////
-              if (MuMuKK.M() > MaxXMass  ||  MuMuKK.M() < MinXMass))
+              if (MuMuKK.M() > MaxXMass  ||  MuMuKK.M() < MinXMass)
               continue ; nX_pre9++ ;
 
               /// having two oppositely charged muons, and two oppositely charged tracks: try to vertex them
@@ -1674,8 +1673,8 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       }
 
 
-                      PriVtxXLess_n->push_back( X_pvs.size() ) ;
-                      xLessPvs->push_back( XLessPV);
+                      PriVtxXLess_n.push_back( X_pvs.size() ) ;
+                      xLessPvs.push_back( XLessPV);
                       // PriVtxXLess_X->push_back( XLessPV.position().x() ) ;
                       // PriVtxXLess_Y->push_back( XLessPV.position().y() ) ;
                       // PriVtxXLess_Z->push_back( XLessPV.position().z() ) ;
