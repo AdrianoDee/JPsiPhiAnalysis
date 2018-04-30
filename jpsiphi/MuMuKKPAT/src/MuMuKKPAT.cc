@@ -991,9 +991,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           // muP_p4   = recoPosMuon->p4();
           // muNeg_p4 = recoNegMuon->p4();
 
-          Jpsi_p4.push_back(mumu_p4);
-          mupos_p4.push_back(muP_p4);
-          muneg_p4.push_back(muNeg_p4);
+          // Jpsi_p4.push_back(mumu_p4);
+          // mupos_p4.push_back(muP_p4);
+          // muneg_p4.push_back(muNeg_p4);
 
           MuMuVtx_CL->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
           MuMuVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
