@@ -1282,7 +1282,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               // ////////////////// cuts on tracks' delta R for B0 //////////////////
               math::XYZTLorentzVector MuMu = (recoPosMuon->p4() + recoNegMuon->p4());
-              math::XYZTLorentzVector MuMuKK = (MuMu + trackPos->p4() + trackNeg->p4());
+              //math::XYZTLorentzVector MuMuKK = (MuMu + trackPos->p4() + trackNeg->p4());
               // float MuMu_K1_DR = sqrt( pow(MuMu.eta() - trackPos->p4().eta(),2) + pow(MuMu.phi() - trackPos->p4().phi(), 2) );
               // float MuMu_K2_DR = sqrt( pow(MuMu.eta() - trackNeg->p4().eta(),2) + pow(MuMu.phi() - trackNeg->p4().phi(), 2) );
               // float MuMuKK_K1_DR = sqrt( pow(MuMuKK.eta() - trackPos->p4().eta(),2) + pow(MuMuKK.phi() - trackPos->p4().phi(), 2) );
@@ -1305,7 +1305,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               math::XYZTLorentzVector xCand = trackPos->p4() + trackNeg->p4() + MuMu;
               ////////////////// cuts on MuMuKK mass window for B0 //////////////////
-              if (MuMuKK.M() > MaxXMass  ||  MuMuKK.M() < MinXMass)
+              if (xCand.M() > MaxXMass  ||  xCand.M() < MinXMass)
               continue ; nX_pre9++ ;
 
               /// having two oppositely charged muons, and two oppositely charged tracks: try to vertex them
