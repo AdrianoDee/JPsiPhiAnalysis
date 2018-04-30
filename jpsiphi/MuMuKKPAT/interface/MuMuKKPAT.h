@@ -149,7 +149,7 @@ private:
   double XMassMax, XMassMin ;
   double MuMuTrackMaxDR, XTrackMaxDR;
   bool   UseXDR ;
-  double MuMuKKMinB0Mass, MuMuKKMaxB0Mass, MuMuKKMaxXMass;
+  double MuMuKKMinB0Mass, MuMuKKMaxB0Mass, MaxXMass,MinXMass;
   bool   addXlessPrimaryVertex_;
   bool   Debug_;
   std::string DeDxEstimator_, m_dEdxDiscrimTag, m_dEdxDiscrimTag_kaon ;
