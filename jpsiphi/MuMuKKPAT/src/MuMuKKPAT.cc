@@ -1673,7 +1673,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       }
 
 
-                      PriVtxXLess_n.push_back( X_pvs.size() ) ;
+                      PriVtxXLess_n->push_back( X_pvs.size() ) ;
                       xLessPvs.push_back( XLessPV);
                       // PriVtxXLess_X->push_back( XLessPV.position().x() ) ;
                       // PriVtxXLess_Y->push_back( XLessPV.position().y() ) ;

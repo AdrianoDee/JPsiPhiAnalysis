@@ -146,7 +146,7 @@ private:
   bool   addMuMulessPrimaryVertex_;
   double MuMuMinMass, MuMuMaxMass, JPsiMinMass, JPsiMaxMass;
   double KKMinMass, KKMaxMass, PhiMinMass, PhiMaxMass;
-  double XMassMax, XMassMin ;
+  double XMassMin,XMassMax;
   double MuMuTrackMaxDR, XTrackMaxDR;
   bool   UseXDR ;
   double MuMuKKMinB0Mass, MuMuKKMaxB0Mass, MaxXMass,MinXMass;
