@@ -2177,7 +2177,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             kaonNeg_KK_Px->clear(); kaonNeg_KK_Py->clear();  kaonNeg_KK_Pz->clear(); kaonNeg_KK_Chi2->clear(); kaonNeg_KK_NDF->clear();
             DR_MuMu_K1->clear(); DR_MuMu_K2->clear(); DR_MuMuKK_K1->clear(); DR_MuMuKK_K2->clear();
             /// Primary Vertex with "MuMu correction"
-            mumuLessPvs_n->clear();
+            mumuLessPvs_n.clear();
             PriVtxMuMuCorr_X->clear(); PriVtxMuMuCorr_Y->clear(); PriVtxMuMuCorr_Z->clear();
             PriVtxMuMuCorr_EX->clear(); PriVtxMuMuCorr_EY->clear(); PriVtxMuMuCorr_EZ->clear();
             PriVtxMuMuCorr_Chi2->clear(); PriVtxMuMuCorr_CL->clear(); PriVtxMuMuCorr_tracks->clear();
