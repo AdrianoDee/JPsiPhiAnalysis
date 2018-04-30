@@ -714,7 +714,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
         {
         for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle->begin(); iTr != thePATTrackHandle->end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
-          tracks->puhs_back(tr.track());
+          tracks.puhs_back(tr.track());
 
           // trPx->push_back(tr.px());
           // trPy->push_back(tr.py());
@@ -981,11 +981,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
           pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
-          ref_Jpsi.push_back(patJPsi);
-          ref_mupos.push_back(patPM);
-          ref_muneg.push_back(patNM);
+          ref_Jpsi.push_back(pat_ref_JPsi);
+          ref_mupos.push_back(pat_ref_PM);
+          ref_muneg.push_back(pat_ref_NM);
 
-          mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
+          mumu_p4  = math::XYZTLorentzVector(recoNegMuon->p4() + recoPosMuon->p4());
           muP_p4   = recoPosMuon->p4();
           muNeg_p4 = recoNegMuon->p4();
 
