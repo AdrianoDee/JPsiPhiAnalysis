@@ -1111,8 +1111,8 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               }
             }
           }
-          mumuLessPvs_n->push_back( pvs.size() );
-          mumuLessPVs->push_back( mumuLessPV);
+          mumuLessPvs_n.push_back( pvs.size() );
+          mumuLessPVs.push_back( mumuLessPV);
 
           ++nMuMu;
           muons.clear();
@@ -1244,9 +1244,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               ref_kaonpos.push_back(reco_ref_PK);
               ref_kaonneg.push_back(reco_ref_NK);
 
-              mumu_p4  = recoNegMuon.p4() + recoPosMuon.p4();
-              muP_p4   = recoPosMuon.p4();
-              muNeg_p4 = recoNegMuon.p4();
+              mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
+              muP_p4   = recoPosMuon->p4();
+              muNeg_p4 = recoNegMuon->p4();
 
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
@@ -1324,13 +1324,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                     break;
 
                   if ( tNotRef->track().key() == trackNeg->track().key() && ! notRefNeg) {
-                    notRefNeg = true
+                    notRefNeg = true;
                     kaonPos_notRefit = TransientTrack( tNotRef->track(), &(*bFieldHandle) ) ;
                     continue;
                   }
 
                   if ( tNotRef->track().key() == trackPos->track().key() && ! notRefPos) {
-                    notRefPos = true
+                    notRefPos = true;
                     kaonPos_notRefit = TransientTrack( tNotRef->track(), &(*bFieldHandle) ) ;
                     continue;
                   }
