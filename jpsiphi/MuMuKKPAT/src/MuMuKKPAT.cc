@@ -987,7 +987,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           ref_mupos.push_back(pat_ref_PM);
           ref_muneg.push_back(pat_ref_NM);
 
-          mumu_p4  = math::XYZTLorentzVector(recoNegMuon->p4() + recoPosMuon->p4());
+          mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
           muP_p4   = recoPosMuon->p4();
           muNeg_p4 = recoNegMuon->p4();
 
