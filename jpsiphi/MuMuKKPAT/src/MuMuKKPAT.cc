@@ -987,9 +987,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           ref_mupos.push_back(pat_ref_PM);
           ref_muneg.push_back(pat_ref_NM);
 
-          mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
-          muP_p4   = recoPosMuon->p4();
-          muNeg_p4 = recoNegMuon->p4();
+          // mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
+          // muP_p4   = recoPosMuon->p4();
+          // muNeg_p4 = recoNegMuon->p4();
 
           Jpsi_p4.push_back(mumu_p4);
           mupos_p4.push_back(muP_p4);
@@ -1246,9 +1246,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               ref_kaonpos.push_back(reco_ref_PK);
               ref_kaonneg.push_back(reco_ref_NK);
 
-              mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
-              muP_p4   = recoPosMuon->p4();
-              muNeg_p4 = recoNegMuon->p4();
+              // mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
+              // muP_p4   = recoPosMuon->p4();
+              // muNeg_p4 = recoNegMuon->p4();
 
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
