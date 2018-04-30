@@ -38,6 +38,8 @@ Implementation:
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GtFdlWord.h"
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/Candidate/interface/CompositeCandidate.h"
+#include "DataFormats/Candidate/interface/LeafCandidates.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
@@ -1306,7 +1308,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // }
               // nX_pre8++ ;
 
-              math::XYZTLorentzVector xCand = trackPos->p4() + trackNeg->p4() + MuMu
+              math::XYZTLorentzVector xCand = trackPos->p4() + trackNeg->p4() + MuMu;
               ////////////////// cuts on MuMuKK mass window for B0 //////////////////
               if (MuMuKK.M() > MaxXMass  ||  MuMuKK.M() < MinXMass))
               continue ; nX_pre9++ ;
