@@ -165,7 +165,7 @@ private:
   int                   n_pV;
 
   Vertex pV, bS;
-  reco::TrackCollection tracks;
+  reco::TrackRefCollection tracks;
   std::vector<Vertex> corrPVs, mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlphaXLessPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
   std::vector<math::XYZTLorentzVector> mumu_p4, muP_p4,muNeg_p4;
   std::vector < CompositeCandidate > ref_Jpsi, ref_mupos, ref_muneg, ref_Phi, ref_kpos, ref_kneg;
