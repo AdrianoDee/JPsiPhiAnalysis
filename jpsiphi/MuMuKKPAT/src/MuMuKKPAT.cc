@@ -714,7 +714,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
         {
         for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle->begin(); iTr != thePATTrackHandle->end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
-          tracks.push_back(tr.track());
+          tracks.push_back(*tr.track());
 
           // trPx->push_back(tr.px());
           // trPy->push_back(tr.py());
