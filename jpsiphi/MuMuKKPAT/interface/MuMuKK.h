@@ -162,6 +162,8 @@ private:
   unsigned int          nX_pre0, nX_pre1, nX_pre2, nX_pre3, nX_pre4, nX_pre5, nX_pre6, nX_pre7, nX_pre8, nX_pre9, nX_pre10, nX_pre11, nX_pre12, nX_pre13, nX_pre14, nX_pre15;
   int                   n_pV;
   Vertex pV, bS;
+  std::vector < CompositeCandidate > ref_Jpsi, ref_mupos, ref_muneg, ref_Phi, ref_kpos, ref_kneg;
+  std::vector < LorentzVector > Jpsi_p4, mupos_p4, muneg_p4, Phi_p4, kpos_p4, kneg_p4;
   // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
   // int                   priVtx_tracks;
   float                 tracksPtSq_pV;
