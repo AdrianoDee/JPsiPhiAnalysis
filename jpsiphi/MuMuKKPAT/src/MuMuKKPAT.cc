@@ -985,9 +985,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           ref_mupos.push_back(patPM);
           ref_muneg.push_back(patNM);
 
-          mumu_p4  = recoNegMuon.p4() + recoPosMuon.p4();
-          muP_p4   = recoPosMuon.p4();
-          muNeg_p4 = recoNegMuon.p4();
+          mumu_p4  = recoNegMuon->p4() + recoPosMuon->p4();
+          muP_p4   = recoPosMuon->p4();
+          muNeg_p4 = recoNegMuon->p4();
 
           Jpsi_p4.push_back(mumu_p4);
           mupos_p4.push_back(muP_p4);
