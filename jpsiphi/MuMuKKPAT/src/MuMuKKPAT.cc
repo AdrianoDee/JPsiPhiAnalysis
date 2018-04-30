@@ -714,7 +714,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
         {
         for ( std::vector<pat::GenericParticle>::const_iterator iTr = thePATTrackHandle->begin(); iTr != thePATTrackHandle->end(); ++iTr ) {
           pat::GenericParticle tr = *iTr;
-          tracks.puhs_back(tr.track());
+          tracks.push_back(tr.track());
 
           // trPx->push_back(tr.px());
           // trPy->push_back(tr.py());
@@ -763,7 +763,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
         // muCharge->push_back(recoPosMuon->charge());
 
         if (recoPosMuon->track().isNull()) continue;
-        if (recoPosMuon->charge() .isNull()) continue;
+        if (recoPosMuon->charge()<=0.0) continue;
 
         // if (recoPosMuon->track().isNull()) { // rmu->track() returns innerTrack();
         //   std::cout << "no track for " << std::distance(thePATMuonHandle->begin(), posMuon) << " filling defaults" << std::endl;
@@ -1240,17 +1240,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               pat::CompositeCandidate pat_ref_NK(reco_ref_NK);
 
-              ref_Phi.push_back(patPhi);
-              ref_mupos.push_back(patPK);
-              ref_muneg.push_back(patNK);
+              ref_Phi.push_back(reco_ref_Phi);
+              ref_kaonpos.push_back(reco_ref_PK);
+              ref_kaonneg.push_back(reco_ref_NK);
 
               mumu_p4  = recoNegMuon.p4() + recoPosMuon.p4();
               muP_p4   = recoPosMuon.p4();
               muNeg_p4 = recoNegMuon.p4();
-
-              ref_Phi.push_back(patPhi);
-              ref_kpos.push_back(patPK);
-              ref_kneg.push_back(patNK);
 
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
