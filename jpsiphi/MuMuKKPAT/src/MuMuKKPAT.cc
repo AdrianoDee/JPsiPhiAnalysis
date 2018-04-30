@@ -39,7 +39,7 @@ Implementation:
 #include "DataFormats/L1GlobalTrigger/interface/L1GtFdlWord.h"
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
-#include "DataFormats/Candidate/interface/LeafCandidates.h"
+#include "DataFormats/Candidate/interface/LeafCandidate.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 

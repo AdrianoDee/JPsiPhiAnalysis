@@ -52,7 +52,7 @@
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
 #include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
-#include "DataFormats/Candidate/interface/LeafCandidates.h"
+#include "DataFormats/Candidate/interface/LeafCandidate.h"
 #include "DataFormats/V0Candidate/interface/V0Candidate.h"
 #include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
 #include "RecoVertex/V0Producer/interface/V0Producer.h"
