@@ -30,7 +30,7 @@ process.source = cms.Source("PoolSource",
 )
 
 if (not MC) :
-    sourceFiles = cms.untracked.vstring('/store/data/Run2012B/MuOniaParked/AOD/22Jan2013-v1/20001/EE35A843-3E69-E211-9292-00215E2226AC.root')
+    sourceFiles = cms.untracked.vstring('file:00054BD0-5668-E211-8091-00215E21DC7E.root')
 elif MC :
     readFiles = cms.untracked.vstring()
     sourceFiles.extend( [
@@ -123,8 +123,8 @@ process.load('L1TriggerConfig.L1GtConfigProducers.L1GtTriggerMaskAlgoTrigConfig_
 process.load('L1TriggerConfig.L1GtConfigProducers.L1GtTriggerMaskTechTrigConfig_cff')
 process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 
-####################################################################################
-##################################good collisions############################################
+###############################################################################################
+################################## good collisions ############################################
 
 #### 44x
 #process.primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
@@ -135,6 +135,7 @@ process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 #                                           )
 
 ## 53x
+
 pvSelection = cms.PSet(
         minNdof = cms.double( 4. )
         , maxZ    = cms.double( 24. )
@@ -179,7 +180,9 @@ process.genMuons = cms.EDProducer("GenParticlePruner",
                                   )
  )
 
-
+########################################################################
+##Trigger Matching for Muons
+########################################################################
 
 process.load("MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff")
 from MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff import  addMCinfo, useExistingPATMuons, useL1MatchingWindowForSinglets, changeTriggerProcessName, switchOffAmbiguityResolution, addDiMuonTriggers
@@ -210,13 +213,19 @@ process.muonMatchHLTTrackMu.maxDeltaR = 0.1
 process.muonMatchHLTTrackMu.maxDPtRel = 10.0
 
 from PhysicsTools.PatAlgos.tools.trackTools import *
-######## adding tracks refitted with different mass
+
+########################################################################
+##Tracks - adding tracks refitted with different mass
 from RecoTracker.TrackProducer.TrackRefitters_cff import *
 from TrackingTools.MaterialEffects.RungeKuttaTrackerPropagator_cfi import *
 #process.RungeKuttaTrackerPropagatorForMuons = TrackingTools.MaterialEffects.RungeKuttaTrackerPropagator_cfi.RungeKuttaTrackerPropagator.clone( Mass = cms.double(0.10565837), ComponentName = cms.string('RungeKuttaTrackerPropagatorForMuons') )
 #process.refittedGeneralTracksMuon = RecoTracker.TrackProducer.TrackRefitter_cfi.TrackRefitter.clone( Propagator = "RungeKuttaTrackerPropagatorForMuons" )
 process.RungeKuttaTrackerPropagatorForPions = TrackingTools.MaterialEffects.RungeKuttaTrackerPropagator_cfi.RungeKuttaTrackerPropagator.clone( Mass = cms.double(0.13957), ComponentName = cms.string('RungeKuttaTrackerPropagatorForPions') )
 process.refittedGeneralTracksPion = RecoTracker.TrackProducer.TrackRefitter_cfi.TrackRefitter.clone( Propagator = "RungeKuttaTrackerPropagatorForPions" )
+
+#######################################################################
+##Pions
+
 makeTrackCandidates( process,                                # patAODTrackCands
                      label = 'TrackCands',                   # output collection will be 'allLayer0TrackCands', 'allLayer1TrackCands', 'selectedLayer1TrackCands'
                      tracks = cms.InputTag('generalTracks'), # input track collection
@@ -224,11 +233,11 @@ makeTrackCandidates( process,                                # patAODTrackCands
                      #tracks = cms.InputTag('refittedGeneralTracksPion'), # input track collection               // AP changed from generalTracks
                      #particleType = 'mu+',                   # particle type (for assigning a mass) # not working, everything is a pion
                      particleType = 'pi+',                   # particle type (for assigning a mass) # not working, everything is a pion
-                     preselection = 'pt > 0.4',              # preselection cut on candidates. Only methods of 'reco::Candidate' are available
+                     preselection = 'pt > 0.5',              # preselection cut on candidates. Only methods of 'reco::Candidate' are available
                      #selection = 'pt > 0.35',                 # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
                      #selection = 'p > 0.5',                 # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
-                     selection = 'pt > 0.4 && p > 0.5',     # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
-		     isolation = {},                         # Isolations to use ('source':deltaR; set to {} for None)
+                     selection = 'pt > 0.5 && p > 0.5',     # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
+		             isolation = {},                         # Isolations to use ('source':deltaR; set to {} for None)
                      isoDeposits = [],
                      mcAs = None                           # Replicate MC match as the one used for Muons
              );                                    # you can specify more than one collection for this
@@ -236,12 +245,13 @@ makeTrackCandidates( process,                                # patAODTrackCands
 l1cands = getattr(process, 'patTrackCands')
 l1cands.addGenMatch = False
 
-######## adding tracks refitted with Kaon mass
+###################################################
+##Kaons
+
 #process.RungeKuttaTrackerPropagator.Mass = cms.double(0.493677)
 process.RungeKuttaTrackerPropagatorForKaons = TrackingTools.MaterialEffects.RungeKuttaTrackerPropagator_cfi.RungeKuttaTrackerPropagator.clone(
         Mass = cms.double(0.493677), ComponentName = cms.string('RungeKuttaTrackerPropagatorForKaons') )
 process.refittedGeneralTracksKaon = RecoTracker.TrackProducer.TrackRefitter_cfi.TrackRefitter.clone( Propagator = "RungeKuttaTrackerPropagatorForKaons" )
-###################################################
 makeTrackCandidates( process,                                        # patAODTrackCands
                      label = 'TrackKaonCands',                       # output collection will be 'allLayer0TrackCands', 'allLayer1TrackCands', 'selectedLayer1TrackCands'
                      #tracks = cms.InputTag('refittedGeneralTracksKaon'), # input track collection               // AP changed from generalTracks
@@ -249,11 +259,11 @@ makeTrackCandidates( process,                                        # patAODTra
                      particleType = 'K+',                            # particle type (for assigning a mass)  // AP changed from pi to K # not working, everything is a pion
                      #particleType = 'pi+',                            # particle type (for assigning a mass)  // AP changed from pi to K # not working, everything is a pion
                      #particleType = 'mu+',                            # particle type (for assigning a mass)  // AP changed from pi to K # not working, everything is a pion
-                     preselection = 'pt > 0.4',                      # preselection cut on candidates. Only methods of 'reco::Candidate' are available
+                     preselection = 'pt > 0.5',                      # preselection cut on candidates. Only methods of 'reco::Candidate' are available
                      #selection = 'pt > 0.35',                 # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
                      #selection = 'p > 0.5',                 # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
-                     selection = 'pt > 0.4 && p > 0.5',     # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
-		     isolation = {},                                 # Isolations to use ('source':deltaR; set to {} for None)
+                     selection = 'pt > 0.5 && p > 0.5',     # Selection on PAT Layer 1 objects ('selectedLayer1TrackCands')
+		             isolation = {},                                 # Isolations to use ('source':deltaR; set to {} for None)
                      isoDeposits = [],
                      #mcAs = 'muon'                                   # Replicate MC match as the one used for Muons # AP "=None"  ??
                      mcAs = None                                    # Replicate MC match as the one used for Muons
@@ -303,9 +313,15 @@ process.load("RecoVertex.BeamSpotProducer.BeamSpot_cff")
 #                                         ShapeTest = cms.bool(True),
 #                                 )
 
+###################################################
+##Filtering the event
 
 #process.PATfilter = cms.EDFilter("X3872FilterPAT")
 process.PATfilter = cms.EDFilter("X4140FilterPAT")
+
+
+###################################################
+##The Analyzer
 
 process.mkcands = cms.EDAnalyzer("mumukk",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
@@ -327,6 +343,9 @@ process.mkcands = cms.EDAnalyzer("mumukk",
                                  MaxMuNormChi2 = cms.untracked.double(7),
                                  MaxMuD0 = cms.untracked.double(10.0),
                                  sharedFraction = cms.untracked.double(0.5),
+
+                                 JPsiMass                 = cms.vdouble(2.95,3.25),
+                                 PhiMass                 = cms.vdouble(0.99,1.05),
 
                                  MinJPsiMass = cms.untracked.double(2.8), # SEMRA changed
                                  MaxJPsiMass = cms.untracked.double(3.4), # SEMRA changed
