@@ -323,7 +323,7 @@ process.PATfilter = cms.EDFilter("X4140FilterPAT")
 ###################################################
 ##The Analyzer
 
-process.mkcands = cms.EDAnalyzer("mumukk",
+process.mkcands = cms.EDAnalyzer("MuMuKKPAT",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
