@@ -2273,7 +2273,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
             if (Debug_) std::cout <<"after muon stuff clear" <<std::endl ;
             /// tracks
-            tracks->clear();
+            tracks.clear();
             // trNotRef->clear(); trRef->clear();
             // trPx->clear(); trPy->clear(); trPz->clear(); trE->clear();
             // trNDF->clear(); trPhits->clear(); trShits->clear(); trChi2->clear();
