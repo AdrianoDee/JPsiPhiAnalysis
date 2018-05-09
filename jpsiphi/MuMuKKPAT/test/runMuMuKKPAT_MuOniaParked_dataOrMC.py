@@ -32,7 +32,7 @@ process.source = cms.Source("PoolSource",
 if (not MC) :
     sourceFiles = cms.untracked.vstring('file:00054BD0-5668-E211-8091-00215E21DC7E.root')
 elif MC :
-    readFiles = cms.untracked.vstring()
+    sourceFiles = cms.untracked.vstring()
     sourceFiles.extend( [
     '/store/mc/Summer12DR53X/Y4140ToJpsiPhi_BFilter_TuneCUEP8M1_8TeV-Pythia8/AODSIM/PU_RD2_START53_V19F-v2/50000/00AC758F-4558-E611-AF39-02163E014BCA.root',
     '/store/mc/Summer12DR53X/Y4140ToJpsiPhi_BFilter_TuneCUEP8M1_8TeV-Pythia8/AODSIM/PU_RD2_START53_V19F-v2/50000/188EC304-1F58-E611-B1E5-FA163E7918CE.root',
