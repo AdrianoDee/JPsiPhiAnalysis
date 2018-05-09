@@ -319,6 +319,9 @@ MuMuKKPAT::~MuMuKKPAT()
 void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   /// get event content information
+  int debug = 0;
+
+  std::cout <<"Debug : " << debug << std::endl;
 
   bool decayChainOK = false;
   runNum = iEvent.id().run();
@@ -392,6 +395,8 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   } /// end valid trigger
 
+  std::cout <<"Debug : " << debug << std::endl;
+
   /// get L1 trigger info
   edm::ESHandle<L1GtTriggerMenu> menuRcd;
   iSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
@@ -440,6 +445,8 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     thePrimaryVtx = Vertex(beamSpot.position(), beamSpot.covariance3D());
     thePrimaryVtx_multiplicity = 1 ;
   }
+
+  std::cout <<"Debug : " << debug << std::endl;
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
@@ -495,6 +502,8 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     iexception_dedx = 1;
   }
 
+  std::cout <<"Debug : " << debug << std::endl;
+
   /// dE/dx hits
   Handle<edm::ValueMap<reco::DeDxData> > dEdxTrackHandle;
   try {
@@ -514,6 +523,8 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     iexception_dedx = 1;
   }
 
+
+  std::cout <<"Debug : " << debug << std::endl;
 
   ////////////////// check MC truth //////////////////
   if (doMC) {
@@ -2165,10 +2176,16 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             MuMuDecayVtx_X->clear(); MuMuDecayVtx_Y->clear(); MuMuDecayVtx_Z->clear();
             MuMuDecayVtx_XE->clear(); MuMuDecayVtx_YE->clear(); MuMuDecayVtx_ZE->clear();
             MuMuMuonTrigMatch->clear();
+
+            if (Debug_) std::cout <<"after mumus stuff clear" <<std::endl ;
+
             KKMass->clear(); KKPx->clear(); KKPy->clear(); KKPz->clear();
             KKVtx_CL->clear(); KKVtx_Chi2->clear();
             KKDecayVtx_X->clear(); KKDecayVtx_Y->clear(); KKDecayVtx_Z->clear();
             KKDecayVtx_XE->clear(); KKDecayVtx_YE->clear(); KKDecayVtx_ZE->clear();
+
+            if (Debug_) std::cout <<"after kks stuff clear" <<std::endl ;
+
             /// muons from JPsi (MuMu) fit & kaons from Phi (KK) fit
             muPos_MuMu_Px->clear(); muPos_MuMu_Py->clear(); muPos_MuMu_Pz->clear(); muPos_MuMu_Chi2->clear(); muPos_MuMu_NDF->clear();
             muNeg_MuMu_Px->clear(); muNeg_MuMu_Py->clear(); muNeg_MuMu_Pz->clear(); muNeg_MuMu_Chi2->clear(); muNeg_MuMu_NDF->clear();
@@ -2176,6 +2193,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             kaonPos_KK_Px->clear(); kaonPos_KK_Py->clear(); kaonPos_KK_Pz->clear(); kaonPos_KK_Chi2->clear(); kaonPos_KK_NDF->clear();
             kaonNeg_KK_Px->clear(); kaonNeg_KK_Py->clear();  kaonNeg_KK_Pz->clear(); kaonNeg_KK_Chi2->clear(); kaonNeg_KK_NDF->clear();
             DR_MuMu_K1->clear(); DR_MuMu_K2->clear(); DR_MuMuKK_K1->clear(); DR_MuMuKK_K2->clear();
+            if (Debug_) std::cout <<"after kaons stuff clear" <<std::endl ;
             /// Primary Vertex with "MuMu correction"
             mumuLessPvs_n.clear();
             PriVtxMuMuCorr_X->clear(); PriVtxMuMuCorr_Y->clear(); PriVtxMuMuCorr_Z->clear();
@@ -2188,6 +2206,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             xPxE->clear(); xPyE->clear(); xPzE->clear();
             xDecayVtx_X->clear(); xDecayVtx_Y->clear(); xDecayVtx_Z->clear();
             xDecayVtx_XE->clear(); xDecayVtx_YE->clear(); xDecayVtx_ZE->clear();
+            if (Debug_) std::cout <<"after x cands stuff clear" <<std::endl ;
             /// Muons and tracks after X candidates fit
             mu1Px_MuMuKK->clear(); mu1Py_MuMuKK->clear(); mu1Pz_MuMuKK->clear(); mu1E_MuMuKK->clear();
             mu2Px_MuMuKK->clear(); mu2Py_MuMuKK->clear(); mu2Pz_MuMuKK->clear(); mu2E_MuMuKK->clear();
@@ -2197,12 +2216,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             k2Px_MuMuKK->clear(); k2Py_MuMuKK->clear(); k2Pz_MuMuKK->clear(); k2E_MuMuKK->clear();
             kaonNeg_nsigdedx->clear(); kaonNeg_dedx->clear(); kaonNeg_dedxMass->clear(); kaonNeg_theo->clear(); kaonNeg_sigma->clear();
             kaonNeg_dedx_byHits->clear(); kaonNeg_dedxErr_byHits->clear(); kaonNeg_saturMeas_byHits->clear(); kaonNeg_Meas_byHits->clear();
+            if (Debug_) std::cout <<"after mu tracks stuff clear" <<std::endl ;
             /// Primary Vertex with largest B0_cos(alpha)
             PriVtxXLess_n->clear();
             PriVtxXLess_X->clear(); PriVtxXLess_Y->clear(); PriVtxXLess_Z->clear();
             PriVtxXLess_EX->clear(); PriVtxXLess_EY->clear(); PriVtxXLess_EZ->clear();
             PriVtxXLess_Chi2->clear(); PriVtxXLess_CL->clear(); PriVtxXLess_tracks->clear();
-
+            if (Debug_) std::cout <<"after pvxless stuff clear" <<std::endl ;
             XLessPV_tracksPtSq->clear(); XLessPV_4tracksPtSq->clear();
             PriVtx_XCosAlpha_n->clear();
             PriVtx_XCosAlpha_X->clear(); PriVtx_XCosAlpha_Y->clear(); PriVtx_XCosAlpha_Z->clear();
@@ -2212,11 +2232,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             PriVtxXLess_XCosAlpha_X->clear(); PriVtxXLess_XCosAlpha_Y->clear(); PriVtxXLess_XCosAlpha_Z->clear();
             PriVtxXLess_XCosAlpha_EX->clear(); PriVtxXLess_XCosAlpha_EY->clear(); PriVtxXLess_XCosAlpha_EZ->clear();
             PriVtxXLess_XCosAlpha_Chi2->clear(); PriVtxXLess_XCosAlpha_CL->clear(); PriVtxXLess_XCosAlpha_tracks->clear();
+            if (Debug_) std::cout <<"after cosA  stuff clear" <<std::endl ;
             /// Primary Vertex with "B0 correction"
             PriVtxXCorr_n->clear();
             PriVtxXCorr_X->clear(); PriVtxXCorr_Y->clear(); PriVtxXCorr_Z->clear();
             PriVtxXCorr_EX->clear(); PriVtxXCorr_EY->clear(); PriVtxXCorr_EZ->clear();
             PriVtxXCorr_Chi2->clear(); PriVtxXCorr_CL->clear(); PriVtxXCorr_tracks->clear();
+            if (Debug_) std::cout <<"after pvs stuff clear" <<std::endl ;
             /// Lifetime variables for B0
             xCosAlphaBS->clear(); xCosAlpha3DBS->clear(); xCTauBS->clear(); xCTauBSE->clear(); xLxyBS->clear(); xLxyBSE->clear(); xLxyzBS->clear(); xLxyzBSE->clear();
             xCosAlphaPV->clear(); xCosAlpha3DPV->clear(); xCTauPV->clear(); xCTauPVE->clear(); xLxyPV->clear(); xLxyPVE->clear(); xLxyzPV->clear(); xLxyzPVE->clear();
@@ -2227,6 +2249,8 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             xCosAlphaXLessPVCosAlpha3D->clear(); xCosAlpha3DXLessPVCosAlpha3D->clear(); xCTauXLessPVCosAlpha3D->clear() ; xCTauXLessPVCosAlpha3DE->clear() ; xLxyXLessPVCosAlpha3D->clear() ; xLxyXLessPVCosAlpha3DE->clear() ; xLxyzXLessPVCosAlpha3D->clear() ; xLxyzXLessPVCosAlpha3DE->clear() ;
             xCosAlphaPVX->clear(); xCTauPVX->clear(); xCTauPVXE->clear(); xLxyPVX->clear(); xLxyzPVX->clear();
             xCTauPVX_3D->clear(); xCTauPVX_3D_err->clear();
+            if (Debug_) std::cout <<"after other ctau stuff clear" <<std::endl ;
+
             /// dxy, dz, dxyE, dzE for kaons from PV, BS, B0LessPV
             kaonPos_dxy_PV->clear(); kaonPos_dz_PV->clear(); kaonNeg_dxy_PV->clear(); kaonNeg_dz_PV->clear();
             kaonPos_dxy_BS->clear(); kaonPos_dz_BS->clear(); kaonNeg_dxy_BS->clear(); kaonNeg_dz_BS->clear();
