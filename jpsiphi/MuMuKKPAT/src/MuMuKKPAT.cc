@@ -193,9 +193,9 @@ MCmumPx(0), MCmumPy(0), MCmumPz(0),
 MCPhiPx(0), MCPhiPy(0), MCPhiPz(0),
 MCkpPx(0), MCkpPy(0), MCkpPz(0),
 MCkmPx(0), MCkmPy(0), MCkmPz(0),
-//MCpionPx(0), MCpionPy(0), MCpionPz(0),
-//MCkaonPx(0), MCkaonPy(0), MCkaonPz(0),
-//MCpionCh(0), MCkaonCh(0),
+MCpionPx(0), MCpionPy(0), MCpionPz(0),
+MCkaonPx(0), MCkaonPy(0), MCkaonPz(0),
+MCpionCh(0), MCkaonCh(0),
 MCPx(0), MCPy(0), MCPz(0),
 /// generic muons
 muPx(0), muPy(0), muPz(0), muCharge(0),
@@ -209,13 +209,14 @@ muGlDzVtx(0), muGlDxyVtx(0),
 nMatchedStations(0),
 muType(0), muQual(0), muTrack(0), muNOverlap(0), muNSharingSegWith(0),
 /// generic tracks
-// trNotRef(0), trRef(0),
-// trPx(0), trPy(0), trPz(0), trE(0),
-// trNDF(0), trPhits(0), trShits(0), trChi2(0),
-// trD0(0), trD0E(0), trCharge(0),
-// trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
+tracks(0),
+trNotRef(0), trRef(0),
+trPx(0), trPy(0), trPz(0), trE(0),
+trNDF(0), trPhits(0), trShits(0), trChi2(0),
+trD0(0), trD0E(0), trCharge(0),
+trfHits(0), trFirstBarrel(0), trFirstEndCap(0),
 trDzVtx(0), trDxyVtx(0),
-// trQualityHighPurity(0), trQualityTight(0),
+trQualityHighPurity(0), trQualityTight(0),
 tr_nsigdedx(0), tr_dedx(0), tr_dedxMass(0), tr_theo(0), tr_sigma(0),
 tr_dedx_byHits(0), tr_dedxErr_byHits(0), tr_saturMeas_byHits(0), tr_Meas_byHits(0),
 /// MuMu cand & KK cand
@@ -2192,7 +2193,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             MuMuType->clear();
             kaonPos_KK_Px->clear(); kaonPos_KK_Py->clear(); kaonPos_KK_Pz->clear(); kaonPos_KK_Chi2->clear(); kaonPos_KK_NDF->clear();
             kaonNeg_KK_Px->clear(); kaonNeg_KK_Py->clear();  kaonNeg_KK_Pz->clear(); kaonNeg_KK_Chi2->clear(); kaonNeg_KK_NDF->clear();
-            DR_MuMu_K1->clear(); DR_MuMu_K2->clear(); DR_MuMuKK_K1->clear(); DR_MuMuKK_K2->clear();
+            // DR_MuMu_K1->clear(); DR_MuMu_K2->clear(); DR_MuMuKK_K1->clear(); DR_MuMuKK_K2->clear();
             if (Debug_) std::cout <<"after kaons stuff clear" <<std::endl ;
             /// Primary Vertex with "MuMu correction"
             mumuLessPvs_n.clear();
@@ -2272,12 +2273,13 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
             if (Debug_) std::cout <<"after muon stuff clear" <<std::endl ;
             /// tracks
-            trNotRef->clear(); trRef->clear();
-            trPx->clear(); trPy->clear(); trPz->clear(); trE->clear();
-            trNDF->clear(); trPhits->clear(); trShits->clear(); trChi2->clear();
-            trD0->clear(); trD0E->clear(); trCharge->clear();
-            trQualityHighPurity->clear(); trQualityTight->clear();
-            trfHits->clear(); trFirstBarrel->clear(); trFirstEndCap->clear();
+            tracks->clear();
+            // trNotRef->clear(); trRef->clear();
+            // trPx->clear(); trPy->clear(); trPz->clear(); trE->clear();
+            // trNDF->clear(); trPhits->clear(); trShits->clear(); trChi2->clear();
+            // trD0->clear(); trD0E->clear(); trCharge->clear();
+            // trQualityHighPurity->clear(); trQualityTight->clear();
+            // trfHits->clear(); trFirstBarrel->clear(); trFirstEndCap->clear();
             trDzVtx->clear(); trDxyVtx->clear();
             tr_nsigdedx->clear(); tr_dedx->clear(); tr_dedxMass->clear(); tr_theo->clear(); tr_sigma->clear();
             tr_dedx_byHits->clear(); tr_dedxErr_byHits->clear(); tr_saturMeas_byHits->clear(); tr_Meas_byHits->clear();
