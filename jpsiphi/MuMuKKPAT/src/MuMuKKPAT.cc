@@ -179,6 +179,7 @@ nX_pre0(0), nX_pre1(0), nX_pre2(0), nX_pre3(0), nX_pre4(0), nX_pre5(0), nX_pre6(
 
 n_pV(0),tracksPtSq_pV(0),
 /// indices
+tracks(0),
 mu1Idx(0), mu2Idx(0), MuMuType(0), ka1Idx(0), ka2Idx(0),
 X_MuMuIdx(0), X_ka1Idx(0), X_ka2Idx(0),
 /// MC Analysis /// n_B0Ancestors & no for X
@@ -209,7 +210,6 @@ muGlDzVtx(0), muGlDxyVtx(0),
 nMatchedStations(0),
 muType(0), muQual(0), muTrack(0), muNOverlap(0), muNSharingSegWith(0),
 /// generic tracks
-tracks(0),
 trNotRef(0), trRef(0),
 trPx(0), trPy(0), trPz(0), trE(0),
 trNDF(0), trPhits(0), trShits(0), trChi2(0),
