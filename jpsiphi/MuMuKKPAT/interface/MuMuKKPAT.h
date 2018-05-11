@@ -201,9 +201,9 @@ private:
   std::vector<float>         *MCPhiPx, *MCPhiPy, *MCPhiPz;
   std::vector<float>         *MCkpPx, *MCkpPy, *MCkpPz;
   std::vector<float>         *MCkmPx, *MCkmPy, *MCkmPz;
-  //std::vector<float>         *MCpionPx, *MCpionPy, *MCpionPz;
-  //std::vector<float>         *MCkaonPx, *MCkaonPy, *MCkaonPz;
-  //std::vector<int>           *MCpionCh, *MCkaonCh;
+  std::vector<float>         *MCpionPx, *MCpionPy, *MCpionPz;
+  std::vector<float>         *MCkaonPx, *MCkaonPy, *MCkaonPz;
+  std::vector<int>           *MCpionCh, *MCkaonCh;
   std::vector<float>         *MCPx, *MCPy, *MCPz;
 
   /// Generic Muons
