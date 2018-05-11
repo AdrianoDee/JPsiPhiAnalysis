@@ -1391,10 +1391,15 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                 MultiTrackKinematicConstraint *MuMu = 0;
                 MuMu = new TwoTrackMassKinematicConstraint(JPsi_mass);
 
+                std::cout<< "POINT 30.1" <<std::endl;
 
                 XVertexFitTree = XFitter.fit( xDaughters, MuMu );
 
+                std::cout<< "POINT 30.2" <<std::endl;
+
                 if (notRefittedPartner) { // use not refitted kaons
+
+                  std::cout<< "POINT 30.3" <<std::endl;
 
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
@@ -1402,18 +1407,25 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                   xDaughters_unref.push_back(pFactory.particle( kaonNeg_notRefit, kaon_mass, chi, ndf, small_sigma));
 
                   XVertexFitTree_noKrefit = XFitter.fit( xDaughters_unref, MuMu );
+                  std::cout<< "POINT 30.4" <<std::endl;
                 }
               }
               else {
+
+                std::cout<< "POINT 30.5" <<std::endl;
                 XVertexFitTree = XFitter.fit( xDaughters );
+                std::cout<< "POINT 30.6" <<std::endl;
+
                 if (notRefittedPartner) { // use not refitted kaons
 
+                  std::cout<< "POINT 30.7" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( kaonPos_notRefit, kaon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( kaonNeg_notRefit, kaon_mass, chi, ndf, small_sigma));
 
                   XVertexFitTree_noKrefit = XFitter.fit( xDaughters_unref );
+                  std::cout<< "POINT 30.8" <<std::endl;
                 }
               }
 
