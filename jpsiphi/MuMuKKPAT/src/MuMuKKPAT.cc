@@ -1355,7 +1355,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
                   if ( tNotRef->track().key() == trackNeg->track().key() && ! notRefNeg) {
                     notRefNeg = true;
-                    kaonPos_notRefit = TransientTrack( tNotRef->track(), &(*bFieldHandle) ) ;
+                    kaonNeg_notRefit = TransientTrack( tNotRef->track(), &(*bFieldHandle) ) ;
                     continue;
                   }
 
@@ -1396,14 +1396,18 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
                 std::cout<< "POINT 30.2" <<std::endl;
 
-                if (notRefittedPartner) { // use not refitted kaons
+                if (notRefittedPartner && notRefNeg && notRefPos) { // use not refitted kaons
 
                   std::cout<< "POINT 30.3" <<std::endl;
 
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
+                  std::cout<< "POINT 30.3.1" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
+                  std::cout<< "POINT 30.3.2" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( kaonPos_notRefit, kaon_mass, chi, ndf, small_sigma));
+                  std::cout<< "POINT 30.3.3" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( kaonNeg_notRefit, kaon_mass, chi, ndf, small_sigma));
+                  std::cout<< "POINT 30.3.4" <<std::endl;
 
                   XVertexFitTree_noKrefit = XFitter.fit( xDaughters_unref, MuMu );
                   std::cout<< "POINT 30.4" <<std::endl;
@@ -1415,7 +1419,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                 XVertexFitTree = XFitter.fit( xDaughters );
                 std::cout<< "POINT 30.6" <<std::endl;
 
-                if (notRefittedPartner) { // use not refitted kaons
+                if (notRefittedPartner && notRefNeg && notRefPos) { // use not refitted kaons
 
                   std::cout<< "POINT 30.7" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
