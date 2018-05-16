@@ -1013,6 +1013,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           muNeg_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
           muNeg_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
 
+
           // mumu_p4->push_back();
           //
           // MuMuMass->push_back( MuMuCand_fromFit->currentState().mass() );
@@ -2500,6 +2501,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("muDxyVtx", &muDxyVtx);
             /// MuMu cand
             mumukktree->Branch("nMuMu",&nMuMu,"nMuMu/i");
+            mumukktree->Branch("ref_Jpsi", "reco::CompositeCandidateCollection", &ref_Jpsi);
             mumukktree->Branch("MuMuMass",&MuMuMass);
             mumukktree->Branch("MuMuPx",&MuMuPx);
             mumukktree->Branch("MuMuPy",&MuMuPy);

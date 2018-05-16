@@ -169,7 +169,7 @@ private:
   reco::TrackCollection tracks;
   std::vector<Vertex> corrPVs, mumuLessPVs, xLessPvs, xCosAlphaPVs, xCosAlphaXLessPVs, xCosAlpha3DPVs, xCosAlpha3DXLessPVs;
   // math::XYZTLorentzVector mumu_p4, muP_p4,muNeg_p4;
-  std::vector < CompositeCandidate > ref_Jpsi, ref_mupos, ref_muneg, ref_Phi, ref_kaonpos, ref_kaonneg;
+  reco::CompositeCandidateCollection ref_Jpsi, ref_mupos, ref_muneg, ref_Phi, ref_kaonpos, ref_kaonneg;
   std::vector < reco::LeafCandidate::LorentzVector > Jpsi_p4, mupos_p4, muneg_p4, Phi_p4, kpos_p4, kneg_p4;
 
   // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
