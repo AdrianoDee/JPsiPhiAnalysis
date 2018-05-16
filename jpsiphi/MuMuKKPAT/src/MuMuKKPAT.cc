@@ -366,7 +366,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (int itrig = 0; itrig < ntrigs; itrig++) {
       string trigName = triggerNames_.triggerName(itrig);
       int hltflag = (*hltresults)[itrig].accept();
-      if (Debug_) std::cout << trigName << " " <<hltflag <<std::endl;
+      if (Debug_) if (hltflag) std::cout << trigName << " " <<hltflag <<std::endl;
       trigRes->push_back(hltflag);
       trigNames->push_back(trigName);
 
