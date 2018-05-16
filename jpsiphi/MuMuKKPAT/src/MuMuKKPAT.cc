@@ -325,7 +325,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   /// get event content information
   int debug = 0;
 
-  std::cout <<"Debug : " << ++debug << std::endl;
+  if(Debug_) std::cout <<"Debug : " << ++debug << std::endl;
 
   bool decayChainOK = false;
   runNum = iEvent.id().run();
@@ -1051,9 +1051,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           if (Debug_) std::cout <<dimuonType <<std::endl;
 
           if (Debug_) std::cout <<"evt:" <<evtNum <<" MuMu with diMuonType = " <<dimuonType <<std::endl;
-          //std::cout << "POINT 0" << std::endl;
+          //if (Debug_) std::cout << "POINT 0" << std::endl;
           // MuMuType->push_back(dimuonType);
-          //std::cout << "POINT 2" << std::endl;
+          //if (Debug_) std::cout << "POINT  2" << std::endl;
 
           int ntriggers = TriggersForMatching_.size();
           if (Debug_) std::cout << "ntriggers: " << ntriggers << std::endl;
@@ -1063,27 +1063,27 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             if (Debug_) std::cout << "MatchingTriggerResult[" << MatchTrig << "]: " << MatchingTriggerResult[MatchTrig] << std::endl;
             if ( MatchingTriggerResult[MatchTrig]!=0 )
             {
-              //std::cout << "POINT 3" << std::endl;
+              //if (Debug_) std::cout << "POINT  3" << std::endl;
               if (Debug_) std::cout << "CHECKING FiltersForMatching_[" << MatchTrig << "]: " << FiltersForMatching_[MatchTrig] << std::endl;
-              //std::cout << "POINT 4" << std::endl;
+              //if (Debug_) std::cout << "POINT  4" << std::endl;
               pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-              //std::cout << "POINT 5" << std::endl;
+              //if (Debug_) std::cout << "POINT  5" << std::endl;
               pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-              //std::cout << "POINT 6" << std::endl;
+              //if (Debug_) std::cout << "POINT  6" << std::endl;
               bool pass1 = mu1HLTMatches.size() > 0;
               bool pass2 = mu2HLTMatches.size() > 0;
-              //std::cout << "POINT 7" << std::endl;
+              //if (Debug_) std::cout << "POINT  7" << std::endl;
               if ((pass1) && (pass2))
               {
-                //std::cout << "POINT 8" << std::endl;
+                //if (Debug_) std::cout << "POINT  8" << std::endl;
                 MuMuMuonTrigMatch->push_back(true);
                 if (Debug_) std::cout <<"Matched MuMu" <<std::endl ;
               } else
-              //std::cout << "POINT 9" << std::endl;
+              //if (Debug_) std::cout << "POINT 9" << std::endl;
               MuMuMuonTrigMatch->push_back(false);
             }
             else
-            //std::cout << "POINT 10" << std::endl;
+            //if (Debug_) std::cout << "POINT 10" << std::endl;
             MuMuMuonTrigMatch->push_back(false);
           }
 
@@ -1134,11 +1134,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           /// for B0
           if (Debug_) std::cout <<"evt:"<<evtNum<< " is Invalid Muon ?  " <<isEventWithInvalidMu << std::endl;
           //if (skipJPsi && ( dimuonType == 1 ));
-          //std::cout<< "POINT 11" <<std::endl;
+          //if (Debug_) std::cout << "POINT 11" <<std::endl;
           nTrk->push_back( thePATTrackHandle->size() ) ;
-          // //std::cout<< "POINT 12" <<std::endl;
+          // //if (Debug_) std::cout << "POINT 12" <<std::endl;
           // if (thePATTrackHandle->size() < 2) {
-          //   //std::cout<< "POINT 13" <<std::endl;
+          //   //if (Debug_) std::cout << "POINT 13" <<std::endl;
           //   nX_pre0++;
           // }
 
@@ -1146,25 +1146,25 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
           ////////////////// check tracks for kaonPos for B0 //////////////////
           for ( std::vector<pat::GenericParticle>::const_iterator trackPos = theKaonRefittedPATTrackHandle->begin(); trackPos != theKaonRefittedPATTrackHandle->end(); ++trackPos ) {
-            if (Debug_) std::cout<< "POINT 15" <<std::endl;
+            if (Debug_) if (Debug_) std::cout << "POINT 15" <<std::endl;
             /// check track doesn't overlap with the MuMu candidate tracks
             if (trackPos->charge() <= 0) continue;
             if (trackPos->track().key() == recoPosMuon->track().key()  ||  trackPos->track().key() == recoNegMuon->track().key())
             continue ;
 
-            if (Debug_) std::cout<< "POINT 16" <<std::endl;
+            if (Debug_) if (Debug_) std::cout << "POINT 16" <<std::endl;
             /// cuts on charged tracks
             if (( trackPos->track()->chi2()/trackPos->track()->ndof() > TrMaxNormChi2 )  ||  trackPos->pt() < TrMinPt)
             continue ; nX_pre3++ ;
 
-            std::cout<< "POINT 17" <<std::endl;
+            if (Debug_) std::cout << "POINT 17" <<std::endl;
 
 
 
             ////////////////// check tracks for kaonNeg for B0 //////////////////
             for ( std::vector<pat::GenericParticle>::const_iterator trackNeg = trackPos+1; trackNeg != theKaonRefittedPATTrackHandle->end(); ++trackNeg ){
 
-              std::cout<< "POINT 18" <<std::endl;
+              if (Debug_) std::cout << "POINT 18" <<std::endl;
               /// check that this second track doesn't overlap with the the first track candidate
               if (trackNeg->track().key() == trackPos->track().key())
               continue ; nX_pre4++ ;
@@ -1178,7 +1178,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               if ((trackNeg->track()->chi2() / trackNeg->track()->ndof() > TrMaxNormChi2)  ||  trackNeg->pt() < TrMinPt)
               continue; nX_pre7++ ;
 
-              std::cout<< "POINT 19" <<std::endl;
+              if (Debug_) std::cout << "POINT 19" <<std::endl;
 
               ////////////////// get the KK information //////////////////
               TransientTrack kaonPosTT( trackPos->track(), &(*bFieldHandle) );
@@ -1188,7 +1188,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               /// initial chi2 and ndf before kinematic fits
               float chi = 0., ndf = 0.;
 
-              std::cout<< "POINT 20" <<std::endl;
+              if (Debug_) std::cout << "POINT 20" <<std::endl;
 
               std::vector<RefCountedKinematicParticle> kaons;
               kaons.push_back( pFactory.particle( kaonPosTT, kaon_mass, chi, ndf, small_sigma));
@@ -1197,7 +1197,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               RefCountedKinematicTree KKVertexFitTree;
               KKVertexFitTree = KKFitter.fit(kaons);
 
-              std::cout<< "POINT 21" <<std::endl;
+              if (Debug_) std::cout << "POINT 21" <<std::endl;
 
               if (!KKVertexFitTree->isValid())
               continue ;
@@ -1215,7 +1215,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               double ditrack_vy_fit = KKCand_vertex_fromFit->position().y();
               double ditrack_vz_fit = KKCand_vertex_fromFit->position().z();
 
-              std::cout<< "POINT 22" <<std::endl;
+              if (Debug_) std::cout << "POINT 22" <<std::endl;
 
               ////////////////// fill the KK vectors //////////////////
               if (KKCand_fromFit->currentState().mass() < KKMinMass  ||  KKCand_fromFit->currentState().mass() > KKMaxMass)
@@ -1232,7 +1232,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(ditrack_vx_fit,ditrack_vy_fit,ditrack_vz_fit),443);
               pat::CompositeCandidate pat_ref_Phi(reco_ref_Phi);
 
-              std::cout<< "POINT 23" <<std::endl;
+              if (Debug_) std::cout << "POINT 23" <<std::endl;
 
 
               float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
@@ -1246,7 +1246,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(ditrack_vx_fit,ditrack_vy_fit,ditrack_vz_fit),-13);
               pat::CompositeCandidate pat_ref_PK(reco_ref_PK);
 
-              std::cout<< "POINT 24" <<std::endl;
+              if (Debug_) std::cout << "POINT 24" <<std::endl;
 
               float kaonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
               int   kaonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
@@ -1258,7 +1258,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               reco::CompositeCandidate reco_ref_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
                                                        math::XYZPoint(ditrack_vx_fit,ditrack_vy_fit,ditrack_vz_fit),13);
 
-              std::cout<< "POINT 24" <<std::endl;
+              if (Debug_) std::cout << "POINT 24" <<std::endl;
 
 
               pat::CompositeCandidate pat_ref_NK(reco_ref_NK);
@@ -1274,7 +1274,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
 
-              std::cout<< "POINT 25" <<std::endl;
+              if (Debug_) std::cout << "POINT 25" <<std::endl;
 
               kaonPos_KK_Chi2->push_back( kaonPosCand_fromFit->chiSquared());
               kaonPos_KK_NDF->push_back( kaonPosCand_fromFit->degreesOfFreedom());
@@ -1304,7 +1304,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // kaonNeg_KK_Py->push_back( Ka2Cand_KP.momentum().y());
               // kaonNeg_KK_Pz->push_back( Ka2Cand_KP.momentum().z());
               //
-              std::cout<< "POINT 26" <<std::endl;
+              if (Debug_) std::cout << "POINT 26" <<std::endl;
 
               ++nKK;
               kaons.clear();
@@ -1332,7 +1332,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // }
               // nX_pre8++ ;
 
-              std::cout<< "POINT 27" <<std::endl;
+              if (Debug_) std::cout << "POINT 27" <<std::endl;
 
               math::XYZTLorentzVector xCand = trackPos->p4() + trackNeg->p4() + MuMu;
               ////////////////// cuts on MuMuKK mass window for B0 //////////////////
@@ -1343,7 +1343,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               //TransientTrack kaonPosTT( trackPos->track(), &(*bFieldHandle) );
               //TransientTrack kaonNegTT( trackNeg->track(), &(*bFieldHandle) );
 
-              std::cout<< "POINT 28" <<std::endl;
+              if (Debug_) std::cout << "POINT 28" <<std::endl;
 
               TransientTrack kaonPos_notRefit, kaonNeg_notRefit;
               bool notRefPos = false, notRefNeg = false;
@@ -1368,7 +1368,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               }
 
-              std::cout<< "POINT 29" <<std::endl;
+              if (Debug_) std::cout << "POINT 29" <<std::endl;
 
               bool notRefittedPartner = notRefPos || notRefNeg;
               /// do mass constraint for MuMu cand and do mass constrained vertex fit for B0
@@ -1381,58 +1381,58 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               RefCountedKinematicTree XVertexFitTree, XVertexFitTree_noKrefit ;
               KinematicConstrainedVertexFitter XFitter ;
 
-              std::cout<< "POINT 30" <<std::endl;
+              if (Debug_) std::cout << "POINT 30" <<std::endl;
 
               if (doMuMuMassConst) { // MassConst = 'MC' in the following
 
-                std::cout<< "POINT 30.0" <<std::endl;
+                if (Debug_) std::cout << "POINT 30.0" <<std::endl;
 
                 MultiTrackKinematicConstraint *MuMu = 0;
                 MuMu = new TwoTrackMassKinematicConstraint(JPsi_mass);
 
-                std::cout<< "POINT 30.1" <<std::endl;
+                if (Debug_) std::cout << "POINT 30.1" <<std::endl;
 
                 XVertexFitTree = XFitter.fit( xDaughters, MuMu );
 
-                std::cout<< "POINT 30.2" <<std::endl;
+                if (Debug_) std::cout << "POINT 30.2" <<std::endl;
 
                 if (notRefittedPartner && notRefNeg && notRefPos) { // use not refitted kaons
 
-                  std::cout<< "POINT 30.3" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.3" <<std::endl;
 
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
-                  std::cout<< "POINT 30.3.1" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.3.1" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
-                  std::cout<< "POINT 30.3.2" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.3.2" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( kaonPos_notRefit, kaon_mass, chi, ndf, small_sigma));
-                  std::cout<< "POINT 30.3.3" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.3.3" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( kaonNeg_notRefit, kaon_mass, chi, ndf, small_sigma));
-                  std::cout<< "POINT 30.3.4" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.3.4" <<std::endl;
 
                   XVertexFitTree_noKrefit = XFitter.fit( xDaughters_unref, MuMu );
-                  std::cout<< "POINT 30.4" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.4" <<std::endl;
                 }
               }
               else {
 
-                std::cout<< "POINT 30.5" <<std::endl;
+                if (Debug_) std::cout << "POINT 30.5" <<std::endl;
                 XVertexFitTree = XFitter.fit( xDaughters );
-                std::cout<< "POINT 30.6" <<std::endl;
+                if (Debug_) std::cout << "POINT 30.6" <<std::endl;
 
                 if (notRefittedPartner && notRefNeg && notRefPos) { // use not refitted kaons
 
-                  std::cout<< "POINT 30.7" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.7" <<std::endl;
                   xDaughters_unref.push_back(pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( kaonPos_notRefit, kaon_mass, chi, ndf, small_sigma));
                   xDaughters_unref.push_back(pFactory.particle( kaonNeg_notRefit, kaon_mass, chi, ndf, small_sigma));
 
                   XVertexFitTree_noKrefit = XFitter.fit( xDaughters_unref );
-                  std::cout<< "POINT 30.8" <<std::endl;
+                  if (Debug_) std::cout << "POINT 30.8" <<std::endl;
                 }
               }
 
-              std::cout<< "POINT 31" <<std::endl;
+              if (Debug_) std::cout << "POINT 31" <<std::endl;
 
               if ( !XVertexFitTree->isValid() ) /// B0 variables started
               continue ; nX_pre10++ ;
@@ -1458,7 +1458,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               continue ; nX_pre15++ ;
 
 
-              std::cout<< "POINT 32" <<std::endl;
+              if (Debug_) std::cout << "POINT 32" <<std::endl;
 
               //////////////////// Lifetimes calculations for B0 ////////////////////
               TVector3 X_vtx((*XCand_vertex_fromMCFit).position().x(), (*XCand_vertex_fromMCFit).position().y(), 0) ;
@@ -1479,7 +1479,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               float X_lxy, X_lxyErr, X_lxyz, X_lxyzErr ;
               ROOT::Math::SVector<double, 3> X_vDiff, X_vDiff3D ; // needed by Similarity method
 
-              std::cout<< "POINT 33" <<std::endl;
+              if (Debug_) std::cout << "POINT 33" <<std::endl;
 
               ////////////////// Lifetime wrt PV for B0 //////////////////
               X_v2e = thePrimaryVtx.error();
@@ -1503,7 +1503,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               X_lxyzErr = sqrt(ROOT::Math::Similarity(X_vDiff3D,X_vXYe)) / X_vdiff3D.Mag();
 
 
-              std::cout<< "POINT 34" <<std::endl;
+              if (Debug_) std::cout << "POINT 34" <<std::endl;
 
 
               ////////////////// Last cuts for B0 //////////////////
@@ -1565,7 +1565,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),-13);
               pat::CompositeCandidate pat_X_muonP(reco_X_muonP);
 
-              std::cout<< "POINT 35" <<std::endl;
+              if (Debug_) std::cout << "POINT 35" <<std::endl;
 
               float x_muonN_ma_fit = x_muonN_fromMCFit->currentState().mass();
               int   x_muonN_ch_fit = x_muonN_fromMCFit->currentState().particleCharge();
@@ -1589,7 +1589,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                                                        math::XYZPoint(xcand_vx_fit,xcand_vy_fit,xcand_vz_fit),321);
               pat::CompositeCandidate pat_X_kaonP(reco_X_kaonP);
 
-              std::cout<< "POINT 36" <<std::endl;
+              if (Debug_) std::cout << "POINT 36" <<std::endl;
 
               float x_kaonN_ma_fit = x_kaonN_fromMCFit->currentState().mass();
               int   x_kaonN_ch_fit = x_kaonN_fromMCFit->currentState().particleCharge();
@@ -1683,7 +1683,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               Vertex XLessPV = thePrimaryVtx ;
 
 
-              std::cout<< "POINT 37" <<std::endl;
+              if (Debug_) std::cout << "POINT 37" <<std::endl;
 
 
               if (addXlessPrimaryVertex_)
