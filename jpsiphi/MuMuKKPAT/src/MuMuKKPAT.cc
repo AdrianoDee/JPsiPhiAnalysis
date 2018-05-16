@@ -1144,9 +1144,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
           if (Debug_) std::cout<<"nmumu : "<<nMuMu<<std::endl;
 
-
-
-          int point = 0;
           ////////////////// check tracks for kaonPos for B0 //////////////////
           for ( std::vector<pat::GenericParticle>::const_iterator trackPos = theKaonRefittedPATTrackHandle->begin(); trackPos != theKaonRefittedPATTrackHandle->end(); ++trackPos ) {
             if (Debug_) std::cout<< "POINT 15" <<std::endl;
