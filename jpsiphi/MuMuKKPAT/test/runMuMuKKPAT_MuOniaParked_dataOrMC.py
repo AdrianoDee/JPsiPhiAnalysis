@@ -12,8 +12,8 @@ process.MessageLogger.suppressInfo = cms.untracked.vstring( "mkcands" )
 process.MessageLogger.suppressWarning = cms.untracked.vstring( "mkcands" )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
-#MC = False
-MC = True
+MC = False
+# MC = True
 if MC :
         official = True
 MCMotherId = 531
@@ -110,9 +110,9 @@ process.load("Configuration.StandardSequences.Reconstruction_cff") # from Lucia
 process.load("Configuration.StandardSequences.MagneticField_cff") # for using TransientTrackBuilder
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff") # for using TransientTrackBuilder
 #process.GlobalTag.globaltag = 'FT_53_V6_AN3::All' # for using TransientTrackBuilder
-#process.GlobalTag.globaltag = 'START53_V19F::All'
+process.GlobalTag.globaltag = 'START53_V19F::All'
 #process.GlobalTag.globaltag = 'START53_V7C::All'
-process.GlobalTag.globaltag = 'FT_R_53_V18::All' #Global tag for 2012B data
+#process.GlobalTag.globaltag = 'FT_R_53_V18::All' #Global tag for 2012B data
 #process.GlobalTag.globaltag = 'FT53_V21A_AN6::All' #Global tag for 2012C data
 
 process.load('Configuration/EventContent/EventContent_cff')
