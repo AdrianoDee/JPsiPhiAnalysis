@@ -1388,6 +1388,8 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               if (doMuMuMassConst) { // MassConst = 'MC' in the following
 
+                std::cout<< "POINT 30.0" <<std::endl;
+
                 MultiTrackKinematicConstraint *MuMu = 0;
                 MuMu = new TwoTrackMassKinematicConstraint(JPsi_mass);
 
