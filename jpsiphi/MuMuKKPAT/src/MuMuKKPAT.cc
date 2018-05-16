@@ -325,7 +325,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   /// get event content information
   int debug = 0;
 
-  std::cout <<"Debug : " << debug << std::endl;
+  std::cout <<"Debug : " << ++debug << std::endl;
 
   bool decayChainOK = false;
   runNum = iEvent.id().run();
@@ -399,7 +399,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   } /// end valid trigger
 
-  std::cout <<"Debug : " << debug << std::endl;
+  std::cout <<"Debug : " << ++debug << std::endl;
 
   /// get L1 trigger info
   edm::ESHandle<L1GtTriggerMenu> menuRcd;
@@ -450,7 +450,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     thePrimaryVtx_multiplicity = 1 ;
   }
 
-  std::cout <<"Debug : " << debug << std::endl;
+  std::cout <<"Debug : " << ++debug << std::endl;
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
@@ -506,7 +506,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     iexception_dedx = 1;
   }
 
-  std::cout <<"Debug : " << debug << std::endl;
+  std::cout <<"Debug : " << ++debug << std::endl;
 
   /// dE/dx hits
   Handle<edm::ValueMap<reco::DeDxData> > dEdxTrackHandle;
@@ -528,7 +528,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   }
 
 
-  std::cout <<"Debug : " << debug << std::endl;
+  std::cout <<"Debug : " << ++debug << std::endl;
 
   ////////////////// check MC truth //////////////////
   if (doMC) {
