@@ -30,7 +30,7 @@ process.source = cms.Source("PoolSource",
 )
 
 if (not MC) :
-    sourceFiles = cms.untracked.vstring('file:00054BD0-5668-E211-8091-00215E21DC7E.root')
+    sourceFiles = cms.untracked.vstring('file:00AC758F-4558-E611-AF39-02163E014BCA.root')
 elif MC :
     sourceFiles = cms.untracked.vstring()
     sourceFiles.extend( [
