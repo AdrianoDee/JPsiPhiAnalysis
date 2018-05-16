@@ -367,7 +367,7 @@ process.mkcands = cms.EDAnalyzer("MuMuKKPAT",
                                  addMuMulessPrimaryVertex = cms.untracked.bool(True),
                                  #addMuMulessPrimaryVertex = cms.untracked.bool(False),
                                  addXlessPrimaryVertex = cms.untracked.bool(True),
-                                 Debug_Output = cms.untracked.bool(False), # true
+                                 Debug_Output = cms.untracked.bool(True), # true
                                  ##
                                  ##  use the correct trigger path
                                  ##
