@@ -942,23 +942,23 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     }/// begin Job
 
-    // ------------ method called when ending the processing of a run  ------------
-void
-Testing::endRun(edm::Run&, edm::EventSetup const&)
-{
-}
+        // ------------ method called when ending the processing of a run  ------------
+    void
+    MuMuProducerPAT::endRun(edm::Run&, edm::EventSetup const&)
+    {
+    }
 
-// ------------ method called when starting to processes a luminosity block  ------------
-void
-Testing::beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
-{
-}
+    // ------------ method called when starting to processes a luminosity block  ------------
+    void
+    MuMuProducerPAT::beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
+    {
+    }
 
-// ------------ method called when ending the processing of a luminosity block  ------------
-void
-Testing::endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
-{
-}
+    // ------------ method called when ending the processing of a luminosity block  ------------
+    void
+    MuMuProducerPAT::endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
+    {
+    }
 
 
     /// ------------ method called once each job just after ending the event loop  ------------
