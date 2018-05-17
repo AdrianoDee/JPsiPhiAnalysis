@@ -458,7 +458,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
         if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
         unsigned int posMuonType, negMuonType, posMuonTrackType, negMuonTrackType;
-        float posMuonDzVtx, posMuonDxyVtx;
+        float posMuonDzVtx, posMuonDxyVtx, negMuonDzVtx, negMuonDxyVtx;
 
         int nMatchedStationsPos, nMatchedStationsNeg,nOverlapMusPos, nOverlapMusNeg, nSharingSegWithPos, nSharingSegWithNeg;
 
