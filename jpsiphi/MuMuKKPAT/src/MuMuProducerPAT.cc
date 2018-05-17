@@ -621,7 +621,8 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
-            reco::LorentzVector muP, muN,mumuP4;
+            LorentzVector mumu = posMuon->p4() + negMuon->p4();
+            TLorentzVector muP, muN,mumuP4;
 
             muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
             muN.SetXYZM(recoNegMuon->bestTrackRef()->px(),recoNegMuon->bestTrackRef()->py(),recoNegMuon->bestTrackRef()->pz(),muon_mass);
@@ -629,7 +630,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
             mumuP4 = muP + muN;
 
-            mumuCandidate.setP4(mumuP4);
+            mumuCandidate.setP4(mumu);
             mumuCandidate.setCharge(recoPosMuon->charge() + recoNegMuon->charge());
 
             float deltaRMuMu = reco::deltaR2(recoPosMuon->eta(),recoPosMuon->phi(),recoNegMuon->eta(),recoNegMuon->phi());
