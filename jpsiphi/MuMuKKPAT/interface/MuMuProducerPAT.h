@@ -178,14 +178,9 @@ public:
   explicit MuMuProducerPAT(const edm::ParameterSet&);
   ~MuMuProducerPAT();
 
-private:
-
-  ~Testing();
-
-static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+  static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
-
 
   virtual void beginJob() ;
   virtual void produce(edm::Event&, const edm::EventSetup&);
