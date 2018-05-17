@@ -149,8 +149,6 @@ MuMinSiHits_(iConfig.getUntrackedParameter<int>("MinNumMuSiHits", 0)),
 MuMaxNormChi_(iConfig.getUntrackedParameter<float>("MaxMuNormChi2", 1000)),
 MuMaxD0_(iConfig.getUntrackedParameter<float>("MaxMuD0", 1000)),
 
-resolveAmbiguity_(iConfig.getUntrackedParameter<bool>("resolvePileUpAmbiguity",true)),
-
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
 HLTFileters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),

@@ -1015,7 +1015,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
           // mumu_p4->push_back();
           //
-          MuMuMass->push_back( pat_ref_JPsi.Mass() );
+          MuMuMass->push_back( pat_ref_JPsi.mass() );
 
           // MuMuDecayVtx_X->push_back( MuMuCand_vertex_fromFit->position().x() );
           // MuMuDecayVtx_Y->push_back( MuMuCand_vertex_fromFit->position().y() );

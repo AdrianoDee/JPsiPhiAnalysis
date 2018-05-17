@@ -145,7 +145,7 @@ private:
   int MuMinPixHits_, MuMinSiHits_;
   double MuMaxNormChi_;
   double MuMaxD0_;
-  bool resolveAmbiguity_,TriggerCut_;
+  bool TriggerCut_;
 
   std::vector<string> HLTFileters_, FiltersForMatching_;
   bool Debug_;
