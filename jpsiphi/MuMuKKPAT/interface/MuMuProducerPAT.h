@@ -179,10 +179,10 @@ public:
   ~MuMuProducerPAT();
 
 private:
-  virtual void beginJob() ;
-  virtual void beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup);
-  virtual void produce(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  void beginJob() ;
+  void beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup);
+  void produce(const edm::Event&, const edm::EventSetup&);
+  void endJob() ;
 
   UInt_t isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon);
   int muonTrackType(const reco::Muon * muon);
@@ -192,11 +192,11 @@ private:
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   std::pair<int, float> findCandMCInfo(reco::GenParticleRef genCand);
-  virtual double getSigmaOfLogdEdx(double logde);
-  virtual float  getEnergyLoss(const reco::TrackRef & track);
-  virtual double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
-  virtual double getLogdEdx(double bg);
-  virtual double GetMass(const reco::TrackRef & track);
+  double getSigmaOfLogdEdx(double logde);
+  float  getEnergyLoss(const reco::TrackRef & track);
+  double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
+  double getLogdEdx(double bg);
+  double GetMass(const reco::TrackRef & track);
   bool isSameMuon(const reco::Muon &mu1, const reco::Muon &mu2) const ;
   template<typename T> bool isBetterMuon(const T &mu1, const T &mu2) const ;
 
