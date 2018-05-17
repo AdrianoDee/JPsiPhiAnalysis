@@ -66,6 +66,7 @@ doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
 
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
+addMuMulessPrimaryVertex_(iConfig.getParameter<bool>("addMuMulessPrimaryVertex")),
 
 addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 MCParticle_( iConfig.getUntrackedParameter<int>("MonteCarloParticleId", 20443) ), /// 20443 X, 100443 Psi(2S), 9120443 X from B / decide later for X(4140)
@@ -856,7 +857,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             // MuMuType->push_back(dimuonType);
             //if (Debug_) std::cout << "POINT  2" << std::endl;
 
-            pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(*posMuon,*negMuon));
+            pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(&(*posMuon),&(*negMuon)));
 
 
             /// vertex without matched muons
