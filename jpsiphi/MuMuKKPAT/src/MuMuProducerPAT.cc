@@ -813,9 +813,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             MuMu_lxy = MuMu_vdiff.Perp();
             MuMu_vDiff[0] = MuMu_vdiff.x(); MuMu_vDiff[1] = MuMu_vdiff.y(); MuMu_vDiff[2] = 0 ; // needed by Similarity method
             MuMu_lxyErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff,MuMu_vXYe)) / MuMu_vdiff.Perp();
-            MuMu_distXY = MuMu_vdistXY.distance(Vertex(*XCand_vertex_fromMCFit), Vertex(theBeamSpotVtx));
-            MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * (XCand_fromMCFit->currentState().mass() / MuMu_pperp.Perp()) ;
-            MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * XCand_fromMCFit->currentState().mass()/MuMu_pperp.Perp2();
+            MuMu_distXY = MuMu_vdistXY.distance(Vertex(*mumuCandidate_vertex_fromFit), Vertex(theBeamSpotVtx));
+            MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * (mumuCandidate_fromFit->currentState().mass() / MuMu_pperp.Perp()) ;
+            MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * mumuCandidate_fromFit->currentState().mass()/MuMu_pperp.Perp2();
 
             /// 3D
             MuMu_pvtx3D.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), theBeamSpotVtx.position().z());
@@ -856,37 +856,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             // MuMuType->push_back(dimuonType);
             //if (Debug_) std::cout << "POINT  2" << std::endl;
 
-            pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(posMuon,negMuon));
-
-            int isTriggerMatched = 0;
-
-            int ntriggers = HLTFileters_.size();
-            if (Debug_) std::cout << "ntriggers: " << ntriggers << std::endl;
-
-            for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++)
-            {
-              if (Debug_) std::cout << "MatchingTriggerResult[" << MatchTrig << "]: " << MatchingTriggerResult[MatchTrig] << std::endl;
-              if ( MatchingTriggerResult[MatchTrig]!=0 )
-              {
-                if (Debug_) std::cout << "CHECKING FiltersForMatching_[" << MatchTrig << "]: " << FiltersForMatching_[MatchTrig] << std::endl;
-                pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-                pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-                bool pass1 = mu1HLTMatches.size() > 0;
-                bool pass2 = mu2HLTMatches.size() > 0;
-
-                if ((pass1) && (pass2))
-                {
-                  isTriggerMatched = 1;
-                  MuMuMuonTrigMatch->push_back(true);
-                  if (Debug_) std::cout <<"Matched MuMu" <<std::endl ;
-                } else
-                //if (Debug_) std::cout << "POINT 9" << std::endl;
-                MuMuMuonTrigMatch->push_back(false);
-              }
-              else
-              //if (Debug_) std::cout << "POINT 10" << std::endl;
-              MuMuMuonTrigMatch->push_back(false);
-            }
+            pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(*posMuon,*negMuon));
 
 
             /// vertex without matched muons
