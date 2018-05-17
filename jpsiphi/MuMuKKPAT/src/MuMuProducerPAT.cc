@@ -768,7 +768,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             AlgebraicSymMatrix33 MuMu_vXYe ;
             float MuMu_ctauErr ;
             float MuMu_lxy, MuMu_lxyErr, MuMu_lxyz, MuMu_lxyzErr ;
-            ROOT::Math::SVector<float, 3> MuMu_vDiff, MuMu_vDiff3D ; // needed by Similarity method
+            ROOT::Math::SVector<double, 3> MuMu_vDiff, MuMu_vDiff3D ; // needed by Similarity method
 
             ////////////////// Lifetime wrt PV for MuMu //////////////////
             MuMu_v2e = thePrimaryVtx.error();
