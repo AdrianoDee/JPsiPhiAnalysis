@@ -893,10 +893,8 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
                 }
               }
             }
-            // mumuLessPvs_n.push_back( pvs.size() );
-            mumuLessPVs.push_back("muonlessPV",Vertex(mumuLessPV));
 
-            pat_ref_JPsi.addUserData("muLessVertex",isTriggerMatched(&(*posMuon),&(*negMuon)));
+            pat_ref_JPsi.addUserData("muonlessPV",Vertex(mumuLessPV));
 
             muons.clear();
 
