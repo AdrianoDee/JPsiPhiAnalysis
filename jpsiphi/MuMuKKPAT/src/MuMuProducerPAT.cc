@@ -625,7 +625,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
-            ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > mumu = posMuon->p4() + negMuon->p4();
+            ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > mumu = posMuon->p4() + negMuon->p4();
             TLorentzVector muP, muN,mumuP4;
 
             muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
