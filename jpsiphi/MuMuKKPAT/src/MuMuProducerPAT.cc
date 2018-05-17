@@ -123,7 +123,7 @@ float small_sigma = muon_mass*1.e-6;
 /// constructors and destructor
 ///
 
-DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
+MuMuProducerPAT::MuMuProducerPAT(const edm::ParameterSet& iConfig):
 
 hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
