@@ -185,6 +185,7 @@ private:
   virtual void endJob() ;
 
   UInt_t isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon);
+  int MuMuProducerPAT::muonTrackType(const reco::Muon * muon)
 
   InvariantMassFromVertex massCalculator;
 

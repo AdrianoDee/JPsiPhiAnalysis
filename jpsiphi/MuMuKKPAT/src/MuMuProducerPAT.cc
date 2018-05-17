@@ -591,7 +591,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
             nMatchedStationsNeg = recoNegMuon->numberOfMatchedStations();
 
-            negMuonTrackType = recoNegMuon->MuonTrackType();
+            negMuonTrackType = (unsigned int)(recoNegMuon)->MuonTrackType();
             negMuonType = (unsigned int)(recoNegMuon->type());
 
             ////////////////// Muons Overlap Checks //////////////////
@@ -1082,6 +1082,28 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
       mu1.reco::Muon::outerTrack() == mu2.reco::Muon::outerTrack());
     }
 
+    int MuMuProducerPAT::muonTrackType(const reco::Muon * muon)
+    {
+      switch (muon->MuonTrackType())
+      {
+        case Muon::InnerTrack :
+          return 0;
+        case Muon::OuterTrack :
+          return 1;
+        case Muon::CombinedTrack :
+          return 2;
+        case Muon::TPFMS :
+          return 3;
+        case Muon::Picky :
+          return 4;
+        case Muon::DYT :
+          return 5;
+        case Muon::None :
+          return 6;
+      }
+
+      return 6;
+    }
 
     /// define this as a plug-in
     DEFINE_FWK_MODULE(MuMuProducerPAT);
