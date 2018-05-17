@@ -172,7 +172,7 @@ private:
   reco::CompositeCandidateCollection ref_Jpsi, ref_mupos, ref_muneg, ref_Phi, ref_kaonpos, ref_kaonneg;
   std::vector < reco::LeafCandidate::LorentzVector > Jpsi_p4, mupos_p4, muneg_p4, Phi_p4, kpos_p4, kneg_p4;
 
-  // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_CL;
+  // float                 priVtx_X, priVtx_Y, priVtx_Z, priVtx_XE, priVtx_YE, priVtx_ZE, priVtx_NormChi2, priVtx_Chi2, priVtx_VProb;
   int                   priVtx_tracks;
   float                 tracksPtSq_pV;
   /// Indices
@@ -193,7 +193,7 @@ private:
 
   std::vector<float>         *PriVtxGen_X, *PriVtxGen_Y, *PriVtxGen_Z ;
   std::vector<double>        *PriVtxGen_EX, *PriVtxGen_EY, *PriVtxGen_EZ ;
-  std::vector<float>	        *PriVtxGen_Chi2, *PriVtxGen_CL, *PriVtxGen_Ndof;
+  std::vector<float>	        *PriVtxGen_Chi2, *PriVtxGen_VProb, *PriVtxGen_Ndof;
   std::vector<int>           *PriVtxGen_tracks ;
   std::vector<float>         *MCJPsiPx, *MCJPsiPy, *MCJPsiPz;
   std::vector<float>         *MCmupPx, *MCmupPy, *MCmupPz;
@@ -239,11 +239,11 @@ private:
 
   /// MuMu cand & KK cand
   std::vector<float>         *MuMuMass, *MuMuPx, *MuMuPy, *MuMuPz;
-  std::vector<float>         *MuMuVtx_CL, *MuMuVtx_Chi2;
+  std::vector<float>         *MuMuVtx_VProb, *MuMuVtx_Chi2;
   std::vector<float>         *MuMuDecayVtx_X, *MuMuDecayVtx_Y, *MuMuDecayVtx_Z, *MuMuDecayVtx_XE, *MuMuDecayVtx_YE, *MuMuDecayVtx_ZE;
   std::vector<bool>          *MuMuMuonTrigMatch;
   std::vector<float>         *KKMass, *KKPx, *KKPy, *KKPz;
-  std::vector<float>         *KKVtx_CL, *KKVtx_Chi2;
+  std::vector<float>         *KKVtx_VProb, *KKVtx_Chi2;
   std::vector<float>         *KKDecayVtx_X, *KKDecayVtx_Y, *KKDecayVtx_Z, *KKDecayVtx_XE, *KKDecayVtx_YE, *KKDecayVtx_ZE;
   /// Muons after JPsi (MuMu) fit & Kaons after Phi (KK) fit
   std::vector<float>         *muPos_MuMu_Px, *muPos_MuMu_Py, *muPos_MuMu_Pz ;
@@ -263,11 +263,11 @@ private:
   std::vector<int>           *PriVtxMuMuCorr_n, mumuLessPvs_n;
   std::vector<float>         *PriVtxMuMuCorr_X, *PriVtxMuMuCorr_Y, *PriVtxMuMuCorr_Z ;
   std::vector<double>        *PriVtxMuMuCorr_EX, *PriVtxMuMuCorr_EY, *PriVtxMuMuCorr_EZ ;
-  std::vector<float>	        *PriVtxMuMuCorr_Chi2, *PriVtxMuMuCorr_CL;
+  std::vector<float>	        *PriVtxMuMuCorr_Chi2, *PriVtxMuMuCorr_VProb;
   std::vector<int>           *PriVtxMuMuCorr_tracks ;
   std::vector<int>           *nTrk ;
   /// X candidates
-  std::vector<float>         *xMass, *xVtx_CL, *xVtx_Chi2;
+  std::vector<float>         *xMass, *xVtx_VProb, *xVtx_Chi2;
   std::vector<float>         *xPx, *xPy, *xPz ;
   std::vector<double>        *xPxE, *xPyE, *xPzE ;
   std::vector<float>         *xDecayVtx_X, *xDecayVtx_Y, *xDecayVtx_Z ;
@@ -289,35 +289,35 @@ private:
   std::vector<int>           *PriVtx_XCosAlpha_n;
   std::vector<float>         *PriVtx_XCosAlpha_X, *PriVtx_XCosAlpha_Y, *PriVtx_XCosAlpha_Z ;
   std::vector<double>        *PriVtx_XCosAlpha_EX, *PriVtx_XCosAlpha_EY, *PriVtx_XCosAlpha_EZ ;
-  std::vector<float>	        *PriVtx_XCosAlpha_Chi2, *PriVtx_XCosAlpha_CL;
+  std::vector<float>	        *PriVtx_XCosAlpha_Chi2, *PriVtx_XCosAlpha_VProb;
   std::vector<int>           *PriVtx_XCosAlpha_tracks ;
 
   std::vector<int>           *PriVtx_XCosAlpha3D_n;
   std::vector<float>         *PriVtx_XCosAlpha3D_X, *PriVtx_XCosAlpha3D_Y, *PriVtx_XCosAlpha3D_Z ;
   std::vector<double>        *PriVtx_XCosAlpha3D_EX, *PriVtx_XCosAlpha3D_EY, *PriVtx_XCosAlpha3D_EZ ;
-  std::vector<float>	        *PriVtx_XCosAlpha3D_Chi2, *PriVtx_XCosAlpha3D_CL;
+  std::vector<float>	        *PriVtx_XCosAlpha3D_Chi2, *PriVtx_XCosAlpha3D_VProb;
   std::vector<int>           *PriVtx_XCosAlpha3D_tracks ;
   std::vector<float>         *XLessPV_tracksPtSq, *XLessPV_4tracksPtSq ;
   std::vector<int>           *PriVtxXLess_n;
   std::vector<float>         *PriVtxXLess_X, *PriVtxXLess_Y, *PriVtxXLess_Z ;
   std::vector<double>        *PriVtxXLess_EX, *PriVtxXLess_EY, *PriVtxXLess_EZ ;
-  std::vector<float>	        *PriVtxXLess_Chi2, *PriVtxXLess_CL;
+  std::vector<float>	        *PriVtxXLess_Chi2, *PriVtxXLess_VProb;
   std::vector<int>           *PriVtxXLess_tracks ;
   std::vector<int>           *PriVtxXLess_XCosAlpha_n;
   std::vector<float>         *PriVtxXLess_XCosAlpha_X, *PriVtxXLess_XCosAlpha_Y, *PriVtxXLess_XCosAlpha_Z ;
   std::vector<double>        *PriVtxXLess_XCosAlpha_EX, *PriVtxXLess_XCosAlpha_EY, *PriVtxXLess_XCosAlpha_EZ ;
-  std::vector<float>	        *PriVtxXLess_XCosAlpha_Chi2, *PriVtxXLess_XCosAlpha_CL;
+  std::vector<float>	        *PriVtxXLess_XCosAlpha_Chi2, *PriVtxXLess_XCosAlpha_VProb;
   std::vector<int>           *PriVtxXLess_XCosAlpha_tracks ;
   std::vector<int>           *PriVtxXLess_XCosAlpha3D_n;
   std::vector<float>         *PriVtxXLess_XCosAlpha3D_X, *PriVtxXLess_XCosAlpha3D_Y, *PriVtxXLess_XCosAlpha3D_Z ;
   std::vector<double>        *PriVtxXLess_XCosAlpha3D_EX, *PriVtxXLess_XCosAlpha3D_EY, *PriVtxXLess_XCosAlpha3D_EZ ;
-  std::vector<float>	        *PriVtxXLess_XCosAlpha3D_Chi2, *PriVtxXLess_XCosAlpha3D_CL;
+  std::vector<float>	        *PriVtxXLess_XCosAlpha3D_Chi2, *PriVtxXLess_XCosAlpha3D_VProb;
   std::vector<int>           *PriVtxXLess_XCosAlpha3D_tracks ;
   /// Primary Vertex with "B0 correction"
   std::vector<int>           *PriVtxXCorr_n;
   std::vector<float>         *PriVtxXCorr_X, *PriVtxXCorr_Y, *PriVtxXCorr_Z;
   std::vector<double>        *PriVtxXCorr_EX, *PriVtxXCorr_EY, *PriVtxXCorr_EZ;
-  std::vector<float>	        *PriVtxXCorr_Chi2, *PriVtxXCorr_CL;
+  std::vector<float>	        *PriVtxXCorr_Chi2, *PriVtxXCorr_VProb;
   std::vector<int>           *PriVtxXCorr_tracks;
   /// Lifetimes variables for B0
   std::vector<double>        *xCosAlphaBS, *xCosAlpha3DBS, *xCTauBS, *xCTauBSE, *xLxyBS, *xLxyBSE, *xLxyzBS, *xLxyzBSE ;
