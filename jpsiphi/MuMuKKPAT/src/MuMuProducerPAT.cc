@@ -746,8 +746,10 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
 
             ////////////////// fill the MuMu vectors //////////////////
-            if (mumuCandidate_fromFit->currentState().mass() < JPsiMinMass  ||  mumuCandidate_fromFit->currentState().mass() > JPsiMaxMass)
-            continue ;
+
+            if ( mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[1] )
+              if ( mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[1] )
+                continue ;
 
             float dimuon_ma_fit = mumuCandidate_fromFit->currentState().mass();
             int   dimuon_ch_fit = mumuCandidate_fromFit->currentState().particleCharge();
@@ -788,8 +790,8 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
 
-            mumuCandidate.addDaughter(*muonPos, "muonPos");
-            mumuCandidate.addDaughter(*muonNeg,"muonNeg");
+            mumuCandidate.addDaughter(*posMuon, "posMuon");
+            mumuCandidate.addDaughter(*negMuon,"negMuon");
 
             pat_ref_JPsi.addUserFloat("deltaR",deltaRMuMu);
             pat_ref_JPsi.addUserFloat("mumuP4",mumuP4.M());
@@ -797,8 +799,8 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat_ref_JPsi.addDaughter(*pat_ref_PM, "ref_muonPos");
             pat_ref_JPsi.addDaughter(*pat_ref_NM, "ref_muonNeg");
             pat_ref_JPsi.addDaughter(*mumuCandidate, "mumuCandidate");
-            // pat_ref_JPsi.addDaughter(*pat_ref_PM, "muonPos");
-            // pat_ref_JPsi.addDaughter(*pat_ref_NM, "muonNeg");
+            // pat_ref_JPsi.addDaughter(*pat_ref_PM, "posMuon");
+            // pat_ref_JPsi.addDaughter(*pat_ref_NM, "negMuon");
 
             pat_ref_JPsi.addUserInt("nMatchedStationsPos",    nMatchedStationsPos);
             pat_ref_JPsi.addUserInt("nOverlapMusPos",         nOverlapMusPos);
@@ -908,10 +910,10 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
             Int_t dimuonType = 0;   //0 nothing,  1 J/psi  , 2 psi(2S)
 
-            if ( mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[1] )
+            if ( mumuCandidate_fromFit->currentState().mass() >= jspiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() <= jspiMassCuts_[1] )
             dimuonType = 1 ;
             else
-            if ( mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[1] )
+            if ( mumuCandidate_fromFit->currentState().mass() >= psiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() <= psiMassCuts_[1] )
             dimuonType = 2;
 
             pat_ref_JPsi.addUserInt("dimuonType",    dimuonType);
