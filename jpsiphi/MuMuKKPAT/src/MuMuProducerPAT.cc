@@ -594,6 +594,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             negMuonTrackType = (unsigned int)(recoNegMuon)->muonBestTrackType();
             negMuonType = (unsigned int)(recoNegMuon->type());
 
+            negMuonDzVtx = recoPosMuon->bestTrackRef()->dz(RefVtx);
+            negMuonDxyVtx = recoPosMuon->bestTrackRef()->dxy(RefVtx);
+
             ////////////////// Muons Overlap Checks //////////////////
 
             int nOverlapMus = 0, nSharingSegWith = -1;
