@@ -188,7 +188,6 @@ private:
 
   InvariantMassFromVertex massCalculator;
 
-
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   std::pair<int, float> findCandMCInfo(reco::GenParticleRef genCand);

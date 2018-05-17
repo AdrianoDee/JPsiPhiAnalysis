@@ -103,7 +103,7 @@ MuMuProducerPAT::~MuMuProducerPAT()
 
 }
 
-UInt_t MuMuProducerPAT::isTriggerMatched(pat::Muon* posMuon, pat::Muon* negMuon) {
+UInt_t MuMuProducerPAT::isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon) {
 
   UInt_t matched = 0;  // if no list is given, is not matched
 
@@ -167,10 +167,6 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   std::auto_ptr<pat::CompositeCandidateCollection> oniaOutput(new pat::CompositeCandidateCollection);
 
   bool decayChainOK = false;
-  int runNum = iEvent.id().run();
-  int evtNum = iEvent.id().event();
-  int lumiNum = iEvent.id().luminosityBlock();
-
 
   bool hasRequestedTrigger = false;
   ESHandle<MagneticField> bFieldHandle;
@@ -247,9 +243,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   KalmanVertexFitter vtxFitter(true);
 
   RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
-  reco::Vertex pV = thePrimaryVtx;
-  int n_pV = thePrimaryVtx_multiplicity ;
-  float priVtx_VProb = ChiSquaredProbability( (float)(thePrimaryVtx.chi2()), (float)(thePrimaryVtx.ndof())) ;
+  // reco::Vertex pV = thePrimaryVtx;
+  // int n_pV = thePrimaryVtx_multiplicity ;
+  // float priVtx_VProb = ChiSquaredProbability( (float)(thePrimaryVtx.chi2()), (float)(thePrimaryVtx.ndof())) ;
 
   // VertexHigherPtSquared vertexHigherPtSquared ;
   // tracksPtSq_pV = vertexHigherPtSquared.sumPtSquared(thePrimaryVtx) ;
@@ -895,8 +891,10 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
                 }
               }
             }
-            mumuLessPvs_n.push_back( pvs.size() );
-            mumuLessPVs.push_back( mumuLessPV);
+            // mumuLessPvs_n.push_back( pvs.size() );
+            mumuLessPVs.push_back("muonlessPV",Vertex(mumuLessPV));
+
+            pat_ref_JPsi.addUserData("muLessVertex",isTriggerMatched(&(*posMuon),&(*negMuon)));
 
             muons.clear();
 
@@ -1001,61 +999,61 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
     }
 
-    float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
-    {
-      return 0.3;
-    }
-
-    float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
-    {
-      if (iexception_dedx==1) return 9999.;
-      const reco::DeDxDataValueMap & eloss = *energyLoss;
-      return eloss[track].dEdx();
-    }
-
-    float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
-    {
-
-      // no usable dE/dx if p > 2
-      float nsigma = 99 ;
-      if (iexception_dedx==1) return nsigma ;
-
-      float m  = 0.13957;
-      float bg = track->p() / m;
-
-      theo = getLogdEdx(bg);
-
-
-      int nhitr = track->numberOfValidHits();
-      float meas = log(getEnergyLoss(track));
-      sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
-      if (sigma>0)
-      nsigma = (meas-theo) / sigma ;
-      return nsigma;
-    }
-
-
-    float MuMuProducerPAT::getLogdEdx(float bg)
-    {
-      const float a =  3.25 ;
-      const float b =  0.288;
-      const float c = -0.852;
-
-      float beta = bg/sqrt(bg*bg + 1);
-      float dedx = log( a/(beta*beta) + b * log(bg) + c );
-
-      return dedx;
-
-    }
-
-
-    float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
-      float P = track->p();
-      float C = 2.625;
-      float K = 2.495;
-      float I = getEnergyLoss(track);
-      return sqrt((I-C)/K)*P;
-    }
+    // float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
+    // {
+    //   return 0.3;
+    // }
+    //
+    // float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
+    // {
+    //   if (iexception_dedx==1) return 9999.;
+    //   const reco::DeDxDataValueMap & eloss = *energyLoss;
+    //   return eloss[track].dEdx();
+    // }
+    //
+    // float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
+    // {
+    //
+    //   // no usable dE/dx if p > 2
+    //   float nsigma = 99 ;
+    //   if (iexception_dedx==1) return nsigma ;
+    //
+    //   float m  = 0.13957;
+    //   float bg = track->p() / m;
+    //
+    //   theo = getLogdEdx(bg);
+    //
+    //
+    //   int nhitr = track->numberOfValidHits();
+    //   float meas = log(getEnergyLoss(track));
+    //   sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
+    //   if (sigma>0)
+    //   nsigma = (meas-theo) / sigma ;
+    //   return nsigma;
+    // }
+    //
+    //
+    // float MuMuProducerPAT::getLogdEdx(float bg)
+    // {
+    //   const float a =  3.25 ;
+    //   const float b =  0.288;
+    //   const float c = -0.852;
+    //
+    //   float beta = bg/sqrt(bg*bg + 1);
+    //   float dedx = log( a/(beta*beta) + b * log(bg) + c );
+    //
+    //   return dedx;
+    //
+    // }
+    //
+    //
+    // float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
+    //   float P = track->p();
+    //   float C = 2.625;
+    //   float K = 2.495;
+    //   float I = getEnergyLoss(track);
+    //   return sqrt((I-C)/K)*P;
+    // }
 
 
     template<typename T>
