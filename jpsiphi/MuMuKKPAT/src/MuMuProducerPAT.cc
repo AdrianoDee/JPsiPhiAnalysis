@@ -457,7 +457,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
         if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
-        int posMuonType, negMuonType, posMuonTrackType, MuonTrackType;
+        unsigned int posMuonType, negMuonType, posMuonTrackType, negMuonTrackType;
         float posMuonDzVtx, posMuonDxyVtx;
 
         int nMatchedStationsPos, nMatchedStationsNeg,nOverlapMusPos, nOverlapMusNeg, nSharingSegWithPos, nSharingSegWithNeg;
@@ -510,7 +510,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           const reco::Track recoPosMuonTrack = *(recoPosMuon->bestTrack());
 
           posMuonTrackType = recoPosMuon->MuonTrackType();
-          posMuonType = (int)(recoPosMuon->type());
+          posMuonType = (unsigned int)(recoPosMuon->type());
 
           const reco::Track* recoPosMuonInTrack = 0, *recoPosMuonOutTrack = 0, *recoPosMuonGlobTrack = 0;
 
@@ -590,6 +590,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             continue ;
 
             nMatchedStationsNeg = recoNegMuon->numberOfMatchedStations();
+
+            negMuonTrackType = recoNegMuon->MuonTrackType();
+            negMuonType = (unsigned int)(recoNegMuon->type());
 
             ////////////////// Muons Overlap Checks //////////////////
 
