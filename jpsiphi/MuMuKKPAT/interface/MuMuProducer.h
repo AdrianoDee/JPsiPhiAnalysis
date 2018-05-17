@@ -149,7 +149,7 @@ private:
 
   std::vector<string> HLTFileters_, FiltersForMatching_;
   bool Debug_;
-  
+
 };
 
 #endif
