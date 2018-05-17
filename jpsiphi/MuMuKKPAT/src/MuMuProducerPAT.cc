@@ -1,4 +1,4 @@
-// -*- C++ -*-
+Neg// -*- C++ -*-
 //
 // Package:    MuMuProducerPAT
 // Class:      MuMuProducerPAT
@@ -533,6 +533,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
         int posMuonType, negMuonType, posMuonTrackType, MuonTrackType;
         float posMuonDzVtx, posMuonDxyVtx;
 
+        int nMatchedStationsPos, nMatchedStationsNeg,nOverlapMusPos, nOverlapMusNeg, nSharingSegWithPos, nSharingSegWithNeg;
+
+
         float mumuVProb;
 
         /// get MuMu cands
@@ -594,10 +597,10 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           if (!(recoPosMuon->globalTrack().isNull()))
           recoPosMuonGlobTrack = (recoPosMuon->globalTrack()).get();
 
-          posMuonDzVtx = murecoPosMuon->bestTrackRef()->dz(RefVtx);
-          posMuonDxyVtx = murecoPosMuon->bestTrackRef()->dxy(RefVtx);
+          posMuonDzVtx = recoPosMuon->bestTrackRef()->dz(RefVtx);
+          posMuonDxyVtx = recoPosMuon->bestTrackRef()->dxy(RefVtx);
 
-          // nMatchedStations->push_back(recoPosMuon->numberOfMatchedStations()) ;
+          nMatchedStationsPos = recoPosMuon->numberOfMatchedStations();
 
           ////////////////// Muons Overlap Checks //////////////////
 
@@ -625,8 +628,12 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
               nSharingSegWith++ ;
             }
           }
-          muNOverlap->push_back( nOverlapMus ) ;
-          muNSharingSegWith->push_back( nSharingSegWith ) ;
+
+          nOverlapMusPos = nOverlapMus;
+          nSharingSegWithPos = nSharingSegWith;
+
+          // muNOverlap->push_back( nOverlapMus ) ;
+          // muNSharingSegWith->push_back( nSharingSegWith ) ;
 
           ////////////////// check for muon2 //////////////////
           for ( std::vector<pat::Muon>::const_iterator negMuon = posMuon+1; negMuon != thePATMuonHandle->end(); ++negMuon) {
@@ -658,9 +665,39 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
             continue ;
 
+            nMatchedStationsNeg = recoNegMuon->numberOfMatchedStations();
+
+            ////////////////// Muons Overlap Checks //////////////////
+
+            int nOverlapMus = 0, nSharingSegWith = -1;
+            int nSegments1 = recoNegMuon->numberOfMatches(reco::Muon::SegmentArbitration);
+
+            for ( std::vector<pat::Muon>::const_iterator otherMuon = posMuon+1; otherMuon != thePATMuonHandle->end(); ++otherMuon) {
+
+              const reco::Muon* recoOtherMuon = dynamic_cast<const reco::Muon*>(otherMuon->originalObject());
+              if ( isSameMuon(*recoNegMuon, *recoOtherMuon)) continue;
+              if ( !muon::isGoodMuon(*recoOtherMuon, muon::TMOneStationTight) ) continue;
+              /// geometric overlap
+              if ( muon::overlap( *recoNegMuon, *recoOtherMuon ) )
+              nOverlapMus++ ;
+              /// shared segments
+              int nSegments2 = recoOtherMuon->numberOfMatches(reco::Muon::SegmentArbitration);
+
+              if (nSegments2 == 0 || nSegments1 == 0) continue;
+
+              float sf = muon::sharedSegments(*recoNegMuon, *recoOtherMuon) / std::min<float>(nSegments1, nSegments2);
+
+              if (sf > 0.5) {
+                nSharingSegWith = 0;
+                if ( !isBetterMuon(*recoNegMuon, *recoOtherMuon) )
+                nSharingSegWith++ ;
+              }
+            }
+
+            nOverlapMusNeg = nOverlapMus;
+            nSharingSegWithNeg = nSharingSegWith;
 
             pat::CompositeCandidate mumuCandidateidate;
-
 
             // ---- define and set candidate's 4momentum  ----
             math::XYZTLorentzVector muP, muN,mumuP4;
@@ -768,7 +805,13 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             // pat_ref_JPsi.addDaughter(*pat_ref_PM, "muonPos");
             // pat_ref_JPsi.addDaughter(*pat_ref_NM, "muonNeg");
 
+            pat_ref_JPsi.addUserInt("nMatchedStationsPos",    nMatchedStationsPos);
+            pat_ref_JPsi.addUserInt("nOverlapMusPos",         nOverlapMusPos);
+            pat_ref_JPsi.addUserInt("nSharingSegWithPos",     nSharingSegWithPos);
 
+            pat_ref_JPsi.addUserInt("nMatchedStationsNeg",    nMatchedStationsNeg);
+            pat_ref_JPsi.addUserInt("nOverlapMusNeg",         nOverlapMusNeg);
+            pat_ref_JPsi.addUserInt("nSharingSegWithNeg",     nSharingSegWithNeg);
 
             // ref_Jpsi.push_back(pat_ref_JPsi);
             // ref_mupos.push_back(pat_ref_PM);
