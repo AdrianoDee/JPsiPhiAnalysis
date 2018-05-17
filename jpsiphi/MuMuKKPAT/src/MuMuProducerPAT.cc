@@ -203,7 +203,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   Vertex thePrimaryVtx, theBeamSpotVtx;
   math::XYZPoint RefVtx;
 
-  Int_t thePrimaryVtx_multiplicity = -1 ;
+  // Int_t thePrimaryVtx_multiplicity = -1 ;
 
   reco::BeamSpot beamSpot;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
@@ -218,7 +218,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   iEvent.getByLabel(vtxSample_, recVtxs);
   unsigned int nVtxTrks = 0;
   if ( recVtxs->begin() != recVtxs->end() ) {
-    thePrimaryVtx_multiplicity = recVtxs->size() ;
+    // thePrimaryVtx_multiplicity = recVtxs->size() ;
 
     if (resolveAmbiguity_) {
       //thePrimaryVtx = Vertex(*(recVtxs->begin()));
@@ -235,7 +235,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
     }
   } else {
     thePrimaryVtx = Vertex(beamSpot.position(), beamSpot.covariance3D());
-    thePrimaryVtx_multiplicity = 1 ;
+    // thePrimaryVtx_multiplicity = 1 ;
   }
 
   std::cout <<"Debug : " << ++debug << std::endl;
