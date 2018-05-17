@@ -76,9 +76,10 @@ MuMaxNormChi_(iConfig.getUntrackedParameter<float>("MaxMuNormChi2", 1000)),
 MuMaxD0_(iConfig.getUntrackedParameter<float>("MaxMuD0", 1000)),
 
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
-HLTFileters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
+HLTFilters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),
-Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true)),
+Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
+
 {
   // revtxtrks_ = "generalTracks"; //if that is not true, we will raise an exception
   // revtxbs_ = "offlineBeamSpot";
@@ -621,7 +622,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
-            LorentzVector mumu = posMuon->p4() + negMuon->p4();
+            ROOT::Math::LorentzVector mumu = posMuon->p4() + negMuon->p4();
             TLorentzVector muP, muN,mumuP4;
 
             muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
@@ -948,8 +949,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
     /// ------------ method called once each job just after ending the event loop  ------------
     void MuMuProducerPAT::endJob() {
-      mumukktree->GetDirectory()->cd();
-      mumukktree->Write();
+
     }/// endjob
 
 
