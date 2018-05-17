@@ -111,7 +111,7 @@ private:
   virtual void produce(const edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
 
-  UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
+  UInt_t isTriggerMatched(pat::Muon* posMuon, pat::Muon* negMuon);
 
   InvariantMassFromVertex massCalculator;
 

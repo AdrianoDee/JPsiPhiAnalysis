@@ -533,9 +533,6 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
         int nMatchedStationsPos, nMatchedStationsNeg,nOverlapMusPos, nOverlapMusNeg, nSharingSegWithPos, nSharingSegWithNeg;
 
-
-        float mumuVProb;
-
         /// get MuMu cands
         for ( std::vector<pat::Muon>::const_iterator posMuon = thePATMuonHandle->begin(); posMuon != thePATMuonHandle->end(); ++posMuon ) {
 
@@ -695,7 +692,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             nOverlapMusNeg = nOverlapMus;
             nSharingSegWithNeg = nSharingSegWith;
 
-            pat::CompositeCandidate mumuCandidateidate;
+            pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
             math::XYZTLorentzVector muP, muN,mumuP4;
@@ -741,12 +738,12 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             float dimuon_vy_fit = mumuCandidate_vertex_fromFit->position().y();
             float dimuon_vz_fit = mumuCandidate_vertex_fromFit->position().z();
 
-            mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
+            float mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
 
             if (mumuVProb < 0.001)
             continue;
 
-            mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
+            float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
 
             ////////////////// fill the MuMu vectors //////////////////
             if (mumuCandidate_fromFit->currentState().mass() < JPsiMinMass  ||  mumuCandidate_fromFit->currentState().mass() > JPsiMaxMass)
