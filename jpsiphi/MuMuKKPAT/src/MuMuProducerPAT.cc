@@ -152,7 +152,7 @@ UInt_t MuMuProducerPAT::isTriggerMatched(const pat::Muon* posMuon, const pat::Mu
 ///
 
 /// ------------ method called to for each event  ------------
-void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
   using namespace edm;
