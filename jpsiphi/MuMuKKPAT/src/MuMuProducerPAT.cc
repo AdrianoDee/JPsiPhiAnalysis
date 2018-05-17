@@ -446,7 +446,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
   if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData_ ) {
 
-    // bool isEventWithInvalidMu = false;
+    bool isEventWithInvalidMu = false;
 
     if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
@@ -484,13 +484,13 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           if (recoPosMuon->innerTrack().isNull() && recoPosMuon->outerTrack().isNull() && recoPosMuon->globalTrack().isNull()) continue;
 
           if ( !(recoPosMuon->track()->hitPattern().trackerLayersWithMeasurement()) ) {
-            // isEventWithInvalidMu = true;
+            isEventWithInvalidMu = true;
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
             continue ;
           }
           if ( !(recoPosMuon->track()->hitPattern().pixelLayersWithMeasurement()) ) {
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
-            // isEventWithInvalidMu = true;
+            isEventWithInvalidMu = true;
             continue ;
           }
 
@@ -848,6 +848,10 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat_ref_JPsi.addUserFloat("BS_lxyErr",      MuMu_lxyErr);
             pat_ref_JPsi.addUserFloat("BS_lxyz",        MuMu_lxyz);
             pat_ref_JPsi.addUserFloat("BS_lxyzErr",     MuMu_lxyzErr);
+
+            pat_ref_JPsi.addUserFloat("isEventWithInvalidMu",    float(isEventWithInvalidMu));
+
+
 
             // MuMuDecayVtx_XE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cxx()) );
             // MuMuDecayVtx_YE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cyy()) );
