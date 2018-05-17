@@ -127,20 +127,20 @@ DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 
 hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
-vtxSample_(iConfig.getUntrackedParameter<std::string>("VtxSample",std::string("offlinePrimaryVertices"))),
+vtxSample__(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
 
 jspiMassCuts_(iConfig.getParameter<std::vector<float>>("JPsiMassCuts")),
 psiMassCuts_(iConfig.getParameter<std::vector<float>>("PsiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
-doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
+doMC__( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
 
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
 
 addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 MCParticle_( iConfig.getUntrackedParameter<int>("MonteCarloParticleId", 20443) ), /// 20443 X, 100443 Psi(2S), 9120443 X from B / decide later for X(4140)
-MCExclusiveDecay_( iConfig.getUntrackedParameter<bool>("MonteCarloExclusiveDecay", true) ),
+MCExclusiveDecay__( iConfig.getUntrackedParameter<bool>("MonteCarloExclusiveDecay", true) ),
 MCMother_( iConfig.getUntrackedParameter<int>("MonteCarloMotherId", 511) ), /// 511 B0 (=anti-B0), 531 B0 / decide later MCMotherId for X(4140)
 MCDaughtersN_( iConfig.getUntrackedParameter<int>(" MonteCarloDaughtersN", 3) ), /// will be same
 
@@ -288,7 +288,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   else std::cout << "No beam spot available from EventSetup" << std::endl;
 
   Handle<VertexCollection> recVtxs;
-  iEvent.getByLabel(vtxSample, recVtxs);
+  iEvent.getByLabel(vtxSample_, recVtxs);
   unsigned int nVtxTrks = 0;
   if ( recVtxs->begin() != recVtxs->end() ) {
     thePrimaryVtx_multiplicity = recVtxs->size() ;
@@ -318,12 +318,12 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   KalmanVertexFitter vtxFitter(true);
 
   RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
-  pV = thePrimaryVtx;
-  n_pV = thePrimaryVtx_multiplicity ;
-  priVtx_VProb = ChiSquaredProbability( (float)(thePrimaryVtx.chi2()), (float)(thePrimaryVtx.ndof())) ;
+  reco::Vertex pV = thePrimaryVtx;
+  int n_pV = thePrimaryVtx_multiplicity ;
+  float priVtx_VProb = ChiSquaredProbability( (float)(thePrimaryVtx.chi2()), (float)(thePrimaryVtx.ndof())) ;
 
-  VertexHigherPtSquared vertexHigherPtSquared ;
-  tracksPtSq_pV = vertexHigherPtSquared.sumPtSquared(thePrimaryVtx) ;
+  // VertexHigherPtSquared vertexHigherPtSquared ;
+  // tracksPtSq_pV = vertexHigherPtSquared.sumPtSquared(thePrimaryVtx) ;
 
   /// /// /// /// /// /// /// /// /// /// /// /// /// ///
   /// MUONS
@@ -337,7 +337,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   /// MC Truth
   /// /// /// /// /// /// /// /// /// /// /// /// /// ///
   //
-  //   if (doMC) {
+  //   if (doMC_) {
   //     /*
   //     // Get generated event
   //     //Handle<edm::HepMCProduct> hepEv;
@@ -388,7 +388,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   //       MCPdgIdAll->push_back( pdgid );
   //       MCDanNumAll->push_back( dauNum );
   //
-  //       if ( MCExclusiveDecay ) {
+  //       if ( MCExclusiveDecay_ ) {
   //         /// check if there is a MCMother which has MCDaughtersN daughters
   //         if ( abs(pdgid) == MCMother  &&  dauNum == MCDaughtersN ) {
   //           bool mumuOK = false;
@@ -509,641 +509,639 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   //       }
   //       if (Debug_) std::cout << "decayChainOK = " << decayChainOK << std::endl;
   //     } // if ( abs(pdgid) == MCMother  &&  dauNum == 3 )
-  //   } // if ( !MCExclusiveDecay )
+  //   } // if ( !MCExclusiveDecay_ )
   //
   // } // for (size_t i = 0; i < genParticles->size(); ++ i)
-  // } // if (doMC)
+  // } // if (doMC_)
   //
 
-/// reconstruction only for events with B decaying in psi(nS)+Pi+K /// SEMRA JPsiPhi !!!
+  /// reconstruction only for events with B decaying in psi(nS)+Pi+K /// SEMRA JPsiPhi !!!
 
-if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK)) || doData ) {
+  if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData ) {
 
-  bool isEventWithInvalidMu = false;
+    bool isEventWithInvalidMu = false;
 
-  if (Debug_) std::cout << "Starting event with " << thePATTrackHandle->size() << " tracks, and " << thePATMuonHandle->size() << " muons" << std::endl;
+    if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
-  if ((thePATMuonHandle->size()) * (thePATTrackHandle->size()) > 20000)
-    std::cout << "Too many Muons: " << thePATMuonHandle->size() << ", and Tracks: " << thePATTrackHandle->size() << std::endl;
+    if ((thePATMuonHandle->size())) > 10000)
+    std::cout << "Too many Muons: " << thePATMuonHandle->size() << std::endl;
     else //if (thePATMuonHandle->size() >= 2) { // check
-    if (thePATMuonHandle->size() >= 2  && (hasRequestedTrigger || !TriggerCut_)) {
+      if (thePATMuonHandle->size() >= 2  && (hasRequestedTrigger || !TriggerCut_)) {
 
-      if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
+        if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
-      int posMuonType, negMuonType, posMuonTrackType, MuonTrackType;
-      float posMuonDzVtx, posMuonDxyVtx;
+        int posMuonType, negMuonType, posMuonTrackType, MuonTrackType;
+        float posMuonDzVtx, posMuonDxyVtx;
 
-      float mumuVProb;
+        float mumuVProb;
 
-      /// get MuMu cands
-      for ( std::vector<pat::Muon>::const_iterator posMuon = thePATMuonHandle->begin(); posMuon != thePATMuonHandle->end(); ++posMuon ) {
+        /// get MuMu cands
+        for ( std::vector<pat::Muon>::const_iterator posMuon = thePATMuonHandle->begin(); posMuon != thePATMuonHandle->end(); ++posMuon ) {
 
 
-        /// push back all muon information
-        ++nMu;
-        const reco::Muon* recoPosMuon = dynamic_cast<const reco::Muon * >(posMuon->originalObject());
-        // muPx->push_back(recoPosMuon->px());
-        // muPy->push_back(recoPosMuon->py());
-        // muPz->push_back(recoPosMuon->pz());
-        // muCharge->push_back(recoPosMuon->charge());
+          /// push back all muon information
+          const reco::Muon* recoPosMuon = dynamic_cast<const reco::Muon * >(posMuon->originalObject());
+          // muPx->push_back(recoPosMuon->px());
+          // muPy->push_back(recoPosMuon->py());
+          // muPz->push_back(recoPosMuon->pz());
+          // muCharge->push_back(recoPosMuon->charge());
 
-        if (recoPosMuon->charge()<=0.0) continue;
+          if (recoPosMuon->charge()<=0.0) continue;
 
-        if (recoPosMuon->pt()<=0.5) continue;
+          if (recoPosMuon->pt()<=0.5) continue;
 
-        if (recoPosMuon->track().isNull()) continue;
+          if (recoPosMuon->track().isNull()) continue;
 
-        if (recoPosMuon->bestTrackRef().isNull()) continue;
+          if (recoPosMuon->bestTrackRef().isNull()) continue;
 
-        if (recoPosMuon->innerTrack().isNull() && recoPosMuon->outerTrack().isNull() && recoPosMuon->globalTrack().isNull()) continue;
+          if (recoPosMuon->innerTrack().isNull() && recoPosMuon->outerTrack().isNull() && recoPosMuon->globalTrack().isNull()) continue;
 
-        if ( !(recoPosMuon->track()->hitPattern().trackerLayersWithMeasurement()) ) {
-          isEventWithInvalidMu = true;
-          if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
+          if ( !(recoPosMuon->track()->hitPattern().trackerLayersWithMeasurement()) ) {
+            isEventWithInvalidMu = true;
+            if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
+            continue ;
+          }
+          if ( !(recoPosMuon->track()->hitPattern().pixelLayersWithMeasurement()) ) {
+            if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
+            isEventWithInvalidMu = true;
+            continue ;
+          }
+
+          /// Pixel Cuts On
+          if (recoPosMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits_
+          || recoPosMuon->track()->hitPattern().numberOfValidStripHits() < _
+          || recoPosMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi_
+          || fabs(recoPosMuon->track()->dxy(RefVtx)) > MuMaxD0_) {
+            continue ;
+          }
+
+          TrackRef muPosTrack = posMuon->track() ; //Needed for Refitting
+
+          if ( muPosTrack.isNull() )
           continue ;
-        }
-        if ( !(recoPosMuon->track()->hitPattern().pixelLayersWithMeasurement()) ) {
-          if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
-          isEventWithInvalidMu = true;
-          continue ;
-        }
 
-        /// Pixel Cuts On
-        if (recoPosMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits
-        || recoPosMuon->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits
-        || recoPosMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi
-        || fabs(recoPosMuon->track()->dxy(RefVtx)) > MuMaxD0) {
-          continue ;
-        }
+          const reco::Track recoPosMuonTrack = *(recoPosMuon->bestTrack());
 
-        TrackRef muPosTrack = posMuon->track() ; //Needed for Refitting
+          posMuonTrackType = recoPosMuon->MuonTrackType();
+          posMuonType = (int)(recoPosMuon->type());
 
-        if ( muPosTrack.isNull() )
-          continue ;
+          const reco::Track* recoPosMuonInTrack = 0, *recoPosMuonOutTrack = 0, *recoPosMuonGlobTrack = 0;
 
-        const reco::Track recoPosMuonTrack = *(recoPosMuon->bestTrack());
-
-        posMuonTrackType = recoPosMuon->MuonTrackType();
-        posMuonType = recoPosMuon->type();
-
-        const reco::Track* recoPosMuonInTrack = 0,recoPosMuonOutTrack = 0, recoPosMuonGlobTrack = 0;
-
-        if (!(recoPosMuon->innerTrack().isNull()))
+          if (!(recoPosMuon->innerTrack().isNull()))
           recoPosMuonInTrack = (recoPosMuon->track()).get();
-        if (!(recoPosMuon->outerTrack().isNull()))
+          if (!(recoPosMuon->outerTrack().isNull()))
           recoPosMuonOutTrack = (recoPosMuon->outerTrack()).get();
-        if (!(recoPosMuon->globalTrack().isNull()))
+          if (!(recoPosMuon->globalTrack().isNull()))
           recoPosMuonGlobTrack = (recoPosMuon->globalTrack()).get();
 
-        posMuonDzVtx = murecoPosMuon->bestTrackRef()->dz(RefVtx));
-        posMuonDxyVtx = murecoPosMuon->bestTrackRef()->dxy(RefVtx));
+          posMuonDzVtx = murecoPosMuon->bestTrackRef()->dz(RefVtx);
+          posMuonDxyVtx = murecoPosMuon->bestTrackRef()->dxy(RefVtx);
 
-        nMatchedStations->push_back(recoPosMuon->numberOfMatchedStations()) ;
+          // nMatchedStations->push_back(recoPosMuon->numberOfMatchedStations()) ;
 
-        ////////////////// Muons Overlap Checks //////////////////
+          ////////////////// Muons Overlap Checks //////////////////
 
-        int nOverlapMus = 0, nSharingSegWith = -1;
-        int nSegments1 = recoPosMuon->numberOfMatches(reco::Muon::SegmentArbitration);
+          int nOverlapMus = 0, nSharingSegWith = -1;
+          int nSegments1 = recoPosMuon->numberOfMatches(reco::Muon::SegmentArbitration);
 
-        for ( std::vector<pat::Muon>::const_iterator otherMuon = posMuon+1; otherMuon != thePATMuonHandle->end(); ++otherMuon) {
+          for ( std::vector<pat::Muon>::const_iterator otherMuon = posMuon+1; otherMuon != thePATMuonHandle->end(); ++otherMuon) {
 
-          const reco::Muon* recoOtherMuon = dynamic_cast<const reco::Muon*>(otherMuon->originalObject());
-          if ( isSameMuon(*recoPosMuon, *recoOtherMuon)) continue;
-          if ( !muon::isGoodMuon(*recoOtherMuon, muon::TMOneStationTight) ) continue;
-          /// geometric overlap
-          if ( muon::overlap( *recoPosMuon, *recoOtherMuon ) )
+            const reco::Muon* recoOtherMuon = dynamic_cast<const reco::Muon*>(otherMuon->originalObject());
+            if ( isSameMuon(*recoPosMuon, *recoOtherMuon)) continue;
+            if ( !muon::isGoodMuon(*recoOtherMuon, muon::TMOneStationTight) ) continue;
+            /// geometric overlap
+            if ( muon::overlap( *recoPosMuon, *recoOtherMuon ) )
             nOverlapMus++ ;
-          /// shared segments
-          int nSegments2 = recoOtherMuon->numberOfMatches(reco::Muon::SegmentArbitration);
+            /// shared segments
+            int nSegments2 = recoOtherMuon->numberOfMatches(reco::Muon::SegmentArbitration);
 
-          if (nSegments2 == 0 || nSegments1 == 0) continue;
+            if (nSegments2 == 0 || nSegments1 == 0) continue;
 
-          float sf = muon::sharedSegments(*recoPosMuon, *recoOtherMuon) / std::min<float>(nSegments1, nSegments2);
+            float sf = muon::sharedSegments(*recoPosMuon, *recoOtherMuon) / std::min<float>(nSegments1, nSegments2);
 
-          if (sf > 0.5) {
-            nSharingSegWith = 0;
-            if ( !isBetterMuon(*recoPosMuon, *recoOtherMuon) )
-            nSharingSegWith++ ;
+            if (sf > 0.5) {
+              nSharingSegWith = 0;
+              if ( !isBetterMuon(*recoPosMuon, *recoOtherMuon) )
+              nSharingSegWith++ ;
+            }
           }
-        }
-        muNOverlap->push_back( nOverlapMus ) ;
-        muNSharingSegWith->push_back( nSharingSegWith ) ;
+          muNOverlap->push_back( nOverlapMus ) ;
+          muNSharingSegWith->push_back( nSharingSegWith ) ;
 
-        ////////////////// check for muon2 //////////////////
-        for ( std::vector<pat::Muon>::const_iterator negMuon = posMuon+1; negMuon != thePATMuonHandle->end(); ++negMuon) {
+          ////////////////// check for muon2 //////////////////
+          for ( std::vector<pat::Muon>::const_iterator negMuon = posMuon+1; negMuon != thePATMuonHandle->end(); ++negMuon) {
 
-          if(negMuon->charge() >= 0) continue ;
+            if(negMuon->charge() >= 0) continue ;
 
-          if(negMuon->pt() <= 0.5) continue ;
+            if(negMuon->pt() <= 0.5) continue ;
 
-          const reco::Muon* recoNegMuon = dynamic_cast<const reco::Muon *>(negMuon->originalObject()) ;
+            const reco::Muon* recoNegMuon = dynamic_cast<const reco::Muon *>(negMuon->originalObject()) ;
 
-          if (muon::overlap(*recoPosMuon, *recoNegMuon) )
-          continue ;
+            if (muon::overlap(*recoPosMuon, *recoNegMuon) )
+            continue ;
 
-          if (recoNegMuon->track().isNull()) continue;
+            if (recoNegMuon->track().isNull()) continue;
 
-          if (recoNegMuon->bestTrackRef().isNull()) continue;
+            if (recoNegMuon->bestTrackRef().isNull()) continue;
 
-          if (recoNegMuon->innerTrack().isNull() && recoNegMuon->outerTrack().isNull() && recoNegMuon->globalTrack().isNull()) continue;
+            if (recoNegMuon->innerTrack().isNull() && recoNegMuon->outerTrack().isNull() && recoNegMuon->globalTrack().isNull()) continue;
 
-          TrackRef muNegTrack = negMuon->track() ;
-          if ( muNegTrack.isNull() )
-          continue ;
+            TrackRef muNegTrack = negMuon->track() ;
+            if ( muNegTrack.isNull() )
+            continue ;
 
-          /// cuts on muon2
-          if (recoNegMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits
-          || recoNegMuon->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits
-          || recoNegMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi
-          || fabs(recoNegMuon->track()->dxy(RefVtx)) > MuMaxD0)
+            /// cuts on muon2
+            if (recoNegMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits_
+            || recoNegMuon->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits_
+            || recoNegMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi_
+            || fabs(recoNegMuon->track()->dxy(RefVtx)) > MuMaxD0_)
 
             continue ;
 
 
-          pat::CompositeCandidate mumuCandidateidate;
+            pat::CompositeCandidate mumuCandidateidate;
 
 
-          // ---- define and set candidate's 4momentum  ----
-          math::XYZTLorentzVector muP, muN,mumuP4;
+            // ---- define and set candidate's 4momentum  ----
+            math::XYZTLorentzVector muP, muN,mumuP4;
 
-          muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
-          muN.SetXYZM(recoNegMuon->bestTrackRef()->px(),recoNegMuon->bestTrackRef()->py(),recoNegMuon->bestTrackRef()->pz(),muon_mass);
-          // LorentzVector mumu;
+            muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
+            muN.SetXYZM(recoNegMuon->bestTrackRef()->px(),recoNegMuon->bestTrackRef()->py(),recoNegMuon->bestTrackRef()->pz(),muon_mass);
+            // LorentzVector mumu;
 
-          mumuP4 = muP + muN;
+            mumuP4 = muP + muN;
 
-          mumuCandidate.setP4(mumuP4);
-          mumuCandidate.setCharge(recoPosMuon->charge() + recoNegMuon->charge());
+            mumuCandidate.setP4(mumuP4);
+            mumuCandidate.setCharge(recoPosMuon->charge() + recoNegMuon->charge());
 
-          float deltaRMuMu = reco::deltaR2(recoPosMuon->eta(),recoPosMuon->phi(),recoNegMuon->eta(),recoNegMuon->phi());
+            float deltaRMuMu = reco::deltaR2(recoPosMuon->eta(),recoPosMuon->phi(),recoNegMuon->eta(),recoNegMuon->phi());
 
 
-          ////////////////// get the MuMu information //////////////////
-          TransientTrack muonPosTT( muPosTrack, &(*bFieldHandle) );
-          TransientTrack muonNegTT( muNegTrack, &(*bFieldHandle) );
-          KinematicParticleFactoryFromTransientTrack pFactory;
+            ////////////////// get the MuMu information //////////////////
+            TransientTrack muonPosTT( muPosTrack, &(*bFieldHandle) );
+            TransientTrack muonNegTT( muNegTrack, &(*bFieldHandle) );
+            KinematicParticleFactoryFromTransientTrack pFactory;
 
-          /// initial chi2 and ndf before kinematic fits
-          float chi = 0., ndf = 0.;
-          std::vector<RefCountedKinematicParticle> muons; /// the final state muons produced by the KinematicParticleFactory
-          muons.push_back( pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
-          muons.push_back( pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
-          KinematicParticleVertexFitter MuMuFitter; /// creating the vertex fitter for JPsi
-          RefCountedKinematicTree MuMuVertexFitTree;
-          MuMuVertexFitTree = MuMuFitter.fit(muons);
+            /// initial chi2 and ndf before kinematic fits
+            float chi = 0., ndf = 0.;
+            std::vector<RefCountedKinematicParticle> muons; /// the final state muons produced by the KinematicParticleFactory
+            muons.push_back( pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
+            muons.push_back( pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
+            KinematicParticleVertexFitter MuMuFitter; /// creating the vertex fitter for JPsi
+            RefCountedKinematicTree MuMuVertexFitTree;
+            MuMuVertexFitTree = MuMuFitter.fit(muons);
 
-          if (!MuMuVertexFitTree->isValid())
-          continue ;
+            if (!MuMuVertexFitTree->isValid())
+            continue ;
 
-          MuMuVertexFitTree->movePointerToTheTop();
-          RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
-          RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
-          MuMuVertexFitTree->movePointerToTheFirstChild();
-          RefCountedKinematicParticle MuPosCand_fromFit = MuMuVertexFitTree->currentParticle();
-          MuMuVertexFitTree->movePointerToTheNextChild();
-          RefCountedKinematicParticle MuNegCand_fromFit = MuMuVertexFitTree->currentParticle();
+            MuMuVertexFitTree->movePointerToTheTop();
+            RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
+            RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
+            MuMuVertexFitTree->movePointerToTheFirstChild();
+            RefCountedKinematicParticle MuPosCand_fromFit = MuMuVertexFitTree->currentParticle();
+            MuMuVertexFitTree->movePointerToTheNextChild();
+            RefCountedKinematicParticle MuNegCand_fromFit = MuMuVertexFitTree->currentParticle();
 
-          float dimuon_vx_fit = mumuCandidate_vertex_fromFit->position().x();
-          float dimuon_vy_fit = mumuCandidate_vertex_fromFit->position().y();
-          float dimuon_vz_fit = mumuCandidate_vertex_fromFit->position().z();
+            float dimuon_vx_fit = mumuCandidate_vertex_fromFit->position().x();
+            float dimuon_vy_fit = mumuCandidate_vertex_fromFit->position().y();
+            float dimuon_vz_fit = mumuCandidate_vertex_fromFit->position().z();
 
-          mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
+            mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
 
-          if (mumuVProb < 0.001)
+            if (mumuVProb < 0.001)
             continue;
 
-          mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
+            mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
 
-          ////////////////// fill the MuMu vectors //////////////////
-          if (mumuCandidate_fromFit->currentState().mass() < JPsiMinMass  ||  mumuCandidate_fromFit->currentState().mass() > JPsiMaxMass)
-          continue ;
+            ////////////////// fill the MuMu vectors //////////////////
+            if (mumuCandidate_fromFit->currentState().mass() < JPsiMinMass  ||  mumuCandidate_fromFit->currentState().mass() > JPsiMaxMass)
+            continue ;
 
-          float dimuon_ma_fit = mumuCandidate_fromFit->currentState().mass();
-          int   dimuon_ch_fit = mumuCandidate_fromFit->currentState().particleCharge();
-          float dimuon_px_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().x();
-          float dimuon_py_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().y();
-          float dimuon_pz_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().z();
-          float dimuon_en_fit = sqrt(dimuon_ma_fit*dimuon_ma_fit+dimuon_px_fit*dimuon_px_fit+dimuon_py_fit*dimuon_py_fit+dimuon_pz_fit*dimuon_pz_fit);
+            float dimuon_ma_fit = mumuCandidate_fromFit->currentState().mass();
+            int   dimuon_ch_fit = mumuCandidate_fromFit->currentState().particleCharge();
+            float dimuon_px_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().x();
+            float dimuon_py_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().y();
+            float dimuon_pz_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().z();
+            float dimuon_en_fit = sqrt(dimuon_ma_fit*dimuon_ma_fit+dimuon_px_fit*dimuon_px_fit+dimuon_py_fit*dimuon_py_fit+dimuon_pz_fit*dimuon_pz_fit);
 
-          reco::CompositeCandidate reco_ref_JPsi(dimuon_ch_fit,math::XYZTLorentzVector(dimuon_px_fit,dimuon_py_fit,dimuon_pz_fit,dimuon_en_fit),
-                                                   math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),443);
-          pat::CompositeCandidate pat_ref_JPsi(reco_ref_JPsi);
+            reco::CompositeCandidate reco_ref_JPsi(dimuon_ch_fit,math::XYZTLorentzVector(dimuon_px_fit,dimuon_py_fit,dimuon_pz_fit,dimuon_en_fit),
+            math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),443);
+            pat::CompositeCandidate pat_ref_JPsi(reco_ref_JPsi);
 
-          //////////////////// For Lifetimes Calculations ////////////////////
-          TVector3 MuMu_vtx((*mumuCandidate_vertex_fromFit).position().x(), (*mumuCandidate_vertex_fromFit).position().y(), 0) ;
-          TVector3 MuMu_pperp(mumuCandidate_fromFit->currentState().globalMomentum().x(), mumuCandidate_fromFit->currentState().globalMomentum().y(), 0);
-          TVector3 MuMu_vtx3D((*mumuCandidate_vertex_fromFit).position().x(), (*mumuCandidate_vertex_fromFit).position().y(), (*mumuCandidate_vertex_fromFit).position().z()) ;
-          TVector3 MuMu_pperp3D(mumuCandidate_fromFit->currentState().globalMomentum().x(),mumuCandidate_fromFit->currentState().globalMomentum().y(), mumuCandidate_fromFit->currentState().globalMomentum().z());
-
-
-          float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
-          int   muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
-          float muonPos_px_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().x();
-          float muonPos_py_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().y();
-          float muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
-          float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
-
-          reco::CompositeCandidate reco_ref_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),-13);
-          pat::CompositeCandidate pat_ref_PM(reco_ref_PM);
-
-          float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
-          int   muonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
-          float muonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
-          float muonNeg_py_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().y();
-          float muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
-          float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
-
-          reco::CompositeCandidate reco_ref_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),13);
-          pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
+            //////////////////// For Lifetimes Calculations ////////////////////
+            TVector3 MuMu_vtx((*mumuCandidate_vertex_fromFit).position().x(), (*mumuCandidate_vertex_fromFit).position().y(), 0) ;
+            TVector3 MuMu_pperp(mumuCandidate_fromFit->currentState().globalMomentum().x(), mumuCandidate_fromFit->currentState().globalMomentum().y(), 0);
+            TVector3 MuMu_vtx3D((*mumuCandidate_vertex_fromFit).position().x(), (*mumuCandidate_vertex_fromFit).position().y(), (*mumuCandidate_vertex_fromFit).position().z()) ;
+            TVector3 MuMu_pperp3D(mumuCandidate_fromFit->currentState().globalMomentum().x(),mumuCandidate_fromFit->currentState().globalMomentum().y(), mumuCandidate_fromFit->currentState().globalMomentum().z());
 
 
-          mumuCandidate.addDaughter(*muonPos, "muonPos");
-          mumuCandidate.addDaughter(*muonNeg,"muonNeg");
+            float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
+            int   muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
+            float muonPos_px_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().x();
+            float muonPos_py_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().y();
+            float muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
+            float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
 
-          pat_ref_JPsi.addUserFloat("deltaR",deltaRMuMu);
-          pat_ref_JPsi.addUserFloat("mumuP4",mumuP4.M());
+            reco::CompositeCandidate reco_ref_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),-13);
+            pat::CompositeCandidate pat_ref_PM(reco_ref_PM);
 
-          pat_ref_JPsi.addDaughter(*pat_ref_PM, "ref_muonPos");
-          pat_ref_JPsi.addDaughter(*pat_ref_NM, "ref_muonNeg");
-          pat_ref_JPsi.addDaughter(*mumuCandidate, "mumuCandidate");
-          // pat_ref_JPsi.addDaughter(*pat_ref_PM, "muonPos");
-          // pat_ref_JPsi.addDaughter(*pat_ref_NM, "muonNeg");
+            float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
+            int   muonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
+            float muonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
+            float muonNeg_py_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().y();
+            float muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
+            float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
 
-
-
-          // ref_Jpsi.push_back(pat_ref_JPsi);
-          // ref_mupos.push_back(pat_ref_PM);
-          // ref_muneg.push_back(pat_ref_NM);
-          //
-          // Jpsi_p4.push_back(recoNegMuon->p4() + recoPosMuon->p4());
-          // mupos_p4.push_back(recoPosMuon->p4());
-          // muneg_p4.push_back(recoNegMuon->p4());
-
-          pat_ref_JPsi.addUserFloat("muPos_Chi2", MuPosCand_fromFit->chiSquared());
-          pat_ref_JPsi.addUserFloat("muPos_NDF",  MuPosCand_fromFit->degreesOfFreedom());
-          pat_ref_JPsi.addUserFloat("muNeg_Chi2", MuNegCand_fromFit->chiSquared());
-          pat_ref_JPsi.addUserFloat("muNeg_NDF",  MuNegCand_fromFit->degreesOfFreedom());
-
-          pat_ref_JPsi.addUserFloat("VProb", mumuVProb);
-          pat_ref_JPsi.addUserFloat("Chi2",  mumuChi2);
-
-          AlgebraicVector3 MuMu_v3pperp ;
-          MuMu_v3pperp[0] = MuMu_pperp.x(); MuMu_v3pperp[1] = MuMu_pperp.y(); MuMu_v3pperp[2] = 0.;
-
-          TVector3 MuMu_pvtx, MuMu_pvtx3D, MuMu_vdiff, MuMu_vdiff3D ;
-          float MuMu_cosAlpha, MuMu_cosAlpha3D, MuMu_ctau ;
-          VertexDistanceXY MuMu_vdistXY ;
-          Measurement1D MuMu_distXY ;
-          GlobalError MuMu_v1e = (Vertex(*mumuCandidate_vertex_fromFit)).error(), MuMu_v2e;
-          AlgebraicSymMatrix33 MuMu_vXYe ;
-          float MuMu_ctauErr ;
-          float MuMu_lxy, MuMu_lxyErr, MuMu_lxyz, MuMu_lxyzErr ;
-          ROOT::Math::SVector<float, 3> MuMu_vDiff, MuMu_vDiff3D ; // needed by Similarity method
-
-          ////////////////// Lifetime wrt PV for MuMu //////////////////
-          MuMu_v2e = thePrimaryVtx.error();
-          MuMu_vXYe = MuMu_v1e.matrix() + MuMu_v2e.matrix() ;
-
-          /// 2D
-          MuMu_pvtx.SetXYZ(thePrimaryVtx.position().x(), thePrimaryVtx.position().y(), 0) ;
-          MuMu_vdiff = MuMu_vtx - MuMu_pvtx ;
-          MuMu_cosAlpha = MuMu_vdiff.Dot(MuMu_pperp) / (MuMu_vdiff.Perp()*MuMu_pperp.Perp()) ;
-          MuMu_lxy = MuMu_vdiff.Perp();
-          MuMu_vDiff[0] = MuMu_vdiff.x(); MuMu_vDiff[1] = MuMu_vdiff.y(); MuMu_vDiff[2] = 0 ; // needed by Similarity method
-          MuMu_lxyErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff,MuMu_vXYe)) / MuMu_vdiff.Perp();
-          MuMu_distXY = MuMu_vdistXY.distance(Vertex(*mumuCandidate_vertex_fromFit), Vertex(thePrimaryVtx));
-          MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * mumuCandidate_fromFit->currentState().mass() / MuMu_pperp.Perp();
-          MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * mumuCandidate_fromFit->currentState().mass() / (MuMu_pperp.Perp2()) ;
-
-          /// 3D
-          MuMu_pvtx3D.SetXYZ(thePrimaryVtx.position().x(), thePrimaryVtx.position().y(), thePrimaryVtx.position().z());
-          MuMu_vdiff3D = MuMu_vtx3D - MuMu_pvtx3D;
-          MuMu_cosAlpha3D = MuMu_vdiff3D.Dot(MuMu_pperp3D)/(MuMu_vdiff3D.Mag()*MuMu_pperp3D.Mag());
-          MuMu_lxyz = MuMu_vdiff3D.Mag();
-          MuMu_vDiff3D[0] = MuMu_vdiff3D.x(); MuMu_vDiff3D[1] = MuMu_vdiff3D.y(); MuMu_vDiff3D[2] = MuMu_vdiff3D.z() ;
-          MuMu_lxyzErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff3D,MuMu_vXYe)) / MuMu_vdiff3D.Mag();
-
-          pat_ref_JPsi.addUserFloat("cosAlpha",    MuMu_cosAlpha);
-          pat_ref_JPsi.addUserFloat("cosAlpha3D",  MuMu_cosAlpha3D);
-          pat_ref_JPsi.addUserFloat("ctau",        MuMu_ctau);
-          pat_ref_JPsi.addUserFloat("ctauErr",     MuMu_ctauErr);
-          pat_ref_JPsi.addUserFloat("lxy",         MuMu_lxy);
-          pat_ref_JPsi.addUserFloat("lxyErr",      MuMu_lxyErr);
-          pat_ref_JPsi.addUserFloat("lxyz",        MuMu_lxyz);
-          pat_ref_JPsi.addUserFloat("lxyzErr",     MuMu_lxyzErr);
-
-          ////////////////// Lifetime wrt BS for MuMu //////////////////
-          MuMu_v2e = theBeamSpotVtx.error();
-          MuMu_vXYe = MuMu_v1e.matrix() + MuMu_v2e.matrix();
-
-          /// 2D
-          MuMu_pvtx.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), 0);
-          MuMu_vdiff = MuMu_vtx - MuMu_pvtx;
-          MuMu_cosAlpha = MuMu_vdiff.Dot(MuMu_pperp)/(MuMu_vdiff.Perp()*MuMu_pperp.Perp());
-          MuMu_lxy = MuMu_vdiff.Perp();
-          MuMu_vDiff[0] = MuMu_vdiff.x(); MuMu_vDiff[1] = MuMu_vdiff.y(); MuMu_vDiff[2] = 0 ; // needed by Similarity method
-          MuMu_lxyErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff,MuMu_vXYe)) / MuMu_vdiff.Perp();
-          MuMu_distXY = MuMu_vdistXY.distance(Vertex(*XCand_vertex_fromMCFit), Vertex(theBeamSpotVtx));
-          MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * (XCand_fromMCFit->currentState().mass() / MuMu_pperp.Perp()) ;
-          MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * XCand_fromMCFit->currentState().mass()/MuMu_pperp.Perp2();
-
-          /// 3D
-          MuMu_pvtx3D.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), theBeamSpotVtx.position().z());
-          MuMu_vdiff3D = MuMu_vtx3D - MuMu_pvtx3D;
-          MuMu_cosAlpha3D = MuMu_vdiff3D.Dot(MuMu_pperp3D)/(MuMu_vdiff3D.Mag()*MuMu_pperp3D.Mag());
-          MuMu_lxyz = MuMu_vdiff3D.Mag();
-          MuMu_vDiff3D[0] = MuMu_vdiff3D.x(); MuMu_vDiff3D[1] = MuMu_vdiff3D.y(); MuMu_vDiff3D[2] = MuMu_vdiff3D.z() ;
-          MuMu_lxyzErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff3D,MuMu_vXYe)) / MuMu_vdiff3D.Mag();
-
-          pat_ref_JPsi.addUserFloat("BS_cosAlpha",    MuMu_cosAlpha);
-          pat_ref_JPsi.addUserFloat("BS_cosAlpha3D",  MuMu_cosAlpha3D);
-          pat_ref_JPsi.addUserFloat("BS_ctau",        MuMu_ctau);
-          pat_ref_JPsi.addUserFloat("BS_ctauErr",     MuMu_ctauErr);
-          pat_ref_JPsi.addUserFloat("BS_lxy",         MuMu_lxy);
-          pat_ref_JPsi.addUserFloat("BS_lxyErr",      MuMu_lxyErr);
-          pat_ref_JPsi.addUserFloat("BS_lxyz",        MuMu_lxyz);
-          pat_ref_JPsi.addUserFloat("BS_lxyzErr",     MuMu_lxyzErr);
-
-          // MuMuDecayVtx_XE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cxx()) );
-          // MuMuDecayVtx_YE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cyy()) );
-          // MuMuDecayVtx_ZE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().czz()) );
+            reco::CompositeCandidate reco_ref_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),13);
+            pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
 
-          Int_t dimuonType = 0;   //0 nothing,  1 J/psi  , 2 psi(2S)
+            mumuCandidate.addDaughter(*muonPos, "muonPos");
+            mumuCandidate.addDaughter(*muonNeg,"muonNeg");
 
-          if ( mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[1] )
+            pat_ref_JPsi.addUserFloat("deltaR",deltaRMuMu);
+            pat_ref_JPsi.addUserFloat("mumuP4",mumuP4.M());
+
+            pat_ref_JPsi.addDaughter(*pat_ref_PM, "ref_muonPos");
+            pat_ref_JPsi.addDaughter(*pat_ref_NM, "ref_muonNeg");
+            pat_ref_JPsi.addDaughter(*mumuCandidate, "mumuCandidate");
+            // pat_ref_JPsi.addDaughter(*pat_ref_PM, "muonPos");
+            // pat_ref_JPsi.addDaughter(*pat_ref_NM, "muonNeg");
+
+
+
+            // ref_Jpsi.push_back(pat_ref_JPsi);
+            // ref_mupos.push_back(pat_ref_PM);
+            // ref_muneg.push_back(pat_ref_NM);
+            //
+            // Jpsi_p4.push_back(recoNegMuon->p4() + recoPosMuon->p4());
+            // mupos_p4.push_back(recoPosMuon->p4());
+            // muneg_p4.push_back(recoNegMuon->p4());
+
+            pat_ref_JPsi.addUserFloat("muPos_Chi2", MuPosCand_fromFit->chiSquared());
+            pat_ref_JPsi.addUserFloat("muPos_NDF",  MuPosCand_fromFit->degreesOfFreedom());
+            pat_ref_JPsi.addUserFloat("muNeg_Chi2", MuNegCand_fromFit->chiSquared());
+            pat_ref_JPsi.addUserFloat("muNeg_NDF",  MuNegCand_fromFit->degreesOfFreedom());
+
+            pat_ref_JPsi.addUserFloat("VProb", mumuVProb);
+            pat_ref_JPsi.addUserFloat("Chi2",  mumuChi2);
+
+            AlgebraicVector3 MuMu_v3pperp ;
+            MuMu_v3pperp[0] = MuMu_pperp.x(); MuMu_v3pperp[1] = MuMu_pperp.y(); MuMu_v3pperp[2] = 0.;
+
+            TVector3 MuMu_pvtx, MuMu_pvtx3D, MuMu_vdiff, MuMu_vdiff3D ;
+            float MuMu_cosAlpha, MuMu_cosAlpha3D, MuMu_ctau ;
+            VertexDistanceXY MuMu_vdistXY ;
+            Measurement1D MuMu_distXY ;
+            GlobalError MuMu_v1e = (Vertex(*mumuCandidate_vertex_fromFit)).error(), MuMu_v2e;
+            AlgebraicSymMatrix33 MuMu_vXYe ;
+            float MuMu_ctauErr ;
+            float MuMu_lxy, MuMu_lxyErr, MuMu_lxyz, MuMu_lxyzErr ;
+            ROOT::Math::SVector<float, 3> MuMu_vDiff, MuMu_vDiff3D ; // needed by Similarity method
+
+            ////////////////// Lifetime wrt PV for MuMu //////////////////
+            MuMu_v2e = thePrimaryVtx.error();
+            MuMu_vXYe = MuMu_v1e.matrix() + MuMu_v2e.matrix() ;
+
+            /// 2D
+            MuMu_pvtx.SetXYZ(thePrimaryVtx.position().x(), thePrimaryVtx.position().y(), 0) ;
+            MuMu_vdiff = MuMu_vtx - MuMu_pvtx ;
+            MuMu_cosAlpha = MuMu_vdiff.Dot(MuMu_pperp) / (MuMu_vdiff.Perp()*MuMu_pperp.Perp()) ;
+            MuMu_lxy = MuMu_vdiff.Perp();
+            MuMu_vDiff[0] = MuMu_vdiff.x(); MuMu_vDiff[1] = MuMu_vdiff.y(); MuMu_vDiff[2] = 0 ; // needed by Similarity method
+            MuMu_lxyErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff,MuMu_vXYe)) / MuMu_vdiff.Perp();
+            MuMu_distXY = MuMu_vdistXY.distance(Vertex(*mumuCandidate_vertex_fromFit), Vertex(thePrimaryVtx));
+            MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * mumuCandidate_fromFit->currentState().mass() / MuMu_pperp.Perp();
+            MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * mumuCandidate_fromFit->currentState().mass() / (MuMu_pperp.Perp2()) ;
+
+            /// 3D
+            MuMu_pvtx3D.SetXYZ(thePrimaryVtx.position().x(), thePrimaryVtx.position().y(), thePrimaryVtx.position().z());
+            MuMu_vdiff3D = MuMu_vtx3D - MuMu_pvtx3D;
+            MuMu_cosAlpha3D = MuMu_vdiff3D.Dot(MuMu_pperp3D)/(MuMu_vdiff3D.Mag()*MuMu_pperp3D.Mag());
+            MuMu_lxyz = MuMu_vdiff3D.Mag();
+            MuMu_vDiff3D[0] = MuMu_vdiff3D.x(); MuMu_vDiff3D[1] = MuMu_vdiff3D.y(); MuMu_vDiff3D[2] = MuMu_vdiff3D.z() ;
+            MuMu_lxyzErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff3D,MuMu_vXYe)) / MuMu_vdiff3D.Mag();
+
+            pat_ref_JPsi.addUserFloat("cosAlpha",    MuMu_cosAlpha);
+            pat_ref_JPsi.addUserFloat("cosAlpha3D",  MuMu_cosAlpha3D);
+            pat_ref_JPsi.addUserFloat("ctau",        MuMu_ctau);
+            pat_ref_JPsi.addUserFloat("ctauErr",     MuMu_ctauErr);
+            pat_ref_JPsi.addUserFloat("lxy",         MuMu_lxy);
+            pat_ref_JPsi.addUserFloat("lxyErr",      MuMu_lxyErr);
+            pat_ref_JPsi.addUserFloat("lxyz",        MuMu_lxyz);
+            pat_ref_JPsi.addUserFloat("lxyzErr",     MuMu_lxyzErr);
+
+            ////////////////// Lifetime wrt BS for MuMu //////////////////
+            MuMu_v2e = theBeamSpotVtx.error();
+            MuMu_vXYe = MuMu_v1e.matrix() + MuMu_v2e.matrix();
+
+            /// 2D
+            MuMu_pvtx.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), 0);
+            MuMu_vdiff = MuMu_vtx - MuMu_pvtx;
+            MuMu_cosAlpha = MuMu_vdiff.Dot(MuMu_pperp)/(MuMu_vdiff.Perp()*MuMu_pperp.Perp());
+            MuMu_lxy = MuMu_vdiff.Perp();
+            MuMu_vDiff[0] = MuMu_vdiff.x(); MuMu_vDiff[1] = MuMu_vdiff.y(); MuMu_vDiff[2] = 0 ; // needed by Similarity method
+            MuMu_lxyErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff,MuMu_vXYe)) / MuMu_vdiff.Perp();
+            MuMu_distXY = MuMu_vdistXY.distance(Vertex(*XCand_vertex_fromMCFit), Vertex(theBeamSpotVtx));
+            MuMu_ctau = MuMu_distXY.value() * MuMu_cosAlpha * (XCand_fromMCFit->currentState().mass() / MuMu_pperp.Perp()) ;
+            MuMu_ctauErr = sqrt(ROOT::Math::Similarity(MuMu_v3pperp,MuMu_vXYe)) * XCand_fromMCFit->currentState().mass()/MuMu_pperp.Perp2();
+
+            /// 3D
+            MuMu_pvtx3D.SetXYZ(theBeamSpotVtx.position().x(), theBeamSpotVtx.position().y(), theBeamSpotVtx.position().z());
+            MuMu_vdiff3D = MuMu_vtx3D - MuMu_pvtx3D;
+            MuMu_cosAlpha3D = MuMu_vdiff3D.Dot(MuMu_pperp3D)/(MuMu_vdiff3D.Mag()*MuMu_pperp3D.Mag());
+            MuMu_lxyz = MuMu_vdiff3D.Mag();
+            MuMu_vDiff3D[0] = MuMu_vdiff3D.x(); MuMu_vDiff3D[1] = MuMu_vdiff3D.y(); MuMu_vDiff3D[2] = MuMu_vdiff3D.z() ;
+            MuMu_lxyzErr = sqrt(ROOT::Math::Similarity(MuMu_vDiff3D,MuMu_vXYe)) / MuMu_vdiff3D.Mag();
+
+            pat_ref_JPsi.addUserFloat("BS_cosAlpha",    MuMu_cosAlpha);
+            pat_ref_JPsi.addUserFloat("BS_cosAlpha3D",  MuMu_cosAlpha3D);
+            pat_ref_JPsi.addUserFloat("BS_ctau",        MuMu_ctau);
+            pat_ref_JPsi.addUserFloat("BS_ctauErr",     MuMu_ctauErr);
+            pat_ref_JPsi.addUserFloat("BS_lxy",         MuMu_lxy);
+            pat_ref_JPsi.addUserFloat("BS_lxyErr",      MuMu_lxyErr);
+            pat_ref_JPsi.addUserFloat("BS_lxyz",        MuMu_lxyz);
+            pat_ref_JPsi.addUserFloat("BS_lxyzErr",     MuMu_lxyzErr);
+
+            // MuMuDecayVtx_XE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cxx()) );
+            // MuMuDecayVtx_YE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().cyy()) );
+            // MuMuDecayVtx_ZE->push_back( sqrt( mumuCandidate_vertex_fromFit->error().czz()) );
+
+
+            Int_t dimuonType = 0;   //0 nothing,  1 J/psi  , 2 psi(2S)
+
+            if ( mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[1] )
             dimuonType = 1 ;
-          else
-          if ( mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[1] )
+            else
+            if ( mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[0]  &&  mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[1] )
             dimuonType = 2;
 
-          pat_ref_JPsi.addUserInt("dimuonType",    dimuonType);
+            pat_ref_JPsi.addUserInt("dimuonType",    dimuonType);
 
-          if (Debug_) std::cout <<dimuonType <<std::endl;
+            if (Debug_) std::cout <<dimuonType <<std::endl;
 
-          if (Debug_) std::cout <<"evt:" <<evtNum <<" MuMu with diMuonType = " <<dimuonType <<std::endl;
-          //if (Debug_) std::cout << "POINT 0" << std::endl;
-          // MuMuType->push_back(dimuonType);
-          //if (Debug_) std::cout << "POINT  2" << std::endl;
+            if (Debug_) std::cout <<"evt:" <<evtNum <<" MuMu with diMuonType = " <<dimuonType <<std::endl;
+            //if (Debug_) std::cout << "POINT 0" << std::endl;
+            // MuMuType->push_back(dimuonType);
+            //if (Debug_) std::cout << "POINT  2" << std::endl;
 
-          pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(posMuon,negMuon));
+            pat_ref_JPsi.addUserInt("isTriggerMatched",isTriggerMatched(posMuon,negMuon));
 
-          int isTriggerMatched = 0;
+            int isTriggerMatched = 0;
 
-          int ntriggers = HLTFileters_.size();
-          if (Debug_) std::cout << "ntriggers: " << ntriggers << std::endl;
+            int ntriggers = HLTFileters_.size();
+            if (Debug_) std::cout << "ntriggers: " << ntriggers << std::endl;
 
-          for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++)
-          {
-            if (Debug_) std::cout << "MatchingTriggerResult[" << MatchTrig << "]: " << MatchingTriggerResult[MatchTrig] << std::endl;
-            if ( MatchingTriggerResult[MatchTrig]!=0 )
+            for (int MatchTrig = 0; MatchTrig < ntriggers; MatchTrig++)
             {
-              if (Debug_) std::cout << "CHECKING FiltersForMatching_[" << MatchTrig << "]: " << FiltersForMatching_[MatchTrig] << std::endl;
-              pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-              pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
-              bool pass1 = mu1HLTMatches.size() > 0;
-              bool pass2 = mu2HLTMatches.size() > 0;
-
-              if ((pass1) && (pass2))
+              if (Debug_) std::cout << "MatchingTriggerResult[" << MatchTrig << "]: " << MatchingTriggerResult[MatchTrig] << std::endl;
+              if ( MatchingTriggerResult[MatchTrig]!=0 )
               {
-                isTriggerMatched = 1;
-                MuMuMuonTrigMatch->push_back(true);
-                if (Debug_) std::cout <<"Matched MuMu" <<std::endl ;
-              } else
-              //if (Debug_) std::cout << "POINT 9" << std::endl;
+                if (Debug_) std::cout << "CHECKING FiltersForMatching_[" << MatchTrig << "]: " << FiltersForMatching_[MatchTrig] << std::endl;
+                pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
+                pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter( FiltersForMatching_[MatchTrig] );
+                bool pass1 = mu1HLTMatches.size() > 0;
+                bool pass2 = mu2HLTMatches.size() > 0;
+
+                if ((pass1) && (pass2))
+                {
+                  isTriggerMatched = 1;
+                  MuMuMuonTrigMatch->push_back(true);
+                  if (Debug_) std::cout <<"Matched MuMu" <<std::endl ;
+                } else
+                //if (Debug_) std::cout << "POINT 9" << std::endl;
+                MuMuMuonTrigMatch->push_back(false);
+              }
+              else
+              //if (Debug_) std::cout << "POINT 10" << std::endl;
               MuMuMuonTrigMatch->push_back(false);
             }
-            else
-            //if (Debug_) std::cout << "POINT 10" << std::endl;
-            MuMuMuonTrigMatch->push_back(false);
-          }
 
 
-          /// vertex without matched muons
-          std::vector<TransientVertex> pvs ;
-          Vertex mumuLessPV = thePrimaryVtx ;
+            /// vertex without matched muons
+            std::vector<TransientVertex> pvs ;
+            Vertex mumuLessPV = thePrimaryVtx ;
 
-          if (addMuMulessPrimaryVertex_)
-          {
-            VertexReProducer revertex(recVtxs, iEvent);
-            Handle<TrackCollection> pvtracks;
-            iEvent.getByLabel(revertex.inputTracks(),   pvtracks);
-            Handle<BeamSpot>        pvbeamspot;
-            iEvent.getByLabel(revertex.inputBeamSpot(), pvbeamspot);
+            if (addMuMulessPrimaryVertex_)
+            {
+              VertexReProducer revertex(recVtxs, iEvent);
+              Handle<TrackCollection> pvtracks;
+              iEvent.getByLabel(revertex.inputTracks(),   pvtracks);
+              Handle<BeamSpot>        pvbeamspot;
+              iEvent.getByLabel(revertex.inputBeamSpot(), pvbeamspot);
 
-            if ( pvbeamspot.isValid() < 0 )
-            continue ;
-            if (pvbeamspot.id() != beamSpotHandle.id()) {
-              edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this Producer.";
-            }
-            const reco::Muon *rmu_1 = dynamic_cast<const reco::Muon*>( posMuon->originalObject() ) ;
-            const reco::Muon *rmu_2 = dynamic_cast<const reco::Muon*>( negMuon->originalObject() ) ;
-
-            if (rmu_1 != 0  &&  rmu_2 != 0  &&  rmu_1->track().id() == pvtracks.id()  &&  rmu_2->track().id() == pvtracks.id() ) {
-              TrackCollection MuMuLess;
-              MuMuLess.reserve(pvtracks->size());
-              for (size_t i = 0, n = pvtracks->size(); i < n; ++i) {
-                if (i == rmu_1->track().key()) continue;
-                if (i == rmu_2->track().key()) continue;
-                MuMuLess.push_back((*pvtracks)[i]);
+              if ( pvbeamspot.isValid() < 0 )
+              continue ;
+              if (pvbeamspot.id() != beamSpotHandle.id()) {
+                edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this Producer.";
               }
-              if (Debug_) std::cout <<"pvbeamspot.isValid() = " <<pvbeamspot.isValid() <<std::endl ;
-              pvs = revertex.makeVertices(MuMuLess, *pvbeamspot, iSetup) ;
-              if (!pvs.empty()) {
-                mumuLessPV = Vertex(pvs.front());
-              }
-            }
-          }
-          mumuLessPvs_n.push_back( pvs.size() );
-          mumuLessPVs.push_back( mumuLessPV);
+              const reco::Muon *rmu_1 = dynamic_cast<const reco::Muon*>( posMuon->originalObject() ) ;
+              const reco::Muon *rmu_2 = dynamic_cast<const reco::Muon*>( negMuon->originalObject() ) ;
 
-          ++nMuMu;
-          muons.clear();
-
-
-                } // 2nd loop over muons (look for mu-)
-              } //first loop over muons (look for mu+)
-            } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
-            } // if (doMC || doData)
-            // AT THE END OF THE EVENT fill the tree and clear the vectors
-            // ===========================================================
-
-
-          }
-          //}/// produce
-          /// ------------ method called once each job just before starting event loop  ------------
-          void MuMuProducerPAT::beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup)
-          {
-          }
-          void MuMuProducerPAT::beginJob()
-          {
-
-
-          }/// begin Job
-
-          /// ------------ method called once each job just after ending the event loop  ------------
-          void MuMuProducerPAT::endJob() {
-            mumukktree->GetDirectory()->cd();
-            mumukktree->Write();
-          }/// endjob
-
-
-          bool MuMuProducerPAT::isAbHadron(int pdgID) {
-
-            if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
-            return false;
-
-          }
-
-          bool MuMuProducerPAT::isAMixedbHadron(int pdgID, int momPdgID) {
-
-            if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
-            (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
-            return true;
-            return false;
-
-          }
-
-          std::pair<int, float> MuMuProducerPAT::findCandMCInfo(reco::GenParticleRef genCand) {
-
-            int momJpsiID = 0;
-            float trueLife = -99.;
-            //std::cout <<"externalmodule"<<std::endl;
-
-            if (genCand->numberOfMothers()>0) {
-
-              TVector3 trueVtx(0.0,0.0,0.0);
-              TVector3 trueP(0.0,0.0,0.0);
-              TVector3 trueVtxMom(0.0,0.0,0.0);
-
-              trueVtx.SetXYZ(genCand->vertex().x(),genCand->vertex().y(),genCand->vertex().z());
-              trueP.SetXYZ(genCand->momentum().x(),genCand->momentum().y(),genCand->momentum().z());
-
-              bool aBhadron = false;
-              reco::GenParticleRef Candmom = genCand->motherRef();       // find mothers
-              if (Candmom.isNull()) {
-                std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
-                return result;
-              } else {
-                reco::GenParticleRef CandGrandMom = Candmom->motherRef();
-                if (isAbHadron(Candmom->pdgId())) {
-                  if (CandGrandMom.isNonnull() && isAMixedbHadron(Candmom->pdgId(),CandGrandMom->pdgId())) {
-                    momJpsiID = CandGrandMom->pdgId();
-                    trueVtxMom.SetXYZ(CandGrandMom->vertex().x(),CandGrandMom->vertex().y(),CandGrandMom->vertex().z());
-                  } else {
-                    momJpsiID = Candmom->pdgId();
-                    trueVtxMom.SetXYZ(Candmom->vertex().x(),Candmom->vertex().y(),Candmom->vertex().z());
-                  }
-                  aBhadron = true;
-                } else {
-                  if (CandGrandMom.isNonnull() && isAbHadron(CandGrandMom->pdgId())) {
-                    reco::GenParticleRef JpsiGrandgrandmom = CandGrandMom->motherRef();
-                    if (JpsiGrandgrandmom.isNonnull() && isAMixedbHadron(CandGrandMom->pdgId(),JpsiGrandgrandmom->pdgId())) {
-                      momJpsiID = JpsiGrandgrandmom->pdgId();
-                      trueVtxMom.SetXYZ(JpsiGrandgrandmom->vertex().x(),JpsiGrandgrandmom->vertex().y(),JpsiGrandgrandmom->vertex().z());
-                    } else {
-                      momJpsiID = CandGrandMom->pdgId();
-                      trueVtxMom.SetXYZ(CandGrandMom->vertex().x(),CandGrandMom->vertex().y(),CandGrandMom->vertex().z());
-                    }
-                    aBhadron = true;
-                  }
+              if (rmu_1 != 0  &&  rmu_2 != 0  &&  rmu_1->track().id() == pvtracks.id()  &&  rmu_2->track().id() == pvtracks.id() ) {
+                TrackCollection MuMuLess;
+                MuMuLess.reserve(pvtracks->size());
+                for (size_t i = 0, n = pvtracks->size(); i < n; ++i) {
+                  if (i == rmu_1->track().key()) continue;
+                  if (i == rmu_2->track().key()) continue;
+                  MuMuLess.push_back((*pvtracks)[i]);
                 }
-                if (!aBhadron) {
-                  momJpsiID = Candmom->pdgId();
-                  trueVtxMom.SetXYZ(Candmom->vertex().x(),Candmom->vertex().y(),Candmom->vertex().z());
+                if (Debug_) std::cout <<"pvbeamspot.isValid() = " <<pvbeamspot.isValid() <<std::endl ;
+                pvs = revertex.makeVertices(MuMuLess, *pvbeamspot, iSetup) ;
+                if (!pvs.empty()) {
+                  mumuLessPV = Vertex(pvs.front());
                 }
               }
-
-              TVector3 vdiff = trueVtx - trueVtxMom;
-              trueLife = vdiff.Perp()*genCand->mass()/trueP.Perp();
             }
-            std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
-            return result;
+            mumuLessPvs_n.push_back( pvs.size() );
+            mumuLessPVs.push_back( mumuLessPV);
 
-          }
-
-          float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
-          {
-            return 0.3;
-          }
-
-          float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
-          {
-            if (iexception_dedx==1) return 9999.;
-            const reco::DeDxDataValueMap & eloss = *energyLoss;
-            return eloss[track].dEdx();
-          }
-
-          float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
-          {
-
-            // no usable dE/dx if p > 2
-            float nsigma = 99 ;
-            if (iexception_dedx==1) return nsigma ;
-
-            float m  = 0.13957;
-            float bg = track->p() / m;
-
-            theo = getLogdEdx(bg);
+            muons.clear();
 
 
-            int nhitr = track->numberOfValidHits();
-            float meas = log(getEnergyLoss(track));
-            sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
-            if (sigma>0)
-            nsigma = (meas-theo) / sigma ;
-            return nsigma;
-          }
+          } // 2nd loop over muons (look for mu-)
+        } //first loop over muons (look for mu+)
+      } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
+      } // if (doMC_ || doData)
+      // AT THE END OF THE EVENT fill the tree and clear the vectors
+      // ===========================================================
 
 
-          float MuMuProducerPAT::getLogdEdx(float bg)
-          {
-            const float a =  3.25 ;
-            const float b =  0.288;
-            const float c = -0.852;
-
-            float beta = bg/sqrt(bg*bg + 1);
-            float dedx = log( a/(beta*beta) + b * log(bg) + c );
-
-            return dedx;
-
-          }
+    }
+    //}/// produce
+    /// ------------ method called once each job just before starting event loop  ------------
+    void MuMuProducerPAT::beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup)
+    {
+    }
+    void MuMuProducerPAT::beginJob()
+    {
 
 
-          float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
-            float P = track->p();
-            float C = 2.625;
-            float K = 2.495;
-            float I = getEnergyLoss(track);
-            return sqrt((I-C)/K)*P;
-          }
+    }/// begin Job
+
+    /// ------------ method called once each job just after ending the event loop  ------------
+    void MuMuProducerPAT::endJob() {
+      mumukktree->GetDirectory()->cd();
+      mumukktree->Write();
+    }/// endjob
 
 
-          template<typename T>
-          bool MuMuProducerPAT::isBetterMuon(const T &mu1, const T &mu2) const {
-            if (mu2.track().isNull()) return true;
-            if (mu1.track().isNull()) return false;
-            if (mu1.isPFMuon() != mu2.isPFMuon()) return mu1.isPFMuon();
-            if (mu1.isGlobalMuon() != mu2.isGlobalMuon()) return mu1.isGlobalMuon();
-            if (mu1.charge() == mu2.charge() && deltaR2(mu1,mu2) < 0.0009) {
-              return mu1.track()->ptError()/mu1.track()->pt() < mu2.track()->ptError()/mu2.track()->pt();
+    bool MuMuProducerPAT::isAbHadron(int pdgID) {
+
+      if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
+      return false;
+
+    }
+
+    bool MuMuProducerPAT::isAMixedbHadron(int pdgID, int momPdgID) {
+
+      if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
+      (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
+      return true;
+      return false;
+
+    }
+
+    std::pair<int, float> MuMuProducerPAT::findCandMCInfo(reco::GenParticleRef genCand) {
+
+      int momJpsiID = 0;
+      float trueLife = -99.;
+      //std::cout <<"externalmodule"<<std::endl;
+
+      if (genCand->numberOfMothers()>0) {
+
+        TVector3 trueVtx(0.0,0.0,0.0);
+        TVector3 trueP(0.0,0.0,0.0);
+        TVector3 trueVtxMom(0.0,0.0,0.0);
+
+        trueVtx.SetXYZ(genCand->vertex().x(),genCand->vertex().y(),genCand->vertex().z());
+        trueP.SetXYZ(genCand->momentum().x(),genCand->momentum().y(),genCand->momentum().z());
+
+        bool aBhadron = false;
+        reco::GenParticleRef Candmom = genCand->motherRef();       // find mothers
+        if (Candmom.isNull()) {
+          std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+          return result;
+        } else {
+          reco::GenParticleRef CandGrandMom = Candmom->motherRef();
+          if (isAbHadron(Candmom->pdgId())) {
+            if (CandGrandMom.isNonnull() && isAMixedbHadron(Candmom->pdgId(),CandGrandMom->pdgId())) {
+              momJpsiID = CandGrandMom->pdgId();
+              trueVtxMom.SetXYZ(CandGrandMom->vertex().x(),CandGrandMom->vertex().y(),CandGrandMom->vertex().z());
             } else {
-              int nm1 = mu1.numberOfMatches(reco::Muon::SegmentArbitration);
-              int nm2 = mu2.numberOfMatches(reco::Muon::SegmentArbitration);
-              return (nm1 != nm2 ? nm1 > nm2 : mu1.pt() > mu2.pt());
+              momJpsiID = Candmom->pdgId();
+              trueVtxMom.SetXYZ(Candmom->vertex().x(),Candmom->vertex().y(),Candmom->vertex().z());
+            }
+            aBhadron = true;
+          } else {
+            if (CandGrandMom.isNonnull() && isAbHadron(CandGrandMom->pdgId())) {
+              reco::GenParticleRef JpsiGrandgrandmom = CandGrandMom->motherRef();
+              if (JpsiGrandgrandmom.isNonnull() && isAMixedbHadron(CandGrandMom->pdgId(),JpsiGrandgrandmom->pdgId())) {
+                momJpsiID = JpsiGrandgrandmom->pdgId();
+                trueVtxMom.SetXYZ(JpsiGrandgrandmom->vertex().x(),JpsiGrandgrandmom->vertex().y(),JpsiGrandgrandmom->vertex().z());
+              } else {
+                momJpsiID = CandGrandMom->pdgId();
+                trueVtxMom.SetXYZ(CandGrandMom->vertex().x(),CandGrandMom->vertex().y(),CandGrandMom->vertex().z());
+              }
+              aBhadron = true;
             }
           }
-
-          bool MuMuProducerPAT::isSameMuon(const reco::Muon &mu1, const reco::Muon &mu2) const {
-            return (& mu1 == & mu2) ||
-            //(mu1.originalObjectRef() == mu2.originalObjectRef()) ||
-            (mu1.reco::Muon::innerTrack().isNonnull() ?
-            mu1.reco::Muon::innerTrack() == mu2.reco::Muon::innerTrack() :
-            mu1.reco::Muon::outerTrack() == mu2.reco::Muon::outerTrack());
+          if (!aBhadron) {
+            momJpsiID = Candmom->pdgId();
+            trueVtxMom.SetXYZ(Candmom->vertex().x(),Candmom->vertex().y(),Candmom->vertex().z());
           }
+        }
+
+        TVector3 vdiff = trueVtx - trueVtxMom;
+        trueLife = vdiff.Perp()*genCand->mass()/trueP.Perp();
+      }
+      std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+      return result;
+
+    }
+
+    float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
+    {
+      return 0.3;
+    }
+
+    float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
+    {
+      if (iexception_dedx==1) return 9999.;
+      const reco::DeDxDataValueMap & eloss = *energyLoss;
+      return eloss[track].dEdx();
+    }
+
+    float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
+    {
+
+      // no usable dE/dx if p > 2
+      float nsigma = 99 ;
+      if (iexception_dedx==1) return nsigma ;
+
+      float m  = 0.13957;
+      float bg = track->p() / m;
+
+      theo = getLogdEdx(bg);
 
 
-          /// define this as a plug-in
-          DEFINE_FWK_MODULE(MuMuProducerPAT);
+      int nhitr = track->numberOfValidHits();
+      float meas = log(getEnergyLoss(track));
+      sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
+      if (sigma>0)
+      nsigma = (meas-theo) / sigma ;
+      return nsigma;
+    }
 
-          // rsync -vut --existing src/MuMuProducerPAT.cc semrat@lxplus.cern.ch:/afs/cern.ch/user/s/semrat/scratch0/CMSSW_5_3_22/src/X4140/MuMuProducerPAT/src/MuMuProducerPAT.cc
+
+    float MuMuProducerPAT::getLogdEdx(float bg)
+    {
+      const float a =  3.25 ;
+      const float b =  0.288;
+      const float c = -0.852;
+
+      float beta = bg/sqrt(bg*bg + 1);
+      float dedx = log( a/(beta*beta) + b * log(bg) + c );
+
+      return dedx;
+
+    }
+
+
+    float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
+      float P = track->p();
+      float C = 2.625;
+      float K = 2.495;
+      float I = getEnergyLoss(track);
+      return sqrt((I-C)/K)*P;
+    }
+
+
+    template<typename T>
+    bool MuMuProducerPAT::isBetterMuon(const T &mu1, const T &mu2) const {
+      if (mu2.track().isNull()) return true;
+      if (mu1.track().isNull()) return false;
+      if (mu1.isPFMuon() != mu2.isPFMuon()) return mu1.isPFMuon();
+      if (mu1.isGlobalMuon() != mu2.isGlobalMuon()) return mu1.isGlobalMuon();
+      if (mu1.charge() == mu2.charge() && deltaR2(mu1,mu2) < 0.0009) {
+        return mu1.track()->ptError()/mu1.track()->pt() < mu2.track()->ptError()/mu2.track()->pt();
+      } else {
+        int nm1 = mu1.numberOfMatches(reco::Muon::SegmentArbitration);
+        int nm2 = mu2.numberOfMatches(reco::Muon::SegmentArbitration);
+        return (nm1 != nm2 ? nm1 > nm2 : mu1.pt() > mu2.pt());
+      }
+    }
+
+    bool MuMuProducerPAT::isSameMuon(const reco::Muon &mu1, const reco::Muon &mu2) const {
+      return (& mu1 == & mu2) ||
+      //(mu1.originalObjectRef() == mu2.originalObjectRef()) ||
+      (mu1.reco::Muon::innerTrack().isNonnull() ?
+      mu1.reco::Muon::innerTrack() == mu2.reco::Muon::innerTrack() :
+      mu1.reco::Muon::outerTrack() == mu2.reco::Muon::outerTrack());
+    }
+
+
+    /// define this as a plug-in
+    DEFINE_FWK_MODULE(MuMuProducerPAT);
+
+    // rsync -vut --existing src/MuMuProducerPAT.cc semrat@lxplus.cern.ch:/afs/cern.ch/user/s/semrat/scratch0/CMSSW_5_3_22/src/X4140/MuMuProducerPAT/src/MuMuProducerPAT.cc
