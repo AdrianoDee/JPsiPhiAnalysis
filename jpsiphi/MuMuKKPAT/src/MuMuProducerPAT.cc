@@ -509,7 +509,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
           const reco::Track recoPosMuonTrack = *(recoPosMuon->bestTrack());
 
-          posMuonTrackType = recoPosMuon->MuonTrackType();
+          posMuonTrackType = recoPosMuon->muonBestTrackType();
           posMuonType = (unsigned int)(recoPosMuon->type());
 
           const reco::Track* recoPosMuonInTrack = 0, *recoPosMuonOutTrack = 0, *recoPosMuonGlobTrack = 0;
@@ -591,7 +591,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
             nMatchedStationsNeg = recoNegMuon->numberOfMatchedStations();
 
-            negMuonTrackType = (unsigned int)(recoNegMuon)->MuonTrackType();
+            negMuonTrackType = (unsigned int)(recoNegMuon)->muonBestTrackType();
             negMuonType = (unsigned int)(recoNegMuon->type());
 
             ////////////////// Muons Overlap Checks //////////////////
@@ -1084,7 +1084,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
     int MuMuProducerPAT::muonTrackType(const reco::Muon * muon)
     {
-      switch (muon->MuonTrackType())
+      switch (muon->muonBestTrackType())
       {
         case Muon::InnerTrack :
           return 0;
