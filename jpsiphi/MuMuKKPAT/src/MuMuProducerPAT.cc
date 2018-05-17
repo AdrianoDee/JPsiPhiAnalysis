@@ -159,6 +159,8 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
   using namespace std;
   using namespace reco;
 
+  int evtNum = iEvent.id().event();
+
   /// get event content information
   int debug = 0;
 
