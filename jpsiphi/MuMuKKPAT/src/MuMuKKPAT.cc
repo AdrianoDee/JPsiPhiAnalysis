@@ -190,7 +190,7 @@ n_genEvtVtx(0), genEvtVtx_X(0), genEvtVtx_Y(0), genEvtVtx_Z(0), genEvtVtx_partic
 nMCAll(0), nMCX(0), /*nMCXVtx(0),*/ MCPdgIdAll(0), MCDanNumAll(0),
 // Gen Primary Vertex
 PriVtxGen_X(0), PriVtxGen_Y(0), PriVtxGen_Z(0), PriVtxGen_EX(0), PriVtxGen_EY(0), PriVtxGen_EZ(0),
-PriVtxGen_Chi2(0), PriVtxGen_CL(0), PriVtxGen_Ndof(0), PriVtxGen_tracks(0),
+PriVtxGen_Chi2(0), PriVtxGen_VProb(0), PriVtxGen_Ndof(0), PriVtxGen_tracks(0),
 MCJPsiPx(0), MCJPsiPy(0), MCJPsiPz(0),
 MCmupPx(0), MCmupPy(0), MCmupPz(0),
 MCmumPx(0), MCmumPy(0), MCmumPz(0),
@@ -224,12 +224,12 @@ tr_nsigdedx(0), tr_dedx(0), tr_dedxMass(0), tr_theo(0), tr_sigma(0),
 tr_dedx_byHits(0), tr_dedxErr_byHits(0), tr_saturMeas_byHits(0), tr_Meas_byHits(0),
 /// MuMu cand & KK cand
 MuMuMass(0), MuMuPx(0), MuMuPy(0), MuMuPz(0),
-MuMuVtx_CL(0), MuMuVtx_Chi2(0),
+MuMuVtx_VProb(0), MuMuVtx_Chi2(0),
 MuMuDecayVtx_X(0), MuMuDecayVtx_Y(0), MuMuDecayVtx_Z(0),
 MuMuDecayVtx_XE(0), MuMuDecayVtx_YE(0), MuMuDecayVtx_ZE(0),
 MuMuMuonTrigMatch(0),
 KKMass(0), KKPx(0), KKPy(0), KKPz(0),
-KKVtx_CL(0), KKVtx_Chi2(0),
+KKVtx_VProb(0), KKVtx_Chi2(0),
 KKDecayVtx_X(0), KKDecayVtx_Y(0), KKDecayVtx_Z(0),
 KKDecayVtx_XE(0), KKDecayVtx_YE(0), KKDecayVtx_ZE(0),
 /// muons after JPsi (MuMu) fit &kaons after Phi (KK) fit
@@ -241,10 +241,10 @@ kaonNeg_KK_Px(0), kaonNeg_KK_Py(0), kaonNeg_KK_Pz(0), kaonNeg_KK_Chi2(0), kaonNe
 /// Primary Vertex with "MuMu correction"
 mumuLessPvs_n(0),
 PriVtxMuMuCorr_X(0), PriVtxMuMuCorr_Y(0), PriVtxMuMuCorr_Z(0), PriVtxMuMuCorr_EX(0), PriVtxMuMuCorr_EY(0), PriVtxMuMuCorr_EZ(0),
-PriVtxMuMuCorr_Chi2(0), PriVtxMuMuCorr_CL(0), PriVtxMuMuCorr_tracks(0),
+PriVtxMuMuCorr_Chi2(0), PriVtxMuMuCorr_VProb(0), PriVtxMuMuCorr_tracks(0),
 nTrk(0),
 /// X candidates
-xMass(0), xVtx_CL(0), xVtx_Chi2(0),
+xMass(0), xVtx_VProb(0), xVtx_Chi2(0),
 xPx(0), xPy(0), xPz(0), xPxE(0), xPyE(0), xPzE(0),
 xDecayVtx_X(0), xDecayVtx_Y(0), xDecayVtx_Z(0), xDecayVtx_XE(0), xDecayVtx_YE(0), xDecayVtx_ZE(0),
 /// Muons and tracks after X candidates fit
@@ -259,24 +259,24 @@ kaonNeg_dedx_byHits(0), kaonNeg_dedxErr_byHits(0), kaonNeg_saturMeas_byHits(0), 
 /// Primary Vertex with largest B0_cos(alpha) no less values for X
 PriVtx_XCosAlpha_n(0),
 PriVtx_XCosAlpha_X(0), PriVtx_XCosAlpha_Y(0), PriVtx_XCosAlpha_Z(0), PriVtx_XCosAlpha_EX(0), PriVtx_XCosAlpha_EY(0), PriVtx_XCosAlpha_EZ(0),
-PriVtx_XCosAlpha_Chi2(0), PriVtx_XCosAlpha_CL(0), PriVtx_XCosAlpha_tracks(0),
+PriVtx_XCosAlpha_Chi2(0), PriVtx_XCosAlpha_VProb(0), PriVtx_XCosAlpha_tracks(0),
 PriVtx_XCosAlpha3D_n(0),
 PriVtx_XCosAlpha3D_X(0), PriVtx_XCosAlpha3D_Y(0), PriVtx_XCosAlpha3D_Z(0), PriVtx_XCosAlpha3D_EX(0), PriVtx_XCosAlpha3D_EY(0), PriVtx_XCosAlpha3D_EZ(0),
-PriVtx_XCosAlpha3D_Chi2(0), PriVtx_XCosAlpha3D_CL(0), PriVtx_XCosAlpha3D_tracks(0),
+PriVtx_XCosAlpha3D_Chi2(0), PriVtx_XCosAlpha3D_VProb(0), PriVtx_XCosAlpha3D_tracks(0),
 XLessPV_tracksPtSq(0), XLessPV_4tracksPtSq(0),
 PriVtxXLess_n(0),
 PriVtxXLess_X(0), PriVtxXLess_Y(0), PriVtxXLess_Z(0), PriVtxXLess_EX(0), PriVtxXLess_EY(0), PriVtxXLess_EZ(0),
-PriVtxXLess_Chi2(0), PriVtxXLess_CL(0), PriVtxXLess_tracks(0),
+PriVtxXLess_Chi2(0), PriVtxXLess_VProb(0), PriVtxXLess_tracks(0),
 PriVtxXLess_XCosAlpha_n(0),
 PriVtxXLess_XCosAlpha_X(0), PriVtxXLess_XCosAlpha_Y(0), PriVtxXLess_XCosAlpha_Z(0), PriVtxXLess_XCosAlpha_EX(0), PriVtxXLess_XCosAlpha_EY(0), PriVtxXLess_XCosAlpha_EZ(0),
-PriVtxXLess_XCosAlpha_Chi2(0), PriVtxXLess_XCosAlpha_CL(0), PriVtxXLess_XCosAlpha_tracks(0),
+PriVtxXLess_XCosAlpha_Chi2(0), PriVtxXLess_XCosAlpha_VProb(0), PriVtxXLess_XCosAlpha_tracks(0),
 PriVtxXLess_XCosAlpha3D_n(0),
 PriVtxXLess_XCosAlpha3D_X(0), PriVtxXLess_XCosAlpha3D_Y(0), PriVtxXLess_XCosAlpha3D_Z(0), PriVtxXLess_XCosAlpha3D_EX(0), PriVtxXLess_XCosAlpha3D_EY(0), PriVtxXLess_XCosAlpha3D_EZ(0),
-PriVtxXLess_XCosAlpha3D_Chi2(0), PriVtxXLess_XCosAlpha3D_CL(0), PriVtxXLess_XCosAlpha3D_tracks(0),
+PriVtxXLess_XCosAlpha3D_Chi2(0), PriVtxXLess_XCosAlpha3D_VProb(0), PriVtxXLess_XCosAlpha3D_tracks(0),
 /// Primary Vertex with "B0 correction"
 PriVtxXCorr_n(0),
 PriVtxXCorr_X(0), PriVtxXCorr_Y(0), PriVtxXCorr_Z(0), PriVtxXCorr_EX(0), PriVtxXCorr_EY(0), PriVtxXCorr_EZ(0),
-PriVtxXCorr_Chi2(0), PriVtxXCorr_CL(0), PriVtxXCorr_tracks(0),
+PriVtxXCorr_Chi2(0), PriVtxXCorr_VProb(0), PriVtxXCorr_tracks(0),
 /// Lifetime variables for B0
 xCosAlphaBS(0), xCosAlpha3DBS(0), xCTauBS(0), xCTauBSE(0), xLxyBS(0), xLxyBSE(0), xLxyzBS(0), xLxyzBSE(0),
 xCosAlphaPV(0), xCosAlpha3DPV(0), xCTauPV(0), xCTauPVE(0), xLxyPV(0), xLxyPVE(0), xLxyzPV(0), xLxyzPVE(0),
@@ -467,7 +467,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   // priVtx_ZE = (thePrimaryVtx.zError()) ;
   // priVtx_NormChi2 = (thePrimaryVtx.normalizedChi2()) ;
   // priVtx_Chi2 = thePrimaryVtx.chi2() ;
-  // priVtx_CL = ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) ;
+  // priVtx_VProb = ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) ;
   // priVtx_tracks = thePrimaryVtx.tracksSize() ;
   VertexHigherPtSquared vertexHigherPtSquared ;
   tracksPtSq_pV = vertexHigherPtSquared.sumPtSquared(thePrimaryVtx) ;
@@ -553,7 +553,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     //genEvtVtx_ZE = (primaryGenVtx->zError()) ;
     //genEvtVtx_NormChi2 = (primaryGenVtx->normalizedChi2()) ;
     //genEvtVtx_Chi2 = primaryGenVtx->chi2() ;
-    //genEvtVtx_CL = ChiSquaredProbability( (double)(primaryGenVtx.chi2()), (double)(primaryGenVtx.ndof())) ;
+    //genEvtVtx_VProb = ChiSquaredProbability( (double)(primaryGenVtx.chi2()), (double)(primaryGenVtx.ndof())) ;
     genEvtVtx_particles->push_back( primaryGenVtx->particles_out_size() );
     */
 
@@ -664,7 +664,7 @@ void MuMuKKPAT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         PriVtxGen_X->push_back( p.vx() ) ;
         PriVtxGen_Y->push_back( p.vy() ) ;
         PriVtxGen_Z->push_back( p.vz() ) ;
-        PriVtxGen_CL->push_back( p.vertexNormalizedChi2() ) ;
+        PriVtxGen_VProb->push_back( p.vertexNormalizedChi2() ) ;
         PriVtxGen_Chi2->push_back( p.vertexChi2() ) ;
         PriVtxGen_Ndof->push_back( p.vertexNdof() ) ;
 
@@ -1005,7 +1005,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           mupos_p4.push_back(recoPosMuon->p4());
           muneg_p4.push_back(recoNegMuon->p4());
 
-          MuMuVtx_CL->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
+          MuMuVtx_VProb->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
           MuMuVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
 
           muPos_MuMu_Chi2->push_back( MuPosCand_fromFit->chiSquared());
@@ -1013,17 +1013,17 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
           muNeg_MuMu_Chi2->push_back( MuNegCand_fromFit->chiSquared());
           muNeg_MuMu_NDF->push_back( MuNegCand_fromFit->degreesOfFreedom());
 
-
           // mumu_p4->push_back();
           //
-          // MuMuMass->push_back( MuMuCand_fromFit->currentState().mass() );
+          MuMuMass->push_back( pat_ref_JPsi.Mass() );
+
           // MuMuDecayVtx_X->push_back( MuMuCand_vertex_fromFit->position().x() );
           // MuMuDecayVtx_Y->push_back( MuMuCand_vertex_fromFit->position().y() );
           // MuMuDecayVtx_Z->push_back( MuMuCand_vertex_fromFit->position().z() );
           // MuMuDecayVtx_XE->push_back( sqrt( MuMuCand_vertex_fromFit->error().cxx()) );
           // MuMuDecayVtx_YE->push_back( sqrt( MuMuCand_vertex_fromFit->error().cyy()) );
           // MuMuDecayVtx_ZE->push_back( sqrt( MuMuCand_vertex_fromFit->error().czz()) );
-          // MuMuVtx_CL->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
+          // MuMuVtx_VProb->push_back( ChiSquaredProbability((double)( MuMuCand_vertex_fromFit->chiSquared()),(double)( MuMuCand_vertex_fromFit->degreesOfFreedom())) );
           // MuMuVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
           // MuMuPx->push_back( Mu1Cand_KP.momentum().x() + Mu2Cand_KP.momentum().x() );
           // MuMuPy->push_back( Mu1Cand_KP.momentum().y() + Mu2Cand_KP.momentum().y() );
@@ -1261,7 +1261,6 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               if (Debug_) std::cout << "POINT 24" <<std::endl;
 
-
               pat::CompositeCandidate pat_ref_NK(reco_ref_NK);
 
               ref_Phi.push_back(reco_ref_Phi);
@@ -1272,7 +1271,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               kpos_p4.push_back(trackPos->p4());
               kneg_p4.push_back(trackNeg->p4());
 
-              KKVtx_CL->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
+              KKVtx_VProb->push_back( ChiSquaredProbability((double)( KKCand_vertex_fromFit->chiSquared()),(double)( KKCand_vertex_fromFit->degreesOfFreedom())) );
               KKVtx_Chi2->push_back( MuMuCand_vertex_fromFit->chiSquared() ) ;
 
               if (Debug_) std::cout << "POINT 25" <<std::endl;
@@ -1536,7 +1535,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // xPxE->push_back( sqrt( XCand_fromMCFit->currentState().kinematicParametersError().matrix()(3,3) ) ) ;
               // xPyE->push_back( sqrt( XCand_fromMCFit->currentState().kinematicParametersError().matrix()(4,4) ) ) ;
               // xPzE->push_back( sqrt( XCand_fromMCFit->currentState().kinematicParametersError().matrix()(5,5) ) ) ;
-              // xVtx_CL->push_back( xVtxProb );
+              // xVtx_VProb->push_back( xVtxProb );
               // xVtx_Chi2->push_back( XCand_vertex_fromMCFit->chiSquared() ) ;
               // xDecayVtx_X->push_back((*XCand_vertex_fromMCFit).position().x());
               // xDecayVtx_Y->push_back((*XCand_vertex_fromMCFit).position().y());
@@ -1752,7 +1751,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtxXLess_EX->push_back( XLessPV.xError() ) ;
                       // PriVtxXLess_EY->push_back( XLessPV.yError() ) ;
                       // PriVtxXLess_EZ->push_back( XLessPV.zError() ) ;
-                      // PriVtxXLess_CL->push_back( ChiSquaredProbability( (double)(XLessPV.chi2()), (double)(XLessPV.ndof())) );
+                      // PriVtxXLess_VProb->push_back( ChiSquaredProbability( (double)(XLessPV.chi2()), (double)(XLessPV.ndof())) );
                       // PriVtxXLess_Chi2->push_back( XLessPV.chi2() ) ;
                       // PriVtxXLess_tracks->push_back( XLessPV.tracksSize() ) ;
 
@@ -1828,7 +1827,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtx_XCosAlpha_EX->push_back( theCosAlphaV.xError() ) ;
                       // PriVtx_XCosAlpha_EY->push_back( theCosAlphaV.yError() ) ;
                       // PriVtx_XCosAlpha_EZ->push_back( theCosAlphaV.zError() ) ;
-                      // PriVtx_XCosAlpha_CL->push_back( ChiSquaredProbability((double)(theCosAlphaV.chi2()), (double)(theCosAlphaV.ndof())) ) ;
+                      // PriVtx_XCosAlpha_VProb->push_back( ChiSquaredProbability((double)(theCosAlphaV.chi2()), (double)(theCosAlphaV.ndof())) ) ;
                       // PriVtx_XCosAlpha_Chi2->push_back( theCosAlphaV.chi2() ) ;
                       // PriVtx_XCosAlpha_tracks->push_back( theCosAlphaV.tracksSize() ) ;
 
@@ -1899,7 +1898,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtxXLess_XCosAlpha_EX->push_back( theXLessCosAlphaV.xError() ) ;
                       // PriVtxXLess_XCosAlpha_EY->push_back( theXLessCosAlphaV.yError() ) ;
                       // PriVtxXLess_XCosAlpha_EZ->push_back( theXLessCosAlphaV.zError() ) ;
-                      // PriVtxXLess_XCosAlpha_CL->push_back( ChiSquaredProbability((double)(theXLessCosAlphaV.chi2()), (double)(theXLessCosAlphaV.ndof())) ) ;
+                      // PriVtxXLess_XCosAlpha_VProb->push_back( ChiSquaredProbability((double)(theXLessCosAlphaV.chi2()), (double)(theXLessCosAlphaV.ndof())) ) ;
                       // PriVtxXLess_XCosAlpha_Chi2->push_back( theXLessCosAlphaV.chi2() ) ;
                       // PriVtxXLess_XCosAlpha_tracks->push_back( theXLessCosAlphaV.tracksSize() ) ;
 
@@ -1939,7 +1938,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtx_XCosAlpha3D_EX->push_back( theCosAlpha3DV.xError() ) ;
                       // PriVtx_XCosAlpha3D_EY->push_back( theCosAlpha3DV.yError() ) ;
                       // PriVtx_XCosAlpha3D_EZ->push_back( theCosAlpha3DV.zError() ) ;
-                      // PriVtx_XCosAlpha3D_CL->push_back( ChiSquaredProbability((double)(theCosAlpha3DV.chi2()), (double)(theCosAlpha3DV.ndof())) ) ;
+                      // PriVtx_XCosAlpha3D_VProb->push_back( ChiSquaredProbability((double)(theCosAlpha3DV.chi2()), (double)(theCosAlpha3DV.ndof())) ) ;
                       // PriVtx_XCosAlpha3D_Chi2->push_back( theCosAlpha3DV.chi2() ) ;
                       // PriVtx_XCosAlpha3D_tracks->push_back( theCosAlpha3DV.tracksSize() ) ;
 
@@ -1996,7 +1995,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtxXLess_XCosAlpha3D_EX->push_back( theXLessCosAlpha3DV.xError() ) ;
                       // PriVtxXLess_XCosAlpha3D_EY->push_back( theXLessCosAlpha3DV.yError() ) ;
                       // PriVtxXLess_XCosAlpha3D_EZ->push_back( theXLessCosAlpha3DV.zError() ) ;
-                      // PriVtxXLess_XCosAlpha3D_CL->push_back( ChiSquaredProbability((double)(theXLessCosAlpha3DV.chi2()), (double)(theXLessCosAlpha3DV.ndof())) ) ;
+                      // PriVtxXLess_XCosAlpha3D_VProb->push_back( ChiSquaredProbability((double)(theXLessCosAlpha3DV.chi2()), (double)(theXLessCosAlpha3DV.ndof())) ) ;
                       // PriVtxXLess_XCosAlpha3D_Chi2->push_back( theXLessCosAlpha3DV.chi2() ) ;
                       // PriVtxXLess_XCosAlpha3D_tracks->push_back( theXLessCosAlpha3DV.tracksSize() ) ;
 
@@ -2096,7 +2095,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
                       // PriVtxXCorr_EX->push_back( thePrimaryVtx.xError() ) ;
                       // PriVtxXCorr_EY->push_back( thePrimaryVtx.yError() ) ;
                       // PriVtxXCorr_EZ->push_back( thePrimaryVtx.zError() ) ;
-                      // PriVtxXCorr_CL->push_back( ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) );
+                      // PriVtxXCorr_VProb->push_back( ChiSquaredProbability( (double)(thePrimaryVtx.chi2()), (double)(thePrimaryVtx.ndof())) );
                       // PriVtxXCorr_Chi2->push_back( thePrimaryVtx.chi2() ) ;
                       // PriVtxXCorr_tracks->push_back( thePrimaryVtx.tracksSize() ) ;
 
@@ -2208,7 +2207,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               // Gen Primary Vertex
               PriVtxGen_X->clear(); PriVtxGen_Y->clear(); PriVtxGen_Z->clear();
               PriVtxGen_EX->clear(); PriVtxGen_EY->clear(); PriVtxGen_EZ->clear();
-              PriVtxGen_Chi2->clear(); PriVtxGen_CL->clear(); PriVtxGen_Ndof->clear();
+              PriVtxGen_Chi2->clear(); PriVtxGen_VProb->clear(); PriVtxGen_Ndof->clear();
               PriVtxGen_tracks->clear();
 
               MCPdgIdAll->clear(); MCDanNumAll->clear();
@@ -2229,9 +2228,9 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             tracksPtSq_pV = 0 ;
             // priVtx_X = 0; priVtx_Y = 0; priVtx_Z = 0 ;
             // priVtx_XE = 0; priVtx_YE = 0; priVtx_ZE = 0 ;
-            // priVtx_NormChi2 = 0; priVtx_Chi2 = 0; priVtx_CL = 0; priVtx_tracks = 0;
+            // priVtx_NormChi2 = 0; priVtx_Chi2 = 0; priVtx_VProb = 0; priVtx_tracks = 0;
             /// MuMu cand & KK cand
-            MuMuMass->clear(); MuMuVtx_CL->clear(); MuMuVtx_Chi2->clear();
+            MuMuMass->clear(); MuMuVtx_VProb->clear(); MuMuVtx_Chi2->clear();
             MuMuPx->clear(); MuMuPy->clear(); MuMuPz->clear();
             MuMuDecayVtx_X->clear(); MuMuDecayVtx_Y->clear(); MuMuDecayVtx_Z->clear();
             MuMuDecayVtx_XE->clear(); MuMuDecayVtx_YE->clear(); MuMuDecayVtx_ZE->clear();
@@ -2240,7 +2239,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             if (Debug_) std::cout <<"after mumus stuff clear" <<std::endl ;
 
             KKMass->clear(); KKPx->clear(); KKPy->clear(); KKPz->clear();
-            KKVtx_CL->clear(); KKVtx_Chi2->clear();
+            KKVtx_VProb->clear(); KKVtx_Chi2->clear();
             KKDecayVtx_X->clear(); KKDecayVtx_Y->clear(); KKDecayVtx_Z->clear();
             KKDecayVtx_XE->clear(); KKDecayVtx_YE->clear(); KKDecayVtx_ZE->clear();
 
@@ -2258,10 +2257,10 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumuLessPvs_n.clear();
             PriVtxMuMuCorr_X->clear(); PriVtxMuMuCorr_Y->clear(); PriVtxMuMuCorr_Z->clear();
             PriVtxMuMuCorr_EX->clear(); PriVtxMuMuCorr_EY->clear(); PriVtxMuMuCorr_EZ->clear();
-            PriVtxMuMuCorr_Chi2->clear(); PriVtxMuMuCorr_CL->clear(); PriVtxMuMuCorr_tracks->clear();
+            PriVtxMuMuCorr_Chi2->clear(); PriVtxMuMuCorr_VProb->clear(); PriVtxMuMuCorr_tracks->clear();
             nTrk->clear();
             /// X candidates
-            xMass->clear(); xVtx_CL->clear(); xVtx_Chi2->clear();
+            xMass->clear(); xVtx_VProb->clear(); xVtx_Chi2->clear();
             xPx->clear(); xPy->clear(); xPz->clear();
             xPxE->clear(); xPyE->clear(); xPzE->clear();
             xDecayVtx_X->clear(); xDecayVtx_Y->clear(); xDecayVtx_Z->clear();
@@ -2281,23 +2280,23 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             PriVtxXLess_n->clear();
             PriVtxXLess_X->clear(); PriVtxXLess_Y->clear(); PriVtxXLess_Z->clear();
             PriVtxXLess_EX->clear(); PriVtxXLess_EY->clear(); PriVtxXLess_EZ->clear();
-            PriVtxXLess_Chi2->clear(); PriVtxXLess_CL->clear(); PriVtxXLess_tracks->clear();
+            PriVtxXLess_Chi2->clear(); PriVtxXLess_VProb->clear(); PriVtxXLess_tracks->clear();
             if (Debug_) std::cout <<"after pvxless stuff clear" <<std::endl ;
             XLessPV_tracksPtSq->clear(); XLessPV_4tracksPtSq->clear();
             PriVtx_XCosAlpha_n->clear();
             PriVtx_XCosAlpha_X->clear(); PriVtx_XCosAlpha_Y->clear(); PriVtx_XCosAlpha_Z->clear();
             PriVtx_XCosAlpha_EX->clear(); PriVtx_XCosAlpha_EY->clear(); PriVtx_XCosAlpha_EZ->clear();
-            PriVtx_XCosAlpha_Chi2->clear(); PriVtx_XCosAlpha_CL->clear(); PriVtx_XCosAlpha_tracks->clear();
+            PriVtx_XCosAlpha_Chi2->clear(); PriVtx_XCosAlpha_VProb->clear(); PriVtx_XCosAlpha_tracks->clear();
             PriVtxXLess_XCosAlpha_n->clear();
             PriVtxXLess_XCosAlpha_X->clear(); PriVtxXLess_XCosAlpha_Y->clear(); PriVtxXLess_XCosAlpha_Z->clear();
             PriVtxXLess_XCosAlpha_EX->clear(); PriVtxXLess_XCosAlpha_EY->clear(); PriVtxXLess_XCosAlpha_EZ->clear();
-            PriVtxXLess_XCosAlpha_Chi2->clear(); PriVtxXLess_XCosAlpha_CL->clear(); PriVtxXLess_XCosAlpha_tracks->clear();
+            PriVtxXLess_XCosAlpha_Chi2->clear(); PriVtxXLess_XCosAlpha_VProb->clear(); PriVtxXLess_XCosAlpha_tracks->clear();
             if (Debug_) std::cout <<"after cosA  stuff clear" <<std::endl ;
             /// Primary Vertex with "B0 correction"
             PriVtxXCorr_n->clear();
             PriVtxXCorr_X->clear(); PriVtxXCorr_Y->clear(); PriVtxXCorr_Z->clear();
             PriVtxXCorr_EX->clear(); PriVtxXCorr_EY->clear(); PriVtxXCorr_EZ->clear();
-            PriVtxXCorr_Chi2->clear(); PriVtxXCorr_CL->clear(); PriVtxXCorr_tracks->clear();
+            PriVtxXCorr_Chi2->clear(); PriVtxXCorr_VProb->clear(); PriVtxXCorr_tracks->clear();
             if (Debug_) std::cout <<"after pvs stuff clear" <<std::endl ;
             /// Lifetime variables for B0
             xCosAlphaBS->clear(); xCosAlpha3DBS->clear(); xCTauBS->clear(); xCTauBSE->clear(); xLxyBS->clear(); xLxyBSE->clear(); xLxyzBS->clear(); xLxyzBSE->clear();
@@ -2376,7 +2375,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             // mumukktree->Branch("priVtx_ZE", &priVtx_ZE, "priVtx_ZE/f");
             // mumukktree->Branch("priVtx_NormChi2",&priVtx_NormChi2, "priVtx_NormChi2/f");
             // mumukktree->Branch("priVtx_Chi2",&priVtx_Chi2, "priVtx_Chi2/f");
-            // mumukktree->Branch("priVtx_CL",&priVtx_CL, "priVtx_CL/f");
+            // mumukktree->Branch("priVtx_VProb",&priVtx_VProb, "priVtx_VProb/f");
             // mumukktree->Branch("priVtx_tracks", &priVtx_tracks, "priVtx_tracks/i");
 
             /// MC Analysis
@@ -2399,7 +2398,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               mumukktree->Branch("PriVtxGen_EY",&PriVtxGen_EY);
               mumukktree->Branch("PriVtxGen_EZ",&PriVtxGen_EZ);
               mumukktree->Branch("PriVtxGen_Chi2",&PriVtxGen_Chi2);
-              mumukktree->Branch("PriVtxGen_CL",&PriVtxGen_CL);
+              mumukktree->Branch("PriVtxGen_VProb",&PriVtxGen_VProb);
               mumukktree->Branch("PriVtxGen_Ndof",&PriVtxGen_Ndof);
               mumukktree->Branch("PriVtxGen_tracks",&PriVtxGen_tracks);
               mumukktree->Branch("MCJPsiPx",&MCJPsiPx);
@@ -2502,11 +2501,12 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             /// MuMu cand
             mumukktree->Branch("nMuMu",&nMuMu,"nMuMu/i");
             mumukktree->Branch("ref_Jpsi", "reco::CompositeCandidateCollection", &ref_Jpsi);
+
             mumukktree->Branch("MuMuMass",&MuMuMass);
             mumukktree->Branch("MuMuPx",&MuMuPx);
             mumukktree->Branch("MuMuPy",&MuMuPy);
             mumukktree->Branch("MuMuPz",&MuMuPz);
-            mumukktree->Branch("MuMuVtx_CL",&MuMuVtx_CL);
+            mumukktree->Branch("MuMuVtx_VProb",&MuMuVtx_VProb);
             mumukktree->Branch("MuMuVtx_Chi2",&MuMuVtx_Chi2);
             mumukktree->Branch("MuMuDecayVtx_X",&MuMuDecayVtx_X);
             mumukktree->Branch("MuMuDecayVtx_Y",&MuMuDecayVtx_Y);
@@ -2538,7 +2538,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtxMuMuCorr_EY", &PriVtxMuMuCorr_EY);
             mumukktree->Branch("PriVtxMuMuCorr_EZ", &PriVtxMuMuCorr_EZ);
             mumukktree->Branch("PriVtxMuMuCorr_Chi2", &PriVtxMuMuCorr_Chi2);
-            mumukktree->Branch("PriVtxMuMuCorr_CL", &PriVtxMuMuCorr_CL);
+            mumukktree->Branch("PriVtxMuMuCorr_VProb", &PriVtxMuMuCorr_VProb);
             mumukktree->Branch("PriVtxMuMuCorr_tracks", &PriVtxMuMuCorr_tracks);
             mumukktree->Branch("nTrk_afterMuMu", &nTrk);
             /// KK cand
@@ -2547,7 +2547,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("KKPx",&KKPx);
             mumukktree->Branch("KKPy",&KKPy);
             mumukktree->Branch("KKPz",&KKPz);
-            mumukktree->Branch("KKVtx_CL",&KKVtx_CL);
+            mumukktree->Branch("KKVtx_VProb",&KKVtx_VProb);
             mumukktree->Branch("KKVtx_Chi2",&KKVtx_Chi2);
             mumukktree->Branch("KKDecayVtx_X",&KKDecayVtx_X);
             mumukktree->Branch("KKDecayVtx_Y",&KKDecayVtx_Y);
@@ -2598,7 +2598,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("XPxE",&xPxE);
             mumukktree->Branch("XPyE",&xPyE);
             mumukktree->Branch("XPzE",&xPzE);
-            mumukktree->Branch("XVtx_CL",&xVtx_CL);
+            mumukktree->Branch("XVtx_VProb",&xVtx_VProb);
             mumukktree->Branch("XVtx_Chi2",&xVtx_Chi2);
             mumukktree->Branch("XDecayVtx_X",&xDecayVtx_X);
             mumukktree->Branch("XDecayVtx_Y",&xDecayVtx_Y);
@@ -2631,7 +2631,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtx_XCosAlpha_EY",&PriVtx_XCosAlpha_EY);
             mumukktree->Branch("PriVtx_XCosAlpha_EZ",&PriVtx_XCosAlpha_EZ);
             mumukktree->Branch("PriVtx_XCosAlpha_Chi2",&PriVtx_XCosAlpha_Chi2);
-            mumukktree->Branch("PriVtx_XCosAlpha_CL",&PriVtx_XCosAlpha_CL);
+            mumukktree->Branch("PriVtx_XCosAlpha_VProb",&PriVtx_XCosAlpha_VProb);
             mumukktree->Branch("PriVtx_XCosAlpha_tracks",&PriVtx_XCosAlpha_tracks);
             mumukktree->Branch("XCosAlphaPVCosAlpha", &xCosAlphaPVCosAlpha);
             mumukktree->Branch("XCosAlpha3DPVCosAlpha", &xCosAlpha3DPVCosAlpha);
@@ -2649,7 +2649,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtx_XCosAlpha3D_EY",&PriVtx_XCosAlpha3D_EY);
             mumukktree->Branch("PriVtx_XCosAlpha3D_EZ",&PriVtx_XCosAlpha3D_EZ);
             mumukktree->Branch("PriVtx_XCosAlpha3D_Chi2",&PriVtx_XCosAlpha3D_Chi2);
-            mumukktree->Branch("PriVtx_XCosAlpha3D_CL",&PriVtx_XCosAlpha3D_CL);
+            mumukktree->Branch("PriVtx_XCosAlpha3D_VProb",&PriVtx_XCosAlpha3D_VProb);
             mumukktree->Branch("PriVtx_XCosAlpha3D_tracks",&PriVtx_XCosAlpha3D_tracks);
             mumukktree->Branch("XCosAlphaPVCosAlpha3D", &xCosAlphaPVCosAlpha3D);
             mumukktree->Branch("XCosAlpha3DPVCosAlpha3D", &xCosAlpha3DPVCosAlpha3D);
@@ -2670,7 +2670,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtxXLess_EY",&PriVtxXLess_EY);
             mumukktree->Branch("PriVtxXLess_EZ",&PriVtxXLess_EZ);
             mumukktree->Branch("PriVtxXLess_Chi2",&PriVtxXLess_Chi2);
-            mumukktree->Branch("PriVtxXLess_CL",&PriVtxXLess_CL);
+            mumukktree->Branch("PriVtxXLess_VProb",&PriVtxXLess_VProb);
             mumukktree->Branch("PriVtxXLess_tracks",&PriVtxXLess_tracks);
             mumukktree->Branch("XCosAlphaXLessPV", &xCosAlphaXLessPV);
             mumukktree->Branch("XCosAlpha3DXLessPV", &xCosAlpha3DXLessPV);
@@ -2688,7 +2688,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtxXLess_XCosAlpha_EY",&PriVtxXLess_XCosAlpha_EY);
             mumukktree->Branch("PriVtxXLess_XCosAlpha_EZ",&PriVtxXLess_XCosAlpha_EZ);
             mumukktree->Branch("PriVtxXLess_XCosAlpha_Chi2",&PriVtxXLess_XCosAlpha_Chi2);
-            mumukktree->Branch("PriVtxXLess_XCosAlpha_CL",&PriVtxXLess_XCosAlpha_CL);
+            mumukktree->Branch("PriVtxXLess_XCosAlpha_VProb",&PriVtxXLess_XCosAlpha_VProb);
             mumukktree->Branch("PriVtxXLess_XCosAlpha_tracks",&PriVtxXLess_XCosAlpha_tracks);
             mumukktree->Branch("XCosAlphaXLessPVCosAlpha", &xCosAlphaXLessPVCosAlpha);
             mumukktree->Branch("XCosAlpha3DXLessPVCosAlpha", &xCosAlpha3DXLessPVCosAlpha);
@@ -2706,7 +2706,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtxXLess_XCosAlpha3D_EY",&PriVtxXLess_XCosAlpha3D_EY);
             mumukktree->Branch("PriVtxXLess_XCosAlpha3D_EZ",&PriVtxXLess_XCosAlpha3D_EZ);
             mumukktree->Branch("PriVtxXLess_XCosAlpha3D_Chi2",&PriVtxXLess_XCosAlpha3D_Chi2);
-            mumukktree->Branch("PriVtxXLess_XCosAlpha3D_CL",&PriVtxXLess_XCosAlpha3D_CL);
+            mumukktree->Branch("PriVtxXLess_XCosAlpha3D_VProb",&PriVtxXLess_XCosAlpha3D_VProb);
             mumukktree->Branch("PriVtxXLess_XCosAlpha3D_tracks",&PriVtxXLess_XCosAlpha3D_tracks);
             mumukktree->Branch("XCosAlphaXLessPVCosAlpha3D", &xCosAlphaXLessPVCosAlpha3D);
             mumukktree->Branch("XCosAlpha3DXLessPVCosAlpha3D", &xCosAlpha3DXLessPVCosAlpha3D);
@@ -2725,7 +2725,7 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
             mumukktree->Branch("PriVtxXCorr_EY",&PriVtxXCorr_EY);
             mumukktree->Branch("PriVtxXCorr_EZ",&PriVtxXCorr_EZ);
             mumukktree->Branch("PriVtxXCorr_Chi2",&PriVtxXCorr_Chi2);
-            mumukktree->Branch("PriVtxXCorr_CL",&PriVtxXCorr_CL);
+            mumukktree->Branch("PriVtxXCorr_VProb",&PriVtxXCorr_VProb);
             mumukktree->Branch("PriVtxXCorr_tracks",&PriVtxXCorr_tracks);
             /// Lifetime variables for B0
             mumukktree->Branch("XCosAlphaPVX", &xCosAlphaPVX);
