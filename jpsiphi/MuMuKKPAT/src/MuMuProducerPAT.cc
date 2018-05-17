@@ -25,80 +25,6 @@ Implementation:
 #include "../interface/VertexReProducer.h"
 //#include "DataFormats/Candidate/interface/OverlapChecker.h"
 
-#include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDProducer.h"
-#include "FWCore/Framework/interface/Event.h"
-#include "FWCore/Framework/interface/MakerMacros.h"
-#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
-
-#include "FWCore/ServiceRegistry/interface/Service.h"
-#include "CommonTools/UtilAlgos/interface/TFileService.h"
-#include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
-#include "DataFormats/L1GlobalTrigger/interface/L1GtFdlWord.h"
-#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
-#include "DataFormats/Candidate/interface/CompositeCandidate.h"
-#include "DataFormats/Candidate/interface/LeafCandidate.h"
-
-#include "FWCore/Common/interface/TriggerNames.h"
-
-#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
-
-#include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
-#include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
-#include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
-#include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
-
-#include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
-
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "TrackingTools/TransientTrack/interface/TransientTrack.h"
-#include "MagneticField/Engine/interface/MagneticField.h"
-#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
-#include "TrackingTools/IPTools/interface/IPTools.h"
-
-//#include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
-
-#include "DataFormats/Common/interface/RefToBase.h"
-#include "DataFormats/Candidate/interface/ShallowCloneCandidate.h"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/Candidate/interface/CandMatchMap.h"
-#include "DataFormats/Math/interface/Error.h"
-#include "DataFormats/Math/interface/LorentzVector.h"
-#include "DataFormats/Math/interface/Point3D.h"
-#include "DataFormats/Math/interface/Vector3D.h"
-
-#include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/MuonReco/interface/MuonSelectors.h"
-#include "DataFormats/PatCandidates/interface/GenericParticle.h"
-
-#include "DataFormats/Common/interface/ValueMap.h"
-#include "DataFormats/TrackReco/interface/DeDxData.h"
-
-/// for 53x
-#include "Geometry/CaloGeometry/interface/CaloGeometry.h"
-#include "Geometry/Records/interface/CaloGeometryRecord.h"
-
-#include "TFile.h"
-#include "TTree.h"
-#include "TVector3.h"
-
-#include <vector>
-#include <utility>
-
-#include "TMath.h"
-#include "Math/VectorUtil.h"
-
-/// useless so far
-//#include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
-//#include "HepMC/GenVertex.h"
-//#include <HepMC/GenVertex.h>
-//#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
-#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
-
 ///
 /// constants, enums and typedefs
 ///
@@ -695,7 +621,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
-            math::LorentzVector muP, muN,mumuP4;
+            reco::LorentzVector muP, muN,mumuP4;
 
             muP.SetXYZM(recoPosMuon->bestTrackRef()->px(),recoPosMuon->bestTrackRef()->py(),recoPosMuon->bestTrackRef()->pz(),muon_mass);
             muN.SetXYZM(recoNegMuon->bestTrackRef()->px(),recoNegMuon->bestTrackRef()->py(),recoNegMuon->bestTrackRef()->pz(),muon_mass);
