@@ -31,17 +31,17 @@ Implementation:
 /// constants, enums and typedefs
 ///
 
-typedef math::Error<3>::type CovarianceMatrix;
-
-const ParticleMass muon_mass = 0.10565837; //pdg mass
-const ParticleMass kaon_mass = 0.493667; //pdg mass
-ParticleMass JPsi_mass = 3.096916;
-const ParticleMass Phi_mass = 1.0194;
-
-
-
-/// Setting insignificant mass sigma to avoid singularities in the covariance matrix.
-float small_sigma = muon_mass*1.e-6;
+// typedef math::Error<3>::type CovarianceMatrix;
+//
+// const ParticleMass muon_mass = 0.10565837; //pdg mass
+// const ParticleMass kaon_mass = 0.493667; //pdg mass
+// ParticleMass JPsi_mass = 3.096916;
+// const ParticleMass Phi_mass = 1.0194;
+//
+//
+//
+// /// Setting insignificant mass sigma to avoid singularities in the covariance matrix.
+// float small_sigma = muon_mass*1.e-6;
 //float small_sigma = kaon_mass*1.e-6; /// SEMRA
 
 ///
