@@ -517,14 +517,14 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
   /// reconstruction only for events with B decaying in psi(nS)+Pi+K /// SEMRA JPsiPhi !!!
 
-  if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData ) {
+  if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData_ ) {
 
     bool isEventWithInvalidMu = false;
 
     if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
-    if ((thePATMuonHandle->size())) > 10000)
-    std::cout << "Too many Muons: " << thePATMuonHandle->size() << std::endl;
+    if ((thePATMuonHandle->size()) > 10000)
+      std::cout << "Too many Muons: " << thePATMuonHandle->size() << std::endl;
     else //if (thePATMuonHandle->size() >= 2) { // check
       if (thePATMuonHandle->size() >= 2  && (hasRequestedTrigger || !TriggerCut_)) {
 
@@ -569,7 +569,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
           /// Pixel Cuts On
           if (recoPosMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits_
-          || recoPosMuon->track()->hitPattern().numberOfValidStripHits() < _
+          || recoPosMuon->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits_
           || recoPosMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi_
           || fabs(recoPosMuon->track()->dxy(RefVtx)) > MuMaxD0_) {
             continue ;
@@ -962,7 +962,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           } // 2nd loop over muons (look for mu-)
         } //first loop over muons (look for mu+)
       } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
-      } // if (doMC_ || doData)
+      } // if (doMC_ || doData_)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
       // ===========================================================
 
