@@ -179,24 +179,36 @@ public:
   ~MuMuProducerPAT();
 
 private:
-  void beginJob() ;
-  void beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup);
-  void produce(const edm::Event&, const edm::EventSetup&);
-  void endJob() ;
 
-  UInt_t isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon);
-  int muonTrackType(const reco::Muon * muon);
+  ~Testing();
+
+static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+
+private:
+
+
+  virtual void beginJob() ;
+  virtual void produce(edm::Event&, const edm::EventSetup&);
+  virtual void endJob() ;
+
+  virtual void beginRun(edm::Run&, edm::EventSetup const&);
+  virtual void endRun(edm::Run&, edm::EventSetup const&);
+  virtual void beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&);
+  virtual void endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&);
+
+  virtual UInt_t isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon);
+  virtual int muonTrackType(const reco::Muon * muon);
 
   InvariantMassFromVertex massCalculator;
 
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   std::pair<int, float> findCandMCInfo(reco::GenParticleRef genCand);
-  double getSigmaOfLogdEdx(double logde);
-  float  getEnergyLoss(const reco::TrackRef & track);
-  double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
-  double getLogdEdx(double bg);
-  double GetMass(const reco::TrackRef & track);
+  virtual double getSigmaOfLogdEdx(double logde);
+  virtual float  getEnergyLoss(const reco::TrackRef & track);
+  virtual double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
+  virtual double getLogdEdx(double bg);
+  virtual double GetMass(const reco::TrackRef & track);
   bool isSameMuon(const reco::Muon &mu1, const reco::Muon &mu2) const ;
   template<typename T> bool isBetterMuon(const T &mu1, const T &mu2) const ;
 
