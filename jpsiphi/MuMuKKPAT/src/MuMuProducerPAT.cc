@@ -933,7 +933,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
     //}/// produce
     /// ------------ method called once each job just before starting event loop  ------------
-    void MuMuProducerPAT::beginRun(edm::Run const & iRun, edm::EventSetup const& iSetup)
+    void MuMuProducerPAT::beginRun(edm::Run& iRun, edm::EventSetup const& iSetup)
     {
     }
     void MuMuProducerPAT::beginJob()
