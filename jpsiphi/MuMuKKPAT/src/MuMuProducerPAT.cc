@@ -49,8 +49,8 @@ hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
 vtxSample_(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
 
-jspiMassCuts_(iConfig.getParameter<std::vector<float>>("JPsiMassCuts")),
-psiMassCuts_(iConfig.getParameter<std::vector<float>>("PsiMassCuts")),
+jspiMassCuts_(iConfig.getParameter<std::vector<double>>("JPsiMassCuts")),
+psiMassCuts_(iConfig.getParameter<std::vector<double>>("PsiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
 doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
@@ -67,8 +67,8 @@ MCDaughtersN_( iConfig.getUntrackedParameter<int>(" MonteCarloDaughtersN", 3) ),
 
 MuMinPixHits_(iConfig.getUntrackedParameter<int>("MinNumMuPixHits", 0)),
 MuMinSiHits_(iConfig.getUntrackedParameter<int>("MinNumMuSiHits", 0)),
-MuMaxNormChi_(iConfig.getUntrackedParameter<float>("MaxMuNormChi2", 1000)),
-MuMaxD0_(iConfig.getUntrackedParameter<float>("MaxMuD0", 1000)),
+MuMaxNormChi_(iConfig.getUntrackedParameter<double>("MaxMuNormChi2", 1000)),
+MuMaxD0_(iConfig.getUntrackedParameter<double>("MaxMuD0", 1000)),
 
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
 HLTFilters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
