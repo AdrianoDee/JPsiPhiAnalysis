@@ -446,7 +446,7 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
 
   if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData_ ) {
 
-    bool isEventWithInvalidMu = false;
+    // bool isEventWithInvalidMu = false;
 
     if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
@@ -484,13 +484,13 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           if (recoPosMuon->innerTrack().isNull() && recoPosMuon->outerTrack().isNull() && recoPosMuon->globalTrack().isNull()) continue;
 
           if ( !(recoPosMuon->track()->hitPattern().trackerLayersWithMeasurement()) ) {
-            isEventWithInvalidMu = true;
+            // isEventWithInvalidMu = true;
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
             continue ;
           }
           if ( !(recoPosMuon->track()->hitPattern().pixelLayersWithMeasurement()) ) {
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
-            isEventWithInvalidMu = true;
+            // isEventWithInvalidMu = true;
             continue ;
           }
 
@@ -512,14 +512,14 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
           posMuonTrackType = recoPosMuon->muonBestTrackType();
           posMuonType = (unsigned int)(recoPosMuon->type());
 
-          const reco::Track* recoPosMuonInTrack = 0, *recoPosMuonOutTrack = 0, *recoPosMuonGlobTrack = 0;
-
-          if (!(recoPosMuon->innerTrack().isNull()))
-          recoPosMuonInTrack = (recoPosMuon->track()).get();
-          if (!(recoPosMuon->outerTrack().isNull()))
-          recoPosMuonOutTrack = (recoPosMuon->outerTrack()).get();
-          if (!(recoPosMuon->globalTrack().isNull()))
-          recoPosMuonGlobTrack = (recoPosMuon->globalTrack()).get();
+          // const reco::Track* recoPosMuonInTrack = 0, *recoPosMuonOutTrack = 0, *recoPosMuonGlobTrack = 0;
+          //
+          // if (!(recoPosMuon->innerTrack().isNull()))
+          // recoPosMuonInTrack = (recoPosMuon->track()).get();
+          // if (!(recoPosMuon->outerTrack().isNull()))
+          // recoPosMuonOutTrack = (recoPosMuon->outerTrack()).get();
+          // if (!(recoPosMuon->globalTrack().isNull()))
+          // recoPosMuonGlobTrack = (recoPosMuon->globalTrack()).get();
 
           posMuonDzVtx = recoPosMuon->bestTrackRef()->dz(RefVtx);
           posMuonDxyVtx = recoPosMuon->bestTrackRef()->dxy(RefVtx);
@@ -742,6 +742,19 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat_ref_JPsi.addUserInt("nMatchedStationsNeg",    nMatchedStationsNeg);
             pat_ref_JPsi.addUserInt("nOverlapMusNeg",         nOverlapMusNeg);
             pat_ref_JPsi.addUserInt("nSharingSegWithNeg",     nSharingSegWithNeg);
+
+            pat_ref_JPsi.addUserInt("posMuonTrackType",posMuonTrackType);
+            pat_ref_JPsi.addUserInt("posMuonType",posMuonType);
+
+            pat_ref_JPsi.addUserFloat("posMuonDzVtx",posMuonDzVtx);
+            pat_ref_JPsi.addUserFloat("posMuonDxyVtx",posMuonDxyVtx);
+
+            pat_ref_JPsi.addUserInt("negMuonTrackType",negMuonTrackType);
+            pat_ref_JPsi.addUserInt("negMuonType",negMuonType);
+
+            pat_ref_JPsi.addUserFloat("negMuonDzVtx",negMuonDzVtx);
+            pat_ref_JPsi.addUserFloat("negMuonDxyVtx",negMuonDxyVtx);
+
 
             // ref_Jpsi.push_back(pat_ref_JPsi);
             // ref_mupos.push_back(pat_ref_PM);
