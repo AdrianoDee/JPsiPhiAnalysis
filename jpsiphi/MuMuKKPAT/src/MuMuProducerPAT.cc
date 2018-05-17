@@ -1,4 +1,4 @@
-Neg// -*- C++ -*-
+// -*- C++ -*-
 //
 // Package:    MuMuProducerPAT
 // Class:      MuMuProducerPAT
