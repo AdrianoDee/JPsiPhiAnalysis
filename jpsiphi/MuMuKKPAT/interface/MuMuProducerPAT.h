@@ -199,11 +199,11 @@ private:
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   std::pair<int, float> findCandMCInfo(reco::GenParticleRef genCand);
-  virtual double getSigmaOfLogdEdx(double logde);
-  virtual float  getEnergyLoss(const reco::TrackRef & track);
-  virtual double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
-  virtual double getLogdEdx(double bg);
-  virtual double GetMass(const reco::TrackRef & track);
+  // virtual double getSigmaOfLogdEdx(double logde);
+  // virtual float  getEnergyLoss(const reco::TrackRef & track);
+  // virtual double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);
+  // virtual double getLogdEdx(double bg);
+  // virtual double GetMass(const reco::TrackRef & track);
   bool isSameMuon(const reco::Muon &mu1, const reco::Muon &mu2) const ;
   template<typename T> bool isBetterMuon(const T &mu1, const T &mu2) const ;
 

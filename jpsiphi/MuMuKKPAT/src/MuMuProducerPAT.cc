@@ -1050,61 +1050,61 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     }
 
-    float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
-    {
-      return 0.3;
-    }
-
-    float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
-    {
-      if (iexception_dedx==1) return 9999.;
-      const reco::DeDxDataValueMap & eloss = *energyLoss;
-      return eloss[track].dEdx();
-    }
-
-    float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
-    {
-
-      // no usable dE/dx if p > 2
-      float nsigma = 99 ;
-      if (iexception_dedx==1) return nsigma ;
-
-      float m  = 0.13957;
-      float bg = track->p() / m;
-
-      theo = getLogdEdx(bg);
-
-
-      int nhitr = track->numberOfValidHits();
-      float meas = log(getEnergyLoss(track));
-      sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
-      if (sigma>0)
-      nsigma = (meas-theo) / sigma ;
-      return nsigma;
-    }
-
-
-    float MuMuProducerPAT::getLogdEdx(float bg)
-    {
-      const float a =  3.25 ;
-      const float b =  0.288;
-      const float c = -0.852;
-
-      float beta = bg/sqrt(bg*bg + 1);
-      float dedx = log( a/(beta*beta) + b * log(bg) + c );
-
-      return dedx;
-
-    }
-
-
-    float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
-      float P = track->p();
-      float C = 2.625;
-      float K = 2.495;
-      float I = getEnergyLoss(track);
-      return sqrt((I-C)/K)*P;
-    }
+    // float MuMuProducerPAT::getSigmaOfLogdEdx(float logde)
+    // {
+    //   return 0.3;
+    // }
+    //
+    // float MuMuProducerPAT::getEnergyLoss(const reco::TrackRef & track)
+    // {
+    //   if (iexception_dedx==1) return 9999.;
+    //   const reco::DeDxDataValueMap & eloss = *energyLoss;
+    //   return eloss[track].dEdx();
+    // }
+    //
+    // float MuMuProducerPAT::nsigmaofdedx(const reco::TrackRef & track, float & theo, float & sigma)
+    // {
+    //
+    //   // no usable dE/dx if p > 2
+    //   float nsigma = 99 ;
+    //   if (iexception_dedx==1) return nsigma ;
+    //
+    //   float m  = 0.13957;
+    //   float bg = track->p() / m;
+    //
+    //   theo = getLogdEdx(bg);
+    //
+    //
+    //   int nhitr = track->numberOfValidHits();
+    //   float meas = log(getEnergyLoss(track));
+    //   sigma = getSigmaOfLogdEdx(theo) * pow(nhitr,-0.65);
+    //   if (sigma>0)
+    //   nsigma = (meas-theo) / sigma ;
+    //   return nsigma;
+    // }
+    //
+    //
+    // float MuMuProducerPAT::getLogdEdx(float bg)
+    // {
+    //   const float a =  3.25 ;
+    //   const float b =  0.288;
+    //   const float c = -0.852;
+    //
+    //   float beta = bg/sqrt(bg*bg + 1);
+    //   float dedx = log( a/(beta*beta) + b * log(bg) + c );
+    //
+    //   return dedx;
+    //
+    // }
+    //
+    //
+    // float MuMuProducerPAT::GetMass(const reco::TrackRef & track){
+    //   float P = track->p();
+    //   float C = 2.625;
+    //   float K = 2.495;
+    //   float I = getEnergyLoss(track);
+    //   return sqrt((I-C)/K)*P;
+    // }
 
 
     template<typename T>
