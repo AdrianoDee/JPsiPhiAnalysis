@@ -127,20 +127,20 @@ MuMuProducerPAT::MuMuProducerPAT(const edm::ParameterSet& iConfig):
 
 hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
-vtxSample__(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
+vtxSample_(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
 
 jspiMassCuts_(iConfig.getParameter<std::vector<float>>("JPsiMassCuts")),
 psiMassCuts_(iConfig.getParameter<std::vector<float>>("PsiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
-doMC__( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
+doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
 
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
 
 addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 MCParticle_( iConfig.getUntrackedParameter<int>("MonteCarloParticleId", 20443) ), /// 20443 X, 100443 Psi(2S), 9120443 X from B / decide later for X(4140)
-MCExclusiveDecay__( iConfig.getUntrackedParameter<bool>("MonteCarloExclusiveDecay", true) ),
+MCExclusiveDecay_( iConfig.getUntrackedParameter<bool>("MonteCarloExclusiveDecay", true) ),
 MCMother_( iConfig.getUntrackedParameter<int>("MonteCarloMotherId", 511) ), /// 511 B0 (=anti-B0), 531 B0 / decide later MCMotherId for X(4140)
 MCDaughtersN_( iConfig.getUntrackedParameter<int>(" MonteCarloDaughtersN", 3) ), /// will be same
 
@@ -796,9 +796,9 @@ void MuMuProducerPAT::produce(const edm::Event& iEvent, const edm::EventSetup& i
             pat_ref_JPsi.addUserFloat("deltaR",deltaRMuMu);
             pat_ref_JPsi.addUserFloat("mumuP4",mumuP4.M());
 
-            pat_ref_JPsi.addDaughter(*pat_ref_PM, "ref_muonPos");
-            pat_ref_JPsi.addDaughter(*pat_ref_NM, "ref_muonNeg");
-            pat_ref_JPsi.addDaughter(*mumuCandidate, "mumuCandidate");
+            pat_ref_JPsi.addDaughter(pat_ref_PM, "ref_muonPos");
+            pat_ref_JPsi.addDaughter(pat_ref_NM, "ref_muonNeg");
+            pat_ref_JPsi.addDaughter(mumuCandidate, "mumuCandidate");
             // pat_ref_JPsi.addDaughter(*pat_ref_PM, "posMuon");
             // pat_ref_JPsi.addDaughter(*pat_ref_NM, "negMuon");
 
