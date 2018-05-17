@@ -21,6 +21,8 @@ Implementation:
 #include <memory>
 
 /// user include files
+#include "TLorentzVector.h"
+
 #include "../interface/MuMuProducerPAT.h"
 #include "../interface/VertexReProducer.h"
 //#include "DataFormats/Candidate/interface/OverlapChecker.h"
@@ -35,6 +37,7 @@ const ParticleMass muon_mass = 0.10565837; //pdg mass
 const ParticleMass kaon_mass = 0.493667; //pdg mass
 ParticleMass JPsi_mass = 3.096916;
 const ParticleMass Phi_mass = 1.0194;
+
 
 
 /// Setting insignificant mass sigma to avoid singularities in the covariance matrix.
