@@ -24,7 +24,7 @@ class VertexReProducer {
 
         /// Make the vertices
         std::vector<TransientVertex> makeVertices(const reco::TrackCollection &tracks, const reco::BeamSpot &bs, const edm::EventSetup &iSetup) const;
-  	    std::vector<TransientVertex> makeVertices(const std::vector<reco::TransientTrack> &tracks, const reco::BeamSpot &bs, const edm::EventSetup &iSetup) const; 
+  	    std::vector<TransientVertex> makeVertices(const std::vector<reco::TransientTrack> &tracks, const reco::BeamSpot &bs, const edm::EventSetup &iSetup) const;
 
         /// Get the configuration used in the VertexProducer
         const edm::ParameterSet & inputConfig()   const { return config_; }
