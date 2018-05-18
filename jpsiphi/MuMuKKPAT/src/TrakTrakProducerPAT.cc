@@ -146,7 +146,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
   bool decayChainOK = false;
 
-  bool hasRequestedTrigger = false;
   ESHandle<MagneticField> bFieldHandle;
   iSetup.get<IdealMagneticFieldRecord>().get(bFieldHandle);
 
