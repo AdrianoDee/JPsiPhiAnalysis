@@ -222,7 +222,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
                                  JPsiMassCuts = cms.untracked.vdouble((2.95,3.25)),
                                  PsiMassCuts = cms.untracked.vdouble((3.45,3.85)),
 
-                                 DoDataAnalysis = = cms.untracked.bool( True ),
+                                 DoDataAnalysis = cms.untracked.bool( True ),
                                  DoMonteCarloTree = cms.untracked.bool( False ),
 
                                  addCommonVertex = cms.untracked.bool( False ),
