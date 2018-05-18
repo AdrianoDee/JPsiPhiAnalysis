@@ -79,21 +79,21 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   UInt_t    trigger;
   UInt_t    tMatch;
   Int_t     charge;
+  Int_t     dimuonType;
+  Int_t isTriggerMatched;
 
 	TLorentzVector dimuon_p4;
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
 
-  Float_t MassErr;
-  Float_t vProb;
-  Float_t DCA;
-  Float_t ppdlPV;
-  Float_t ppdlErrPV;
-  Float_t ppdlBS;
-  Float_t ppdlErrBS;
-  Float_t cosAlpha;
-  Float_t lxyPV;
-  Float_t lxyBS;
+  Float_t mumuVProb, mumuChi2, mumuNDof, invalidMu;
+  Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
+  Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
+  Float_t posMuonDzVtx, posMuonDxyVtx, negMuonTrackType, negMuonType, negMuonDzVtx, negMuonDxyVtx;
+  Float_t muPos_Chi2, muPos_NDF, muNeg_Chi2, muNeg_NDF, mumuVProb, mumuChi2, mumuNDof;
+
+  Int_t nMatchedStationsPos, nOverlapMusPos, nSharingSegWithPos, nMatchedStationsNeg, nOverlapMusNeg;
+  Int_t nSharingSegWithNeg, posMuonTrackType, posMuonType, negMuonTrackType, negMuonType;
 
 	UInt_t numPrimaryVertices;
 
@@ -144,16 +144,55 @@ Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
     dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
     dimuon_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
 
-    dimuon_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
-    dimuon_tree->Branch("vProb",     &vProb,      "vProb/F");
-    dimuon_tree->Branch("DCA",       &DCA,        "DCA/F");
-    dimuon_tree->Branch("ppdlPV",    &ppdlPV,     "ppdlPV/F");
-    dimuon_tree->Branch("ppdlErrPV", &ppdlErrPV,  "ppdlErrPV/F");
-    dimuon_tree->Branch("ppdlBS",    &ppdlBS,     "ppdlBS/F");
-    dimuon_tree->Branch("ppdlErrBS", &ppdlErrBS,  "ppdlErrBS/F");
-    dimuon_tree->Branch("cosAlpha",  &cosAlpha,   "cosAlpha/F");
-    dimuon_tree->Branch("lxyPV",     &lxyPV,      "lxyPV/F");
-    dimuon_tree->Branch("lxyBS",     &lxyBS,      "lxyBS/F");
+    dimuon_tree->Branch("nMatchedStationsPos",   &nMatchedStationsPos,   "nMatchedStationsPos/I");
+    dimuon_tree->Branch("nOverlapMusPos",  &nOverlapMusPos,  "nOverlapMusPos/I");
+    dimuon_tree->Branch("nSharingSegWithPos",   &nSharingSegWithPos,   "nSharingSegWithPos/I");
+
+    dimuon_tree->Branch("nMatchedStationsNeg",   &nMatchedStationsNeg,   "nMatchedStationsNeg/I");
+    dimuon_tree->Branch("nOverlapMusNeg",  &nOverlapMusNeg,  "nOverlapMusNeg/I");
+    dimuon_tree->Branch("nSharingSegWithNeg",   &nSharingSegWithNeg,   "nSharingSegWithNeg/I");
+
+    dimuon_tree->Branch("posMuonTrackType",  &posMuonTrackType,  "posMuonTrackType/I");
+    dimuon_tree->Branch("posMuonType",   &posMuonType,   "posMuonType/I");
+
+    dimuon_tree->Branch("negMuonTrackType",  &negMuonTrackType,  "negMuonTrackType/I");
+    dimuon_tree->Branch("negMuonType",   &negMuonType,   "negMuonType/I");
+
+    dimuon_tree->Branch("posMuonDzVtx",  &posMuonDzVtx,  "posMuonDzVtx/D");
+    dimuon_tree->Branch("posMuonDxyVtx",   &posMuonDxyVtx,   "posMuonDxyVtx/D");
+
+    dimuon_tree->Branch("negMuonDzVtx",  &negMuonDzVtx,  "negMuonDzVtx/D");
+    dimuon_tree->Branch("negMuonDxyVtx",   &negMuonDxyVtx,   "negMuonDxyVtx/D");
+
+    dimuon_tree->Branch("muPos_Chi2",  &muPos_Chi2,  "muPos_Chi2/D");
+    dimuon_tree->Branch("muPos_NDF",   &muPos_NDF,   "muPos_NDF/D");
+    dimuon_tree->Branch("muNeg_Chi2",  &muNeg_Chi2,  "muNeg_Chi2/D");
+    dimuon_tree->Branch("muNeg_NDF",   &muNeg_NDF,   "muNeg_NDF/D");
+    dimuon_tree->Branch("VProb",  &VProb,  "VProb/D");
+    dimuon_tree->Branch("Chi2",   &Chi2,   "Chi2/D");
+    dimuon_tree->Branch("NDof",   &NDof,   "NDof/D");
+
+    dimuon_tree->Branch("cosAlpha",  &cosAlpha,  "cosAlpha/D");
+    dimuon_tree->Branch("cosAlpha3D",   &cosAlpha3D,   "cosAlpha3D/D");
+    dimuon_tree->Branch("ctau",  &ctau,  "ctau/D");
+    dimuon_tree->Branch("ctauErr",   &ctauErr,   "ctauErr/D");
+    dimuon_tree->Branch("lxy",  &lxy,  "lxy/D");
+    dimuon_tree->Branch("lxyErr",   &lxyErr,   "lxyErr/D");
+    dimuon_tree->Branch("lxyz",   &lxyz,   "lxyz/D");
+    dimuon_tree->Branch("lxyzErr",   &lxyzErr,   "lxyzErr/D");
+
+    dimuon_tree->Branch("cosAlphaBS",  &cosAlphaBS,  "cosAlphaBS/D");
+    dimuon_tree->Branch("cosAlpha3DBS",   &cosAlpha3DBS,   "cosAlpha3DBS/D");
+    dimuon_tree->Branch("ctauBS",  &ctauBS,  "ctauBS/D");
+    dimuon_tree->Branch("ctauErrBS",   &ctauErrBS,   "ctauErrBS/D");
+    dimuon_tree->Branch("lxyBS",  &lxyBS,  "lxyBS/D");
+    dimuon_tree->Branch("lxyErrBS",   &lxyErrBS,   "lxyErrBS/D");
+    dimuon_tree->Branch("lxyzBS",   &lxyzBS,   "lxyzBS/D");
+    dimuon_tree->Branch("lxyzErrBS",   &lxyzErrBS,   "lxyzErrBS/D");
+
+    dimuon_tree->Branch("invalidMu",   &invalidMu,   "invalidMu/D");
+    dimuon_tree->Branch("dimuonType",   &dimuonType,   "lxyzErrBS/I");
+    dimuon_tree->Branch("isTriggerMatched",   &isTriggerMatched,   "lxyzErrBS/I");
 
     dimuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
   }
@@ -304,25 +343,82 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
-          reco::Candidate::LorentzVector vP = dimuonCand->daughter("muon1")->p4();
-          reco::Candidate::LorentzVector vM = dimuonCand->daughter("muon2")->p4();
-          if ( dimuonCand->daughter("muon1")->charge() < 0 ) {
-              vP = dimuonCand->daughter("muon2")->p4();
-              vM = dimuonCand->daughter("muon1")->p4();
-          }
+
+          reco::Candidate::LorentzVector vP = dimuonCand->daughter("posMuon")->p4();
+          reco::Candidate::LorentzVector vM = dimuonCand->daughter("negMuon")->p4();
+
           muonP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
           MassErr = -1.0;
-          if (dimuonCand->hasUserFloat("MassErr"))    MassErr = dimuonCand->userFloat("MassErr");
+
           vProb = dimuonCand->userFloat("vProb");
           DCA = -1.;
           if (dimuonCand->hasUserFloat("DCA"))  DCA = dimuonCand->userFloat("DCA");
-          ppdlPV = dimuonCand->userFloat("ppdlPV");
-          ppdlErrPV = dimuonCand->userFloat("ppdlErrPV");
-          ppdlBS = dimuonCand->userFloat("ppdlBS");
-          ppdlErrBS = dimuonCand->userFloat("ppdlErrBS");
-          cosAlpha = dimuonCand->userFloat("cosAlpha");
-          tMatch = dimuonCand->userInt("isTriggerMatched");
+
+          mumuCandidate.addDaughter(*posMuon, "posMuon");
+          mumuCandidate.addDaughter(*negMuon,"negMuon");
+
+          dimuon->userFloat("deltaR",deltaRMuMu);
+          dimuon->userFloat("mumuP4",mumuP4.M());
+
+          pat_ref_JPsi.addDaughter(pat_ref_PM, "ref_muonPos");
+          pat_ref_JPsi.addDaughter(pat_ref_NM, "ref_muonNeg");
+          pat_ref_JPsi.addDaughter(mumuCandidate, "mumuCandidate");
+          // pat_ref_JPsi.addDaughter(*pat_ref_PM, "posMuon");
+          // pat_ref_JPsi.addDaughter(*pat_ref_NM, "negMuon");
+
+          nMatchedStationsPos = dimuon->userInt("nMatchedStationsPos");
+          nOverlapMusPos =  dimuon->userInt("nOverlapMusPos");
+          nSharingSegWithPos =  dimuon->userInt("nSharingSegWithPos");
+
+          nMatchedStationsNeg = dimuon->userInt("nMatchedStationsNeg");
+          nOverlapMusNeg =  dimuon->userInt("nOverlapMusNeg");
+          nSharingSegWithNeg =  dimuon->userInt("nSharingSegWithNeg");
+
+          posMuonTrackType =  dimuon->userInt("posMuonTrackType");
+          posMuonType = dimuon->userInt("posMuonType");
+
+          posMuonDzVtx =  dimuon->userFloat("posMuonDzVtx");
+          posMuonDxyVtx = dimuon->userFloat("posMuonDxyVtx");
+
+          negMuonTrackType =  dimuon->userInt("negMuonTrackType");
+          negMuonType = dimuon->userInt("negMuonType");
+
+          negMuonDzVtx = dimuon->userFloat("negMuonDzVtx");
+          negMuonDxyVtx = dimuon->userFloat("negMuonDxyVtx");
+          muPos_Chi2 = dimuon->userFloat("muPos_Chi2");
+          muPos_NDF = dimuon->userFloat("muPos_NDF");
+          muNeg_Chi2 = dimuon->userFloat("muNeg_Chi2");
+          muNeg_NDF = dimuon->userFloat("muNeg_NDF");
+
+          mumuVProb = dimuon->userFloat("VProb");
+          mumuChi2 = dimuon->userFloat("Chi2");
+          mumuNDof = dimuon->userFloat("NDof");
+
+          cosAlpha = dimuon->userFloat("cosAlpha");
+          cosAlpha3D = dimuon->userFloat("cosAlpha3D");
+          ctau = dimuon->userFloat("ctau");
+          ctauErr = dimuon->userFloat("ctauErr");
+          lxy = dimuon->userFloat("lxy");
+          lxyErr = dimuon->userFloat("lxyErr");
+          lxyz = dimuon->userFloat("lxyz");
+          lxyzErr = dimuon->userFloat("lxyzErr");
+
+          cosAlphaBS =  dimuon->userFloat("cosAlphaBS");
+          cosAlpha3DBS =  dimuon->userFloat("cosAlpha3DBS");
+          ctauBS =  dimuon->userFloat("ctauBS");
+          ctauErrBS = dimuon->userFloat("ctauErrBS");
+          lxyBS = dimuon->userFloat("lxyBS");
+          lxyErrBS =  dimuon->userFloat("lxyErrBS");
+          lxyzBS =  dimuon->userFloat("lxyzBS");
+          lxyzErrBS = dimuon->userFloat("lxyzErrBS");
+
+          invalidMu = dimuon->userFloat("isEventWithInvalidMu");
+          dimuonType = dimuon->userInt("dimuonType");
+          isTriggerMatched = dimuon->userInt("isTriggerMatched");
+
+          // pat_ref_JPsi.addUserData("muonlessPV");
+
           charge = dimuonCand->charge();
           TVector3 pperp(dimuonCand->px(),dimuonCand->py(),0);
           lxyPV = ppdlPV * pperp.Perp() / dimuonCand->mass();
