@@ -63,7 +63,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	std::string file_name;
 	std::string dimuon_Label;
   std::string primaryVertices_Label;
-  std::string hlTriggerResults;
+  edm::InputTag hlTriggerResults;
   int  pdgid_;
   std::vector<double> DimuonMassCuts_;
 	bool isMC_;
