@@ -71,7 +71,7 @@ MuMaxNormChi_(iConfig.getUntrackedParameter<double>("MaxMuNormChi2", 1000)),
 MuMaxD0_(iConfig.getUntrackedParameter<double>("MaxMuD0", 1000)),
 
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
-HLTFilters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
+HLTPaths_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),
 Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
 
@@ -100,11 +100,11 @@ UInt_t MuMuProducerPAT::isTriggerMatched(const pat::Muon* posMuon, const pat::Mu
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<FiltersForMatching_.size(); iTr++ ) {
-    // std::cout << HLTFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    // std::cout << HLTPaths_[iTr] << std::endl;
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = posMuon->triggerObjectMatchesByFilter(HLTPaths_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = negMuon->triggerObjectMatchesByFilter(HLTPaths_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
-    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
+    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTPaths_[iTr] << std::endl;
   }
 
   return matched;
@@ -119,12 +119,12 @@ UInt_t MuMuProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-     unsigned int NTRIGGERS = HLTs_.size();
+     unsigned int NTRIGGERS = HLTPaths_.size();
 
      for (unsigned int i = 0; i < NTRIGGERS; i++) {
         for (int version = 1; version < 20; version++) {
            std::stringstream ss;
-           ss << HLTs_[i] << "_v" << version;
+           ss << HLTPaths_[i] << "_v" << version;
            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
               trigger += (1<<i);
@@ -653,8 +653,14 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             muons.push_back( pFactory.particle( muonPosTT, muon_mass, chi, ndf, small_sigma));
             muons.push_back( pFactory.particle( muonNegTT, muon_mass, chi, ndf, small_sigma));
             KinematicParticleVertexFitter MuMuFitter; /// creating the vertex fitter for JPsi
+
             RefCountedKinematicTree MuMuVertexFitTree;
             MuMuVertexFitTree = MuMuFitter.fit(muons);
+
+
+            MuMuVertexFitTree->movePointerToTheTop();
+            RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
+            RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
 
             if (!MuMuVertexFitTree->isValid())
             continue ;
@@ -667,9 +673,6 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
             float mumuNDof = mumuCandidate_vertex_fromFit->degreesOfFreedom();
 
-            MuMuVertexFitTree->movePointerToTheTop();
-            RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
-            RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
             MuMuVertexFitTree->movePointerToTheFirstChild();
             RefCountedKinematicParticle MuPosCand_fromFit = MuMuVertexFitTree->currentParticle();
             MuMuVertexFitTree->movePointerToTheNextChild();

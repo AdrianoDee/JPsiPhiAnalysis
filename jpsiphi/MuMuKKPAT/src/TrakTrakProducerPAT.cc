@@ -69,7 +69,7 @@ TrMaxNormChi_(iConfig.getUntrackedParameter<double>("MaxTrNormChi2", 1000)),
 TrMaxD0_(iConfig.getUntrackedParameter<double>("MaxTrD0", 1000)),
 
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
-HLTFilters_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
+HLTPaths_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),
 Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
 
@@ -101,12 +101,12 @@ UInt_t TrakTrakProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-     unsigned int NTRIGGERS = HLTs_.size();
+     unsigned int NTRIGGERS = HLTPaths_.size();
 
      for (unsigned int i = 0; i < NTRIGGERS; i++) {
         for (int version = 1; version < 20; version++) {
            std::stringstream ss;
-           ss << HLTs_[i] << "_v" << version;
+           ss << HLTPaths_[i] << "_v" << version;
            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
               trigger += (1<<i);
@@ -524,8 +524,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
                 continue;
 
-            trackNegDzVtx = trackNeg->bestTrackRef()->dz(RefVtx);
-            trackNegDxyVtx = trackNeg->bestTrackRef()->dxy(RefVtx);
+            negTrackDzVtx = trackNeg->bestTrackRef()->dz(RefVtx);
+            negTrackDxyVtx = trackNeg->bestTrackRef()->dxy(RefVtx);
 
             //Vertex fit
             TransientTrack kaonPosTT( trackPos->track(), &(*bFieldHandle) );
@@ -647,7 +647,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             pat_ref_Phi.addUserFloat("trackPosDxyVtx",posTrackDxyVtx);
 
             pat_ref_Phi.addUserFloat("trackNegDzVtx",negTrackDzVtx);
-            pat_ref_Phi.addUserFloat("trackNegDxyVtx",negTrackDzVtx);
+            pat_ref_Phi.addUserFloat("trackNegDxyVtx",negTrackDxyVtx);
 
 
             pat_ref_Phi.addUserFloat("trPos_Chi2", kaonPosCand_fromFit->chiSquared());
@@ -657,7 +657,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             pat_ref_Phi.addUserFloat("VProb", trktrkVProb);
             pat_ref_Phi.addUserFloat("Chi2",  trktrkChi2);
-            pat_ref_Phi.addUserFloat("NDof",  trktrkNDof)
+            pat_ref_Phi.addUserFloat("NDof",  trktrkNDof);
 
             AlgebraicVector3 TrTr_v3pperp ;
             TrTr_v3pperp[0] = TrTr_pperp.x(); TrTr_v3pperp[1] = TrTr_pperp.y(); TrTr_v3pperp[2] = 0.;

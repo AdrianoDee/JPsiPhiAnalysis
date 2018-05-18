@@ -228,7 +228,7 @@ private:
   double MuMaxD0_;
   bool TriggerCut_;
 
-  std::vector<string> HLTFilters_, FiltersForMatching_;
+  std::vector<string> HLTPaths_, FiltersForMatching_;
   bool Debug_;
 
 };
