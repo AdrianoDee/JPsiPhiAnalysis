@@ -214,7 +214,7 @@ private:
 
   edm::InputTag inputGEN_;
   std::string vtxSample_;
-  std::vector<double> jspiMassCuts_,psiMassCuts_;
+  std::vector<double> phiMassCuts_;
   bool doData_, doMC_,addCommonVertex_,resolveAmbiguity_,addMCTruth_;
   int  MCParticle_;
   bool MCExclusiveDecay_;

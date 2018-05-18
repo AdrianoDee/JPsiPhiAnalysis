@@ -49,8 +49,7 @@ hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
 vtxSample_(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
 
-jspiMassCuts_(iConfig.getParameter<std::vector<double>>("JPsiMassCuts")),
-psiMassCuts_(iConfig.getParameter<std::vector<double>>("PsiMassCuts")),
+phiMassCuts_(iConfig.getParameter<std::vector<double>>("PhiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
 doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
@@ -461,7 +460,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
         if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
-        float posTrackDzVtx, posTrackDxyVtx, trackNegDzVtx, trackNegDxyVtx;
+        float posTrackDzVtx, posTrackDxyVtx, negTrackDzVtx, negTrackDxyVtx;
 
         /// get TrTr cands
         for ( std::vector<pat::GenericParticle>::const_iterator trackPos = theKaonRefittedPATTrackHandle->begin(); trackPos != theKaonRefittedPATTrackHandle->end(); ++trackPos ) {
@@ -571,7 +570,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
 
             ////////////////// fill the KK vectors //////////////////
-            if (KKCand_fromFit->currentState().mass() < KKMinMass  ||  KKCand_fromFit->currentState().mass() > KKMaxMass)
+            if (KKCand_fromFit->currentState().mass() < phiMassCuts_[0]  ||  KKCand_fromFit->currentState().mass() > phiMassCuts_[1])
             continue ;
 
             float ditrack_ma_fit = KKCand_fromFit->currentState().mass();
