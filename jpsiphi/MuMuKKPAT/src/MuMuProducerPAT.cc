@@ -115,7 +115,7 @@ UInt_t MuMuProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
   UInt_t trigger = 0;
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
+  iEvent.getByLabel( hlTriggerResults_ , triggerResults_handle);
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
