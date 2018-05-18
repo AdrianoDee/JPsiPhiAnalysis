@@ -3,7 +3,7 @@
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
 //
-// Description: Dimuon(mu+ mu-)  producer
+// Description: dimuonCand(mu+ mu-)  producer
 //
 // Author:  Adriano Di Florio
 //    based on : Alberto Sanchez Hernandez Onia2MuMu code
@@ -129,7 +129,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
-  dimuon_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
+  dimuon_tree = fs->make < TTree > ("dimuonTree", "Tree of dimuonCand");
 
   dimuon_tree->Branch("run",      &run,      "run/i");
   dimuon_tree->Branch("event",    &event,    "event/l");
@@ -178,7 +178,7 @@ Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
     dimuon_tree->Branch("muPos_NDF",   &muPos_NDF,   "muPos_NDF/D");
     dimuon_tree->Branch("muNeg_Chi2",  &muNeg_Chi2,  "muNeg_Chi2/D");
     dimuon_tree->Branch("muNeg_NDF",   &muNeg_NDF,   "muNeg_NDF/D");
-    dimuon_tree->Branch("VProb",  &VProb,  "VProb/D");
+    dimuon_tree->Branch("vProb",  &vProb,  "vProb/D");
     dimuon_tree->Branch("Chi2",   &Chi2,   "Chi2/D");
     dimuon_tree->Branch("NDof",   &NDof,   "NDof/D");
 
@@ -208,7 +208,7 @@ Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+     std::cout << "DiMuonRootupler::DiMuonRootupler: dimuonCand id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
@@ -367,9 +367,9 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           // DCA = -1.;
           // if (dimuonCand->hasUserFloat("DCA"))  DCA = dimuonCand->userFloat("DCA");
 
-          deltaRMuMu = dimuon->userFloat("deltaR");
+          deltaRMuMu = dimuonCand->userFloat("deltaR");
           mass = dimuon_p4.M();
-          mass_unref = dimuon->userFloat("mumuP4");
+          mass_unref = dimuonCand->userFloat("mumuP4");
 
           reco::Candidate::LorentzVector unrefMuMu = dimuonCand->daughter("mumuCandidate")->p4();
 
@@ -381,55 +381,55 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           muonP_ref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_ref_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
-          nMatchedStationsPos = dimuon->userInt("nMatchedStationsPos");
-          nOverlapMusPos =  dimuon->userInt("nOverlapMusPos");
-          nSharingSegWithPos =  dimuon->userInt("nSharingSegWithPos");
+          nMatchedStationsPos = dimuonCand->userInt("nMatchedStationsPos");
+          nOverlapMusPos =  dimuonCand->userInt("nOverlapMusPos");
+          nSharingSegWithPos =  dimuonCand->userInt("nSharingSegWithPos");
 
-          nMatchedStationsNeg = dimuon->userInt("nMatchedStationsNeg");
-          nOverlapMusNeg =  dimuon->userInt("nOverlapMusNeg");
-          nSharingSegWithNeg =  dimuon->userInt("nSharingSegWithNeg");
+          nMatchedStationsNeg = dimuonCand->userInt("nMatchedStationsNeg");
+          nOverlapMusNeg =  dimuonCand->userInt("nOverlapMusNeg");
+          nSharingSegWithNeg =  dimuonCand->userInt("nSharingSegWithNeg");
 
-          posMuonTrackType =  dimuon->userInt("posMuonTrackType");
-          posMuonType = dimuon->userInt("posMuonType");
+          posMuonTrackType =  dimuonCand->userInt("posMuonTrackType");
+          posMuonType = dimuonCand->userInt("posMuonType");
 
-          posMuonDzVtx =  dimuon->userFloat("posMuonDzVtx");
-          posMuonDxyVtx = dimuon->userFloat("posMuonDxyVtx");
+          posMuonDzVtx =  dimuonCand->userFloat("posMuonDzVtx");
+          posMuonDxyVtx = dimuonCand->userFloat("posMuonDxyVtx");
 
-          negMuonTrackType =  dimuon->userInt("negMuonTrackType");
-          negMuonType = dimuon->userInt("negMuonType");
+          negMuonTrackType =  dimuonCand->userInt("negMuonTrackType");
+          negMuonType = dimuonCand->userInt("negMuonType");
 
-          negMuonDzVtx = dimuon->userFloat("negMuonDzVtx");
-          negMuonDxyVtx = dimuon->userFloat("negMuonDxyVtx");
-          muPos_Chi2 = dimuon->userFloat("muPos_Chi2");
-          muPos_NDF = dimuon->userFloat("muPos_NDF");
-          muNeg_Chi2 = dimuon->userFloat("muNeg_Chi2");
-          muNeg_NDF = dimuon->userFloat("muNeg_NDF");
+          negMuonDzVtx = dimuonCand->userFloat("negMuonDzVtx");
+          negMuonDxyVtx = dimuonCand->userFloat("negMuonDxyVtx");
+          muPos_Chi2 = dimuonCand->userFloat("muPos_Chi2");
+          muPos_NDF = dimuonCand->userFloat("muPos_NDF");
+          muNeg_Chi2 = dimuonCand->userFloat("muNeg_Chi2");
+          muNeg_NDF = dimuonCand->userFloat("muNeg_NDF");
 
-          VProb = dimuon->userFloat("VProb");
-          Chi2 = dimuon->userFloat("Chi2");
-          NDof = dimuon->userFloat("NDof");
+          vProb = dimuonCand->userFloat("vProb");
+          Chi2 = dimuonCand->userFloat("Chi2");
+          NDof = dimuonCand->userFloat("NDof");
 
-          cosAlpha = dimuon->userFloat("cosAlpha");
-          cosAlpha3D = dimuon->userFloat("cosAlpha3D");
-          ctau = dimuon->userFloat("ctau");
-          ctauErr = dimuon->userFloat("ctauErr");
-          lxy = dimuon->userFloat("lxy");
-          lxyErr = dimuon->userFloat("lxyErr");
-          lxyz = dimuon->userFloat("lxyz");
-          lxyzErr = dimuon->userFloat("lxyzErr");
+          cosAlpha = dimuonCand->userFloat("cosAlpha");
+          cosAlpha3D = dimuonCand->userFloat("cosAlpha3D");
+          ctau = dimuonCand->userFloat("ctau");
+          ctauErr = dimuonCand->userFloat("ctauErr");
+          lxy = dimuonCand->userFloat("lxy");
+          lxyErr = dimuonCand->userFloat("lxyErr");
+          lxyz = dimuonCand->userFloat("lxyz");
+          lxyzErr = dimuonCand->userFloat("lxyzErr");
 
-          cosAlphaBS =  dimuon->userFloat("cosAlphaBS");
-          cosAlpha3DBS =  dimuon->userFloat("cosAlpha3DBS");
-          ctauBS =  dimuon->userFloat("ctauBS");
-          ctauErrBS = dimuon->userFloat("ctauErrBS");
-          lxyBS = dimuon->userFloat("lxyBS");
-          lxyErrBS =  dimuon->userFloat("lxyErrBS");
-          lxyzBS =  dimuon->userFloat("lxyzBS");
-          lxyzErrBS = dimuon->userFloat("lxyzErrBS");
+          cosAlphaBS =  dimuonCand->userFloat("cosAlphaBS");
+          cosAlpha3DBS =  dimuonCand->userFloat("cosAlpha3DBS");
+          ctauBS =  dimuonCand->userFloat("ctauBS");
+          ctauErrBS = dimuonCand->userFloat("ctauErrBS");
+          lxyBS = dimuonCand->userFloat("lxyBS");
+          lxyErrBS =  dimuonCand->userFloat("lxyErrBS");
+          lxyzBS =  dimuonCand->userFloat("lxyzBS");
+          lxyzErrBS = dimuonCand->userFloat("lxyzErrBS");
 
-          invalidMu = dimuon->userFloat("isEventWithInvalidMu");
-          dimuonType = dimuon->userInt("dimuonType");
-          isTriggerMatched = dimuon->userInt("isTriggerMatched");
+          invalidMu = dimuonCand->userFloat("isEventWithInvalidMu");
+          dimuonType = dimuonCand->userInt("dimuonType");
+          isTriggerMatched = dimuonCand->userInt("isTriggerMatched");
 
           // pat_ref_JPsi.addUserData("muonlessPV");
 
