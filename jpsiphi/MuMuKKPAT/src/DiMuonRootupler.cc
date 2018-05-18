@@ -125,8 +125,8 @@ DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
-Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
+HLTs_(iConfig.getUntrackedParameter<std::vector<std::string>>("HLTs")),
+Filters_(iConfig.getUntrackedParameter<std::vector<std::string>>("Filters"))
 {
   edm::Service < TFileService > fs;
   dimuon_tree = fs->make < TTree > ("dimuonTree", "Tree of dimuonCand");
