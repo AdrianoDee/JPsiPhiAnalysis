@@ -53,7 +53,7 @@ jspiMassCuts_(iConfig.getParameter<std::vector<double>>("JPsiMassCuts")),
 psiMassCuts_(iConfig.getParameter<std::vector<double>>("PsiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
-doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", true) ),
+doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", false) ),
 
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
