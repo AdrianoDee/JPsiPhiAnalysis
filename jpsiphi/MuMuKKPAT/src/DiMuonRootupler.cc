@@ -373,10 +373,10 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
           reco::Candidate::LorentzVector unrefMuMu = dimuonCand->daughter("mumuCandidate")->p4();
 
-          dimuon_unref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
+          dimuon_unref_p4.SetPtEtaPhiM(unrefMuMu.pt(),unrefMuMu.eta(),unrefMuMu.phi(),unrefMuMu.mass());
 
-          vP = dimuonCand->daughter("ref_muonNeg")->p4();
-          vM = dimuonCand->daughter("ref_muonPos")->p4();
+          vM = dimuonCand->daughter("ref_muonNeg")->p4();
+          vP = dimuonCand->daughter("ref_muonPos")->p4();
 
           muonP_ref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_ref_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
