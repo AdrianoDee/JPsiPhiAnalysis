@@ -257,7 +257,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
                          )
 
-process.psitomumu = cms.EDProducer("DiMuonRootupler",
+process.rootuplemumu = cms.EDProducer("DiMuonRootupler",
                                  dimuons = cms.untracked.InputTag("genParticles"),
                                  primaryVertices = cms.untracked.InputTag("genParticles"),
                                  TriggerResults = cms.untracked.InputTag("genParticles"),
@@ -334,7 +334,8 @@ process.ntup = cms.Path(
         * process.patDefaultSequence
         * process.patMuonsWithTriggerSequence
         * process.PATfilter
-        * process.mkcands
+        * process.psitomumu
+        * process.rootuplemumu
 )
 
 process.schedule = cms.Schedule(process.ntup)
