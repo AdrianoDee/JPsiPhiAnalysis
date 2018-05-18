@@ -266,7 +266,7 @@ process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  dimuon_mass_cuts = cms.vdouble((2.95,3.25)),
                                  isMC = cms.bool( True ),
                                  OnlyBest = cms.bool( True ),
-                                 OnlyGen = cms.bool( True ),
+                                 OnlyGen = cms.bool( False ),
                                  TriggersForMatching = cms.untracked.vstring(
                                          #2012 displaced J/psi = Alessandra
                                          "HLT_DoubleMu4_Jpsi_Displaced",
