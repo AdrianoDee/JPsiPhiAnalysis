@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-MC = false
+MC = False
 process = cms.Process('NTUPLE')
 
 process.options = cms.untracked.PSet(
