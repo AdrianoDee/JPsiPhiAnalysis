@@ -259,7 +259,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
 process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  dimuons = cms.untracked.string("DiMuonCandidates"),
-                                 primaryVertices = cms.untracked.InputTag("genParticles"),
+                                 primaryVertices  = cms.untracked.string('offlinePrimaryVertices'),
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
 
                                  dimuon_pdgid = cms.uint32( 511 ),
