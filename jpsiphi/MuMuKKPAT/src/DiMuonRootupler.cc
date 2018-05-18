@@ -434,9 +434,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           // pat_ref_JPsi.addUserData("muonlessPV");
 
           charge = dimuonCand->charge();
-          TVector3 pperp(dimuonCand->px(),dimuonCand->py(),0);
-          lxyPV = ppdlPV * pperp.Perp() / dimuonCand->mass();
-          lxyBS = ppdlBS * pperp.Perp() / dimuonCand->mass();
+
           ndimuon++;
           if (OnlyBest_) break;
           else {
