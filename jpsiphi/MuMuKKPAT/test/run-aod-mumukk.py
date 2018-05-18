@@ -262,7 +262,7 @@ process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  primaryVertices = cms.untracked.InputTag("genParticles"),
                                  TriggerResults = cms.untracked.InputTag("genParticles"),
 
-                                 dimuon_pdgid = cms.int32( 511 ),
+                                 dimuon_pdgid = cms.uint32( 511 ),
                                  dimuon_mass_cuts = cms.vdouble((2.95,3.25)),
                                  isMC = cms.bool( True ),
                                  OnlyBest = cms.bool( True ),
