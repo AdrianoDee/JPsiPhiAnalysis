@@ -257,7 +257,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
                          )
 
-process.rootuplemumu = cms.EDProducer("DiMuonRootupler",
+process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  dimuons = cms.untracked.InputTag("genParticles"),
                                  primaryVertices = cms.untracked.InputTag("genParticles"),
                                  TriggerResults = cms.untracked.InputTag("genParticles"),
