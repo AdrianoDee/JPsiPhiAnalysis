@@ -657,13 +657,12 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             RefCountedKinematicTree MuMuVertexFitTree;
             MuMuVertexFitTree = MuMuFitter.fit(muons);
 
+            if (!MuMuVertexFitTree->isValid())
+            continue ;
 
             MuMuVertexFitTree->movePointerToTheTop();
             RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
             RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
-
-            if (!MuMuVertexFitTree->isValid())
-            continue ;
 
             float mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
 
