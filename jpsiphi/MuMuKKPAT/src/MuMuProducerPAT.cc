@@ -80,7 +80,7 @@ Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
   // revtxbs_ = "offlineBeamSpot";
   // genCands_ = "genParticles";
 
-  produces<pat::CompositeCandidateCollection>();
+  produces<pat::CompositeCandidateCollection>("DiMuonCandidates");
 
   /// now do what ever initialization is needed
 
@@ -166,34 +166,33 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   bool decayChainOK = false;
 
-  bool hasRequestedTrigger = false;
   ESHandle<MagneticField> bFieldHandle;
   iSetup.get<IdealMagneticFieldRecord>().get(bFieldHandle);
 
-  // /// first get HLT results
-  // unsigned int triggerBit = -1;
-  //
-  // std::map<string,int> HLTPreScaleMap;
-  // edm::Handle<edm::TriggerResults> hltresults;
-  // try {
-  //   iEvent.getByLabel(hlTriggerResults_, hltresults);
-  // }
-  // catch ( ... ) {
-  //   std::cout << "Couldn't get handle on HLT Trigger!" << std::endl;
-  // }
-  // if (!hltresults.isValid()) {
-  //   std::cout << "No Trigger Results!" << std::endl;
-  // }
-  // else {
-  //
-  //   int ntrigs = hltresults->size();
-  //
-  //   if (ntrigs==0)
-  //     std::cout << "No trigger name given in TriggerResults of the input " << std::endl;
-  //
-  //   triggerBit = getTriggerBits(iEvent);
-  //
-  // } /// end valid trigger
+  /// first get HLT results
+  unsigned int triggerBit = -1;
+
+  std::map<string,int> HLTPreScaleMap;
+  edm::Handle<edm::TriggerResults> hltresults;
+  try {
+    iEvent.getByLabel(hlTriggerResults_, hltresults);
+  }
+  catch ( ... ) {
+    std::cout << "Couldn't get handle on HLT Trigger!" << std::endl;
+  }
+  if (!hltresults.isValid()) {
+    std::cout << "No Trigger Results!" << std::endl;
+  }
+  else {
+
+    int ntrigs = hltresults->size();
+
+    if (ntrigs==0)
+      std::cout << "No trigger name given in TriggerResults of the input " << std::endl;
+
+    triggerBit = getTriggerBits(iEvent);
+
+  } /// end valid trigger
 
 
   Vertex thePrimaryVtx, theBeamSpotVtx;
@@ -255,6 +254,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   Handle< std::vector<pat::Muon> > thePATMuonHandle;
   iEvent.getByLabel("patMuonsWithTrigger", thePATMuonHandle);
 
+  Handle< std::vector<pat::GenericParticle> > thePATTrackHandle;
+  iEvent.getByLabel("cleanPatTrackCands", thePATTrackHandle);
 
   /// /// /// /// /// /// /// /// /// /// /// /// /// ///
   /// MC Truth
@@ -446,10 +447,10 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
-    if ((thePATMuonHandle->size()) > 10000)
+    if ((thePATMuonHandle->size() > 10000) || (thePATTrackHandle->size() > 10000))
       std::cout << "Too many Muons: " << thePATMuonHandle->size() << std::endl;
     else //if (thePATMuonHandle->size() >= 2) { // check
-      if (thePATMuonHandle->size() >= 2  && (hasRequestedTrigger || !TriggerCut_)) {
+      if (thePATMuonHandle->size() >= 2  && (triggerBit > 0 || !TriggerCut_)) {
 
         if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
@@ -658,6 +659,13 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (!MuMuVertexFitTree->isValid())
             continue ;
 
+            float mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
+
+            if (mumuVProb < 0.001)
+            continue;
+
+            float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
+
             MuMuVertexFitTree->movePointerToTheTop();
             RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
             RefCountedKinematicVertex mumuCandidate_vertex_fromFit = MuMuVertexFitTree->currentDecayVertex();
@@ -669,13 +677,6 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             float dimuon_vx_fit = mumuCandidate_vertex_fromFit->position().x();
             float dimuon_vy_fit = mumuCandidate_vertex_fromFit->position().y();
             float dimuon_vz_fit = mumuCandidate_vertex_fromFit->position().z();
-
-            float mumuVProb = ChiSquaredProbability((float)( mumuCandidate_vertex_fromFit->chiSquared()),(float)( mumuCandidate_vertex_fromFit->degreesOfFreedom()));
-
-            if (mumuVProb < 0.001)
-            continue;
-
-            float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
 
             ////////////////// fill the MuMu vectors //////////////////
 

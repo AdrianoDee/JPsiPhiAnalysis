@@ -1222,11 +1222,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
               if (KKCand_fromFit->currentState().mass() < KKMinMass  ||  KKCand_fromFit->currentState().mass() > KKMaxMass)
               continue ;
 
-              float ditrack_ma_fit = MuMuCand_fromFit->currentState().mass();
-              int   ditrack_ch_fit = MuMuCand_fromFit->currentState().particleCharge();
-              float ditrack_px_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().x();
-              float ditrack_py_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().y();
-              float ditrack_pz_fit = MuMuCand_fromFit->currentState().kinematicParameters().momentum().z();
+              float ditrack_ma_fit = KKCand_fromFit->currentState().mass();
+              int   ditrack_ch_fit = KKCand_fromFit->currentState().particleCharge();
+              float ditrack_px_fit = KKCand_fromFit->currentState().kinematicParameters().momentum().x();
+              float ditrack_py_fit = KKCand_fromFit->currentState().kinematicParameters().momentum().y();
+              float ditrack_pz_fit = KKCand_fromFit->currentState().kinematicParameters().momentum().z();
               float ditrack_en_fit = sqrt(ditrack_ma_fit*ditrack_ma_fit+ditrack_px_fit*ditrack_px_fit+ditrack_py_fit*ditrack_py_fit+ditrack_pz_fit*ditrack_pz_fit);
 
               reco::CompositeCandidate reco_ref_Phi(ditrack_ch_fit,math::XYZTLorentzVector(ditrack_px_fit,ditrack_py_fit,ditrack_pz_fit,ditrack_en_fit),
@@ -1249,11 +1249,11 @@ if ( (doMC && !MCExclusiveDecay) || (doMC && (MCExclusiveDecay && decayChainOK))
 
               if (Debug_) std::cout << "POINT 24" <<std::endl;
 
-              float kaonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
-              int   kaonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
-              float kaonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
-              float kaonNeg_py_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().y();
-              float kaonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
+              float kaonNeg_ma_fit = kaonNegCand_fromFit->currentState().mass();
+              int   kaonNeg_ch_fit = kaonNegCand_fromFit->currentState().particleCharge();
+              float kaonNeg_px_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().x();
+              float kaonNeg_py_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().y();
+              float kaonNeg_pz_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().z();
               float kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
 
               reco::CompositeCandidate reco_ref_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
