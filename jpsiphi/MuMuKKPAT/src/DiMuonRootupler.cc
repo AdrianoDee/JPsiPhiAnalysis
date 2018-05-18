@@ -86,11 +86,11 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
 
-  Float_t mumuVProb, mumuChi2, mumuNDof, invalidMu;
+  Float_t invalidMu;
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
   Float_t posMuonDzVtx, posMuonDxyVtx, negMuonTrackType, negMuonType, negMuonDzVtx, negMuonDxyVtx;
-  Float_t muPos_Chi2, muPos_NDF, muNeg_Chi2, muNeg_NDF, mumuVProb, mumuChi2, mumuNDof;
+  Float_t muPos_Chi2, muPos_NDF, muNeg_Chi2, muNeg_NDF, VProb, Chi2, NDof;
 
   Int_t nMatchedStationsPos, nOverlapMusPos, nSharingSegWithPos, nMatchedStationsNeg, nOverlapMusNeg;
   Int_t nSharingSegWithNeg, posMuonTrackType, posMuonType, negMuonTrackType, negMuonType;
@@ -352,7 +352,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           MassErr = -1.0;
 
           vProb = dimuonCand->userFloat("vProb");
-          DCA = -1.;
+          // DCA = -1.;
           if (dimuonCand->hasUserFloat("DCA"))  DCA = dimuonCand->userFloat("DCA");
 
           mumuCandidate.addDaughter(*posMuon, "posMuon");
@@ -391,9 +391,9 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           muNeg_Chi2 = dimuon->userFloat("muNeg_Chi2");
           muNeg_NDF = dimuon->userFloat("muNeg_NDF");
 
-          mumuVProb = dimuon->userFloat("VProb");
-          mumuChi2 = dimuon->userFloat("Chi2");
-          mumuNDof = dimuon->userFloat("NDof");
+          VProb = dimuon->userFloat("VProb");
+          Chi2 = dimuon->userFloat("Chi2");
+          NDof = dimuon->userFloat("NDof");
 
           cosAlpha = dimuon->userFloat("cosAlpha");
           cosAlpha3D = dimuon->userFloat("cosAlpha3D");
