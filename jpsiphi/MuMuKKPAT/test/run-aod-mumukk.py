@@ -215,7 +215,7 @@ process.PATfilter = cms.EDFilter("X4140FilterPAT")
 ##The Producers
 
 process.psitomumu = cms.EDProducer("MuMuProducerPAT",
-                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
+                                 HLTriggerResults = cms.untracked.InputTag("DiMuonCandidates"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
 
@@ -223,6 +223,66 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
                                  PsiMassCuts = cms.untracked.vdouble((3.45,3.85)),
 
                                  DoDataAnalysis = = cms.untracked.bool( True ),
+                                 DoMonteCarloTree = cms.untracked.bool( False ),
+
+                                 addCommonVertex = cms.untracked.bool( False ),
+                                 resolvePileUpAmbiguity = cms.untracked.bool( False ),
+                                 addMuMulessPrimaryVertex = cms.untracked.bool( True ),
+
+                                 addMCTruth = cms.untracked.bool( False ),
+                                 MonteCarloParticleId = cms.untracked.int32(20443),
+                                 MonteCarloExclusiveDecay = cms.untracked.bool( False ),
+                                 MonteCarloMotherId = cms.untracked.int32( 511 ),
+                                 MonteCarloDaughtersN = cms.untracked.int32( 3 ), # 3 for exclusive B0->psi'KPi
+
+                                 MinNumMuPixHits = cms.untracked.int32(1),
+                                 MinNumMuSiHits = cms.untracked.int32(8),
+                                 MaxMuNormChi2 = cms.untracked.double(7),
+                                 MaxMuD0 = cms.untracked.double(10.0),
+
+                                 Debug_Output = cms.untracked.bool(True), # true
+                                 ##
+                                 ##  use the correct trigger path
+                                 ##
+                                 TriggersForMatching = cms.untracked.vstring(
+                                         #2012 displaced J/psi = Alessandra
+                                         "HLT_DoubleMu4_Jpsi_Displaced",
+                    					 "HLT_Dimuon8_Jpsi",
+                                 ),
+
+                                 FiltersForMatching = cms.untracked.vstring(
+                                         "hltDisplacedmumuFilterDoubleMu4Jpsi",
+                                         "hltVertexmumuFilterDimuon8Jpsi")
+
+                         )
+
+process.psitomumu = cms.EDProducer("DiMuonRootupler",
+                                 dimuons = cms.untracked.InputTag("genParticles"),
+                                 primaryVertices = cms.untracked.InputTag("genParticles"),
+                                 TriggerResults = cms.untracked.InputTag("genParticles"),
+
+                                 dimuon_pdgid = cms.untracked.int32( 511 ),
+                                 dimuon_mass_cuts = cms.untracked.vdouble((2.95,3.25)),
+                                 isMC = cms.untracked.bool( True ),
+                                 OnlyBest = cms.untracked.bool( True ),
+                                 OnlyGen = cms.untracked.bool( True ),
+                                 HLTs = cms.untracked.vstring(
+                                         #2012 displaced J/psi = Alessandra
+                                         "HLT_DoubleMu4_Jpsi_Displaced",
+                    					 "HLT_Dimuon8_Jpsi",
+                                 ),
+                                 Filters = cms.untracked.vstring(
+                                         "hltDisplacedmumuFilterDoubleMu4Jpsi",
+                                         "hltVertexmumuFilterDimuon8Jpsi")
+
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
+                                 inputGEN  = cms.untracked.InputTag("genParticles"),
+                                 VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
+
+                                 JPsiMassCuts = cms.untracked.vdouble((2.95,3.25)),
+                                 PsiMassCuts = cms.untracked.vdouble((3.45,3.85)),
+
+                                 DoDataAnalysis = cms.untracked.bool( True ),
                                  DoMonteCarloTree = cms.untracked.bool( False ),
 
                                  addCommonVertex = cms.untracked.bool( False ),
@@ -255,7 +315,6 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
                                          "hltVertexmumuFilterDimuon8Jpsi")
 
                          )
-
 
 process.TFileService = cms.Service("TFileService",
     fileName = cms.string('set_below.root')

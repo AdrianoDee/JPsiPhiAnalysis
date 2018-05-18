@@ -63,7 +63,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	std::string file_name;
 	std::string dimuon_Label;
   std::string primaryVertices_Label;
-  std::string triggerResults_Label;
+  std::string hlTriggerResults;
   int  pdgid_;
   std::vector<double> DimuonMassCuts_;
 	bool isMC_;
@@ -117,9 +117,9 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 //
 
 DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
-dimuon_Label(iConfig.getParameter<std::string>("dimuons")),
-primaryVertices_Label(iConfig.getParameter<std::string>("primaryVertices")),
-triggerResults_Label(iConfig.getParameter<std::string>("TriggerResults")),
+dimuon_Label(iConfig.getUntrackedParameter<std::string>("dimuons")),
+primaryVertices_Label(iConfig.getUntrackedParameter<std::string>("primaryVertices_Label",std::string("offlinePrimaryVertices"))),
+hlTriggerResults(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
 isMC_(iConfig.getParameter<bool>("isMC")),
@@ -253,7 +253,7 @@ UInt_t DiMuonRootupler::getTriggerBits(const edm::Event& iEvent ) {
   UInt_t trigger = 0;
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
+  iEvent.getByLabel( hlTriggerResults , triggerResults_handle);
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
