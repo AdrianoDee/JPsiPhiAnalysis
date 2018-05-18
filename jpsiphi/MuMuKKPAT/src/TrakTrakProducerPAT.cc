@@ -470,14 +470,14 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
           if (trackPos->charge()<=0.0) continue;
 
-          if (trackPos->pt()<=0.5) continue;
+          if (trackPos->pt()<=0.7) continue;
 
-          if ( !(trackPos->hitPattern().trackerLayersWithMeasurement()) ) {
+          if ( !(trackPos->track()->hitPattern().trackerLayersWithMeasurement()) ) {
             isEventWithInvalidTrack = true;
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
             continue ;
           }
-          if ( !(trackPos->hitPattern().pixelLayersWithMeasurement()) ) {
+          if ( !(trackPos->track()->hitPattern().pixelLayersWithMeasurement()) ) {
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
             isEventWithInvalidTrack = true;
             continue ;
@@ -504,17 +504,14 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             if(trackNeg->charge() >= 0) continue ;
 
-            if(trackNeg->pt() <= 0.5) continue ;
+            if(trackNeg->pt() <= 0.7) continue ;
 
-            if ((trackNeg->track()->chi2() / trackNeg->track()->ndof() > TrMaxNormChi2)  ||  trackNeg->pt() < TrMinPt)
-            continue;
-
-            if ( !(trackNeg->hitPattern().trackerLayersWithMeasurement()) ) {
+            if ( !(trackNeg->track()->hitPattern().trackerLayersWithMeasurement()) ) {
               isEventWithInvalidTrack = true;
               if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
               continue ;
             }
-            if ( !(trackNeg->hitPattern().pixelLayersWithMeasurement()) ) {
+            if ( !(trackNeg->track()->hitPattern().pixelLayersWithMeasurement()) ) {
               if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with pixelLayersWithMeasurement" <<std::endl;
               isEventWithInvalidTrack = true;
               continue ;
@@ -551,16 +548,17 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             if (!KKVertexFitTree->isValid())
             continue ;
 
-            float trktrkVProb = ChiSquaredProbability((float)( trktrkCandidate_vertex_fromFit->chiSquared()),(float)( trktrkCandidate_vertex_fromFit->degreesOfFreedom()));
+            KKVertexFitTree->movePointerToTheTop();
+            RefCountedKinematicParticle KKCand_fromFit = KKVertexFitTree->currentParticle();
+            RefCountedKinematicVertex KKCand_vertex_fromFit = KKVertexFitTree->currentDecayVertex();
+
+            float trktrkVProb = ChiSquaredProbability((float)( KKCand_vertex_fromFit->chiSquared()),(float)( KKCand_vertex_fromFit->degreesOfFreedom()));
 
             if (trktrkVProb < 0.001)
             continue;
 
-            float trktrkChi2 = trktrkCandidate_vertex_fromFit->chiSquared();
-
-            KKVertexFitTree->movePointerToTheTop();
-            RefCountedKinematicParticle KKCand_fromFit = KKVertexFitTree->currentParticle();
-            RefCountedKinematicVertex KKCand_vertex_fromFit = KKVertexFitTree->currentDecayVertex();
+            float trktrkChi2 = KKCand_vertex_fromFit->chiSquared();
+            float trktrkNDof = KKCand_vertex_fromFit->degreesOfFreedom();
 
             KKVertexFitTree->movePointerToTheFirstChild();
             RefCountedKinematicParticle kaonPosCand_fromFit = KKVertexFitTree->currentParticle();
@@ -661,6 +659,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             pat_ref_Phi.addUserFloat("VProb", trktrkVProb);
             pat_ref_Phi.addUserFloat("Chi2",  trktrkChi2);
+            pat_ref_Phi.addUserFloat("NDof",  trktrkNDof)
 
             AlgebraicVector3 TrTr_v3pperp ;
             TrTr_v3pperp[0] = TrTr_pperp.x(); TrTr_v3pperp[1] = TrTr_pperp.y(); TrTr_v3pperp[2] = 0.;

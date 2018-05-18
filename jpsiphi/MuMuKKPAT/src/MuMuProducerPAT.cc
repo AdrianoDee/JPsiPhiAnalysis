@@ -665,6 +665,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             continue;
 
             float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
+            float mumuNDof = mumuCandidate_vertex_fromFit->degreesOfFreedom();
 
             MuMuVertexFitTree->movePointerToTheTop();
             RefCountedKinematicParticle mumuCandidate_fromFit = MuMuVertexFitTree->currentParticle();
@@ -771,6 +772,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             pat_ref_JPsi.addUserFloat("VProb", mumuVProb);
             pat_ref_JPsi.addUserFloat("Chi2",  mumuChi2);
+            pat_ref_JPsi.addUserFloat("NDof",  mumuNDof);
 
             AlgebraicVector3 MuMu_v3pperp ;
             MuMu_v3pperp[0] = MuMu_pperp.x(); MuMu_v3pperp[1] = MuMu_pperp.y(); MuMu_v3pperp[2] = 0.;
