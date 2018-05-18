@@ -89,7 +89,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Float_t invalidMu;
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
-  Float_t posMuonDzVtx, posMuonDxyVtx, negMuonTrackType, negMuonType, negMuonDzVtx, negMuonDxyVtx;
+  Float_t posMuonDzVtx, posMuonDxyVtx, negMuonDzVtx, negMuonDxyVtx;
   Float_t muPos_Chi2, muPos_NDF, muNeg_Chi2, muNeg_NDF, VProb, Chi2, NDof;
 
   Int_t nMatchedStationsPos, nOverlapMusPos, nSharingSegWithPos, nMatchedStationsNeg, nOverlapMusNeg;
