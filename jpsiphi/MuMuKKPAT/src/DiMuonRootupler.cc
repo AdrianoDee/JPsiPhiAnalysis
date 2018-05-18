@@ -118,7 +118,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
 DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
 dimuon_Label(iConfig.getUntrackedParameter<std::string>("dimuons")),
-primaryVertices_Label(iConfig.getUntrackedParameter<std::string>("primaryVertices_Label",std::string("offlinePrimaryVertices"))),
+primaryVertices_Label(iConfig.getUntrackedParameter<std::string>("primaryVertices",std::string("offlinePrimaryVertices"))),
 hlTriggerResults(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),

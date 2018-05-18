@@ -216,7 +216,7 @@ process.PATfilter = cms.EDFilter("X4140FilterPAT")
 ##The Producers
 
 process.psitomumu = cms.EDProducer("MuMuProducerPAT",
-                                 HLTriggerResults = cms.untracked.InputTag("DiMuonCandidates"),
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
 
@@ -260,7 +260,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  dimuons = cms.untracked.string("DiMuonCandidates"),
                                  primaryVertices = cms.untracked.InputTag("genParticles"),
-                                 TriggerResults = cms.untracked.InputTag("genParticles"),
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
 
                                  dimuon_pdgid = cms.uint32( 511 ),
                                  dimuon_mass_cuts = cms.vdouble((2.95,3.25)),
