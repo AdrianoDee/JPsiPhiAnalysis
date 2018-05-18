@@ -85,8 +85,11 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 	TLorentzVector dimuon_p4;
 	TLorentzVector muonP_p4;
 	TLorentzVector muonN_p4;
+  TLorentzVector dimuon_unref_p4;
+  TLorentzVector muonP_ref_p4;
+  TLorentzVector muonN_ref_p4;
 
-  Float_t invalidMu;
+  Float_t invalidMu, deltaRMuMu, mass, mass_unref;
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
   Float_t posMuonDzVtx, posMuonDxyVtx, negMuonDzVtx, negMuonDxyVtx;
@@ -138,11 +141,18 @@ Filters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
     dimuon_tree->Branch("trigger",  &trigger,  "trigger/i");
     dimuon_tree->Branch("charge",   &charge,   "charge/I");
 
-    dimuon_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
+    dimuon_tree->Branch("deltaRMuMu",   &deltaRMuMu,   "deltaRMuMu/D");
+
+    dimuon_tree->Branch("mass",   &mass,   "mass/D");
+    dimuon_tree->Branch("mass_unref",   &mass_unref,   "mass_unref/D");
 
     dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
     dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
     dimuon_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
+
+    dimuon_tree->Branch("dimuon_unref_p4", "TLorentzVector", &dimuon_unref_p4);
+    dimuon_tree->Branch("muonP_ref_p4", "TLorentzVector", &muonP_ref_p4);
+    dimuon_tree->Branch("muonN_ref_p4", "TLorentzVector", &muonN_ref_p4);
 
     dimuon_tree->Branch("nMatchedStationsPos",   &nMatchedStationsPos,   "nMatchedStationsPos/I");
     dimuon_tree->Branch("nOverlapMusPos",  &nOverlapMusPos,  "nOverlapMusPos/I");
@@ -293,6 +303,9 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  dimuon_unref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  muonP_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  muonN_ref_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -349,23 +362,24 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
 
           muonP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
-          MassErr = -1.0;
 
           vProb = dimuonCand->userFloat("vProb");
           // DCA = -1.;
-          if (dimuonCand->hasUserFloat("DCA"))  DCA = dimuonCand->userFloat("DCA");
+          // if (dimuonCand->hasUserFloat("DCA"))  DCA = dimuonCand->userFloat("DCA");
 
-          mumuCandidate.addDaughter(*posMuon, "posMuon");
-          mumuCandidate.addDaughter(*negMuon,"negMuon");
+          deltaRMuMu = dimuon->userFloat("deltaR");
+          mass = dimuon_p4.M();
+          mass_unref = dimuon->userFloat("mumuP4");
 
-          dimuon->userFloat("deltaR",deltaRMuMu);
-          dimuon->userFloat("mumuP4",mumuP4.M());
+          reco::Candidate::LorentzVector unrefMuMu = dimuonCand->daughter("mumuCandidate")->p4();
 
-          pat_ref_JPsi.addDaughter(pat_ref_PM, "ref_muonPos");
-          pat_ref_JPsi.addDaughter(pat_ref_NM, "ref_muonNeg");
-          pat_ref_JPsi.addDaughter(mumuCandidate, "mumuCandidate");
-          // pat_ref_JPsi.addDaughter(*pat_ref_PM, "posMuon");
-          // pat_ref_JPsi.addDaughter(*pat_ref_NM, "negMuon");
+          dimuon_unref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
+
+          vP = dimuonCand->daughter("ref_muonNeg")->p4();
+          vM = dimuonCand->daughter("ref_muonPos")->p4();
+
+          muonP_ref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
+          muonN_ref_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
           nMatchedStationsPos = dimuon->userInt("nMatchedStationsPos");
           nOverlapMusPos =  dimuon->userInt("nOverlapMusPos");
