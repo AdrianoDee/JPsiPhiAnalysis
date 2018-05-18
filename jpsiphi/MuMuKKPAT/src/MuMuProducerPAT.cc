@@ -110,32 +110,32 @@ UInt_t MuMuProducerPAT::isTriggerMatched(const pat::Muon* posMuon, const pat::Mu
   return matched;
 }
 
-// UInt_t MuMuProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
-//
-//   UInt_t trigger = 0;
-//
-//   edm::Handle< edm::TriggerResults > triggerResults_handle;
-//   iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
-//
-//   if (triggerResults_handle.isValid()) {
-//      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-//      unsigned int NTRIGGERS = HLTs_.size();
-//
-//      for (unsigned int i = 0; i < NTRIGGERS; i++) {
-//         for (int version = 1; version < 20; version++) {
-//            std::stringstream ss;
-//            ss << HLTs_[i] << "_v" << version;
-//            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
-//            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
-//               trigger += (1<<i);
-//               break;
-//            }
-//         }
-//      }
-//    } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
-//
-//    return trigger;
-// }
+UInt_t MuMuProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
+
+  UInt_t trigger = 0;
+
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
+
+  if (triggerResults_handle.isValid()) {
+     const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
+     unsigned int NTRIGGERS = HLTs_.size();
+
+     for (unsigned int i = 0; i < NTRIGGERS; i++) {
+        for (int version = 1; version < 20; version++) {
+           std::stringstream ss;
+           ss << HLTs_[i] << "_v" << version;
+           unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
+           if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
+              trigger += (1<<i);
+              break;
+           }
+        }
+     }
+   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
+   return trigger;
+}
 
 
 ///
@@ -581,7 +581,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             /// cuts on muon2
             if (recoNegMuon->track()->hitPattern().numberOfValidPixelHits() < MuMinPixHits_
             || recoNegMuon->track()->hitPattern().numberOfValidStripHits() < MuMinSiHits_
-            || recoNegMuon->track()->chi2()/recoPosMuon->track()->ndof() > MuMaxNormChi_
+            || recoNegMuon->track()->chi2()/recoNegMuon->track()->ndof() > MuMaxNormChi_
             || fabs(recoNegMuon->track()->dxy(RefVtx)) > MuMaxD0_)
 
             continue ;

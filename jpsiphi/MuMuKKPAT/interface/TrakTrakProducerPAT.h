@@ -196,6 +196,7 @@ private:
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   std::pair<int, float> findCandMCInfo(reco::GenParticleRef genCand);
+  virtual UInt_t getTriggerBits(const edm::Event& iEvent );
   // virtual double getSigmaOfLogdEdx(double logde);
   // virtual float  getEnergyLoss(const reco::TrackRef & track);
   // virtual double nsigmaofdedx(const reco::TrackRef & track, double & theo, double & sigma);

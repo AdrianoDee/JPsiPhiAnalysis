@@ -193,6 +193,7 @@ private:
 
   virtual UInt_t isTriggerMatched(const pat::Muon* posMuon, const pat::Muon* negMuon);
   virtual int muonTrackType(const reco::Muon * muon);
+  virtual UInt_t getTriggerBits(const edm::Event& iEvent )
 
   InvariantMassFromVertex massCalculator;
 

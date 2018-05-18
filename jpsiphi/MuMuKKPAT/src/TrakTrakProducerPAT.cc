@@ -46,8 +46,6 @@ typedef math::Error<3>::type CovarianceMatrix;
 TrakTrakProducerPAT::TrakTrakProducerPAT(const edm::ParameterSet& iConfig):
 
 hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
-hlTriggerEvent_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerEvent",edm::InputTag("hltTriggerSummaryAOD::HLT")) ),
-
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
 vtxSample_(iConfig.getUntrackedParameter<std::string>("vtxSample_",std::string("offlinePrimaryVertices"))),
 
@@ -95,32 +93,32 @@ TrakTrakProducerPAT::~TrakTrakProducerPAT()
 
 }
 
-// UInt_t TrakTrakProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
-//
-//   UInt_t trigger = 0;
-//
-//   edm::Handle< edm::TriggerResults > triggerResults_handle;
-//   iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
-//
-//   if (triggerResults_handle.isValid()) {
-//      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-//      unsigned int NTRIGGERS = HLTs_.size();
-//
-//      for (unsigned int i = 0; i < NTRIGGERS; i++) {
-//         for (int version = 1; version < 20; version++) {
-//            std::stringstream ss;
-//            ss << HLTs_[i] << "_v" << version;
-//            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
-//            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
-//               trigger += (1<<i);
-//               break;
-//            }
-//         }
-//      }
-//    } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
-//
-//    return trigger;
-// }
+UInt_t TrakTrakProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
+
+  UInt_t trigger = 0;
+
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByLabel( triggerResults_Label , triggerResults_handle);
+
+  if (triggerResults_handle.isValid()) {
+     const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
+     unsigned int NTRIGGERS = HLTs_.size();
+
+     for (unsigned int i = 0; i < NTRIGGERS; i++) {
+        for (int version = 1; version < 20; version++) {
+           std::stringstream ss;
+           ss << HLTs_[i] << "_v" << version;
+           unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
+           if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
+              trigger += (1<<i);
+              break;
+           }
+        }
+     }
+   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
+   return trigger;
+}
 
 
 ///
@@ -226,13 +224,15 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
 
   /// /// /// /// /// /// /// /// /// /// /// /// /// ///
-  /// MUONS
+  /// Paricles
   /// /// /// /// /// /// /// /// /// /// /// /// /// ///
 
   Handle< std::vector<pat::GenericParticle> > thePATTrackHandle;
   iEvent.getByLabel("cleanPatTrackCands", thePATTrackHandle); /// container of tracks with pion mass hypothesis
   Handle< std::vector<pat::GenericParticle> > theKaonRefittedPATTrackHandle;
   iEvent.getByLabel("cleanPatTrackKaonCands", theKaonRefittedPATTrackHandle);
+  Handle< std::vector<pat::Muon> > thePATMuonHandle;
+  iEvent.getByLabel("patMuonsWithTrigger", thePATMuonHandle);
 
   // //Trigger Event for matching NOT USEFULL IN 2012, no track matched
   //
@@ -259,7 +259,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   //   /* code */
   // }
   //
-  // for ( std::vector<pat::GenericParticle>::const_iterator posTrack = theKaonRefittedPATTrackHandle->begin(); posTrack != theKaonRefittedPATTrackHandle->end(); ++posTrack )
+  // for ( std::vector<pat::GenericParticle>::const_iterator trackPos = theKaonRefittedPATTrackHandle->begin(); trackPos != theKaonRefittedPATTrackHandle->end(); ++trackPos )
   // {
   //
   // }
@@ -464,7 +464,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
         float posTrackDzVtx, posTrackDxyVtx, trackNegDzVtx, trackNegDxyVtx;
 
         /// get TrTr cands
-        for ( std::vector<pat::GenericParticle>::const_iterator posTrack = theKaonRefittedPATTrackHandle->begin(); posTrack != theKaonRefittedPATTrackHandle->end(); ++posTrack ) {
+        for ( std::vector<pat::GenericParticle>::const_iterator trackPos = theKaonRefittedPATTrackHandle->begin(); trackPos != theKaonRefittedPATTrackHandle->end(); ++trackPos ) {
 
           if (trackPos->track().isNull()) continue;
 
@@ -491,10 +491,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             continue;
 
-          posTrackDzVtx = recoposTrack->track()->dz(RefVtx);
-          posTrackDxyVtx = recoposTrack->track()->dxy(RefVtx);
-
-          nMatchedStationsPos = recoposTrack->numberOfMatchedStations();
+          posTrackDzVtx = trackPos->track()->dz(RefVtx);
+          posTrackDxyVtx = trackPos->track()->dxy(RefVtx);
 
           ////////////////// check for muon2 //////////////////
           for ( std::vector<pat::GenericParticle>::const_iterator trackNeg = trackPos+1; trackNeg != theKaonRefittedPATTrackHandle->end(); ++trackNeg ){
@@ -524,16 +522,17 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
 
             /// cuts on track 2
-            if (recotrackNeg->track()->hitPattern().numberOfValidPixelHits() < TrMinPixHits_
-                || recotrackNeg->track()->hitPattern().numberOfValidStripHits() < TrMinSiHits_
-                || recotrackNeg->track()->chi2()/recoposTrack->track()->ndof() > TrMaxNormChi_
-                || fabs(recotrackNeg->track()->dxy(RefVtx)) > TrMaxD0_)
+            if (trackNeg->track()->hitPattern().numberOfValidPixelHits() < TrMinPixHits_
+                || trackNeg->track()->hitPattern().numberOfValidStripHits() < TrMinSiHits_
+                || trackNeg->track()->chi2()/trackNeg->track()->ndof() > TrMaxNormChi_
+                || fabs(trackNeg->track()->dxy(RefVtx)) > TrMaxD0_)
 
                 continue;
 
-            trackNegDzVtx = recoposTrack->bestTrackRef()->dz(RefVtx);
-            trackNegDxyVtx = recoposTrack->bestTrackRef()->dxy(RefVtx);
+            trackNegDzVtx = trackNeg->bestTrackRef()->dz(RefVtx);
+            trackNegDxyVtx = trackNeg->bestTrackRef()->dxy(RefVtx);
 
+            //Vertex fit
             TransientTrack kaonPosTT( trackPos->track(), &(*bFieldHandle) );
             TransientTrack kaonNegTT( trackNeg->track(), &(*bFieldHandle) );
             KinematicParticleFactoryFromTransientTrack pFactory;
@@ -622,19 +621,19 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             pat::CompositeCandidate trktrkCandidate;
 
             // ---- define and set candidate's 4momentum  ----
-            ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > trktrk = posTrack->p4() + trackNeg->p4();
+            ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > trktrk = trackPos->p4() + trackNeg->p4();
             TLorentzVector trP, trN,trktrkP4;
 
-            trP.SetXYZM(recoposTrack->bestTrackRef()->px(),recoposTrack->bestTrackRef()->py(),recoposTrack->bestTrackRef()->pz(),kaon_mass);
-            trN.SetXYZM(recotrackNeg->bestTrackRef()->px(),recotrackNeg->bestTrackRef()->py(),recotrackNeg->bestTrackRef()->pz(),kaon_mass);
+            trP.SetXYZM(trackPos->bestTrackRef()->px(),trackPos->bestTrackRef()->py(),trackPos->bestTrackRef()->pz(),kaon_mass);
+            trN.SetXYZM(trackNeg->bestTrackRef()->px(),trackNeg->bestTrackRef()->py(),trackNeg->bestTrackRef()->pz(),kaon_mass);
             // LorentzVector trktrk;
 
             trktrkP4 = trP + trN;
 
             trktrkCandidate.setP4(trktrk);
-            trktrkCandidate.setCharge(recoposTrack->charge() + recotrackNeg->charge());
+            trktrkCandidate.setCharge(trackPos->charge() + trackNeg->charge());
 
-            float deltaRTrTr = reco::deltaR2(recoposTrack->eta(),recoposTrack->phi(),recotrackNeg->eta(),recotrackNeg->phi());
+            float deltaRTrTr = reco::deltaR2(trackPos->eta(),trackPos->phi(),trackNeg->eta(),trackNeg->phi());
 
             trktrkCandidate.addDaughter(*trackPos, "trackPos");
             trktrkCandidate.addDaughter(*trackNeg,"trackNeg");
@@ -748,8 +747,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             // TrTrDecayVtx_YE->push_back( sqrt( KKCand_vertex_fromFit->error().cyy()) );
             // TrTrDecayVtx_ZE->push_back( sqrt( KKCand_vertex_fromFit->error().czz()) );
 
-            // pat_ref_Phi.addUserInt("isTriggerMatchedPos",isTriggerMatched(&(*posTrack),&(*trackNeg)));
-            // pat_ref_Phi.addUserInt("isTriggerMatchedNeg",isTriggerMatched(&(*posTrack),&(*trackNeg)));
+            // pat_ref_Phi.addUserInt("isTriggerMatchedPos",isTriggerMatched(&(*trackPos),&(*trackNeg)));
+            // pat_ref_Phi.addUserInt("isTriggerMatchedNeg",isTriggerMatched(&(*trackPos),&(*trackNeg)));
 
             kaons.clear();
 
