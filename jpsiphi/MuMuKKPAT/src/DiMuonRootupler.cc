@@ -353,10 +353,10 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   bool already_stored = false;
   if ( ! OnlyGen_ ) { // we will look for dimuons, then for muons
     if ( dimuons.isValid() && !dimuons->empty()) {
-      std::Cout << "DiMuon Valid!" << std::endl;
+      std::cout << "DiMuon Valid!" << std::endl;
 
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
-        std::Cout << "DiMuon Size:" << dimuons->size() <<std::endl;
+        std::cout << "DiMuon Size:" << dimuons->size() <<std::endl;
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
 
