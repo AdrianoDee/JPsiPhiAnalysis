@@ -936,6 +936,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
       //std::cout << "MuMu candidates count : " << oniaOutput->size() << std::endl;
       //iEvent.put(std::move(oniaOutput));
+      if(Debug_) std::cout << "No. dimuons: " << oniaOutput->size() << std::endl;
       iEvent.put( oniaOutput, "DiMuonCandidates" );
 
     }
