@@ -523,6 +523,7 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
           int nOverlapMus = 0, nSharingSegWith = -1;
           int nSegments1 = recoPosMuon->numberOfMatches(reco::Muon::SegmentArbitration);
 
+          if(Debug_) std::cout << "Good positive muon - ";
           for ( std::vector<pat::Muon>::const_iterator otherMuon = posMuon+1; otherMuon != thePATMuonHandle->end(); ++otherMuon) {
 
             const reco::Muon* recoOtherMuon = dynamic_cast<const reco::Muon*>(otherMuon->originalObject());
@@ -619,6 +620,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             nOverlapMusNeg = nOverlapMus;
             nSharingSegWithNeg = nSharingSegWith;
 
+            if(Debug_) std::cout << "Good negative muon " << std::endl;
+
             pat::CompositeCandidate mumuCandidate;
 
             // ---- define and set candidate's 4momentum  ----
@@ -664,6 +667,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (mumuVProb < 0.001)
             continue;
 
+            if(Debug_) std::cout << " = Vprob good!" <<std::endl;
+
             float mumuChi2 = mumuCandidate_vertex_fromFit->chiSquared();
             float mumuNDof = mumuCandidate_vertex_fromFit->degreesOfFreedom();
 
@@ -677,6 +682,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             float dimuon_vz_fit = mumuCandidate_vertex_fromFit->position().z();
 
             ////////////////// fill the MuMu vectors //////////////////
+
+            if(Debug_) std::cout << "DiMuon mass =" << mumuCandidate_fromFit->currentState().mass() <<std::endl;
 
             if ( mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[1] )
               if ( mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[1] )

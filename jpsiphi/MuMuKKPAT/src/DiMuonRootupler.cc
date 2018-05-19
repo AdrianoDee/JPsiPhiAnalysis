@@ -436,11 +436,12 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
           charge = dimuonCand->charge();
 
           ndimuon++;
-          if (OnlyBest_) break;
-          else {
-            dimuon_tree->Fill();   // be aware, we are storing all combinations
-            already_stored = true;
-          }
+
+          dimuon_tree->Fill();   // be aware, we are storing all combinations
+          already_stored = true;
+
+
+          if (OnlyBest_ && already_stored) break;
         }
       }
     } //..else {
