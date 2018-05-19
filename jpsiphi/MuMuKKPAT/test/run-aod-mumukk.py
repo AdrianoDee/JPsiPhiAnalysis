@@ -336,7 +336,7 @@ process.ntup = cms.Path(
         * process.patMuonsWithTriggerSequence
         * process.PATfilter
         * process.psitomumu
-        * process.content
+        #* process.content
         * process.rootuplemumu
 )
 
