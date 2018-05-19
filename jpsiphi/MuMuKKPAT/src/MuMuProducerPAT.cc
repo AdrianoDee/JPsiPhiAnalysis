@@ -80,7 +80,7 @@ Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
   // revtxbs_ = "offlineBeamSpot";
   // genCands_ = "genParticles";
 
-  produces<pat::CompositeCandidateCollection>("DiMuonCandidates");
+  produces<pat::CompositeCandidateCollection>( "DiMuonCandidates" ).setBranchAlias( "DiMuonCandidates");
 
   /// now do what ever initialization is needed
 
