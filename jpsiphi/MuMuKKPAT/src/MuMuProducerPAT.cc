@@ -727,8 +727,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
 
-            mumuCandidate.addDaughter(*posMuon, "posMuon");
-            mumuCandidate.addDaughter(*negMuon,"negMuon");
+            pat_ref_JPsi.addDaughter(*posMuon,"posMuon");
+            pat_ref_JPsi.addDaughter(*negMuon,"negMuon");
 
             pat_ref_JPsi.addUserFloat("deltaR",deltaRMuMu);
             pat_ref_JPsi.addUserFloat("mumuP4",mumuP4.M());
