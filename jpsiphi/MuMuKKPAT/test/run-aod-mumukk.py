@@ -264,8 +264,8 @@ process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
 
                                  dimuon_pdgid = cms.uint32( 511 ),
                                  dimuon_mass_cuts = cms.vdouble((2.95,3.25)),
-                                 isMC = cms.bool( True ),
-                                 OnlyBest = cms.bool( True ),
+                                 isMC = cms.bool( False ),
+                                 OnlyBest = cms.bool( False ),
                                  OnlyGen = cms.bool( False ),
                                  TriggersForMatching = cms.untracked.vstring(
                                          #2012 displaced J/psi = Alessandra
@@ -322,6 +322,7 @@ process.filter = cms.Sequence(
         + process.noscraping
 )
 #44x process.filter = cms.Sequence(process.primaryVertexFilter+process.noscraping)
+process.content = cms.EDAnalyzer("EventContentAnalyzer")
 
 process.ntup = cms.Path(
         #process.refittedGeneralTracksPion *
@@ -335,6 +336,7 @@ process.ntup = cms.Path(
         * process.patMuonsWithTriggerSequence
         * process.PATfilter
         * process.psitomumu
+        * process.content
         * process.rootuplemumu
 )
 
