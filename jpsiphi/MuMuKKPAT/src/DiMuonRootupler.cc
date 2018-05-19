@@ -89,7 +89,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   TLorentzVector muonP_ref_p4;
   TLorentzVector muonN_ref_p4;
 
-  Float_t invalidMu, deltaRMuMu, mass, mass_unref;
+  Double_t invalidMu, deltaRMuMu, mass, mass_unref;
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
   Float_t posMuonDzVtx, posMuonDxyVtx, negMuonDzVtx, negMuonDxyVtx;
