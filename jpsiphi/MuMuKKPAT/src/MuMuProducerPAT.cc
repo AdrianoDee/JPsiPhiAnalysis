@@ -84,7 +84,6 @@ Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
 
   /// now do what ever initialization is needed
 
-
 }
 
 MuMuProducerPAT::~MuMuProducerPAT()
@@ -936,7 +935,8 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
       //std::cout << "MuMu candidates count : " << oniaOutput->size() << std::endl;
-      iEvent.put(std::move(oniaOutput));
+      //iEvent.put(std::move(oniaOutput));
+      iEvent.put( oniaOutput, "DiMuonCandidates" );
 
     }
     //}/// produce
