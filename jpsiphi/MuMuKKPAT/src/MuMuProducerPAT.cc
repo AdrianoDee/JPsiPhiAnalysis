@@ -934,6 +934,9 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
       // ===========================================================
 
+      std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
+      //std::cout << "MuMu candidates count : " << oniaOutput->size() << std::endl;
+      iEvent.put(std::move(oniaOutput));
 
     }
     //}/// produce
