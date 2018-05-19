@@ -231,6 +231,8 @@ private:
   std::vector<string> HLTPaths_, FiltersForMatching_;
   bool Debug_;
 
+  GreaterByVProb<pat::CompositeCandidate> vPComparator_;
+
 };
 
 #endif
