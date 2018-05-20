@@ -141,8 +141,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   /// get event content information
   int debug = 0;
 
-  if(Debug_) std::cout <<"Debug : " << ++debug << std::endl;
-
   std::auto_ptr<pat::CompositeCandidateCollection> oniaOutput(new pat::CompositeCandidateCollection);
 
   bool decayChainOK = false;
@@ -213,8 +211,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
     thePrimaryVtx = Vertex(beamSpot.position(), beamSpot.covariance3D());
     // thePrimaryVtx_multiplicity = 1 ;
   }
-
-  std::cout <<"Debug : " << ++debug << std::endl;
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);

@@ -258,7 +258,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
                          )
 
-process.psitomumu = cms.EDProducer("TrakTrakProducerPAT",
+process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
@@ -299,8 +299,8 @@ process.psitomumu = cms.EDProducer("TrakTrakProducerPAT",
 
                          )
 
-process.rootuplemumu = cms.EDAnalyzer("DiTrackRootupler",
-                                 DiTracks = cms.untracked.InputTag("psitomumu","DiMuonCandidates","NTUPLE"),
+process.rootupletrtr = cms.EDAnalyzer("DiTrackRootupler",
+                                 DiTracks = cms.untracked.InputTag("process","DiTrakCandidates","NTUPLE"),
                                  primaryVertices  = cms.untracked.string('offlinePrimaryVertices'),
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
 
@@ -400,8 +400,10 @@ process.ntup = cms.Path(
         * process.patMuonsWithTriggerSequence
         * process.PATfilter
         * process.psitomumu
-        #* process.content
+        * process.phitokk
+        * process.content
         * process.rootuplemumu
+        * process.rootupletrtr
 )
 
 process.schedule = cms.Schedule(process.ntup)
