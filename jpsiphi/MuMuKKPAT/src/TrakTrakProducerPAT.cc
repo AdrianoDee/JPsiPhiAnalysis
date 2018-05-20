@@ -750,6 +750,12 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
       // AT THE END OF THE EVENT fill the tree and clear the vectors
       // ===========================================================
 
+      std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
+      //std::cout << "MuMu candidates count : " << oniaOutput->size() << std::endl;
+      //iEvent.put(std::move(oniaOutput));
+      if(Debug_) std::cout << "No. ditracks: " << oniaOutput->size() << std::endl;
+      iEvent.put( oniaOutput, "DiTrakCandidates" );
+
 
     }
     //}/// produce
