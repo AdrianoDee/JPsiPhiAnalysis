@@ -378,8 +378,8 @@ void DiTrackRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup 
 
           DiTrack_unref_p4.SetPtEtaPhiM(unrefMuMu.pt(),unrefMuMu.eta(),unrefMuMu.phi(),unrefMuMu.mass());
 
-          vM = DiTrackCand->daughter("ref_trackNeg")->p4();
-          vP = DiTrackCand->daughter("ref_trackPos")->p4();
+          vP = DiTrackCand->daughter("ref_kaonPos")->p4();
+          vM = DiTrackCand->daughter("ref_kaonNeg")->p4();
 
           trackP_ref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           trackN_ref_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
@@ -389,7 +389,7 @@ void DiTrackRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup 
 
           negTrackDzVtx = DiTrackCand->userFloat("trackNegDzVtx");
           negTrackDxyVtx = DiTrackCand->userFloat("trackNegDxyVtx");
-          
+
           trPos_Chi2 = DiTrackCand->userFloat("trPos_Chi2");
           trPos_NDF = DiTrackCand->userFloat("trPos_NDF");
           trNeg_Chi2 = DiTrackCand->userFloat("trNeg_Chi2");
