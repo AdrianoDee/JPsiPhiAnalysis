@@ -93,7 +93,7 @@ class DiTrackRootupler:public edm::EDAnalyzer {
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
   Float_t posTrackDzVtx, posTrackDxyVtx, negTrackDzVtx, negTrackDxyVtx;
-  Float_t trPos_Chi2, trPos_NDF, trNeg_Chi2, trNeg_NDF, vProb, Chi2, NDof;
+  Float_t trPos_Chi2, trPos_NDF, trNeg_Chi2, trNeg_NDF, vProb, Chi2, NDof,SS;
 
   Int_t nMatchedStationsPos, nOverlapMusPos, nSharingSegWithPos, nMatchedStationsNeg, nOverlapMusNeg;
   Int_t nSharingSegWithNeg, posTrackTrackType, posTrackType, negTrackTrackType, negTrackType;
@@ -181,6 +181,7 @@ Filters_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMat
     DiTrack_tree->Branch("vProb",  &vProb,  "vProb/D");
     DiTrack_tree->Branch("Chi2",   &Chi2,   "Chi2/D");
     DiTrack_tree->Branch("NDof",   &NDof,   "NDof/D");
+    DiTrack_tree->Branch("SS",   &SS,   "SS/D");
 
     DiTrack_tree->Branch("cosAlpha",  &cosAlpha,  "cosAlpha/D");
     DiTrack_tree->Branch("cosAlpha3D",   &cosAlpha3D,   "cosAlpha3D/D");
@@ -398,6 +399,7 @@ void DiTrackRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup 
           vProb = DiTrackCand->userFloat("vProb");
           Chi2 = DiTrackCand->userFloat("Chi2");
           NDof = DiTrackCand->userFloat("NDof");
+          SS   = DiTrackCand->userFloat("SS");
 
           cosAlpha = DiTrackCand->userFloat("cosAlpha");
           cosAlpha3D = DiTrackCand->userFloat("cosAlpha3D");
