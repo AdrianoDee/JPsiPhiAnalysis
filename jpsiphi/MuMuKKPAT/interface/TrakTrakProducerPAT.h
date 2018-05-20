@@ -229,6 +229,8 @@ private:
   bool Debug_;
   bool SameSign_;
 
+  GreaterByVProb<pat::CompositeCandidate> vPComparator_;
+
 };
 
 #endif
