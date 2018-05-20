@@ -624,8 +624,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             float deltaRTrTr = reco::deltaR2(trackPos->eta(),trackPos->phi(),trackNeg->eta(),trackNeg->phi());
 
-            trktrkCandidate.addDaughter(*trackPos, "trackPos");
-            trktrkCandidate.addDaughter(*trackNeg,"trackNeg");
+            pat_ref_Phi.addDaughter(*trackPos, "trackPos");
+            pat_ref_Phi.addDaughter(*trackNeg,"trackNeg");
 
             pat_ref_Phi.addUserFloat("deltaR",deltaRTrTr);
             pat_ref_Phi.addUserFloat("trktrkP4",trktrkP4.M());
