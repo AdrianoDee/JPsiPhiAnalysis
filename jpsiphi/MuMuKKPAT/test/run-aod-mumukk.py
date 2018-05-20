@@ -300,7 +300,7 @@ process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                          )
 
 process.rootupletrtr = cms.EDAnalyzer("DiTrackRootupler",
-                                 DiTracks = cms.untracked.InputTag("process","DiTrakCandidates","NTUPLE"),
+                                 DiTracks = cms.untracked.InputTag("phitokk","DiTrakCandidates","NTUPLE"),
                                  primaryVertices  = cms.untracked.string('offlinePrimaryVertices'),
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
 
