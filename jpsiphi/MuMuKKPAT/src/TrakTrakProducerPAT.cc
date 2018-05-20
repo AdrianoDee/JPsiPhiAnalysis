@@ -71,14 +71,15 @@ TrMaxD0_(iConfig.getUntrackedParameter<double>("MaxTrD0", 1000)),
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
 HLTPaths_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),
-Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true))
+Debug_(iConfig.getUntrackedParameter<bool>("Debug_Output",true)),
+SameSign_(iConfig.getUntrackedParameter<bool>("SameSign",false))
 
 {
   // revtxtrks_ = "generalTracks"; //if that is not true, we will raise an exception
   // revtxbs_ = "offlineBeamSpot";
   // genCands_ = "genParticles";
 
-  produces<pat::CompositeCandidateCollection>("DiTrakCandidates");
+  produces<pat::CompositeCandidateCollection>( "DiTrakCandidates" ).setBranchAlias( "DiTrakCandidates");
 
   /// now do what ever initialization is needed
 
@@ -466,7 +467,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
           if (trackPos->track().isNull()) continue;
 
-          if (trackPos->charge()<=0.0) continue;
+          if (trackPos->charge()<=0.0 && !SameSign_) continue;
 
           if (trackPos->pt()<=0.7) continue;
 
@@ -500,7 +501,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             if (trackNeg->track().key() == trackPos->track().key())
             continue ;
 
-            if(trackNeg->charge() >= 0) continue ;
+            if(trackNeg->charge() >= 0 && | SameSign_) continue ;
 
             if(trackNeg->pt() <= 0.7) continue ;
 
@@ -534,7 +535,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             /// initial chi2 and ndf before kinematic fits
             float chi = 0., ndf = 0.;
-
 
             std::vector<RefCountedKinematicParticle> kaons;
             kaons.push_back( pFactory.particle( kaonPosTT, kaon_mass, chi, ndf, small_sigma));
@@ -658,6 +658,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             pat_ref_Phi.addUserFloat("VProb", trktrkVProb);
             pat_ref_Phi.addUserFloat("Chi2",  trktrkChi2);
             pat_ref_Phi.addUserFloat("NDof",  trktrkNDof);
+            pat_ref_Phi.addUserFloat("SS",  float(SameSign_));
 
             AlgebraicVector3 TrTr_v3pperp ;
             TrTr_v3pperp[0] = TrTr_pperp.x(); TrTr_v3pperp[1] = TrTr_pperp.y(); TrTr_v3pperp[2] = 0.;
@@ -738,8 +739,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             pat_ref_Phi.addUserFloat("isEventWithInvalidTrack",    float(isEventWithInvalidTrack));
 
-
-
             // TrTrDecayVtx_XE->push_back( sqrt( KKCand_vertex_fromFit->error().cxx()) );
             // TrTrDecayVtx_YE->push_back( sqrt( KKCand_vertex_fromFit->error().cyy()) );
             // TrTrDecayVtx_ZE->push_back( sqrt( KKCand_vertex_fromFit->error().czz()) );
@@ -749,6 +748,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             kaons.clear();
 
+            oniaOutput->push_back(pat_ref_Phi);
 
           } // 2nd loop over tracks (look for tr-)
         } //first loop over tracks (look for tr+)

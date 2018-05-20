@@ -54,6 +54,7 @@ psiMassCuts_(iConfig.getParameter<std::vector<double>>("PsiMassCuts")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
 doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", false) ),
+doPsiN_( iConfig.getUntrackedParameter<bool>("DoPsiN", false) ),
 
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
@@ -685,9 +686,11 @@ void MuMuProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if(Debug_) std::cout << "DiMuon mass =" << mumuCandidate_fromFit->currentState().mass() <<std::endl;
 
             if ( mumuCandidate_fromFit->currentState().mass() < jspiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > jspiMassCuts_[1] )
+              if (doPsiN_)
               if ( mumuCandidate_fromFit->currentState().mass() < psiMassCuts_[0]  ||  mumuCandidate_fromFit->currentState().mass() > psiMassCuts_[1] )
                 continue ;
-
+              else
+                continue;
             float dimuon_ma_fit = mumuCandidate_fromFit->currentState().mass();
             int   dimuon_ch_fit = mumuCandidate_fromFit->currentState().particleCharge();
             float dimuon_px_fit = mumuCandidate_fromFit->currentState().kinematicParameters().momentum().x();

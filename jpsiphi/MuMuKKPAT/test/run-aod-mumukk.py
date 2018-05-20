@@ -257,6 +257,70 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
                          )
 
+process.psitomumu = cms.EDProducer("TrakTrakProducerPAT",
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
+                                 inputGEN  = cms.untracked.InputTag("genParticles"),
+                                 VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
+
+                                 JPsiMassCuts = cms.vdouble((2.95,3.25)),
+                                 PsiMassCuts = cms.vdouble((3.45,3.85)),
+
+                                 DoDataAnalysis = cms.untracked.bool( True ),
+                                 DoMonteCarloTree = cms.untracked.bool( False ),
+
+                                 addCommonVertex = cms.bool( False ),
+                                 resolvePileUpAmbiguity = cms.bool( False ),
+                                 addMuMulessPrimaryVertex = cms.bool( True ),
+
+                                 addMCTruth = cms.bool( False ),
+                                 MonteCarloParticleId = cms.untracked.int32(20443),
+                                 MonteCarloExclusiveDecay = cms.untracked.bool( False ),
+                                 MonteCarloMotherId = cms.untracked.int32( 511 ),
+                                 MonteCarloDaughtersN = cms.untracked.int32( 3 ), # 3 for exclusive B0->psi'KPi
+
+                                 MinNumMuPixHits = cms.untracked.int32(1),
+                                 MinNumMuSiHits = cms.untracked.int32(8),
+                                 MaxMuNormChi2 = cms.untracked.double(7),
+                                 MaxMuD0 = cms.untracked.double(10.0),
+
+                                 Debug_Output = cms.untracked.bool(True), # true
+                                 ##
+                                 ##  use the correct trigger path
+                                 ##
+                                 TriggersForMatching = cms.untracked.vstring(
+                                         #2012 displaced J/psi = Alessandra
+                                         "HLT_DoubleMu4_Jpsi_Displaced",
+                    					 "HLT_Dimuon8_Jpsi",
+                                 ),
+
+                                 FiltersForMatching = cms.untracked.vstring(
+                                         "hltDisplacedmumuFilterDoubleMu4Jpsi",
+                                         "hltVertexmumuFilterDimuon8Jpsi")
+
+                         )
+
+process.rootuplemumu = cms.EDAnalyzer("DiTrackRootupler",
+                                 DiTracks = cms.untracked.InputTag("psitomumu","DiMuonCandidates","NTUPLE"),
+                                 primaryVertices  = cms.untracked.string('offlinePrimaryVertices'),
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
+
+                                 DiTrack_pdgid = cms.uint32( 511 ),
+                                 DiTrack_mass_cuts = cms.vdouble((0.97,1.07)),
+                                 isMC = cms.bool( False ),
+                                 OnlyBest = cms.bool( False ),
+                                 OnlyGen = cms.bool( False ),
+                                 TriggersForMatching = cms.untracked.vstring(
+                                         #2012 displaced J/psi = Alessandra
+                                         "HLT_DoubleMu4_Jpsi_Displaced",
+                    					 "HLT_Dimuon8_Jpsi",
+                                 ),
+
+                                 FiltersForMatching = cms.untracked.vstring(
+                                         "hltDisplacedmumuFilterDoubleMu4Jpsi",
+                                         "hltVertexmumuFilterDimuon8Jpsi")
+
+                         )
+
 process.rootuplemumu = cms.EDAnalyzer("DiMuonRootupler",
                                  dimuons = cms.untracked.InputTag("psitomumu","DiMuonCandidates","NTUPLE"),
                                  primaryVertices  = cms.untracked.string('offlinePrimaryVertices'),

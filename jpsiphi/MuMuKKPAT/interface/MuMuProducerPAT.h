@@ -218,7 +218,7 @@ private:
   edm::InputTag inputGEN_;
   std::string vtxSample_;
   std::vector<double> jspiMassCuts_,psiMassCuts_;
-  bool doData_, doMC_,addCommonVertex_,resolveAmbiguity_,addMuMulessPrimaryVertex_,addMCTruth_;
+  bool doData_, doMC_, doPsiN_, addCommonVertex_, resolveAmbiguity_, addMuMulessPrimaryVertex_, addMCTruth_;
   int  MCParticle_;
   bool MCExclusiveDecay_;
   int  MCMother_, MCDaughtersN_;
