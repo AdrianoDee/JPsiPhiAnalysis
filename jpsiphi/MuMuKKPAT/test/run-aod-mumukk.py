@@ -401,7 +401,7 @@ process.ntup = cms.Path(
         * process.PATfilter
         * process.psitomumu
         * process.phitokk
-        * process.content
+        #* process.content
         * process.rootuplemumu
         * process.rootupletrtr
 )
