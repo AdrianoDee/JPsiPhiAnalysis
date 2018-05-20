@@ -138,9 +138,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
   int evtNum = iEvent.id().event();
 
-  /// get event content information
-  int debug = 0;
-
   std::auto_ptr<pat::CompositeCandidateCollection> oniaOutput(new pat::CompositeCandidateCollection);
 
   bool decayChainOK = false;
