@@ -241,7 +241,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
                                  MaxMuNormChi2 = cms.untracked.double(7),
                                  MaxMuD0 = cms.untracked.double(10.0),
 
-                                 TriggerCut = = cms.untracked.bool(True),
+                                 TriggerCut = cms.untracked.bool(True),
                                  Debug_Output = cms.untracked.bool(True), # true
                                  ##
                                  ##  use the correct trigger path
