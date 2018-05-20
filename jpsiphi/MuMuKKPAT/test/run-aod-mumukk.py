@@ -241,6 +241,7 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
                                  MaxMuNormChi2 = cms.untracked.double(7),
                                  MaxMuD0 = cms.untracked.double(10.0),
 
+                                 TriggerCut = = cms.untracked.bool(True),
                                  Debug_Output = cms.untracked.bool(True), # true
                                  ##
                                  ##  use the correct trigger path
@@ -262,15 +263,13 @@ process.psitomumu = cms.EDProducer("TrakTrakProducerPAT",
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
 
-                                 JPsiMassCuts = cms.vdouble((2.95,3.25)),
-                                 PsiMassCuts = cms.vdouble((3.45,3.85)),
+                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
 
                                  DoDataAnalysis = cms.untracked.bool( True ),
                                  DoMonteCarloTree = cms.untracked.bool( False ),
 
                                  addCommonVertex = cms.bool( False ),
                                  resolvePileUpAmbiguity = cms.bool( False ),
-                                 addMuMulessPrimaryVertex = cms.bool( True ),
 
                                  addMCTruth = cms.bool( False ),
                                  MonteCarloParticleId = cms.untracked.int32(20443),
@@ -278,11 +277,12 @@ process.psitomumu = cms.EDProducer("TrakTrakProducerPAT",
                                  MonteCarloMotherId = cms.untracked.int32( 511 ),
                                  MonteCarloDaughtersN = cms.untracked.int32( 3 ), # 3 for exclusive B0->psi'KPi
 
-                                 MinNumMuPixHits = cms.untracked.int32(1),
-                                 MinNumMuSiHits = cms.untracked.int32(8),
-                                 MaxMuNormChi2 = cms.untracked.double(7),
-                                 MaxMuD0 = cms.untracked.double(10.0),
+                                 MinNumTrPixHits = cms.untracked.int32(1),
+                                 MinNumTrSiHits = cms.untracked.int32(8),
+                                 MaxTrNormChi2 = cms.untracked.double(7),
+                                 MaxTrD0 = cms.untracked.double(10.0),
 
+                                 TriggerCut = cms.untracked.bool(True),
                                  Debug_Output = cms.untracked.bool(True), # true
                                  ##
                                  ##  use the correct trigger path
