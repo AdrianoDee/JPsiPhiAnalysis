@@ -93,7 +93,7 @@ class DiTrackRootupler:public edm::EDAnalyzer {
   Float_t cosAlpha, cosAlpha3D, ctau, ctauErr, lxy, lxyErr, lxyz, lxyzErr;
   Float_t cosAlphaBS, cosAlpha3DBS, ctauBS, ctauErrBS, lxyBS, lxyErrBS, lxyzBS, lxyzErrBS;
   Float_t posTrackDzVtx, posTrackDxyVtx, negTrackDzVtx, negTrackDxyVtx;
-  Float_t muPos_Chi2, muPos_NDF, muNeg_Chi2, muNeg_NDF, vProb, Chi2, NDof;
+  Float_t trPos_Chi2, trPos_NDF, trNeg_Chi2, trNeg_NDF, vProb, Chi2, NDof;
 
   Int_t nMatchedStationsPos, nOverlapMusPos, nSharingSegWithPos, nMatchedStationsNeg, nOverlapMusNeg;
   Int_t nSharingSegWithNeg, posTrackTrackType, posTrackType, negTrackTrackType, negTrackType;
@@ -174,10 +174,10 @@ Filters_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMat
     DiTrack_tree->Branch("negTrackDzVtx",  &negTrackDzVtx,  "negTrackDzVtx/D");
     DiTrack_tree->Branch("negTrackDxyVtx",   &negTrackDxyVtx,   "negTrackDxyVtx/D");
 
-    DiTrack_tree->Branch("muPos_Chi2",  &muPos_Chi2,  "muPos_Chi2/D");
-    DiTrack_tree->Branch("muPos_NDF",   &muPos_NDF,   "muPos_NDF/D");
-    DiTrack_tree->Branch("muNeg_Chi2",  &muNeg_Chi2,  "muNeg_Chi2/D");
-    DiTrack_tree->Branch("muNeg_NDF",   &muNeg_NDF,   "muNeg_NDF/D");
+    DiTrack_tree->Branch("trPos_Chi2",  &trPos_Chi2,  "trPos_Chi2/D");
+    DiTrack_tree->Branch("trPos_NDF",   &trPos_NDF,   "trPos_NDF/D");
+    DiTrack_tree->Branch("trNeg_Chi2",  &trNeg_Chi2,  "trNeg_Chi2/D");
+    DiTrack_tree->Branch("trNeg_NDF",   &trNeg_NDF,   "trNeg_NDF/D");
     DiTrack_tree->Branch("vProb",  &vProb,  "vProb/D");
     DiTrack_tree->Branch("Chi2",   &Chi2,   "Chi2/D");
     DiTrack_tree->Branch("NDof",   &NDof,   "NDof/D");
@@ -372,9 +372,9 @@ void DiTrackRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup 
 
           deltaRMuMu = DiTrackCand->userFloat("deltaR");
           mass = DiTrack_p4.M();
-          mass_unref = DiTrackCand->userFloat("mumuP4");
+          // mass_unref = DiTrackCand->userFloat("mumuP4");
 
-          reco::Candidate::LorentzVector unrefMuMu = DiTrackCand->daughter("mumuCandidate")->p4();
+          reco::Candidate::LorentzVector unrefMuMu = DiTrackCand->daughter("trktrkCandidate")->p4();
 
           DiTrack_unref_p4.SetPtEtaPhiM(unrefMuMu.pt(),unrefMuMu.eta(),unrefMuMu.phi(),unrefMuMu.mass());
 
@@ -384,29 +384,16 @@ void DiTrackRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup 
           trackP_ref_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           trackN_ref_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
 
-          nMatchedStationsPos = DiTrackCand->userInt("nMatchedStationsPos");
-          nOverlapMusPos =  DiTrackCand->userInt("nOverlapMusPos");
-          nSharingSegWithPos =  DiTrackCand->userInt("nSharingSegWithPos");
+          posTrackDzVtx =  DiTrackCand->userFloat("trackPosDzVtx");
+          posTrackDxyVtx = DiTrackCand->userFloat("trackPosDxyVtx");
 
-          nMatchedStationsNeg = DiTrackCand->userInt("nMatchedStationsNeg");
-          nOverlapMusNeg =  DiTrackCand->userInt("nOverlapMusNeg");
-          nSharingSegWithNeg =  DiTrackCand->userInt("nSharingSegWithNeg");
-
-          posTrackTrackType =  DiTrackCand->userInt("posTrackTrackType");
-          posTrackType = DiTrackCand->userInt("posTrackType");
-
-          posTrackDzVtx =  DiTrackCand->userFloat("posTrackDzVtx");
-          posTrackDxyVtx = DiTrackCand->userFloat("posTrackDxyVtx");
-
-          negTrackTrackType =  DiTrackCand->userInt("negTrackTrackType");
-          negTrackType = DiTrackCand->userInt("negTrackType");
-
-          negTrackDzVtx = DiTrackCand->userFloat("negTrackDzVtx");
-          negTrackDxyVtx = DiTrackCand->userFloat("negTrackDxyVtx");
-          muPos_Chi2 = DiTrackCand->userFloat("muPos_Chi2");
-          muPos_NDF = DiTrackCand->userFloat("muPos_NDF");
-          muNeg_Chi2 = DiTrackCand->userFloat("muNeg_Chi2");
-          muNeg_NDF = DiTrackCand->userFloat("muNeg_NDF");
+          negTrackDzVtx = DiTrackCand->userFloat("trackNegDzVtx");
+          negTrackDxyVtx = DiTrackCand->userFloat("trackNegDxyVtx");
+          
+          trPos_Chi2 = DiTrackCand->userFloat("trPos_Chi2");
+          trPos_NDF = DiTrackCand->userFloat("trPos_NDF");
+          trNeg_Chi2 = DiTrackCand->userFloat("trNeg_Chi2");
+          trNeg_NDF = DiTrackCand->userFloat("trNeg_NDF");
 
           vProb = DiTrackCand->userFloat("vProb");
           Chi2 = DiTrackCand->userFloat("Chi2");
