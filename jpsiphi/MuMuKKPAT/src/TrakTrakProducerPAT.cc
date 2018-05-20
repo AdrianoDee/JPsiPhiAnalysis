@@ -501,7 +501,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             if (trackNeg->track().key() == trackPos->track().key())
             continue ;
 
-            if(trackNeg->charge() >= 0 && | SameSign_) continue ;
+            if(trackNeg->charge() >= 0 && !SameSign_) continue ;
 
             if(trackNeg->pt() <= 0.7) continue ;
 
