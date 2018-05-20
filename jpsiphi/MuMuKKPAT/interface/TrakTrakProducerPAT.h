@@ -224,10 +224,10 @@ private:
   double TrMaxNormChi_;
   double TrMaxD0_;
   bool TriggerCut_;
-  bool SameSign_;
 
   std::vector<string> HLTPaths_, FiltersForMatching_;
   bool Debug_;
+  bool SameSign_;
 
 };
 
