@@ -552,8 +552,6 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             const ParticleMass trakMass2(TrackTwoMass);
             float trakSigma2 = trakMass2*1E-6;
 
-            const ParticleMass diMuonMass(DiMuonMass_);
-
             std::vector<RefCountedKinematicParticle> allPsiTTDaughters;
             allPsiTTDaughters.push_back(pFactory.particle (MuMuTT[0], muonMass, float(0), float(0), muonSigma));
             allPsiTTDaughters.push_back(pFactory.particle (MuMuTT[1], muonMass, float(0), float(0), muonSigma));
