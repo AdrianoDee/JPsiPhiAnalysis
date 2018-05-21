@@ -554,7 +554,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             const ParticleMass trakMass2(TrackTwoMass);
             float trakSigma2 = trakMass2*1E-6;
 
-            float diMuonMass = DiMuonMass_;
+            const ParticleMass diMuonMass(DiMuonMass_);
 
             std::vector<RefCountedKinematicParticle> allPsiTTDaughters;
             allPsiTTDaughters.push_back(pFactory.particle (MuMuTT[0], muonMass, float(0), float(0), muonSigma));
@@ -596,11 +596,11 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             if (mmttCand_fromFit->currentState().mass() < XMassMin  ||  mmttCand_fromFit->currentState().mass() > XMassMax)
             continue ;
 
-            float dimuonditrack_ma_fit = mmtt_fromFit->currentState().mass();
-            int   dimuonditrack_ch_fit = mmtt_fromFit->currentState().particleCharge();
-            float dimuonditrack_px_fit = mmtt_fromFit->currentState().kinematicParameters().momentum().x();
-            float dimuonditrack_py_fit = mmtt_fromFit->currentState().kinematicParameters().momentum().y();
-            float dimuonditrack_pz_fit = mmtt_fromFit->currentState().kinematicParameters().momentum().z();
+            float dimuonditrack_ma_fit = mmttCand_fromFit->currentState().mass();
+            int   dimuonditrack_ch_fit = mmttCand_fromFit->currentState().particleCharge();
+            float dimuonditrack_px_fit = mmttCand_fromFit->currentState().kinematicParameters().momentum().x();
+            float dimuonditrack_py_fit = mmttCand_fromFit->currentState().kinematicParameters().momentum().y();
+            float dimuonditrack_pz_fit = mmttCand_fromFit->currentState().kinematicParameters().momentum().z();
             float dimuonditrack_en_fit = sqrt(dimuonditrack_ma_fit*dimuonditrack_ma_fit+dimuonditrack_px_fit*dimuonditrack_px_fit+dimuonditrack_py_fit*dimuonditrack_py_fit+dimuonditrack_pz_fit*dimuonditrack_pz_fit);
 
             reco::CompositeCandidate reco_ref_X(dimuonditrack_ch_fit,math::XYZTLorentzVector(dimuonditrack_px_fit,dimuonditrack_py_fit,dimuonditrack_pz_fit,dimuonditrack_en_fit),
@@ -609,9 +609,9 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             //////////////////// For Lifetimes Calculations ////////////////////
             TVector3 MMTT_vtx((*mmtt_vertex_fromFit).position().x(), (*mmtt_vertex_fromFit).position().y(), 0) ;
-            TVector3 MMTT_pperp(mmtt_fromFit->currentState().globalMomentum().x(), mmtt_fromFit->currentState().globalMomentum().y(), 0);
+            TVector3 MMTT_pperp(mmttCand_fromFit->currentState().globalMomentum().x(), mmttCand_fromFit->currentState().globalMomentum().y(), 0);
             TVector3 MMTT_vtx3D((*mmtt_vertex_fromFit).position().x(), (*mmtt_vertex_fromFit).position().y(), (*mmtt_vertex_fromFit).position().z()) ;
-            TVector3 MMTT_pperp3D(mmtt_fromFit->currentState().globalMomentum().x(),mmtt_fromFit->currentState().globalMomentum().y(), mmtt_fromFit->currentState().globalMomentum().z());
+            TVector3 MMTT_pperp3D(mmttCand_fromFit->currentState().globalMomentum().x(),mmttCand_fromFit->currentState().globalMomentum().y(), mmttCand_fromFit->currentState().globalMomentum().z());
 
             float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
             int   muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
