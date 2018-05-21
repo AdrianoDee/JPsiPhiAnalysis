@@ -169,8 +169,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
   float DiMuonMassMin = jspiMassCuts_[0];
   float TrakTrakMassMax = phiMassCuts_[1];
   float TrakTrakMassMin = phiMassCuts_[0];
-  float DiMuonDiTrakMassMax = xMassCuts_[1];
-  float DiMuonDiTrakMassMin = xMassCuts_[0];
+  float XMassMax = xMassCuts_[1];
+  float XMassMin = xMassCuts_[0];
   float TrackOneMass = trackMass_[0];
   float TrackTwoMass = trackMass_[1];
 
@@ -488,15 +488,15 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             float mmttMass = ditrakCand->mass() + dimuonCand->mass();
 
-            if ( mmttMass > XMassMax || mttMass < XMassMin ) continue;
+            if ( mmttMass > XMassMax || mmttMass < XMassMin ) continue;
 
             const pat::GenericParticle *trackPos = dynamic_cast<const pat::GenericParticle*>(dimuonCand->daughter("trackPos"));
             const pat::GenericParticle *trackNeg = dynamic_cast<const pat::GenericParticle*>(dimuonCand->daughter("trackNeg"));
 
             std::vector <reco::Track> JpsiTk, phiTk;
 
-            JpsiTk.push_back(posMuon->innerTrack());
-            JpsiTk.push_back(negMuon->innerTrack());
+            JpsiTk.push_back(*(posMuon->innerTrack()));
+            JpsiTk.push_back(*(negMuon->innerTrack()));
 
             phiTk.push_back(trackPos->track());
             phiTk.push_back(trackNeg->track());

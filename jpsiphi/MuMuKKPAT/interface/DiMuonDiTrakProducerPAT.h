@@ -218,7 +218,7 @@ private:
 
   edm::InputTag inputGEN_;
   std::string vtxSample_;
-  std::vector<double> jspiMassCuts_,psiMassCuts_,xMassCuts_,trackMass_;
+  std::vector<double> jspiMassCuts_,phiMassCuts_,xMassCuts_,trackMass_;
   double DiMuonMass_;
   bool doData_, doMC_, doPsiN_, addCommonVertex_, resolveAmbiguity_, addMuMulessPrimaryVertex_, addMCTruth_;
   int  MCParticle_;
