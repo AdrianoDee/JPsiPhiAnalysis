@@ -464,6 +464,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
           if (trackPos->pt()<=0.7) continue;
 
+          if(fabs(trackPos->pdgId())!=211) continue;
+
           if ( !(trackPos->track()->hitPattern().trackerLayersWithMeasurement()) ) {
             isEventWithInvalidTrack = true;
             if (Debug_) std::cout <<"evt:" <<evtNum <<" problem with trackerLayersWithMeasurement" <<std::endl;
@@ -497,6 +499,8 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             if(trackNeg->charge() >= 0 && !SameSign_) continue ;
 
             if(trackNeg->pt() <= 0.7) continue ;
+
+            if(fabs(trackNeg->pdgId())!=211) continue;
 
             if ( !(trackNeg->track()->hitPattern().trackerLayersWithMeasurement()) ) {
               isEventWithInvalidTrack = true;
@@ -581,7 +585,6 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             TVector3 TrTr_pperp(KKCand_fromFit->currentState().globalMomentum().x(), KKCand_fromFit->currentState().globalMomentum().y(), 0);
             TVector3 TrTr_vtx3D((*KKCand_vertex_fromFit).position().x(), (*KKCand_vertex_fromFit).position().y(), (*KKCand_vertex_fromFit).position().z()) ;
             TVector3 TrTr_pperp3D(KKCand_fromFit->currentState().globalMomentum().x(),KKCand_fromFit->currentState().globalMomentum().y(), KKCand_fromFit->currentState().globalMomentum().z());
-
 
             float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
             int   kaonPos_ch_fit = kaonPosCand_fromFit->currentState().particleCharge();
