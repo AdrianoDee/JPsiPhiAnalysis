@@ -248,8 +248,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
     // thePrimaryVtx_multiplicity = 1 ;
   }
 
-  edm::ESHandle<TransientTrackBuilder> theTTBuilder;
-  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
+  edm::ESHandle<TransientTrackBuilder> theB;
+  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
   KalmanVertexFitter vtxFitter(true);
 
   RefVtx = thePrimaryVtx.position(); /// reference primary vertex choosen
