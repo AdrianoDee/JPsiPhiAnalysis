@@ -479,8 +479,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             if ( mmttMass > XMassMax || mmttMass < XMassMin ) continue;
 
-            const pat::GenericParticle *trackPos = dynamic_cast<const pat::GenericParticle*>(dimuonCand->daughter("trackPos"));
-            const pat::GenericParticle *trackNeg = dynamic_cast<const pat::GenericParticle*>(dimuonCand->daughter("trackNeg"));
+            const pat::GenericParticle *trackPos = dynamic_cast<const pat::GenericParticle*>(ditrakCand->daughter("trackPos"));
+            const pat::GenericParticle *trackNeg = dynamic_cast<const pat::GenericParticle*>(ditrakCand->daughter("trackNeg"));
 
             std::vector <reco::Track> JpsiTk, phiTk;
 
