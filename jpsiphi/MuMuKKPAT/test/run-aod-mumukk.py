@@ -266,12 +266,8 @@ process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
-
-                                 JPsiMassCuts = cms.vdouble((2.95,3.25)),
+                
                                  PhiMassCuts = cms.vdouble((0.97,1.07)),
-                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
-                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
-                                 PhiMassCuts = cms.double(0.97),
 
                                  DoDataAnalysis = cms.untracked.bool( True ),
                                  DoMonteCarloTree = cms.untracked.bool( False ),
