@@ -72,11 +72,6 @@ MCExclusiveDecay_( iConfig.getUntrackedParameter<bool>("MonteCarloExclusiveDecay
 MCMother_( iConfig.getUntrackedParameter<int>("MonteCarloMotherId", 511) ), /// 511 B0 (=anti-B0), 531 B0 / decide later MCMotherId for X(4140)
 MCDaughtersN_( iConfig.getUntrackedParameter<int>(" MonteCarloDaughtersN", 3) ), /// will be same
 
-MuMinPixHits_(iConfig.getUntrackedParameter<int>("MinNumMuPixHits", 0)),
-MuMinSiHits_(iConfig.getUntrackedParameter<int>("MinNumMuSiHits", 0)),
-MuMaxNormChi_(iConfig.getUntrackedParameter<double>("MaxMuNormChi2", 1000)),
-MuMaxD0_(iConfig.getUntrackedParameter<double>("MaxMuD0", 1000)),
-
 TriggerCut_(iConfig.getUntrackedParameter<bool>("TriggerCut",true)),
 HLTPaths_(iConfig.getUntrackedParameter<std::vector<std::string> >("TriggersForMatching")),
 FiltersForMatching_(iConfig.getUntrackedParameter<std::vector<std::string> >("FiltersForMatching")),

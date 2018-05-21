@@ -212,21 +212,19 @@ private:
   std::string proccessName_;
   HLTConfigProvider hltConfig_;
 
+  edm::InputTag dimuon_Label,ditraks_Label;
   edm::InputTag hlTriggerResults_;
   std::map<std::string,int> *HLTTrig; /// HLT trigger prescale for accepted paths
 
   edm::InputTag inputGEN_;
   std::string vtxSample_;
-  std::vector<double> jspiMassCuts_,psiMassCuts_,trackMass_;
+  std::vector<double> jspiMassCuts_,psiMassCuts_,xMassCuts_,trackMass_;
   double DiMuonMass_;
   bool doData_, doMC_, doPsiN_, addCommonVertex_, resolveAmbiguity_, addMuMulessPrimaryVertex_, addMCTruth_;
   int  MCParticle_;
   bool MCExclusiveDecay_;
   int  MCMother_, MCDaughtersN_;
 
-  int MuMinPixHits_, MuMinSiHits_;
-  double MuMaxNormChi_;
-  double MuMaxD0_;
   bool TriggerCut_;
 
   std::vector<string> HLTPaths_, FiltersForMatching_;
