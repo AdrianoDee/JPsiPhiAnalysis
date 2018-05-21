@@ -672,11 +672,11 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             MultiTrackKinematicConstraint *dimuon_mtc = new TwoTrackMassKinematicConstraint(DiMuonMass_);
             RefCountedKinematicTree PsiTTVertexFitTree = constVertexFitter.fit(allPsiTTDaughters,dimuon_mtc);
 
-            if (!PSiTTVertexFitTree->isValid()) continue;
+            if (!PsiTTVertexFitTree->isValid()) continue;
 
-            PSiTTVertexFitTree->movePointerToTheTop();
-            RefCountedKinematicParticle PSiTT_fromFit = PSiTTVertexFitTree->currentParticle();
-            RefCountedKinematicVertex PSiTT_vertex_fromFit = PSiTTVertexFitTree->currentDecayVertex();
+            PsiTTVertexFitTree->movePointerToTheTop();
+            RefCountedKinematicParticle PSiTT_fromFit = PsiTTVertexFitTree->currentParticle();
+            RefCountedKinematicVertex PSiTT_vertex_fromFit = PsiTTVertexFitTree->currentDecayVertex();
 
             float mmtt_mc_VProb_Fit = ChiSquaredProbability((float)( PSiTT_vertex_fromFit->chiSquared()),(float)( PSiTT_vertex_fromFit->degreesOfFreedom()));
 
@@ -686,14 +686,14 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float mmtt_mc_Chi2_Fit = PSiTT_vertex_fromFit->chiSquared();
             float mmtt_mc_NDof_Fit = PSiTT_vertex_fromFit->degreesOfFreedom();
 
-            PSiTTVertexFitTree->movePointerToTheFirstChild();
-            MuPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
-            PSiTTVertexFitTree->movePointerToTheNextChild();
-            MuNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
-            PSiTTVertexFitTree->movePointerToTheFirstChild();
-            kaonPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
-            PSiTTVertexFitTree->movePointerToTheNextChild();
-            kaonNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
+            PsiTTVertexFitTree->movePointerToTheFirstChild();
+            MuPosCand_fromFit = PsiTTVertexFitTree->currentParticle();
+            PsiTTVertexFitTree->movePointerToTheNextChild();
+            MuNegCand_fromFit = PsiTTVertexFitTree->currentParticle();
+            PsiTTVertexFitTree->movePointerToTheFirstChild();
+            kaonPosCand_fromFit = PsiTTVertexFitTree->currentParticle();
+            PsiTTVertexFitTree->movePointerToTheNextChild();
+            kaonNegCand_fromFit = PsiTTVertexFitTree->currentParticle();
 
             mmtt_vx_fit = PSiTT_vertex_fromFit->position().x();
             mmtt_vy_fit = PSiTT_vertex_fromFit->position().y();
@@ -841,8 +841,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addUserFloat("Chi2",  mmtt_mc_Chi2_Fit);
             pat_ref_mc_X.addUserFloat("NDof",  mmtt_mc_NDof_Fit);
 
-            pat_ref_mc_X.addDaughter(ditrakCand,"ditrakCand");
-            pat_ref_mc_X.addDaughter(dimuonCand,"dimuonCand");
+            pat_ref_mc_X.addDaughter(*ditrakCand,"ditrakCand");
+            pat_ref_mc_X.addDaughter(*dimuonCand,"dimuonCand");
 
             pat_ref_mc_X.addDaughter(pat_X,"unref_X");
             pat_ref_mc_X.addDaughter(pat_ref_X,"unref_X");
