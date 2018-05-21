@@ -490,8 +490,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             JpsiTk.push_back(*(posMuon->innerTrack()));
             JpsiTk.push_back(*(negMuon->innerTrack()));
 
-            phiTk.push_back(trackPos->track());
-            phiTk.push_back(trackNeg->track());
+            phiTk.push_back(*(trackPos->track()));
+            phiTk.push_back(*(trackNeg->track()));
 
             std::vector<reco::TransientTrack> MuMuTT;
 
