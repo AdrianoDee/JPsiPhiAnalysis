@@ -867,17 +867,17 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
         }//di muon
 
 
-            oniaOutput->push_back(pat_ref_JPsi);
+            DiMuonTTCandColl->push_back(pat_ref_JPsi);
       } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
       } // if (doMC_ || doData_)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
       // ===========================================================
 
-      std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
-      //std::cout << "MuMu candidates count : " << oniaOutput->size() << std::endl;
-      //iEvent.put(std::move(oniaOutput));
-      if(Debug_) std::cout << "No. dimuons: " << oniaOutput->size() << std::endl;
-      iEvent.put( oniaOutput, "DiMuonCandidates" );
+      std::sort(DiMuonTTCandColl->begin(),DiMuonTTCandColl->end(),vPComparator_);
+      //std::cout << "MuMu candidates count : " << DiMuonTTCandColl->size() << std::endl;
+      //iEvent.put(std::move(DiMuonTTCandColl));
+      if(Debug_) std::cout << "No. dimuons: " << DiMuonTTCandColl->size() << std::endl;
+      iEvent.put( DiMuonTTCandColl, "DiMuonCandidates" );
 
     }
     //}/// produce
