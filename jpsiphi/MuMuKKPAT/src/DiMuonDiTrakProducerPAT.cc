@@ -696,7 +696,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             mmtt_vy_fit = PSiTT_vertex_fromFit->position().y();
             mmtt_vz_fit = PSiTT_vertex_fromFit->position().z();
 
-            if (PSiTT_fromFit->currentState().mass() < phiMassCuts_[0]  ||  PSiTT_fromFit->currentState().mass() > phiMassCuts_[1])
+            if (PSiTT_fromFit->currentState().mass() < XMassMin  ||  PSiTT_fromFit->currentState().mass() > XMassMax)
             continue ;
 
             dimuonditrack_ma_fit = PSiTT_fromFit->currentState().mass();
