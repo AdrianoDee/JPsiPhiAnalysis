@@ -688,7 +688,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             float mmtt_mc_VProb_Fit = ChiSquaredProbability((float)( PSiTT_vertex_fromFit->chiSquared()),(float)( PSiTT_vertex_fromFit->degreesOfFreedom()));
 
-            if (mmtt_mc_VProb < 0.001)
+            if (mmtt_mc_VProb_Fit < 0.001)
             continue;
 
             float mmtt_mc_Chi2_Fit = PSiTT_vertex_fromFit->chiSquared();
@@ -845,9 +845,9 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             pat_ref_Phi.addUserFloat("deltaR",deltaRMMTT);
 
-            pat_ref_Phi.addUserFloat("VProb", mmtt_mc_VProb);
-            pat_ref_Phi.addUserFloat("Chi2",  mmtt_mc_Chi2);
-            pat_ref_Phi.addUserFloat("NDof",  mmtt_mc_NDof);
+            pat_ref_Phi.addUserFloat("VProb", mmtt_mc_VProb_Fit);
+            pat_ref_Phi.addUserFloat("Chi2",  mmtt_mc_Chi2_Fit);
+            pat_ref_Phi.addUserFloat("NDof",  mmtt_mc_NDof_Fit);
 
             pat_ref_mc_X.addDaughter(*ditrakCand,"ditrakCand");
             pat_ref_mc_X.addDaughter(*dimuonCand,"dimuonCand");
