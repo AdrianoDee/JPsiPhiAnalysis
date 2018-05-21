@@ -520,7 +520,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             double mmtt_vy_fit = mmttVertex.position().y();
             double mmtt_vz_fit = mmttVertex.position().z();
 
-            TLorentzVector mmttP4 = trackPos->p4() + trackNeg->p4() + recoPosMuon->p4() + recoNegMuon->p4();
+            ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > mmttP4 = trackPos->p4() + trackNeg->p4() + recoPosMuon->p4() + recoNegMuon->p4();
 
             float mmtt_ma_fit = mmttP4.M();
             int   mmtt_ch_fit = dimuonCand->mass() + ditrakCand->mass();
