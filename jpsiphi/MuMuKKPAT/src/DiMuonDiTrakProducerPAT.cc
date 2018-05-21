@@ -520,13 +520,13 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             double mmtt_vy_fit = mmttVertex.position().y();
             double mmtt_vz_fit = mmttVertex.position().z();
 
-            TLorentzVector mmttP4 = trakPos->p4() + trackNeg->p4() + recoPosMuon->p4() + recoNegMuon->p4();
+            TLorentzVector mmttP4 = trackPos->p4() + trackNeg->p4() + recoPosMuon->p4() + recoNegMuon->p4();
 
             float mmtt_ma_fit = mmttP4.M();
             int   mmtt_ch_fit = dimuonCand->mass() + ditrakCand->mass();
-            float mmtt_px_fit = mmttP4->Px();
-            float mmtt_py_fit = mmttP4->Py();
-            float mmtt_pz_fit = mmttP4->Pz();
+            float mmtt_px_fit = mmttP4.Px();
+            float mmtt_py_fit = mmttP4.Py();
+            float mmtt_pz_fit = mmttP4.Pz();
             float mmtt_en_fit = sqrt(mmtt_ma_fit*mmtt_ma_fit+mmtt_px_fit*mmtt_px_fit+mmtt_py_fit*mmtt_py_fit+mmtt_pz_fit*mmtt_pz_fit);
 
             reco::CompositeCandidate reco_X(mmtt_ch_fit,math::XYZTLorentzVector(mmtt_px_fit,mmtt_py_fit,mmtt_pz_fit,mmtt_en_fit),
@@ -570,7 +570,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             mmttVertexFitTree->movePointerToTheTop();
             RefCountedKinematicParticle mmttCand_fromFit = mmttVertexFitTree->currentParticle();
-            RefCountedKinematicVertex mmtt_vertex_fromFit = mmttVertexFitTree->currentDecayVertex()
+            RefCountedKinematicVertex mmtt_vertex_fromFit = mmttVertexFitTree->currentDecayVertex();
 
             float mmttVProb_Fit = ChiSquaredProbability((float)( mmtt_vertex_fromFit->chiSquared()),(float)( mmtt_vertex_fromFit->degreesOfFreedom()));
 
@@ -593,7 +593,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             mmtt_vy_fit = mmtt_vertex_fromFit->position().y();
             mmtt_vz_fit = mmtt_vertex_fromFit->position().z();
 
-            if (mmtt_fromFit->currentState().mass() < phiMassCuts_[0]  ||  mmtt_fromFit->currentState().mass() > phiMassCuts_[1])
+            if (mmttCand_fromFit->currentState().mass() < XMassMin  ||  mmttCand_fromFit->currentState().mass() > XMassMax)
             continue ;
 
             float dimuonditrack_ma_fit = mmtt_fromFit->currentState().mass();
@@ -604,8 +604,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float dimuonditrack_en_fit = sqrt(dimuonditrack_ma_fit*dimuonditrack_ma_fit+dimuonditrack_px_fit*dimuonditrack_px_fit+dimuonditrack_py_fit*dimuonditrack_py_fit+dimuonditrack_pz_fit*dimuonditrack_pz_fit);
 
             reco::CompositeCandidate reco_ref_X(dimuonditrack_ch_fit,math::XYZTLorentzVector(dimuonditrack_px_fit,dimuonditrack_py_fit,dimuonditrack_pz_fit,dimuonditrack_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),443);
-            pat::CompositeCandidate pat_ref_X(reco_ref_Phi);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),443);
+            pat::CompositeCandidate pat_ref_X(reco_ref_X);
 
             //////////////////// For Lifetimes Calculations ////////////////////
             TVector3 MMTT_vtx((*mmtt_vertex_fromFit).position().x(), (*mmtt_vertex_fromFit).position().y(), 0) ;
@@ -620,7 +620,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
             float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
 
-            reco::CompositeCandidate reco_ref_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),-13);
+            reco::CompositeCandidate reco_ref_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_PM(reco_ref_PM);
 
             float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
@@ -630,7 +630,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
             float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
 
-            reco::CompositeCandidate reco_ref_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),13);
+            reco::CompositeCandidate reco_ref_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
             pat::CompositeCandidate pat_ref_NM(reco_ref_NM);
 
             float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
@@ -641,7 +641,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float kaonPos_en_fit = sqrt(kaonPos_ma_fit*kaonPos_ma_fit+kaonPos_px_fit*kaonPos_px_fit+kaonPos_py_fit*kaonPos_py_fit+kaonPos_pz_fit*kaonPos_pz_fit);
 
             reco::CompositeCandidate reco_ref_PK(kaonPos_ch_fit,math::XYZTLorentzVector(kaonPos_px_fit,kaonPos_py_fit,kaonPos_pz_fit,kaonPos_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),-13);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_PK(reco_ref_PK);
 
             float kaonNeg_ma_fit = kaonNegCand_fromFit->currentState().mass();
@@ -652,14 +652,14 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
 
             reco::CompositeCandidate reco_ref_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),13);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
 
             pat::CompositeCandidate pat_ref_NK(reco_ref_NK);
 
-            pat_ref_X.addDaughter(*pat_ref_PM,"posMuon");
-            pat_ref_X.addDaughter(*pat_ref_NM,"negMuon");
-            pat_ref_X.addDaughter(*pat_ref_PK,"trackPos");
-            pat_ref_X.addDaughter(*pat_ref_NK,"trackNeg");
+            pat_ref_X.addDaughter(pat_ref_PM,"posMuon");
+            pat_ref_X.addDaughter(pat_ref_NM,"negMuon");
+            pat_ref_X.addDaughter(pat_ref_PK,"trackPos");
+            pat_ref_X.addDaughter(pat_ref_NK,"trackNeg");
 
             pat_ref_X.addUserFloat("VProb", mmttVProb_Fit);
             pat_ref_X.addUserFloat("Chi2",  mmttChi2_Fit);
@@ -695,9 +695,9 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             PSiTTVertexFitTree->movePointerToTheNextChild();
             RefCountedKinematicParticle kaonNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
 
-            double PSiTT_vx_fit = PSiTT_vertex_fromFit->position().x();
-            double PSiTT_vy_fit = PSiTT_vertex_fromFit->position().y();
-            double PSiTT_vz_fit = PSiTT_vertex_fromFit->position().z();
+            double mmtt_vx_fit = PSiTT_vertex_fromFit->position().x();
+            double mmtt_vy_fit = PSiTT_vertex_fromFit->position().y();
+            double mmtt_vz_fit = PSiTT_vertex_fromFit->position().z();
 
             if (PSiTT_fromFit->currentState().mass() < phiMassCuts_[0]  ||  PSiTT_fromFit->currentState().mass() > phiMassCuts_[1])
             continue ;
@@ -710,7 +710,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float dimuonditrack_en_fit = sqrt(dimuonditrack_ma_fit*dimuonditrack_ma_fit+dimuonditrack_px_fit*dimuonditrack_px_fit+dimuonditrack_py_fit*dimuonditrack_py_fit+dimuonditrack_pz_fit*dimuonditrack_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_X(dimuonditrack_ch_fit,math::XYZTLorentzVector(dimuonditrack_px_fit,dimuonditrack_py_fit,dimuonditrack_pz_fit,dimuonditrack_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),443);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),443);
             pat::CompositeCandidate pat_ref_mc_X(reco_ref_Phi);
 
             float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
@@ -720,7 +720,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
             float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
 
-            reco::CompositeCandidate reco_ref_mc_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),-13);
+            reco::CompositeCandidate reco_ref_mc_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_mc_PM(reco_ref_PM);
 
             float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
@@ -730,7 +730,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
             float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
 
-            reco::CompositeCandidate reco_ref_mc_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(dimuon_vx_fit,dimuon_vy_fit,dimuon_vz_fit),13);
+            reco::CompositeCandidate reco_ref_mc_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
             pat::CompositeCandidate pat_ref_mc_NM(reco_ref_NM);
 
             float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
@@ -741,7 +741,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float kaonPos_en_fit = sqrt(kaonPos_ma_fit*kaonPos_ma_fit+kaonPos_px_fit*kaonPos_px_fit+kaonPos_py_fit*kaonPos_py_fit+kaonPos_pz_fit*kaonPos_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_PK(kaonPos_ch_fit,math::XYZTLorentzVector(kaonPos_px_fit,kaonPos_py_fit,kaonPos_pz_fit,kaonPos_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),-13);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_mc_PK(reco_ref_PK);
 
             float kaonNeg_ma_fit = kaonNegCand_fromFit->currentState().mass();
@@ -752,7 +752,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
-                                                     math::XYZPoint(PSiTT_vx_fit,PSiTT_vy_fit,PSiTT_vz_fit),13);
+                                                     math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
 
             pat::CompositeCandidate pat_ref_mc_NK(reco_ref_NK);
 
@@ -841,16 +841,16 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_Phi.addUserFloat("Chi2",  mmtt_mc_Chi2_Fit);
             pat_ref_Phi.addUserFloat("NDof",  mmtt_mc_NDof_Fit);
 
-            pat_ref_mc_X.addDaughter(*ditrakCand,"ditrakCand");
-            pat_ref_mc_X.addDaughter(*dimuonCand,"dimuonCand");
+            pat_ref_mc_X.addDaughter(ditrakCand,"ditrakCand");
+            pat_ref_mc_X.addDaughter(dimuonCand,"dimuonCand");
 
-            pat_ref_mc_X.addDaughter(*pat_X,"unref_X");
-            pat_ref_mc_X.addDaughter(*pat_ref_X,"unref_X");
+            pat_ref_mc_X.addDaughter(pat_X,"unref_X");
+            pat_ref_mc_X.addDaughter(pat_ref_X,"unref_X");
 
-            pat_ref_X.addDaughter(*pat_ref_mc_PM,"posMuon");
-            pat_ref_X.addDaughter(*pat_ref_mc_NM,"negMuon");
-            pat_ref_X.addDaughter(*pat_ref_mc_PK,"trackPos");
-            pat_ref_X.addDaughter(*pat_ref_mc_NK,"trackNeg");
+            pat_ref_X.addDaughter(pat_ref_mc_PM,"posMuon");
+            pat_ref_X.addDaughter(pat_ref_mc_NM,"negMuon");
+            pat_ref_X.addDaughter(pat_ref_mc_PK,"trackPos");
+            pat_ref_X.addDaughter(pat_ref_mc_NK,"trackNeg");
 
 
 
