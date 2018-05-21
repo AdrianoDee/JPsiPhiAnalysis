@@ -266,7 +266,7 @@ process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
-                
+
                                  PhiMassCuts = cms.vdouble((0.97,1.07)),
 
                                  DoDataAnalysis = cms.untracked.bool( True ),
@@ -303,7 +303,7 @@ process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
 
                          )
 
-process.phitokk = cms.EDProducer("DiMuonDiTrakProducerPAT",
+process.xtomumukk = cms.EDProducer("DiMuonDiTrakProducerPAT",
 
                                  ditraks = cms.untracked.InputTag("phitokk","DiTrakCandidates","NTUPLE"),
                                  dimuons = cms.untracked.InputTag("psitomumu","DiMuonCandidates","NTUPLE"),
@@ -450,6 +450,7 @@ process.ntup = cms.Path(
         * process.psitomumu
         * process.phitokk
         #* process.content
+        * process.xtomumukk
         * process.rootuplemumu
         * process.rootupletrtr
 )
