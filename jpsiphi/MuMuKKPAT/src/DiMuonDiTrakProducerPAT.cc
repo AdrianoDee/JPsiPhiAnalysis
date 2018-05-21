@@ -842,7 +842,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addDaughter(*dimuonCand,"dimuonCand");
 
             pat_ref_mc_X.addDaughter(pat_X,"unref_X");
-            pat_ref_mc_X.addDaughter(pat_ref_X,"unref_X");
+            pat_ref_mc_X.addDaughter(pat_ref_X,"ref_X");
 
             pat_ref_mc_X.addDaughter(pat_ref_mc_PM,"posMuon");
             pat_ref_mc_X.addDaughter(pat_ref_mc_NM,"negMuon");
