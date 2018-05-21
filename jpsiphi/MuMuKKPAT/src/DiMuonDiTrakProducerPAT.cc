@@ -669,7 +669,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             //Vertex fit jpsi mass constant
 
             KinematicConstrainedVertexFitter constVertexFitter;
-            MultiTrackKinematicConstraint *dimuon_mtc = new  TwoTrackMassKinematicConstraint(diMuonMass);
+            MultiTrackKinematicConstraint *dimuon_mtc = new TwoTrackMassKinematicConstraint(DiMuonMass_);
             RefCountedKinematicTree PsiTTVertexFitTree = constVertexFitter.fit(allPsiTTDaughters,dimuon_mtc);
 
             if (!PSiTTVertexFitTree->isValid()) continue;
@@ -835,11 +835,11 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addUserFloat("BS_lxyz",        MMTT_lxyz);
             pat_ref_mc_X.addUserFloat("BS_lxyzErr",     MMTT_lxyzErr);
 
-            pat_ref_Phi.addUserFloat("deltaR",deltaRMMTT);
+            pat_ref_mc_X.addUserFloat("deltaR",deltaRMMTT);
 
-            pat_ref_Phi.addUserFloat("VProb", mmtt_mc_VProb_Fit);
-            pat_ref_Phi.addUserFloat("Chi2",  mmtt_mc_Chi2_Fit);
-            pat_ref_Phi.addUserFloat("NDof",  mmtt_mc_NDof_Fit);
+            pat_ref_mc_X.addUserFloat("VProb", mmtt_mc_VProb_Fit);
+            pat_ref_mc_X.addUserFloat("Chi2",  mmtt_mc_Chi2_Fit);
+            pat_ref_mc_X.addUserFloat("NDof",  mmtt_mc_NDof_Fit);
 
             pat_ref_mc_X.addDaughter(ditrakCand,"ditrakCand");
             pat_ref_mc_X.addDaughter(dimuonCand,"dimuonCand");
@@ -847,10 +847,10 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addDaughter(pat_X,"unref_X");
             pat_ref_mc_X.addDaughter(pat_ref_X,"unref_X");
 
-            pat_ref_X.addDaughter(pat_ref_mc_PM,"posMuon");
-            pat_ref_X.addDaughter(pat_ref_mc_NM,"negMuon");
-            pat_ref_X.addDaughter(pat_ref_mc_PK,"trackPos");
-            pat_ref_X.addDaughter(pat_ref_mc_NK,"trackNeg");
+            pat_ref_mc_X.addDaughter(pat_ref_mc_PM,"posMuon");
+            pat_ref_mc_X.addDaughter(pat_ref_mc_NM,"negMuon");
+            pat_ref_mc_X.addDaughter(pat_ref_mc_PK,"trackPos");
+            pat_ref_mc_X.addDaughter(pat_ref_mc_NK,"trackNeg");
 
 
 
@@ -859,7 +859,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
         }//di muon
 
 
-            DiMuonTTCandColl->push_back(pat_ref_X);
+            DiMuonTTCandColl->push_back(pat_ref_mc_X);
       } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
       } // if (doMC_ || doData_)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
