@@ -477,6 +477,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             float mmttMass = ditrakCand->mass() + dimuonCand->mass();
 
+            std::cout << "MMTT mass : " << mmttMass << std::endl;
+
             if ( mmttMass > XMassMax || mmttMass < XMassMin ) continue;
 
             const pat::GenericParticle *trackPos = dynamic_cast<const pat::GenericParticle*>(ditrakCand->daughter("trackPos"));
@@ -847,7 +849,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addDaughter(pat_ref_mc_PK,"trackPos");
             pat_ref_mc_X.addDaughter(pat_ref_mc_NK,"trackNeg");
 
-            std::cout << "X mass : " << pat_ref_mc_X.mass() << std::endl;
+            std::cout << "X mass ref : " << pat_ref_mc_X.mass() << std::endl;
 
             DiMuonTTCandColl->push_back(pat_ref_mc_X);
 
