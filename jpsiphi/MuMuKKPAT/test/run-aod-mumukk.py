@@ -1,5 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
+kaon_mass = 0.493667
+jpsi_mass = 3.096916
+
 MC = False
 process = cms.Process('NTUPLE')
 
@@ -258,12 +261,17 @@ process.psitomumu = cms.EDProducer("MuMuProducerPAT",
 
                          )
 
+
 process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                                  HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
                                  inputGEN  = cms.untracked.InputTag("genParticles"),
                                  VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
 
+                                 JPsiMassCuts = cms.vdouble((2.95,3.25)),
                                  PhiMassCuts = cms.vdouble((0.97,1.07)),
+                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
+                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
+                                 PhiMassCuts = cms.double(0.97),
 
                                  DoDataAnalysis = cms.untracked.bool( True ),
                                  DoMonteCarloTree = cms.untracked.bool( False ),
@@ -281,6 +289,50 @@ process.phitokk = cms.EDProducer("TrakTrakProducerPAT",
                                  MinNumTrSiHits = cms.untracked.int32(8),
                                  MaxTrNormChi2 = cms.untracked.double(7),
                                  MaxTrD0 = cms.untracked.double(10.0),
+
+                                 TriggerCut = cms.untracked.bool(True),
+                                 Debug_Output = cms.untracked.bool(True), # true
+                                 ##
+                                 ##  use the correct trigger path
+                                 ##
+                                 TriggersForMatching = cms.untracked.vstring(
+                                         #2012 displaced J/psi = Alessandra
+                                         "HLT_DoubleMu4_Jpsi_Displaced",
+                    					 "HLT_Dimuon8_Jpsi",
+                                 ),
+
+                                 FiltersForMatching = cms.untracked.vstring(
+                                         "hltDisplacedmumuFilterDoubleMu4Jpsi",
+                                         "hltVertexmumuFilterDimuon8Jpsi")
+
+                         )
+
+process.phitokk = cms.EDProducer("DiMuonDiTrakProducerPAT",
+
+                                 ditraks = cms.untracked.InputTag("phitokk","DiTrakCandidates","NTUPLE"),
+                                 dimuons = cms.untracked.InputTag("psitomumu","DiMuonCandidates","NTUPLE"),
+
+                                 HLTriggerResults = cms.untracked.InputTag("TriggerResults","","HLT"),
+                                 inputGEN  = cms.untracked.InputTag("genParticles"),
+                                 VtxSample   = cms.untracked.string('offlinePrimaryVertices'),
+
+                                 JPsiMassCuts = cms.vdouble((2.95,3.25)),
+                                 PhiMassCuts = cms.vdouble((0.97,1.07)),
+                                 XMassCuts = cms.vdouble((4.0,6.0)),
+                                 TrackMass = cms.vdouble((kaon_mass,kaon_mass)),
+                                 DiMuonMass = cms.double(jpsi_mass),
+
+                                 DoDataAnalysis = cms.untracked.bool( True ),
+                                 DoMonteCarloTree = cms.untracked.bool( False ),
+
+                                 addCommonVertex = cms.bool( False ),
+                                 resolvePileUpAmbiguity = cms.bool( False ),
+                                 addMCTruth = cms.bool( False ),
+
+                                 MonteCarloParticleId = cms.untracked.int32(20443),
+                                 MonteCarloExclusiveDecay = cms.untracked.bool( False ),
+                                 MonteCarloMotherId = cms.untracked.int32( 511 ),
+                                 MonteCarloDaughtersN = cms.untracked.int32( 3 ), # 3 for exclusive B0->psi'KPi
 
                                  TriggerCut = cms.untracked.bool(True),
                                  Debug_Output = cms.untracked.bool(True), # true
