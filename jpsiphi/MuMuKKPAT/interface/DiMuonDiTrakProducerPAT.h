@@ -212,7 +212,7 @@ private:
   std::string proccessName_;
   HLTConfigProvider hltConfig_;
 
-  edm::InputTag dimuon_Label,ditraks_Label;
+  edm::InputTag dimuon_Label_,ditraks_Label_;
   edm::InputTag hlTriggerResults_;
   std::map<std::string,int> *HLTTrig; /// HLT trigger prescale for accepted paths
 
