@@ -150,7 +150,6 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
   const ParticleMass muon_mass = 0.10565837; //pdg mass
 
   /// Setting insignificant mass sigma to avoid singularities in the covariance matrix.
-  float small_sigma = muon_mass*1.e-6;
 
   using namespace edm;
   using namespace std;
@@ -456,8 +455,6 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
   /// reconstruction only for events with B decaying in psi(nS)+Pi+K /// SEMRA JPsiPhi !!!
 
   if ( (doMC_ && !MCExclusiveDecay_) || (doMC_ && (MCExclusiveDecay_ && decayChainOK)) || doData_ ) {
-
-    bool isEventWithInvalidMu = false;
 
     if (Debug_) std::cout << "Starting event with " << thePATMuonHandle->size() << " muons" << std::endl;
 
