@@ -676,7 +676,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             PSiTTVertexFitTree->movePointerToTheTop();
             RefCountedKinematicParticle PSiTT_fromFit = PSiTTVertexFitTree->currentParticle();
-            RefCountedKinematicVertex PSiTT_vertex_fromFit = PSiTTVertexFitTree->currentDecayVertex()
+            RefCountedKinematicVertex PSiTT_vertex_fromFit = PSiTTVertexFitTree->currentDecayVertex();
 
             float mmtt_mc_VProb_Fit = ChiSquaredProbability((float)( PSiTT_vertex_fromFit->chiSquared()),(float)( PSiTT_vertex_fromFit->degreesOfFreedom()));
 
@@ -687,69 +687,69 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             float mmtt_mc_NDof_Fit = PSiTT_vertex_fromFit->degreesOfFreedom();
 
             PSiTTVertexFitTree->movePointerToTheFirstChild();
-            RefCountedKinematicParticle MuPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
+            MuPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
             PSiTTVertexFitTree->movePointerToTheNextChild();
-            RefCountedKinematicParticle MuNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
+            MuNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
             PSiTTVertexFitTree->movePointerToTheFirstChild();
-            RefCountedKinematicParticle kaonPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
+            kaonPosCand_fromFit = PSiTTVertexFitTree->currentParticle();
             PSiTTVertexFitTree->movePointerToTheNextChild();
-            RefCountedKinematicParticle kaonNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
+            kaonNegCand_fromFit = PSiTTVertexFitTree->currentParticle();
 
-            double mmtt_vx_fit = PSiTT_vertex_fromFit->position().x();
-            double mmtt_vy_fit = PSiTT_vertex_fromFit->position().y();
-            double mmtt_vz_fit = PSiTT_vertex_fromFit->position().z();
+            mmtt_vx_fit = PSiTT_vertex_fromFit->position().x();
+            mmtt_vy_fit = PSiTT_vertex_fromFit->position().y();
+            mmtt_vz_fit = PSiTT_vertex_fromFit->position().z();
 
             if (PSiTT_fromFit->currentState().mass() < phiMassCuts_[0]  ||  PSiTT_fromFit->currentState().mass() > phiMassCuts_[1])
             continue ;
 
-            float dimuonditrack_ma_fit = PSiTT_fromFit->currentState().mass();
-            int   dimuonditrack_ch_fit = PSiTT_fromFit->currentState().particleCharge();
-            float dimuonditrack_px_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().x();
-            float dimuonditrack_py_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().y();
-            float dimuonditrack_pz_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().z();
-            float dimuonditrack_en_fit = sqrt(dimuonditrack_ma_fit*dimuonditrack_ma_fit+dimuonditrack_px_fit*dimuonditrack_px_fit+dimuonditrack_py_fit*dimuonditrack_py_fit+dimuonditrack_pz_fit*dimuonditrack_pz_fit);
+            dimuonditrack_ma_fit = PSiTT_fromFit->currentState().mass();
+            dimuonditrack_ch_fit = PSiTT_fromFit->currentState().particleCharge();
+            dimuonditrack_px_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().x();
+            dimuonditrack_py_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().y();
+            dimuonditrack_pz_fit = PSiTT_fromFit->currentState().kinematicParameters().momentum().z();
+            dimuonditrack_en_fit = sqrt(dimuonditrack_ma_fit*dimuonditrack_ma_fit+dimuonditrack_px_fit*dimuonditrack_px_fit+dimuonditrack_py_fit*dimuonditrack_py_fit+dimuonditrack_pz_fit*dimuonditrack_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_X(dimuonditrack_ch_fit,math::XYZTLorentzVector(dimuonditrack_px_fit,dimuonditrack_py_fit,dimuonditrack_pz_fit,dimuonditrack_en_fit),
                                                      math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),443);
             pat::CompositeCandidate pat_ref_mc_X(reco_ref_Phi);
 
-            float muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
-            int   muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
-            float muonPos_px_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().x();
-            float muonPos_py_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().y();
-            float muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
-            float muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
+            muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
+            muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
+            muonPos_px_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().x();
+            muonPos_py_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().y();
+            muonPos_pz_fit = MuPosCand_fromFit->currentState().kinematicParameters().momentum().z();
+            muonPos_en_fit = sqrt(muonPos_ma_fit*muonPos_ma_fit+muonPos_px_fit*muonPos_px_fit+muonPos_py_fit*muonPos_py_fit+muonPos_pz_fit*muonPos_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_PM(muonPos_ch_fit,math::XYZTLorentzVector(muonPos_px_fit,muonPos_py_fit,muonPos_pz_fit,muonPos_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_mc_PM(reco_ref_PM);
 
-            float muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
-            int   muonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
-            float muonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
-            float muonNeg_py_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().y();
-            float muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
-            float muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
+            muonNeg_ma_fit = MuNegCand_fromFit->currentState().mass();
+            muonNeg_ch_fit = MuNegCand_fromFit->currentState().particleCharge();
+            muonNeg_px_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().x();
+            muonNeg_py_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().y();
+            muonNeg_pz_fit = MuNegCand_fromFit->currentState().kinematicParameters().momentum().z();
+            muonNeg_en_fit = sqrt(muonNeg_ma_fit*muonNeg_ma_fit+muonNeg_px_fit*muonNeg_px_fit+muonNeg_py_fit*muonNeg_py_fit+muonNeg_pz_fit*muonNeg_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_NM(muonNeg_ch_fit,math::XYZTLorentzVector(muonNeg_px_fit,muonNeg_py_fit,muonNeg_pz_fit,muonNeg_en_fit),math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
             pat::CompositeCandidate pat_ref_mc_NM(reco_ref_NM);
 
-            float kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
-            int   kaonPos_ch_fit = kaonPosCand_fromFit->currentState().particleCharge();
-            float kaonPos_px_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().x();
-            float kaonPos_py_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().y();
-            float kaonPos_pz_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().z();
-            float kaonPos_en_fit = sqrt(kaonPos_ma_fit*kaonPos_ma_fit+kaonPos_px_fit*kaonPos_px_fit+kaonPos_py_fit*kaonPos_py_fit+kaonPos_pz_fit*kaonPos_pz_fit);
+            kaonPos_ma_fit = kaonPosCand_fromFit->currentState().mass();
+            kaonPos_ch_fit = kaonPosCand_fromFit->currentState().particleCharge();
+            kaonPos_px_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().x();
+            kaonPos_py_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().y();
+            kaonPos_pz_fit = kaonPosCand_fromFit->currentState().kinematicParameters().momentum().z();
+            kaonPos_en_fit = sqrt(kaonPos_ma_fit*kaonPos_ma_fit+kaonPos_px_fit*kaonPos_px_fit+kaonPos_py_fit*kaonPos_py_fit+kaonPos_pz_fit*kaonPos_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_PK(kaonPos_ch_fit,math::XYZTLorentzVector(kaonPos_px_fit,kaonPos_py_fit,kaonPos_pz_fit,kaonPos_en_fit),
                                                      math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),-13);
             pat::CompositeCandidate pat_ref_mc_PK(reco_ref_PK);
 
-            float kaonNeg_ma_fit = kaonNegCand_fromFit->currentState().mass();
-            int   kaonNeg_ch_fit = kaonNegCand_fromFit->currentState().particleCharge();
-            float kaonNeg_px_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().x();
-            float kaonNeg_py_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().y();
-            float kaonNeg_pz_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().z();
-            float kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
+            kaonNeg_ma_fit = kaonNegCand_fromFit->currentState().mass();
+            kaonNeg_ch_fit = kaonNegCand_fromFit->currentState().particleCharge();
+            kaonNeg_px_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().x();
+            kaonNeg_py_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().y();
+            kaonNeg_pz_fit = kaonNegCand_fromFit->currentState().kinematicParameters().momentum().z();
+            kaonNeg_en_fit = sqrt(kaonNeg_ma_fit*kaonNeg_ma_fit+kaonNeg_px_fit*kaonNeg_px_fit+kaonNeg_py_fit*kaonNeg_py_fit+kaonNeg_pz_fit*kaonNeg_pz_fit);
 
             reco::CompositeCandidate reco_ref_mc_NK(kaonNeg_ch_fit,math::XYZTLorentzVector(kaonNeg_px_fit,kaonNeg_py_fit,kaonNeg_pz_fit,kaonNeg_en_fit),
                                                      math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),13);
