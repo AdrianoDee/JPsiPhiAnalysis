@@ -852,14 +852,13 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addDaughter(pat_ref_mc_PK,"trackPos");
             pat_ref_mc_X.addDaughter(pat_ref_mc_NK,"trackNeg");
 
-
-
+            DiMuonTTCandColl->push_back(pat_ref_mc_X);
 
           }//di track
         }//di muon
 
 
-            DiMuonTTCandColl->push_back(pat_ref_mc_X);
+
       } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
       } // if (doMC_ || doData_)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
