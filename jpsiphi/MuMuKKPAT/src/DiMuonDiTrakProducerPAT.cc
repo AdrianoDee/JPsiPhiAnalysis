@@ -56,7 +56,7 @@ jspiMassCuts_(iConfig.getParameter<std::vector<double>>("JPsiMassCuts")),
 phiMassCuts_(iConfig.getParameter<std::vector<double>>("PhiMassCuts")),
 xMassCuts_(iConfig.getParameter<std::vector<double>>("XMassCuts")),
 trackMass_(iConfig.getParameter<std::vector<double>>("TrackMass")),
-DiMuonMass_(iConfig.getParameter<std::vector<double>>("DiMuonMass")),
+DiMuonMass_(iConfig.getParameter<double>("DiMuonMass")),
 
 doData_( iConfig.getUntrackedParameter<bool>("DoDataAnalysis", true) ),
 doMC_( iConfig.getUntrackedParameter<bool>("DoMonteCarloTree", false) ),
@@ -146,8 +146,6 @@ UInt_t DiMuonDiTrakProducerPAT::getTriggerBits(const edm::Event& iEvent ) {
 /// ------------ method called to for each event  ------------
 void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-
-  const ParticleMass muon_mass = 0.10565837; //pdg mass
 
   /// Setting insignificant mass sigma to avoid singularities in the covariance matrix.
 
@@ -711,7 +709,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             reco::CompositeCandidate reco_ref_mc_X(dimuonditrack_ch_fit,math::XYZTLorentzVector(dimuonditrack_px_fit,dimuonditrack_py_fit,dimuonditrack_pz_fit,dimuonditrack_en_fit),
                                                      math::XYZPoint(mmtt_vx_fit,mmtt_vy_fit,mmtt_vz_fit),443);
-            pat::CompositeCandidate pat_ref_mc_X(reco_ref_Phi);
+            pat::CompositeCandidate pat_ref_mc_X(reco_ref_mc_X);
 
             muonPos_ma_fit = MuPosCand_fromFit->currentState().mass();
             muonPos_ch_fit = MuPosCand_fromFit->currentState().particleCharge();
