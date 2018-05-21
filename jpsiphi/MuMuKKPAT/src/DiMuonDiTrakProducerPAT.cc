@@ -45,8 +45,8 @@ typedef math::Error<3>::type CovarianceMatrix;
 
 DiMuonDiTrakProducerPAT::DiMuonDiTrakProducerPAT(const edm::ParameterSet& iConfig):
 
-dimuon_Label(iConfig.getUntrackedParameter<edm::InputTag>("dimuons")),
-ditraks_Label(iConfig.getUntrackedParameter<edm::InputTag>("ditraks")),
+dimuon_Label_(iConfig.getUntrackedParameter<edm::InputTag>("dimuons")),
+ditraks_Label_(iConfig.getUntrackedParameter<edm::InputTag>("ditraks")),
 
 hlTriggerResults_(iConfig.getUntrackedParameter<edm::InputTag>("HLTriggerResults",edm::InputTag("TriggerResults::HLT")) ),
 inputGEN_(iConfig.getUntrackedParameter<edm::InputTag>("inputGEN",edm::InputTag("genParticles"))),
@@ -156,13 +156,13 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
   using namespace reco;
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
-  iEvent.getByLabel(dimuon_Label,dimuon);
+  iEvent.getByLabel(dimuon_Label_,dimuon);
 
   edm::Handle<pat::CompositeCandidateCollection> ditrak;
-  iEvent.getByLabel(ditraks_Label,ditrak);
+  iEvent.getByLabel(ditraks_Label_,ditrak);
 
   edm::Handle<reco::VertexCollection> primaryVertices_handle;
-  iEvent.getByLabel(primaryVertices_Label, primaryVertices_handle);
+  iEvent.getByLabel(vtxSample_, primaryVertices_handle);
 
   float DiMuonMassMax = jspiMassCuts_[1];
   float DiMuonMassMin = jspiMassCuts_[0];
@@ -508,17 +508,17 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
             if(!mmttVertex.isValid()) continue;
 
-            float mmttVProb = ChiSquaredProbability((float)( mmttVertex->totalChiSquared()),(float)( mmttVertex->degreesOfFreedom()));
+            float mmttVProb = ChiSquaredProbability((float)( mmttVertex.totalChiSquared()),(float)( mmttVertex.degreesOfFreedom()));
 
             if (mmttVProb < 0.001)
             continue;
 
-            float mmttChi2 = mmttVertex->totalChiSquared();
-            float mmttNDof = mmttVertex->degreesOfFreedom();
+            float mmttChi2 = mmttVertex.totalChiSquared();
+            float mmttNDof = mmttVertex.degreesOfFreedom();
 
-            double mmtt_vx_fit = mmttVertex->position().x();
-            double mmtt_vy_fit = mmttVertex->position().y();
-            double mmtt_vz_fit = mmttVertex->position().z();
+            double mmtt_vx_fit = mmttVertex.position().x();
+            double mmtt_vy_fit = mmttVertex.position().y();
+            double mmtt_vz_fit = mmttVertex.position().z();
 
             TLorentzVector mmttP4 = trakPos->p4() + trackNeg->p4() + recoPosMuon->p4() + recoNegMuon->p4();
 
