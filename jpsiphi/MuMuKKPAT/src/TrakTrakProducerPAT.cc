@@ -464,7 +464,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
           if (trackPos->pt()<=0.7) continue;
 
-          if(fabs(trackPos->pdgId())!=211) continue;
+          // if(fabs(trackPos->pdgId())!=211) continue;
 
           if ( !(trackPos->track()->hitPattern().trackerLayersWithMeasurement()) ) {
             isEventWithInvalidTrack = true;
@@ -500,7 +500,7 @@ void TrakTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
             if(trackNeg->pt() <= 0.7) continue ;
 
-            if(fabs(trackNeg->pdgId())!=211) continue;
+            // if(fabs(trackNeg->pdgId())!=211) continue;
 
             if ( !(trackNeg->track()->hitPattern().trackerLayersWithMeasurement()) ) {
               isEventWithInvalidTrack = true;
