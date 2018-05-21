@@ -468,11 +468,6 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
 
         if (Debug_) std::cout <<"============================  Evt: " <<evtNum <<" accept event with 2 mu and trigger ==============================================" <<std::endl;
 
-        unsigned int posMuonType, negMuonType, posMuonTrackType, negMuonTrackType;
-        float posMuonDzVtx, posMuonDxyVtx, negMuonDzVtx, negMuonDxyVtx;
-
-        int nMatchedStationsPos, nMatchedStationsNeg,nOverlapMusPos, nOverlapMusNeg, nSharingSegWithPos, nSharingSegWithNeg;
-
         /// get MuMu cands
         for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
 
@@ -867,7 +862,7 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
         }//di muon
 
 
-            DiMuonTTCandColl->push_back(pat_ref_JPsi);
+            DiMuonTTCandColl->push_back(pat_ref_X);
       } // if (thePATMuonHandle->size() >= 2  && hasRequestedTrigger) {
       } // if (doMC_ || doData_)
       // AT THE END OF THE EVENT fill the tree and clear the vectors
