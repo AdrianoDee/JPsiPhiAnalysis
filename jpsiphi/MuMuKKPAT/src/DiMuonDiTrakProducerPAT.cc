@@ -848,6 +848,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
             pat_ref_mc_X.addDaughter(pat_ref_mc_PK,"trackPos");
             pat_ref_mc_X.addDaughter(pat_ref_mc_NK,"trackNeg");
 
+            std::cout << "X mass : " << pat_ref_mc_X.mass() << std::endl;
+
             DiMuonTTCandColl->push_back(pat_ref_mc_X);
 
           }//di track
@@ -863,8 +865,8 @@ void DiMuonDiTrakProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup&
       std::sort(DiMuonTTCandColl->begin(),DiMuonTTCandColl->end(),vPComparator_);
       //std::cout << "MuMu candidates count : " << DiMuonTTCandColl->size() << std::endl;
       //iEvent.put(std::move(DiMuonTTCandColl));
-      if(Debug_) std::cout << "No. dimuons: " << DiMuonTTCandColl->size() << std::endl;
-      iEvent.put( DiMuonTTCandColl, "DiMuonCandidates" );
+      if(Debug_) std::cout << "No. dimuonsditracks: " << DiMuonTTCandColl->size() << std::endl;
+      iEvent.put( DiMuonTTCandColl, "DiMuonDiTrakCandidates" );
 
     }
     //}/// produce
