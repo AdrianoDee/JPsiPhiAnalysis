@@ -73,6 +73,8 @@ class DiTrakPAT : public edm::EDProducer {
                                               const pat::TriggerObjectStandAlone& trakN);
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  UInt_t getTriggerBits(const edm::Event& iEvent, const edm::Handle< edm::TriggerResults >& triggerResults_handle);
+
 
   // ----------member data ---------------------------
  private:
