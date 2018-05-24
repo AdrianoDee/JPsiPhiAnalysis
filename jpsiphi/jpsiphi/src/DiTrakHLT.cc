@@ -293,6 +293,10 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
   // edm::Handle<pat::CompositeCandidateCollection> ditrigs;
   // iEvent.getByToken(diTrig_label,ditrigs);
 
+  ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
+
   edm::Handle<std::vector<pat::PackedCandidate> > trakColl;
   iEvent.getByToken(TrakCollection_,trakColl);
 
@@ -421,7 +425,7 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
              if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
-               vector<TransientTrack> tt_ttks;
+               std::vector<TransientTrack> tt_ttks;
                tt_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
                tt_ttks.push_back(theTTBuilder->build(posTrack.bestTrack()))
 
