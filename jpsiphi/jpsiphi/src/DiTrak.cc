@@ -52,11 +52,11 @@ const pat::CompositeCandidate DiTrakPAT::makeTTTriggerCandidate(
   TTCand.addDaughter(trakN,"trigN");
   TTCand.setCharge(trakP.charge()+trakN.charge());
 
-  double m_kaon1 = MassTraks_[0];
+  double m_kaon1 = massTraks_[0];
   math::XYZVector mom_kaon1 = trakP.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
-  double m_kaon2 = MassTraks_[1];
+  double m_kaon2 = massTraks_[1];
   math::XYZVector mom_kaon2 = trakN.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
