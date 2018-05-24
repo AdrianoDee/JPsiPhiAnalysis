@@ -67,7 +67,8 @@ class DiMuonDiTrakPAT : public edm::EDProducer {
   void endJob() override ;
   const pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& dimuon,
   				          const pat::CompositeCandidate& tt);
-
+  const pat::CompositeCandidate makeDiMuonTTTrigCandidate(const pat::CompositeCandidate& dimuon,
+                    				          const pat::CompositeCandidate& tt);
 
   // ----------member data ---------------------------
  private:

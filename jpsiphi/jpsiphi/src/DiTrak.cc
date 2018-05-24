@@ -2,10 +2,12 @@
 
 DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
 traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("Traks"))),
+TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 ditrakSelection_(iConfig.existsAs<std::string>("DiTrakCuts") ? iConfig.getParameter<std::string>("DiTrakCuts") : ""),
 massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses"))
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   produces<pat::CompositeCandidateCollection>();
 }
@@ -17,6 +19,30 @@ DiTrakPAT::~DiTrakPAT()
   // do anything here that needs to be done at desctruction time
   // (e.g. close files, deallocate resources etc.)
 
+}
+
+const pat::CompositeCandidate DiTrakPAT::makeTTTriggerCandidate(
+                                          const pat::TriggerObjectStandAlone& trakP,
+                                          const pat::TriggerObjectStandAlone& trakN
+                                         ){
+
+  pat::CompositeCandidate TTCand;
+  TTCand.addDaughter(trakP,"trigP");
+  TTCand.addDaughter(trakN,"trigN");
+  TTCand.setCharge(trakP.charge()+trakN.charge());
+
+  double m_kaon1 = MassTraks_[0];
+  math::XYZVector mom_kaon1 = trakP.momentum();
+  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+  double m_kaon2 = MassTraks_[1];
+  math::XYZVector mom_kaon2 = trakN.momentum();
+  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+  TTCand.setP4(vTT);
+
+  return TTCand;
 }
 
 const pat::CompositeCandidate DiTrakPAT::makeTTCandidate(
@@ -80,6 +106,64 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
 
+  pat::TriggerObjectStandAloneCollection filteredColl, matchedColl;
+  std::vector< pat::PackedCandidate> filteredTracks;
+  std::vector < UInt_t > filterResults;
+
+  for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
+
+    pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
+
+    unPackedTrigger.unpackPathNames( names );
+    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+
+    bool filtered = false;
+    UInt_t thisFilter = 0;
+
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
+
+    if(filtered)
+    {
+      filteredColl.push_back(unPackedTrigger);
+      filterResults.push_back(thisFilter);
+    }
+  }
+
+  //Matching
+
+  for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
+  {
+    bool matched = false;
+    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+    {
+      if(MatchByDRDPt(*trak,*trigger))
+      {
+        if(matched)
+        {
+          if(DeltaR(*trak,matchedColl.back()) > DeltaR(*trak,*trigger))
+          {
+            matchedColl.pop_back();
+            matchedColl.push_back(*trigger);
+
+          }
+        }
+
+        if(!matched)
+          {
+            filteredTracks.push_back(*trak);
+            matchedColl.push_back(*trigger);
+          }
+
+        matched = true;
+      }
+    }
+  }
+
   // ParticleMass trakP_mass = massTraks_[0];
   // ParticleMass trakN_mass = massTraks_[1];
 
@@ -93,16 +177,16 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
-  for (size_t i = 0; i < traks->size(); i++)
+  for (size_t i = 0; i < filteredTracks->size(); i++)
   {
-    auto posTrack = traks->at(i);
+    auto posTrack = filteredTracks->at(i);
 
     if(posTrack.charge() <= 0 ) continue;
     if(posTrack.pt()<0.5) continue;
     if(fabs(posTrack.pdgId())!=211) continue;
     if(!posTrack.hasTrackDetails()) continue;
 
-    for (size_t j = 0; j < traks->size(); j++){
+    for (size_t j = 0; j < filteredTracks->size(); j++){
 
       vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
       cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
@@ -110,7 +194,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if (i == j) continue;
 
-      auto negTrack = traks->at(j);
+      auto negTrack = filteredTracks->at(j);
 
       if(negTrack.charge() >= 0 ) continue;
       if(negTrack.pt()<0.5) continue;
@@ -118,6 +202,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(!negTrack.hasTrackDetails()) continue;
 
       pat::CompositeCandidate trktrkcand = makeTTCandidate(posTrack,negTrack);
+      pat::CompositeCandidate TTTrigger = makeTTTriggerCandidate(matchedColl[i],matchedColl[j]);
+
       vector<TransientVertex> pvs;
 
       if(!ditrakSelection_(trktrkcand)) continue;
@@ -206,6 +292,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       l_xy = vdiff.Perp();
       lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
+      trktrkcand.addDaughter(TTTrigger,"triggerTrakTrak")
 
       trktrkcand.addUserFloat("vNChi2",vChi2/vNDF);
       trktrkcand.addUserFloat("vProb",vProb);
@@ -219,12 +306,22 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       trktrkcand.addUserData("thePV",Vertex(thePrimaryV));
       trktrkcand.addUserData("theVertex",Vertex(ttVertex));
 
+      trktrkcand.addUserData("vX",Vertex(ttVertex).x());
+      trktrkcand.addUserData("vY",Vertex(ttVertex).y());
+      trktrkcand.addUserData("vZ",Vertex(ttVertex).z());
+      trktrkcand.addUserData("vT",Vertex(ttVertex).t());
+
+      trktrkcand.addUserData("vXErr",Vertex(ttVertex).xError());
+      trktrkcand.addUserData("vYErr",Vertex(ttVertex).yError());
+      trktrkcand.addUserData("vZErr",Vertex(ttVertex).zError());
+      trktrkcand.addUserData("vTErr",Vertex(ttVertex).tError());
+
       trakCollection->push_back(trktrkcand);
 
 
     } // loop over second track
   }
-  
+
   std::sort(trakCollection->begin(),trakCollection->end(),vPComparator_);
   iEvent.put(std::move(trakCollection));
 

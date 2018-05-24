@@ -547,6 +547,17 @@ DiMuonProducerHLTPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserFloat("l_xyzBS",l_xyzBS);
               mumucand.addUserFloat("lErr_xyzBS",lErr_xyzBS);
               mumucand.addUserData("commonVertex",Vertex(mumuVertex));
+
+              mumucand.addUserData("vX",Vertex(mumuVertex).x());
+              mumucand.addUserData("vY",Vertex(mumuVertex).y());
+              mumucand.addUserData("vZ",Vertex(mumuVertex).z());
+              mumucand.addUserData("vT",Vertex(mumuVertex).t());
+
+              mumucand.addUserData("vXErr",Vertex(mumuVertex).xError());
+              mumucand.addUserData("vYErr",Vertex(mumuVertex).yError());
+              mumucand.addUserData("vZErr",Vertex(mumuVertex).zError());
+              mumucand.addUserData("vTErr",Vertex(mumuVertex).tError());
+
               mumucand.addUserData("muonlessPV",Vertex(thePrimaryV));
               mumucand.addUserData("thePV",Vertex(theOriginalPV));
 

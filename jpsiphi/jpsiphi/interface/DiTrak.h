@@ -69,16 +69,23 @@ class DiTrakPAT : public edm::EDProducer {
   void endJob() override ;
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP,
     const pat::PackedCandidate& trakN);
+  const pat::CompositeCandidate DiTrakPAT::makeTTTriggerCandidate(
+                                              const pat::TriggerObjectStandAlone& trakP,
+                                              const pat::TriggerObjectStandAlone& trakN
+                                            );
 
 
   // ----------member data ---------------------------
  private:
 
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> traks_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   StringCutObjectSelector<reco::Candidate, true> ditrakSelection_;
   std::vector<double> massTraks_;
+
+  std::string HLTFilters_;
 
   InvariantMassFromVertex massCalculator;
 

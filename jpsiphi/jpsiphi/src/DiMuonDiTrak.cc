@@ -41,6 +41,22 @@ const pat::CompositeCandidate DiMuonDiTrakPAT::makeDiMuonTTCandidate(
 
 }
 
+const pat::CompositeCandidate makeDiMuonTTTrigCandidate(const pat::CompositeCandidate& dimuon,
+                                    const pat::CompositeCandidate& tt){
+
+pat::CompositeCandidate DiMuonTCand;
+DiMuonTCand.addDaughter(dimuon,"dimuon");
+DiMuonTCand.addDaughter(tt,"ditrak");
+DiMuonTCand.setVertex(dimuon.vertex());
+DiMuonTCand.setCharge(tt.charge());
+
+reco::Candidate::LorentzVector vDiMuonT = dimuon.p4() + tt.p4();
+DiMuonTCand.setP4(vDiMuonT);
+
+return DiMuonTCand;
+
+}
+
 
 void
 DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -105,6 +121,12 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
 
         pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *ditrakCand);
+
+        pat::CompositeCandidate ttTrig = ditrakCand->daughter("triggerTrakTrak");
+        pat::CompositeCandidate mmTrig = dimuonCand->daughter("mumuTrigger");
+
+        pat::CompositeCandidate mmttTrigCand = makeDiMuonTTCandidate(mmTrig, ttTrig);
+
 
         if ( !(mmttCand.mass() < DiMuonDiTrakMassMax_  && mmttCand.mass() > DiMuonDiTrakMassMin_) )
           continue;
@@ -195,6 +217,18 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         mmttCand.addUserFloat("cosAlpha",cosAlpha);
         mmttCand.addUserData("thePV",Vertex(thePrimaryV));
         mmttCand.addUserData("theVertex",Vertex(mmttVertex));
+
+        mmttCand.addDaughter(mmttTrigCand,"mmttTrigger");
+
+        mmttCand.addUserData("vX",Vertex(mmttVertex).x());
+        mmttCand.addUserData("vY",Vertex(mmttVertex).y());
+        mmttCand.addUserData("vZ",Vertex(mmttVertex).z());
+        mmttCand.addUserData("vT",Vertex(mmttVertex).t());
+
+        mmttCand.addUserData("vXErr",Vertex(mmttVertex).xError());
+        mmttCand.addUserData("vYErr",Vertex(mmttVertex).yError());
+        mmttCand.addUserData("vZErr",Vertex(mmttVertex).zError());
+        mmttCand.addUserData("vTErr",Vertex(mmttVertex).tError());
 
         mmttCollection->push_back(mmttCand);
 

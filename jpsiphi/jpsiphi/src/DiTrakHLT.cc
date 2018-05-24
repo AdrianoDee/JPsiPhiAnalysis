@@ -421,6 +421,58 @@ void DiTrakHLT::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetu
 
              if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
+               vector<TransientTrack> tt_ttks;
+               tt_ttks.push_back(theTTBuilder->build(negTrack.bestTrack()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+               tt_ttks.push_back(theTTBuilder->build(posTrack.bestTrack()))
+
+               TransientVertex ttVertex = vtxFitter.vertex(tt_ttks);
+               CachingVertex<5> VtxForInvMass = vtxFitter.vertex( tt_ttks );
+
+               LorentzVector trktrk = posTrack.p4() + negTrack.p4();
+
+               Measurement1D MassWErr(posTrack.mass(),-9999.);
+               if ( field->nominalValue() > 0 )
+                   MassWErr = massCalculator.invariantMass( VtxForInvMass, ttMasses );
+               else
+                   ttVertex = TransientVertex();                      // with no arguments it is invalid
+
+               if (!(ttVertex.isValid()))
+                   continue;
+
+               vChi2 = ttVertex.totalChiSquared();
+               vNDF  = ttVertex.degreesOfFreedom();
+               vProb = TMath::Prob(vChi2,(int)vNDF);
+
+               //Vertex parameters
+               TVector3 vtx,vtx3D;
+               TVector3 pvtx,pvtx3D;
+               VertexDistanceXY vdistXY;
+
+               vtx.SetXYZ(ttVertex.position().x(),ttVertex.position().y(),0);
+               vtx3D.SetXYZ(ttVertex.position().x(),ttVertex.position().y(),ttVertex.position().z());
+               TVector3 pperp(trktrk.px(), trktrk.py(), 0);
+               TVector3 pperp3D(trktrk.px(), trktrk.py(), trktrk.pz());
+               AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+               AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
+
+               //Lifetime calculations
+               pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+               TVector3 vdiff = vtx - pvtx;
+               cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+
+               Measurement1D distXY = vdistXY.distance(Vertex(ttVertex), thePrimaryV);
+               ctauPV = distXY.value()*cosAlpha * trktrkcand.mass()/pperp.Perp();
+
+               GlobalError v1e = (Vertex(ttVertex)).error();
+               GlobalError v2e = thePrimaryV.error();
+               AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+               ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*trktrkcand.mass()/(pperp.Perp2());
+
+               AlgebraicVector3 vDiff;
+               vDiff[0] = vdiff.x(); vDiff[1] = vdiff.y(); vDiff[2] = 0 ;
+               l_xy = vdiff.Perp();
+               lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
+
                ditrak_p4.SetPtEtaPhiM(TTCand.pt(),TTCand.eta(),TTCand.phi(),TTCand.mass());
 
                charge = TTTrigger.charge();
