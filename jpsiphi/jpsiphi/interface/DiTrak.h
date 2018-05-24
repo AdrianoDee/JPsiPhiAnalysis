@@ -84,7 +84,7 @@ class DiTrakPAT : public edm::EDProducer {
   StringCutObjectSelector<reco::Candidate, true> ditrakSelection_;
   std::vector<double> massTraks_;
 
-  std::string HLTFilters_;
+  std::vector<std::string> HLTFilters_;
 
   InvariantMassFromVertex massCalculator;
 
