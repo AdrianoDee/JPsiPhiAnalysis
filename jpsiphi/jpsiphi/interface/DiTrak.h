@@ -67,6 +67,7 @@ class DiTrakPAT : public edm::EDProducer {
   void beginJob() override ;
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endJob() override ;
+
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP, const pat::PackedCandidate& trakN);
   const pat::CompositeCandidate makeTTTriggerCandidate(
                                               const pat::TriggerObjectStandAlone& trakP,
@@ -87,7 +88,7 @@ class DiTrakPAT : public edm::EDProducer {
   StringCutObjectSelector<reco::Candidate, true> ditrakSelection_;
   std::vector<double> massTraks_;
 
-  std::vector<std::string> HLTFilters_;
+  std::vector<std::string> HLTs_,HLTFilters_;
 
   InvariantMassFromVertex massCalculator;
 

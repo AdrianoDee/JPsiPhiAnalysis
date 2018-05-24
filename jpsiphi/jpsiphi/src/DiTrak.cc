@@ -47,6 +47,7 @@ thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamS
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 ditrakSelection_(iConfig.existsAs<std::string>("DiTrakCuts") ? iConfig.getParameter<std::string>("DiTrakCuts") : ""),
 massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses")),
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   produces<pat::CompositeCandidateCollection>();
