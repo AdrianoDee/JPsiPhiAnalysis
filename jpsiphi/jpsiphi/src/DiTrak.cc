@@ -1,5 +1,22 @@
 #include "../interface/DiTrak.h"
 
+float DiTrakHLT::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   float p1 = t1.phi();
+   float p2 = t2.phi();
+   float e1 = t1.eta();
+   float e2 = t2.eta();
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+   return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
+bool DiTrakHLT::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+	DeltaR(t1,t2) < maxDeltaR);
+}
+
 DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
 traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("Traks"))),
 TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
@@ -177,16 +194,16 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
-  for (size_t i = 0; i < filteredTracks->size(); i++)
+  for (size_t i = 0; i < filteredTracks.size(); i++)
   {
-    auto posTrack = filteredTracks->at(i);
+    auto posTrack = filteredTracks.at(i);
 
     if(posTrack.charge() <= 0 ) continue;
     if(posTrack.pt()<0.5) continue;
     if(fabs(posTrack.pdgId())!=211) continue;
     if(!posTrack.hasTrackDetails()) continue;
 
-    for (size_t j = 0; j < filteredTracks->size(); j++){
+    for (size_t j = 0; j < filteredTracks.size(); j++){
 
       vProb = -1.0; vNDF = -1.0; vChi2 = -1.0;
       cosAlpha = -1.0; ctauPV = -1.0; ctauErrPV = -1.0;
@@ -194,7 +211,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if (i == j) continue;
 
-      auto negTrack = filteredTracks->at(j);
+      auto negTrack = filteredTracks.at(j);
 
       if(negTrack.charge() >= 0 ) continue;
       if(negTrack.pt()<0.5) continue;
