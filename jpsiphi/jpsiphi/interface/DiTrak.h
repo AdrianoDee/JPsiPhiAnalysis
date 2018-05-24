@@ -71,7 +71,7 @@ class DiTrakPAT : public edm::EDProducer {
   const pat::CompositeCandidate DiTrakPAT::makeTTTriggerCandidate(
                                               const pat::TriggerObjectStandAlone& trakP,
                                               const pat::TriggerObjectStandAlone& trakN
-  bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2
+  bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
   // ----------member data ---------------------------
@@ -89,7 +89,7 @@ class DiTrakPAT : public edm::EDProducer {
   InvariantMassFromVertex massCalculator;
 
   GreaterByVProb<pat::CompositeCandidate> vPComparator_;
-  
+
   float maxDeltaR;
   float maxDPtRel;
 
