@@ -23,7 +23,7 @@ TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.g
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 ditrakSelection_(iConfig.existsAs<std::string>("DiTrakCuts") ? iConfig.getParameter<std::string>("DiTrakCuts") : ""),
-massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses"))
+massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   produces<pat::CompositeCandidateCollection>();
@@ -313,7 +313,9 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       l_xy = vdiff.Perp();
       lErr_xy = sqrt(ROOT::Math::Similarity(vDiff,vXYe)) / vdiff.Perp();
 
-      trktrkcand.addDaughter(TTTrigger,"triggerTrakTrak")
+      trktrkcand.addDaughter(TTTrigger,"triggerTrakTrak");
+      trktrkcand.addDaughter(matchedColl[i],"negTrig");
+      trktrkcand.addDaughter(matchedColl[j],"posTrig");
 
       trktrkcand.addUserFloat("vNChi2",vChi2/vNDF);
       trktrkcand.addUserFloat("vProb",vProb);

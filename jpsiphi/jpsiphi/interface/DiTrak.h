@@ -68,9 +68,9 @@ class DiTrakPAT : public edm::EDProducer {
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endJob() override ;
   const pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trakP, const pat::PackedCandidate& trakN);
-  const pat::CompositeCandidate DiTrakPAT::makeTTTriggerCandidate(
+  const pat::CompositeCandidate makeTTTriggerCandidate(
                                               const pat::TriggerObjectStandAlone& trakP,
-                                              const pat::TriggerObjectStandAlone& trakN
+                                              const pat::TriggerObjectStandAlone& trakN);
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
