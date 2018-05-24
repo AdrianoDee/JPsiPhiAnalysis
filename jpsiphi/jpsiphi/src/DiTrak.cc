@@ -1,6 +1,6 @@
 #include "../interface/DiTrak.h"
 
-float DiTrakHLT::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float DiTrakPAT::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -11,7 +11,7 @@ float DiTrakHLT::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectS
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiTrakHLT::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+bool DiTrakPAT::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
@@ -27,6 +27,10 @@ massTraks_(iConfig.getParameter<std::vector<double>>("TraksMasses"))
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
   produces<pat::CompositeCandidateCollection>();
+
+  maxDeltaR = 0.01;
+  maxDPtRel = 2.0;
+
 }
 
 
