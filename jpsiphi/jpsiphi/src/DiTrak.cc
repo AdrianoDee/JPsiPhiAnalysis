@@ -20,6 +20,7 @@ bool DiTrakPAT::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerOb
 DiTrakPAT::DiTrakPAT(const edm::ParameterSet& iConfig):
 traks_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("Traks"))),
 TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
+triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 ditrakSelection_(iConfig.existsAs<std::string>("DiTrakCuts") ? iConfig.getParameter<std::string>("DiTrakCuts") : ""),
@@ -123,6 +124,17 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     thePrimaryV = Vertex(bs.position(), bs.covariance3D());
   }
 
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+  int trigger = -1;
+
+  if (triggerResults_handle.isValid())
+    trigger = getTriggerBits(iEvent,triggerResults_handle);
+  else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
   KalmanVertexFitter vtxFitter(true);
@@ -131,6 +143,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   std::vector< pat::PackedCandidate> filteredTracks;
   std::vector < UInt_t > filterResults;
 
+  if( trigger>=0 )
   for ( size_t iTrigObj = 0; iTrigObj < triggerColl->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( triggerColl->at( iTrigObj ) );
@@ -157,6 +170,7 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //Matching
 
+  if( trigger>=0 )
   for (std::vector<pat::PackedCandidate>::const_iterator trak = trakColl->begin(), trakend=trakColl->end(); trak!= trakend; ++trak)
   {
     bool matched = false;
@@ -198,6 +212,8 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float vProb, vNDF, vChi2, minDz = 999999.;
   float cosAlpha, ctauPV, ctauErrPV, dca;
   float l_xy, lErr_xy;
+
+  if( trigger>=0 )
   for (size_t i = 0; i < filteredTracks.size(); i++)
   {
     auto posTrack = filteredTracks.at(i);
@@ -345,9 +361,11 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     } // loop over second track
   }
 
-  std::sort(trakCollection->begin(),trakCollection->end(),vPComparator_);
-  iEvent.put(std::move(trakCollection));
-
+  if( trigger>=0 )
+  {
+    std::sort(trakCollection->begin(),trakCollection->end(),vPComparator_);
+    iEvent.put(std::move(trakCollection));
+  }
 }
 
 

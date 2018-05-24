@@ -79,6 +79,7 @@ class DiTrakPAT : public edm::EDProducer {
 
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> traks_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
+  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   StringCutObjectSelector<reco::Candidate, true> ditrakSelection_;

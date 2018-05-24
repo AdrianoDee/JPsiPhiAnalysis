@@ -123,7 +123,7 @@ DiMuonDiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         pat::CompositeCandidate mmttCand = makeDiMuonTTCandidate(*dimuonCand, *ditrakCand);
 
         const pat::CompositeCandidate ttTrig = dynamic_cast<const pat::CompositeCandidate>(ditrakCand->daughter("triggerTrakTrak"));
-        const pat::CompositeCandidate mmTrig = dynamic_cast<const pat::CompositeCandidate>(dimuonCand->daughter("mumuTrigger"));
+        const pat::CompositeCandidate mmTrig = dynamic_cast<const pat::CompositeCandidate>(dimuonCand->daughter("mumuTrigger");
 
         pat::CompositeCandidate mmttTrigCand = makeDiMuonTTCandidate(mmTrig, ttTrig);
 
