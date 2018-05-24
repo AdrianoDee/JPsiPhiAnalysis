@@ -125,11 +125,13 @@ DiTrakPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> trakCollection(new pat::CompositeCandidateCollection);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > traks;
-  iEvent.getByToken(traks_,traks);
+  edm::Handle<std::vector<pat::PackedCandidate> > trakColl;
+  iEvent.getByToken(traks_,trakColl);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> triggerColl;
   iEvent.getByToken(TriggerCollection_,triggerColl);
+
+
 
   Vertex thePrimaryV;
 
