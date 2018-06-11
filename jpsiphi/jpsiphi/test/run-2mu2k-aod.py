@@ -12,10 +12,6 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
-process.load('Configuration.Geometry.GeometryIdeal_cff') # 53x
-process.load("Configuration.StandardSequences.GeometryExtended_cff") # from Lucia
-process.load("Configuration.StandardSequences.Reconstruction_cff") # from Lucia
-process.load("Configuration.StandardSequences.MagneticField_cff") # for using TransientTrackBuilder
 process.load('Configuration/EventContent/EventContent_cff')
 
 process.load('L1TriggerConfig.L1GtConfigProducers.L1GtTriggerMaskAlgoTrigConfig_cff')
