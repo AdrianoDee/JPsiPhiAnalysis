@@ -6,6 +6,7 @@ input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
 mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
 mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
+mc_file = "file:/lustre/cms/store/user/adiflori/Y_MC/4700/5AEF6C10-4942-E811-92FB-A4BF01125B70.root"
 input_file = mc_file #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
@@ -148,7 +149,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
-    DiMuonTrakTrakMassCuts    = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    DiMuonTrakTrakMassCuts    = cms.vdouble(4.1,5.5),            # b-hadron mass window
     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
 )
@@ -162,7 +163,7 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     isMC = cms.bool(True),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
-    Mother_pdg = cms.uint32(531), #20443 #10441
+    Mother_pdg = cms.uint32(10441), #20443 #10441
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,

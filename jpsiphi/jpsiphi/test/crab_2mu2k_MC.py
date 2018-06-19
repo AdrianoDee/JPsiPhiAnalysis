@@ -2,7 +2,7 @@ import sys
 import os
 
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
-#jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
+jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -48,7 +48,7 @@ runNumber = [
 ''
 ]
 
-run = 'bbar'
+run = 'Y4500'
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
@@ -87,8 +87,8 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 3
-config.Data.splitting           = 'LumiBased'
+config.Data.unitsPerJob         = 1
+config.Data.splitting           = 'FileBased'
 config.Data.runRange            = runNum
 #config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'

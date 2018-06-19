@@ -11,7 +11,7 @@ input_file = mc_file #gen_file
 Y = "4700"
 
 input_file_4700 = ["file:/lustre/cms/store/user/adiflori/Y_MC/4700/5AEF6C10-4942-E811-92FB-A4BF01125B70.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/58212DB4-4642-E811-992B-001E6779262C.root"
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/58212DB4-4642-E811-992B-001E6779262C.root",
 "file:/lustre/cms/store/user/adiflori/Y_MC/4700/7EBA7618-4D42-E811-8183-A4BF01158D70.root",
 "file:/lustre/cms/store/user/adiflori/Y_MC/4700/1418711F-4442-E811-B0B6-A4BF01125D66.root",
 "file:/lustre/cms/store/user/adiflori/Y_MC/4700/1CA11BB9-6942-E811-9942-001E67E6F8E6.root",
