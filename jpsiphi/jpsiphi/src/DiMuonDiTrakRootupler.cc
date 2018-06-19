@@ -114,6 +114,9 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
 
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
+  Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuonditrk_pt,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
+  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt;
+
   Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt;
   Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt;
 
@@ -237,6 +240,19 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
         dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
 
+        //kin
+        dimuonditrk_tree->Branch("gen_dimuonditrk_m",        &gen_dimuonditrk_m,        "gen_dimuonditrk_m/D");
+        dimuonditrk_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D");
+        dimuonditrk_tree->Branch("dimuonditrk_pt",          &dimuonditrk_pt,          "dimuonditrk_pt/D");
+        dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
+        dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
+        dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
+        dimuonditrk_tree->Branch("ditrak_pt",       &ditrak_pt,        "ditrak_pt/D");
+        dimuonditrk_tree->Branch("highKaon_pt",          &highKaon_pt,          "highKaon_pt/D");
+        dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
+        dimuonditrk_tree->Branch("highMuon_pt",    &highMuon_pt,    "highMuon_pt/D");
+        dimuonditrk_tree->Branch("lowMuon_pt",     &lowMuon_pt,     "lowMuon_pt/D");
+
         //2mu vertexing
         dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
         dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
@@ -249,6 +265,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         //2mu+2Trk vertexing
         dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
         dimuonditrk_tree->Branch("dimuonditrk_vChi2",      &dimuonditrk_vChi2,        "dimuonditrk_vChi2/D");
+        dimuonditrk_tree->Branch("dimuonditrk_nDof",       &dimuonditrk_nDof,         "dimuonditrk_nDof/D");
         dimuonditrk_tree->Branch("dimuonditrk_cosAlpha",   &dimuonditrk_cosAlpha,     "dimuonditrk_cosAlpha/D");
         dimuonditrk_tree->Branch("dimuonditrk_ctauPV",     &dimuonditrk_ctauPV,       "dimuonditrk_ctauPV/D");
         dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
@@ -289,6 +306,8 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
            dimuonditrk_tree->Branch("gen_muonn_p4",  "TLorentzVector",  &gen_muonn_p4);
            dimuonditrk_tree->Branch("gen_kaonp_p4",  "TLorentzVector",  &gen_kaonp_p4);
            dimuonditrk_tree->Branch("gen_kaonn_p4",  "TLorentzVector",  &gen_kaonn_p4);
+
+           dimuonditrk_tree->Branch("gen_dimuonditrk_m",  &gen_dimuonditrk_m,    "gen_dimuonditrk_m/D");
 
            dimuonditrk_tree->Branch("gen_b4_p4", "TLorentzVector",  &gen_b4_p4);
            dimuonditrk_tree->Branch("gen_d1_p4",  "TLorentzVector",  &gen_d1_p4);
@@ -652,10 +671,12 @@ if(!OnlyGen_)
 
       dimuonditrk_vProb     = dimuonditrk_rf_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_rf_cand.userFloat("vChi2");
+      dimuonditrk_nDof      = dimuonditrk_rf_cand.userFloat("nDof");
       dimuonditrk_cosAlpha  = dimuonditrk_rf_cand.userFloat("cosAlpha");
       dimuonditrk_ctauPV    = dimuonditrk_rf_cand.userFloat("ctauPV");
       dimuonditrk_ctauErrPV = dimuonditrk_rf_cand.userFloat("ctauErrPV");
       dimuonditrk_charge    = dimuonditrk_cand.charge();
+
 
       tPMatch = dimuonditrk_rf_cand.userInt("tPMatch");
       tNMatch = dimuonditrk_rf_cand.userInt("tNMatch");
@@ -692,6 +713,13 @@ if(!OnlyGen_)
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
+      dimuonditrk_m   = dimuonditrk_cand->mass();
+      dimuonditrk_pt  = dimuonditrk_cand->pt();
+      dimuon_m        = dimuon_cand->mass();
+      dimuon_pt       = dimuon_cand->pt();
+      ditrak_m        = ditrak_cand->mass();
+      ditrak_pt       = ditrak_cand->pt();
+
       const pat::Muon *muonP, *muonN;
 
       if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
@@ -704,6 +732,7 @@ if(!OnlyGen_)
         muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
         muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
       }
+
 
       muonP_isLoose    =  muonP->isLooseMuon();
       muonP_isSoft     =  muonP->isSoftMuon(thePrimaryV);
@@ -728,6 +757,11 @@ if(!OnlyGen_)
 
       kaonp_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
       kaonn_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
+
+      highKaon_pt     = std::max(kP.pt(),kM.pt());
+      lowKaon_pt      = -std::max(-kP.pt(),-kM.pt());
+      highMuon_pt     = std::max(vM.pt(),vP.pt());
+      lowMuon_pt      = -std::max(-vM.pt(),-vP.pt());
 
       //double kmass = 0.4936770;
       dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());

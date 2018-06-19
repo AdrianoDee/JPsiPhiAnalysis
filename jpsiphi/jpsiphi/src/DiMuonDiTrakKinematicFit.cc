@@ -210,12 +210,14 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
        double dimuontt_ma_fit = 14000.;
        double dimuontt_vp_fit = -9999.;
        double dimuontt_x2_fit = 10000.;
+       double dimuontt_ndof_fit = 10000.;
 
        if (fitPsiT->currentState().isValid()) {
          dimuontt_ma_fit = fitPsiT->currentState().mass();
          dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
          dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
                                               (double)(PsiTDecayVertex->degreesOfFreedom()));
+         dimuontt_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
        }
 
        if ( dimuontt_ma_fit > DiMuonTTMassCuts_[0] && dimuontt_ma_fit < DiMuonTTMassCuts_[1] && dimuontt_vp_fit > 0.0 ) {
@@ -250,6 +252,7 @@ void DiMuonDiTrakKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
 	    pat::CompositeCandidate patPsiT(recoPsiT);
             patPsiT.addUserFloat("vProb",dimuontt_vp_fit);
             patPsiT.addUserFloat("vChi2",dimuontt_x2_fit);
+            patPsiT.addUserFloat("nDof",dimuontt_ndof_fit);
             patPsiT.addUserFloat("cosAlpha",cosAlpha);
             patPsiT.addUserFloat("ctauPV",ctauPV);
             patPsiT.addUserFloat("ctauErrPV",ctauErrPV);
