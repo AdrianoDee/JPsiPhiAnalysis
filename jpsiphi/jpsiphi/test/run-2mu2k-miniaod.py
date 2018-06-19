@@ -16,7 +16,7 @@ process.load("SimTracker.TrackerHitAssociation.tpClusterProducer_cfi")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v10')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v11')
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -43,12 +43,12 @@ charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-'HLT_DoubleMu4_JpsiTrk_Displaced',
-'HLT_DoubleMu4_Jpsi_Displaced',
-'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-'HLT_Dimuon25_Jpsi',
+#'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
+#'HLT_DoubleMu4_JpsiTrk_Displaced',
+#'HLT_DoubleMu4_Jpsi_Displaced',
+#'HLT_DoubleMu4_3_Jpsi_Displaced',
+#'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+#'HLT_Dimuon25_Jpsi',
 ]
 
 hltList = charmoniumHLT #muoniaHLT
