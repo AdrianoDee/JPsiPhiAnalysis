@@ -2,7 +2,7 @@ import sys
 import os
 
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
+#jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -36,7 +36,8 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 datasetnames = {
 
 "bbar": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
-"bJpsi": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM'
+"bJpsi": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
+"Y4700":"/Y4700_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAOD-PU2017_94X_mc2017_realistic_v11-v1/MINIAODSIM"
 }
 
 
@@ -67,7 +68,7 @@ config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2mu2k_bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = 'miniaod_2mu2k_' + run + '_' +runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
 config.General.transferLogs     = False
 
 config.section_('JobType')
@@ -83,10 +84,10 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 5
-config.Data.splitting           = 'FileBased'
+config.Data.unitsPerJob         = 1
+config.Data.splitting           = 'LumiBased'
 config.Data.runRange            = runNum
-config.Data.lumiMask            = lumi
+#config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'
 config.Data.publication         = False
 config.Data.ignoreLocality      = True
