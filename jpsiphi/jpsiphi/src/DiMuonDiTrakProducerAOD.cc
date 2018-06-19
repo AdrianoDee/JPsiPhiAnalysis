@@ -53,8 +53,8 @@ void DiMuonDiTrakProducerAOD::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<std::vector<pat::PackedCandidate> > trak;
   iEvent.getByToken(TrakCollection_,trak);
 
-  edm::Handle<trigger::TriggerEvent> trig;
-  iEvent.getByToken(TriggerEvent_,trig);
+  edm::Handle<trigger::TriggerEvent> triggerEvent;
+  iEvent.getByToken(TriggerEvent_,triggerEvent);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
@@ -69,67 +69,121 @@ void DiMuonDiTrakProducerAOD::produce(edm::Event& iEvent, const edm::EventSetup&
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
 
-  pat::TriggerObjectStandAloneCollection filteredColl,matchedColl;
-  std::vector < UInt_t > filterResults,filters;
-
-  for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
-
-    pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
-
-    unPackedTrigger.unpackPathNames( names );
-    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
-
-    bool filtered = false;
-    UInt_t thisFilter = 0;
-
-    for (size_t i = 0; i < HLTFilters_.size(); i++)
-      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
-        {
-          thisFilter += (1<<i);
-          filtered = true;
-        }
-
-    if(filtered)
-    {
-      filteredColl.push_back(unPackedTrigger);
-      filterResults.push_back(thisFilter);
-    }
-  }
-
-  for (std::vector<pat::PackedCandidate>::const_iterator t = trak->begin(), trakend=trak->end(); t!= trakend; ++t)
-  {
-    bool matched = false;
-    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
-  for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
-    {
-      auto thisTrig = filteredColl.at(iTrigObj);
-      if(MatchByDRDPt(*t,filteredColl[iTrigObj]))
-      {
-        if(matched)
-        {
-          if(DeltaR(*t,matchedColl.back()) > DeltaR(*t,thisTrig))
-          {
-            filters.pop_back();
-            filters.push_back(filterResults[iTrigObj]);
-            matchedColl.pop_back();
-            matchedColl.push_back(thisTrig);
-
-          }
-        }
-
-        if(!matched)
-          {
-            filters.push_back(filterResults[iTrigObj]);
-            matchedColl.push_back(thisTrig);
-          }
-
-        matched = true;
-      }
-    }
-
-    if (!matched)
-      filters.push_back(0);
-  }
+  const trigger::size_type nFilters(triggerEvent->sizeFilters());
+  const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
+  //
+  // pat::TriggerObjectCollection filteredColl,matchedColl;
+  // std::vector < UInt_t > iFilterKeys, filterResults,filters;
+  // std::vector< std::vector <size_t> > filterIndices;
+  //
+  // for (size_t i = 0; i < HLTFilters_.size()
+  // {
+  //   for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
+  //   {
+  //   std::string filterTag = triggerEvent->filterTag(iFilter).encode();
+  // }
+  //
+  // }
+  //
+  //   for (size_t i = 0; i < HLTFilters_.size(); i++)
+  //     //if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+  //     if ( ( std::string(filterTag) == HLTFilters_[i]) )
+  //       {
+  //         thisFilter += (1<<i);
+  //         filtered = true;
+  //       }
+  //
+  //   if(filtered)
+  //   {
+  //     filteredColl.push_back(unPackedTrigger);
+  //     filterResults.push_back(thisFilter);
+  //   }
+  //
+  //
+  //   {
+  //     trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
+  //     const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
+  //
+  //     for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+  //     {
+  //       trigger::size_type objKey = objectKeys.at(iKey);
+  //       const trigger::TriggerObject& triggerObj(triggerObjects[objKey]);
+  //
+  //       HLTObjCand hltObj;
+  //
+  //       hltObj.filterTag = filterTag;
+  //
+  //       hltObj.pt  = triggerObj.pt();
+  //       hltObj.eta = triggerObj.eta();
+  //       hltObj.phi = triggerObj.phi();
+  //       hltObj.id  = triggerObj.id();
+  //
+  //
+  //
+  //       if (isTag)       event_.hltTag.objects.push_back(hltObj);
+  //       else             event_.hlt   .objects.push_back(hltObj);
+  //     }
+  //   }
+  // }
+  //
+  // for ( size_t iTrigObj = 0; iTrigObj < triggerEvent->size(); ++iTrigObj ) {
+  //
+  //   pat::TriggerObjectStandAlone unPackedTrigger( triggerEvent->at( iTrigObj ) );
+  //
+  //   unPackedTrigger.unpackPathNames( names );
+  //   unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+  //
+  //   bool filtered = false;
+  //   UInt_t thisFilter = 0;
+  //
+  //   for (size_t i = 0; i < HLTFilters_.size(); i++)
+  //     if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+  //       {
+  //         thisFilter += (1<<i);
+  //         filtered = true;
+  //       }
+  //
+  //   if(filtered)
+  //   {
+  //     filteredColl.push_back(unPackedTrigger);
+  //     filterResults.push_back(thisFilter);
+  //   }
+  // }
+  //
+  // for (std::vector<pat::PackedCandidate>::const_iterator t = trak->begin(), trakend=trak->end(); t!= trakend; ++t)
+  // {
+  //   bool matched = false;
+  //   for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+  // for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
+  //   {
+  //     auto thisTrig = filteredColl.at(iTrigObj);
+  //     if(MatchByDRDPt(*t,filteredColl[iTrigObj]))
+  //     {
+  //       if(matched)
+  //       {
+  //         if(DeltaR(*t,matchedColl.back()) > DeltaR(*t,thisTrig))
+  //         {
+  //           filters.pop_back();
+  //           filters.push_back(filterResults[iTrigObj]);
+  //           matchedColl.pop_back();
+  //           matchedColl.push_back(thisTrig);
+  //
+  //         }
+  //       }
+  //
+  //       if(!matched)
+  //         {
+  //           filters.push_back(filterResults[iTrigObj]);
+  //           matchedColl.push_back(thisTrig);
+  //         }
+  //
+  //       matched = true;
+  //     }
+  //   }
+  //
+  //   if (!matched)
+  //     filters.push_back(0);
+  // }
 
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
