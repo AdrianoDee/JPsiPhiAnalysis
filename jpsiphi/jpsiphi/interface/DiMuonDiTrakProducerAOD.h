@@ -24,7 +24,7 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
-#include "DataFormats/​HLTReco/interface/TriggerEvent.h"
+#include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
