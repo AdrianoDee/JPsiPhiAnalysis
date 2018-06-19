@@ -197,7 +197,7 @@ process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         )
 
 process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
-  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedPatTrigger' ), #selectedPatTrigger for MC
+  patTriggerObjectsStandAlone = cms.InputTag( 'slimmedstPatTrigger' ), #selectedPatTrigger for MC
   triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
   unpackFilterLabels          = cms.bool( True )
 )
@@ -236,10 +236,11 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
       HLTFilters          = filters
 )
 
-process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
+process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerAOD',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('cleanPatTrackKaonCands'),
-    TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    #TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    TriggerEvent = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
@@ -291,7 +292,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 
 process.p = cms.Path(process.triggerSelection *
                      #process.slimmedMuonsWithTriggerSequence *
-                     process.unpackPatTriggers *
+                     #process.unpackPatTriggers *
                      #process.softMuons *
                      process.patDefaultSequence *
                      process.patMuonsWithTriggerSequence *

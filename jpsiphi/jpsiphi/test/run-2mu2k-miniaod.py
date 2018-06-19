@@ -5,6 +5,7 @@ gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
 mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
+mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 input_file = mc_file #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
