@@ -1,33 +1,28 @@
+import FWCore.ParameterSet.Config as cms
+process = cms.Process("4MU")
+from FWCore.ParameterSet.VarParsing import VarParsing
+from Y_MC_Files import *
+
+options.register ('yMass',
+				  "4700",
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.string,
+				  "MC sample Y mass ")
+
 #input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
-ouput_filename = 'rootuple-2017-doubledimuon.root'
-input_filename = 'file:00000113-58FF-E711-AB19-002590E7E02E.root'#Muonia
-input_filename = "file:006425F0-6DED-E711-850C-0025904C66E8.root" #Charmonium
 
-Y = "4700"
+input_file = 'file:00000113-58FF-E711-AB19-002590E7E02E.root'#Muonia
+input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root" #Charmonium
 
-input_file_4700 = ["file:/lustre/cms/store/user/adiflori/Y_MC/4700/5AEF6C10-4942-E811-92FB-A4BF01125B70.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/58212DB4-4642-E811-992B-001E6779262C.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/7EBA7618-4D42-E811-8183-A4BF01158D70.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/1418711F-4442-E811-B0B6-A4BF01125D66.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/1CA11BB9-6942-E811-9942-001E67E6F8E6.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/10BBE194-5A42-E811-A350-001E67E71AA1.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/82AB0A04-DE41-E811-8C7F-A4BF0112BE12.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/8E92E7BF-3D42-E811-B5B8-001E67E719B6.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/D6FD65FE-3642-E811-BD28-A4BF01125358.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/3C1EFDC7-6342-E811-978A-001E67E6F693.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/B8339580-5E42-E811-94D6-002590A81DAC.root",
-"file:/lustre/cms/store/user/adiflori/Y_MC/4700/68892559-8142-E811-8CEC-001E6779250C.root"]
+Y = str(options.ymass)
 
-input_files = {"4700" : input_file_4700}
-YMassCuts   = {"4700" : cms.vdouble(4.0,5.4)}
-motherPdgs   = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "Y4500": 10441}
+input_files = {"4700" : input_files_4700,"4500" : input_files_4500,"4300" : input_files_4300,"4100" : input_files_4100}
+YMassCuts   = {"4700" : cms.vdouble(4.0,5.4),"4500" : cms.vdouble(3.9,5.1),"4300" : cms.vdouble(3.7,4.9),"4100" : cms.vdouble(3.5,4.7)}
+motherPdgs  = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "Y4500": 10441}
 
 motherPdg = motherPdgs[Y]
 input_file = input_files[Y]
 YMassCut = YMassCuts[Y]
-
-import FWCore.ParameterSet.Config as cms
-process = cms.Process("Rootuple")
 
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
@@ -41,7 +36,7 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 20000
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input_filename))
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input_file))
 
 filename = "rootuple-2017_MC_Y_" + str(Y) + "_doubledimuon.root"
 
