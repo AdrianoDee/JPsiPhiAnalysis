@@ -35,14 +35,17 @@ process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v11')
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 20000
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(input_filename))
-process.TFileService = cms.Service("TFileService",fileName = cms.string(ouput_filename))
+
+filename = "rootuple-2017_MC_Y_" + str(Y) + "_doubledimuon.root"
+
+process.TFileService = cms.Service("TFileService",fileName = cms.string(filename))
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(False))
 
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")

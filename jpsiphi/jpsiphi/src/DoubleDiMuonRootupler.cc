@@ -320,8 +320,8 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
             doubledimuon_tree->Branch("gen_gd5_p4",  "TLorentzVector",  &gen_gd5_p4);
             doubledimuon_tree->Branch("gen_gd6_p4",  "TLorentzVector",  &gen_gd6_p4);
 	  }
-        genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
-        packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
+    genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
+    packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
 
 DoubleDiMuonRootupler::~DoubleDiMuonRootupler() {}
