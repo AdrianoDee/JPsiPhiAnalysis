@@ -106,6 +106,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt,lowDiM_m,lowDiM_pt;
   Double_t highLowDiM_pt,lowLowDiM_pt,highHighDiM_pt,lowHighDiM_pt,doubledimuon_nDof,doubledimuon_m_rf;
 
+  Double_t highDiM_m, highDiM_pt, lowDiM_m, lowDiM_pt;
   Int_t    higdim_triggerMatch_rf, lowdim_triggerMatch_rf;
   Double_t higdim_vProb_rf, higdim_vChi2_rf, higdim_DCA_rf, higdim_ctauPV_rf, higdim_ctauErrPV_rf, higdim_cosAlpha_rf;
   Double_t lowdim_vProb_rf, lowdim_vChi2_rf, lowdim_DCA_rf, lowdim_ctauPV_rf, lowdim_ctauErrPV_rf, lowdim_cosAlpha_rf;
@@ -181,8 +182,8 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
-        motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+        motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("filters"))
 {
