@@ -186,8 +186,10 @@ process.rootuplefourmu = cms.EDAnalyzer('DoubleDiMuonRootupler',
     beamSpotTag             = cms.InputTag("offlineBeamSpot"),
     primaryVertices         = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC                    = cms.bool(False),
+    Mother_pdg              = cms.uint32(motherPdg),
+    isMC                    = cms.bool(True),
     OnlyBest                = cms.bool(False),
+    OnlyGen                 = cms.bool(False),
     HLTs                    = hltpaths,
     filters                 = filters
 )
