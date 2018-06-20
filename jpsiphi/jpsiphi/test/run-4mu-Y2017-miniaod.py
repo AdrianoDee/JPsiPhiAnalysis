@@ -6,10 +6,12 @@ from Y_MC_Files import *
 options = VarParsing ('analysis')
 
 options.register ('yMass',
-				  "4700",
+				  4700,
 				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.string,
+				  VarParsing.varType.int,
 				  "MC sample Y mass ")
+
+options.parseArguments()
 
 #input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
 

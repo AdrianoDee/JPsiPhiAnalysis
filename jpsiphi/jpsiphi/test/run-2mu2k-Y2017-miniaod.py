@@ -7,10 +7,13 @@ from Y_MC_Files import *
 options = VarParsing ('analysis')
 
 options.register ('yMass',
-				  "4700",
+				  4700,
 				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.string,
+				  VarParsing.varType.int,
 				  "MC sample Y mass ")
+
+options.parseArguments()
+
 #
 # gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 # input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
