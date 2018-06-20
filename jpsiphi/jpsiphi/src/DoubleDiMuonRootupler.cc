@@ -102,6 +102,22 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   Double_t doubledimuon_vProb,  doubledimuon_vChi2, doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV;
   Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
 
+  gen_doubledimuon_m
+doubledimuon_m
+doubledimuon_m_rf
+doubledimuon_pt
+highDiM_m
+highDiM_pt
+lowDiM_m
+lowDiM_pt
+highHighDiM_pt
+lowHighDiM_pt
+highLowDiM_pt
+lowLowDiM_pt
+
+  Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt,lowDiM_m,lowDiM_pt;
+  Double_t highLowDiM_pt,lowLowDiM_pt,highHighDiM_pt,lowHighDiM_pt,doubledimuon_nDof,doubledimuon_m_rf;
+
   Int_t    higdim_triggerMatch_rf, lowdim_triggerMatch_rf;
   Double_t higdim_vProb_rf, higdim_vChi2_rf, higdim_DCA_rf, higdim_ctauPV_rf, higdim_ctauErrPV_rf, higdim_cosAlpha_rf;
   Double_t lowdim_vProb_rf, lowdim_vChi2_rf, lowdim_DCA_rf, lowdim_ctauPV_rf, lowdim_ctauErrPV_rf, lowdim_cosAlpha_rf;
@@ -215,6 +231,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 
         doubledimuon_tree->Branch("doubledimuon_vProb",      &doubledimuon_vProb,        "doubledimuon_vProb/D");
         doubledimuon_tree->Branch("doubledimuon_vChi2",      &doubledimuon_vChi2,        "doubledimuon_vChi2/D");
+        doubledimuon_tree->Branch("doubledimuon_nDof",      &doubledimuon_nDof,        "doubledimuon_nDof/D");
         doubledimuon_tree->Branch("doubledimuon_cosAlpha",   &doubledimuon_cosAlpha,     "doubledimuon_cosAlpha/D");
         doubledimuon_tree->Branch("doubledimuon_ctauPV",     &doubledimuon_ctauPV,       "doubledimuon_ctauPV/D");
         doubledimuon_tree->Branch("doubledimuon_ctauErrPV",  &doubledimuon_ctauErrPV,    "doubledimuon_ctauErrPV/D");
@@ -225,6 +242,18 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         doubledimuon_tree->Branch("highDiMPy_fit",  &highDiMPy_fit,    "highDiMPy_fit/D");
         doubledimuon_tree->Branch("highDiMPz_fit",  &highDiMPz_fit,    "highDiMPz_fit/D");
 
+        doubledimuon_tree->Branch("gen_doubledimuon_m",        &gen_doubledimuon_m,        "gen_doubledimuon_m/D");
+        doubledimuon_tree->Branch("doubledimuon_m",       &doubledimuon_m,        "doubledimuon_m/D");
+        doubledimuon_tree->Branch("doubledimuon_m_rf",       &doubledimuon_m_rf,        "doubledimuon_m_rf/D");
+        doubledimuon_tree->Branch("doubledimuon_pt",          &doubledimuon_pt,          "doubledimuon_pt/D");
+        doubledimuon_tree->Branch("highDiM_m",       &highDiM_m,       "highDiMn_m/D");
+        doubledimuon_tree->Branch("highDiM_pt",    &highDiM_pt,    "highDiM_pt/D");
+        doubledimuon_tree->Branch("lowDiM_m",     &lowDiM_m,     "lowDiM_m/D");
+        doubledimuon_tree->Branch("lowDiM_pt",       &lowDiM_pt,        "lowDiM_pt/D");
+        doubledimuon_tree->Branch("highHighDiM_pt",          &highHighDiM_pt,          "highHighDiM_pt/D");
+        doubledimuon_tree->Branch("lowHighDiM_pt",       &lowHighDiM_pt,       "lowHighDiM_pt/D");
+        doubledimuon_tree->Branch("highLowDiM_pt",    &highLowDiM_pt,    "highLowDiM_pt/D");
+        doubledimuon_tree->Branch("lowLowDiM_pt",     &lowLowDiM_pt,     "lowLowDiM_pt/D");
 
         doubledimuon_tree->Branch("muonHighP_isLoose",        &muonHighP_isLoose,        "muonHighP_isLoose/O");
         doubledimuon_tree->Branch("muonHighP_isSoft",        &muonHighP_isSoft,        "muonHighP_isSoft/O");
@@ -337,6 +366,13 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 	// ex. 7 = pass 0, 8 and 10
 	// ex. 6 = pass 8, 10
         // ex. 1 = pass 0
+  gen_doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_muonHighP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_muonHighN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_muonLowP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_muonLowN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   trigger = 0;
 
@@ -356,6 +392,126 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         }
      }
    } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+
+   gen_doubledimuon_pdgId = 0;
+
+   if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+     for (size_t i=0; i<pruned->size(); i++) {
+       // std::cout << "Valid"<<std::endl;
+       const reco::Candidate *afourmuon = &(*pruned)[i];
+
+       if ( (abs(afourmuon->pdgId()) == motherpdgid_) && (afourmuon->status() == 2))
+         gen_b_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
+
+       if ( (abs(afourmuon->pdgId()) == motherpdgid_) && (afourmuon->status() == 2) && (afourmuon->numberOfDaughters() > 1) && (afourmuon->numberOfDaughters() < 7) ) {
+         //asking for decay (status==2) && two daughters
+         bool goToJPsi = false;
+         bool goToPhi = false;
+
+         bool muJPsiP = false, muJPsiN = false, muPhiP = false, muPhiN = false;
+
+         int noDaughters = 0, noGDaughters = 0;
+         int theJPsi = 0, thePhi = 0, theJPsiMuP = 0, theJPsiMuN = 0, thePhiMuP = 0, thePhiMuN = 0;
+
+         std::vector<const reco::Candidate *> daughters,gdaughters;
+         for(size_t j = 0; j < afourmuon->numberOfDaughters(); ++j)
+         {
+           const reco::Candidate * daughter = afourmuon->daughter(j);
+           if(daughter->mother(daughter->numberOfMothers()-1) != afourmuon) continue;
+           if(daughter->pdgId() == 443)
+           {
+             goToJPsi=true;
+             theJPsi = j;
+           }
+           if(daughter->pdgId() == 333)
+           {
+             thePhi = j;
+             goToPhi=true;
+           }
+
+           daughters.push_back(daughter);
+
+           ++noDaughters;
+
+         }
+
+         for (size_t j = 0; j < daughters.size(); j++) {
+
+           if(daughters[j]->status() != 2) continue;
+
+           for(size_t k = 0; k <daughters[j]->numberOfDaughters(); ++k)
+           {
+             const reco::Candidate * gdaughter = daughters[j]->daughter(k);
+             if(gdaughter->mother(gdaughter->numberOfMothers()-1) != daughters[j]) continue;
+             gdaughters.push_back(gdaughter);
+
+             if(goToPhi && goToJPsi)
+             {
+               if(gdaughter->pdgId()==-13)
+               {
+                 theJPsiMuP = j;
+                 muJPsiP=true;
+               }
+               if(gdaughter->pdgId()==13)
+               {
+                 theJPsiMuN = j;
+                 muJPsiN=true;
+               }
+               if(gdaughter->pdgId()==13)
+               {
+                 thePhiMuP = j;
+                 muPhiP=true;
+               }
+               if(gdaughter->pdgId()==-13)
+               {
+                 thePhiMuN = j;
+                 muPhiN=true;
+               }
+             }
+
+             ++noGDaughters;
+           }
+         }
+
+         if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi)
+         {
+
+           for (size_t j = 0; j < daughters.size(); j++)
+             std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
+
+           for (size_t j = 0; j < gdaughters.size(); j++)
+             std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
+
+           gen_b4_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
+           gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
+           gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
+
+           gen_gd1_p4.SetPtEtaPhiM(gdaughters[0]->pt(),gdaughters[0]->eta(),gdaughters[0]->phi(),gdaughters[0]->mass());
+           gen_gd2_p4.SetPtEtaPhiM(gdaughters[1]->pt(),gdaughters[1]->eta(),gdaughters[1]->phi(),gdaughters[1]->mass());
+           gen_gd3_p4.SetPtEtaPhiM(gdaughters[2]->pt(),gdaughters[2]->eta(),gdaughters[2]->phi(),gdaughters[2]->mass());
+           gen_gd4_p4.SetPtEtaPhiM(gdaughters[3]->pt(),gdaughters[3]->eta(),gdaughters[3]->phi(),gdaughters[3]->mass());
+
+           if(noGDaughters > 4)
+             gen_gd5_p4.SetPtEtaPhiM(gdaughters[4]->pt(),gdaughters[4]->eta(),gdaughters[4]->phi(),gdaughters[4]->mass());
+           if(noGDaughters > 5)
+             gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
+         }
+
+         if(muJPsiP && muJPsiN && muPhiP && muPhiN)
+         {
+
+           gen_doubledimuon_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
+           gen_dimuon_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
+           gen_ditrak_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
+           gen_muonHighN_p4.SetPtEtaPhiM(gdaughters[theJPsiMuN]->pt(),gdaughters[theJPsiMuN]->eta(),gdaughters[theJPsiMuN]->phi(),gdaughters[theJPsiMuN]->mass());
+           gen_muonHighP_p4.SetPtEtaPhiM(gdaughters[theJPsiMuP]->pt(),gdaughters[theJPsiMuP]->eta(),gdaughters[theJPsiMuP]->phi(),gdaughters[theJPsiMuP]->mass());
+           gen_muonLowN_p4.SetPtEtaPhiM(gdaughters[thePhiMuN]->pt(),gdaughters[thePhiMuN]->eta(),gdaughters[thePhiMuN]->phi(),gdaughters[thePhiMuN]->mass());
+           gen_muonLowP_p4.SetPtEtaPhiM(gdaughters[thePhiMuP]->pt(),gdaughters[thePhiMuP]->eta(),gdaughters[thePhiMuP]->phi(),gdaughters[thePhiMuP]->mass());
+           gen_doubledimuon_pdgId = afourmuon->pdgId();
+       }
+     } // for (size
+   }
+   }
 
 // grabbing doubledimuon information
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
@@ -379,9 +535,12 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
       doubledimuon_vProb     = doubledimuon_rf_cand.userFloat("vProb");
       doubledimuon_vChi2     = doubledimuon_rf_cand.userFloat("vChi2");
+      doubledimuon_nDof      = doubledimuon_rf_cand.userFloat("nDof");
       doubledimuon_cosAlpha  = doubledimuon_rf_cand.userFloat("cosAlpha");
       doubledimuon_ctauPV    = doubledimuon_rf_cand.userFloat("ctauPV");
       doubledimuon_ctauErrPV = doubledimuon_rf_cand.userFloat("ctauErrPV");
+      doubledimuon_m_rf      = doubledimuon_rf_cand.mass();
+
       highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
       highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
       highDiMPy_fit = doubledimuon_rf_cand.userFloat("highDiMPy_fit");
@@ -396,6 +555,11 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
       higdim_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("higdimuon"));
       lowdim_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("lowdimuon"));
+
+      doubledimuon_m   = doubledimuon_cand.mass();
+      doubledimuon_m_rf= doubledimuon_rf_cand.mass();
+      doubledimuon_pt  = doubledimuon_cand.pt();
+
 
       reco::Candidate::LorentzVector vJpsiP = higdim_cand_rf->daughter("muon1")->p4();
       reco::Candidate::LorentzVector vJpsiM = higdim_cand_rf->daughter("muon2")->p4();
@@ -492,6 +656,16 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         lowPatMuonP = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon1"));
         lowPatMuonN = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon2"));
       }
+
+      highDiM_m        = higdim_cand->mass();
+      highDiM_pt       = higdim_cand->pt();
+      lowDiM_m         = lowdim_cand->mass();
+      lowDiM_pt        = lowdim_cand->pt();
+
+      highHighDiM_pt     = std::max(vJpsiP.pt(),vJpsiM.pt());
+      lowHighDiM_pt      = -std::max(-vJpsiP.pt(),-vJpsiM.pt());
+      highLowDiM_pt      = std::max(vPhiP.pt(),vPhiP.pt());
+      lowLowDiM_pt       = -std::max(-vPhiP.pt(),-vPhiP.pt());
 
       muonLowP_isLoose   =  lowPatMuonP->isLooseMuon();
       muonLowP_isSoft   =  lowPatMuonP->isSoftMuon(thePrimaryV);

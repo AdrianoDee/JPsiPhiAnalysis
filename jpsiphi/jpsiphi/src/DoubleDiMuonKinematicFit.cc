@@ -285,6 +285,7 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
 	          pat::CompositeCandidate patDoubleDiMu(recoDoubleDiMu);
             patDoubleDiMu.addUserFloat("vProb",DoubleDiMuVtxP_fit);
             patDoubleDiMu.addUserFloat("vChi2",DoubleDiMu_x2_fit);
+            patDoubleDiMu.addUserFloat("nDof",DoubleDiMu_nDof_fit);
             patDoubleDiMu.addUserFloat("cosAlpha",cosAlpha);
             patDoubleDiMu.addUserFloat("ctauPV",ctauPV);
             patDoubleDiMu.addUserFloat("ctauErrPV",ctauErrPV);

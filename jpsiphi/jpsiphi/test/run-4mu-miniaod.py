@@ -3,6 +3,29 @@ ouput_filename = 'rootuple-2017-doubledimuon.root'
 input_filename = 'file:00000113-58FF-E711-AB19-002590E7E02E.root'#Muonia
 input_filename = "file:006425F0-6DED-E711-850C-0025904C66E8.root" #Charmonium
 
+Y = "4700"
+
+input_file_4700 = ["file:/lustre/cms/store/user/adiflori/Y_MC/4700/5AEF6C10-4942-E811-92FB-A4BF01125B70.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/58212DB4-4642-E811-992B-001E6779262C.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/7EBA7618-4D42-E811-8183-A4BF01158D70.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/1418711F-4442-E811-B0B6-A4BF01125D66.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/1CA11BB9-6942-E811-9942-001E67E6F8E6.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/10BBE194-5A42-E811-A350-001E67E71AA1.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/82AB0A04-DE41-E811-8C7F-A4BF0112BE12.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/8E92E7BF-3D42-E811-B5B8-001E67E719B6.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/D6FD65FE-3642-E811-BD28-A4BF01125358.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/3C1EFDC7-6342-E811-978A-001E67E6F693.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/B8339580-5E42-E811-94D6-002590A81DAC.root",
+"file:/lustre/cms/store/user/adiflori/Y_MC/4700/68892559-8142-E811-8CEC-001E6779250C.root"]
+
+input_files = {"4700" : input_file_4700}
+YMassCuts   = {"4700" : cms.vdouble(4.0,5.4)}
+motherPdgs   = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "Y4500": 10441}
+
+motherPdg = motherPdgs[Y]
+input_file = input_files[Y]
+YMassCut = YMassCuts[Y]
+
 import FWCore.ParameterSet.Config as cms
 process = cms.Process("Rootuple")
 
@@ -27,15 +50,15 @@ process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
 'HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
-'HLT_DoubleMu4_Jpsi_Displaced',
-'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-'HLT_Dimuon25_Jpsi',
-'HLT_Dimuon0_Jpsi3p5_Muon2'
+#'HLT_DoubleMu4_Jpsi_Displaced',
+#'HLT_DoubleMu4_3_Jpsi_Displaced',
+#'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+#'HLT_Dimuon25_Jpsi',
+#'HLT_Dimuon0_Jpsi3p5_Muon2'
 ]
 
 muoniaHLT = [
-'HLT_Dimuon14_Phi_Barrel_Seagulls',
+#'HLT_Dimuon14_Phi_Barrel_Seagulls',
 ]
 
 hltList = charmoniumHLT
@@ -153,7 +176,7 @@ process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
     DoubleDiMuonCollection  = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     LowMassConstraint       = cms.double(1.019461),              # J/psi mass in GeV
     HighMassConstraint      = cms.double(3.096916),
-    DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
+    DoubleDiMuonMassCuts    = YMassCuts,            # b-hadron mass window
     product_name            = cms.string('DoubleDiMuonCandidatesRefit')
 )
 
