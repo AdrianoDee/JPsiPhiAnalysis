@@ -135,6 +135,16 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_muonHighP_p4;
   TLorentzVector gen_muonLowN_p4;
 
+  TLorentzVector gen_b4_p4;
+  TLorentzVector gen_d1_p4;
+  TLorentzVector gen_d2_p4;
+  TLorentzVector gen_gd1_p4;
+  TLorentzVector gen_gd2_p4;
+  TLorentzVector gen_gd3_p4;
+  TLorentzVector gen_gd4_p4;
+  TLorentzVector gen_gd5_p4;
+  TLorentzVector gen_gd6_p4;
+
   TTree* doubledimuon_tree, *doubledimuon_tree_rf;
   edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
@@ -294,6 +304,18 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
             doubledimuon_tree->Branch("gen_muonHighN_p4",    "TLorentzVector", &gen_muonHighN_p4);
             doubledimuon_tree->Branch("gen_muonHighP_p4",    "TLorentzVector", &gen_muonHighP_p4);
             doubledimuon_tree->Branch("gen_muonLowN_p4",    "TLorentzVector", &gen_muonLowN_p4);
+
+            doubledimuon_tree->Branch("gen_doubledimuon_m",  &gen_doubledimuon_m,    "gen_doubledimuon_m/D");
+
+            doubledimuon_tree->Branch("gen_b4_p4", "TLorentzVector",  &gen_b4_p4);
+            doubledimuon_tree->Branch("gen_d1_p4",  "TLorentzVector",  &gen_d1_p4);
+            doubledimuon_tree->Branch("gen_d2_p4",  "TLorentzVector",  &gen_d2_p4);
+            doubledimuon_tree->Branch("gen_gd1_p4",  "TLorentzVector",  &gen_gd1_p4);
+            doubledimuon_tree->Branch("gen_gd2_p4",  "TLorentzVector",  &gen_gd2_p4);
+            doubledimuon_tree->Branch("gen_gd3_p4", "TLorentzVector",  &gen_gd3_p4);
+            doubledimuon_tree->Branch("gen_gd4_p4",  "TLorentzVector",  &gen_gd4_p4);
+            doubledimuon_tree->Branch("gen_gd5_p4",  "TLorentzVector",  &gen_gd5_p4);
+            doubledimuon_tree->Branch("gen_gd6_p4",  "TLorentzVector",  &gen_gd6_p4);
 	  }
         genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
         packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
