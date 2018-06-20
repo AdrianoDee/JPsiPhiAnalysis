@@ -73,7 +73,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  doubledimuon_pdgid_, higdim_pdgid_, lowdim_pdgid_;
-  bool isMC_,OnlyBest_;
+  bool isMC_,OnlyBest_,OnlyGen_;
   UInt_t motherpdgid_;
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
@@ -184,6 +184,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+        OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("filters"))
@@ -407,6 +408,13 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
    } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
    gen_doubledimuon_pdgId = 0;
+
+   edm::Handle< std::vector <reco::GenParticle> > pruned;
+   iEvent.getByToken(genCands_, pruned);
+
+   // Packed particles are all the status 1. The navigation to pruned is possible (the other direction should be made by hand)
+   edm::Handle<pat::PackedGenParticleCollection> packed;
+   iEvent.getByToken(packCands_,  packed);
 
    if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
      for (size_t i=0; i<pruned->size(); i++) {
