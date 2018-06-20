@@ -136,6 +136,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   TLorentzVector gen_muonHighP_p4;
   TLorentzVector gen_muonLowN_p4;
 
+  TLorentzVector gen_b_p4;
   TLorentzVector gen_b4_p4;
   TLorentzVector gen_d1_p4;
   TLorentzVector gen_d2_p4;
