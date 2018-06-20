@@ -103,7 +103,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   Double_t doubledimuon_vProb,  doubledimuon_vChi2, doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV;
   Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
 
-  Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt,lowDiM_m,lowDiM_pt;
+  Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt;
   Double_t highLowDiM_pt,lowLowDiM_pt,highHighDiM_pt,lowHighDiM_pt,doubledimuon_nDof,doubledimuon_m_rf;
 
   Double_t highDiM_m, highDiM_pt, lowDiM_m, lowDiM_pt;
