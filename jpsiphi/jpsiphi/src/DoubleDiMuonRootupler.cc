@@ -72,6 +72,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  UInt_t motherpdgid_;
   int  doubledimuon_pdgid_, higdim_pdgid_, lowdim_pdgid_;
   bool isMC_,OnlyBest_;
   std::vector<std::string>                            HLTs_;
@@ -101,19 +102,6 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   Int_t    doubledimuon_charge, higdim_triggerMatch, lowdim_triggerMatch, doubledimuon_rf_bindx;
   Double_t doubledimuon_vProb,  doubledimuon_vChi2, doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV;
   Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
-
-  gen_doubledimuon_m
-doubledimuon_m
-doubledimuon_m_rf
-doubledimuon_pt
-highDiM_m
-highDiM_pt
-lowDiM_m
-lowDiM_pt
-highHighDiM_pt
-lowHighDiM_pt
-highLowDiM_pt
-lowLowDiM_pt
 
   Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt,lowDiM_m,lowDiM_pt;
   Double_t highLowDiM_pt,lowLowDiM_pt,highHighDiM_pt,lowHighDiM_pt,doubledimuon_nDof,doubledimuon_m_rf;
@@ -183,6 +171,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
+        motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("filters"))
