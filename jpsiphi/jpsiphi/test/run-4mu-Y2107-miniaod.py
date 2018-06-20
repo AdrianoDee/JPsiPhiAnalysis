@@ -176,7 +176,7 @@ process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
     DoubleDiMuonCollection  = cms.InputTag('DoubleDiMuonProducer','DoubleDiMuonCandidates'),
     LowMassConstraint       = cms.double(1.019461),              # J/psi mass in GeV
     HighMassConstraint      = cms.double(3.096916),
-    DoubleDiMuonMassCuts    = YMassCuts,            # b-hadron mass window
+    DoubleDiMuonMassCuts    = YMassCut,            # b-hadron mass window
     product_name            = cms.string('DoubleDiMuonCandidatesRefit')
 )
 
