@@ -72,9 +72,9 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  UInt_t motherpdgid_;
   int  doubledimuon_pdgid_, higdim_pdgid_, lowdim_pdgid_;
   bool isMC_,OnlyBest_;
+  UInt_t motherpdgid_;
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
 
