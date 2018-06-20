@@ -380,8 +380,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 	// ex. 6 = pass 8, 10
         // ex. 1 = pass 0
   gen_doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_higdim_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_lowdim_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonHighP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonHighN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonLowP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -514,8 +514,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
          {
 
            gen_doubledimuon_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
-           gen_dimuon_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
-           gen_ditrak_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
+           gen_higdim_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
+           gen_lowdim_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
            gen_muonHighN_p4.SetPtEtaPhiM(gdaughters[theJPsiMuN]->pt(),gdaughters[theJPsiMuN]->eta(),gdaughters[theJPsiMuN]->phi(),gdaughters[theJPsiMuN]->mass());
            gen_muonHighP_p4.SetPtEtaPhiM(gdaughters[theJPsiMuP]->pt(),gdaughters[theJPsiMuP]->eta(),gdaughters[theJPsiMuP]->phi(),gdaughters[theJPsiMuP]->mass());
            gen_muonLowN_p4.SetPtEtaPhiM(gdaughters[thePhiMuN]->pt(),gdaughters[thePhiMuN]->eta(),gdaughters[thePhiMuN]->phi(),gdaughters[thePhiMuN]->mass());
