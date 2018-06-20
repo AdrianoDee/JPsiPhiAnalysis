@@ -4,6 +4,8 @@ process = cms.Process('PSIKK')
 from FWCore.ParameterSet.VarParsing import VarParsing
 from Y_MC_Files import *
 
+options = VarParsing ('analysis')
+
 options.register ('yMass',
 				  "4700",
 				  VarParsing.multiplicity.singleton,
@@ -17,7 +19,7 @@ options.register ('yMass',
 # mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 # input_file = mc_file #gen_file
 
-Y = str(options.ymass)
+Y = str(options.yMass)
 
 input_files = {"4700" : input_files_4700,"4500" : input_files_4500,"4300" : input_files_4300,"4100" : input_files_4100}
 YMassCuts   = {"4700" : cms.vdouble(4.0,5.4),"4500" : cms.vdouble(3.9,5.1),"4300" : cms.vdouble(3.7,4.9),"4100" : cms.vdouble(3.5,4.7)}
