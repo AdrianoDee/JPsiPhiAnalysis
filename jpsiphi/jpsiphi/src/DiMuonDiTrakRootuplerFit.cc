@@ -629,7 +629,7 @@ if(!OnlyGen_)
 
 
       tPMatch = dimuonditrk_cand.userInt("tPMatch");
-      tNMatch = dimuonditrk_rf_cand.userInt("tNMatch");
+      tNMatch = dimuonditrk_cand.userInt("tNMatch");
 
       //unref corresponding
 
@@ -639,8 +639,8 @@ if(!OnlyGen_)
 
       const pat::Muon *muonP, *muonN;
 
-      reco::Candidate::LorentzVector vP = dimuon_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vM = dimuon_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vP = dimuon_cand->daughter("muon1")->p4();
+      reco::Candidate::LorentzVector vM = dimuon_cand->daughter("muon2")->p4();
 
       if (dimuon_cand->daughter("muon1")->charge() < 0) {
          vP = dimuon_cand->daughter("muon2")->p4();
@@ -697,6 +697,7 @@ if(!OnlyGen_)
 
       if (refPos >= 0)
       {
+        dimuonditrk_rf_cand = dimuonditrk_cand_handle->at(refPos);
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
         dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("dimuon")->pt(),dimuonditrk_rf_cand.daughter("dimuon")->eta(),
                                 dimuonditrk_rf_cand.daughter("dimuon")->phi(),dimuonditrk_rf_cand.daughter("dimuon")->mass());
