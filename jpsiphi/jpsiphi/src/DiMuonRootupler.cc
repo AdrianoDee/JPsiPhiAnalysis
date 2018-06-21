@@ -160,7 +160,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
   }
 
   if (isMC_ || OnlyGen_) {
-     std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
+     // std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      dimuon_tree->Branch("gen_mother_p4", "TLorentzVector",  &gen_mother_p4);
@@ -296,7 +296,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
         } else dimuon_pdgId = 0;
       }  // if ( p_id
     } // for (size
-    if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
+    // if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
   }  // end if isMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];

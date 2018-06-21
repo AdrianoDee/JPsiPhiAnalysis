@@ -605,13 +605,13 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::pair<int, float>
     DiMuonProducerPAT::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
-      std::cout << "findJpsiMCInfo 1 " << std::endl;
+      // std::cout << "findJpsiMCInfo 1 " << std::endl;
       int momJpsiID = 0;
       float trueLife = -99.;
 
       if (genJpsi->numberOfMothers()>0) {
 
-        std::cout << "findJpsiMCInfo 1 " << std::endl;
+        // std::cout << "findJpsiMCInfo 1 " << std::endl;
 
         TVector3 trueVtx(0.0,0.0,0.0);
         TVector3 trueP(0.0,0.0,0.0);
@@ -622,7 +622,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         bool aBhadron = false;
         reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
-        std::cout << "findJpsiMCInfo 1 " << std::endl;
+        // std::cout << "findJpsiMCInfo 1 " << std::endl;
         if (Jpsimom.isNull()) {
           std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
           return result;

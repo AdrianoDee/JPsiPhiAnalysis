@@ -779,7 +779,7 @@ if(!OnlyGen_)
       dimuon_triggerMatch = DiMuonDiTrakRootupler::isTriggerMatched(dimuon_cand);
 
       dimuonditrk_tree->Fill();
-      std::cout << i << std::endl;
+      
       if (OnlyBest_) break;
       else if(i==0)
       isBestCandidate = false;
