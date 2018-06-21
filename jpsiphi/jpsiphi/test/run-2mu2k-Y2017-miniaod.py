@@ -180,6 +180,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     Product = cms.string("DiMuonDiTrakCandidates"),
     Filters = filters,
     IsMC = cms.bool(True),
+    AddMCTruth = cms.bool(True)
 )
 
 
@@ -240,7 +241,7 @@ if options.trigger:
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
                          process.PsiPhiFitter *
-                         process.rootuple *
+                         process.rootuple #*
                          #process.rootupleMuMu
                          )# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
 else:
@@ -253,7 +254,7 @@ else:
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
                          process.PsiPhiFitter *
-                         process.rootuple *
+                         process.rootuple #*
                          #process.rootupleMuMu
                          )
 
