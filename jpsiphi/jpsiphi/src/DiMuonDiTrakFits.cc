@@ -114,7 +114,7 @@ DiMuonDiTrakFits::DiMuonDiTrakFits(const edm::ParameterSet& iConfig) {
   PhiMass_            = iConfig.getParameter<double>("PhiMass");
   DiMuonTTMassCuts_   = iConfig.getParameter<std::vector<double>>("DiMuonTrakTrakMassCuts");
   MassTraks_          = iConfig.getParameter<std::vector<double>>("MassTraks");
-  Product_name        = iConfig.getParameter<std::string>("JPsiName");
+  Product_name        = iConfig.getParameter<std::string>("Product");
 
 // kinematic refit collections
   produces<pat::CompositeCandidateCollection>(Product_name);
