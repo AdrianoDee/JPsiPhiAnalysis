@@ -56,7 +56,7 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
     reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
     // std::cout << "findJpsiMCInfo 1 " << std::endl;
     if (Jpsimom.isNull()) {
-      std::tuple<int, float, float> result = std::make_pair(momJpsiID, trueLife,isPrompt);
+      std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
       return result;
     } else
     {
@@ -67,7 +67,7 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
     trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
   }
 }
-  std::tuple<int,float,float> result = std::make_pair(momJpsiID, trueLife,isPrompt);
+  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
   return result;
 
 }
