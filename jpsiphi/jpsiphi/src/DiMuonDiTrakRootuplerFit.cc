@@ -583,7 +583,7 @@ if (dimuonditrk_rf_cand_handle.isValid() && dimuonditrk_cand_handle.isValid())
 {
   for (unsigned int i=0; i< dimuonditrk_rf_cand_handle->size(); i++)
   {
-    refToUnRefMap.push_back(dimuonditrk_rf_cand.userInt("bIndex"));
+    refToUnRefMap.push_back(dimuonditrk_rf_cand_handle->at(i).userInt("bIndex"));
   }
 }
 if(!OnlyGen_)
