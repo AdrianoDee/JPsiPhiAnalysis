@@ -70,7 +70,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
   bool isMC_;
-  bool AddMCTruth_;
+  bool addMCTruth_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
@@ -78,8 +78,10 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
-  std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genParticle)
-
+  std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
+  bool isAbHadron(int pdgID);
+  bool isAMixedbHadron(int pdgID, int momPdgID);
+  
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 

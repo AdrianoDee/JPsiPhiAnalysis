@@ -17,6 +17,23 @@ bool DiMuonDiTrakProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
+bool
+DiMuonDiTrakProducer::isAbHadron(int pdgID) {
+
+  if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
+  return false;
+
+}
+
+bool
+DiMuonDiTrakProducer::isAMixedbHadron(int pdgID, int momPdgID) {
+
+  if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
+  (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
+  return true;
+  return false;
+
+}
 
 std::pair<int, float>
 DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
@@ -94,7 +111,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
-  AddMCTruth_(iConfig.getParameter<bool>("AddMCTruth"))
+  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -300,7 +317,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            TVector3 vtx;
            TVector3 pvtx;
            VertexDistanceXY vdistXY;
-           int   x_ch_fit = x->charge();
+           int   x_ch_fit = fitX->currentState().charge();
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
            double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
            double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
@@ -340,8 +357,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
              if (addMCTruth_) {
                reco::GenParticleRef genMu1 = pmu1->genParticleRef();
                reco::GenParticleRef genMu2 = pmu2->genParticleRef();
-               reco::GenParticleRef genKaon1 = posTrack->genParticleRef();
-               reco::GenParticleRef genKaon2 = negTrack->genParticleRef();
+               reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
+               reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
 
                if (genMu1.isNonnull() && genMu2.isNonnull() && genKaon1.isNonnull() && genKaon2.isNonnull()) {
                  if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0 && genKaon1->numberOfMothers()>0 && gengenKaon1Mu2->numberOfMothers()>0){
@@ -375,7 +392,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                    if (x_mom1.isNonnull() && (x_mom1 == x_mom2)) {
                      DiMuonTTCand.setGenParticleRef(x_mom1); // set
                      DiMuonTTCand.embedGenParticle();      // and embed
-                     DiMuonTTCand.addUserInt("xPDGId",x_mom1.pdgId());
+                     DiMuonTTCand.addUserInt("xPDGId",x_mom1->pdgId());
                    } else {
                      DiMuonTTCand.addUserInt("xPDGId",0);
                    }
