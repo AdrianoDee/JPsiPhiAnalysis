@@ -26,6 +26,9 @@
 
 #include "FWCore/Common/interface/TriggerNames.h"
 
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "TrackingTools/Records/interface/TransientTrackRecord.h"
+
 #include <TLorentzVector.h>
 #include <vector>
 
@@ -55,6 +58,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
   bool isMC_;
+  bool AddMCTruth_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
