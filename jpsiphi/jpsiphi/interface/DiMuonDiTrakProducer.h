@@ -78,6 +78,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
+  std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genParticle)
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);

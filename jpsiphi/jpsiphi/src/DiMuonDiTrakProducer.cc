@@ -18,6 +18,82 @@ bool DiMuonDiTrakProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat
 }
 
 
+TVector3 pperp(x_px_fit, x_py_fit, 0);
+AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+TVector3 vdiff = vtx - pvtx;
+double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), thePrimaryV);
+double ctauPV = distXY.value()*cosAlpha * x_ma_fit/pperp.Perp();
+GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+GlobalError v2e = thePrimaryV.error();
+AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2());
+
+
+std::pair<int, float>
+DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+
+  // std::cout << "findJpsiMCInfo 1 " << std::endl;
+  int momJpsiID = 0;
+  float trueLife = -99.;
+
+  if (genJpsi->numberOfMothers()>0) {
+
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+
+    TVector3 trueVtx(0.0,0.0,0.0);
+    TVector3 trueP(0.0,0.0,0.0);
+    TVector3 trueVtxMom(0.0,0.0,0.0);
+
+    trueVtx.SetXYZ(genJpsi->vertex().x(),genJpsi->vertex().y(),genJpsi->vertex().z());
+    trueP.SetXYZ(genJpsi->momentum().x(),genJpsi->momentum().y(),genJpsi->momentum().z());
+
+    bool aBhadron = false;
+    reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+    if (Jpsimom.isNull()) {
+      std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+      return result;
+    } else {
+      reco::GenParticleRef Jpsigrandmom = Jpsimom->motherRef();
+      if (isAbHadron(Jpsimom->pdgId())) {
+        if (Jpsigrandmom.isNonnull() && isAMixedbHadron(Jpsimom->pdgId(),Jpsigrandmom->pdgId())) {
+          momJpsiID = Jpsigrandmom->pdgId();
+          trueVtxMom.SetXYZ(Jpsigrandmom->vertex().x(),Jpsigrandmom->vertex().y(),Jpsigrandmom->vertex().z());
+        } else {
+          momJpsiID = Jpsimom->pdgId();
+          trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+        }
+        aBhadron = true;
+      } else {
+        if (Jpsigrandmom.isNonnull() && isAbHadron(Jpsigrandmom->pdgId())) {
+          reco::GenParticleRef JpsiGrandgrandmom = Jpsigrandmom->motherRef();
+          if (JpsiGrandgrandmom.isNonnull() && isAMixedbHadron(Jpsigrandmom->pdgId(),JpsiGrandgrandmom->pdgId())) {
+            momJpsiID = JpsiGrandgrandmom->pdgId();
+            trueVtxMom.SetXYZ(JpsiGrandgrandmom->vertex().x(),JpsiGrandgrandmom->vertex().y(),JpsiGrandgrandmom->vertex().z());
+          } else {
+            momJpsiID = Jpsigrandmom->pdgId();
+            trueVtxMom.SetXYZ(Jpsigrandmom->vertex().x(),Jpsigrandmom->vertex().y(),Jpsigrandmom->vertex().z());
+          }
+          aBhadron = true;
+        }
+      }
+      if (!aBhadron) {
+        momJpsiID = Jpsimom->pdgId();
+        trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+      }
+    }
+
+    TVector3 vdiff = trueVtx - trueVtxMom;
+    //trueLife = vdiff.Perp()*3.09688/trueP.Perp();
+    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+  }
+  std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+  return result;
+
+}
+
 DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
@@ -143,6 +219,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
        if(dimuonCand->userFloat("vProb")<0.0)
          continue;
 
+       const reco::Vertex thePrimaryV = *dimuonCand->userData<reco::Vertex>("PVwithmuons");
+
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
 
@@ -176,7 +254,12 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
 
-           if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
+
+           if ( !(TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_) ) continue;
+
+           pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
+
+           if ( !(DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_)) continue;
 
            float refittedMass = -1.0, mumuVtxCL = -1.0;
 
@@ -219,35 +302,113 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            double x_x2_fit = 10000.;
            double x_ndof_fit = 10000.;
 
-           if (fitX->currentState().isValid())
-           {
-             x_ma_fit = fitX->currentState().mass();
-             x_x2_fit = fitXVertex->chiSquared();
-             x_vp_fit = ChiSquaredProbability(x_x2_fit,
-                                                  (double)(fitXVertex->degreesOfFreedom()));
-             x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
-           }else
-            continue;
+           if (!fitX->currentState().isValid()) continue;
 
-           pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
+           x_ma_fit = fitX->currentState().mass();
+           x_x2_fit = fitXVertex->chiSquared();
+           x_vp_fit = ChiSquaredProbability(x_x2_fit,
+                                                (double)(fitXVertex->degreesOfFreedom()));
+           x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
+
+           TVector3 vtx;
+           TVector3 pvtx;
+           VertexDistanceXY vdistXY;
+           int   x_ch_fit = x->charge();
+           double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
+           double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
+           double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
+           double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+
+                                     x_py_fit*x_py_fit+x_pz_fit*x_pz_fit);
+           double x_vx_fit = fitXVertex->position().x();
+	         double x_vy_fit = fitXVertex->position().y();
+           double x_vz_fit = fitXVertex->position().z();
+
+           vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
+           TVector3 pperp(x_px_fit, x_py_fit, 0);
+           AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+           pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+           TVector3 vdiff = vtx - pvtx;
+           double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), thePrimaryV);
+           double ctauPV = distXY.value()*cosAlpha * x_ma_fit/pperp.Perp();
+           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+           GlobalError v2e = thePrimaryV.error();
+           AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+           double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2());
+
 
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
 
+           DiMuonTTCand.addUserInt("mass_rf",x_ma_fit);
+           DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
+           DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
+           DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
+           DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha);
+           DiMuonTTCand.addUserFloat("ctauPV",ctauPV);
+           DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV);
 
-           DiMuonTTCand.addUserInt("xMass",DiMuonTTCand.mass());
-           DiMuonTTCand.addUserInt("x_rf_Mass",x_ma_fit);
-           DiMuonTTCand.addUserInt("xChi2",x_x2_fit);
-           DiMuonTTCand.addUserInt("xVProb",x_vp_fit);
-           DiMuonTTCand.addUserInt("xNdof",x_ndof_fit);
 
-           if ( x_ma_fit < DiMuonDiTrakMassMax_ && x_ma_fit > DiMuonDiTrakMassMin_) {
+
+             if (addMCTruth_) {
+               reco::GenParticleRef genMu1 = pmu1->genParticleRef();
+               reco::GenParticleRef genMu2 = pmu2->genParticleRef();
+               reco::GenParticleRef genKaon1 = posTrack->genParticleRef();
+               reco::GenParticleRef genKaon2 = negTrack->genParticleRef();
+
+               if (genMu1.isNonnull() && genMu2.isNonnull() && genKaon1.isNonnull() && genKaon2.isNonnull()) {
+                 if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0 && genKaon1->numberOfMothers()>0 && gengenKaon1Mu2->numberOfMothers()>0){
+                   reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
+                   reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
+                   if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
+
+                     std::pair<int, float> MCinfo = findJpsiMCInfo(mumu_mom1);
+                     DiMuonTTCand.addUserInt("jpsiPDGId",MCinfo.first);
+                     DiMuonTTCand.addUserFloat("jpsiPpdlTrue",MCinfo.second);
+                   } else {
+                     DiMuonTTCand.addUserInt("jpsiPDGId",0);
+                     DiMuonTTCand.addUserFloat("jpsiPpdlTrue",-99.);
+                   }
+
+                   reco::GenParticleRef tktk_mom1 = genKaon1->motherRef();
+                   reco::GenParticleRef tktk_mom2 = genKaon2->motherRef();
+                   if (tktk_mom1.isNonnull() && (tktk_mom1 == tktk_mom2)) {
+
+                     std::pair<int, float> MCinfo = findJpsiMCInfo(tktk_mom1);
+                     DiMuonTTCand.addUserInt("phiPDGId",MCinfo.first);
+                     DiMuonTTCand.addUserFloat("phiPpdlTrue",MCinfo.second);
+                   } else {
+                     DiMuonTTCand.addUserInt("phiPDGId",0);
+                     DiMuonTTCand.addUserFloat("phiPpdlTrue",-99.);
+                   }
+
+                   reco::GenParticleRef x_mom1 = tktk_mom1->motherRef();
+                   reco::GenParticleRef x_mom2 = mumu_mom1->motherRef();
+
+                   if (x_mom1.isNonnull() && (x_mom1 == x_mom2)) {
+                     DiMuonTTCand.setGenParticleRef(x_mom1); // set
+                     DiMuonTTCand.embedGenParticle();      // and embed
+                     DiMuonTTCand.addUserInt("xPDGId",x_mom1.pdgId());
+                   } else {
+                     DiMuonTTCand.addUserInt("xPDGId",0);
+                   }
+
+
+                 }
+              } else {
+                 DiMuonTTCand.addUserInt("xPDGId",0);
+                 DiMuonTTCand.addUserInt("phiPDGId",0);
+                 DiMuonTTCand.addUserFloat("phiPpdlTrue",-99.);
+                 DiMuonTTCand.addUserInt("jpsiPDGId",0);
+                 DiMuonTTCand.addUserFloat("jpsiPpdlTrue",-99.);
+               }
+             }
+
 
              DiMuonTTCandColl->push_back(DiMuonTTCand);
              candidates++;
              ncombo++;
-           }
-        }
+
 
          }
          } // loop over second track
