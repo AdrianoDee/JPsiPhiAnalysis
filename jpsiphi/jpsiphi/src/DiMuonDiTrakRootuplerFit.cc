@@ -80,7 +80,6 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
   bool isMC_,OnlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  HLTs_;
@@ -142,8 +141,8 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
 
   Bool_t isBestCandidate;
 
-  UInt_t dimuonditrk_pdgid, dimuonditrk_phipdg,  dimuonditrk_jpsipdg;
-  Double_t dimuonditrk_phippdl,dimuonditrk_jpsippdl;
+  UInt_t dimuonditrk_pdgid,  dimuonditrk_jpsipdg;
+  Double_t dimuonditrk_isprompt,dimuonditrk_jpsippdl;
 
   Int_t          gen_dimuonditrk_pdgId;
   TLorentzVector gen_dimuonditrk_p4;
@@ -316,9 +315,8 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
            dimuonditrk_tree->Branch("gen_dimuonditrk_m",  &gen_dimuonditrk_m,    "gen_dimuonditrk_m/D");
 
            dimuonditrk_tree->Branch("dimuonditrk_pdgid",  &dimuonditrk_pdgid,    "dimuonditrk_pdgid/I");
-           dimuonditrk_tree->Branch("dimuonditrk_phipdg",  &dimuonditrk_phipdg,    "dimuonditrk_phipdg/I");
            dimuonditrk_tree->Branch("dimuonditrk_jpsipdg",  &dimuonditrk_jpsipdg,    "dimuonditrk_jpsipdg/I");
-           dimuonditrk_tree->Branch("dimuonditrk_phippdl",  &dimuonditrk_phippdl,    "dimuonditrk_phippdl/D");
+           dimuonditrk_tree->Branch("dimuonditrk_isprompt",  &dimuonditrk_isprompt,    "dimuonditrk_isprompt/D");
            dimuonditrk_tree->Branch("dimuonditrk_jpsippdl",  &dimuonditrk_jpsippdl,    "dimuonditrk_jpsippdl/D");
 
            dimuonditrk_tree->Branch("gen_b4_p4", "TLorentzVector",  &gen_b4_p4);
@@ -453,11 +451,10 @@ gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd5_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-dimuonditrk_pdgid    = 0;
-dimuonditrk_phipdg   = 0;
-dimuonditrk_phippdl  = 0.0;
-dimuonditrk_jpsipdg  = 0;
-dimuonditrk_jpsippdl = 0;
+dimuonditrk_pdgid      = 0;
+dimuonditrk_isprompt   = -99.0;
+dimuonditrk_jpsipdg    = 0;
+dimuonditrk_jpsippdl   = -99.0;
 
 gen_dimuonditrk_pdgId = 0;
 
@@ -624,11 +621,10 @@ if(!OnlyGen_)
 
       if(isMC_ || OnlyGen_)
       {
-        dimuonditrk_pdgid     = dimuonditrk_cand.userInt("xPDGId");
-        dimuonditrk_phipdg    = dimuonditrk_cand.userInt("phiPDGId");
-        dimuonditrk_phippdl   = dimuonditrk_cand.userFloat("phiPpdlTrue");
-        dimuonditrk_jpsipdg   = dimuonditrk_cand.userInt("jpsiPDGId");
-        dimuonditrk_jpsippdl  = dimuonditrk_cand.userFloat("jpsiPpdlTrue");
+        dimuonditrk_jpsipdg    = dimuonditrk_cand.userInt("jPsiGenPdgId");
+        dimuonditrk_jpsippdl   = dimuonditrk_cand.userFloat("jPsiPpdlTrue");
+        dimuonditrk_pdgid      = dimuonditrk_cand.userInt("xGenPdgId");
+        dimuonditrk_isprompt   = dimuonditrk_cand.userFloat("xGenIsPrompt");
       }
 
 

@@ -35,13 +35,13 @@ DiMuonDiTrakProducer::isAMixedbHadron(int pdgID, int momPdgID) {
 
 }
 
-std::pair<int, float>
+std::tuple<int, float, float>
 DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
   // std::cout << "findJpsiMCInfo 1 " << std::endl;
   int momJpsiID = 0;
   float trueLife = -99.;
-
+  float isPrompt = -99.;
   if (genJpsi->numberOfMothers()>0) {
 
     // std::cout << "findJpsiMCInfo 1 " << std::endl;
@@ -53,47 +53,21 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
     trueVtx.SetXYZ(genJpsi->vertex().x(),genJpsi->vertex().y(),genJpsi->vertex().z());
     trueP.SetXYZ(genJpsi->momentum().x(),genJpsi->momentum().y(),genJpsi->momentum().z());
 
-    bool aBhadron = false;
     reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
     // std::cout << "findJpsiMCInfo 1 " << std::endl;
     if (Jpsimom.isNull()) {
-      std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+      std::tuple<int, float, float> result = std::make_pair(momJpsiID, trueLife,isPrompt);
       return result;
-    } else {
-      reco::GenParticleRef Jpsigrandmom = Jpsimom->motherRef();
-      if (isAbHadron(Jpsimom->pdgId())) {
-        if (Jpsigrandmom.isNonnull() && isAMixedbHadron(Jpsimom->pdgId(),Jpsigrandmom->pdgId())) {
-          momJpsiID = Jpsigrandmom->pdgId();
-          trueVtxMom.SetXYZ(Jpsigrandmom->vertex().x(),Jpsigrandmom->vertex().y(),Jpsigrandmom->vertex().z());
-        } else {
-          momJpsiID = Jpsimom->pdgId();
-          trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-        }
-        aBhadron = true;
-      } else {
-        if (Jpsigrandmom.isNonnull() && isAbHadron(Jpsigrandmom->pdgId())) {
-          reco::GenParticleRef JpsiGrandgrandmom = Jpsigrandmom->motherRef();
-          if (JpsiGrandgrandmom.isNonnull() && isAMixedbHadron(Jpsigrandmom->pdgId(),JpsiGrandgrandmom->pdgId())) {
-            momJpsiID = JpsiGrandgrandmom->pdgId();
-            trueVtxMom.SetXYZ(JpsiGrandgrandmom->vertex().x(),JpsiGrandgrandmom->vertex().y(),JpsiGrandgrandmom->vertex().z());
-          } else {
-            momJpsiID = Jpsigrandmom->pdgId();
-            trueVtxMom.SetXYZ(Jpsigrandmom->vertex().x(),Jpsigrandmom->vertex().y(),Jpsigrandmom->vertex().z());
-          }
-          aBhadron = true;
-        }
-      }
-      if (!aBhadron) {
-        momJpsiID = Jpsimom->pdgId();
-        trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-      }
-    }
-
+    } else
+    {
+    momJpsiID = Jpsimom->pdgId();
+    Jpsimom->isPromptDecayed();
+    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
     TVector3 vdiff = trueVtx - trueVtxMom;
-    //trueLife = vdiff.Perp()*3.09688/trueP.Perp();
     trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
   }
-  std::pair<int, float> result = std::make_pair(momJpsiID, trueLife);
+}
+  std::tuple<int,float,float> result = std::make_pair(momJpsiID, trueLife,isPrompt);
   return result;
 
 }
@@ -357,54 +331,34 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
              if (addMCTruth_) {
                reco::GenParticleRef genMu1 = pmu1->genParticleRef();
                reco::GenParticleRef genMu2 = pmu2->genParticleRef();
-               reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
-               reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
+               // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
+               // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
 
-               if (genMu1.isNonnull() && genMu2.isNonnull() && genKaon1.isNonnull() && genKaon2.isNonnull()) {
-                 if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0 && genKaon1->numberOfMothers()>0 && gengenKaon1Mu2->numberOfMothers()>0){
+               if (genMu1.isNonnull() && genMu2.isNonnull()) {
+                 if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
                    reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
                    reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
+
                    if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
 
-                     std::pair<int, float> MCinfo = findJpsiMCInfo(mumu_mom1);
-                     DiMuonTTCand.addUserInt("jpsiPDGId",MCinfo.first);
-                     DiMuonTTCand.addUserFloat("jpsiPpdlTrue",MCinfo.second);
+                     std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
+                     DiMuonTTCand.addUserInt("jPsiGenPdgId",mumu_mom1->pdgId());
+                     DiMuonTTCand.addUserFloat("jPsiPpdlTrue",std::get<1>(MCinfo));
+                     DiMuonTTCand.addUserInt("xGenPdgId",std::get<0>(MCinfo)));
+                     DiMuonTTCand.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo)));
                    } else {
-                     DiMuonTTCand.addUserInt("jpsiPDGId",0);
-                     DiMuonTTCand.addUserFloat("jpsiPpdlTrue",-99.);
+                     DiMuonTTCand.addUserInt("jPsiGenPdgId",0.0);
+                     DiMuonTTCand.addUserFloat("jPsiPpdlTrue",-99.0);
+                     DiMuonTTCand.addUserInt("xGenPdgId",0.0);
+                     DiMuonTTCand.addUserFloat("xGenIsPrompt",-99.0);
                    }
-
-                   reco::GenParticleRef tktk_mom1 = genKaon1->motherRef();
-                   reco::GenParticleRef tktk_mom2 = genKaon2->motherRef();
-                   if (tktk_mom1.isNonnull() && (tktk_mom1 == tktk_mom2)) {
-
-                     std::pair<int, float> MCinfo = findJpsiMCInfo(tktk_mom1);
-                     DiMuonTTCand.addUserInt("phiPDGId",MCinfo.first);
-                     DiMuonTTCand.addUserFloat("phiPpdlTrue",MCinfo.second);
-                   } else {
-                     DiMuonTTCand.addUserInt("phiPDGId",0);
-                     DiMuonTTCand.addUserFloat("phiPpdlTrue",-99.);
-                   }
-
-                   reco::GenParticleRef x_mom1 = tktk_mom1->motherRef();
-                   reco::GenParticleRef x_mom2 = mumu_mom1->motherRef();
-
-                   if (x_mom1.isNonnull() && (x_mom1 == x_mom2)) {
-                     DiMuonTTCand.setGenParticleRef(x_mom1); // set
-                     DiMuonTTCand.embedGenParticle();      // and embed
-                     DiMuonTTCand.addUserInt("xPDGId",x_mom1->pdgId());
-                   } else {
-                     DiMuonTTCand.addUserInt("xPDGId",0);
-                   }
-
 
                  }
               } else {
-                 DiMuonTTCand.addUserInt("xPDGId",0);
-                 DiMuonTTCand.addUserInt("phiPDGId",0);
-                 DiMuonTTCand.addUserFloat("phiPpdlTrue",-99.);
-                 DiMuonTTCand.addUserInt("jpsiPDGId",0);
-                 DiMuonTTCand.addUserFloat("jpsiPpdlTrue",-99.);
+                DiMuonTTCand.addUserInt("jPsiGenPdgId",0.0);
+                DiMuonTTCand.addUserFloat("jPsiPpdlTrue",-99.0);
+                DiMuonTTCand.addUserInt("xGenPdgId",0.0);
+                DiMuonTTCand.addUserFloat("xGenIsPrompt",-99.0);
                }
              }
 

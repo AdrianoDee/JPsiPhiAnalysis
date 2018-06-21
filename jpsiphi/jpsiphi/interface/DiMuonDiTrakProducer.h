@@ -43,6 +43,7 @@
 
 #include <TLorentzVector.h>
 #include <vector>
+#include <tuple>
 
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
@@ -78,10 +79,10 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
-  std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
+  std::tuple<int, float, float>findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
-  
+
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
