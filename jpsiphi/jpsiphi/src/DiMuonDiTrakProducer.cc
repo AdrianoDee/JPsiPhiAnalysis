@@ -189,7 +189,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            std::vector<reco::TransientTrack> yTracks;
            KinematicParticleFactoryFromTransientTrack pFactory;
-           vector<RefCountedKinematicParticle> yParticles;
+           std::vector<RefCountedKinematicParticle> xParticles;
 
            float kinChi = 0.;
            float kinNdf = 0.;
@@ -199,8 +199,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
            xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
 
-           xParticles.push_back(pFactory.particle(xTracks[0],muon_mass,kinChi,kinNdf,muonSigma));
-           xParticles.push_back(pFactory.particle(xTracks[1],muon_mass,kinChi,kinNdf,muonSigma));
+           xParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+           xParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
            xParticles.push_back(pFactory.particle(xTracks[0],trakMass1,kinChi,kinNdf,trakSigma1));
            xParticles.push_back(pFactory.particle(xTracks[1],trakMass2,kinChi,kinNdf,trakSigma2));
 
@@ -221,11 +221,11 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            if (fitX->currentState().isValid())
            {
-             x_ma_fit = fitPsiT->currentState().mass();
-             x_x2_fit = PsiTDecayVertex->chiSquared();
+             x_ma_fit = fitX->currentState().mass();
+             x_x2_fit = fitXVertex->chiSquared();
              x_vp_fit = ChiSquaredProbability(x_x2_fit,
-                                                  (double)(PsiTDecayVertex->degreesOfFreedom()));
-             x_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
+                                                  (double)(fitXVertex->degreesOfFreedom()));
+             x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
            }else
             continue;
 

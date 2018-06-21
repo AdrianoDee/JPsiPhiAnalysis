@@ -157,6 +157,7 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
   int indexPsiT = -1;
   for (pat::CompositeCandidateCollection::const_iterator dimuontt=mumuTTCandidates->begin(); dimuontt!=mumuTTCandidates->end(); ++dimuontt) {
 
+    indexPsiT++;
     const pat::CompositeCandidate *dimuonC = dynamic_cast<const pat::CompositeCandidate *>(dimuontt->daughter("dimuon"));
     const pat::CompositeCandidate *ditrakC = dynamic_cast<const pat::CompositeCandidate*>(dimuontt->daughter("ditrak"));
     const pat::PackedCandidate *trakP = dynamic_cast<const pat::PackedCandidate*>(ditrakC->daughter("trakP"));
@@ -297,9 +298,8 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
             patPsiT.addUserInt("tPMatch",dimuontt->userInt("tPMatch"));
             patPsiT.addUserInt("tNMatch",dimuontt->userInt("tNMatch"));
 
-            // patPsiT.addUserInt("bIndex",indexPsiT);
-            indexPsiT++;
-            dimuontt.addUserInt("fitInedx",indexPsiT)
+            patPsiT.addUserInt("bIndex",indexPsiT);
+
 // get first muon
             bool child = PsiTTree->movePointerToTheFirstChild();
             RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
@@ -372,7 +372,6 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
             PsiTCandRefitColl->push_back(patPsiT);
           }
 	}
-  }
 // End kinematic fit
 
 // now sort by vProb
