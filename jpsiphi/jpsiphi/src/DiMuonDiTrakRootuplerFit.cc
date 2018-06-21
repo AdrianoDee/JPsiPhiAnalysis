@@ -696,7 +696,7 @@ if(!OnlyGen_)
 
       if (refPos >= 0)
       {
-        dimuonditrk_rf_cand = dimuonditrk_cand_handle->at(refPos);
+        dimuonditrk_rf_cand = dimuonditrk_rf_cand_handle->at(refPos);
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.pt(),dimuonditrk_rf_cand.eta(),dimuonditrk_rf_cand.phi(),dimuonditrk_rf_cand.mass());
         dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand.daughter("dimuon")->pt(),dimuonditrk_rf_cand.daughter("dimuon")->eta(),
                                 dimuonditrk_rf_cand.daughter("dimuon")->phi(),dimuonditrk_rf_cand.daughter("dimuon")->mass());

@@ -202,7 +202,7 @@ process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakFits',
 )
 
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
+process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     dimuonditrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
