@@ -211,8 +211,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            if (xVertexFitTree->isEmpty()) continue;
 
            xVertexFitTree->movePointerToTheTop();
-           RefCountedKinematicParticle fitX = PsiTTree->currentParticle();
-           RefCountedKinematicVertex fitXVertex = PsiTTree->currentDecayVertex();
+           RefCountedKinematicParticle fitX = xVertexFitTree->currentParticle();
+           RefCountedKinematicVertex fitXVertex = xVertexFitTree->currentDecayVertex();
 
            double x_ma_fit = 14000.;
            double x_vp_fit = -9999.;
