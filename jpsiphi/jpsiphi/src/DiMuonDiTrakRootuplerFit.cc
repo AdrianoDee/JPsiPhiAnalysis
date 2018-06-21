@@ -115,7 +115,7 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuonditrk_pt,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
-  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf;
+  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c;
 
   Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt;
   Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt;
@@ -607,7 +607,7 @@ if(!OnlyGen_)
       std::vector<unsigned int>::iterator refFind = std::find(refToUnRefMap.begin(),refToUnRefMap.end(),i);
 
       if(refFind != refToUnRefMap.end())
-        refPos = refFind - refToUnRefMap.begin()
+        refPos = refFind - refToUnRefMap.begin();
 
       if (refPos<0 || refPos>(int) dimuonditrk_rf_cand_handle->size()) {
         std::cout << "Incorrect index for dimuontt combination " << run << "," << event <<"," << dimuonditrk_rf_bindx << std::endl;
@@ -642,6 +642,9 @@ if(!OnlyGen_)
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
       const pat::Muon *muonP, *muonN;
+
+      reco::Candidate::LorentzVector vP = dimuon_cand_rf->daughter("muon1")->p4();
+      reco::Candidate::LorentzVector vM = dimuon_cand_rf->daughter("muon2")->p4();
 
       if (dimuon_cand->daughter("muon1")->charge() < 0) {
          vP = dimuon_cand->daughter("muon2")->p4();
@@ -707,8 +710,8 @@ if(!OnlyGen_)
         dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("dimuon"));
         ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand.daughter("ditrak"));
 
-        reco::Candidate::LorentzVector vP = dimuon_cand_rf->daughter("muon1")->p4();
-        reco::Candidate::LorentzVector vM = dimuon_cand_rf->daughter("muon2")->p4();
+        vP = dimuon_cand_rf->daughter("muon1")->p4();
+        vM = dimuon_cand_rf->daughter("muon2")->p4();
 
         if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
            vP = dimuon_cand_rf->daughter("muon2")->p4();

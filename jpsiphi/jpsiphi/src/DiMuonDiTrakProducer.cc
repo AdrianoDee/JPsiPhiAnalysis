@@ -18,19 +18,6 @@ bool DiMuonDiTrakProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat
 }
 
 
-TVector3 pperp(x_px_fit, x_py_fit, 0);
-AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-TVector3 vdiff = vtx - pvtx;
-double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), thePrimaryV);
-double ctauPV = distXY.value()*cosAlpha * x_ma_fit/pperp.Perp();
-GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
-GlobalError v2e = thePrimaryV.error();
-AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2());
-
-
 std::pair<int, float>
 DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 

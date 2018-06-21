@@ -39,7 +39,7 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
-
+#include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
 
 #include <TLorentzVector.h>
 #include <vector>
