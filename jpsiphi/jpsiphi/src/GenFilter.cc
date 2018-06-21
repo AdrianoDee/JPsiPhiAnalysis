@@ -2,7 +2,7 @@
 //
 // Package:    GenFilter/GenFilter
 // Class:      GenFilter
-// 
+//
 /**\class GenFilter GenFilter.cc GenFilter/GenFilter/plugins/GenFilter.cc
 
  Description: [one line class summary]
@@ -30,6 +30,13 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/StreamID.h"
 
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/PatCandidates/interface/UserData.h"
+
 //
 // class declaration
 //
@@ -50,7 +57,9 @@ class GenFilter : public edm::stream::EDFilter<> {
       //virtual void endRun(edm::Run const&, edm::EventSetup const&) override;
       //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
       //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
+      UInt_t thePdgId_;
 
+      edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
       // ----------member data ---------------------------
 };
 
@@ -65,16 +74,17 @@ class GenFilter : public edm::stream::EDFilter<> {
 //
 // constructors and destructor
 //
-GenFilter::GenFilter(const edm::ParameterSet& iConfig)
+GenFilter::GenFilter(const edm::ParameterSet& iConfig):
+    thePdgId_(iConfig.getParameter<uint32_t>("PdgId"))
 {
-   //now do what ever initialization is needed
+  genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
 
 }
 
 
 GenFilter::~GenFilter()
 {
- 
+
    // do anything here that needs to be done at destruction time
    // (e.g. close files, deallocate resources etc.)
 
@@ -90,16 +100,15 @@ bool
 GenFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
-#ifdef THIS_IS_AN_EVENT_EXAMPLE
-   Handle<ExampleData> pIn;
-   iEvent.getByLabel("example",pIn);
-#endif
+   edm::Handle< std::vector <reco::GenParticle> > pruned;
+   iEvent.getByToken(genCands_, pruned);
 
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-   ESHandle<SetupData> pSetup;
-   iSetup.get<SetupRecord>().get(pSetup);
-#endif
-   return true;
+   if(pruned.isValid())
+    for (size_t i=0; i<pruned->size(); i++)
+      if (abs(afourmuon->pdgId()) == thePdgId_)
+        return true;
+
+   return false;
 }
 
 // ------------ method called once each stream before processing any runs, lumis or events  ------------
@@ -117,10 +126,10 @@ GenFilter::endStream() {
 /*
 void
 GenFilter::beginRun(edm::Run const&, edm::EventSetup const&)
-{ 
+{
 }
 */
- 
+
 // ------------ method called when ending the processing of a run  ------------
 /*
 void
@@ -128,7 +137,7 @@ GenFilter::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 */
- 
+
 // ------------ method called when starting to processes a luminosity block  ------------
 /*
 void
@@ -136,7 +145,7 @@ GenFilter::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup con
 {
 }
 */
- 
+
 // ------------ method called when ending the processing of a luminosity block  ------------
 /*
 void
@@ -144,7 +153,7 @@ GenFilter::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const
 {
 }
 */
- 
+
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
 GenFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {

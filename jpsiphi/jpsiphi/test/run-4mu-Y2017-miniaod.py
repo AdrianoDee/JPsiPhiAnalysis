@@ -11,6 +11,12 @@ options.register ('yMass',
 				  VarParsing.varType.int,
 				  "MC sample Y mass ")
 
+options.register ('trigger',
+				  True,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "Adding triggers")
+
 options.parseArguments()
 
 #input_filename = '/store/data/Run2016B/MuOnia/MINIAOD/PromptReco-v1/000/297/723/00000/9040368C-DE5E-E711-ACFF-02163E0134FF.root'
@@ -22,7 +28,7 @@ Y = str(options.yMass)
 
 input_files = {"4700" : input_files_4700,"4500" : input_files_4500,"4300" : input_files_4300,"4100" : input_files_4100}
 YMassCuts   = {"4700" : cms.vdouble(4.0,5.4),"4500" : cms.vdouble(3.9,5.1),"4300" : cms.vdouble(3.7,4.9),"4100" : cms.vdouble(3.5,4.7)}
-motherPdgs  = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "Y4500": 10441}
+motherPdgs  = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "4500": 10441}
 
 motherPdg = motherPdgs[Y]
 input_file = input_files[Y]
@@ -223,19 +229,35 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           HLTs = hltpaths
                           )
 
-process.sequence = cms.Sequence(
-                    process.triggerSelection *
-                    process.slimmedMuonsWithTriggerSequence *
-                    process.softMuons *
-                    process.JPsi2MuMuPAT *
-                    process.Phi2MuMuPAT *
-                    process.DiMuonFilteredJpsi *
-                    process.DiMuonFilteredPhi *
-                    process.DoubleDiMuonProducer *
-                    process.DoubleDiMuonFitter *
-                    process.rootuplefourmu *
-                    process.rootupleJPsi *
-                    process.rootuplePhi
-)
+if options.trigger:
+	process.sequence = cms.Sequence(
+	                    process.triggerSelection *
+	                    process.slimmedMuonsWithTriggerSequence *
+	                    process.softMuons *
+	                    process.JPsi2MuMuPAT *
+	                    process.Phi2MuMuPAT *
+	                    process.DiMuonFilteredJpsi *
+	                    process.DiMuonFilteredPhi *
+	                    process.DoubleDiMuonProducer *
+	                    process.DoubleDiMuonFitter *
+	                    process.rootuplefourmu *
+	                    process.rootupleJPsi *
+	                    process.rootuplePhi
+	)
+else:
+		process.sequence = cms.Sequence(
+		                    #process.triggerSelection *
+		                    process.slimmedMuonsWithTriggerSequence *
+		                    process.softMuons *
+		                    process.JPsi2MuMuPAT *
+		                    process.Phi2MuMuPAT *
+		                    process.DiMuonFilteredJpsi *
+		                    process.DiMuonFilteredPhi *
+		                    process.DoubleDiMuonProducer *
+		                    process.DoubleDiMuonFitter *
+		                    process.rootuplefourmu *
+		                    process.rootupleJPsi *
+		                    process.rootuplePhi
+		)
 
 process.p = cms.Path(process.sequence)
