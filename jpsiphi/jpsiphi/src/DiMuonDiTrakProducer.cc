@@ -291,7 +291,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            TVector3 vtx;
            TVector3 pvtx;
            VertexDistanceXY vdistXY;
-           int   x_ch_fit = fitX->currentState().charge();
+           int   x_ch_fit = DiMuonTTCand.charge();
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
            double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
            double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
@@ -344,8 +344,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                      std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
                      DiMuonTTCand.addUserInt("jPsiGenPdgId",mumu_mom1->pdgId());
                      DiMuonTTCand.addUserFloat("jPsiPpdlTrue",std::get<1>(MCinfo));
-                     DiMuonTTCand.addUserInt("xGenPdgId",std::get<0>(MCinfo)));
-                     DiMuonTTCand.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo)));
+                     DiMuonTTCand.addUserInt("xGenPdgId",std::get<0>(MCinfo));
+                     DiMuonTTCand.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
                    } else {
                      DiMuonTTCand.addUserInt("jPsiGenPdgId",0.0);
                      DiMuonTTCand.addUserFloat("jPsiPpdlTrue",-99.0);
