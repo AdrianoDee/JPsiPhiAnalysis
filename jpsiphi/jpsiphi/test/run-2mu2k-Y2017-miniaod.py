@@ -192,7 +192,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
 #     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
 # )
 
-process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
+process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakFits',
     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     JPsiMass                  = cms.double(3.096916),
     PhiMass                   = cms.double(1.019461),              # J/psi mass in GeV
