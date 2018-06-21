@@ -606,7 +606,7 @@ if(!OnlyGen_)
       if(refFind != refToUnRefMap.end())
         refPos = refFind - refToUnRefMap.begin();
 
-      if (refPos<0 || refPos>(int) dimuonditrk_rf_cand_handle->size()) {
+      if (refPos>(int) dimuonditrk_rf_cand_handle->size()) {
         std::cout << "Incorrect index for dimuontt combination " << run << "," << event <<"," << dimuonditrk_rf_bindx << std::endl;
         continue;
       }
