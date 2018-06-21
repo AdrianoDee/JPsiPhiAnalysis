@@ -198,7 +198,7 @@ process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakFits',
     PhiMass                   = cms.double(1.019461),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = YMassCut,            # b-hadron mass window
     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
-    Product                   = cms.string('DiMuonDiTrakCandidatesRef')
+    JPsiName                   = cms.string('DiMuonDiTrakCandidatesRef')
 )
 
 
