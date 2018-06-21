@@ -72,7 +72,7 @@ config.General.requestName      = 'miniaod_2mu2k_' + run + '_' +runNum+'_'+times
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2017/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2mu2k-Y2017-miniaod.py '
+config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2017/CMSSW_9_4_6_patch1/src/jpsiphi/jpsiphi/test/run-2mu2k-Y2017-miniaod.py '
 config.JobType.pyCfgParams      = [commands]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
