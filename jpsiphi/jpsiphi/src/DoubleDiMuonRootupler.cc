@@ -497,11 +497,11 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
          if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi)
          {
 
-           for (size_t j = 0; j < daughters.size(); j++)
-             std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
-
-           for (size_t j = 0; j < gdaughters.size(); j++)
-             std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
+           // for (size_t j = 0; j < daughters.size(); j++)
+           //   std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
+           //
+           // for (size_t j = 0; j < gdaughters.size(); j++)
+           //   std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
 
            gen_b4_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
            gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
