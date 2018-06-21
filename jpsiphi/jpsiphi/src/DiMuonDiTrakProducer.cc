@@ -187,7 +187,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            const ParticleMass trakMass2(MassTraks_[1]);
            float trakSigma2 = trakMass2*1E-6;
 
-           std::vector<reco::TransientTrack> yTracks;
+           std::vector<reco::TransientTrack> xTracks;
            KinematicParticleFactoryFromTransientTrack pFactory;
            std::vector<RefCountedKinematicParticle> xParticles;
 
@@ -201,8 +201,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            xParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
            xParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-           xParticles.push_back(pFactory.particle(xTracks[0],trakMass1,kinChi,kinNdf,trakSigma1));
-           xParticles.push_back(pFactory.particle(xTracks[1],trakMass2,kinChi,kinNdf,trakSigma2));
+           xParticles.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
+           xParticles.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
 
            KinematicParticleVertexFitter kFitter;
            RefCountedKinematicTree xVertexFitTree;

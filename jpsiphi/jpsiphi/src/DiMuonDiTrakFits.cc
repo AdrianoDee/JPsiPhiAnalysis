@@ -239,7 +239,7 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
 
     KinematicParticleVertexFitter vertexFitter;
     // MultiTrackKinematicConstraint *dimuon_mtc = new  TwoTrackMassKinematicConstraint(DiMuonMass_);
-    RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters)
+    RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters);
 
     if (!PsiTTree->isEmpty()) {
        PsiTTree->movePointerToTheTop();
