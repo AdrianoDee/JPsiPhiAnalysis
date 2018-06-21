@@ -295,11 +295,11 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
            double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
            double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
-           double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+
+           // double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+
                                      x_py_fit*x_py_fit+x_pz_fit*x_pz_fit);
            double x_vx_fit = fitXVertex->position().x();
 	         double x_vy_fit = fitXVertex->position().y();
-           double x_vz_fit = fitXVertex->position().z();
+           // double x_vz_fit = fitXVertex->position().z();
 
            vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
            TVector3 pperp(x_px_fit, x_py_fit, 0);
