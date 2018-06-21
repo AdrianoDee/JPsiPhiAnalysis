@@ -32,7 +32,7 @@ Y = str(options.yMass)
 
 input_files = {"4700" : input_files_4700,"4500" : input_files_4500,"4300" : input_files_4300,"4100" : input_files_4100}
 YMassCuts   = {"4700" : cms.vdouble(4.0,5.4),"4500" : cms.vdouble(3.9,5.1),"4300" : cms.vdouble(3.7,4.9),"4100" : cms.vdouble(3.5,4.7)}
-motherPdgs  = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "Y4500": 10441}
+motherPdgs  = {"4700" : 10441, "B" : 532 , "4100" : 20443, "4300": 20443, "4500": 10441}
 
 motherPdg = motherPdgs[Y]
 input_file = input_files[Y]

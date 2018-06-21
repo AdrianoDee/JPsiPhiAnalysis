@@ -57,8 +57,7 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 dataset = filter(None, datasetName.split('/'))
 
 jobdir = 'miniaod_2mu2k_' + run
-
-commands = 'yMass=' + str(run) + ' trigger=' + str(False)
+#commands = 'yMass=' + str(run) + ' trigger=' + str(trigger)
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
@@ -73,7 +72,7 @@ config.General.transferLogs     = False
 
 config.section_('JobType')
 config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2017/CMSSW_9_4_6_patch1/src/jpsiphi/jpsiphi/test/run-2mu2k-Y2017-miniaod.py'
-config.JobType.pyCfgParams      = [commands]
+config.JobType.pyCfgParams      = ['yMass=' + str(run),' trigger=' + str(trigger)]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
