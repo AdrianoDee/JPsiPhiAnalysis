@@ -30,7 +30,8 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  isMC_(iConfig.getParameter<bool>("IsMC"))
+  isMC_(iConfig.getParameter<bool>("IsMC")),
+  AddMCTruth_(iConfig.getParameter<bool>("AddMCTruth"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -60,6 +61,10 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+  // Kinematic fit
+  edm::ESHandle<TransientTrackBuilder> theB;
+  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
 
   uint ncombo = 0;
   float DiMuonMassMax_ = DiMuonMassCuts_[1];
@@ -134,6 +139,10 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
+
+       if(dimuonC->userFloat("vProb")<0.0)
+         continue;
+
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
 
@@ -146,6 +155,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
          if(posTrack.pt()<0.5) continue;
 	       if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
+         if(!(posTrack.hasTrackDetails())) continue;
 
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2) || posTrack.charge() < 0 ) continue;
 
@@ -159,6 +169,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
 
   	       if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
+           if(!(negTrack.hasTrackDetails())) continue;
 
            if (i == j) continue;
            if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) || negTrack.charge() > 0 ) continue;
@@ -167,12 +178,70 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
 
            if ( TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_ ) {
 
+           float refittedMass = -1.0, mumuVtxCL = -1.0;
+
+           const ParticleMass muonMass(0.1056583);
+           float muonSigma = muonMass*1E-6;
+           const ParticleMass trakMass1(MassTraks_[0]);
+           float trakSigma1 = trakMass1*1E-6;
+           const ParticleMass trakMass2(MassTraks_[1]);
+           float trakSigma2 = trakMass2*1E-6;
+
+           std::vector<reco::TransientTrack> yTracks;
+           KinematicParticleFactoryFromTransientTrack pFactory;
+           vector<RefCountedKinematicParticle> yParticles;
+
+           float kinChi = 0.;
+           float kinNdf = 0.;
+
+           xTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // K+
+           xTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // K+
+           xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
+           xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
+
+           xParticles.push_back(pFactory.particle(xTracks[0],muon_mass,kinChi,kinNdf,muonSigma));
+           xParticles.push_back(pFactory.particle(xTracks[1],muon_mass,kinChi,kinNdf,muonSigma));
+           xParticles.push_back(pFactory.particle(xTracks[0],trakMass1,kinChi,kinNdf,trakSigma1));
+           xParticles.push_back(pFactory.particle(xTracks[1],trakMass2,kinChi,kinNdf,trakSigma2));
+
+           KinematicParticleVertexFitter kFitter;
+           RefCountedKinematicTree xVertexFitTree;
+           xVertexFitTree = kFitter.fit(xParticles);
+
+           if (xVertexFitTree->isEmpty()) continue;
+
+           xVertexFitTree->movePointerToTheTop();
+           RefCountedKinematicParticle fitX = PsiTTree->currentParticle();
+           RefCountedKinematicVertex fitXVertex = PsiTTree->currentDecayVertex();
+
+           double x_ma_fit = 14000.;
+           double x_vp_fit = -9999.;
+           double x_x2_fit = 10000.;
+           double x_ndof_fit = 10000.;
+
+           if (fitX->currentState().isValid())
+           {
+             x_ma_fit = fitPsiT->currentState().mass();
+             x_x2_fit = PsiTDecayVertex->chiSquared();
+             x_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
+                                                  (double)(PsiTDecayVertex->degreesOfFreedom()));
+             x_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
+           }else
+            continue;
+
            pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
 
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
 
-           if ( DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_) {
+
+           DiMuonTTCand.addUserInt("xMass",DiMuonTTCand.mass());
+           DiMuonTTCand.addUserInt("x_rf_Mass",x_ma_fit);
+           DiMuonTTCand.addUserInt("xChi2",x_x2_fit);
+           DiMuonTTCand.addUserInt("xVProb",x_vp_fit);
+           DiMuonTTCand.addUserInt("xNdof",x_ndof_fit);
+
+           if ( x_ma_fit < DiMuonDiTrakMassMax_ && x_ma_fit > DiMuonDiTrakMassMin_) {
 
              DiMuonTTCandColl->push_back(DiMuonTTCand);
              candidates++;
