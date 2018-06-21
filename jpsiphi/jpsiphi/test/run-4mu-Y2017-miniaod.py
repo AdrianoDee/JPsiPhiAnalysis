@@ -95,6 +95,9 @@ muoniaFilters = cms.vstring("hltDisplacedmumuFilterDimuon14PhiBarrelnoCow")
 
 filters = charmoniumFilters
 
+process.yfilter = cms.EDFilter("GenFilter",
+								PdgId = cms.uint32(motherPdg)
+								)
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         triggerConditions = cms.vstring(hltpathsV),
@@ -231,6 +234,7 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
 
 if options.trigger:
 	process.sequence = cms.Sequence(
+						process.yfilter *
 	                    process.triggerSelection *
 	                    process.slimmedMuonsWithTriggerSequence *
 	                    process.softMuons *
@@ -246,7 +250,7 @@ if options.trigger:
 	)
 else:
 		process.sequence = cms.Sequence(
-		                    #process.triggerSelection *
+							process.yfilter *
 		                    process.slimmedMuonsWithTriggerSequence *
 		                    process.softMuons *
 		                    process.JPsi2MuMuPAT *

@@ -12,6 +12,12 @@ options.register ('yMass',
 				  VarParsing.varType.int,
 				  "MC sample Y mass ")
 
+options.register ('trigger',
+				  True,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "Adding triggers")
+
 options.parseArguments()
 
 #
@@ -111,6 +117,10 @@ filters = cms.vstring(
                                 'hltDisplacedmumuFilterDimuon25Jpsis'
                                 )
 
+process.yfilter = cms.EDFilter("GenFilter",
+								PdgId = cms.uint32(motherPdg)
+								)
+
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         triggerConditions = cms.vstring(hltpathsV),
                                         hltResults = cms.InputTag( "TriggerResults", "", "HLT" ),
@@ -209,14 +219,28 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           OnlyGen = cms.bool(False),
                           HLTs = hltpaths
                           )
+if options.trigger:
+    process.sequence = cms.Sequence(process.yfilter*
+                         process.triggerSelection *
+                         process.slimmedMuonsWithTriggerSequence *
+                         process.unpackPatTriggers *
+                         process.softMuons *
+                         process.JPsi2MuMuPAT *
+                         process.JPsi2MuMuFilter*
+                         process.PsiPhiProducer *
+                         process.PsiPhiFitter *
+                         process.rootuple *
+                         process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+else:
+    process.sequence = cms.Sequence(process.yfilter*
+                         process.slimmedMuonsWithTriggerSequence *
+                         process.unpackPatTriggers *
+                         process.softMuons *
+                         process.JPsi2MuMuPAT *
+                         process.JPsi2MuMuFilter*
+                         process.PsiPhiProducer *
+                         process.PsiPhiFitter *
+                         process.rootuple *
+                         process.rootupleMuMu)
 
-process.p = cms.Path(process.triggerSelection *
-                     process.slimmedMuonsWithTriggerSequence *
-                     process.unpackPatTriggers *
-                     process.softMuons *
-                     process.JPsi2MuMuPAT *
-                     process.JPsi2MuMuFilter*
-                     process.PsiPhiProducer *
-                     process.PsiPhiFitter *
-                     process.rootuple *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+process.p = cms.Path(process.sequence)
