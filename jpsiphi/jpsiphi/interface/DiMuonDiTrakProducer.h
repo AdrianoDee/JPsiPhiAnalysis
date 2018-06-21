@@ -29,6 +29,17 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 
+#include "RecoVertex/KinematicFit/interface/KinematicParticleVertexFitter.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
+#include "RecoVertex/KinematicFit/interface/MassKinematicConstraint.h"
+#include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
+#include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticle.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
+
+
 #include <TLorentzVector.h>
 #include <vector>
 

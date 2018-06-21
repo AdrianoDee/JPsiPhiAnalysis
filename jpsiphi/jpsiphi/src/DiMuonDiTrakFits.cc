@@ -82,7 +82,7 @@ class DiMuonDiTrakFits : public edm::EDProducer {
 // ----------member data ---------------------------
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonTTCand_;
   double JPsiMass_;
-  double PhiMass_
+  double PhiMass_;
   std::vector<double> DiMuonTTMassCuts_;
   std::vector<double> MassTraks_;
   std::string Product_name;
@@ -201,19 +201,6 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
     jpsiVertexFitTree->movePointerToTheTop();
   	RefCountedKinematicParticle fitJPsi = jpsiVertexFitTree->currentParticle();
 
-
-      MuMuTT.push_back((*theB).build(*(trakP->bestTrack()))); // K+
-
-      MuMuTT.push_back((*theB).build((trakP->pseudoTrack()))); // K+
-
-
-    if()
-      continue;
-    else if(trakN->bestTrack())
-      MuMuTT.push_back((*theB).build(*(trakN->bestTrack()))); // K+
-    else
-      MuMuTT.push_back((*theB).build((trakN->pseudoTrack()))); // K+
-
     //Phi
     std::vector<RefCountedKinematicParticle> PhiParticles;
     std::vector<reco::TransientTrack> PhiTrTk;
@@ -223,7 +210,6 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
     PhiParticles.push_back(pFactory.particle(PhiTrTk[0],muonMass,float(0),float(0),muonSigma));
     PhiParticles.push_back(pFactory.particle(PhiTrTk[1],muonMass,float(0),float(0),muonSigma));
 
-    KinematicParticleVertexFitter fitter;
     KinematicParticleFitter csFitterPhi;
     RefCountedKinematicTree phiVertexFitTree,phiVertexFitTreeConst;
     phiVertexFitTree = fitter.fit(PhiParticles);
@@ -252,7 +238,7 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
 
     KinematicParticleVertexFitter vertexFitter;
     // MultiTrackKinematicConstraint *dimuon_mtc = new  TwoTrackMassKinematicConstraint(DiMuonMass_);
-    RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters,dimuon_mtc);
+    RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters)
 
     if (!PsiTTree->isEmpty()) {
        PsiTTree->movePointerToTheTop();

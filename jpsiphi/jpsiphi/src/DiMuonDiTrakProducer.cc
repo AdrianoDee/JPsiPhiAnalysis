@@ -44,7 +44,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
 
 }
 
-void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& esetup){
+void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
@@ -140,7 +140,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
 
-       if(dimuonC->userFloat("vProb")<0.0)
+       if(dimuonCand->userFloat("vProb")<0.0)
          continue;
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
@@ -223,7 +223,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& es
            {
              x_ma_fit = fitPsiT->currentState().mass();
              x_x2_fit = PsiTDecayVertex->chiSquared();
-             x_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
+             x_vp_fit = ChiSquaredProbability(x_x2_fit,
                                                   (double)(PsiTDecayVertex->degreesOfFreedom()));
              x_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
            }else
