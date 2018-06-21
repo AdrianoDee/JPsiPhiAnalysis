@@ -105,9 +105,11 @@ GenFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    if(pruned.isValid())
     for (size_t i=0; i<pruned->size(); i++)
-      if (abs(afourmuon->pdgId()) == thePdgId_)
-        return true;
-
+      if (abs(pruned[i]->pdgId()) == thePdgId_)
+        {
+          std::cout << "Passing the fiter" << std::endl;
+          return true;
+        }
    return false;
 }
 
