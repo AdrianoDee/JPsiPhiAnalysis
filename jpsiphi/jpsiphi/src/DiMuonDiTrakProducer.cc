@@ -325,8 +325,6 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            DiMuonTTCand.addUserFloat("ctauPV",ctauPV);
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV);
 
-
-
              if (addMCTruth_) {
                reco::GenParticleRef genMu1 = pmu1->genParticleRef();
                reco::GenParticleRef genMu2 = pmu2->genParticleRef();
@@ -360,7 +358,6 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                 DiMuonTTCand.addUserFloat("xGenIsPrompt",-99.0);
                }
              }
-
 
              DiMuonTTCandColl->push_back(DiMuonTTCand);
              candidates++;

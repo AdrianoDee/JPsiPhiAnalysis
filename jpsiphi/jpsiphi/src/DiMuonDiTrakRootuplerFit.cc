@@ -633,7 +633,6 @@ if(!OnlyGen_)
 
       //unref corresponding
 
-      dimuonditrk_cand = dimuonditrk_cand_handle->at(dimuonditrk_rf_bindx);
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
