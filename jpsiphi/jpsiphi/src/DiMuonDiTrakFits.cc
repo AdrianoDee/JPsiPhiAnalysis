@@ -372,6 +372,7 @@ void DiMuonDiTrakFits::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
             PsiTCandRefitColl->push_back(patPsiT);
           }
 	}
+}
 // End kinematic fit
 
 // now sort by vProb
