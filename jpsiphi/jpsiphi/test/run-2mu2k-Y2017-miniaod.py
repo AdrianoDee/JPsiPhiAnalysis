@@ -75,12 +75,12 @@ charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-#'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-#'HLT_DoubleMu4_JpsiTrk_Displaced',
-#'HLT_DoubleMu4_Jpsi_Displaced',
-#'HLT_DoubleMu4_3_Jpsi_Displaced',
-#'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-#'HLT_Dimuon25_Jpsi',
+'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
+'HLT_DoubleMu4_JpsiTrk_Displaced',
+'HLT_DoubleMu4_Jpsi_Displaced',
+'HLT_DoubleMu4_3_Jpsi_Displaced',
+'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+'HLT_Dimuon25_Jpsi',
 ]
 
 hltList = charmoniumHLT #muoniaHLT
@@ -133,19 +133,20 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
   triggerResults              = cms.InputTag( 'TriggerResults::HLT' ),
   unpackFilterLabels          = cms.bool( True )
 )
-process.softMuons = cms.EDFilter('PATMuonSelector',
-   src = cms.InputTag('slimmedMuonsWithTrigger'),
-   cut = cms.string('muonID(\"TMOneStationTight\")'
-                    ' && abs(innerTrack.dxy) < 0.3'
-                    ' && abs(innerTrack.dz)  < 20.'
-                    ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
-                    ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
-                    ' && innerTrack.quality(\"highPurity\")'
-   ),
-   filter = cms.bool(True)
-)
+
+# process.softMuons = cms.EDFilter('PATMuonSelector',
+#    src = cms.InputTag('slimmedMuonsWithTrigger'),
+#    cut = cms.string('muonID(\"TMOneStationTight\")'
+#                     ' && abs(innerTrack.dxy) < 0.3'
+#                     ' && abs(innerTrack.dz)  < 20.'
+#                     ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
+#                     ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
+#                     ' && innerTrack.quality(\"highPurity\")'
+#    ),
+#    filter = cms.bool(True)
+# )
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -182,13 +183,23 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
 )
 
 
+# process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
+#     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+#     DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
+#     DiMuonTrakTrakMassCuts    = YMassCut,            # b-hadron mass window
+#     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
+#     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
+# )
+
 process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
+    JPsiMass                  = cms.double(3.096916),
+    PhiMass                   = cms.double(1.019461),              # J/psi mass in GeV
     DiMuonTrakTrakMassCuts    = YMassCut,            # b-hadron mass window
     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
 )
+
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
@@ -224,23 +235,26 @@ if options.trigger:
                          process.triggerSelection *
                          process.slimmedMuonsWithTriggerSequence *
                          process.unpackPatTriggers *
-                         process.softMuons *
+                         #process.softMuons *
                          process.JPsi2MuMuPAT *
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
                          process.PsiPhiFitter *
                          process.rootuple *
-                         process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+                         #process.rootupleMuMu
+                         )# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
 else:
-    process.sequence = cms.Sequence(process.yfilter*
+    process.sequence = cms.Sequence(
+                         process.yfilter*
                          process.slimmedMuonsWithTriggerSequence *
                          process.unpackPatTriggers *
-                         process.softMuons *
+                         #process.softMuons *
                          process.JPsi2MuMuPAT *
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
                          process.PsiPhiFitter *
                          process.rootuple *
-                         process.rootupleMuMu)
+                         #process.rootupleMuMu
+                         )
 
 process.p = cms.Path(process.sequence)
