@@ -318,7 +318,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
 
-           DiMuonTTCand.addUserInt("mass_rf",x_ma_fit);
+           DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
