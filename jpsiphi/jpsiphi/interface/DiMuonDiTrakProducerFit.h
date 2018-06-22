@@ -67,6 +67,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
   std::vector<double> MassTraks_;
+  double JPsiMass_;
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;

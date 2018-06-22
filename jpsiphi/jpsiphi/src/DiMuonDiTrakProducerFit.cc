@@ -81,7 +81,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
-  JPsiMass(iConfig.getParameter<double>("JPsiMass")),
+  JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass(iConfig.getParameter<double>("PhiMass")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
@@ -493,7 +493,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        DiMuonTTCand_rf.addDaughter(psi,"dimuon");
            	           DiMuonTTCand_rf.addDaughter(phi,"ditrak");
                        DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
-                       
+
                        PsiTCandRefitColl->push_back(DiMuonTTCand);
                      }
            	      }
