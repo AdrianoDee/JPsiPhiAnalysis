@@ -669,14 +669,14 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       muonP_isHighPt   = muonP->isHighPtMuon(thePrimaryV);
       muonP_isTracker  = muonP->isTrackerMuon();
       muonP_isGlobal   = muonP->isGlobalMuon();
-      muonP_NPixelHits = muonP->innerTrack()->hitPattern()->numberOfValidPixelHits();
-      muonP_NStripHits = muonP->innerTrack()->hitPattern()->numberOfValidStripHits();
-      muonP_NTrackhits = muonP->innerTrack()->hitPattern()->numberOfValidTrackerHits();
-      muonP_NBPixHits  = muonP->innerTrack()->hitPattern()->numberOfValidStripHits();
-      muonP_NPixLayers = muonP->innerTrack()->hitPattern()->pixelLayersWithMeasurement();
-      muonP_NTraLayers = muonP->innerTrack()->hitPattern()->trackerLayersWithMeasurement();
-      muonP_NStrLayers = muonP->innerTrack()->hitPattern()->stripLayersWithMeasurement();
-      muonP_NBPixLayers = muonP->innerTrack()->hitPattern()->pixelBarrelLayersWithMeasurement();
+      muonP_NPixelHits = muonP->innerTrack()->hitPattern().numberOfValidPixelHits();
+      muonP_NStripHits = muonP->innerTrack()->hitPattern().numberOfValidStripHits();
+      muonP_NTrackhits = muonP->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      muonP_NBPixHits  = muonP->innerTrack()->hitPattern().numberOfValidStripHits();
+      muonP_NPixLayers = muonP->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      muonP_NTraLayers = muonP->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      muonP_NStrLayers = muonP->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      muonP_NBPixLayers = muonP->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
       muonN_isTight    = muonN->isTightMuon(thePrimaryV);
       muonN_isLoose    = muonN->isLooseMuon();
@@ -685,14 +685,14 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       muonN_isHighPt   = muonN->isHighPtMuon(thePrimaryV);
       muonN_isTracker  = muonN->isTrackerMuon();
       muonN_isGlobal   = muonN->isGlobalMuon();
-      muonN_NPixelHits = muonN->innerTrack()->hitPattern()->numberOfValidPixelHits();
-      muonN_NStripHits = muonN->innerTrack()->hitPattern()->numberOfValidStripHits();
-      muonN_NTrackhits = muonN->innerTrack()->hitPattern()->numberOfValidTrackerHits();
-      muonN_NBPixHits  = muonN->innerTrack()->hitPattern()->numberOfValidStripHits();
-      muonN_NPixLayers = muonN->innerTrack()->hitPattern()->pixelLayersWithMeasurement();
-      muonN_NTraLayers = muonN->innerTrack()->hitPattern()->trackerLayersWithMeasurement();
-      muonN_NStrLayers = muonN->innerTrack()->hitPattern()->stripLayersWithMeasurement();
-      muonN_NBPixLayers = muonN->innerTrack()->hitPattern()->pixelBarrelLayersWithMeasurement();
+      muonN_NPixelHits = muonN->innerTrack()->hitPattern().numberOfValidPixelHits();
+      muonN_NStripHits = muonN->innerTrack()->hitPattern().numberOfValidStripHits();
+      muonN_NTrackhits = muonN->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      muonN_NBPixHits  = muonN->innerTrack()->hitPattern().numberOfValidStripHits();
+      muonN_NPixLayers = muonN->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      muonN_NTraLayers = muonN->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      muonN_NStrLayers = muonN->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      muonN_NBPixLayers = muonN->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
       muonP_type       = muonP->type();
       muonN_type       = muonN->type();
