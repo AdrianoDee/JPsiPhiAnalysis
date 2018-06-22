@@ -388,7 +388,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        TVector3 vtx;
                        TVector3 pvtx;
                        VertexDistanceXY vdistXY;
-                       int   dimuontt_ch_fit = DiMuonTTCand->charge();
+                       int   dimuontt_ch_fit = DiMuonTTCand.charge();
                        double dimuontt_px_fit = fitPsiT->currentState().kinematicParameters().momentum().x();
                        double dimuontt_py_fit = fitPsiT->currentState().kinematicParameters().momentum().y();
                        double dimuontt_pz_fit = fitPsiT->currentState().kinematicParameters().momentum().z();
