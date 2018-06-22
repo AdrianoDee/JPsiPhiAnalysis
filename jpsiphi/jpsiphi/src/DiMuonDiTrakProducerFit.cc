@@ -61,7 +61,7 @@ DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
     } else
     {
     momJpsiID = Jpsimom->pdgId();
-    Jpsimom->isPromptDecayed();
+    isPrompt = Jpsimom->isPromptDecayed();
     trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
     TVector3 vdiff = trueVtx - trueVtxMom;
     trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
@@ -240,7 +240,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if ( !(DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_)) continue;
 
-           float refittedMass = -1.0, mumuVtxCL = -1.0;
+           // float refittedMass = -1.0, mumuVtxCL = -1.0;
 
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
@@ -326,6 +326,157 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV);
 
            //Mass Constrained fit
+           KinematicConstrainedVertexFitter vertexFitter;
+           MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
+           RefCountedKinematicTree PsiTTree = xParticles.fit(allPsiTDaughters,jpsi_mtc);
+
+           if (!PsiTTree->isEmpty()) {
+
+              PsiTTree->movePointerToTheTop();
+              RefCountedKinematicParticle fitPsiTT = PsiTTree->currentParticle();
+              RefCountedKinematicVertex PsiTDecayVertex = PsiTTree->currentDecayVertex();
+       // Get PsiT reffited
+              double dimuontt_ma_fit = 14000.;
+              double dimuontt_vp_fit = -9999.;
+              double dimuontt_x2_fit = 10000.;
+              double dimuontt_ndof_fit = 10000.;
+
+              if (fitPsiTT->currentState().isValid()) {
+                dimuontt_ma_fit = fitPsiTT->currentState().mass();
+                dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
+                dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
+                                                     (double)(PsiTDecayVertex->degreesOfFreedom()));
+                dimuontt_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
+              }
+
+              if ( dimuontt_vp_fit > 0.0 ) {
+                  std::cout << "dimuontt_vp_fit" << std::endl;
+                   TVector3 vtx;
+                   TVector3 pvtx;
+                   VertexDistanceXY vdistXY;
+                   int   dimuontt_ch_fit = DiMuonTTCand.charge();
+                   double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
+                   double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
+                   double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
+                   double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
+                                             dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
+                   double dimuontt_vx_fit = PsiTDecayVertex->position().x();
+                   double dimuontt_vy_fit = PsiTDecayVertex->position().y();
+                   double dimuontt_vz_fit = PsiTDecayVertex->position().z();
+
+                   vtx.SetXYZ(dimuontt_vx_fit,dimuontt_vy_fit,0);
+                   TVector3 pperp(dimuontt_px_fit, dimuontt_py_fit, 0);
+                   AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+                   pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+                   TVector3 vdiff = vtx - pvtx;
+                   double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+                   Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
+                   double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
+                   GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
+                   GlobalError v2e = thePrimaryV.error();
+                   AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+                   double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt_ma_fit/(pperp.Perp2());
+
+                   reco::CompositeCandidate recoPsiT_rf(dimuontt_ch_fit,math::XYZTLorentzVector(dimuontt_px_fit,dimuontt_py_fit,dimuontt_pz_fit,dimuontt_en_fit),
+                                                      math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),531);
+
+                   pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
+
+                   DiMuonTTCand.addUserFloat("vProb_ref",dimuontt_vp_fit);
+                   DiMuonTTCand.addUserFloat("vChi2_ref",dimuontt_x2_fit);
+                   DiMuonTTCand.addUserFloat("nDof_ref",dimuontt_ndof_fit);
+                   DiMuonTTCand.addUserFloat("cosAlpha_ref",cosAlpha);
+                   DiMuonTTCand.addUserFloat("ctauPV_ref",ctauPV);
+                   DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
+
+                   bool child = true;
+       // get first muon
+                   bool child = PsiTTree->movePointerToTheFirstChild();
+                   RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
+                   if (!child) break;
+                   float m1_ma_fit = fitMu1->currentState().mass();
+                   int   m1_ch_fit = fitMu1->currentState().particleCharge();
+                   float m1_px_fit = fitMu1->currentState().kinematicParameters().momentum().x();
+                   float m1_py_fit = fitMu1->currentState().kinematicParameters().momentum().y();
+                   float m1_pz_fit = fitMu1->currentState().kinematicParameters().momentum().z();
+                   float m1_en_fit = sqrt(m1_ma_fit*m1_ma_fit+m1_px_fit*m1_px_fit+m1_py_fit*m1_py_fit+m1_pz_fit*m1_pz_fit);
+                   reco::CompositeCandidate recoMu1(m1_ch_fit,math::XYZTLorentzVector(m1_px_fit,m1_py_fit,m1_pz_fit,m1_en_fit),
+                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
+                   pat::CompositeCandidate patMu1(recoMu1);
+       // get second muon
+                   child = PsiTTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitMu2 = PsiTTree->currentParticle();
+                   if (!child) break;
+                   float m2_ma_fit = fitMu2->currentState().mass();
+                   int   m2_ch_fit = fitMu2->currentState().particleCharge();
+                   float m2_px_fit = fitMu2->currentState().kinematicParameters().momentum().x();
+                   float m2_py_fit = fitMu2->currentState().kinematicParameters().momentum().y();
+                   float m2_pz_fit = fitMu2->currentState().kinematicParameters().momentum().z();
+                   float m2_en_fit = sqrt(m2_ma_fit*m2_ma_fit+m2_px_fit*m2_px_fit+m2_py_fit*m2_py_fit+m2_pz_fit*m2_pz_fit);
+                   reco::CompositeCandidate recoMu2(m2_ch_fit,math::XYZTLorentzVector(m2_px_fit,m2_py_fit,m2_pz_fit,m2_en_fit),
+                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
+                   pat::CompositeCandidate patMu2(recoMu2);
+
+       // Define psi from two muons
+       	           pat::CompositeCandidate psi;
+       	           psi.addDaughter(patMu1,"muon1");
+                   psi.addDaughter(patMu2,"muon2");
+                   psi.setP4(patMu1.p4()+patMu2.p4());
+       // get kaon
+                   child = PsiTTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
+                   if (!child) break;
+                   float tk_ma_fit = fitTrk->currentState().mass();
+                   int   tk_ch_fit = fitTrk->currentState().particleCharge();
+                   float tk_px_fit = fitTrk->currentState().kinematicParameters().momentum().x();
+                   float tk_py_fit = fitTrk->currentState().kinematicParameters().momentum().y();
+                   float tk_pz_fit = fitTrk->currentState().kinematicParameters().momentum().z();
+                   float tk_en_fit = sqrt(tk_ma_fit*tk_ma_fit+tk_px_fit*tk_px_fit+tk_py_fit*tk_py_fit+tk_pz_fit*tk_pz_fit);
+                   reco::CompositeCandidate recoTk(tk_ch_fit,math::XYZTLorentzVector(tk_px_fit,tk_py_fit,tk_pz_fit,tk_en_fit),
+                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
+                   pat::CompositeCandidate patTk(recoTk);
+
+       // get kaon2
+                   child = PsiTTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
+                   if (!child) break;
+                   float tk2_ma_fit = fitTrk2->currentState().mass();
+                   int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
+                   float tk2_px_fit = fitTrk2->currentState().kinematicParameters().momentum().x();
+                   float tk2_py_fit = fitTrk2->currentState().kinematicParameters().momentum().y();
+                   float tk2_pz_fit = fitTrk2->currentState().kinematicParameters().momentum().z();
+                   float tk2_en_fit = sqrt(tk2_ma_fit*tk2_ma_fit+tk2_px_fit*tk2_px_fit+tk2_py_fit*tk2_py_fit+tk2_pz_fit*tk2_pz_fit);
+                   reco::CompositeCandidate recoTk2(tk2_ch_fit,math::XYZTLorentzVector(tk2_px_fit,tk2_py_fit,tk2_pz_fit,tk2_en_fit),
+                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
+                   pat::CompositeCandidate patTk2(recoTk2);
+
+       // get jpsi
+                   child = PsiTTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitJPsi = PsiTTree->currentParticle();
+                   if (!child) break;
+                   float jpsi_ma_fit = fitJPsi->currentState().mass();
+                   int   jpsi_ch_fit = fitJPsi->currentState().particleCharge();
+                   float jpsi_px_fit = fitJPsi->currentState().kinematicParameters().momentum().x();
+                   float jpsi_py_fit = fitJPsi->currentState().kinematicParameters().momentum().y();
+                   float jpsi_pz_fit = fitJPsi->currentState().kinematicParameters().momentum().z();
+                   float jpsi_en_fit = sqrt(jpsi_ma_fit*jpsi_ma_fit+jpsi_px_fit*jpsi_px_fit+jpsi_py_fit*jpsi_py_fit+jpsi_pz_fit*jpsi_pz_fit);
+                   reco::CompositeCandidate recoJPsi_rf(jpsi_ch_fit,math::XYZTLorentzVector(jpsi_px_fit,jpsi_py_fit,jpsi_pz_fit,jpsi_en_fit),
+                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
+                   pat::CompositeCandidate patJPsi_rf(recoJPsi_rf);
+
+       // Define phi from two kaons
+                   pat::CompositeCandidate phi;
+                   phi.addDaughter(patTk,"trakP");
+                   phi.addDaughter(patTk2,"trakN");
+                   phi.setP4(patTk.p4()+patTk2.p4());
+                   candRef = 1.0;
+                   DiMuonTTCand_rf.addDaughter(phi,"ditrak");
+                   DiMuonTTCand_rf.addDaughter(psi,"dimuon");
+                   DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
+                 }
+              }
+
+           //Mass Doubly Constrained fit
            //JPsi
            std::vector<RefCountedKinematicParticle> JPsiParticles;
            std::vector<reco::TransientTrack> JPsiTrTk;
@@ -340,7 +491,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            RefCountedKinematicTree jpsiVertexFitTree;
            jpsiVertexFitTree = fitter.fit(JPsiParticles);
 
-           float candRef = -1.0;
+           float candRef = -1.0, cand_const_ref = -1.0;
 
            if (jpsiVertexFitTree->isValid())
            {
@@ -367,23 +518,22 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                allPsiTDaughters.push_back(fitJPsi);
 
                KinematicConstrainedVertexFitter vertexFitter;
-               MultiTrackKinematicConstraint *dimuon_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
-               RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters,dimuon_mtc);
+               MultiTrackKinematicConstraint *phi_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
+               RefCountedKinematicTree PsiPhiTree = vertexFitter.fit(allPsiTDaughters,phi_mtc);
 
-               if (!PsiTTree->isEmpty()) {
-                  std::cout << "PsiTTree" << std::endl;
-                  PsiTTree->movePointerToTheTop();
-                  RefCountedKinematicParticle fitPsiT = PsiTTree->currentParticle();
-                  RefCountedKinematicVertex PsiTDecayVertex = PsiTTree->currentDecayVertex();
+               if (!PsiPhiTree->isEmpty()) {
+                  std::cout << "PsiPhiTree" << std::endl;
+                  PsiPhiTree->movePointerToTheTop();
+                  RefCountedKinematicParticle fitPsiTT = PsiPhiTree->currentParticle();
+                  RefCountedKinematicVertex PsiTDecayVertex = PsiPhiTree->currentDecayVertex();
            // Get PsiT reffited
                   double dimuontt_ma_fit = 14000.;
                   double dimuontt_vp_fit = -9999.;
                   double dimuontt_x2_fit = 10000.;
                   double dimuontt_ndof_fit = 10000.;
 
-                  if (fitPsiT->currentState().isValid()) {
-                    std::cout << "fitPsiT" << std::endl;
-                    dimuontt_ma_fit = fitPsiT->currentState().mass();
+                  if (fitPsiTT->currentState().isValid()) {
+                    dimuontt_ma_fit = fitPsiTT->currentState().mass();
                     dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
                     dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
                                                          (double)(PsiTDecayVertex->degreesOfFreedom()));
@@ -391,14 +541,13 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   }
 
                   if ( dimuontt_vp_fit > 0.0 ) {
-                      std::cout << "dimuontt_vp_fit" << std::endl;
                        TVector3 vtx;
                        TVector3 pvtx;
                        VertexDistanceXY vdistXY;
                        int   dimuontt_ch_fit = DiMuonTTCand.charge();
-                       double dimuontt_px_fit = fitPsiT->currentState().kinematicParameters().momentum().x();
-                       double dimuontt_py_fit = fitPsiT->currentState().kinematicParameters().momentum().y();
-                       double dimuontt_pz_fit = fitPsiT->currentState().kinematicParameters().momentum().z();
+                       double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
+                       double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
+                       double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
                        double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
                                                  dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
                        double dimuontt_vx_fit = PsiTDecayVertex->position().x();
@@ -423,107 +572,24 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                        pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
 
-                       DiMuonTTCand.addUserFloat("vProb_ref",dimuontt_vp_fit);
-                       DiMuonTTCand.addUserFloat("vChi2_ref",dimuontt_x2_fit);
-                       DiMuonTTCand.addUserFloat("nDof_ref",dimuontt_ndof_fit);
-                       DiMuonTTCand.addUserFloat("cosAlpha_ref",cosAlpha);
-                       DiMuonTTCand.addUserFloat("ctauPV_ref",ctauPV);
-                       DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
+                       DiMuonTTCand.addUserFloat("vProb_const_ref",dimuontt_vp_fit);
+                       DiMuonTTCand.addUserFloat("vChi2_const_ref",dimuontt_x2_fit);
+                       DiMuonTTCand.addUserFloat("nDof_const_ref",dimuontt_ndof_fit);
+                       DiMuonTTCand.addUserFloat("cosAlpha_const_ref",cosAlpha);
+                       DiMuonTTCand.addUserFloat("ctauPV_const_ref",ctauPV);
+                       DiMuonTTCand.addUserFloat("ctauErrPV_const_ref",ctauErrPV);
 
-                       bool child = true;
-           // // get first muon
-           //             bool child = PsiTTree->movePointerToTheFirstChild();
-           //             RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
-           //             if (!child) break;
-           //             float m1_ma_fit = fitMu1->currentState().mass();
-           //             int   m1_ch_fit = fitMu1->currentState().particleCharge();
-           //             float m1_px_fit = fitMu1->currentState().kinematicParameters().momentum().x();
-           //             float m1_py_fit = fitMu1->currentState().kinematicParameters().momentum().y();
-           //             float m1_pz_fit = fitMu1->currentState().kinematicParameters().momentum().z();
-           //             float m1_en_fit = sqrt(m1_ma_fit*m1_ma_fit+m1_px_fit*m1_px_fit+m1_py_fit*m1_py_fit+m1_pz_fit*m1_pz_fit);
-           //             reco::CompositeCandidate recoMu1(m1_ch_fit,math::XYZTLorentzVector(m1_px_fit,m1_py_fit,m1_pz_fit,m1_en_fit),
-           //                                              math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
-           //             pat::CompositeCandidate patMu1(recoMu1);
-           // // get second muon
-           //             child = PsiTTree->movePointerToTheNextChild();
-           //             RefCountedKinematicParticle fitMu2 = PsiTTree->currentParticle();
-           //             if (!child) break;
-           //             float m2_ma_fit = fitMu2->currentState().mass();
-           //             int   m2_ch_fit = fitMu2->currentState().particleCharge();
-           //             float m2_px_fit = fitMu2->currentState().kinematicParameters().momentum().x();
-           //             float m2_py_fit = fitMu2->currentState().kinematicParameters().momentum().y();
-           //             float m2_pz_fit = fitMu2->currentState().kinematicParameters().momentum().z();
-           //             float m2_en_fit = sqrt(m2_ma_fit*m2_ma_fit+m2_px_fit*m2_px_fit+m2_py_fit*m2_py_fit+m2_pz_fit*m2_pz_fit);
-           //             reco::CompositeCandidate recoMu2(m2_ch_fit,math::XYZTLorentzVector(m2_px_fit,m2_py_fit,m2_pz_fit,m2_en_fit),
-           //                                              math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
-           //             pat::CompositeCandidate patMu2(recoMu2);
-           //
-           // // Define psi from two muons
-           // 	           pat::CompositeCandidate psi;
-           // 	           psi.addDaughter(patMu1,"muon1");
-           //             psi.addDaughter(patMu2,"muon2");
-           //             psi.setP4(patMu1.p4()+patMu2.p4());
-           // get kaon
-                       child = PsiTTree->movePointerToTheFirstChild();
-                       RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
-                       if (!child) break;
-                       std::cout << "child1" << std::endl;
-                       float tk_ma_fit = fitTrk->currentState().mass();
-                       int   tk_ch_fit = fitTrk->currentState().particleCharge();
-                       float tk_px_fit = fitTrk->currentState().kinematicParameters().momentum().x();
-                       float tk_py_fit = fitTrk->currentState().kinematicParameters().momentum().y();
-                       float tk_pz_fit = fitTrk->currentState().kinematicParameters().momentum().z();
-                       float tk_en_fit = sqrt(tk_ma_fit*tk_ma_fit+tk_px_fit*tk_px_fit+tk_py_fit*tk_py_fit+tk_pz_fit*tk_pz_fit);
-                       reco::CompositeCandidate recoTk(tk_ch_fit,math::XYZTLorentzVector(tk_px_fit,tk_py_fit,tk_pz_fit,tk_en_fit),
-                                                        math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
-                       pat::CompositeCandidate patTk(recoTk);
-
-           // get kaon2
-                       child = PsiTTree->movePointerToTheNextChild();
-                       RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
-                       if (!child) break;
-                       std::cout << "child2" << std::endl;
-                       float tk2_ma_fit = fitTrk2->currentState().mass();
-                       int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
-                       float tk2_px_fit = fitTrk2->currentState().kinematicParameters().momentum().x();
-                       float tk2_py_fit = fitTrk2->currentState().kinematicParameters().momentum().y();
-                       float tk2_pz_fit = fitTrk2->currentState().kinematicParameters().momentum().z();
-                       float tk2_en_fit = sqrt(tk2_ma_fit*tk2_ma_fit+tk2_px_fit*tk2_px_fit+tk2_py_fit*tk2_py_fit+tk2_pz_fit*tk2_pz_fit);
-                       reco::CompositeCandidate recoTk2(tk2_ch_fit,math::XYZTLorentzVector(tk2_px_fit,tk2_py_fit,tk2_pz_fit,tk2_en_fit),
-                                                        math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
-                       pat::CompositeCandidate patTk2(recoTk2);
-
-           // get jpsi
-                       child = PsiTTree->movePointerToTheNextChild();
-                       RefCountedKinematicParticle fitJPsi = PsiTTree->currentParticle();
-                       if (!child) break;
-                       std::cout << "child3" << std::endl;
-                       float jpsi_ma_fit = fitJPsi->currentState().mass();
-                       int   jpsi_ch_fit = fitJPsi->currentState().particleCharge();
-                       float jpsi_px_fit = fitJPsi->currentState().kinematicParameters().momentum().x();
-                       float jpsi_py_fit = fitJPsi->currentState().kinematicParameters().momentum().y();
-                       float jpsi_pz_fit = fitJPsi->currentState().kinematicParameters().momentum().z();
-                       float jpsi_en_fit = sqrt(jpsi_ma_fit*jpsi_ma_fit+jpsi_px_fit*jpsi_px_fit+jpsi_py_fit*jpsi_py_fit+jpsi_pz_fit*jpsi_pz_fit);
-                       reco::CompositeCandidate recoJPsi_rf(jpsi_ch_fit,math::XYZTLorentzVector(jpsi_px_fit,jpsi_py_fit,jpsi_pz_fit,jpsi_en_fit),
-                                                        math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
-                       pat::CompositeCandidate patJPsi_rf(recoJPsi_rf);
-
-           // Define phi from two kaons
-                       pat::CompositeCandidate phi;
-                       phi.addDaughter(patTk,"trakP");
-                       phi.addDaughter(patTk2,"trakN");
-                       phi.setP4(patTk.p4()+patTk2.p4());
-                       candRef = 1.0;
-                       DiMuonTTCand_rf.addDaughter(patJPsi_rf,"dimuon");
-           	           DiMuonTTCand_rf.addDaughter(phi,"ditrak");
-                       DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
+                       cand_const_ref = 1.0;
+                       // DiMuonTTCand_rf.addDaughter(patJPsi_rf,"dimuon");
+           	           // DiMuonTTCand_rf.addDaughter(phi,"ditrak");
+                       DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_const_cand");
                      }
            	      }
 
              }
            }
 
-
+           DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",candRef);
 
 

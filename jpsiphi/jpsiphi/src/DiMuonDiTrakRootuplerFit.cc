@@ -97,7 +97,7 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector kaonn_p4;
 
   TLorentzVector dimuonditrk_rf_p4;
-  TLorentzVector dimuonditrk_not_rf_p4;
+  TLorentzVector dimuonditrk_rf_const_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
   TLorentzVector ditrak_rf_p4, ditrak_not_rf_p4;
   TLorentzVector muonp_rf_p4;
@@ -111,11 +111,12 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
 
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
+  Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
 
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuonditrk_pt,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
-  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c;
+  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
 
   Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt, muonP_isTight;
   Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt, muonN_isTight;
@@ -221,114 +222,126 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
 	      edm::Service<TFileService> fs;
         dimuonditrk_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
 
+
         dimuonditrk_tree->Branch("run",                &run,                "run/I");
         dimuonditrk_tree->Branch("event",              &event,              "event/I");
         dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
         dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
-        dimuonditrk_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
 
-        //p4s
-        dimuonditrk_tree->Branch("dimuonditrk_p4",   "TLorentzVector", &dimuonditrk_p4);
-        dimuonditrk_tree->Branch("ditrak_p4",     "TLorentzVector", &ditrak_p4);
-        dimuonditrk_tree->Branch("dimuon_p4",     "TLorentzVector", &dimuon_p4);
-        dimuonditrk_tree->Branch("muonp_p4",   "TLorentzVector", &muonp_p4);
-        dimuonditrk_tree->Branch("muonn_p4",   "TLorentzVector", &muonn_p4);
-        dimuonditrk_tree->Branch("kaonp_p4",   "TLorentzVector", &kaonp_p4);
-        dimuonditrk_tree->Branch("kaonn_p4",   "TLorentzVector", &kaonn_p4);
+        if(!OnlyGen_)
+        {
+          dimuonditrk_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
 
-        //refitted p4s
-        dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
-        dimuonditrk_tree->Branch("ditrak_rf_p4",     "TLorentzVector", &ditrak_rf_p4);
-        dimuonditrk_tree->Branch("dimuon_rf_p4",     "TLorentzVector", &dimuon_rf_p4);
-        dimuonditrk_tree->Branch("muonp_rf_p4",   "TLorentzVector", &muonp_rf_p4);
-        dimuonditrk_tree->Branch("muonn_rf_p4",   "TLorentzVector", &muonn_rf_p4);
-        dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
-        dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
+          //p4s
+          dimuonditrk_tree->Branch("dimuonditrk_p4",   "TLorentzVector", &dimuonditrk_p4);
+          dimuonditrk_tree->Branch("ditrak_p4",     "TLorentzVector", &ditrak_p4);
+          dimuonditrk_tree->Branch("dimuon_p4",     "TLorentzVector", &dimuon_p4);
+          dimuonditrk_tree->Branch("muonp_p4",   "TLorentzVector", &muonp_p4);
+          dimuonditrk_tree->Branch("muonn_p4",   "TLorentzVector", &muonn_p4);
+          dimuonditrk_tree->Branch("kaonp_p4",   "TLorentzVector", &kaonp_p4);
+          dimuonditrk_tree->Branch("kaonn_p4",   "TLorentzVector", &kaonn_p4);
 
-        //kin
-        dimuonditrk_tree->Branch("gen_dimuonditrk_m",        &gen_dimuonditrk_m,        "gen_dimuonditrk_m/D");
-        dimuonditrk_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D");
-        dimuonditrk_tree->Branch("dimuonditrk_m_rf",       &dimuonditrk_m_rf,        "dimuonditrk_m_rf/D");
-        dimuonditrk_tree->Branch("dimuonditrk_m_rf_c",       &dimuonditrk_m_rf_c,        "dimuonditrk_m_rf_c/D");
-        dimuonditrk_tree->Branch("dimuonditrk_pt",          &dimuonditrk_pt,          "dimuonditrk_pt/D");
-        dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
-        dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
-        dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
-        dimuonditrk_tree->Branch("ditrak_pt",       &ditrak_pt,        "ditrak_pt/D");
-        dimuonditrk_tree->Branch("highKaon_pt",          &highKaon_pt,          "highKaon_pt/D");
-        dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
-        dimuonditrk_tree->Branch("highMuon_pt",    &highMuon_pt,    "highMuon_pt/D");
-        dimuonditrk_tree->Branch("lowMuon_pt",     &lowMuon_pt,     "lowMuon_pt/D");
+          //refitted p4s
+          dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
+          dimuonditrk_tree->Branch("ditrak_rf_p4",     "TLorentzVector", &ditrak_rf_p4);
+          dimuonditrk_tree->Branch("dimuon_rf_p4",     "TLorentzVector", &dimuon_rf_p4);
+          dimuonditrk_tree->Branch("muonp_rf_p4",   "TLorentzVector", &muonp_rf_p4);
+          dimuonditrk_tree->Branch("muonn_rf_p4",   "TLorentzVector", &muonn_rf_p4);
+          dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
+          dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
 
-        //2mu vertexing
-        dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
-        dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
-        dimuonditrk_tree->Branch("dimuon_DCA",          &dimuon_DCA,          "dimuon_DCA/D");
-        dimuonditrk_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
-        dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
-        dimuonditrk_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
-        dimuonditrk_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
+          //kin
+          dimuonditrk_tree->Branch("gen_dimuonditrk_m",        &gen_dimuonditrk_m,        "gen_dimuonditrk_m/D");
+          dimuonditrk_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D");
+          dimuonditrk_tree->Branch("dimuonditrk_m_rf",       &dimuonditrk_m_rf,        "dimuonditrk_m_rf/D");
+          dimuonditrk_m_rf_d_c
+          dimuonditrk_tree->Branch("dimuonditrk_m_rf_c",       &dimuonditrk_m_rf_c,        "dimuonditrk_m_rf_c/D");
+          dimuonditrk_tree->Branch("dimuonditrk_pt",          &dimuonditrk_pt,          "dimuonditrk_pt/D");
+          dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
+          dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
+          dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
+          dimuonditrk_tree->Branch("ditrak_pt",       &ditrak_pt,        "ditrak_pt/D");
+          dimuonditrk_tree->Branch("highKaon_pt",          &highKaon_pt,          "highKaon_pt/D");
+          dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
+          dimuonditrk_tree->Branch("highMuon_pt",    &highMuon_pt,    "highMuon_pt/D");
+          dimuonditrk_tree->Branch("lowMuon_pt",     &lowMuon_pt,     "lowMuon_pt/D");
 
-        //2mu+2Trk vertexing
-        dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
-        dimuonditrk_tree->Branch("dimuonditrk_vChi2",      &dimuonditrk_vChi2,        "dimuonditrk_vChi2/D");
-        dimuonditrk_tree->Branch("dimuonditrk_nDof",       &dimuonditrk_nDof,         "dimuonditrk_nDof/D");
-        dimuonditrk_tree->Branch("dimuonditrk_cosAlpha",   &dimuonditrk_cosAlpha,     "dimuonditrk_cosAlpha/D");
-        dimuonditrk_tree->Branch("dimuonditrk_ctauPV",     &dimuonditrk_ctauPV,       "dimuonditrk_ctauPV/D");
-        dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
-        dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
+          //2mu vertexing
+          dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
+          dimuonditrk_tree->Branch("dimuon_vNChi2",       &dimuon_vChi2,        "dimuon_vNChi2/D");
+          dimuonditrk_tree->Branch("dimuon_DCA",          &dimuon_DCA,          "dimuon_DCA/D");
+          dimuonditrk_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
+          dimuonditrk_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
+          dimuonditrk_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
+          dimuonditrk_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
 
-        dimuonditrk_tree->Branch("dimuonditrk_rf_vProb",      &dimuonditrk_rf_vProb,        "dimuonditrk_rf_vProb/D");
-        dimuonditrk_tree->Branch("dimuonditrk_rf_vChi2",      &dimuonditrk_rf_vChi2,        "dimuonditrk_rf_vChi2/D");
-        dimuonditrk_tree->Branch("dimuonditrk_rf_nDof",       &dimuonditrk_rf_nDof,         "dimuonditrk_rf_nDof/D");
-        dimuonditrk_tree->Branch("dimuonditrk_rf_cosAlpha",   &dimuonditrk_rf_cosAlpha,     "dimuonditrk_rf_cosAlpha/D");
-        dimuonditrk_tree->Branch("dimuonditrk_rf_ctauPV",     &dimuonditrk_rf_ctauPV,       "dimuonditrk_rf_ctauPV/D");
-        dimuonditrk_tree->Branch("dimuonditrk_rf_ctauErrPV",  &dimuonditrk_rf_ctauErrPV,    "dimuonditrk_rf_ctauErrPV/D");
+          //2mu+2Trk vertexing
+          dimuonditrk_tree->Branch("dimuonditrk_vProb",      &dimuonditrk_vProb,        "dimuonditrk_vProb/D");
+          dimuonditrk_tree->Branch("dimuonditrk_vChi2",      &dimuonditrk_vChi2,        "dimuonditrk_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_nDof",       &dimuonditrk_nDof,         "dimuonditrk_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_cosAlpha",   &dimuonditrk_cosAlpha,     "dimuonditrk_cosAlpha/D");
+          dimuonditrk_tree->Branch("dimuonditrk_ctauPV",     &dimuonditrk_ctauPV,       "dimuonditrk_ctauPV/D");
+          dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",  &dimuonditrk_ctauErrPV,    "dimuonditrk_ctauErrPV/D");
+          dimuonditrk_tree->Branch("dimuonditrk_charge",     &dimuonditrk_charge,       "dimuonditrk_charge/I");
 
-        dimuonditrk_tree->Branch("tPMatch",     &tPMatch,       "tPMatch/I");
-        dimuonditrk_tree->Branch("tNMatch",     &tNMatch,       "tNMatch/I");
-        //Muon flags
-        dimuonditrk_tree->Branch("muonP_isTight",        &muonP_isTight,        "muonP_isTight/O");
-        dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
-        dimuonditrk_tree->Branch("muonP_isSoft",        &muonP_isSoft,        "muonP_isSoft/O");
-        dimuonditrk_tree->Branch("muonP_isMedium",        &muonP_isMedium,        "muonP_isMedium/O");
-        dimuonditrk_tree->Branch("muonP_isHighPt",        &muonP_isHighPt,        "muonP_isHighPt/O");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_vProb",      &dimuonditrk_rf_vProb,        "dimuonditrk_rf_vProb/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_vChi2",      &dimuonditrk_rf_vChi2,        "dimuonditrk_rf_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_nDof",       &dimuonditrk_rf_nDof,         "dimuonditrk_rf_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_cosAlpha",   &dimuonditrk_rf_cosAlpha,     "dimuonditrk_rf_cosAlpha/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_ctauPV",     &dimuonditrk_rf_ctauPV,       "dimuonditrk_rf_ctauPV/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_ctauErrPV",  &dimuonditrk_rf_ctauErrPV,    "dimuonditrk_rf_ctauErrPV/D");
 
-        dimuonditrk_tree->Branch("muonP_isTracker",        &muonP_isTracker,        "muonP_isTracker/O");
-        dimuonditrk_tree->Branch("muonP_isGlobal",        &muonP_isGlobal,        "muonP_isGlobal/O");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_vProb",      &dimuonditrk_rf_c_vProb,        "dimuonditrk_rf_c_vProb/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_vChi2",      &dimuonditrk_rf_c_vChi2,        "dimuonditrk_rf_c_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_nDof",       &dimuonditrk_rf_c_nDof,         "dimuonditrk_rf_c_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_cosAlpha",   &dimuonditrk_rf_c_cosAlpha,     "dimuonditrk_rf_c_cosAlpha/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_ctauPV",     &dimuonditrk_rf_c_ctauPV,       "dimuonditrk_rf_c_ctauPV/D");
+          dimuonditrk_tree->Branch("dimuonditrk_rf_c_ctauErrPV",  &dimuonditrk_rf_c_ctauErrPV,    "dimuonditrk_rf_c_ctauErrPV/D");
 
-        dimuonditrk_tree->Branch("muonP_NPixelHits",        &muonP_NPixelHits,        "muonP_NPixelHits/I");
-        dimuonditrk_tree->Branch("muonP_NStripHits",        &muonP_NStripHits,        "muonP_NStripHits/I");
-        dimuonditrk_tree->Branch("muonP_NTrackhits",        &muonP_NTrackhits,        "muonP_NTrackhits/I");
-        dimuonditrk_tree->Branch("muonP_NBPixHits",        &muonP_NBPixHits,        "muonP_NBPixHits/I");
+          dimuonditrk_tree->Branch("tPMatch",     &tPMatch,       "tPMatch/I");
+          dimuonditrk_tree->Branch("tNMatch",     &tNMatch,       "tNMatch/I");
+          //Muon flags
+          dimuonditrk_tree->Branch("muonP_isTight",        &muonP_isTight,        "muonP_isTight/O");
+          dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
+          dimuonditrk_tree->Branch("muonP_isSoft",        &muonP_isSoft,        "muonP_isSoft/O");
+          dimuonditrk_tree->Branch("muonP_isMedium",        &muonP_isMedium,        "muonP_isMedium/O");
+          dimuonditrk_tree->Branch("muonP_isHighPt",        &muonP_isHighPt,        "muonP_isHighPt/O");
 
-        dimuonditrk_tree->Branch("muonP_NPixLayers",        &muonP_NPixLayers,        "muonP_NPixLayers/I");
-        dimuonditrk_tree->Branch("muonP_NTraLayers",        &muonP_NTraLayers,        "muonP_NTraLayers/I");
-        dimuonditrk_tree->Branch("muonP_NStrLayers",        &muonP_NStrLayers,        "muonP_NStrLayers/I");
-        dimuonditrk_tree->Branch("muonP_NBPixLayers",        &muonP_NBPixLayers,        "muonP_NBPixLayers/I");
+          dimuonditrk_tree->Branch("muonP_isTracker",        &muonP_isTracker,        "muonP_isTracker/O");
+          dimuonditrk_tree->Branch("muonP_isGlobal",        &muonP_isGlobal,        "muonP_isGlobal/O");
 
-        dimuonditrk_tree->Branch("muonN_isTight",        &muonN_isTight,        "muonN_isTight/O");
-        dimuonditrk_tree->Branch("muonN_isLoose",        &muonN_isLoose,        "muonN_isLoose/O");
-        dimuonditrk_tree->Branch("muonN_isSoft",        &muonN_isSoft,        "muonN_isSoft/O");
-        dimuonditrk_tree->Branch("muonN_isMedium",        &muonN_isMedium,        "muonN_isMedium/O");
-        dimuonditrk_tree->Branch("muonN_isHighPt",        &muonN_isHighPt,        "muonN_isHighPt/O");
+          dimuonditrk_tree->Branch("muonP_NPixelHits",        &muonP_NPixelHits,        "muonP_NPixelHits/I");
+          dimuonditrk_tree->Branch("muonP_NStripHits",        &muonP_NStripHits,        "muonP_NStripHits/I");
+          dimuonditrk_tree->Branch("muonP_NTrackhits",        &muonP_NTrackhits,        "muonP_NTrackhits/I");
+          dimuonditrk_tree->Branch("muonP_NBPixHits",        &muonP_NBPixHits,        "muonP_NBPixHits/I");
 
-        dimuonditrk_tree->Branch("muonN_isTracker",        &muonN_isTracker,        "muonN_isTracker/O");
-        dimuonditrk_tree->Branch("muonN_isGlobal",        &muonN_isGlobal,        "muonN_isGlobal/O");
+          dimuonditrk_tree->Branch("muonP_NPixLayers",        &muonP_NPixLayers,        "muonP_NPixLayers/I");
+          dimuonditrk_tree->Branch("muonP_NTraLayers",        &muonP_NTraLayers,        "muonP_NTraLayers/I");
+          dimuonditrk_tree->Branch("muonP_NStrLayers",        &muonP_NStrLayers,        "muonP_NStrLayers/I");
+          dimuonditrk_tree->Branch("muonP_NBPixLayers",        &muonP_NBPixLayers,        "muonP_NBPixLayers/I");
 
-        dimuonditrk_tree->Branch("muonN_NPixelHits",        &muonN_NPixelHits,        "muonN_NPixelHits/I");
-        dimuonditrk_tree->Branch("muonN_NStripHits",        &muonN_NStripHits,        "muonN_NStripHits/I");
-        dimuonditrk_tree->Branch("muonN_NTrackhits",        &muonN_NTrackhits,        "muonN_NTrackhits/I");
-        dimuonditrk_tree->Branch("muonN_NBPixHits",        &muonN_NBPixHits,        "muonN_NBPixHits/I");
+          dimuonditrk_tree->Branch("muonN_isTight",        &muonN_isTight,        "muonN_isTight/O");
+          dimuonditrk_tree->Branch("muonN_isLoose",        &muonN_isLoose,        "muonN_isLoose/O");
+          dimuonditrk_tree->Branch("muonN_isSoft",        &muonN_isSoft,        "muonN_isSoft/O");
+          dimuonditrk_tree->Branch("muonN_isMedium",        &muonN_isMedium,        "muonN_isMedium/O");
+          dimuonditrk_tree->Branch("muonN_isHighPt",        &muonN_isHighPt,        "muonN_isHighPt/O");
 
-        dimuonditrk_tree->Branch("muonN_NPixLayers",        &muonN_NPixLayers,        "muonN_NPixLayers/I");
-        dimuonditrk_tree->Branch("muonN_NTraLayers",        &muonN_NTraLayers,        "muonN_NTraLayers/I");
-        dimuonditrk_tree->Branch("muonN_NStrLayers",        &muonN_NStrLayers,        "muonN_NStrLayers/I");
-        dimuonditrk_tree->Branch("muonN_NBPixLayers",        &muonN_NBPixLayers,        "muonN_NBPixLayers/I");
+          dimuonditrk_tree->Branch("muonN_isTracker",        &muonN_isTracker,        "muonN_isTracker/O");
+          dimuonditrk_tree->Branch("muonN_isGlobal",        &muonN_isGlobal,        "muonN_isGlobal/O");
 
-        dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
-        dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
+          dimuonditrk_tree->Branch("muonN_NPixelHits",        &muonN_NPixelHits,        "muonN_NPixelHits/I");
+          dimuonditrk_tree->Branch("muonN_NStripHits",        &muonN_NStripHits,        "muonN_NStripHits/I");
+          dimuonditrk_tree->Branch("muonN_NTrackhits",        &muonN_NTrackhits,        "muonN_NTrackhits/I");
+          dimuonditrk_tree->Branch("muonN_NBPixHits",        &muonN_NBPixHits,        "muonN_NBPixHits/I");
 
+          dimuonditrk_tree->Branch("muonN_NPixLayers",        &muonN_NPixLayers,        "muonN_NPixLayers/I");
+          dimuonditrk_tree->Branch("muonN_NTraLayers",        &muonN_NTraLayers,        "muonN_NTraLayers/I");
+          dimuonditrk_tree->Branch("muonN_NStrLayers",        &muonN_NStrLayers,        "muonN_NStrLayers/I");
+          dimuonditrk_tree->Branch("muonN_NBPixLayers",        &muonN_NBPixLayers,        "muonN_NBPixLayers/I");
+
+          dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
+          dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
+        }
         int pdgid_ = 0;
 
         if (isMC_ || OnlyGen_) {
@@ -727,38 +740,40 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerFit::isTriggerMatched(dimuon_cand);
 
-      dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-      dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-      ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
+      dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
+      dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,2.4);
+      ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.5);
 
       muonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
       muonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
       kaonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
       kaonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-      dimuonditrk_m_rf_c = -1.0;
+      dimuonditrk_m_rf_c = 3.9;
+      dimuonditrk_m_rf_d_c = 3.9;
 
-      if (dimuonditrk_cand.userFloat("has_const_ref") >= 0)
+      if (dimuonditrk_cand.userFloat("has_ref") >= 0)
       {
         dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ref_cand"));
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
-        // dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
-                                // dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
+        dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
+                                dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
         ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
                                 dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
 
-        // dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
+        dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
         ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
 
-        // vP = dimuon_cand_rf->daughter("muon1")->p4();
-        // vM = dimuon_cand_rf->daughter("muon2")->p4();
-        //
-        // if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
-        //    vP = dimuon_cand_rf->daughter("muon2")->p4();
-        //    vM = dimuon_cand_rf->daughter("muon1")->p4();
-        // }
-        //
-        // muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-        // muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+        vP = dimuon_cand_rf->daughter("muon1")->p4();
+        vM = dimuon_cand_rf->daughter("muon2")->p4();
+
+        if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
+           vP = dimuon_cand_rf->daughter("muon2")->p4();
+           vM = dimuon_cand_rf->daughter("muon1")->p4();
+        }
+
+        muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
+        muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
 
         kP = ditrak_cand_rf->daughter("trakP")->p4();
         kM = ditrak_cand_rf->daughter("trakN")->p4();
@@ -775,6 +790,22 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         dimuonditrk_rf_ctauPV = dimuonditrk_cand.userFloat("ctauPV_ref");
         dimuonditrk_rf_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_ref");
 
+
+      }
+
+      if (dimuonditrk_cand.userFloat("has_const_ref") >= 0)
+      {
+        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ref_const_cand"));
+        dimuonditrk_rf_const_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
+
+        dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
+
+        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vProb_const_ref");
+        dimuonditrk_rf_vChi2 = dimuonditrk_cand.userFloat("vChi2_const_ref");
+        dimuonditrk_rf_nDof = dimuonditrk_cand.userFloat("nDof_const_ref");
+        dimuonditrk_rf_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_const_ref");
+        dimuonditrk_rf_ctauPV = dimuonditrk_cand.userFloat("ctauPV_const_ref");
+        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_const_ref");
 
       }
 
