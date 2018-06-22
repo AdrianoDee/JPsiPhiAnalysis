@@ -761,12 +761,12 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
         dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
 
-        DiMuonTTCand.addUserFloat("vProb_ref",dimuontt_vp_fit);
-        DiMuonTTCand.addUserFloat("vChi2_ref",dimuontt_x2_fit);
-        DiMuonTTCand.addUserFloat("nDof_ref",dimuontt_ndof_fit);
-        DiMuonTTCand.addUserFloat("cosAlpha_ref",cosAlpha);
-        DiMuonTTCand.addUserFloat("ctauPV_ref",ctauPV);
-        DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
+        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vProb_ref");
+        dimuonditrk_rf_vChi2 = dimuonditrk_cand.userFloat("vChi2_ref");
+        dimuonditrk_rf_nDof = dimuonditrk_cand.userFloat("nDof_ref");
+        dimuonditrk_rf_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_ref");
+        dimuonditrk_rf_ctauPV = dimuonditrk_cand.userFloat("ctauPV_ref");
+        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_ref");
 
 
       }else
