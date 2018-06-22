@@ -578,7 +578,9 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         }
       }
 
-      if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi)
+      bool goodCandidate = false;
+
+      if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi && goToPhi)
       {
 
         // for (size_t j = 0; j < daughters.size(); j++)
@@ -600,6 +602,9 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
           gen_gd5_p4.SetPtEtaPhiM(gdaughters[4]->pt(),gdaughters[4]->eta(),gdaughters[4]->phi(),gdaughters[4]->mass());
         if(noGDaughters > 5)
           gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
+
+        goodCandidate = true;
+
       }
 
       if(muP && muN && kP && kN)

@@ -451,20 +451,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                                                     math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
                    pat::CompositeCandidate patTk2(recoTk2);
 
-       // get jpsi
-                   child = PsiTTree->movePointerToTheNextChild();
-                   RefCountedKinematicParticle fitJPsi = PsiTTree->currentParticle();
-                   if (!child) break;
-                   float jpsi_ma_fit = fitJPsi->currentState().mass();
-                   int   jpsi_ch_fit = fitJPsi->currentState().particleCharge();
-                   float jpsi_px_fit = fitJPsi->currentState().kinematicParameters().momentum().x();
-                   float jpsi_py_fit = fitJPsi->currentState().kinematicParameters().momentum().y();
-                   float jpsi_pz_fit = fitJPsi->currentState().kinematicParameters().momentum().z();
-                   float jpsi_en_fit = sqrt(jpsi_ma_fit*jpsi_ma_fit+jpsi_px_fit*jpsi_px_fit+jpsi_py_fit*jpsi_py_fit+jpsi_pz_fit*jpsi_pz_fit);
-                   reco::CompositeCandidate recoJPsi_rf(jpsi_ch_fit,math::XYZTLorentzVector(jpsi_px_fit,jpsi_py_fit,jpsi_pz_fit,jpsi_en_fit),
-                                                    math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),321);
-                   pat::CompositeCandidate patJPsi_rf(recoJPsi_rf);
-
        // Define phi from two kaons
                    pat::CompositeCandidate phi;
                    phi.addDaughter(patTk,"trakP");
