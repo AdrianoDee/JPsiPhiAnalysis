@@ -414,7 +414,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            	           reco::CompositeCandidate recoPsiT_rf(dimuontt_ch_fit,math::XYZTLorentzVector(dimuontt_px_fit,dimuontt_py_fit,dimuontt_pz_fit,dimuontt_en_fit),
                                                           math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),531);
 
-                       pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT);
+                       pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
 
                        DiMuonTTCand.addUserFloat("has_const_ref",1.0);
                        DiMuonTTCand.addUserFloat("vProb_ref",dimuontt_vp_fit);
