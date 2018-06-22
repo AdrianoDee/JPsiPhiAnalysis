@@ -1,13 +1,13 @@
 /**
    \file
-   Declaration of DiMuonDiTrakProducer
+   Declaration of DiMuonDiTrakProducerFit
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
 */
 
-#ifndef __DiMuonDiTrakProducer_h_
-#define __DiMuonDiTrakProducer_h_
+#ifndef __DiMuonDiTrakProducerFit_h_
+#define __DiMuonDiTrakProducerFit_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -49,10 +49,10 @@
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class DiMuonDiTrakProducer : public edm::EDProducer {
+class DiMuonDiTrakProducerFit : public edm::EDProducer {
 
  public:
-  explicit DiMuonDiTrakProducer(const edm::ParameterSet& ps);
+  explicit DiMuonDiTrakProducerFit(const edm::ParameterSet& ps);
 
  private:
 
@@ -95,4 +95,4 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   int nreco;
 };
 
-#endif // __DiMuonDiTrakProducer_h_
+#endif // __DiMuonDiTrakProducerFit_h_
