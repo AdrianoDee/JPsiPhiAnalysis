@@ -601,8 +601,6 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         if(noGDaughters > 5)
           gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
 
-        goodCandidate = true;
-
       }
 
       if(muP && muN && kP && kN)
