@@ -702,8 +702,8 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
       if (kP.pt() < kM.pt())
       {
-         kP = ditrak_cand->daughter("muon2")->p4();
-         kM = ditrak_cand->daughter("muon1")->p4();
+         kP = ditrak_cand->daughter("trakN")->p4();
+         kM = ditrak_cand->daughter("trakP")->p4();
        }
 
       kaonp_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());

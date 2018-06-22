@@ -183,7 +183,7 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 #     AddMCTruth = cms.bool(True)
 # )
 
-process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
+process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
