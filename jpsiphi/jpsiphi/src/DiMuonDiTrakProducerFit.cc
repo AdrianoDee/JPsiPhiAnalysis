@@ -341,6 +341,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            RefCountedKinematicTree jpsiVertexFitTree;
            jpsiVertexFitTree = fitter.fit(JPsiParticles);
 
+           float candRef = -1.0;
+
            if (jpsiVertexFitTree->isValid())
            {
              const ParticleMass jpsi_mass(JPsiMass_);
@@ -416,7 +418,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                        pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
 
-                       DiMuonTTCand.addUserFloat("has_const_ref",1.0);
                        DiMuonTTCand.addUserFloat("vProb_ref",dimuontt_vp_fit);
                        DiMuonTTCand.addUserFloat("vChi2_ref",dimuontt_x2_fit);
                        DiMuonTTCand.addUserFloat("nDof_ref",dimuontt_ndof_fit);
@@ -489,18 +490,18 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        phi.addDaughter(patTk,"trakP");
                        phi.addDaughter(patTk2,"trakN");
                        phi.setP4(patTk.p4()+patTk2.p4());
-
+                       candRef = 1.0;
                        DiMuonTTCand_rf.addDaughter(psi,"dimuon");
            	           DiMuonTTCand_rf.addDaughter(phi,"ditrak");
                        DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
                      }
            	      }
+
              }
            }
-           else
-           {
-             DiMuonTTCand.addUserFloat("has_const_ref",-1.0);
-           }
+
+
+           DiMuonTTCand.addUserFloat("has_const_ref",candRef);
 
 
            if (addMCTruth_) {
