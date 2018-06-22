@@ -314,6 +314,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
            double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2());
 
+           float candRef = -1.0, cand_const_ref = -1.0;
+           
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
 
@@ -328,7 +330,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
-           RefCountedKinematicTree PsiTTree = xParticles.fit(allPsiTDaughters,jpsi_mtc);
+           RefCountedKinematicTree PsiTTree = vertexFitter.fit(xParticles,jpsi_mtc);
 
            if (!PsiTTree->isEmpty()) {
 
@@ -389,7 +391,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    DiMuonTTCand.addUserFloat("ctauPV_ref",ctauPV);
                    DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
 
-                   bool child = true;
        // get first muon
                    bool child = PsiTTree->movePointerToTheFirstChild();
                    RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
@@ -491,7 +492,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            RefCountedKinematicTree jpsiVertexFitTree;
            jpsiVertexFitTree = fitter.fit(JPsiParticles);
 
-           float candRef = -1.0, cand_const_ref = -1.0;
 
            if (jpsiVertexFitTree->isValid())
            {
@@ -590,7 +590,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            }
 
            DiMuonTTCand.addUserFloat("has_ref",candRef);
-           DiMuonTTCand.addUserFloat("has_const_ref",candRef);
+           DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
 
 
            if (addMCTruth_) {
