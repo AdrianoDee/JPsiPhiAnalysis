@@ -273,7 +273,7 @@ if options.trigger:
                          process.JPsi2MuMuPAT *
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
-                         process.PsiPhiFitter *
+                         #process.PsiPhiFitter *
                          process.rootuple #*
                          #process.rootupleMuMu
                          )# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
@@ -286,7 +286,7 @@ else:
                          process.JPsi2MuMuPAT *
                          process.JPsi2MuMuFilter*
                          process.PsiPhiProducer *
-                         process.PsiPhiFitter *
+                         #process.PsiPhiFitter *
                          process.rootuple #*
                          #process.rootupleMuMu
                          )
