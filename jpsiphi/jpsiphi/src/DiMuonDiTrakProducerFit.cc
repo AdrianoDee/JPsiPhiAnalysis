@@ -464,7 +464,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //             psi.addDaughter(patMu2,"muon2");
            //             psi.setP4(patMu1.p4()+patMu2.p4());
            // get kaon
-                       child = PsiTTree->movePointerToTheNextChild();
+                       child = PsiTTree->movePointerToTheFirstChild();
                        RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
                        if (!child) break;
                        std::cout << "child1" << std::endl;
