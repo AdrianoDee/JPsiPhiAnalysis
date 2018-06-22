@@ -148,7 +148,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   // MuMu candidates only from muons
   for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
     // both must pass low quality
-    if (!(it->track().isNonnull()) continue;
+    if (!(it->track().isNonnull())) continue;
     if (!(it->innerTrack().isNonnull())) continue;
     // if(!lowerPuritySelection_(*it)) continue;
     //std::cout << "First muon quality flag" << std::endl;
