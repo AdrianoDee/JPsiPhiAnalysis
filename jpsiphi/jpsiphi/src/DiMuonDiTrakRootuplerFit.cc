@@ -619,9 +619,10 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 }  // end if isMC
 
 
-  if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if(!OnlyGen_)
+  {
+  if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (dimuonditrk_cand_handle.isValid()) {
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
@@ -827,6 +828,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     }
 
   }
+}
 
 }
 
