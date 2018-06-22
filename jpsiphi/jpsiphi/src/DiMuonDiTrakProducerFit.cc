@@ -330,8 +330,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //JPsi
            std::vector<RefCountedKinematicParticle> JPsiParticles;
            std::vector<reco::TransientTrack> JPsiTrTk;
-           JPsiTrTk.push_back((*theB).build(xTracks[0]));
-           JPsiTrTk.push_back((*theB).build(xTracks[1]));
+           JPsiTrTk.push_back(xTracks[0]);
+           JPsiTrTk.push_back(xTracks[1]);
 
            JPsiParticles.push_back(pFactory.particle(JPsiTrTk[0],muonMass,float(0),float(0),muonSigma));
            JPsiParticles.push_back(pFactory.particle(JPsiTrTk[1],muonMass,float(0),float(0),muonSigma));
