@@ -493,8 +493,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        DiMuonTTCand_rf.addDaughter(psi,"dimuon");
            	           DiMuonTTCand_rf.addDaughter(phi,"ditrak");
                        DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
-
-                       PsiTCandRefitColl->push_back(DiMuonTTCand);
                      }
            	      }
              }
