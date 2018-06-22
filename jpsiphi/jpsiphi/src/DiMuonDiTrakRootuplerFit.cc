@@ -727,28 +727,38 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerFit::isTriggerMatched(dimuon_cand);
 
+      dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+
+      muonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      muonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      kaonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      kaonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+      dimuonditrk_m_rf_c = -1.0;
+
       if (dimuonditrk_cand.userFloat("has_const_ref") >= 0)
       {
         dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ref_cand"));
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
-        dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
-                                dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
+        // dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
+                                // dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
         ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
                                 dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
 
-        dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
+        // dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
         ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
 
-        vP = dimuon_cand_rf->daughter("muon1")->p4();
-        vM = dimuon_cand_rf->daughter("muon2")->p4();
-
-        if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
-           vP = dimuon_cand_rf->daughter("muon2")->p4();
-           vM = dimuon_cand_rf->daughter("muon1")->p4();
-        }
-
-        muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
-        muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
+        // vP = dimuon_cand_rf->daughter("muon1")->p4();
+        // vM = dimuon_cand_rf->daughter("muon2")->p4();
+        //
+        // if (dimuon_cand_rf->daughter("muon1")->charge() < 0) {
+        //    vP = dimuon_cand_rf->daughter("muon2")->p4();
+        //    vM = dimuon_cand_rf->daughter("muon1")->p4();
+        // }
+        //
+        // muonp_rf_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
+        // muonn_rf_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
 
         kP = ditrak_cand_rf->daughter("trakP")->p4();
         kM = ditrak_cand_rf->daughter("trakN")->p4();
@@ -766,20 +776,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         dimuonditrk_rf_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_ref");
 
 
-      }else
-      {
-        dimuonditrk_m_rf_c = -1.0;
-        dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-
-        muonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        muonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        kaonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        kaonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-
       }
-
       dimuonditrk_m    = dimuonditrk_cand.mass();
       dimuonditrk_m_rf = dimuonditrk_cand.userFloat("mass_rf");
       dimuonditrk_pt   = dimuonditrk_cand.pt();

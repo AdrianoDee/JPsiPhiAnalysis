@@ -98,7 +98,7 @@ charmoniumHLT = [
 ]
 
 if options.debug:
-	charmoniumHLT = charmoniumHLT[:0]
+	charmoniumHLT = charmoniumHLT[:1]
 hltList = charmoniumHLT #muoniaHLT
 
 hltpaths = cms.vstring(hltList)
