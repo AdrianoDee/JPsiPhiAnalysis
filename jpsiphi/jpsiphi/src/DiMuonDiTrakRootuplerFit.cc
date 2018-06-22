@@ -777,6 +777,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 
       }
+
       dimuonditrk_m    = dimuonditrk_cand.mass();
       dimuonditrk_m_rf = dimuonditrk_cand.userFloat("mass_rf");
       dimuonditrk_pt   = dimuonditrk_cand.pt();

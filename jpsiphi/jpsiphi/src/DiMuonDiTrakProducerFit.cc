@@ -271,7 +271,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            xVertexFitTree = kFitter.fit(xParticles);
 
            if (xVertexFitTree->isEmpty()) continue;
-
+           std::cout << "xVertexFitTree" << std::endl;
            xVertexFitTree->movePointerToTheTop();
            RefCountedKinematicParticle fitX = xVertexFitTree->currentParticle();
            RefCountedKinematicVertex fitXVertex = xVertexFitTree->currentDecayVertex();
@@ -282,7 +282,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            double x_ndof_fit = 10000.;
 
            if (!(fitX->currentState().isValid())) continue;
-
+           std::cout << "fitX" << std::endl;
            x_ma_fit = fitX->currentState().mass();
            x_x2_fit = fitXVertex->chiSquared();
            x_vp_fit = ChiSquaredProbability(x_x2_fit,
@@ -344,6 +344,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if (jpsiVertexFitTree->isValid())
            {
+             std::cout << "jpsiVertexFitTree" << std::endl;
              const ParticleMass jpsi_mass(JPsiMass_);
              float jpsi_sigma = 1E-6;
 
@@ -354,6 +355,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
              if (jpsiVertexFitTree->isValid())
              {
+               std::cout << "jpsiVertexFitTreeC" << std::endl;
                jpsiVertexFitTree->movePointerToTheTop();
              	 RefCountedKinematicParticle fitJPsi = jpsiVertexFitTree->currentParticle();
 
@@ -367,7 +369,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                KinematicConstrainedVertexFitter vertexFitter;
                MultiTrackKinematicConstraint *dimuon_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
                RefCountedKinematicTree PsiTTree = vertexFitter.fit(allPsiTDaughters,dimuon_mtc);
+
                if (!PsiTTree->isEmpty()) {
+                  std::cout << "PsiTTree" << std::endl;
                   PsiTTree->movePointerToTheTop();
                   RefCountedKinematicParticle fitPsiT = PsiTTree->currentParticle();
                   RefCountedKinematicVertex PsiTDecayVertex = PsiTTree->currentDecayVertex();
@@ -378,6 +382,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   double dimuontt_ndof_fit = 10000.;
 
                   if (fitPsiT->currentState().isValid()) {
+                    std::cout << "fitPsiT" << std::endl;
                     dimuontt_ma_fit = fitPsiT->currentState().mass();
                     dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
                     dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
@@ -386,6 +391,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   }
 
                   if ( dimuontt_vp_fit > 0.0 ) {
+                      std::cout << "dimuontt_vp_fit" << std::endl;
                        TVector3 vtx;
                        TVector3 pvtx;
                        VertexDistanceXY vdistXY;
@@ -461,6 +467,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        child = PsiTTree->movePointerToTheNextChild();
                        RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
                        if (!child) break;
+                       std::cout << "child1" << std::endl;
                        float tk_ma_fit = fitTrk->currentState().mass();
                        int   tk_ch_fit = fitTrk->currentState().particleCharge();
                        float tk_px_fit = fitTrk->currentState().kinematicParameters().momentum().x();
@@ -475,6 +482,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        child = PsiTTree->movePointerToTheNextChild();
                        RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
                        if (!child) break;
+                       std::cout << "child2" << std::endl;
                        float tk2_ma_fit = fitTrk2->currentState().mass();
                        int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
                        float tk2_px_fit = fitTrk2->currentState().kinematicParameters().momentum().x();
@@ -489,6 +497,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                        child = PsiTTree->movePointerToTheNextChild();
                        RefCountedKinematicParticle fitJPsi = PsiTTree->currentParticle();
                        if (!child) break;
+                       std::cout << "child3" << std::endl;
                        float jpsi_ma_fit = fitJPsi->currentState().mass();
                        int   jpsi_ch_fit = fitJPsi->currentState().particleCharge();
                        float jpsi_px_fit = fitJPsi->currentState().kinematicParameters().momentum().x();
