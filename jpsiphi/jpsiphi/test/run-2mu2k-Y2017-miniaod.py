@@ -73,7 +73,12 @@ maxevents = -1 if not options.debug else 1000 if not options.trigger else 40000
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxevents))
 
-filename = "rootuple-2017_MC_Y_" + str(Y) + "_dimuonditrak.root"
+filename = "rootuple-2017_MC_Y_" + str(Y) + "_"
+
+filename += "trigger_" if option.trigger else ""
+filname += "onlyGen_" if options.onlyGen else ""
+
+filename += "_dimuonditrak.root"
 
 process.TFileService = cms.Service("TFileService",
         fileName = cms.string(filename),
