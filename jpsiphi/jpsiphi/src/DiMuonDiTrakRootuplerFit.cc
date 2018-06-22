@@ -618,6 +618,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 }
 }  // end if isMC
 
+if(OnlyGen_) dimuonditrk_tree->Fill();
 
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if(!OnlyGen_)
