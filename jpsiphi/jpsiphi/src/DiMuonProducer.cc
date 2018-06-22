@@ -149,7 +149,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
     // both must pass low quality
     if (!(it->track().isNonnull()) continue;
-    if (!(it->innertrack().isNonnull()) continue;
+    if (!(it->innerTrack().isNonnull())) continue;
     // if(!lowerPuritySelection_(*it)) continue;
     //std::cout << "First muon quality flag" << std::endl;
     for(View<pat::Muon>::const_iterator it2 = it+1; it2 != itend;++it2){
@@ -163,7 +163,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       // ---- fit vertex using Tracker tracks (if they have tracks) ----
       if (!(it2->track().isNonnull())) continue;
-      if (!(it2->innertrack().isNonnull()) continue;
+      if (!(it2->innerTrack().isNonnull())) continue;
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
