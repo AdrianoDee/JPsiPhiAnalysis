@@ -82,7 +82,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
-  PhiMass(iConfig.getParameter<double>("PhiMass")),
+  PhiMass_(iConfig.getParameter<double>("PhiMass")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
