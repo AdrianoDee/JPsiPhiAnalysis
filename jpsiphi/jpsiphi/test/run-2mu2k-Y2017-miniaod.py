@@ -18,6 +18,18 @@ options.register ('trigger',
 				  VarParsing.varType.bool,
 				  "Adding triggers")
 
+options.register ('debug',
+				  False,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "Debugging")
+
+options.register ('onlyGen',
+				  False,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "Only generated")
+
 options.parseArguments()
 
 #
@@ -57,7 +69,9 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+maxevents = -1 if not options.debug else 1000 if not options.trigger else 40000
+
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxevents))
 
 filename = "rootuple-2017_MC_Y_" + str(Y) + "_dimuonditrak.root"
 
@@ -83,6 +97,8 @@ charmoniumHLT = [
 'HLT_Dimuon25_Jpsi',
 ]
 
+if options.debug:
+	charmoniumHLT = charmoniumHLT[:0]
 hltList = charmoniumHLT #muoniaHLT
 
 hltpaths = cms.vstring(hltList)
@@ -145,6 +161,7 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 #    ),
 #    filter = cms.bool(True)
 # )
+
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
@@ -226,7 +243,7 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(True),
     OnlyBest = cms.bool(False),
-    OnlyGen = cms.bool(False),
+    OnlyGen = cms.bool(options.onlyGen),
     Mother_pdg = cms.uint32(motherPdg), #20443 #10441
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
@@ -244,7 +261,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
                           isMC = cms.bool(True),
                           OnlyBest = cms.bool(False),
-                          OnlyGen = cms.bool(False),
+                          OnlyGen = cms.bool(options.onlyGen),
                           HLTs = hltpaths
                           )
 if options.trigger:
@@ -273,5 +290,7 @@ else:
                          process.rootuple #*
                          #process.rootupleMuMu
                          )
+if options.onlyGen:
+	process.sequence = cms.Sequence(process.yfilter*process.rootuple)
 
 process.p = cms.Path(process.sequence)
