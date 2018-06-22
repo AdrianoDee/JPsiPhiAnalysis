@@ -30,7 +30,7 @@ options.register ('onlyGen',
 				  VarParsing.varType.bool,
 				  "Only generated")
 
-options.register ('maxEvents',
+options.register ('events',
 				  -1,
 				  VarParsing.multiplicity.singleton,
 				  VarParsing.varType.int,
@@ -75,7 +75,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-maxevents = options.maxEvents if not options.debug else 1000 if not options.trigger else 40000
+maxevents = options.events if not options.debug else 1000 if not options.trigger else 40000
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxevents))
 
