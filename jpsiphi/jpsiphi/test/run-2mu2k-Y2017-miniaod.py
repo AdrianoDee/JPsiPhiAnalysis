@@ -30,6 +30,12 @@ options.register ('onlyGen',
 				  VarParsing.varType.bool,
 				  "Only generated")
 
+options.register ('maxEvents',
+				  -1,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.int,
+				  "Max num of events")
+
 options.parseArguments()
 
 #
@@ -69,14 +75,14 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
 )
 
-maxevents = -1 if not options.debug else 1000 if not options.trigger else 40000
+maxevents = options.maxEvents if not options.debug else 1000 if not options.trigger else 40000
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxevents))
 
 filename = "rootuple-2017_MC_Y_" + str(Y) + "_"
 
-filename += "trigger_" if option.trigger else ""
-filname += "onlyGen_" if options.onlyGen else ""
+filename += "trigger_" if options.trigger else ""
+filename += "onlyGen_" if options.onlyGen else ""
 
 filename += "_dimuonditrak.root"
 
