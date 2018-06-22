@@ -578,8 +578,6 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
         }
       }
 
-      bool goodCandidate = false;
-
       if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi && goToPhi)
       {
 
