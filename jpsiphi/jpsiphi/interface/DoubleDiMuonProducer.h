@@ -34,9 +34,10 @@ class DoubleDiMuonProducer : public edm::EDProducer {
   std::vector<double> HighDiMuonMassCuts_;
   std::vector<double> LowDiMuonMassCuts_;
   std::vector<double> DoubleDiMuonMassCuts_;
+  bool addMCTruth_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
-
+  std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
   const pat::CompositeCandidate makeCandidate(const pat::CompositeCandidate& l,
     const pat::CompositeCandidate& h);
 

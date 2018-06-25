@@ -5,13 +5,51 @@ DoubleDiMuonProducer::DoubleDiMuonProducer(const edm::ParameterSet& ps):
   LowDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("LowDiMuonCollection"))),
   HighDiMuonMassCuts_(ps.getParameter<std::vector<double>>("HighDiMuonMassCuts")),
   LowDiMuonMassCuts_(ps.getParameter<std::vector<double>>("LowDiMuonMassCuts")),
-  DoubleDiMuonMassCuts_(ps.getParameter<std::vector<double>>("DoubleDiMuonMassCuts"))
+  DoubleDiMuonMassCuts_(ps.getParameter<std::vector<double>>("DoubleDiMuonMassCuts")),
+  addMCTruth_(ps.getParameter<bool>("AddMCTruth"))
 {
   produces<pat::CompositeCandidateCollection>("DoubleDiMuonCandidates");
   candidates = 0;
   nevents = 0;
   nLdM = 0;
   nHdM = 0;
+}
+
+std::tuple<int, float, float>
+DoubleDiMuonProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+
+  // std::cout << "findJpsiMCInfo 1 " << std::endl;
+  int momJpsiID = 0;
+  float trueLife = -99.;
+  float isPrompt = -99.;
+  if (genJpsi->numberOfMothers()>0) {
+
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+
+    TVector3 trueVtx(0.0,0.0,0.0);
+    TVector3 trueP(0.0,0.0,0.0);
+    TVector3 trueVtxMom(0.0,0.0,0.0);
+
+    trueVtx.SetXYZ(genJpsi->vertex().x(),genJpsi->vertex().y(),genJpsi->vertex().z());
+    trueP.SetXYZ(genJpsi->momentum().x(),genJpsi->momentum().y(),genJpsi->momentum().z());
+
+    reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+    if (Jpsimom.isNull()) {
+      std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+      return result;
+    } else
+    {
+    momJpsiID = Jpsimom->pdgId();
+    isPrompt = Jpsimom->isPromptDecayed();
+    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+    TVector3 vdiff = trueVtx - trueVtxMom;
+    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+  }
+}
+  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+  return result;
+
 }
 
 void DoubleDiMuonProducer::produce(edm::Event& event, const edm::EventSetup& esetup){
