@@ -106,6 +106,8 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt;
   Double_t highLowDiM_pt,lowLowDiM_pt,highHighDiM_pt,lowHighDiM_pt,doubledimuon_nDof,doubledimuon_m_rf;
 
+  Double_t doubledimuon_pdgid, doubledimuon_phipdg, doubledimuon_isprompt, doubledimuon_phippdl;
+
   Double_t highDiM_m, highDiM_pt, lowDiM_m, lowDiM_pt;
   Int_t    higdim_triggerMatch_rf, lowdim_triggerMatch_rf;
   Double_t higdim_vProb_rf, higdim_vChi2_rf, higdim_DCA_rf, higdim_ctauPV_rf, higdim_ctauErrPV_rf, higdim_cosAlpha_rf;
@@ -319,6 +321,12 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
             doubledimuon_tree->Branch("gen_gd4_p4",  "TLorentzVector",  &gen_gd4_p4);
             doubledimuon_tree->Branch("gen_gd5_p4",  "TLorentzVector",  &gen_gd5_p4);
             doubledimuon_tree->Branch("gen_gd6_p4",  "TLorentzVector",  &gen_gd6_p4);
+
+            doubledimuon_tree->Branch("doubledimuon_pdgid",  &doubledimuon_pdgid,    "doubledimuon_pdgid/I");
+            doubledimuon_tree->Branch("doubledimuon_phipdg",  &doubledimuon_phipdg,    "doubledimuon_phipdg/I");
+            doubledimuon_tree->Branch("doubledimuon_isprompt",  &doubledimuon_isprompt,    "doubledimuon_isprompt/D");
+            doubledimuon_tree->Branch("doubledimuon_phippdl",  &doubledimuon_phippdl,    "doubledimuon_phippdl/D");
+
 	  }
     genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
     packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
@@ -581,6 +589,10 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       doubledimuon_m_rf= doubledimuon_rf_cand.mass();
       doubledimuon_pt  = doubledimuon_cand.pt();
 
+      doubledimuon_pdgid    = doubledimuon_cand.userInt("phiGenPdgId");
+      doubledimuon_phipdg   = doubledimuon_cand.userInt("phiPpdlTrue");
+      doubledimuon_isprompt = doubledimuon_cand.userFloat("xGenPdgId");
+      doubledimuon_phippdl  = doubledimuon_cand.userFloat("xGenIsPrompt");
 
       reco::Candidate::LorentzVector vJpsiP = higdim_cand_rf->daughter("muon1")->p4();
       reco::Candidate::LorentzVector vJpsiM = higdim_cand_rf->daughter("muon2")->p4();

@@ -60,6 +60,41 @@ void DoubleDiMuonProducer::produce(edm::Event& event, const edm::EventSetup& ese
             if ( DoubleDiMuonCandidate.mass() < DoubleDiMuonMassMax_ && DoubleDiMuonCandidate.mass() > DoubleDiMuonMassMin_)
               {
                 candidates++;
+
+                if (addMCTruth_) {
+                  reco::GenParticleRef genMu1 = phiMu1->genParticleRef();
+                  reco::GenParticleRef genMu2 = phiMu2->genParticleRef();
+                  // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
+                  // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
+
+                  if (genMu1.isNonnull() && genMu2.isNonnull()) {
+                    if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
+                      reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
+                      reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
+
+                      if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
+
+                        std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
+                        DoubleDiMuonCandidate.addUserInt("phiGenPdgId",mumu_mom1->pdgId());
+                        DoubleDiMuonCandidate.addUserFloat("phiPpdlTrue",std::get<1>(MCinfo));
+                        DoubleDiMuonCandidate.addUserInt("xGenPdgId",std::get<0>(MCinfo));
+                        DoubleDiMuonCandidate.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
+                      } else {
+                        DoubleDiMuonCandidate.addUserInt("phiGenPdgId",0.0);
+                        DoubleDiMuonCandidate.addUserFloat("phiPpdlTrue",-99.0);
+                        DoubleDiMuonCandidate.addUserInt("xGenPdgId",0.0);
+                        DoubleDiMuonCandidate.addUserFloat("xGenIsPrompt",-99.0);
+                      }
+
+                    }
+                 } else {
+                   DoubleDiMuonCandidate.addUserInt("phiGenPdgId",0.0);
+                   DoubleDiMuonCandidate.addUserFloat("phiPpdlTrue",-99.0);
+                   DoubleDiMuonCandidate.addUserInt("xGenPdgId",0.0);
+                   DoubleDiMuonCandidate.addUserFloat("xGenIsPrompt",-99.0);
+                  }
+                }
+
                 DoubleDiMuonCandColl->push_back(DoubleDiMuonCandidate);
               }
             }
