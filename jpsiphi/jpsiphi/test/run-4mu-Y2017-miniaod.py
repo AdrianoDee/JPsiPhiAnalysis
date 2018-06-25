@@ -245,7 +245,7 @@ if options.trigger:
 	                    process.DiMuonFilteredPhi *
 	                    process.DoubleDiMuonProducer *
 	                    process.DoubleDiMuonFitter *
-	                    process.rootuplefourmu *
+	                    process.rootuplefourmu 
 	                    #process.rootupleJPsi *
 	                    #process.rootuplePhi
 	)
@@ -260,7 +260,7 @@ else:
 		                    process.DiMuonFilteredPhi *
 		                    process.DoubleDiMuonProducer *
 		                    process.DoubleDiMuonFitter *
-		                    process.rootuplefourmu *
+		                    process.rootuplefourmu 
 		                    #process.rootupleJPsi *
 		                    #process.rootuplePhi
 		)
