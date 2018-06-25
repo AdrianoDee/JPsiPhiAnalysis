@@ -164,7 +164,7 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
       // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
       // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
 
-      if (genMu1.isNonnull() && genMu2.isNonnull() && jpsiMu1->isNonnull() && jpsiMu2->isNonnull() ) {
+      if (genMu1.isNonnull() && genMu2.isNonnull() && genMu3.isNonnull() && genMu4.isNonnull() ) {
         if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
           reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
           reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
