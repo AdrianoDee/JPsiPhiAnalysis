@@ -142,6 +142,46 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
   int indexDoubleDiMu=-1;
   for (pat::CompositeCandidateCollection::const_iterator oniat=DoubleDiMuHandle->begin(); oniat!=DoubleDiMuHandle->end(); ++oniat) {
 
+    const pat::Muon* jpsiMu1 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon1")
+    const pat::Muon* jpsiMu2 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon2")
+    const pat::Muon* phiMu1  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon1")
+    const pat::Muon* phiMu2  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon2")
+
+    int phiGenPdgId, xGenPdgId;
+    float phiPpdlTrue, xGenIsPrompt;
+
+    if (true) {
+
+      phiGenPdgId  = -1;
+      xGenPdgId    = -1;
+      phiPpdlTrue  = -1.0;
+      xGenIsPrompt = -1.0;
+
+      reco::GenParticleRef genMu1 = phiMu1->genParticleRef();
+      reco::GenParticleRef genMu2 = phiMu2->genParticleRef();
+      reco::GenParticleRef genMu3 = jpsiMu1->genParticleRef();
+      reco::GenParticleRef genMu4 = jpsiMu2->genParticleRef();
+      // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
+      // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
+
+      if (genMu1.isNonnull() && genMu2.isNonnull() && jpsiMu1.isNonnull() && jpsiMu2.isNonnull() ) {
+        if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
+          reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
+          reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
+
+          if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
+
+            std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
+            phiGenPdgId  = mumu_mom1->pdgId();
+            phiPpdlTrue  = std::get<1>(MCinfo);
+            xGenPdgId    = std::get<0>(MCinfo);
+            xGenIsPrompt = std::get<2>(MCinfo);
+
+          }
+        }
+     }
+    }
+
     indexDoubleDiMu++;
     reco::TrackRef HighPhiTk[4]={
       ( dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon1") ) )->innerTrack(),
@@ -237,8 +277,6 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
           {
 
 
-
-
             float DoubleDiMuM_fit  = fitDoubleDiMu->currentState().mass();
 
             if ( DoubleDiMuM_fit < DoubleDiMuonMassCuts_[0] || DoubleDiMuM_fit > DoubleDiMuonMassCuts_[1])
@@ -291,6 +329,12 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
             patDoubleDiMu.addUserFloat("ctauErrPV",ctauErrPV);
 
             patDoubleDiMu.addUserInt("bIndex",indexDoubleDiMu);
+
+            patDoubleDiMu.addUserInt("phiGenPdgId",mumu_mom1->pdgId());
+            patDoubleDiMu.addUserFloat("phiPpdlTrue",std::get<1>(MCinfo));
+            patDoubleDiMu.addUserInt("xGenPdgId",std::get<0>(MCinfo));
+            patDoubleDiMu.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
+
             //get first muon
             bool child = DoubleDiMuTree->movePointerToTheFirstChild();
             RefCountedKinematicParticle fitPhiMu1 = DoubleDiMuTree->currentParticle();

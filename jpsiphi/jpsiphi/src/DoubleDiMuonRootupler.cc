@@ -549,7 +549,6 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   if (doubledimuon_rf_cand_handle.isValid() && doubledimuon_cand_handle.isValid()) {
 
 
-
     pat::CompositeCandidate doubledimuon_rf_cand, doubledimuon_cand, *higdim_cand, *lowdim_cand, *higdim_cand_rf, *lowdim_cand_rf;
 
     for (unsigned int i=0; i< doubledimuon_rf_cand_handle->size(); i++){
