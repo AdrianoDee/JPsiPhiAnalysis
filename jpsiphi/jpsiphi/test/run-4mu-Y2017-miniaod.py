@@ -237,7 +237,7 @@ if options.trigger:
 						process.yfilter *
 	                    process.triggerSelection *
 	                    process.slimmedMuonsWithTriggerSequence *
-	                    process.softMuons *
+	                    #process.softMuons *
 	                    process.JPsi2MuMuPAT *
 	                    process.Phi2MuMuPAT *
 	                    process.DiMuonFilteredJpsi *
@@ -245,14 +245,14 @@ if options.trigger:
 	                    process.DoubleDiMuonProducer *
 	                    process.DoubleDiMuonFitter *
 	                    process.rootuplefourmu *
-	                    process.rootupleJPsi *
-	                    process.rootuplePhi
+	                    #process.rootupleJPsi *
+	                    #process.rootuplePhi
 	)
 else:
 		process.sequence = cms.Sequence(
 							process.yfilter *
 		                    process.slimmedMuonsWithTriggerSequence *
-		                    process.softMuons *
+		                    #process.softMuons *
 		                    process.JPsi2MuMuPAT *
 		                    process.Phi2MuMuPAT *
 		                    process.DiMuonFilteredJpsi *
@@ -260,8 +260,8 @@ else:
 		                    process.DoubleDiMuonProducer *
 		                    process.DoubleDiMuonFitter *
 		                    process.rootuplefourmu *
-		                    process.rootupleJPsi *
-		                    process.rootuplePhi
+		                    #process.rootupleJPsi *
+		                    #process.rootuplePhi
 		)
 
 process.p = cms.Path(process.sequence)
