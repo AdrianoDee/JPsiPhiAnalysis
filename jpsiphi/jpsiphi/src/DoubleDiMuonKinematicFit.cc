@@ -164,7 +164,7 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
       // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
       // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
 
-      if (genMu1.isNonnull() && genMu2.isNonnull() && jpsiMu1.isNonnull() && jpsiMu2.isNonnull() ) {
+      if (genMu1.isNonnull() && genMu2.isNonnull() && jpsiMu1->isNonnull() && jpsiMu2->isNonnull() ) {
         if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
           reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
           reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
@@ -330,10 +330,10 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
 
             patDoubleDiMu.addUserInt("bIndex",indexDoubleDiMu);
 
-            patDoubleDiMu.addUserInt("phiGenPdgId",mumu_mom1->pdgId());
-            patDoubleDiMu.addUserFloat("phiPpdlTrue",std::get<1>(MCinfo));
-            patDoubleDiMu.addUserInt("xGenPdgId",std::get<0>(MCinfo));
-            patDoubleDiMu.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
+            patDoubleDiMu.addUserInt("phiGenPdgId",phiGenPdgId);
+            patDoubleDiMu.addUserFloat("phiPpdlTrue",phiPpdlTrue);
+            patDoubleDiMu.addUserInt("xGenPdgId",xGenPdgId);
+            patDoubleDiMu.addUserFloat("xGenIsPrompt",xGenIsPrompt);
 
             //get first muon
             bool child = DoubleDiMuTree->movePointerToTheFirstChild();
