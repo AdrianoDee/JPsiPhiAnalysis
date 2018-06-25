@@ -181,6 +181,7 @@ process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducer',
     HighDiMuonMassCuts      = cms.vdouble(2.9,3.2),      # J/psi mass window 3.096916 +/- 0.150
     LowDiMuonMassCuts       = cms.vdouble(0.9,1.15),  # phi mass window 1.019461 +/- .015
     DoubleDiMuonMassCuts    = cms.vdouble(4.0,6.0),            # b-hadron mass window
+	AddMCTruth				= cms.bool(True)
 )
 
 process.DoubleDiMuonFitter = cms.EDProducer('DoubleDiMuonKinematicFit',
