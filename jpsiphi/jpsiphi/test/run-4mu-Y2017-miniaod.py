@@ -119,7 +119,7 @@ process.softMuons = cms.EDFilter('PATMuonSelector',
 )
 
 process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -133,7 +133,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
 )
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -245,7 +245,7 @@ if options.trigger:
 	                    process.DiMuonFilteredPhi *
 	                    process.DoubleDiMuonProducer *
 	                    process.DoubleDiMuonFitter *
-	                    process.rootuplefourmu 
+	                    process.rootuplefourmu
 	                    #process.rootupleJPsi *
 	                    #process.rootuplePhi
 	)
@@ -260,7 +260,7 @@ else:
 		                    process.DiMuonFilteredPhi *
 		                    process.DoubleDiMuonProducer *
 		                    process.DoubleDiMuonFitter *
-		                    process.rootuplefourmu 
+		                    process.rootuplefourmu
 		                    #process.rootupleJPsi *
 		                    #process.rootuplePhi
 		)
