@@ -142,10 +142,10 @@ void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup
   int indexDoubleDiMu=-1;
   for (pat::CompositeCandidateCollection::const_iterator oniat=DoubleDiMuHandle->begin(); oniat!=DoubleDiMuHandle->end(); ++oniat) {
 
-    const pat::Muon* jpsiMu1 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon1")
-    const pat::Muon* jpsiMu2 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon2")
-    const pat::Muon* phiMu1  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon1")
-    const pat::Muon* phiMu2  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon2")
+    const pat::Muon* jpsiMu1 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon1"));
+    const pat::Muon* jpsiMu2 = dynamic_cast<const pat::Muon*>(oniat->daughter("higdimuon")->daughter("muon2"));
+    const pat::Muon* phiMu1  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon1"));
+    const pat::Muon* phiMu2  = dynamic_cast<const pat::Muon*>(oniat->daughter("lowdimuon")->daughter("muon2"));
 
     int phiGenPdgId, xGenPdgId;
     float phiPpdlTrue, xGenIsPrompt;
