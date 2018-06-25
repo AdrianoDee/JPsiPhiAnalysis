@@ -59,42 +59,7 @@
 // class declaration
 //
 
-std::tuple<int, float, float>
-DoubleDiMuonKinematicFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
-  // std::cout << "findJpsiMCInfo 1 " << std::endl;
-  int momJpsiID = 0;
-  float trueLife = -99.;
-  float isPrompt = -99.;
-  if (genJpsi->numberOfMothers()>0) {
-
-    // std::cout << "findJpsiMCInfo 1 " << std::endl;
-
-    TVector3 trueVtx(0.0,0.0,0.0);
-    TVector3 trueP(0.0,0.0,0.0);
-    TVector3 trueVtxMom(0.0,0.0,0.0);
-
-    trueVtx.SetXYZ(genJpsi->vertex().x(),genJpsi->vertex().y(),genJpsi->vertex().z());
-    trueP.SetXYZ(genJpsi->momentum().x(),genJpsi->momentum().y(),genJpsi->momentum().z());
-
-    reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
-    // std::cout << "findJpsiMCInfo 1 " << std::endl;
-    if (Jpsimom.isNull()) {
-      std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
-      return result;
-    } else
-    {
-    momJpsiID = Jpsimom->pdgId();
-    isPrompt = Jpsimom->isPromptDecayed();
-    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-    TVector3 vdiff = trueVtx - trueVtxMom;
-    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
-  }
-}
-  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
-  return result;
-
-}
 
 class DoubleDiMuonKinematicFit : public edm::EDProducer {
    public:
@@ -163,6 +128,43 @@ DoubleDiMuonKinematicFit::~DoubleDiMuonKinematicFit() {
 //
 // member functions
 //
+
+std::tuple<int, float, float>
+DoubleDiMuonKinematicFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+
+  // std::cout << "findJpsiMCInfo 1 " << std::endl;
+  int momJpsiID = 0;
+  float trueLife = -99.;
+  float isPrompt = -99.;
+  if (genJpsi->numberOfMothers()>0) {
+
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+
+    TVector3 trueVtx(0.0,0.0,0.0);
+    TVector3 trueP(0.0,0.0,0.0);
+    TVector3 trueVtxMom(0.0,0.0,0.0);
+
+    trueVtx.SetXYZ(genJpsi->vertex().x(),genJpsi->vertex().y(),genJpsi->vertex().z());
+    trueP.SetXYZ(genJpsi->momentum().x(),genJpsi->momentum().y(),genJpsi->momentum().z());
+
+    reco::GenParticleRef Jpsimom = genJpsi->motherRef();       // find mothers
+    // std::cout << "findJpsiMCInfo 1 " << std::endl;
+    if (Jpsimom.isNull()) {
+      std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+      return result;
+    } else
+    {
+    momJpsiID = Jpsimom->pdgId();
+    isPrompt = Jpsimom->isPromptDecayed();
+    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+    TVector3 vdiff = trueVtx - trueVtxMom;
+    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+  }
+}
+  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+  return result;
+
+}
 
 // ------------ method called to produce the data  ------------
 void DoubleDiMuonKinematicFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
