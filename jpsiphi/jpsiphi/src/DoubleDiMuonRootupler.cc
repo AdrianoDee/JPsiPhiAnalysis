@@ -588,10 +588,10 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       doubledimuon_m_rf= doubledimuon_rf_cand.mass();
       doubledimuon_pt  = doubledimuon_cand.pt();
 
-      doubledimuon_pdgid    = doubledimuon_cand.userInt("phiGenPdgId");
-      doubledimuon_phipdg   = doubledimuon_cand.userFloat("phiPpdlTrue");
-      doubledimuon_isprompt = doubledimuon_cand.userInt("xGenPdgId");
-      doubledimuon_phippdl  = doubledimuon_cand.userFloat("xGenIsPrompt");
+      doubledimuon_pdgid    = doubledimuon_rf_cand.userInt("phiGenPdgId");
+      doubledimuon_phipdg   = doubledimuon_rf_cand.userFloat("phiPpdlTrue");
+      doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
+      doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
 
       reco::Candidate::LorentzVector vJpsiP = higdim_cand_rf->daughter("muon1")->p4();
       reco::Candidate::LorentzVector vJpsiM = higdim_cand_rf->daughter("muon2")->p4();
