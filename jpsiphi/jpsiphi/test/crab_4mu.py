@@ -85,7 +85,7 @@ config.General.requestName      = 'miniaod_4mu_' + dataset[0]+'_'+dataset[1]+'_'
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/CMSSW_9_2_13/src/mmkk/mmkk/test/run-4mu-miniaod.py'
+config.JobType.psetName         = 'run-4mu-miniaod.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
