@@ -3,6 +3,7 @@ import os
 
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-317591_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -41,15 +42,23 @@ datasetnames = {
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
 "E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD'
+"A2018" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
+"A2018_1": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
+"A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
+"B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD",
+"B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD",
 }
 
 
 runNumber = [
-#'274094-274240',
-'',
+''
 ]
 
 run = 'F'
+
+if "2018" in run:
+    jsonFile = jsonFile2018
+
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]

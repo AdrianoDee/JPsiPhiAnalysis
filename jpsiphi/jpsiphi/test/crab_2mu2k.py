@@ -41,11 +41,11 @@ datasetnames = {
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
 "E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD'
-"A2018" :  datasetbase + "Run2018A-PromptReco-v1/MINIAOD",
-"A2018_1": datasetbase + "Run2018A-PromptReco-v2/MINIAOD",
-"A2018_3": datasetbase + "Run2018A-PromptReco-v3/MINIAOD",
-"B2018_1": datasetbase + "Run2018B-PromptReco-v1/MINIAOD",
-"B2018_2": datasetbase + "Run2018B-PromptReco-v2/MINIAOD",
+"A2018" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
+"A2018_1": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
+"A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
+"B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD",
+"B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD",
 }
 
 
@@ -57,7 +57,7 @@ run = 'F'
 
 if "2018" in run:
     jsonFile = jsonFile2018
-    
+
 datasetName = datasetnames[run]
 runNum = runNumber[0]
 #lumi = jsonfile[jNum]
