@@ -45,7 +45,7 @@ DiMuonDiTrakProducer::isTheCandidate(reco::GenParticleRef genY) {
   {
 
     const reco::Candidate * daughter = genY->daughter(j);
-    if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
+
     if(daughter->pdgId() == 443)
       goToJPsi=true;
     if(daughter->pdgId() == 333)
