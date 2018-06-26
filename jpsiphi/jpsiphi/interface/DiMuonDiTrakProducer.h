@@ -83,7 +83,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   bool isTheCandidate(reco::GenParticleRef genY);
-  
+
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
