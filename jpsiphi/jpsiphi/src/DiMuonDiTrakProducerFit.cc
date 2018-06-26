@@ -50,9 +50,9 @@ DiMuonDiTrakProducerFit::isTheCandidate(reco::GenParticleRef genY) {
     if(daughter->pdgId() == 333)
     {
       bool kP = false, kN = false;
-      for(size_t k = 0; k <daughters->numberOfDaughters(); ++k)
+      for(size_t k = 0; k <daughter->numberOfDaughters(); ++k)
       {
-        const reco::Candidate * gdaughter = daughters->daughter(k);
+        const reco::Candidate * gdaughter = daughter->daughter(k);
 
         if(goToPhi && goToJPsi)
         {
