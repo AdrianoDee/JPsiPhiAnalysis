@@ -35,6 +35,44 @@ DiMuonDiTrakProducer::isAMixedbHadron(int pdgID, int momPdgID) {
 
 }
 
+bool
+DiMuonDiTrakProducer::isTheCandidate(reco::GenParticleRef genY) {
+
+  bool goToJPsi = false;
+  bool goToPhi = false;
+
+  for(size_t j = 0; j < genY->numberOfDaughters(); ++j)
+  {
+
+    const reco::Candidate * daughter = genY->daughter(j);
+    if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
+    if(daughter->pdgId() == 443)
+      goToJPsi=true;
+    if(daughter->pdgId() == 333)
+    {
+      bool kP = false, kN = false;
+      for(size_t k = 0; k <daughters->numberOfDaughters(); ++k)
+      {
+        const reco::Candidate * gdaughter = daughters->daughter(k);
+
+        if(goToPhi && goToJPsi)
+        {
+          if(gdaughter->pdgId()==321)
+            kP=true;
+          if(gdaughter->pdgId()==-321)
+            kN=true;
+        }
+
+      }
+      goToPhi = kP && kN;
+    }
+
+  }
+
+  return (goToJPsi && goToPhi);
+
+}
+
 std::tuple<int, float, float>
 DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
@@ -60,11 +98,16 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
       return result;
     } else
     {
-    momJpsiID = Jpsimom->pdgId();
-    Jpsimom->isPromptDecayed();
-    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-    TVector3 vdiff = trueVtx - trueVtxMom;
-    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+      if(!isTheCandidate(Jpsimon))
+      {
+        std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+        return result;
+      }
+      momJpsiID = Jpsimom->pdgId();
+      Jpsimom->isPromptDecayed();
+      trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+      TVector3 vdiff = trueVtx - trueVtxMom;
+      trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
   }
 }
   std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);

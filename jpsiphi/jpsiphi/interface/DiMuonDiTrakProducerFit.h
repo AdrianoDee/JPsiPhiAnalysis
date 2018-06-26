@@ -84,6 +84,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
+  bool isTheCandidate(reco::GenParticleRef genY)
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
