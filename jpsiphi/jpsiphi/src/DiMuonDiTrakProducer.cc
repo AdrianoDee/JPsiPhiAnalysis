@@ -98,7 +98,7 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
       return result;
     } else
     {
-      if(!isTheCandidate(Jpsimon))
+      if(!isTheCandidate(Jpsimom))
       {
         std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
         return result;

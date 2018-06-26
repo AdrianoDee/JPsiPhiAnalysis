@@ -1,6 +1,6 @@
-#include "../interface/DiMuonDiTrakProducerFit.h"
+#include "../interface/DiMuonDiTrakProducerFitFit.h"
 
-float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float DiMuonDiTrakProducerFitFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -11,14 +11,14 @@ float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool DiMuonDiTrakProducerFit::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+bool DiMuonDiTrakProducerFitFit::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
 bool
-DiMuonDiTrakProducerFit::isAbHadron(int pdgID) {
+DiMuonDiTrakProducerFitFit::isAbHadron(int pdgID) {
 
   if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
   return false;
@@ -26,12 +26,50 @@ DiMuonDiTrakProducerFit::isAbHadron(int pdgID) {
 }
 
 bool
-DiMuonDiTrakProducerFit::isAMixedbHadron(int pdgID, int momPdgID) {
+DiMuonDiTrakProducerFitFit::isAMixedbHadron(int pdgID, int momPdgID) {
 
   if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
   (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
   return true;
   return false;
+
+}
+
+bool
+DiMuonDiTrakProducerFit::isTheCandidate(reco::GenParticleRef genY) {
+
+  bool goToJPsi = false;
+  bool goToPhi = false;
+
+  for(size_t j = 0; j < genY->numberOfDaughters(); ++j)
+  {
+
+    const reco::Candidate * daughter = genY->daughter(j);
+    if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
+    if(daughter->pdgId() == 443)
+      goToJPsi=true;
+    if(daughter->pdgId() == 333)
+    {
+      bool kP = false, kN = false;
+      for(size_t k = 0; k <daughters->numberOfDaughters(); ++k)
+      {
+        const reco::Candidate * gdaughter = daughters->daughter(k);
+
+        if(goToPhi && goToJPsi)
+        {
+          if(gdaughter->pdgId()==321)
+            kP=true;
+          if(gdaughter->pdgId()==-321)
+            kN=true;
+        }
+
+      }
+      goToPhi = kP && kN;
+    }
+
+  }
+
+  return (goToJPsi && goToPhi);
 
 }
 
@@ -60,11 +98,16 @@ DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
       return result;
     } else
     {
-    momJpsiID = Jpsimom->pdgId();
-    isPrompt = Jpsimom->isPromptDecayed();
-    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-    TVector3 vdiff = trueVtx - trueVtxMom;
-    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+      if(!isTheCandidate(Jpsimom))
+      {
+        std::tuple<int, float, float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+        return result;
+      }
+      momJpsiID = Jpsimom->pdgId();
+      Jpsimom->isPromptDecayed();
+      trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+      TVector3 vdiff = trueVtx - trueVtxMom;
+      trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
   }
 }
   std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
@@ -72,7 +115,7 @@ DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
 }
 
-DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfig):
+DiMuonDiTrakProducerFitFit::DiMuonDiTrakProducerFitFit(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
@@ -100,7 +143,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
 
 }
 
-void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
+void DiMuonDiTrakProducerFitFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
@@ -630,7 +673,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   nevents++;
 }
 
-void DiMuonDiTrakProducerFit::endJob(){
+void DiMuonDiTrakProducerFitFit::endJob(){
   std::cout << "###########################" << std::endl;
   std::cout << "DiMuonDiTrak Candidate producer report:" << std::endl;
   std::cout << "###########################" << std::endl;
@@ -642,14 +685,14 @@ void DiMuonDiTrakProducerFit::endJob(){
   std::cout << "###########################" << std::endl;
 }
 
-bool DiMuonDiTrakProducerFit::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
+bool DiMuonDiTrakProducerFitFit::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
   if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
   return false;
 }
 
-pat::CompositeCandidate DiMuonDiTrakProducerFit::makeDiMuonTTCandidate(
+pat::CompositeCandidate DiMuonDiTrakProducerFitFit::makeDiMuonTTCandidate(
                                           const pat::CompositeCandidate& dimuon,
 				          const pat::CompositeCandidate& tt
                                          ){
@@ -667,7 +710,7 @@ pat::CompositeCandidate DiMuonDiTrakProducerFit::makeDiMuonTTCandidate(
 
 }
 
-pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTCandidate(
+pat::CompositeCandidate DiMuonDiTrakProducerFitFit::makeTTCandidate(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN
                                          ){
@@ -692,9 +735,9 @@ pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTCandidate(
 }
 
 
-reco::Candidate::LorentzVector DiMuonDiTrakProducerFit::convertVector(const math::XYZTLorentzVectorF& v){
+reco::Candidate::LorentzVector DiMuonDiTrakProducerFitFit::convertVector(const math::XYZTLorentzVectorF& v){
 
   return reco::Candidate::LorentzVector(v.x(),v.y(), v.z(), v.t());
 }
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakProducerFit);
+DEFINE_FWK_MODULE(DiMuonDiTrakProducerFitFit);
