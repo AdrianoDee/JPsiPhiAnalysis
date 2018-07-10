@@ -46,6 +46,9 @@ class DiMuonProducerPAT : public edm::EDProducer {
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
+  const pat::TriggerObjectStandAlone BestTriggerMuon(const pat::Muon& m);
+  bool isTriggerMatched(const pat::Muon& m);
+  const pat::CompositeCandidate makeMuMuTriggerCand(const pat::TriggerObjectStandAlone& muonP, const pat::TriggerObjectStandAlone& muonN);
   std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
 
   // ----------member data ---------------------------

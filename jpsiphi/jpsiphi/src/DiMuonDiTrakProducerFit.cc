@@ -114,6 +114,54 @@ DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
 }
 
+const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerCandidate(
+                                          const pat::TriggerObjectStandAlone& trakP,
+                                          const pat::TriggerObjectStandAlone& trakN
+                                         ){
+
+  pat::CompositeCandidate TTCand;
+  TTCand.addDaughter(trakP,"trakP");
+  TTCand.addDaughter(trakN,"trakN");
+  TTCand.setCharge(trakP.charge()+trakN.charge());
+
+  double m_kaon1 = MassTraks_[0];
+  math::XYZVector mom_kaon1 = trakP.momentum();
+  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+  double m_kaon2 = MassTraks_[1];
+  math::XYZVector mom_kaon2 = trakN.momentum();
+  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+  TTCand.setP4(vTT);
+
+  return TTCand;
+}
+
+const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerMixedCandidate(
+                                          const pat::PackedCandidate& trakP,
+                                          const pat::TriggerObjectStandAlone& trakN
+                                         ){
+
+  pat::CompositeCandidate TTCand;
+  TTCand.addDaughter(trakP,"trakP");
+  TTCand.addDaughter(trakN,"trakN");
+  TTCand.setCharge(trakP.charge()+trakN.charge());
+
+  double m_kaon1 = MassTraks_[0];
+  math::XYZVector mom_kaon1 = trakP.momentum();
+  double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+  math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+  double m_kaon2 = MassTraks_[1];
+  math::XYZVector mom_kaon2 = trakN.momentum();
+  double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+  TTCand.setP4(vTT);
+
+  return TTCand;
+}
+
 DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
@@ -172,9 +220,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
 
-  pat::TriggerObjectStandAloneCollection filteredColl,matchedColl;
-  std::vector < UInt_t > filterResults,filters;
-
+  pat::TriggerObjectStandAloneCollection filteredColl;
+  std::map<int,pat::TriggerObjectStandAloneCollection> matchedColl;
+  std::vector < UInt_t > filterResults;
+  std::map<int,UInt_t> filters;
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
@@ -199,39 +248,38 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     }
   }
 
-  for (std::vector<pat::PackedCandidate>::const_iterator t = trak->begin(), trakend=trak->end(); t!= trakend; ++t)
-  {
+  for (size_t i = 0; i < trak->size(); i++) {
+
+    auto t = trak->at(i);
+
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
   for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
     {
       auto thisTrig = filteredColl.at(iTrigObj);
-      if(MatchByDRDPt(*t,filteredColl[iTrigObj]))
+      if(MatchByDRDPt(t,filteredColl[iTrigObj]))
       {
         if(matched)
         {
-          if(DeltaR(*t,matchedColl.back()) > DeltaR(*t,thisTrig))
+          if(DeltaR(t,matchedColl.back()) > DeltaR(t,thisTrig))
           {
-            filters.pop_back();
-            filters.push_back(filterResults[iTrigObj]);
-            matchedColl.pop_back();
-            matchedColl.push_back(thisTrig);
-
+            filters[i] = filterResults[iTrigObj]
+            matchedColl[i] = thisTrig;
           }
+        }else
+        {
+          filters[i] = filterResults[iTrigObj]
+          matchedColl[i] = thisTrig;
         }
-
-        if(!matched)
-          {
-            filters.push_back(filterResults[iTrigObj]);
-            matchedColl.push_back(thisTrig);
-          }
 
         matched = true;
       }
     }
+    if(!matched)
+    {
+      filters[i] = 0;
+    }
 
-    if (!matched)
-      filters.push_back(0);
   }
 
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
@@ -253,7 +301,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
          if(posTrack.charge()<=0) continue;
          if(posTrack.pt()<0.5) continue;
-	       if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
+	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
 
@@ -360,6 +408,24 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+
+           if(filters[i] > 0)
+            DiMuonTTCand.addDaughter(matchedColl[i],"tPTrigger");
+
+           if(filters[j] > 0)
+            DiMuonTTCand.addDaughter(matchedColl[j],"tNTrigger");
+
+
+           if(filters[j] > 0 && filters[i] > 0)
+             DiMuonTTCand.addDaughter(makeTTTriggerCandidate(matchedColl[i],matchedColl[j]),"candTrigTrig");
+           else
+           {
+             if(filters[j] > 0)
+               DiMuonTTCand.addDaughter(makeTTTriggerCandidate(posTrack,matchedColl[j]),"candTrigTrig");
+             if(filters[i] > 0)
+               DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
+           }
+
 
            DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);

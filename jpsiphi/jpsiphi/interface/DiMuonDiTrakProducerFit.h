@@ -81,6 +81,14 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
+  const pat::CompositeCandidate makeTTTriggerCandidate(
+                                            const pat::TriggerObjectStandAlone& trakP,
+                                            const pat::TriggerObjectStandAlone& trakN
+                                           )
+  const pat::CompositeCandidate makeTTTriggerMixedCandidate(
+                                            const pat::PackedCandidate& trakP,
+                                            const pat::TriggerObjectStandAlone& trakN
+                                           )
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);

@@ -95,6 +95,10 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector muonn_p4;
   TLorentzVector kaonp_p4;
   TLorentzVector kaonn_p4;
+  TLorentzVector muonp_p4;
+  TLorentzVector muonn_p4;
+  TLorentzVector kaonp_p4;
+  TLorentzVector kaonn_p4;
 
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_rf_const_p4;
@@ -136,7 +140,7 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   Double_t track_KP_d0, track_KP_d0Err, track_KP_dz, track_KP_dxy;
   Int_t track_KP_nvsh, track_KP_nvph;
 
-  UInt_t tPMatch, tNMatch;
+  UInt_t tPMatch, tNMatch,muon1TMatch, muon2TMatch;
 
   Int_t track_KN_nvsh, track_KN_nvph;
 
@@ -265,6 +269,10 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
           dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
           dimuonditrk_tree->Branch("highMuon_pt",    &highMuon_pt,    "highMuon_pt/D");
           dimuonditrk_tree->Branch("lowMuon_pt",     &lowMuon_pt,     "lowMuon_pt/D");
+          // dimuonditrk_tree->Branch("highKaon_trig_pt",          &highKaon_trig_pt,          "highKaon_trig_pt/D");
+          // dimuonditrk_tree->Branch("lowKaon_trig_pt",       &lowKaon_trig_pt,       "lowKaon_trig_pt/D");
+          // dimuonditrk_tree->Branch("highMuon_trig_pt",    &highMuon_trig_pt,    "highMuon_trig_pt/D");
+          // dimuonditrk_tree->Branch("lowMuon_trig_pt",     &lowMuon_trig_pt,     "lowMuon_trig_pt/D");
 
           //2mu vertexing
           dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
@@ -300,6 +308,9 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
 
           dimuonditrk_tree->Branch("tPMatch",     &tPMatch,       "tPMatch/I");
           dimuonditrk_tree->Branch("tNMatch",     &tNMatch,       "tNMatch/I");
+          dimuonditrk_tree->Branch("muonPMatch",     &muonPMatch,       "muonPMatch/I");
+          dimuonditrk_tree->Branch("muonNMatch",     &muonNMatch,       "muonNMatch/I");
+
           //Muon flags
           dimuonditrk_tree->Branch("muonP_isTight",        &muonP_isTight,        "muonP_isTight/O");
           dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
@@ -742,6 +753,8 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerFit::isTriggerMatched(dimuon_cand);
+      muonPMatch   = dimuon_cand->userInt("muon1TMatch");
+      muonMatch    = dimuon_cand->userInt("muon2TMatch");
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
       dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);

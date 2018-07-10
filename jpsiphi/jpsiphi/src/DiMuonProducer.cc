@@ -68,6 +68,79 @@ DiMuonProducerPAT::~DiMuonProducerPAT()
 // member functions
 //
 
+
+const pat::TriggerObjectStandAlone DiMuonProducerPAT::BestTriggerMuon(const pat::Muon& m)
+{
+
+  pat::TriggerObjectStandAloneCollection triggerColl;
+  pat::TriggerObjectStandAlone bestTrigger, thisTrigger;
+  pat::TriggerObjectStandAloneCollection filterColl;
+
+  bool matched = false;
+
+  for (size_t i = 0; i < HLTFilters_.size(); i++)
+  {
+    filterColl = m.triggerObjectMatchesByFilter(HLTFilters_[i]);
+    for ( size_t iTrigObj = 0; iTrigObj < filterColl.size(); ++iTrigObj )
+    {
+      if(!matched)
+      {
+        bestTrigger = filterColl.at(iTrigObj);
+        matched = true;
+      } else
+      {
+        thisTrigger = filterColl.at(iTrigObj);
+
+        if(DeltaR(m,bestTrigger) > DeltaR(m,thisTrigger))
+          bestTrigger = thisTrigger;
+      }
+
+    }
+
+  }
+
+  return bestTrigger;
+
+}
+
+const pat::CompositeCandidate DiMuonProducerPAT::makeMuMuTriggerCand(
+                                          const pat::TriggerObjectStandAlone& muonP,
+                                          const pat::TriggerObjectStandAlone& muonN
+                                         ){
+
+  double mMuon = 0.1056583715;
+
+  pat::CompositeCandidate MMCand;
+  MMCand.addDaughter(muonP,"muonP");
+  MMCand.addDaughter(muonN,"muonN");
+  MMCand.setCharge(muonP.charge()+muonN.charge());
+
+  math::XYZVector mom_muonP = muonP.momentum();
+  double e_muonP = sqrt(mMuon*mMuon + mom_muonP.Mag2());
+  math::XYZTLorentzVector p4_muonP = math::XYZTLorentzVector(mom_muonP.X(),mom_muonP.Y(),mom_muonP.Z(),e_muonP);
+
+  math::XYZVector mom_muonN = muonN.momentum();
+  double e_muonN = sqrt(mMuon*mMuon + mom_muonN.Mag2());
+  math::XYZTLorentzVector p4_muonN = math::XYZTLorentzVector(mom_muonN.X(),mom_muonN.Y(),mom_muonN.Z(),e_muonN);
+  reco::Candidate::LorentzVector vMuMu = p4_muonP + p4_muonN;
+
+  MMCand.setP4(vMuMu);
+
+  return MMCand;
+}
+
+UInt_t DiMuonProducerPAT::isTriggerMatched(const pat::Muon& m) {
+
+  bool matched = false;
+  UInt_t matched = 0;
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+    const pat::TriggerObjectStandAloneCollection muHLT = m.triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    if (!muHLT.empty()) matched += (1<<iTr);
+  }
+
+  return matched;
+}
+
 UInt_t DiMuonProducerPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
   const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
   const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
@@ -145,17 +218,38 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //ParticleMass psi_mass = 3.096916;
   float muon_sigma = muon_mass*1.e-6;
 
+  std::map<int,UInt_t> muonFilters;
+  std::map<int,TriggerObjectStandAlone> matchedColl;
+  //pat::TriggerObjectStandAloneCollection triggerColl;
+
+  for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
+  for (size_t i = 0; i < muons->size(); i++)
+  {
+    auto m = muons->at(i);
+    UInt_t M = isTriggerMatched(m);
+    muonFilters[i] = M;
+    if(M > 0)
+      triggerColl[i] = BestTriggerMuon(m);
+
+  }
+
   // MuMu candidates only from muons
-  for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
+  //for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
+  for (int i = 0; i < muons->size(); i++) {
+
+    auto m1 = muons->at(i);
     // both must pass low quality
-    if (!(it->track().isNonnull())) continue;
-    if (!(it->innerTrack().isNonnull())) continue;
-    if (!(it->track()->pt()>0.7)) continue;
+    if (!(m1.track().isNonnull())) continue;
+    if (!(m1.innerTrack().isNonnull())) continue;
+    if (!(m1.track()->pt()>0.7)) continue;
     // if(!lowerPuritySelection_(*it)) continue;
     //std::cout << "First muon quality flag" << std::endl;
     for(View<pat::Muon>::const_iterator it2 = it+1; it2 != itend;++it2){
 
-      if(it == it2) continue;
+    for (int j = i+1; j < muons->size(); j++) {
+
+      auto m2 = muons->at(j);
+      if(i == j) continue;
       // both must pass low quality
       // if(!lowerPuritySelection_(*it2)) continue;
       //std::cout << "Second muon quality flag" << std::endl;
@@ -163,37 +257,57 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       // if (!(higherPuritySelection_(*it) || higherPuritySelection_(*it2))) continue;
 
       // ---- fit vertex using Tracker tracks (if they have tracks) ----
-      if (!(it2->track().isNonnull())) continue;
-      if (!(it2->innerTrack().isNonnull())) continue;
-      if (!(it2->track()->pt()>0.7)) continue;
+      if (!(m2.track().isNonnull())) continue;
+      if (!(m2.innerTrack().isNonnull())) continue;
+      if (!(m2.track()->pt()>0.7)) continue;
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
 
       // ---- no explicit order defined ----
-      if(it->charge() > 0)
+      if(m1.charge() > 0)
       {
-        mumucand.addDaughter(*it, "muon1");
-        mumucand.addDaughter(*it2,"muon2");
+        mumucand.addDaughter(m1, "muon1");
+        mumucand.addDaughter(m2,"muon2");
       } else
       {
-        mumucand.addDaughter(*it, "muon2");
-        mumucand.addDaughter(*it2,"muon1");
+        mumucand.addDaughter(m1, "muon2");
+        mumucand.addDaughter(m2,"muon1");
       }
 
+      if(m1.charge() > 0)
+      {
+        mumucand.addUserInt(muonFilters[i], "muon1TMatch");
+        mumucand.addUserInt(muonFilters[j],"muon2TMatch");
+        if(muonFilters[i]>0)
+          mumucand.addDaughter(matchedColl[i],"muon1Trigger");
+        if(muonFilters[j]>0)
+          mumucand.addDaughter(matchedColl[j],"muon2Trigger");
+
+      } else
+      {
+        mumucand.addUserInt(muonFilters[i], "muon2TMatch");
+        mumucand.addUserInt(muonFilters[j],"muon1TMatch");
+
+        if(muonFilters[i]>0)
+          mumucand.addDaughter(matchedColl[i],"muon2Trigger");
+        if(muonFilters[j]>0)
+          mumucand.addDaughter(matchedColl[j],"muon1Trigger");
+
+      }
 
       // ---- define and set candidate's 4momentum  ----
-      LorentzVector mumu = it->p4() + it2->p4();
+      LorentzVector mumu = m1.p4() + m2.p4();
       TLorentzVector mu1, mu2,mumuP4;
-      mu1.SetXYZM(it->track()->px(),it->track()->py(),it->track()->pz(),muon_mass);
-      mu2.SetXYZM(it2->track()->px(),it2->track()->py(),it2->track()->pz(),muon_mass);
+      mu1.SetXYZM(m1.track()->px(),m1.track()->py(),m1.track()->pz(),muon_mass);
+      mu2.SetXYZM(m2.track()->px(),m2.track()->py(),m2.track()->pz(),muon_mass);
       // LorentzVector mumu;
 
       mumuP4=mu1+mu2;
       mumucand.setP4(mumu);
-      mumucand.setCharge(it->charge()+it2->charge());
+      mumucand.setCharge(m1.charge()+m2.charge());
 
-      float deltaRMuMu = reco::deltaR2(it->eta(),it->phi(),it2->eta(),it2->phi());
+      float deltaRMuMu = reco::deltaR2(m1.eta(),m1.phi(),m2.eta(),m2.phi());
       mumucand.addUserFloat("deltaR",deltaRMuMu);
       mumucand.addUserFloat("mumuP4",mumuP4.M());
       // ---- apply the dimuon cut ----
@@ -202,8 +316,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
       vector<TransientTrack> muon_ttks;
-      muon_ttks.push_back(theTTBuilder->build(*it->track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
-      muon_ttks.push_back(theTTBuilder->build(*it2->track())); // otherwise the vertex will have transient refs inside.
+      muon_ttks.push_back(theTTBuilder->build(m1.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
+      muon_ttks.push_back(theTTBuilder->build(m2.track())); // otherwise the vertex will have transient refs inside.
 
       //Vertex Fit W/O mass constrain
 
@@ -278,8 +392,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                   iEvent.getByToken(revtxbs_, pvbeamspot);
                   if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
                   // I need to go back to the reco::Muon object, as the TrackRef in the pat::Muon can be an embedded ref.
-                  const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(it->originalObject());
-                  const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(it2->originalObject());
+                  const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(m1.originalObject());
+                  const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(m2.originalObject());
                   // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
                   // also check that the tracks really come from the track collection used for the BS
                   if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
@@ -321,8 +435,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               // count the number of high Purity tracks with pT > 900 MeV attached to the chosen vertex
               double vertexWeight = -1., sumPTPV = -1.;
               int countTksOfPV = -1;
-              const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(it->originalObject());
-              const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(it2->originalObject());
+              const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(m1.originalObject());
+              const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(m2.originalObject());
               try{
                 for(reco::Vertex::trackRef_iterator itVtx = theOriginalPV.tracks_begin(); itVtx != theOriginalPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
                   const reco::Track& track = **itVtx;
@@ -530,8 +644,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           // ---- MC Truth, if enabled ----
           if (addMCTruth_) {
-            reco::GenParticleRef genMu1 = it->genParticleRef();
-            reco::GenParticleRef genMu2 = it2->genParticleRef();
+            reco::GenParticleRef genMu1 = m1.genParticleRef();
+            reco::GenParticleRef genMu2 = m2.genParticleRef();
             if (genMu1.isNonnull() && genMu2.isNonnull()) {
               if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
                 reco::GenParticleRef mom1 = genMu1->motherRef();
@@ -577,7 +691,9 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           // ---- Push back output ----
           mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
-
+          mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
+          mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
+          if(muonFilters[i] > )
           oniaOutput->push_back(mumucand);
         }
       }
