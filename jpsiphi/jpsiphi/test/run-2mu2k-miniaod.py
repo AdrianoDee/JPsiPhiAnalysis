@@ -78,26 +78,26 @@ filters = cms.vstring(
                                 'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
                                 'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
                                 #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
-                                'hltDoubleMu4JpsiDisplacedL3Filtered'
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                'hltJpsiTkTkVertexFilterPhiKstar',
-                                #HLT_DoubleMu4_JpsiTrk_Displaced_v12
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkVertexProducer',
-                                #'hltJpsiTkVertexFilter',
-                                #HLT_DoubleMu4_Jpsi_Displaced
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #HLT_DoubleMu4_3_Jpsi_Displaced
-                                #'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                #HLT_Dimuon20_Jpsi_Barrel_Seagulls
-                                #'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                #HLT_Dimuon25_Jpsi
-                                'hltDisplacedmumuFilterDimuon25Jpsis'
+                                # 'hltDoubleMu4JpsiDisplacedL3Filtered'
+                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                # 'hltJpsiTkTkVertexFilterPhiKstar',
+                                # #HLT_DoubleMu4_JpsiTrk_Displaced_v12
+                                # #'hltDoubleMu4JpsiDisplacedL3Filtered',
+                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                # #'hltJpsiTkVertexProducer',
+                                # #'hltJpsiTkVertexFilter',
+                                # #HLT_DoubleMu4_Jpsi_Displaced
+                                # #'hltDoubleMu4JpsiDisplacedL3Filtered',
+                                # #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
+                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                # #HLT_DoubleMu4_3_Jpsi_Displaced
+                                # #'hltDoubleMu43JpsiDisplacedL3Filtered',
+                                # 'hltDisplacedmumuFilterDoubleMu43Jpsi',
+                                # #HLT_Dimuon20_Jpsi_Barrel_Seagulls
+                                # #'hltDimuon20JpsiBarrelnoCowL3Filtered',
+                                # 'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
+                                # #HLT_Dimuon25_Jpsi
+                                # 'hltDisplacedmumuFilterDimuon25Jpsis'
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
