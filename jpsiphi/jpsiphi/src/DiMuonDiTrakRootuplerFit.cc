@@ -750,7 +750,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerFit::isTriggerMatched(dimuon_cand);
       muonPMatch   = dimuon_cand->userInt("muon1TMatch");
-      muonMatch    = dimuon_cand->userInt("muon2TMatch");
+      muonNMatch    = dimuon_cand->userInt("muon2TMatch");
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
       dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);

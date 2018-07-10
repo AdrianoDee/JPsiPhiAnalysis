@@ -218,24 +218,24 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //ParticleMass psi_mass = 3.096916;
   float muon_sigma = muon_mass*1.e-6;
 
-  std::map<int,UInt_t> muonFilters;
-  std::map<int,TriggerObjectStandAlone> matchedColl;
+  std::map<size_t,UInt_t> muonFilters;
+  std::map<size_t,pat::TriggerObjectStandAlone> matchedColl;
   //pat::TriggerObjectStandAloneCollection triggerColl;
 
-  for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
+  //for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
   for (size_t i = 0; i < muons->size(); i++)
   {
     auto m = muons->at(i);
     UInt_t M = isTriggerMatched(m);
     muonFilters[i] = M;
     if(M > 0)
-      triggerColl[i] = BestTriggerMuon(m);
+      matchedColl[i] = BestTriggerMuon(m);
 
   }
 
   // MuMu candidates only from muons
   //for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
-  for (int i = 0; i < muons->size(); i++) {
+  for (size_t i = 0; i < muons->size(); i++) {
 
     auto m1 = muons->at(i);
     // both must pass low quality
@@ -246,7 +246,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     //std::cout << "First muon quality flag" << std::endl;
     for(View<pat::Muon>::const_iterator it2 = it+1; it2 != itend;++it2){
 
-    for (int j = i+1; j < muons->size(); j++) {
+    for (size_t j = i+1; j < muons->size(); j++) {
 
       auto m2 = muons->at(j);
       if(i == j) continue;
@@ -691,8 +691,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
           // ---- Push back output ----
           mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
-          mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
-          mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
+
           if(muonFilters[i] > )
           oniaOutput->push_back(mumucand);
         }
