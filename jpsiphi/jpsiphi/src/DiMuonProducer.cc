@@ -253,8 +253,6 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if (!(m1.track()->pt()>0.7)) continue;
     // if(!lowerPuritySelection_(*it)) continue;
     //std::cout << "First muon quality flag" << std::endl;
-    for(View<pat::Muon>::const_iterator it2 = it+1; it2 != itend;++it2){
-
     for (size_t j = i+1; j < muons->size(); j++) {
 
       auto m2 = muons->at(j);
@@ -289,18 +287,18 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         mumucand.addUserInt("muon1TMatch",muonFilters[i]);
         mumucand.addUserInt("muon2TMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter("muon1Trigger",matchedColl[i]);
+          mumucand.addDaughter(matchedColl[i],"muon1Trigger");
         if(muonFilters[j]>0)
-          mumucand.addDaughter("muon2Trigger",matchedColl[j]);
+          mumucand.addDaughter(matchedColl[j],"muon2Trigger");
 
       } else
       {
         mumucand.addUserInt("muon2TMatch",muonFilters[i]);
         mumucand.addUserInt("muon1TMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter("muon2Trigger",matchedColl[i]);
+          mumucand.addDaughter(matchedColl[i],"muon2Trigger");
         if(muonFilters[j]>0)
-          mumucand.addDaughter("muon1Trigger",matchedColl[j]);
+          mumucand.addDaughter(matchedColl[j],"muon1Trigger");
 
       }
 
