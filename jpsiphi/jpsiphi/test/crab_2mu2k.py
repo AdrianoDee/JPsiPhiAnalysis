@@ -49,9 +49,24 @@ datasetnames = {
 }
 
 
+GlobalTags = {
+
+"F" :  datasetbase + '/Run2017F-17Nov2017-v1/MINIAOD',
+"B" : datasetbase + '/Run2017B-17Nov2017-v1/MINIAOD',
+"C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
+"D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
+"E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
+"A2018" :  "101X_dataRun2_Prompt_v9",
+"A2018_1": "101X_dataRun2_Prompt_v9",
+"A2018_3": "101X_dataRun2_Prompt_v10",
+"B2018_1": "101X_dataRun2_Prompt_v10",
+"B2018_2": "101X_dataRun2_Prompt_v11",
+}
+
 runNumber = [
 ''
 ]
+
 
 run = 'F'
 
@@ -60,6 +75,7 @@ if "2018" in run:
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
+gtag = GlobalTag[run]
 #lumi = jsonfile[jNum]
 lumi = jsonFile
 #HLT = HLTPath[0]
@@ -84,6 +100,7 @@ config.General.transferLogs     = False
 
 config.section_('JobType')
 config.JobType.psetName         = 'run-2mu2k-miniaod.py'
+config.JobType.pyCfgParams      = ['gtag=' + str(gtag)]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750

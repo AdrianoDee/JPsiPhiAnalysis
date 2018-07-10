@@ -1,6 +1,19 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
+from FWCore.ParameterSet.VarParsing import VarParsing
+from Y_MC_Files import *
+
+options = VarParsing ('analysis')
+
+options.register ('gtag',
+				  "101X_dataRun2_Prompt_v11",
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.string,
+				  "Global Tag")
+
+options.parseArguments()
+
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
@@ -18,7 +31,7 @@ from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v11')
-process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_Prompt_v11')
+process.GlobalTag = GlobalTag(process.GlobalTag, options.gtag)
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
