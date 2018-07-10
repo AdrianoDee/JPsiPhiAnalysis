@@ -221,7 +221,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
 
   pat::TriggerObjectStandAloneCollection filteredColl;
-  std::map<int,pat::TriggerObjectStandAloneCollection> matchedColl;
+  std::map<int,pat::TriggerObjectStandAlone> matchedColl;
   std::vector < UInt_t > filterResults;
   std::map<int,UInt_t> filters;
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {

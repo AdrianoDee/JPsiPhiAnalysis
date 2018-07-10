@@ -286,22 +286,21 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if(m1.charge() > 0)
       {
-        mumucand.addUserInt(muonFilters[i], "muon1TMatch");
-        mumucand.addUserInt(muonFilters[j],"muon2TMatch");
+        mumucand.addUserInt("muon1TMatch",muonFilters[i]);
+        mumucand.addUserInt("muon2TMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter(matchedColl[i],"muon1Trigger");
+          mumucand.addDaughter("muon1Trigger",matchedColl[i]);
         if(muonFilters[j]>0)
-          mumucand.addDaughter(matchedColl[j],"muon2Trigger");
+          mumucand.addDaughter("muon2Trigger",matchedColl[j]);
 
       } else
       {
-        mumucand.addUserInt(muonFilters[i], "muon2TMatch");
-        mumucand.addUserInt(muonFilters[j],"muon1TMatch");
-
+        mumucand.addUserInt("muon2TMatch",muonFilters[i]);
+        mumucand.addUserInt("muon1TMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter(matchedColl[i],"muon2Trigger");
+          mumucand.addDaughter("muon2Trigger",matchedColl[i]);
         if(muonFilters[j]>0)
-          mumucand.addDaughter(matchedColl[j],"muon1Trigger");
+          mumucand.addDaughter("muon1Trigger",matchedColl[j]);
 
       }
 
