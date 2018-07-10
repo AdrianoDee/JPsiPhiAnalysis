@@ -261,14 +261,14 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
       {
         if(matched)
         {
-          if(DeltaR(t,matchedColl.back()) > DeltaR(t,thisTrig))
+          if(DeltaR(t,matchedColl[i]) > DeltaR(t,thisTrig))
           {
-            filters[i] = filterResults[iTrigObj]
+            filters[i] = filterResults[iTrigObj];
             matchedColl[i] = thisTrig;
           }
         }else
         {
-          filters[i] = filterResults[iTrigObj]
+          filters[i] = filterResults[iTrigObj];
           matchedColl[i] = thisTrig;
         }
 
@@ -409,22 +409,22 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
 
-           if(filters[i] > 0)
-            DiMuonTTCand.addDaughter(matchedColl[i],"tPTrigger");
+           // if(filters[i] > 0)
+           //  DiMuonTTCand.addDaughter(matchedColl[i],"tPTrigger");
+           //
+           // if(filters[j] > 0)
+           //  DiMuonTTCand.addDaughter(matchedColl[j],"tNTrigger");
 
-           if(filters[j] > 0)
-            DiMuonTTCand.addDaughter(matchedColl[j],"tNTrigger");
 
-
-           if(filters[j] > 0 && filters[i] > 0)
-             DiMuonTTCand.addDaughter(makeTTTriggerCandidate(matchedColl[i],matchedColl[j]),"candTrigTrig");
-           else
-           {
-             if(filters[j] > 0)
-               DiMuonTTCand.addDaughter(makeTTTriggerCandidate(posTrack,matchedColl[j]),"candTrigTrig");
-             if(filters[i] > 0)
-               DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
-           }
+           // if(filters[j] > 0 && filters[i] > 0)
+           //   DiMuonTTCand.addDaughter(makeTTTriggerCandidate(matchedColl[i],matchedColl[j]),"candTrigTrig");
+           // else
+           // {
+           //   if(filters[j] > 0)
+           //     DiMuonTTCand.addDaughter(makeTTTriggerCandidate(posTrack,matchedColl[j]),"candTrigTrig");
+           //   if(filters[i] > 0)
+           //     DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
+           // }
 
 
            DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);

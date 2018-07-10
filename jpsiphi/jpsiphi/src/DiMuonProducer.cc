@@ -131,7 +131,6 @@ const pat::CompositeCandidate DiMuonProducerPAT::makeMuMuTriggerCand(
 
 UInt_t DiMuonProducerPAT::isTriggerMatched(const pat::Muon& m) {
 
-  bool matched = false;
   UInt_t matched = 0;
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
     const pat::TriggerObjectStandAloneCollection muHLT = m.triggerObjectMatchesByFilter(HLTFilters_[iTr]);
