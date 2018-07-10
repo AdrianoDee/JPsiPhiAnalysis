@@ -95,10 +95,6 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector muonn_p4;
   TLorentzVector kaonp_p4;
   TLorentzVector kaonn_p4;
-  TLorentzVector muonp_p4;
-  TLorentzVector muonn_p4;
-  TLorentzVector kaonp_p4;
-  TLorentzVector kaonn_p4;
 
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_rf_const_p4;
@@ -140,7 +136,7 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   Double_t track_KP_d0, track_KP_d0Err, track_KP_dz, track_KP_dxy;
   Int_t track_KP_nvsh, track_KP_nvph;
 
-  UInt_t tPMatch, tNMatch,muon1TMatch, muon2TMatch;
+  UInt_t tPMatch, tNMatch,muonPMatch, muonNMatch;
 
   Int_t track_KN_nvsh, track_KN_nvph;
 
