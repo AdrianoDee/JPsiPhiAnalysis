@@ -84,7 +84,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   const pat::CompositeCandidate makeTTTriggerCandidate(
                                             const pat::TriggerObjectStandAlone& trakP,
                                             const pat::TriggerObjectStandAlone& trakN
-                                           )
+                                          );
   const pat::CompositeCandidate makeTTTriggerMixedCandidate(
                                             const pat::PackedCandidate& trakP,
                                             const pat::TriggerObjectStandAlone& trakN
