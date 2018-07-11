@@ -12,6 +12,12 @@
 #include "RecoVertex/VertexPrimitives/interface/TransientVertex.h"
 #include "RecoVertex/PrimaryVertexProducer/interface/PrimaryVertexProducerAlgorithm.h"
 
+#include "TMath.h"
+#include "Math/VectorUtil.h"
+#include "TVector3.h"
+#include "../interface/DiMuonVtxReProducer.h"
+#include "TLorentzVector.h"
+
 class DiMuonVtxReProducer {
     public:
         /// This is the real constructor to be used
