@@ -72,6 +72,23 @@ DiMuonDiTrakProducerFit::isTheCandidate(reco::GenParticleRef genY) {
 
 }
 
+bool DiMuonDiTrakProducerFit::isSameTrack(reco::Track t1, reco::Track t2)
+{
+
+  float p1 = t1.phi();
+  float p2 = t2.phi();
+  float e1 = t1.eta();
+  float e2 = t2.eta();
+  auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+  float deltaR = sqrt((e1-e2)*(e1-e2) + dp*dp);
+  float deltaPt = ((t1.pt() - t2.pt())/t1.pt());
+
+  return (deltaR <= 0.001) &&( deltaPt <= 0.01);
+
+}
+
+
 std::tuple<int, float, float>
 DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
@@ -165,6 +182,8 @@ const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerMixedCandida
 DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
@@ -205,6 +224,18 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
+  edm::Handle<BeamSpot> theBeamSpot;
+  iEvent.getByToken(thebeamspot_,theBeamSpot);
+  BeamSpot bs = *theBeamSpot;
+  theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
+
+  edm::Handle<VertexCollection> priVtxs;
+  iEvent.getByToken(thePVs_, priVtxs);
+
+  ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
@@ -282,6 +313,15 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   }
 
+  reco::TrackCollection allTheTracks;
+  for (size_t i = 0; i < trak->size(); i++)
+  {
+    auto t = t->at(i);
+    if(t.pt()<0.5) continue;
+    if(!(t.hasTrackDetails())) continue;
+    allTheTracks.push_back(t);
+
+  }
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
@@ -289,10 +329,13 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
        if(dimuonCand->userFloat("vProb")<0.0)
          continue;
 
-       const reco::Vertex thePrimaryV = *dimuonCand->userData<reco::Vertex>("PVwithmuons");
+       // const reco::Vertex thePrimaryV = *dimuonCand->userData<reco::Vertex>("PVwithmuons");
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
+       const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1.originalObject());
+       const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2.originalObject());
+
 
 // loop on track candidates, make DiMuonT candidate, positive charge
        // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = trak->begin(), trakend=trak->end(); posTrack!= trakend; ++posTrack){
@@ -379,32 +422,236 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                                                 (double)(fitXVertex->degreesOfFreedom()));
            x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
 
-           TVector3 vtx;
-           TVector3 pvtx;
+           DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
+           DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
+           DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
+           DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
+
+           //////////////////////////////////////////////////////////////////////////////
+           //PV Selection(s)
+
+           std::vector <double> vertexWeight,sumPTPV,cosAlpha,ctauPV,ctauErrPV;
+           std::vector <int> countTksOfPV;
+
+           TVector3 vtx, vdiff, pvtx;
            VertexDistanceXY vdistXY;
-           int   x_ch_fit = DiMuonTTCand.charge();
+           reco::Vertex thePrimaryV,thePrimaryVDZ;
+           TwoTrackMinimumDistance ttmd;
+           double cosAlpha = 0.0;
+           float minDz = 999999.;
+
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
            double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
            double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
            // double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+x_py_fit*x_py_fit+x_pz_fit*x_pz_fit);
            double x_vx_fit = fitXVertex->position().x();
 	         double x_vy_fit = fitXVertex->position().y();
-           // double x_vz_fit = fitXVertex->position().z();
-
+           double x_vz_fit = fitXVertex->position().z();
            vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
+
+           bool status = ttmd.calculate( GlobalTrajectoryParameters(
+             GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
+             GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
+             GlobalTrajectoryParameters(
+               GlobalPoint(theBeamSpotV.position().x(), theBeamSpotV.position().y(), theBeamSpotV.position().z()),
+               GlobalVector(theBeamSpotV.dxdz(), theBeamSpotV.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+           float extrapZ=-9E20;
+           if (status) extrapZ=ttmd.points().first.z();
+
            TVector3 pperp(x_px_fit, x_py_fit, 0);
            AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-           pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-           TVector3 vdiff = vtx - pvtx;
-           double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), thePrimaryV);
-           double ctauPV = distXY.value()*cosAlpha * x_ma_fit/pperp.Perp();
-           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
-           GlobalError v2e = thePrimaryV.error();
-           AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-           double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2());
+
+           std::vector < reco::Vertex > verteces;
+           verteces.push_back(theBeamSpotV);
+
+           if ( priVtxs->begin() != priVtxs->end() )
+           {
+             thePrimaryV = Vertex(*(priVtxs->begin()));
+             thePrimaryVDZ = Vertex(*(priVtxs->begin()));
+             verteces.push_back(thePrimaryV);
+             verteces.push_back(thePrimaryVDZ);
+           }else
+           {
+             for(size_t pV = 0; priVtxs->size();++pV)
+             {
+               auto thisPV = priVtxs->at(pV);
+               pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+               vdiff = vtx - pvtx;
+               double thisCosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+               if(thisCosAlpha>cosAlpha)
+               {
+                 thePrimaryV = Vertex(thisPV);
+                 cosAlpha = thisCosAlpha;
+                 verteces.push_back(thePrimaryV);
+               }
+             }
+
+             float deltaZ = fabs(extrapZ - itv->position().z()) ;
+             if ( deltaZ < minDz ) {
+               minDz = deltaZ;
+               thePrimaryVDZ = Vertex(thisPV);
+               verteces.push_back(thePrimaryVDZ);
+             }
+
+           }
+
+           //////////////////////////////////////////////////
+           //Refit PVs (not BS)
+
+
+           for(size_t i = 1; i < verteces.size(); i++)
+           {
+             auto thisPV = verteces[i];
+             TrackCollection xLess;
+             if(thisPV.tracksSize()>4) {
+               // Primary vertex matched to the dimuon, now refit it removing the two muons
+               DiMuonVtxReProducer revertex(priVtxs, iEvent);
+
+               // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
+               // also check that the tracks really come from the track collection used for the BS
+               bool notNullMu = ((rmu1 != nullptr) && (rmu2 != nullptr));
+               //rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()
+               if ( notNullMu ) {
+                 // Save the keys of the tracks in the primary vertex
+                 // std::vector<size_t> vertexTracksKeys;
+                 // vertexTracksKeys.reserve(thePrimaryV.tracksSize());
+                 if( thisPV.hasRefittedTracks() ) {
+                   // Need to go back to the original tracks before taking the key
+                   std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
+                   std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
+                   for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+                   {
+                     if( isSameTrack(*(rmu1->track()),*itRefittedTrack)) continue;
+                     if( isSameTrack(*(rmu2->track()),*itRefittedTrack)) continue;
+                     if( isSameTrack(posTrack.bestTrack(),*itRefittedTrack)) continue;
+                     if( isSameTrack(negTrack.bestTrack(),*itRefittedTrack) ) continue;
+                     // vertexTracksKeys.push_back(thePrimaryV.originalTrack(*itRefittedTrack).key());
+                     xLess.push_back(*(thisPV.originalTrack(*itRefittedTrack)));
+                   }
+                 }
+                 else {
+                   std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
+                   for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+                     if( isSameTrack(*(rmu1->track()),*itPVtrack)) continue;
+                     if( isSameTrack(*(rmu2->track()),*itPVtrack)) continue;
+                     if( isSameTrack(posTrack.bestTrack(),*itPVtrack)) continue;
+                     if( isSameTrack(negTrack.bestTrack(),*itPVtrack)) continue;
+                     // vertexTracksKeys.push_back(itPVtrack->key());
+                     xLess.push_back(**itPVtrack);
+                   }
+                 }
+                 if (xLess.size()>1 && xLess.size() < thisPv.tracksSize()){
+                   pvs = revertex.makeVertices(xLess, theBeamSpotV, iSetup) ;
+                   if (!pvs.empty()) {
+                     Vertex xLessPV = Vertex(pvs.front());
+                     thisPv = xLessPV;
+                   }
+                 }
+               }
+
+             }
+
+           }
+
+           std::vector<bool> mu1FromPV,mu2FromPV,tPFromPV,tMFromPV;
+           std::vector<float> m1W,m2W,tPW,tMW;
+
+           for(size_t i = 0; i < verteces.size(); i++)
+           {
+              auto thisPV = verteces[i];
+              mu1FromPV.push_back(false);
+              mu2FromPV.push_back(false);
+              tPFromPV.push_back(false);
+              tMFromPV.push_back(false);
+              m1W.push_back(-1.0);
+              m2W.push_back(-1.0);
+              tPW.push_back(-1.0);
+              tMW.push_back(-1.0);
+              if( thisPV.hasRefittedTracks() ) {
+                // Need to go back to the original tracks before taking the key
+                std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
+                std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
+                for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+                {
+                  if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
+                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itRefittedTrack);}
+                  if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
+                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itRefittedTrack);}
+                  if( isSameTrack(posTrack.bestTrack(),*itRefittedTrack))
+                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(*itRefittedTrack);}
+                  if( isSameTrack(negTrack.bestTrack(),*itRefittedTrack) )
+                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(*itRefittedTrack);}
+                }
+              }
+              else {
+                std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
+                for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+                  if( isSameTrack(*(rmu1->track()),*itPVtrack))
+                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itPVtrack);}
+                  if( isSameTrack(*(rmu2->track()),*itPVtrack))
+                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itPVtrack);}
+                  if( isSameTrack(posTrack.bestTrack(),*itPVtrack))
+                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(*itPVtrack);}
+                  if( isSameTrack(negTrack.bestTrack(),*itPVtrack))
+                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(*itPVtrack);}
+                }
+              }
+           }
+
+           for(size_t i = 0; i < verteces.size(); i++)
+           {
+             pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
+             vdiff = vtx - pvtx;
+             cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
+             Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
+             ctauPV.push_back(distXY.value()*cosAlpha * x_ma_fit/pperp.Perp());
+             GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+             GlobalError v2e = verteces[i].error();
+             AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+             ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
+           }
 
            float candRef = -1.0, cand_const_ref = -1.0;
+
+           //Weight, PTPV, No.Tks for PV
+           for(size_t i = 0; i < verteces.size(); i++)
+           {
+             auto thisPV = veteces[i];
+             double v = -1.0, s = -1.0;
+             int c = -1;
+
+             try{
+               for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
+                 const reco::Track& track = **itVtx;
+                 if(!track.quality(reco::TrackBase::highPurity)) continue;
+                 if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
+                 TransientTrack tt = theTTBuilder->build(track);
+                 pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thePrimaryV);
+                 if (!tkPVdist.first) continue;
+                 if (tkPVdist.second.significance()>3) continue;
+                 if (track.ptError()/track.pt()>0.1) continue;
+                 // do not count the two muons
+                 if (rmu1 != nullptr && rmu1->innerTrack().key() == itVtx->key())
+                 continue;
+                 if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
+                 continue;
+                 if (isSameTrack(posTrack.bestTrack(),track))
+                 continue;
+                 if (isSameTrack(negTrack.bestTrack(),track))
+                 continue;
+
+                 v += thisPV.trackWeight(*itVtx);
+                 if(thisPV.trackWeight(*itVtx) > 0.5){
+                   c++;
+                   s += track.pt();
+                 }
+               }
+             } catch (std::exception & err) {std::cout << " muon Selection failed " << std::endl; return ; }
+
+             vertexWeight.push_back(v);
+             sumPTPV.push_back(s);
+             countTksOfPV.push_back(c);
+           }
 
            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
@@ -426,14 +673,75 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //     DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
            // }
 
+           DiMuonTTCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
+           DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
+           DiMuonTTCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
+           DiMuonTTCand.addUserFloat("countTksOfPVBS",vertexWeight[0]);
+           DiMuonTTCand.addUserFloat("vertexWeightBS",sumPTPV[0]);
+           DiMuonTTCand.addUserFloat("sumPTPVBS",countTksOfPV[0]);
+           DiMuonTTCand.addUserFloat("mu1FromPVBS",mu1FromPV[0]);
+           DiMuonTTCand.addUserFloat("mu2FromPVBS",mu2FromPV[0]);
+           DiMuonTTCand.addUserFloat("tPFromPVBS",tPFromPV[0]);
+           DiMuonTTCand.addUserFloat("tMFromPVBS",tMFromPV[0]);
+           DiMuonTTCand.addUserFloat("mu1BSW",m1W[0]);
+           DiMuonTTCand.addUserFloat("mu2BSW",m2W[0]);
+           DiMuonTTCand.addUserFloat("tPBSW",tPW[0]);
+           DiMuonTTCand.addUserFloat("tMBSW",tMW[0]);
 
-           DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
-           DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
-           DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
-           DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
-           DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha);
-           DiMuonTTCand.addUserFloat("ctauPV",ctauPV);
-           DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV);
+           DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);
+           DiMuonTTCand.addUserFloat("ctauPV",ctauPV[1]);
+           DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
+           DiMuonTTCand.addUserFloat("countTksOfPV",countTksOfPV[1]);
+           DiMuonTTCand.addUserFloat("vertexWeight",vertexWeight[1]);
+           DiMuonTTCand.addUserFloat("sumPTPV",sumPTPV[1]);
+           DiMuonTTCand.addUserFloat("mu1FromPV",mu1FromPV[1]);
+           DiMuonTTCand.addUserFloat("mu2FromPV",mu2FromPV[1]);
+           DiMuonTTCand.addUserFloat("tPFromPV",tPFromPV[1]);
+           DiMuonTTCand.addUserFloat("tMFromPV",tMFromPV[1]);
+           DiMuonTTCand.addUserFloat("mu1W",m1W[1]);
+           DiMuonTTCand.addUserFloat("mu2W",m2W[1]);
+           DiMuonTTCand.addUserFloat("tPW",tPW[1]);
+           DiMuonTTCand.addUserFloat("tMW",tMW[1]);
+
+           DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[2]);
+           DiMuonTTCand.addUserFloat("ctauPVDZ",ctauPV[2]);
+           DiMuonTTCand.addUserFloat("ctauErrPVDZ",ctauErrPV[2]);
+           DiMuonTTCand.addUserFloat("countTksOfPVDZ",countTksOfPV[2]);
+           DiMuonTTCand.addUserFloat("vertexWeightDZ",vertexWeight[2]);
+           DiMuonTTCand.addUserFloat("sumPTPVDZ",sumPTPV[2]);
+           DiMuonTTCand.addUserFloat("mu1FromPVDZ",mu1FromPV[2]);
+           DiMuonTTCand.addUserFloat("mu2FromPVDZ",mu2FromPV[2]);
+           DiMuonTTCand.addUserFloat("tPFromPVDZ",tPFromPV[2]);
+           DiMuonTTCand.addUserFloat("tMFromPVDZ",tMFromPV[2]);
+           DiMuonTTCand.addUserFloat("mu1DZW",m1W[2]);
+           DiMuonTTCand.addUserFloat("mu1DZW",m2W[2]);
+           DiMuonTTCand.addUserFloat("tPDZW",tPW[2]);
+           DiMuonTTCand.addUserFloat("tMDZW",tMW[2]);
+
+           ///DCA
+           std::vector<float> DCAs;
+           for(size_t i = 0; i < xTracks.size();++i)
+           {
+             for(size_t j = i+1; j < xTracks.size();++j)
+             {
+               TrajectoryStateClosestToPoint TS1 = xTracks[i].impactPointTSCP();
+               TrajectoryStateClosestToPoint TS2 = xTracks[j].impactPointTSCP();
+               float dca = 1E20;
+               if (TS1.isValid() && TS2.isValid()) {
+                 ClosestApproachInRPhi cApp;
+                 cApp.calculate(TS1.theState(), TS2.theState());
+                 if (cApp.status() ) dca = cApp.distance();
+               }
+               DCAs.push_back(dca);
+             }
+           }
+
+           DiMuonTTCand.addUserFloat("dca_m1m2",DCAs[0]);
+           DiMuonTTCand.addUserFloat("dca_m1t1",DCAs[1]);
+           DiMuonTTCand.addUserFloat("dca_m1t2",DCAs[2]);
+           DiMuonTTCand.addUserFloat("dca_m2t1",DCAs[3]);
+           DiMuonTTCand.addUserFloat("dca_m2t2",DCAs[4]);
+           DiMuonTTCand.addUserFloat("dca_t1t2",DCAs[5]);
 
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;

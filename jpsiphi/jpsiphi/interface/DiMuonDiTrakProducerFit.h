@@ -42,6 +42,12 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
 #include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
 
+#include "MagneticField/Engine/interface/MagneticField.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+#include "TrackingTools/IPTools/interface/IPTools.h"
+#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
+
 #include <TLorentzVector.h>
 #include <vector>
 #include <tuple>
@@ -62,6 +68,8 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
+  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> DiMuonMassCuts_;
@@ -90,6 +98,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
                                             const pat::TriggerObjectStandAlone& trakN
                                           );
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
+  bool isSameTrack(reco::Track t1, reco::Track t2);
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   bool isTheCandidate(reco::GenParticleRef genY);
