@@ -323,6 +323,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     allTheTracks.push_back(*(t.bestTrack()));
 
   }
+  std::cout << "DiMuonDiTrakFit " << std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
@@ -1063,7 +1064,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
 void DiMuonDiTrakProducerFit::endJob(){
   std::cout << "###########################" << std::endl;
-  std::cout << "DiMuonDiTrak Candidate producer report:" << std::endl;
+  std::cout << "DiMuonDiTrakFit Candidate producer report:" << std::endl;
   std::cout << "###########################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "Events with DiMuon candidates " << ndimuon << std::endl;
