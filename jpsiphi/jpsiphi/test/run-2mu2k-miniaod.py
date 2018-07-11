@@ -4,27 +4,27 @@ process = cms.Process('PSIKK')
 from FWCore.ParameterSet.VarParsing import VarParsing
 from Y_MC_Files import *
 
-options = VarParsing ('analysis')
+par = VarParsing ('analysis')
 
-options.register ('gtag',
+par.register ('gtag',
 				  "101X_dataRun2_Prompt_v11",
 				  VarParsing.multiplicity.singleton,
 				  VarParsing.varType.string,
 				  "Global Tag")
 
-options.register ('ss',
+par.register ('ss',
 				  False,
 				  VarParsing.multiplicity.singleton,
 				  VarParsing.varType.bool,
 				  "Do Same Sign")
 
-options.register ('kMass',
+par.register ('kMass',
 				  0.493677,
 				  VarParsing.multiplicity.singleton,
 				  VarParsing.varType.bool,
 				  "KMass")
 
-options.parseArguments()
+par.parseArguments()
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
@@ -43,7 +43,7 @@ from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v1')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2') #F
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v11')
-process.GlobalTag = GlobalTag(process.GlobalTag, options.gtag)
+process.GlobalTag = GlobalTag(process.GlobalTag, par.gtag)
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
@@ -240,10 +240,11 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
-    OnlyGen = cms.bool(options.onlyGen),
+    OnlyGen = cms.bool(False),
     Mother_pdg = cms.uint32(20443), #20443 #10441
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
