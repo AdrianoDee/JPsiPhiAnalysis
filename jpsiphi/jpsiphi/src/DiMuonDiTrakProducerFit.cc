@@ -344,7 +344,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
        for (size_t i = 0; i < trak->size(); i++) {
          auto posTrack = trak->at(i);
 
-         std::cout << "dimuon" << std::endl;
          if(posTrack.charge()<=0) continue;
          if(posTrack.pt()<0.7) continue;
 	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
@@ -358,7 +357,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
          for (size_t j = 0; j < trak->size(); j++) {
            auto negTrack = trak->at(j);
 
-           std::cout << "track" << std::endl;
            if(negTrack.charge()>=0) continue;
            if(negTrack.pt()<0.7) continue;
 
@@ -420,7 +418,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if (!(fitX->currentState().isValid())) continue;
 
-           std::cout << "the fit?" << std::endl;
+
            x_ma_fit = fitX->currentState().mass();
            x_x2_fit = fitXVertex->chiSquared();
            x_vp_fit = ChiSquaredProbability(x_x2_fit,
@@ -431,7 +429,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
-           std::cout << "DiMuonTTCand" << std::endl;
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
 
@@ -461,7 +458,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            float extrapZ=-9E20;
 
            if (status) extrapZ=ttmd.points().first.z();
-           std::cout << status << std::endl;
+
            TVector3 pperp(x_px_fit, x_py_fit, 0);
            AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
@@ -472,15 +469,15 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            double maxCosAlpha = -1.0;
            if ( !(priVtxs->begin() != priVtxs->end()) )
            {
-             std::cout << "one" << std::endl;
+
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
              verteces.push_back(thePrimaryVDZ);
-             std::cout << "one.1" << std::endl;
+
            }else
            {
-             std::cout << "two" << std::endl;
+
              reco::Vertex p,pz;
              for(size_t pV = 0; pV<priVtxs->size();++pV)
              {
@@ -508,7 +505,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              verteces.push_back(pz);
            }
 
-           std::cout << verteces.size() << std::endl;
            //////////////////////////////////////////////////
            //Refit PVs (not BS)
 
