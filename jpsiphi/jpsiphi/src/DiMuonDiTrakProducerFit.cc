@@ -581,7 +581,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
                     {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
-                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack);}
+                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
                     {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) )
@@ -640,9 +640,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  continue;
                  if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
                  continue;
-                 if (isSameTrack(posTrack.bestTrack(),track))
+                 if (isSameTrack(*posTrack.bestTrack(),track))
                  continue;
-                 if (isSameTrack(negTrack.bestTrack(),track))
+                 if (isSameTrack(*negTrack.bestTrack(),track))
                  continue;
 
                  v += thisPV.trackWeight(*itVtx);
