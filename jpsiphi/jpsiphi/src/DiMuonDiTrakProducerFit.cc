@@ -233,7 +233,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
 
-  ESHandle<MagneticField> magneticField;
+  edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
@@ -316,7 +316,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   reco::TrackCollection allTheTracks;
   for (size_t i = 0; i < trak->size(); i++)
   {
-    auto t = t->at(i);
+    auto t = trak->at(i);
     if(t.pt()<0.5) continue;
     if(!(t.hasTrackDetails())) continue;
     allTheTracks.push_back(t);
@@ -333,8 +333,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
-       const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1.originalObject());
-       const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2.originalObject());
+       const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
+       const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
 
 // loop on track candidates, make DiMuonT candidate, positive charge
@@ -437,7 +437,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            VertexDistanceXY vdistXY;
            reco::Vertex thePrimaryV,thePrimaryVDZ;
            TwoTrackMinimumDistance ttmd;
-           double cosAlpha = 0.0;
            float minDz = 999999.;
 
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
@@ -453,8 +452,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
              GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
              GlobalTrajectoryParameters(
-               GlobalPoint(theBeamSpotV.position().x(), theBeamSpotV.position().y(), theBeamSpotV.position().z()),
-               GlobalVector(theBeamSpotV.dxdz(), theBeamSpotV.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+               GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
+               GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
            float extrapZ=-9E20;
            if (status) extrapZ=ttmd.points().first.z();
 
