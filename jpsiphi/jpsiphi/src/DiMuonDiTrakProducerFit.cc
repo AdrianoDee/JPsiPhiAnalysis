@@ -549,7 +549,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    pvs = revertex.makeVertices(xLess, bs, iSetup) ;
                    if (!pvs.empty()) {
                      reco::Vertex xLessPV = reco::Vertex(pvs.front());
-                     thisPv = xLessPV;
+                     thisPV = xLessPV;
                    }
                  }
                }
