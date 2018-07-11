@@ -625,8 +625,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  const reco::Track& track = **itVtx;
                  if(!track.quality(reco::TrackBase::highPurity)) continue;
                  if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
-                 TransientTrack tt = theTTBuilder->build(track);
-                 pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thePrimaryV);
+                 reco::TransientTrack tt = theTTBuilder->build(track);
+                 std::pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thePrimaryV);
                  if (!tkPVdist.first) continue;
                  if (tkPVdist.second.significance()>3) continue;
                  if (track.ptError()/track.pt()>0.1) continue;
