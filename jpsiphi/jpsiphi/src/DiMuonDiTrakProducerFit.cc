@@ -625,11 +625,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //Weight, PTPV, No.Tks for PV
            for(size_t i = 0; i < verteces.size(); i++)
            {
-             std::cout << thisPV.tracksSize() << std::endl;
              auto thisPV = verteces[i];
              double v = -1.0, s = -1.0;
              int c = -1;
-
+             std::cout << thisPV.tracksSize() << std::endl;
              for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
                std::cout << "Looping on tracks " << std::endl;
                const reco::Track& track = **itVtx;
