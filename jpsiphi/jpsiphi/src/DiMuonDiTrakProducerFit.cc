@@ -319,7 +319,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     auto t = trak->at(i);
     if(t.pt()<0.5) continue;
     if(!(t.hasTrackDetails())) continue;
-    allTheTracks.push_back(t);
+    allTheTracks.push_back(t.bestTrack());
 
   }
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
@@ -437,7 +437,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            VertexDistanceXY vdistXY;
            reco::Vertex thePrimaryV,thePrimaryVDZ;
            TwoTrackMinimumDistance ttmd;
-           float minDz = 999999.;
 
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
            double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
@@ -463,6 +462,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            std::vector < reco::Vertex > verteces;
            verteces.push_back(theBeamSpotV);
 
+           float minDz = 999999.;
+           double maxCosAlpha = -1.0;
            if ( priVtxs->begin() != priVtxs->end() )
            {
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
@@ -471,27 +472,31 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              verteces.push_back(thePrimaryVDZ);
            }else
            {
+             reco::Vertex p,pz;
              for(size_t pV = 0; priVtxs->size();++pV)
              {
                auto thisPV = priVtxs->at(pV);
+
                pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
                vdiff = vtx - pvtx;
                double thisCosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-               if(thisCosAlpha>cosAlpha)
+               if(thisCosAlpha>maxCosAlpha)
                {
                  thePrimaryV = reco::Vertex(thisPV);
-                 cosAlpha = thisCosAlpha;
-                 verteces.push_back(thePrimaryV);
+                 maxCosAlpha = thisCosAlpha;
+                 p = reco::Vertex(thisPV)
+
+               }
+
+               float deltaZ = fabs(extrapZ - itv->position().z()) ;
+               if ( deltaZ < minDz ) {
+                 minDz = deltaZ;
+                 pz = reco::Vertex(thisPV);
+
                }
              }
-
-             float deltaZ = fabs(extrapZ - itv->position().z()) ;
-             if ( deltaZ < minDz ) {
-               minDz = deltaZ;
-               thePrimaryVDZ = reco::Vertex(thisPV);
-               verteces.push_back(thePrimaryVDZ);
-             }
-
+             verteces.push_back(p);
+             verteces.push_back(pz);
            }
 
            //////////////////////////////////////////////////
