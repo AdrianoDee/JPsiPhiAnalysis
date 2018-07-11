@@ -502,6 +502,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //////////////////////////////////////////////////
            //Refit PVs (not BS)
 
+           std::vector<reco::TransientVertex> pvs;
 
            for(size_t i = 1; i < verteces.size(); i++)
            {
@@ -544,8 +545,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                      xLess.push_back(**itPVtrack);
                    }
                  }
-                 if (xLess.size()>1 && xLess.size() < thisPv.tracksSize()){
-                   pvs = revertex.makeVertices(xLess, theBeamSpotV, iSetup) ;
+                 if (xLess.size()>1 && xLess.size() < thisPV.tracksSize()){
+                   pvs = revertex.makeVertices(xLess, bs, iSetup) ;
                    if (!pvs.empty()) {
                      reco::Vertex xLessPV = reco::Vertex(pvs.front());
                      thisPv = xLessPV;
@@ -578,26 +579,26 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                 for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
                 {
                   if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
-                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itRefittedTrack);}
+                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
-                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itRefittedTrack);}
+                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack);}
                   if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
-                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(*itRefittedTrack);}
+                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) )
-                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(*itRefittedTrack);}
+                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                 }
               }
               else {
                 std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
                 for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
                   if( isSameTrack(*(rmu1->track()),*itPVtrack))
-                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itPVtrack);}
+                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(rmu2->track()),*itPVtrack))
-                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itPVtrack);}
+                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(posTrack.bestTrack()),*itPVtrack))
-                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(*itPVtrack);}
+                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(negTrack.bestTrack()),*itPVtrack))
-                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(*itPVtrack);}
+                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                 }
               }
            }
