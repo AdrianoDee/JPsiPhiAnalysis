@@ -488,7 +488,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                }
 
-               float deltaZ = fabs(extrapZ - itv->position().z()) ;
+               float deltaZ = fabs(extrapZ - thisPV.position().z()) ;
                if ( deltaZ < minDz ) {
                  minDz = deltaZ;
                  pz = reco::Vertex(thisPV);
