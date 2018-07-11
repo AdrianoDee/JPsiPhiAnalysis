@@ -56,7 +56,6 @@
 #include "Math/VectorUtil.h"
 #include "TVector3.h"
 #include "../interface/DiMuonVtxReProducer.h"
-#include "TLorentzVector.h"
 
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)

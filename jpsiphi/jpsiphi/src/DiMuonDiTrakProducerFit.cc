@@ -484,7 +484,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                {
                  thePrimaryV = reco::Vertex(thisPV);
                  maxCosAlpha = thisCosAlpha;
-                 p = reco::Vertex(thisPV)
+                 p = reco::Vertex(thisPV);
 
                }
 
