@@ -725,7 +725,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuonditrk_tMBSW = dimuonditrk_cand.userFloat("tMBSW");
 
       dimuonditrk_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha");
-      dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV",);
+      dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV");
       dimuonditrk_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV");
       dimuonditrk_countTksOfPV = dimuonditrk_cand.userFloat("countTksOfPV");
       dimuonditrk_vertexWeight = dimuonditrk_cand.userFloat("vertexWeight");
