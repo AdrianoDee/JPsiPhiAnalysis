@@ -492,14 +492,14 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  thePrimaryV = reco::Vertex(thisPV);
                  maxCosAlpha = thisCosAlpha;
                  p = reco::Vertex(thisPV);
-                 thisp = priVtxs->atRef(pV).id();
+                 thisp = pV;
                }
 
                float deltaZ = fabs(extrapZ - thisPV.position().z()) ;
                if ( deltaZ < minDz ) {
                  minDz = deltaZ;
                  pz = reco::Vertex(thisPV);
-                 thispz = priVtxs->atRef(pV).id();
+                 thispz =pV;
                }
              }
              verteces.push_back(p);
