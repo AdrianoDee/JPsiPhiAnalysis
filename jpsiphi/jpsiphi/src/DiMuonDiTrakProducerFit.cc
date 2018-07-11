@@ -319,7 +319,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     auto t = trak->at(i);
     if(t.pt()<0.5) continue;
     if(!(t.hasTrackDetails())) continue;
-    allTheTracks.push_back(t.bestTrack());
+    allTheTracks.push_back(*(t.bestTrack()));
 
   }
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
