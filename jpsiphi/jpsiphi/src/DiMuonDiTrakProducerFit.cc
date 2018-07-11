@@ -375,7 +375,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            if ( !(DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_)) continue;
 
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
-
+           std::cout << MassTraks_[0] << std::endl;
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
            const ParticleMass trakMass1(MassTraks_[0]);
@@ -417,6 +417,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if (!(fitX->currentState().isValid())) continue;
 
+           std::cout << "the fit?" << std::endl;
            x_ma_fit = fitX->currentState().mass();
            x_x2_fit = fitXVertex->chiSquared();
            x_vp_fit = ChiSquaredProbability(x_x2_fit,
@@ -465,12 +466,13 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            float minDz = 999999.;
            double maxCosAlpha = -1.0;
-           if ( priVtxs->begin() != priVtxs->end() )
+           if ( priVtxs->begin() == priVtxs->end() )
            {
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
              verteces.push_back(thePrimaryVDZ);
+
            }else
            {
              reco::Vertex p,pz;
@@ -500,6 +502,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              verteces.push_back(pz);
            }
 
+           std::cout << verteces.size() << std::endl;
            //////////////////////////////////////////////////
            //Refit PVs (not BS)
 
