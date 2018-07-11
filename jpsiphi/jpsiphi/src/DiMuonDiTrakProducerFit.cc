@@ -343,8 +343,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
        for (size_t i = 0; i < trak->size(); i++) {
          auto posTrack = trak->at(i);
 
+         std::cout << "dimuon" << std::endl;
          if(posTrack.charge()<=0) continue;
-         if(posTrack.pt()<0.5) continue;
+         if(posTrack.pt()<0.7) continue;
 	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
@@ -356,10 +357,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
          for (size_t j = 0; j < trak->size(); j++) {
            auto negTrack = trak->at(j);
 
+           std::cout << "track" << std::endl;
            if(negTrack.charge()>=0) continue;
-           if(negTrack.pt()<0.5) continue;
+           if(negTrack.pt()<0.7) continue;
 
-  	       if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
+  	       //if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
            if(!(negTrack.hasTrackDetails())) continue;
 
@@ -372,7 +374,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
 
-           if ( !(DiMuonTTCand.mass() < DiMuonDiTrakMassMax_ && DiMuonTTCand.mass() > DiMuonDiTrakMassMin_)) continue;
+           if ( (DiMuonTTCand.mass() > DiMuonDiTrakMassMax_ || DiMuonTTCand.mass() < DiMuonDiTrakMassMin_) continue;
 
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
            std::cout << MassTraks_[0] << std::endl;
