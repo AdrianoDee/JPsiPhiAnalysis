@@ -537,10 +537,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  else {
                    std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
                    for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
-                     if( isSameTrack(*rmu1->track(),*itPVtrack)) continue;
-                     if( isSameTrack(*rmu2->track(),*itPVtrack)) continue;
-                     if( isSameTrack(*(posTrack.bestTrack()),*itPVtrack)) continue;
-                     if( isSameTrack(*(negTrack.bestTrack()),*itPVtrack)) continue;
+                     if( isSameTrack(*(rmu1->track()),**itPVtrack)) continue;
+                     if( isSameTrack(*(rmu2->track()),**itPVtrack)) continue;
+                     if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack)) continue;
+                     if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack)) continue;
                      // vertexTracksKeys.push_back(itPVtrack->key());
                      xLess.push_back(**itPVtrack);
                    }
@@ -578,9 +578,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                 std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
                 for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
                 {
-                  if( isSameTrack(*rmu1->track(),*itRefittedTrack))
+                  if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
                     {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*rmu2->track(),*itRefittedTrack))
+                  if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
                     {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack);}
                   if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
                     {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
@@ -591,13 +591,13 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
               else {
                 std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
                 for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
-                  if( isSameTrack(*rmu1->track(),*itPVtrack))
+                  if( isSameTrack(*(rmu1->track()),**itPVtrack))
                     {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*rmu2->track(),*itPVtrack))
+                  if( isSameTrack(*(rmu2->track()),**itPVtrack))
                     {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*(posTrack.bestTrack()),*itPVtrack))
+                  if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack))
                     {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*(negTrack.bestTrack()),*itPVtrack))
+                  if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack))
                     {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                 }
               }
