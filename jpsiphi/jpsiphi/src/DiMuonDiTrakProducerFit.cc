@@ -608,7 +608,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              vdiff = vtx - pvtx;
              cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
              Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
-             ctauPV.push_back(distXY.value()*cosAlpha * x_ma_fit/pperp.Perp());
+             ctauPV.push_back(distXY.value()*cosAlpha[i] * x_ma_fit/pperp.Perp());
              GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
              GlobalError v2e = verteces[i].error();
              AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
