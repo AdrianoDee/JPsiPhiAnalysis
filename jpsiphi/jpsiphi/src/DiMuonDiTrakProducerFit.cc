@@ -323,7 +323,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     allTheTracks.push_back(*(t.bestTrack()));
 
   }
-  std::cout << "DiMuonDiTrakFit " << std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
@@ -376,7 +375,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            if (DiMuonTTCand.mass() > DiMuonDiTrakMassMax_ || DiMuonTTCand.mass() < DiMuonDiTrakMassMin_) continue;
 
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
-           std::cout << MassTraks_[0] << std::endl;
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
            const ParticleMass trakMass1(MassTraks_[0]);
