@@ -228,7 +228,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
-  reco::Vertex theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
+  reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
@@ -466,8 +466,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if ( priVtxs->begin() != priVtxs->end() )
            {
-             thePrimaryV = Vertex(*(priVtxs->begin()));
-             thePrimaryVDZ = Vertex(*(priVtxs->begin()));
+             thePrimaryV = reco::Vertex(*(priVtxs->begin()));
+             thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
              verteces.push_back(thePrimaryVDZ);
            }else
@@ -480,7 +480,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                double thisCosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
                if(thisCosAlpha>cosAlpha)
                {
-                 thePrimaryV = Vertex(thisPV);
+                 thePrimaryV = reco::Vertex(thisPV);
                  cosAlpha = thisCosAlpha;
                  verteces.push_back(thePrimaryV);
                }
@@ -489,7 +489,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              float deltaZ = fabs(extrapZ - itv->position().z()) ;
              if ( deltaZ < minDz ) {
                minDz = deltaZ;
-               thePrimaryVDZ = Vertex(thisPV);
+               thePrimaryVDZ = reco::Vertex(thisPV);
                verteces.push_back(thePrimaryVDZ);
              }
 
@@ -543,7 +543,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  if (xLess.size()>1 && xLess.size() < thisPv.tracksSize()){
                    pvs = revertex.makeVertices(xLess, theBeamSpotV, iSetup) ;
                    if (!pvs.empty()) {
-                     Vertex xLessPV = Vertex(pvs.front());
+                     Vertex xLessPV = reco::Vertex(pvs.front());
                      thisPv = xLessPV;
                    }
                  }
