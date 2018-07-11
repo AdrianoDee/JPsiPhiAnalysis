@@ -472,15 +472,17 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            double maxCosAlpha = -1.0;
            if ( !(priVtxs->begin() != priVtxs->end()) )
            {
+             std::cout << "one" << std::endl;
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
              verteces.push_back(thePrimaryVDZ);
-
+             std::cout << "one.1" << std::endl;
            }else
            {
+             std::cout << "two" << std::endl;
              reco::Vertex p,pz;
-             for(size_t pV = 0; priVtxs->size();++pV)
+             for(size_t pV = 0; pV<priVtxs->size();++pV)
              {
                auto thisPV = priVtxs->at(pV);
 
