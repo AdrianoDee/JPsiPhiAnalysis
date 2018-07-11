@@ -459,7 +459,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
                GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
            float extrapZ=-9E20;
-           std::cout << status << std::endl;
+
            if (status) extrapZ=ttmd.points().first.z();
            std::cout << status << std::endl;
            TVector3 pperp(x_px_fit, x_py_fit, 0);
@@ -470,7 +470,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            float minDz = 999999.;
            double maxCosAlpha = -1.0;
-           if ( priVtxs->begin() == priVtxs->end() )
+           if ( !(priVtxs->begin() != priVtxs->end()) )
            {
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
