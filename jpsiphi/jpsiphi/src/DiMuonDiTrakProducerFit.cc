@@ -196,7 +196,8 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
-  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth"))
+  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
+  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -884,116 +885,121 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  }
               }
 
+
            //Mass Doubly Constrained fit
            //JPsi
-           std::vector<RefCountedKinematicParticle> JPsiParticles;
-           std::vector<reco::TransientTrack> JPsiTrTk;
-           JPsiTrTk.push_back(xTracks[0]);
-           JPsiTrTk.push_back(xTracks[1]);
 
-           JPsiParticles.push_back(pFactory.particle(JPsiTrTk[0],muonMass,float(0),float(0),muonSigma));
-           JPsiParticles.push_back(pFactory.particle(JPsiTrTk[1],muonMass,float(0),float(0),muonSigma));
-
-           KinematicParticleVertexFitter fitter;
-           KinematicParticleFitter csFitterJPsi;
-           RefCountedKinematicTree jpsiVertexFitTree;
-           jpsiVertexFitTree = fitter.fit(JPsiParticles);
-
-
-           if (jpsiVertexFitTree->isValid())
+           if(doDoubleConstant_)
            {
+             std::vector<RefCountedKinematicParticle> JPsiParticles;
+             std::vector<reco::TransientTrack> JPsiTrTk;
+             JPsiTrTk.push_back(xTracks[0]);
+             JPsiTrTk.push_back(xTracks[1]);
 
-             const ParticleMass jpsi_mass(JPsiMass_);
-             float jpsi_sigma = 1E-6;
+             JPsiParticles.push_back(pFactory.particle(JPsiTrTk[0],muonMass,float(0),float(0),muonSigma));
+             JPsiParticles.push_back(pFactory.particle(JPsiTrTk[1],muonMass,float(0),float(0),muonSigma));
 
-             KinematicConstraint * jpsi_c = new MassKinematicConstraint(jpsi_mass,jpsi_sigma);
+             KinematicParticleVertexFitter fitter;
+             KinematicParticleFitter csFitterJPsi;
+             RefCountedKinematicTree jpsiVertexFitTree;
+             jpsiVertexFitTree = fitter.fit(JPsiParticles);
 
-             jpsiVertexFitTree->movePointerToTheTop();
-             jpsiVertexFitTree = csFitterJPsi.fit(jpsi_c,jpsiVertexFitTree);
 
              if (jpsiVertexFitTree->isValid())
              {
 
+               const ParticleMass jpsi_mass(JPsiMass_);
+               float jpsi_sigma = 1E-6;
+
+               KinematicConstraint * jpsi_c = new MassKinematicConstraint(jpsi_mass,jpsi_sigma);
+
                jpsiVertexFitTree->movePointerToTheTop();
-             	 RefCountedKinematicParticle fitJPsi = jpsiVertexFitTree->currentParticle();
+               jpsiVertexFitTree = csFitterJPsi.fit(jpsi_c,jpsiVertexFitTree);
 
-               //Phi
-               std::vector<RefCountedKinematicParticle> allPsiTDaughters;
-               //allPsiTDaughters.push_back(fitPhi);
-               allPsiTDaughters.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
-               allPsiTDaughters.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
-               allPsiTDaughters.push_back(fitJPsi);
+               if (jpsiVertexFitTree->isValid())
+               {
 
-               KinematicConstrainedVertexFitter vertexFitter;
-               MultiTrackKinematicConstraint *phi_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
-               RefCountedKinematicTree PsiPhiTree = vertexFitter.fit(allPsiTDaughters,phi_mtc);
+                 jpsiVertexFitTree->movePointerToTheTop();
+               	 RefCountedKinematicParticle fitJPsi = jpsiVertexFitTree->currentParticle();
 
-               if (!PsiPhiTree->isEmpty()) {
-                  PsiPhiTree->movePointerToTheTop();
-                  RefCountedKinematicParticle fitPsiTT = PsiPhiTree->currentParticle();
-                  RefCountedKinematicVertex PsiTDecayVertex = PsiPhiTree->currentDecayVertex();
-           // Get PsiT reffited
-                  double dimuontt_ma_fit = 14000.;
-                  double dimuontt_vp_fit = -9999.;
-                  double dimuontt_x2_fit = 10000.;
-                  double dimuontt_ndof_fit = 10000.;
+                 //Phi
+                 std::vector<RefCountedKinematicParticle> allPsiTDaughters;
+                 //allPsiTDaughters.push_back(fitPhi);
+                 allPsiTDaughters.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
+                 allPsiTDaughters.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
+                 allPsiTDaughters.push_back(fitJPsi);
 
-                  if (fitPsiTT->currentState().isValid()) {
-                    dimuontt_ma_fit = fitPsiTT->currentState().mass();
-                    dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
-                    dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
-                                                         (double)(PsiTDecayVertex->degreesOfFreedom()));
-                    dimuontt_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
-                  }
+                 KinematicConstrainedVertexFitter vertexFitter;
+                 MultiTrackKinematicConstraint *phi_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
+                 RefCountedKinematicTree PsiPhiTree = vertexFitter.fit(allPsiTDaughters,phi_mtc);
 
-                  if ( dimuontt_vp_fit > 0.0 ) {
-                       TVector3 vtx;
-                       TVector3 pvtx;
-                       VertexDistanceXY vdistXY;
-                       int   dimuontt_ch_fit = DiMuonTTCand.charge();
-                       double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
-                       double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
-                       double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
-                       double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
-                                                 dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
-                       double dimuontt_vx_fit = PsiTDecayVertex->position().x();
-           	           double dimuontt_vy_fit = PsiTDecayVertex->position().y();
-                       double dimuontt_vz_fit = PsiTDecayVertex->position().z();
+                 if (!PsiPhiTree->isEmpty()) {
+                    PsiPhiTree->movePointerToTheTop();
+                    RefCountedKinematicParticle fitPsiTT = PsiPhiTree->currentParticle();
+                    RefCountedKinematicVertex PsiTDecayVertex = PsiPhiTree->currentDecayVertex();
+             // Get PsiT reffited
+                    double dimuontt_ma_fit = 14000.;
+                    double dimuontt_vp_fit = -9999.;
+                    double dimuontt_x2_fit = 10000.;
+                    double dimuontt_ndof_fit = 10000.;
 
-                       vtx.SetXYZ(dimuontt_vx_fit,dimuontt_vy_fit,0);
-                       TVector3 pperp(dimuontt_px_fit, dimuontt_py_fit, 0);
-                       AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-                       pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-                       TVector3 vdiff = vtx - pvtx;
-                       double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-                       Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
-                       double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
-                       GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
-                       GlobalError v2e = thePrimaryV.error();
-                       AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-                       double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt_ma_fit/(pperp.Perp2());
+                    if (fitPsiTT->currentState().isValid()) {
+                      dimuontt_ma_fit = fitPsiTT->currentState().mass();
+                      dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
+                      dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
+                                                           (double)(PsiTDecayVertex->degreesOfFreedom()));
+                      dimuontt_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
+                    }
 
-           	           reco::CompositeCandidate recoPsiT_rf(dimuontt_ch_fit,math::XYZTLorentzVector(dimuontt_px_fit,dimuontt_py_fit,dimuontt_pz_fit,dimuontt_en_fit),
-                                                          math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),531);
+                    if ( dimuontt_vp_fit > 0.0 ) {
+                         TVector3 vtx;
+                         TVector3 pvtx;
+                         VertexDistanceXY vdistXY;
+                         int   dimuontt_ch_fit = DiMuonTTCand.charge();
+                         double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
+                         double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
+                         double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
+                         double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
+                                                   dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
+                         double dimuontt_vx_fit = PsiTDecayVertex->position().x();
+             	           double dimuontt_vy_fit = PsiTDecayVertex->position().y();
+                         double dimuontt_vz_fit = PsiTDecayVertex->position().z();
 
-                       pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
+                         vtx.SetXYZ(dimuontt_vx_fit,dimuontt_vy_fit,0);
+                         TVector3 pperp(dimuontt_px_fit, dimuontt_py_fit, 0);
+                         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+                         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+                         TVector3 vdiff = vtx - pvtx;
+                         double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+                         Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
+                         double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
+                         GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
+                         GlobalError v2e = thePrimaryV.error();
+                         AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+                         double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt_ma_fit/(pperp.Perp2());
 
-                       DiMuonTTCand.addUserFloat("vProb_const_ref",dimuontt_vp_fit);
-                       DiMuonTTCand.addUserFloat("vChi2_const_ref",dimuontt_x2_fit);
-                       DiMuonTTCand.addUserFloat("nDof_const_ref",dimuontt_ndof_fit);
-                       DiMuonTTCand.addUserFloat("cosAlpha_const_ref",cosAlpha);
-                       DiMuonTTCand.addUserFloat("ctauPV_const_ref",ctauPV);
-                       DiMuonTTCand.addUserFloat("ctauErrPV_const_ref",ctauErrPV);
+             	           reco::CompositeCandidate recoPsiT_rf(dimuontt_ch_fit,math::XYZTLorentzVector(dimuontt_px_fit,dimuontt_py_fit,dimuontt_pz_fit,dimuontt_en_fit),
+                                                            math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),531);
 
-                       cand_const_ref = 1.0;
-                       // DiMuonTTCand_rf.addDaughter(patJPsi_rf,"dimuon");
-           	           // DiMuonTTCand_rf.addDaughter(phi,"ditrak");
-                       DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_const_cand");
-                     }
-           	      }
+                         pat::CompositeCandidate DiMuonTTCand_rf(recoPsiT_rf);
 
+                         DiMuonTTCand.addUserFloat("vProb_const_ref",dimuontt_vp_fit);
+                         DiMuonTTCand.addUserFloat("vChi2_const_ref",dimuontt_x2_fit);
+                         DiMuonTTCand.addUserFloat("nDof_const_ref",dimuontt_ndof_fit);
+                         DiMuonTTCand.addUserFloat("cosAlpha_const_ref",cosAlpha);
+                         DiMuonTTCand.addUserFloat("ctauPV_const_ref",ctauPV);
+                         DiMuonTTCand.addUserFloat("ctauErrPV_const_ref",ctauErrPV);
+
+                         cand_const_ref = 1.0;
+                         // DiMuonTTCand_rf.addDaughter(patJPsi_rf,"dimuon");
+             	           // DiMuonTTCand_rf.addDaughter(phi,"ditrak");
+                         DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_const_cand");
+                       }
+             	      }
+
+               }
              }
-           }
+         }
 
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);

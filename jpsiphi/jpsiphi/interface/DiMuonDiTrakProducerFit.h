@@ -87,6 +87,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   std::vector<std::string>  HLTFilters_;
   bool isMC_;
   bool addMCTruth_;
+  bool doDoubleConstant_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
