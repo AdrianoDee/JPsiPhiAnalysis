@@ -197,7 +197,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
-  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
+  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;

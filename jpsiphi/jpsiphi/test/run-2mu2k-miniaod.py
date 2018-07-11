@@ -12,6 +12,18 @@ options.register ('gtag',
 				  VarParsing.varType.string,
 				  "Global Tag")
 
+options.register ('ss',
+				  False,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "Do Same Sign")
+
+options.register ('kMass',
+				  0.493677,
+				  VarParsing.multiplicity.singleton,
+				  VarParsing.varType.bool,
+				  "KMass")
+
 options.parseArguments()
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
@@ -19,8 +31,8 @@ input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
 mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
 mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
-mc_file = "file:/lustre/cms/store/user/adiflori/Y_MC/4700/5AEF6C10-4942-E811-92FB-A4BF01125B70.root"
-input_file = mc_file #gen_file
+runb2018 = "file:E0E8281D-0476-E811-BF2C-FA163EDF5715.root"
+input_file = runb2018 #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -200,8 +212,10 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     OnlyBest  = cms.bool(False),
     Product = cms.string("DiMuonDiTrakCandidates"),
     Filters = filters,
-    IsMC = cms.bool(True),
-    AddMCTruth = cms.bool(True)
+    IsMC = cms.bool(False),
+    AddMCTruth = cms.bool(False),
+	DoDouble = cms.bool(False),
+	AddSS    = cms.bool(False)
 )
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
@@ -230,12 +244,12 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(options.onlyGen),
-    Mother_pdg = cms.uint32(motherPdg), #20443 #10441
+    Mother_pdg = cms.uint32(20443), #20443 #10441
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
-    TreeName = cms.string('JPsi Phi Tree')
+    TreeName = cms.string('JPsiPhiTree')
 )
 
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
