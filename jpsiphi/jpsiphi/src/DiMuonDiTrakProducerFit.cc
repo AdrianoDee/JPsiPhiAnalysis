@@ -461,8 +461,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
            reco::VertexCollection verteces;
+           std::vector<int> vKeys;
            verteces.push_back(theBeamSpotV);
-
+           vKeys.push_back(0);
            float minDz = 999999.;
            double maxCosAlpha = -1.0;
            if ( !(priVtxs->begin() != priVtxs->end()) )
@@ -472,11 +473,13 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
              verteces.push_back(thePrimaryVDZ);
-
+             vKeys.push_back(0);
+             vKeys.push_back(0);
            }else
            {
 
              reco::Vertex p,pz;
+             int thisp,thispz;
              for(size_t pV = 0; pV<priVtxs->size();++pV)
              {
                auto thisPV = priVtxs->at(pV);
@@ -489,18 +492,20 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  thePrimaryV = reco::Vertex(thisPV);
                  maxCosAlpha = thisCosAlpha;
                  p = reco::Vertex(thisPV);
-
+                 thisp = priVtxs->atRef(pV).id();
                }
 
                float deltaZ = fabs(extrapZ - thisPV.position().z()) ;
                if ( deltaZ < minDz ) {
                  minDz = deltaZ;
                  pz = reco::Vertex(thisPV);
-
+                 thispz = priVtxs->atRef(pV).id();
                }
              }
              verteces.push_back(p);
+             vKeys.push_back(thisp);
              verteces.push_back(pz);
+             vKeys.push_back(thispz);
            }
 
            //////////////////////////////////////////////////
@@ -508,70 +513,73 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            std::vector<TransientVertex> pvs;
 
-           for(size_t i = 1; i < verteces.size(); i++)
-           {
-             auto thisPV = verteces[i];
-             reco::TrackCollection xLess;
-             if(thisPV.tracksSize()>4) {
-               // Primary vertex matched to the dimuon, now refit it removing the two muons
-               DiMuonVtxReProducer revertex(priVtxs, iEvent);
+           //NOT GOOD in MINIAOD
+           // for(size_t i = 1; i < verteces.size(); i++)
+           // {
+           //   auto thisPV = verteces[i];
+           //   reco::TrackCollection xLess;
+           //   if(thisPV.tracksSize()>4) {
+           //     // Primary vertex matched to the dimuon, now refit it removing the two muons
+           //     DiMuonVtxReProducer revertex(priVtxs, iEvent);
+           //
+           //     // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
+           //     // also check that the tracks really come from the track collection used for the BS
+           //     bool notNullMu = ((rmu1 != nullptr) && (rmu2 != nullptr));
+           //     //rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()
+           //     if ( notNullMu ) {
+           //       // Save the keys of the tracks in the primary vertex
+           //       // std::vector<size_t> vertexTracksKeys;
+           //       // vertexTracksKeys.reserve(thePrimaryV.tracksSize());
+           //       if( thisPV.hasRefittedTracks() ) {
+           //         // Need to go back to the original tracks before taking the key
+           //         std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
+           //         std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
+           //         for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+           //         {
+           //           if( isSameTrack(*rmu1->track(),*itRefittedTrack)) continue;
+           //           if( isSameTrack(*rmu2->track(),*itRefittedTrack)) continue;
+           //           if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack)) continue;
+           //           if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) ) continue;
+           //           // vertexTracksKeys.push_back(thePrimaryV.originalTrack(*itRefittedTrack).key());
+           //           xLess.push_back(*(thisPV.originalTrack(*itRefittedTrack)));
+           //         }
+           //       }
+           //       else {
+           //         std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
+           //         for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+           //           if( isSameTrack(*(rmu1->track()),**itPVtrack)) continue;
+           //           if( isSameTrack(*(rmu2->track()),**itPVtrack)) continue;
+           //           if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack)) continue;
+           //           if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack)) continue;
+           //           // vertexTracksKeys.push_back(itPVtrack->key());
+           //           xLess.push_back(**itPVtrack);
+           //         }
+           //       }
+           //       if (xLess.size()>1 && xLess.size() < thisPV.tracksSize()){
+           //         pvs = revertex.makeVertices(xLess, bs, iSetup) ;
+           //         if (!pvs.empty()) {
+           //           reco::Vertex xLessPV = reco::Vertex(pvs.front());
+           //           thisPV = xLessPV;
+           //         }
+           //       }
+           //     }
+           //
+           //   }
+           //
+           // }
 
-               // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
-               // also check that the tracks really come from the track collection used for the BS
-               bool notNullMu = ((rmu1 != nullptr) && (rmu2 != nullptr));
-               //rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()
-               if ( notNullMu ) {
-                 // Save the keys of the tracks in the primary vertex
-                 // std::vector<size_t> vertexTracksKeys;
-                 // vertexTracksKeys.reserve(thePrimaryV.tracksSize());
-                 if( thisPV.hasRefittedTracks() ) {
-                   // Need to go back to the original tracks before taking the key
-                   std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
-                   std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
-                   for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
-                   {
-                     if( isSameTrack(*rmu1->track(),*itRefittedTrack)) continue;
-                     if( isSameTrack(*rmu2->track(),*itRefittedTrack)) continue;
-                     if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack)) continue;
-                     if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) ) continue;
-                     // vertexTracksKeys.push_back(thePrimaryV.originalTrack(*itRefittedTrack).key());
-                     xLess.push_back(*(thisPV.originalTrack(*itRefittedTrack)));
-                   }
-                 }
-                 else {
-                   std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
-                   for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
-                     if( isSameTrack(*(rmu1->track()),**itPVtrack)) continue;
-                     if( isSameTrack(*(rmu2->track()),**itPVtrack)) continue;
-                     if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack)) continue;
-                     if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack)) continue;
-                     // vertexTracksKeys.push_back(itPVtrack->key());
-                     xLess.push_back(**itPVtrack);
-                   }
-                 }
-                 if (xLess.size()>1 && xLess.size() < thisPV.tracksSize()){
-                   pvs = revertex.makeVertices(xLess, bs, iSetup) ;
-                   if (!pvs.empty()) {
-                     reco::Vertex xLessPV = reco::Vertex(pvs.front());
-                     thisPV = xLessPV;
-                   }
-                 }
-               }
-
-             }
-
-           }
-
-           std::vector<bool> mu1FromPV,mu2FromPV,tPFromPV,tMFromPV;
+           std::vector<bool> mu1FromPV,mu2FromPV;
+           std::vector<float> tPFromPV,tMFromPV;
            std::vector<float> m1W,m2W,tPW,tMW;
 
+           //NOT GOOD in MINIAOD
            for(size_t i = 0; i < verteces.size(); i++)
            {
               auto thisPV = verteces[i];
               mu1FromPV.push_back(false);
               mu2FromPV.push_back(false);
-              tPFromPV.push_back(false);
-              tMFromPV.push_back(false);
+              tPFromPV.push_back(0.0);
+              tMFromPV.push_back(0.0);
               m1W.push_back(-1.0);
               m2W.push_back(-1.0);
               tPW.push_back(-1.0);
@@ -587,9 +595,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
                     {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
-                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+                    {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                   if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) )
-                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+                    {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
                 }
               }
               else {
@@ -600,11 +608,17 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   if( isSameTrack(*(rmu2->track()),**itPVtrack))
                     {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itPVtrack);}
                   if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack))
-                    {tPFromPV[i] = true; tPW[i] = thisPV.trackWeight(*itPVtrack);}
+                    {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(*itPVtrack);}
                   if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack))
-                    {tMFromPV[i] = true; tMW[i] = thisPV.trackWeight(*itPVtrack);}
+                    {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(*itPVtrack);}
                 }
               }
+           }
+
+           for(size_t i = 1; i < verteces.size(); i++)
+           {
+             tPFromPV[i] = posTrack.fromPV(vKeys[i]);
+             tMFromPV[i] = negTrack.fromPV(vKeys[i]);
            }
 
            for(size_t i = 0; i < verteces.size(); i++)
