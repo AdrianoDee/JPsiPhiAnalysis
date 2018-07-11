@@ -431,7 +431,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
-
+           std::cout << "DiMuonTTCand" << std::endl;
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
 
@@ -451,7 +451,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 	         double x_vy_fit = fitXVertex->position().y();
            double x_vz_fit = fitXVertex->position().z();
            vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
-
+           std::cout << status << std::endl;
            bool status = ttmd.calculate( GlobalTrajectoryParameters(
              GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
              GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
@@ -460,11 +460,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
            float extrapZ=-9E20;
            if (status) extrapZ=ttmd.points().first.z();
-
+           std::cout << status << std::endl;
            TVector3 pperp(x_px_fit, x_py_fit, 0);
            AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
-           std::vector < reco::Vertex > verteces;
+           reco::VertexCollection verteces;
            verteces.push_back(theBeamSpotV);
 
            float minDz = 999999.;
