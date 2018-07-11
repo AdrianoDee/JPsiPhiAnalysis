@@ -750,7 +750,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuonditrk_tPFromPVDZ = dimuonditrk_cand.userFloat("tPFromPVDZ");
       dimuonditrk_tMFromPVDZ = dimuonditrk_cand.userFloat("tMFromPVDZ");
       dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu1DZW");
-      dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu1DZW");
+      dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu2DZW");
       dimuonditrk_tPDZW = dimuonditrk_cand.userFloat("tPDZW");
       dimuonditrk_tMDZW = dimuonditrk_cand.userFloat("tMDZW");
 

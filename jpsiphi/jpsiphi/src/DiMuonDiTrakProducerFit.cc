@@ -719,7 +719,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("tPFromPVDZ",float(tPFromPV[2]));
            DiMuonTTCand.addUserFloat("tMFromPVDZ",float(tMFromPV[2]));
            DiMuonTTCand.addUserFloat("mu1DZW",m1W[2]);
-           DiMuonTTCand.addUserFloat("mu1DZW",m2W[2]);
+           DiMuonTTCand.addUserFloat("mu2DZW",m2W[2]);
            DiMuonTTCand.addUserFloat("tPDZW",tPW[2]);
            DiMuonTTCand.addUserFloat("tMDZW",tMW[2]);
 
