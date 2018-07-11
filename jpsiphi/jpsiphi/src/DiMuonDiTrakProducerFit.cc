@@ -626,33 +626,32 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              double v = -1.0, s = -1.0;
              int c = -1;
 
-             try{
-               for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
-                 const reco::Track& track = **itVtx;
-                 if(!track.quality(reco::TrackBase::highPurity)) continue;
-                 if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
-                 reco::TransientTrack tt = theB->build(track);
-                 std::pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thePrimaryV);
-                 if (!tkPVdist.first) continue;
-                 if (tkPVdist.second.significance()>3) continue;
-                 if (track.ptError()/track.pt()>0.1) continue;
-                 // do not count the two muons
-                 if (rmu1 != nullptr && rmu1->innerTrack().key() == itVtx->key())
-                 continue;
-                 if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
-                 continue;
-                 if (isSameTrack(*posTrack.bestTrack(),track))
-                 continue;
-                 if (isSameTrack(*negTrack.bestTrack(),track))
-                 continue;
+             for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
+               std::cout << "Looping on tracks " << std::endl;
+               const reco::Track& track = **itVtx;
+               if(!track.quality(reco::TrackBase::highPurity)) continue;
+               if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
+               reco::TransientTrack tt = theB->build(track);
+               std::pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thisPV);
+               if (!tkPVdist.first) continue;
+               if (tkPVdist.second.significance()>3) continue;
+               if (track.ptError()/track.pt()>0.1) continue;
+               // do not count the two muons
+               if (rmu1 != nullptr && rmu1->innerTrack().key() == itVtx->key())
+               continue;
+               if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
+               continue;
+               if (isSameTrack(*posTrack.bestTrack(),track))
+               continue;
+               if (isSameTrack(*negTrack.bestTrack(),track))
+               continue;
 
-                 v += thisPV.trackWeight(*itVtx);
-                 if(thisPV.trackWeight(*itVtx) > 0.5){
-                   c++;
-                   s += track.pt();
-                 }
+               v += thisPV.trackWeight(*itVtx);
+               if(thisPV.trackWeight(*itVtx) > 0.5){
+                 c++;
+                 s += track.pt();
                }
-             } catch (std::exception & err) {std::cout << " muon Selection failed " << std::endl; return ; }
+             }
 
              vertexWeight.push_back(v);
              sumPTPV.push_back(s);
