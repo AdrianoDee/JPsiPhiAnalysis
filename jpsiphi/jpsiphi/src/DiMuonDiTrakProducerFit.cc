@@ -506,7 +506,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            for(size_t i = 1; i < verteces.size(); i++)
            {
              auto thisPV = verteces[i];
-             TrackCollection xLess;
+             reco::TrackCollection xLess;
              if(thisPV.tracksSize()>4) {
                // Primary vertex matched to the dimuon, now refit it removing the two muons
                DiMuonVtxReProducer revertex(priVtxs, iEvent);
@@ -547,7 +547,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  if (xLess.size()>1 && xLess.size() < thisPv.tracksSize()){
                    pvs = revertex.makeVertices(xLess, theBeamSpotV, iSetup) ;
                    if (!pvs.empty()) {
-                     Vertex xLessPV = reco::Vertex(pvs.front());
+                     reco::Vertex xLessPV = reco::Vertex(pvs.front());
                      thisPv = xLessPV;
                    }
                  }
