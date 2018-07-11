@@ -502,7 +502,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //////////////////////////////////////////////////
            //Refit PVs (not BS)
 
-           std::vector<reco::TransientVertex> pvs;
+           std::vector<TransientVertex> pvs;
 
            for(size_t i = 1; i < verteces.size(); i++)
            {
