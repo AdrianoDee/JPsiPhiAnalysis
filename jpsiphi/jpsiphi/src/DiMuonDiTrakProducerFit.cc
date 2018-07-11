@@ -225,12 +225,12 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
-  edm::Handle<BeamSpot> theBeamSpot;
+  edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
-  BeamSpot bs = *theBeamSpot;
-  theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
+  reco::BeamSpot bs = *theBeamSpot;
+  reco::Vertex theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
 
-  edm::Handle<VertexCollection> priVtxs;
+  edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
 
   ESHandle<MagneticField> magneticField;
