@@ -21,10 +21,8 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
         pythia8CP5SettingsBlock,
         processParameters = cms.vstring(
 
-                "SoftQCD:nonDiffractive = on",
-            'PTFilter:filter = on', ### added
-            'PTFilter:quarkToFilter = 5', ## added
-            'PTFilter:scaleToFilter = 1.0',
+            'HardQCD:all = on',
+            'PhaseSpace:pTHatMin = 8.',
 
             ),
         parameterSets = cms.vstring('pythia8CommonSettings',
@@ -53,28 +51,28 @@ bfilter = cms.EDFilter("PythiaFilter",
                        )
 
 
-oniafilter = cms.EDFilter("PythiaFilter",
+phifilter = cms.EDFilter("PythiaFilter",
                           Status = cms.untracked.int32(2),
                           MaxEta = cms.untracked.double(1000.0),
                           MinEta = cms.untracked.double(-1000.0),
-                          MinPt = cms.untracked.double(3.0),
-                          ParticleID = cms.untracked.int32(443)
+                          MinPt = cms.untracked.double(1.0),
+                          ParticleID = cms.untracked.int32(333)
                           )
 
 
 mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     Status = cms.untracked.vint32(1, 1),
-    MinPt = cms.untracked.vdouble(0.5, 0.5),
+    MinPt = cms.untracked.vdouble(1.0, 1.0),
     MinP = cms.untracked.vdouble(0., 0.),
     MaxEta = cms.untracked.vdouble(2.5, 2.5),
     MinEta = cms.untracked.vdouble(-2.5, -2.5),
     MinInvMass = cms.untracked.double(2.0),
     MaxInvMass = cms.untracked.double(4.0),
     ParticleCharge = cms.untracked.int32(-1),
-    ParticleID1 = cms.untracked.vint32(13),
-    ParticleID2 = cms.untracked.vint32(13)
+    ParticleID1 = cms.untracked.vint32(321),
+    ParticleID2 = cms.untracked.vint32(321)
 )
 
 
 
-ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter)
+ProductionFilterSequence = cms.Sequence(generator*bfilter*phifilter*kkgenfilter)
