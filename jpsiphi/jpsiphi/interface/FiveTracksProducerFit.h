@@ -77,10 +77,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  std::vector<double> DiMuonMassCuts_;
-  std::vector<double> TrakTrakMassCuts_;
-  std::vector<double> DiMuonDiTrakMassCuts_;
-  double JPsiMass_;
+  std::vector<double> FiveTrakMassCuts_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
   bool isMC_;

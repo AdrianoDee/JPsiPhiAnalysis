@@ -96,7 +96,6 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
-  JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
@@ -439,7 +438,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
   fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
 
   double m_trak = trackmass;
-  math::XYZVector mom_trak = trakP.momentum();
+  math::XYZVector mom_trak = trak.momentum();
   double e_trak = sqrt(m_trak*m_trak + mom_trak.Mag2());
   math::XYZTLorentzVector p4_trak = math::XYZTLorentzVector(mom_trak.X(),mom_trak.Y(),mom_trak.Z(),e_trak);
 
