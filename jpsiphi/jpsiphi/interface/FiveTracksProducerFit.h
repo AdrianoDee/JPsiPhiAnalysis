@@ -82,7 +82,6 @@ class FiveTracksProducerFit : public edm::EDProducer {
   std::vector<double> DiMuonDiTrakMassCuts_;
   double JPsiMass_;
   bool OnlyBest_;
-  std::string product_name_;
   std::vector<std::string>  HLTFilters_;
   bool isMC_;
   bool addMCTruth_;
@@ -112,12 +111,10 @@ class FiveTracksProducerFit : public edm::EDProducer {
 
   float maxDeltaR;
   float maxDPtRel;
-  float kaonmass = 0.493677,pionmass = 0.13957061, trackmass;
+  float kaonmass, pionmass, trackmass;
 
-  int candidates;
   int nevents;
-  int ndimuon;
-  int nreco;
+  uint ncombokaon,ncombopion;
 };
 
 #endif // __DiMuonDiTrakProducerFit_h_

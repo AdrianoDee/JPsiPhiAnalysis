@@ -98,21 +98,24 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-  product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
   addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
-  produces<pat::CompositeCandidateCollection>(product_name_);
-  candidates = 0;
+  produces<pat::CompositeCandidateCollection>("FiveTracksKaon");
+  produces<pat::CompositeCandidateCollection>("FiveTracksPion");
+
   nevents = 0;
-  ndimuon = 0;
-  nreco = 0;
+
+  kaonmass = 0.493677;
+  pionmass = 0.13957061;
 
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
   trakmass = kaonmass;
+
+  ncombokaon = 0, ncombopion = 0;
 
 }
 
@@ -143,7 +146,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
   edm::ESHandle<TransientTrackBuilder> theB;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
 
-  uint ncombokaon = 0, ncombopion = 0;
 
   float FiveTrakMassMax = FiveTrakMassCuts_[1];
   float FiveTrakMassMin = FiveTrakMassCuts_[0];
@@ -395,8 +397,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
       }
     }
 
-  iEvent.put(std::move(fiveCandPionColl),product_name_);
-  iEvent.put(std::move(fiveCandKaonColl),product_name_);
+  iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
+  iEvent.put(std::move(fiveCandPionColl),"FiveTracksPion");
   nevents++;
 }
 
