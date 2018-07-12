@@ -112,7 +112,7 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
 
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
-  trakmass = kaonmass;
+  trackmass = kaonmass;
 
   ncombokaon = 0, ncombopion = 0;
 
@@ -187,7 +187,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          auto fifthTrack = trak->at(i);
 
          if(fifthTrack.pt()<0.7) continue;
-         if(fifthTrack.charge == 0) continue;
+         if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;
          if(!(fifthTrack.hasTrackDetails())) continue;
@@ -295,7 +295,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
         auto fifthTrack = trak->at(i);
 
         if(fifthTrack.pt()<0.7) continue;
-        if(fifthTrack.charge == 0) continue;
+        if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;
         if(!(fifthTrack.hasTrackDetails())) continue;

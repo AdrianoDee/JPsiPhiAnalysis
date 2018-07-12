@@ -98,7 +98,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
 
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isSameTrack(reco::Track t1, reco::Track t2);
-  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2)
+  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2);
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   bool isTheCandidate(reco::GenParticleRef genY);
