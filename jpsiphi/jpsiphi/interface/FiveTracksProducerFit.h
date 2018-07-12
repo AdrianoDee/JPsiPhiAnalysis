@@ -71,7 +71,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrakCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
@@ -101,7 +101,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
 
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isSameTrack(reco::Track t1, reco::Track t2);
-  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t1)
+  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2)
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   bool isTheCandidate(reco::GenParticleRef genY);

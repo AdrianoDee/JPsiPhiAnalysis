@@ -180,7 +180,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
        const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrk_cand->daughter("ditrak")->daughter("trakP"));
        const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrk_cand->daughter("ditrak")->daughter("trakN"));
-       int tpId = dimuonditrk_cand->userInt("pId"), tmId = dimuonditrk_cand->userInt("mId")
+       int tpId = dimuonditrk_cand->userInt("pId");
+       int tmId = dimuonditrk_cand->userInt("mId");
 
 //Adding a kaon
        for (size_t i = 0; i < trak->size(); i++) {
@@ -253,7 +254,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          TVector3 vtx;
          TVector3 pvtx;
          VertexDistanceXY vdistXY;
-         int   f_ch_fit = DiMuonTTCand.charge();
+         int   f_ch_fit = fiveCandKaon.charge();
          double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
          double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
          double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
@@ -361,7 +362,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
         TVector3 vtx;
         TVector3 pvtx;
         VertexDistanceXY vdistXY;
-        int   f_ch_fit = DiMuonTTCand.charge();
+        int   f_ch_fit = fiveCandPion.charge();
         double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
         double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
         double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
@@ -419,7 +420,7 @@ bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& tk, const pat:
   return false;
 }
 
-bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t1){
+bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2){
   double DeltaEta = fabs(t1.eta()-t2.eta());
   double DeltaP   = fabs(t1.p()-t2.p());
   if (DeltaEta < 0.01 && DeltaP < 0.01) return true;
