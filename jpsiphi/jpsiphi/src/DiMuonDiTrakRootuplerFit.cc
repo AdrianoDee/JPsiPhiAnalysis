@@ -708,7 +708,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
       dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
-
+      dimuonditrk_charge    = dimuonditrk_cand.charge();
       dimuonditrk_cosAlphaBS = dimuonditrk_cand.userFloat("cosAlphaBS");
       dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");

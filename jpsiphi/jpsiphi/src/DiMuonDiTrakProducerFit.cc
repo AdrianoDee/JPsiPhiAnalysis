@@ -197,7 +197,8 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   isMC_(iConfig.getParameter<bool>("IsMC")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
-  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble"))
+  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
+  addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -343,20 +344,20 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
        for (size_t i = 0; i < trak->size(); i++) {
          auto posTrack = trak->at(i);
 
-         if(posTrack.charge()<=0) continue;
+         if(!addSameSig_ && posTrack.charge()<=0) continue;
          if(posTrack.pt()<0.7) continue;
 	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
 
-         if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2) || posTrack.charge() < 0 ) continue;
+         if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
 
 // loop over second track candidate, negative charge
          // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
          for (size_t j = 0; j < trak->size(); j++) {
            auto negTrack = trak->at(j);
 
-           if(negTrack.charge()>=0) continue;
+           if(!addSameSig_ && negTrack.charge()>=0) continue;
            if(negTrack.pt()<0.7) continue;
 
   	       //if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
@@ -364,7 +365,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            if(!(negTrack.hasTrackDetails())) continue;
 
            if (i == j) continue;
-           if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) || negTrack.charge() > 0 ) continue;
+           if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) ) continue;
 
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
 
@@ -427,6 +428,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
+           DiMuonTTCand.addUserInt("pId",i);
+           DiMuonTTCand.addUserInt("mId",j);
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
 
@@ -693,6 +696,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //   if(filters[i] > 0)
            //     DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
            // }
+           DiMuonTTCand.addUserData("bestPV",Vertex(thePrimaryV));
 
            DiMuonTTCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);

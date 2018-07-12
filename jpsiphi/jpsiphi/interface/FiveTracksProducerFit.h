@@ -1,6 +1,6 @@
 /**
    \file
-   Declaration of DiMuonDiTrakProducerFit
+   Declaration of FiveTracksProducerFit
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
@@ -61,10 +61,10 @@
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class DiMuonDiTrakProducerFit : public edm::EDProducer {
+class FiveTracksProducerFit : public edm::EDProducer {
 
  public:
-  explicit DiMuonDiTrakProducerFit(const edm::ParameterSet& ps);
+  explicit FiveTracksProducerFit(const edm::ParameterSet& ps);
 
  private:
 
@@ -80,8 +80,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   std::vector<double> DiMuonMassCuts_;
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
-  std::vector<double> MassTraks_;
-  double JPsiMass_,PhiMass_;
+  double JPsiMass_;
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
@@ -94,18 +93,16 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
-  pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
+  pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
-  const pat::CompositeCandidate makeTTTriggerCandidate(
-                                            const pat::TriggerObjectStandAlone& trakP,
-                                            const pat::TriggerObjectStandAlone& trakN
+  pat::CompositeCandidate makeFiveCandidate(
+                                            const pat::CompositeCandidate& dimuonditrak,
+                                            const pat::PackedCandidate& trakN
                                           );
-  const pat::CompositeCandidate makeTTTriggerMixedCandidate(
-                                            const pat::PackedCandidate& trakP,
-                                            const pat::TriggerObjectStandAlone& trakN
-                                          );
+
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isSameTrack(reco::Track t1, reco::Track t2);
+  bool IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t1)
   bool isAbHadron(int pdgID);
   bool isAMixedbHadron(int pdgID, int momPdgID);
   bool isTheCandidate(reco::GenParticleRef genY);
@@ -115,6 +112,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
 
   float maxDeltaR;
   float maxDPtRel;
+  float kaonmass = 0.493677,pionmass = 0.13957061, trackmass;
 
   int candidates;
   int nevents;
