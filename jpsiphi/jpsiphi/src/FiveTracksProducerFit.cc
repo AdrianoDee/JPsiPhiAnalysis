@@ -177,10 +177,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
        const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
-       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrk_cand->daughter("ditrak")->daughter("trakP"));
-       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrk_cand->daughter("ditrak")->daughter("trakN"));
-       int tpId = dimuonditrk_cand->userInt("pId");
-       int tmId = dimuonditrk_cand->userInt("mId");
+       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand->daughter("ditrak")->daughter("trakP"));
+       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand->daughter("ditrak")->daughter("trakN"));
+       int tpId = dimuonditrakCand->userInt("pId");
+       int tmId = dimuonditrakCand->userInt("mId");
 
 //Adding a kaon
        for (size_t i = 0; i < trak->size(); i++) {
@@ -196,7 +196,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-         pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrk_cand, fifthTrack);
+         pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
 
          if (fiveCandKaon.mass() > FiveTrakMassMax || fiveCandKaon.mass() < FiveTrakMassMin) continue;
 
@@ -304,7 +304,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
         if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
         if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-        pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrk_cand, fifthTrack);
+        pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrakCand, fifthTrack);
 
         if (fiveCandPion.mass() > FiveTrakMassMax || fiveCandPion.mass() < FiveTrakMassMin) continue;
 
