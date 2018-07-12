@@ -696,7 +696,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //   if(filters[i] > 0)
            //     DiMuonTTCand.addDaughter(makeTTTriggerCandidate(negTrack,matchedColl[i]),"candTrigTrig");
            // }
-           DiMuonTTCand.addUserData("bestPV",Vertex(thePrimaryV));
+           DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryV));
 
            DiMuonTTCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
