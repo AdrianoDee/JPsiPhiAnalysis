@@ -197,7 +197,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-         pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(fifthTrack, negTrack);
+         pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(fifthTrack, fifthTrack);
 
          if (fiveCandKaon.mass() > FiveTrakMassMax || fiveCandKaon.mass() < FiveTrakMassMin) continue;
 
@@ -305,7 +305,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
         if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
         if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-        pat::CompositeCandidate fiveCandPion = makeFiveCandidate(fifthTrack, negTrack);
+        pat::CompositeCandidate fiveCandPion = makeFiveCandidate(fifthTrack, fifthTrack);
 
         if (fiveCandPion.mass() > FiveTrakMassMax || fiveCandPion.mass() < FiveTrakMassMin) continue;
 
