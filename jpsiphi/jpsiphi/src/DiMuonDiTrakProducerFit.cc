@@ -1054,8 +1054,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              double pionmass = 0.13957061;
 
              const ParticleMass pionMass(pionmass);
-             std::vector<const ParticleMass> pMassesOne{trakMass1,pionmass,pionmass};
-             std::vector<const ParticleMass> pMassesTwo{pionmass,trakMass1,pionmass};
+             std::vector<const ParticleMass> pMassesOne{trakMass1,pionMass,pionMass};
+             std::vector<const ParticleMass> pMassesTwo{pionMass,trakMass1,pionMass};
 
              KinematicConstrainedVertexFitter pFitter;
 
@@ -1064,7 +1064,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  kinChi = 0.;
                  kinNdf = 0.;
                  massPionRefits.push_back(-1.0);
-                 pkParticles.clear()
+                 pkParticles.clear();
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[2],pMassesOne[i],kinChi,kinNdf,trakSigma1));
@@ -1083,13 +1083,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                     double dimuontt_x2_fit = 10000.;
                     double dimuontt_ndof_fit = 10000.;
 
-                    if (fitPsiTT->currentState().isValid()) {
-
-                    }
-
                     if (fitPion->currentState().isValid())
                     {
-                      massPionRefits[i] = pkTree->currentState().mass();
+                      massPionRefits[i] = fitPion->currentState().mass();
                       chi2PionRefits[i] = vPion->chiSquared();
                       nDofPionRefits[i] = (double)(vPion->degreesOfFreedom());
                       vProbPionRefits[i] = ChiSquaredProbability(chi2PionRefits[i],nDofPionRefits[i]);

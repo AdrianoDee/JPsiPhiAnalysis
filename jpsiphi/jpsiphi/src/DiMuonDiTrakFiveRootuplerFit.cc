@@ -770,7 +770,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
-std::map <int,pat::CompositeCandidate*> fourToFiveMap;
+std::map <int,const pat::CompositeCandidate*> fourToFiveMap;
 
 if(!OnlyGen_)
 {
