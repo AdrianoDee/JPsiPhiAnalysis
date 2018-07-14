@@ -1046,6 +1046,15 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            }
 
            std::vector<float> massPionRefits,vProbPionRefits,chi2PionRefits,nDofPionRefits;
+
+           for(int i = 0; i < 2; ++i)
+           {
+             massPionRefits.push_back(-1.0);
+             chi2PionRefits.push_back(-1.0);
+             nDofPionRefits.push_back(-1.0);
+             vProbPionRefits.push_back(-1.0);
+           }
+
            if(doPionRefit_)
            {
              KinematicParticleFactoryFromTransientTrack pFactory;
@@ -1065,7 +1074,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  const ParticleMass twoMass(twoMasses[i]);
                  kinChi = 0.;
                  kinNdf = 0.;
-                 massPionRefits.push_back(-1.0);
+
                  pkParticles.clear();
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
