@@ -68,7 +68,7 @@ process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
 #Phi
-'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
+'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05',
 #JPsi
 #'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 #'HLT_DoubleMu4_JpsiTrk_Displaced',
