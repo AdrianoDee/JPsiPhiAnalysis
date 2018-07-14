@@ -1054,9 +1054,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              double pionmass = 0.13957061;
 
              const ParticleMass pionMass(pionmass);
-             std::vector<const ParticleMass> pMassesOne{trakMass1,pionMass,pionMass};
-             std::vector<const ParticleMass> pMassesTwo{pionMass,trakMass1,pionMass};
-
+             std::vector<const ParticleMass> pMassesOne;
+             pMassesOne.push_back(trakMass1); pMassesOne.push_back(pionMass);pMassesOne.push_back(pionMass);
+             std::vector<const ParticleMass> pMassesTwo;
+             pMassesTwo.push_back(pionMass); pMassesTwo.push_back(trakMass1);pMassesTwo.push_back(pionMass);
              KinematicConstrainedVertexFitter pFitter;
 
              for(int i = 0; i < 2; ++i)
@@ -1077,11 +1078,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                     pkTree->movePointerToTheTop();
                     RefCountedKinematicParticle fitPion = pkTree->currentParticle();
                     RefCountedKinematicVertex vPion = pkTree->currentDecayVertex();
-
-                    double dimuontt_ma_fit = 14000.;
-                    double dimuontt_vp_fit = -9999.;
-                    double dimuontt_x2_fit = 10000.;
-                    double dimuontt_ndof_fit = 10000.;
 
                     if (fitPion->currentState().isValid())
                     {
