@@ -1053,23 +1053,24 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
              double pionmass = 0.13957061;
 
-             const ParticleMass pionMass(pionmass);
-             std::vector<const ParticleMass> pMassesOne;
-             pMassesOne.push_back(trakMass1); pMassesOne.push_back(pionMass);pMassesOne.push_back(pionMass);
-             std::vector<const ParticleMass> pMassesTwo;
-             pMassesTwo.push_back(pionMass); pMassesTwo.push_back(trakMass1);pMassesTwo.push_back(pionMass);
+
+             std::vector<float> oneMasses,twoMasses;
+             oneMasses.push_back(MassTraks_[0]); oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
+             twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
              KinematicConstrainedVertexFitter pFitter;
 
              for(int i = 0; i < 2; ++i)
              {
+                 const ParticleMass oneMass(oneMasses[i]);
+                 const ParticleMass twoMass(twoMasses[i]);
                  kinChi = 0.;
                  kinNdf = 0.;
                  massPionRefits.push_back(-1.0);
                  pkParticles.clear();
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-                 pkParticles.push_back(pFactory.particle(xTracks[2],pMassesOne[i],kinChi,kinNdf,trakSigma1));
-                 pkParticles.push_back(pFactory.particle(xTracks[3],pMassesTwo[i],kinChi,kinNdf,trakSigma1));
+                 pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
+                 pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma1));
 
                  RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
 
