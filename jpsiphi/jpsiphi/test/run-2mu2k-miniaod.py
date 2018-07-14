@@ -228,6 +228,7 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
     FiveTrakCuts = cms.vdouble(4.0,5.8),         # traks masses
+	Filters = filters,
 	OnlyBest = cms.bool(False),
     IsMC = cms.bool(False),
     AddMCTruth = cms.bool(False),
