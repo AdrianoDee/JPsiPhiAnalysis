@@ -114,7 +114,7 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   maxDPtRel = 2.0;
   trackmass = kaonmass;
 
-  ncombokaon = 0, ncombopion = 0;
+  ncombo = 0, ncombopion = 0;
 
 }
 
@@ -196,21 +196,28 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
+         trackmass = kaonmass;
          pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
+         trackmass = pionmass;
+         pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrakCand, fifthTrack);
 
-         if (fiveCandKaon.mass() > FiveTrakMassMax || fiveCandKaon.mass() < FiveTrakMassMin) continue;
+         if (fiveCandKaon.mass() > FiveTrakMassMax || fiveCandKaon.mass() < FiveTrakMassMin)
+         if (fiveCandPion.mass() > FiveTrakMassMax || fiveCandPion.mass() < FiveTrakMassMin)
+          continue;
 
+         //KaonRefit
          const ParticleMass muonMass(0.1056583);
          float muonSigma = muonMass*1E-6;
          const ParticleMass trakMassP(tp->mass());
          float trakSigmaP = trakMassP*1E-6;
          const ParticleMass trakMassM(tm->mass());
          float trakSigmaM = trakMassM*1E-6;
-         const ParticleMass fifthMass(trackmass);
-         float fifthSigma = fifthMass*1E-6;
+         const ParticleMass fifthKaonMass(kaonmass);
+         float fifthSigma = fifthKaonMass*1E-6;
+         const ParticleMass fifthPionMass(pionmass);
 
          std::vector<reco::TransientTrack> fiveTracks;
-         std::vector<RefCountedKinematicParticle> fParticles;
+         std::vector<RefCountedKinematicParticle> kaonParticles, pionParticles;
 
          float kinChi = 0.;
          float kinNdf = 0.;
@@ -221,181 +228,142 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K+
          fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K+
 
-         fParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
-         fParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-         fParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
-         fParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
-         fParticles.push_back(pFactory.particle(fiveTracks[4],fifthMass,kinChi,kinNdf,fifthSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[4],fifthKaonMass,kinChi,kinNdf,fifthSigma));
 
-         KinematicParticleVertexFitter kFitter;
-         RefCountedKinematicTree fVertexFitTree;
-         fVertexFitTree = kFitter.fit(fParticles);
+         KinematicParticleVertexFitter kaonFitter;
+         RefCountedKinematicTree kaonVertexFitTree;
+         kaonVertexFitTree = kaonFitter.fit(kaonParticles);
 
-         if (fVertexFitTree->isEmpty()) continue;
+         if (kaonVertexFitTree->isEmpty()) continue;
 
-         fVertexFitTree->movePointerToTheTop();
-         RefCountedKinematicParticle fitF = fVertexFitTree->currentParticle();
-         RefCountedKinematicVertex fitFVertex = fVertexFitTree->currentDecayVertex();
+         kaonVertexFitTree->movePointerToTheTop();
+         RefCountedKinematicParticle fitF = kaonVertexFitTree->currentParticle();
+         RefCountedKinematicVertex fitFVertex = kaonVertexFitTree->currentDecayVertex();
 
-         double f_ma_fit = 14000.;
-         double f_vp_fit = -9999.;
-         double f_x2_fit = 10000.;
-         double f_ndof_fit = 10000.;
+         double kaon_ma_fit = 14000.;
+         double kaon_vp_fit = -9999.;
+         double kaon_x2_fit = 10000.;
+         double kaon_ndof_fit = 10000.;
 
          if (!(fitF->currentState().isValid())) continue;
 
-         f_ma_fit = fitF->currentState().mass();
-         f_x2_fit = fitFVertex->chiSquared();
-         f_vp_fit = ChiSquaredProbability(f_x2_fit,
+         kaon_ma_fit = fitF->currentState().mass();
+         kaon_x2_fit = fitFVertex->chiSquared();
+         kaon_vp_fit = ChiSquaredProbability(kaon_x2_fit,
                                               (double)(fitFVertex->degreesOfFreedom()));
-         f_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
+         kaon_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
+
+         float kinChi = 0.;
+         float kinNdf = 0.;
+         fiveTracks.clear()
+         fiveTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // K+
+         fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // K+
+         fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K+
+         fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K+
+         fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K+
+
+         pionParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+         pionParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
+         pionParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
+         pionParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
+         pionParticles.push_back(pFactory.particle(fiveTracks[4],fifthPionMass,kinChi,kinNdf,fifthSigma));
+
+         KinematicParticleVertexFitter pionFitter;
+         RefCountedKinematicTree pionVertexFitTree;
+         pionVertexFitTree = pionFitter.fit(pionParticles);
+
+         if (pionVertexFitTree->isEmpty()) continue;
+
+         pionVertexFitTree->movePointerToTheTop();
+         RefCountedKinematicParticle fitF = pionVertexFitTree->currentParticle();
+         RefCountedKinematicVertex fitFVertex = pionVertexFitTree->currentDecayVertex();
+
+         double pion_ma_fit = 14000.;
+         double pion_vp_fit = -9999.;
+         double pion_x2_fit = 10000.;
+         double pion_ndof_fit = 10000.;
+
+         if (!(fitF->currentState().isValid())) continue;
+
+         pion_ma_fit = fitF->currentState().mass();
+         pion_x2_fit = fitFVertex->chiSquared();
+         pion_vp_fit = ChiSquaredProbability(pion_x2_fit,
+                                              (double)(fitFVertex->degreesOfFreedom()));
+         pion_ndopion_fit = (double)(fitFVertex->degreesOfFreedom());
 
          TVector3 vtx;
          TVector3 pvtx;
          VertexDistanceXY vdistXY;
-         // int   f_ch_fit = fiveCandKaon.charge();
-         double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
-         double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-         // double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
-         // double f_en_fit = sqrt(f_ma_fit*f_ma_fit+f_pf_fit*f_pf_fit+f_py_fit*f_py_fit+f_pz_fit*f_pz_fit);
-         double f_vf_fit = fitFVertex->position().x();
-         double f_vy_fit = fitFVertex->position().y();
-         // double f_vz_fit = fitFVertex->position().z();
+         // int   kaon_ch_fit = fiveCandKaon.charge();
+         double kaon_px_fit = fitF->currentState().kinematicParameters().momentum().x();
+         double kaon_py_fit = fitF->currentState().kinematicParameters().momentum().y();
+         // double kaon_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+         // double kaon_en_fit = sqrt(kaon_ma_fit*kaon_ma_fit+kaon_pkaon_fit*kaon_pkaon_fit+kaon_py_fit*kaon_py_fit+kaon_pz_fit*kaon_pz_fit);
+         double kaon_vx_fit = fitFVertex->position().x();
+         double kaon_vy_fit = fitFVertex->position().y();
+         // double kaon_vz_fit = fitFVertex->position().z();
 
-         vtx.SetXYZ(f_vf_fit,f_vy_fit,0);
-         TVector3 pperp(f_pf_fit, f_py_fit, 0);
+         vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
+         TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
          pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
          TVector3 vdiff = vtx - pvtx;
          double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
          Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
-         double ctauPV = distXY.value()*cosAlpha * f_ma_fit/pperp.Perp();
+         double ctauPV = distXY.value()*cosAlpha * kaon_ma_fit/pperp.Perp();
          GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
          GlobalError v2e = thePrimaryV.error();
          AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-         double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*f_ma_fit/(pperp.Perp2());
+         double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kaon_ma_fit/(pperp.Perp2());
 
-         fiveCandKaon.addUserFloat("mass_rf",f_ma_fit);
-         fiveCandKaon.addUserFloat("vProb",f_vp_fit);
-         fiveCandKaon.addUserFloat("vChi2",f_x2_fit);
-         fiveCandKaon.addUserFloat("nDof",f_ndof_fit);
+         fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
+         fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
+         fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
+         fiveCandKaon.addUserFloat("nDof",kaon_ndokaon_fit);
          fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
          fiveCandKaon.addUserFloat("ctauPV",ctauPV);
          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
+
+         // int   pion_ch_fit = fiveCandKaon.charge();
+         double pion_px_fit = fitF->currentState().kinematicParameters().momentum().x();
+         double pion_py_fit = fitF->currentState().kinematicParameters().momentum().y();
+         // double pion_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+         // double pion_en_fit = sqrt(pion_ma_fit*pion_ma_fit+pion_ppion_fit*pion_ppion_fit+pion_py_fit*pion_py_fit+pion_pz_fit*pion_pz_fit);
+         double pion_vx_fit = fitFVertex->position().x();
+         double pion_vy_fit = fitFVertex->position().y();
+         // double pion_vz_fit = fitFVertex->position().z();
+
+         vtx.SetXYZ(pion_vx_fit,pion_vy_fit,0);
+         TVector3 pperpion(pion_px_fit, pion_py_fit, 0);
+         AlgebraicVector3 vpperpion(pperp.x(),pperp.y(),0);
+         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+         vdiff = vtx - pvtx;
+         cosAlpha = vdiff.Dot(pperpion)/(vdiff.Perp()*pperpion.Perp());
+         distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
+         ctauPV = distXY.value()*cosAlpha * pion_ma_fit/pperpion.Perp();
+         v1e = (reco::Vertex(*fitFVertex)).error();
+         v2e = thePrimaryV.error();
+         vXYe = v1e.matrix()+ v2e.matrix();
+         ctauErrPV = sqrt(ROOT::Math::Similarity(vpperpion,vXYe))*pion_ma_fit/(pperpion.Perp2());
+
+         fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
+         fiveCandKaon.addUserFloat("vProb",pion_vp_fit);
+         fiveCandKaon.addUserFloat("vChi2",pion_x2_fit);
+         fiveCandKaon.addUserFloat("nDof",pion_ndopf_fit);
+         fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
+         fiveCandKaon.addUserFloat("ctauPV",ctauPV);
+         fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
+
          fiveCandKaon.addUserInt("index",d);
 
          fiveCandKaonColl->push_back(fiveCandKaon);
 
-         ++ncombokaon;
+         ++ncombo;
        }
-
-//Adding a pion
-      trackmass = pionmass;
-      for (size_t i = 0; i < trak->size(); i++) {
-        auto fifthTrack = trak->at(i);
-
-        if(fifthTrack.pt()<0.7) continue;
-        if(fifthTrack.charge() == 0) continue;
-	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
-	       if(!(fifthTrack.trackHighPurity())) continue;
-        if(!(fifthTrack.hasTrackDetails())) continue;
-
-        if (IsTheSame(fifthTrack,*tp) || int(i) == tpId) continue;
-        if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
-        if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
-
-        pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrakCand, fifthTrack);
-
-        if (fiveCandPion.mass() > FiveTrakMassMax || fiveCandPion.mass() < FiveTrakMassMin) continue;
-
-        const ParticleMass muonMass(0.1056583);
-        float muonSigma = muonMass*1E-6;
-        const ParticleMass trakMassP(tp->mass());
-        float trakSigmaP = trakMassP*1E-6;
-        const ParticleMass trakMassM(tm->mass());
-        float trakSigmaM = trakMassM*1E-6;
-        const ParticleMass fifthMass(trackmass);
-        float fifthSigma = fifthMass*1E-6;
-
-        std::vector<reco::TransientTrack> fiveTracks;
-        std::vector<RefCountedKinematicParticle> fParticles;
-
-        float kinChi = 0.;
-        float kinNdf = 0.;
-
-        fiveTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // K+
-        fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // K+
-        fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K+
-        fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K+
-        fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K+
-
-        fParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
-        fParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-        fParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
-        fParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
-        fParticles.push_back(pFactory.particle(fiveTracks[4],fifthMass,kinChi,kinNdf,fifthSigma));
-
-        KinematicParticleVertexFitter kFitter;
-        RefCountedKinematicTree fVertexFitTree;
-        fVertexFitTree = kFitter.fit(fParticles);
-
-        if (fVertexFitTree->isEmpty()) continue;
-
-        fVertexFitTree->movePointerToTheTop();
-        RefCountedKinematicParticle fitF = fVertexFitTree->currentParticle();
-        RefCountedKinematicVertex fitFVertex = fVertexFitTree->currentDecayVertex();
-
-        double f_ma_fit = 14000.;
-        double f_vp_fit = -9999.;
-        double f_x2_fit = 10000.;
-        double f_ndof_fit = 10000.;
-
-        if (!(fitF->currentState().isValid())) continue;
-
-        f_ma_fit = fitF->currentState().mass();
-        f_x2_fit = fitFVertex->chiSquared();
-        f_vp_fit = ChiSquaredProbability(f_x2_fit,
-                                             (double)(fitFVertex->degreesOfFreedom()));
-        f_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
-
-        TVector3 vtx;
-        TVector3 pvtx;
-        VertexDistanceXY vdistXY;
-        //int   f_ch_fit = fiveCandPion.charge();
-        double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
-        double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-        //double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
-        // double f_en_fit = sqrt(f_ma_fit*f_ma_fit+f_pf_fit*f_pf_fit+f_py_fit*f_py_fit+f_pz_fit*f_pz_fit);
-        double f_vf_fit = fitFVertex->position().x();
-        double f_vy_fit = fitFVertex->position().y();
-        // double f_vz_fit = fitFVertex->position().z();
-
-        vtx.SetXYZ(f_vf_fit,f_vy_fit,0);
-        TVector3 pperp(f_pf_fit, f_py_fit, 0);
-        AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-        pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-        TVector3 vdiff = vtx - pvtx;
-        double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-        Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
-        double ctauPV = distXY.value()*cosAlpha * f_ma_fit/pperp.Perp();
-        GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
-        GlobalError v2e = thePrimaryV.error();
-        AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-        double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*f_ma_fit/(pperp.Perp2());
-
-        fiveCandPion.addUserFloat("mass_rf",f_ma_fit);
-        fiveCandPion.addUserFloat("vProb",f_vp_fit);
-        fiveCandPion.addUserFloat("vChi2",f_x2_fit);
-        fiveCandPion.addUserFloat("nDof",f_ndof_fit);
-        fiveCandPion.addUserFloat("cosAlpha",cosAlpha);
-        fiveCandPion.addUserFloat("ctauPV",ctauPV);
-        fiveCandPion.addUserFloat("ctauErrPV",ctauErrPV);
-        fiveCandPion.addUserInt("index",d);
-
-        fiveCandPionColl->push_back(fiveCandPion);
-        ++ncombopion;
-      }
-    }
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
   iEvent.put(std::move(fiveCandPionColl),"FiveTracksPion");
@@ -408,7 +376,7 @@ void FiveTracksProducerFit::endJob(){
   std::cout << "###########################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "No. dimuonditrak + pion candidates " << ncombopion << std::endl;
-  std::cout << "No. dimuonditrak + kaon candidates " << ncombokaon << std::endl;
+  std::cout << "No. dimuonditrak + kaon candidates " << ncombo << std::endl;
   std::cout << "###########################" << std::endl;
 }
 

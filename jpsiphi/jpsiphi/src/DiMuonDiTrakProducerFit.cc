@@ -333,8 +333,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        // const reco::Vertex thePrimaryV = *dimuonCand->userData<reco::Vertex>("PVwithmuons");
 
-       const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon1"));
-       const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("muon2"));
+       const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("highMuon"));
+       const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("lowMuon"));
        const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
        const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
@@ -868,8 +868,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        // Define psi from two muons
        	           pat::CompositeCandidate psi;
-       	           psi.addDaughter(patMu1,"muon1");
-                   psi.addDaughter(patMu2,"muon2");
+       	           psi.addDaughter(patMu1,"highMuon");
+                   psi.addDaughter(patMu2,"lowMuon");
                    psi.setP4(patMu1.p4()+patMu2.p4());
        // get kaon
                    child = PsiTTree->movePointerToTheNextChild();
