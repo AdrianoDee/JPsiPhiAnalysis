@@ -689,12 +689,12 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if(posTrack.pt()>=negTrack.pt())
            {
-             DiMuonTTCand.addUserInt("tPMatch",filters[i]);
-             DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+             DiMuonTTCand.addUserInt("highKaonMatch",filters[i]);
+             DiMuonTTCand.addUserInt("lowKaonMatch",filters[j]);
           }else
           {
-            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
-            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+            DiMuonTTCand.addUserInt("lowKaonMatch",filters[i]);
+            DiMuonTTCand.addUserInt("highKaonMatch",filters[j]);
           }
 
            // if(filters[i] > 0)
