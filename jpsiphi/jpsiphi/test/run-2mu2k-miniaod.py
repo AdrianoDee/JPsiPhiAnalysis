@@ -217,7 +217,8 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     IsMC = cms.bool(False),
     AddMCTruth = cms.bool(False),
 	DoDouble = cms.bool(False),
-	AddSS    = cms.bool(False)
+	AddSS    = cms.bool(False),
+	PionRefit = cms.bool(False)
 )
 
 process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
@@ -234,7 +235,6 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
     AddMCTruth = cms.bool(False),
 	DoDouble = cms.bool(False),
 	AddSS    = cms.bool(False),
-	PionRefit = cms.bool(False)
 )
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
