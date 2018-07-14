@@ -137,9 +137,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
 
-  edm::ESHandle<MagneticField> magneticField;
-  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  const MagneticField* field = magneticField.product();
+  // edm::ESHandle<MagneticField> magneticField;
+  // iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  // const MagneticField* field = magneticField.product();
 
   // Kinematic fit
   edm::ESHandle<TransientTrackBuilder> theB;
@@ -174,8 +174,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("muon1"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("muon2"));
-       const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
-       const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
+       // const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
+       // const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
        const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("trakP"));
        const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("trakN"));
@@ -253,10 +253,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          TVector3 vtx;
          TVector3 pvtx;
          VertexDistanceXY vdistXY;
-         int   f_ch_fit = fiveCandKaon.charge();
+         // int   f_ch_fit = fiveCandKaon.charge();
          double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
          double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-         double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+         // double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
          // double f_en_fit = sqrt(f_ma_fit*f_ma_fit+f_pf_fit*f_pf_fit+f_py_fit*f_py_fit+f_pz_fit*f_pz_fit);
          double f_vf_fit = fitFVertex->position().x();
          double f_vy_fit = fitFVertex->position().y();
@@ -361,10 +361,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
         TVector3 vtx;
         TVector3 pvtx;
         VertexDistanceXY vdistXY;
-        int   f_ch_fit = fiveCandPion.charge();
+        //int   f_ch_fit = fiveCandPion.charge();
         double f_pf_fit = fitF->currentState().kinematicParameters().momentum().x();
         double f_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-        double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+        //double f_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
         // double f_en_fit = sqrt(f_ma_fit*f_ma_fit+f_pf_fit*f_pf_fit+f_py_fit*f_py_fit+f_pz_fit*f_pz_fit);
         double f_vf_fit = fitFVertex->position().x();
         double f_vy_fit = fitFVertex->position().y();

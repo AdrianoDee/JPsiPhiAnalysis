@@ -220,6 +220,20 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
 	AddSS    = cms.bool(False)
 )
 
+process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
+    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    PFCandidates = cms.InputTag('packedPFCandidates'),
+	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
+    MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    IsMC = cms.bool(False),
+    AddMCTruth = cms.bool(False),
+	DoDouble = cms.bool(False),
+	AddSS    = cms.bool(False)
+)
+
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
 #     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
 #     DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
@@ -275,5 +289,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
+					 process.FiveTracksProducer *
                      process.rootuple *
                      process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
