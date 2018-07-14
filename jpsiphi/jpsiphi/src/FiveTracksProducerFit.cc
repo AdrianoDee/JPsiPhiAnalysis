@@ -192,8 +192,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 	       if(!(fifthTrack.trackHighPurity())) continue;
          if(!(fifthTrack.hasTrackDetails())) continue;
 
-         if (IsTheSame(fifthTrack,*tp) || i == tpId) continue;
-         if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
+         if (IsTheSame(fifthTrack,*tp) || int(i) == tpId) continue;
+         if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
          pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
@@ -300,8 +300,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 	       if(!(fifthTrack.trackHighPurity())) continue;
         if(!(fifthTrack.hasTrackDetails())) continue;
 
-        if (IsTheSame(fifthTrack,*tp) || i == tpId) continue;
-        if (IsTheSame(fifthTrack,*tm) || i == tmId) continue;
+        if (IsTheSame(fifthTrack,*tp) || int(i) == tpId) continue;
+        if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
         if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
         pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrakCand, fifthTrack);
