@@ -677,7 +677,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              countTksOfPV.push_back(c);
            }
 
-           if(posTrak.pt()>=negTrack.pt())
+           if(posTrack.pt()>=negTrack.pt())
            {
              DiMuonTTCand.addUserInt("tPMatch",filters[i]);
              DiMuonTTCand.addUserInt("tNMatch",filters[j]);
@@ -901,7 +901,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        // Define phi from two kaons
                    pat::CompositeCandidate phi;
-                   if(patTk.pt()>=patT2.pt())
+                   if(patTk.pt()>=patTk2.pt())
                    {
                      phi.addDaughter(patTk,"highTrak");
                      phi.addDaughter(patTk2,"lowTrak");
