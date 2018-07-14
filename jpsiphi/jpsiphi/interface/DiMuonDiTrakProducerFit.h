@@ -89,6 +89,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool addMCTruth_;
   bool doDoubleConstant_;
   bool addSameSig_;
+  bool doPionRefit_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);

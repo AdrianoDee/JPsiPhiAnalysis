@@ -198,7 +198,8 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   isMC_(iConfig.getParameter<bool>("IsMC")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
   doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
-  addSameSig_(iConfig.getParameter<bool>("AddSS"))
+  addSameSig_(iConfig.getParameter<bool>("AddSS")),
+  doPionRefit_(iConfig.getParameter<bool>("PionRefit")),
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -390,10 +391,18 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            float kinChi = 0.;
            float kinNdf = 0.;
 
-           xTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // K+
-           xTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // K+
-           xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
-           xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
+           xTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // µ+
+           xTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ+
+
+           if(posTrack.pt()>=negTrack.pt())
+           {
+             xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
+             xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
+           }else
+           {
+             xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
+             xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
+           }
 
            xParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
            xParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
@@ -587,6 +596,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
               m2W.push_back(-1.0);
               tPW.push_back(-1.0);
               tMW.push_back(-1.0);
+
               if( thisPV.hasRefittedTracks() ) {
                 // Need to go back to the original tracks before taking the key
                 std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
@@ -958,7 +968,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                  //Phi
                  std::vector<RefCountedKinematicParticle> allPsiTDaughters;
-                 //allPsiTDaughters.push_back(fitPhi);
+
                  allPsiTDaughters.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
                  allPsiTDaughters.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
                  allPsiTDaughters.push_back(fitJPsi);
@@ -1033,11 +1043,52 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                }
              }
-         }
+           }
+
+           std::vector<float> massPionRefits;
+           if(doPionRefit_)
+           {
+             KinematicParticleFactoryFromTransientTrack pFactory;
+             std::vector<RefCountedKinematicParticle> pkParticles;
+
+             double pionmass = 0.13957061;
+
+             const ParticleMass pionMass(pionmass);
+             std::vector<const ParticleMass> pMassesOne{trakMass1,pionmass,pionmass};
+             std::vector<const ParticleMass> pMassesTwo{pionmass,trakMass1,pionmass};
+
+             KinematicConstrainedVertexFitter pFitter;
+
+             for(int i = 0; i < 2; ++i)
+             {
+                 kinChi = 0.;
+                 kinNdf = 0.;
+                 massPionRefits.push_back(-1.0);
+                 pkParticles.clear()
+                 pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+                 pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
+                 pkParticles.push_back(pFactory.particle(xTracks[2],pMassesOne[i],kinChi,kinNdf,trakSigma1));
+                 pkParticles.push_back(pFactory.particle(xTracks[3],pMassesTwo[i],kinChi,kinNdf,trakSigma1));
+
+                 RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
+
+                 if (!pkTree->isEmpty()) {
+
+                    pkTree->movePointerToTheTop();
+                    RefCountedKinematicParticle fitPion = pkTree->currentParticle();
+
+                    if (pkTree->currentState().isValid())
+                      massPionRefits[i]= pkTree->currentState().mass();
+                    }
+             }
+
+           }
 
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
-
+           DiMuonTTCand.addUserFloat("massPKRefit",massPionRefits[0]);
+           DiMuonTTCand.addUserFloat("massKPRefit",massPionRefits[1]);
+           DiMuonTTCand.addUserFloat("massPPRefit",massPionRefits[2]);
 
            if (addMCTruth_) {
              reco::GenParticleRef genMu1 = pmu1->genParticleRef();
