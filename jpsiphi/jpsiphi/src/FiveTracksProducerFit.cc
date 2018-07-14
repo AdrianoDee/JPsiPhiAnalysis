@@ -120,7 +120,6 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
 void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> fiveCandKaonColl(new pat::CompositeCandidateCollection);
-  std::unique_ptr<pat::CompositeCandidateCollection> fiveCandPionColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrak;
   iEvent.getByToken(DiMuonDiTrakCollection_,dimuonditrak);
@@ -320,39 +319,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kaon_ma_fit/(pperp.Perp2());
 
          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
+         fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
          fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
-         fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
-         fiveCandKaon.addUserFloat("ctauPV",ctauPV);
-         fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
-
-         // int   pion_ch_fit = fiveCandKaon.charge();
-         double pion_px_fit = fitF->currentState().kinematicParameters().momentum().x();
-         double pion_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-         // double pion_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
-         // double pion_en_fit = sqrt(pion_ma_fit*pion_ma_fit+pion_ppion_fit*pion_ppion_fit+pion_py_fit*pion_py_fit+pion_pz_fit*pion_pz_fit);
-         double pion_vx_fit = fitFVertex->position().x();
-         double pion_vy_fit = fitFVertex->position().y();
-         // double pion_vz_fit = fitFVertex->position().z();
-
-         vtx.SetXYZ(pion_vx_fit,pion_vy_fit,0);
-         TVector3 pperpion(pion_px_fit, pion_py_fit, 0);
-         AlgebraicVector3 vpperpion(pperp.x(),pperp.y(),0);
-         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-         vdiff = vtx - pvtx;
-         cosAlpha = vdiff.Dot(pperpion)/(vdiff.Perp()*pperpion.Perp());
-         distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
-         ctauPV = distXY.value()*cosAlpha * pion_ma_fit/pperpion.Perp();
-         v1e = (reco::Vertex(*fitFVertex)).error();
-         v2e = thePrimaryV.error();
-         vXYe = v1e.matrix()+ v2e.matrix();
-         ctauErrPV = sqrt(ROOT::Math::Similarity(vpperpion,vXYe))*pion_ma_fit/(pperpion.Perp2());
-
-         fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
-         fiveCandKaon.addUserFloat("vProb",pion_vp_fit);
-         fiveCandKaon.addUserFloat("vChi2",pion_x2_fit);
-         fiveCandKaon.addUserFloat("nDof",pion_ndopf_fit);
          fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
          fiveCandKaon.addUserFloat("ctauPV",ctauPV);
          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
@@ -365,7 +335,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        }
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
-  iEvent.put(std::move(fiveCandPionColl),"FiveTracksPion");
   nevents++;
 }
 
