@@ -31,7 +31,7 @@ input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
 mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
 mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
 mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
-runb2018 = "file:E0E8281D-0476-E811-BF2C-FA163EDF5715.root"
+runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
 input_file = runb2018 #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
