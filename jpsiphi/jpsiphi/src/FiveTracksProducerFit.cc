@@ -281,18 +281,11 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fitFVertex = pionVertexFitTree->currentDecayVertex();
 
          double pion_ma_fit = 14000.;
-         double pion_vp_fit = -9999.;
-         double pion_x2_fit = 10000.;
-         double pion_ndof_fit = 10000.;
 
          if (!(fitF->currentState().isValid())) continue;
 
          pion_ma_fit = fitF->currentState().mass();
-         pion_x2_fit = fitFVertex->chiSquared();
-         pion_vp_fit = ChiSquaredProbability(pion_x2_fit,
-                                              (double)(fitFVertex->degreesOfFreedom()));
-         pion_ndopion_fit = (double)(fitFVertex->degreesOfFreedom());
-
+         
          TVector3 vtx;
          TVector3 pvtx;
          VertexDistanceXY vdistXY;
