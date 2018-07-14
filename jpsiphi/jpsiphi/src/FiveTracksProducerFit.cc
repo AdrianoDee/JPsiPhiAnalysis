@@ -177,10 +177,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
        const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
-       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand->daughter("ditrak")->daughter("trakP"));
-       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand->daughter("ditrak")->daughter("trakN"));
-       int tpId = dimuonditrakCand->userInt("pId");
-       int tmId = dimuonditrakCand->userInt("mId");
+       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("trakP"));
+       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("trakN"));
+       int tpId = dimuonditrakCand.userInt("pId");
+       int tmId = dimuonditrakCand.userInt("mId");
 
 //Adding a kaon
        for (size_t i = 0; i < trak->size(); i++) {
