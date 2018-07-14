@@ -132,21 +132,21 @@ DiMuonDiTrakProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 }
 
 const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerCandidate(
-                                          const pat::TriggerObjectStandAlone& trakP,
-                                          const pat::TriggerObjectStandAlone& trakN
+                                          const pat::TriggerObjectStandAlone& highTrak,
+                                          const pat::TriggerObjectStandAlone& lowTrak
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(trakP,"trakP");
-  TTCand.addDaughter(trakN,"trakN");
-  TTCand.setCharge(trakP.charge()+trakN.charge());
+  TTCand.addDaughter(highTrak,"highTrak");
+  TTCand.addDaughter(lowTrak,"lowTrak");
+  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
 
   double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = trakP.momentum();
+  math::XYZVector mom_kaon1 = highTrak.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
   double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = trakN.momentum();
+  math::XYZVector mom_kaon2 = lowTrak.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
@@ -156,21 +156,21 @@ const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerCandidate(
 }
 
 const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerMixedCandidate(
-                                          const pat::PackedCandidate& trakP,
-                                          const pat::TriggerObjectStandAlone& trakN
+                                          const pat::PackedCandidate& highTrak,
+                                          const pat::TriggerObjectStandAlone& lowTrak
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(trakP,"trakP");
-  TTCand.addDaughter(trakN,"trakN");
-  TTCand.setCharge(trakP.charge()+trakN.charge());
+  TTCand.addDaughter(highTrak,"highTrak");
+  TTCand.addDaughter(lowTrak,"lowTrak");
+  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
 
   double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = trakP.momentum();
+  math::XYZVector mom_kaon1 = highTrak.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
   double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = trakN.momentum();
+  math::XYZVector mom_kaon2 = lowTrak.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
@@ -677,8 +677,15 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              countTksOfPV.push_back(c);
            }
 
-           DiMuonTTCand.addUserInt("tPMatch",filters[i]);
-           DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+           if(posTrak.pt()>=negTrack.pt())
+           {
+             DiMuonTTCand.addUserInt("tPMatch",filters[i]);
+             DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+          }else
+          {
+            DiMuonTTCand.addUserInt("tPMatch",filters[i]);
+            DiMuonTTCand.addUserInt("tNMatch",filters[j]);
+          }
 
            // if(filters[i] > 0)
            //  DiMuonTTCand.addDaughter(matchedColl[i],"tPTrigger");
@@ -894,8 +901,16 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        // Define phi from two kaons
                    pat::CompositeCandidate phi;
-                   phi.addDaughter(patTk,"trakP");
-                   phi.addDaughter(patTk2,"trakN");
+                   if(patTk.pt()>=patT2.pt())
+                   {
+                     phi.addDaughter(patTk,"highTrak");
+                     phi.addDaughter(patTk2,"lowTrak");
+                   }else
+                   {
+                     phi.addDaughter(patTk2,"highTrak");
+                     phi.addDaughter(patTk,"lowTrak");
+                   }
+
                    phi.setP4(patTk.p4()+patTk2.p4());
                    candRef = 1.0;
                    DiMuonTTCand_rf.addDaughter(phi,"ditrak");
@@ -1114,21 +1129,30 @@ pat::CompositeCandidate DiMuonDiTrakProducerFit::makeDiMuonTTCandidate(
 }
 
 pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTCandidate(
-                                          const pat::PackedCandidate& trakP,
-                                          const pat::PackedCandidate& trakN
+                                          const pat::PackedCandidate& highTrak,
+                                          const pat::PackedCandidate& lowTrak
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(trakP,"trakP");
-  TTCand.addDaughter(trakN,"trakN");
-  TTCand.setCharge(trakP.charge()+trakN.charge());
+  if(highTrak.pt()<lowTrak.pt())
+  {
+    TTCand.addDaughter(lowTrak,"highTrak");
+    TTCand.addDaughter(highTrak,"lowTrak");
+  }
+  else
+  {
+    TTCand.addDaughter(highTrak,"highTrak");
+    TTCand.addDaughter(lowTrak,"lowTrak");
+  }
+
+  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
 
   double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = trakP.momentum();
+  math::XYZVector mom_kaon1 = highTrak.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
   double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = trakN.momentum();
+  math::XYZVector mom_kaon2 = lowTrak.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;

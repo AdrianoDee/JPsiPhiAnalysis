@@ -151,20 +151,20 @@ UInt_t DiMuonProducerPAT::isTriggerMatched(const pat::Muon& m) {
 }
 
 UInt_t DiMuonProducerPAT::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
+  const pat::Muon* highMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
+  const pat::Muon* lowMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
     // std::cout << HLTFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muon2->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
     // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
   }
 
-  // auto tObjs = muon1->triggerObjectMatches();
+  // auto tObjs = highMuon->triggerObjectMatches();
   //
   // if(tObjs.size()==0) std::cout<<"No matched object"<<std::endl;
   // for(auto hO : tObjs)
@@ -272,33 +272,33 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       vector<TransientVertex> pvs;
 
       // ---- no explicit order defined ----
-      if(m1.charge() > 0)
+      if(m1.pt() > m2.pt())
       {
-        mumucand.addDaughter(m1, "muon1");
-        mumucand.addDaughter(m2,"muon2");
+        mumucand.addDaughter(m1, "highMuon");
+        mumucand.addDaughter(m2,"lowMuon");
       } else
       {
-        mumucand.addDaughter(m1, "muon2");
-        mumucand.addDaughter(m2,"muon1");
+        mumucand.addDaughter(m1, "lowMuon");
+        mumucand.addDaughter(m2,"highMuon");
       }
 
-      if(m1.charge() > 0)
+      if(m1.pt() > m2.pt())
       {
-        mumucand.addUserInt("muon1TMatch",muonFilters[i]);
-        mumucand.addUserInt("muon2TMatch",muonFilters[j]);
+        mumucand.addUserInt("highMuonTMatch",muonFilters[i]);
+        mumucand.addUserInt("lowMuonTMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter(matchedColl[i],"muon1Trigger");
+          mumucand.addDaughter(matchedColl[i],"highMuonTrigger");
         if(muonFilters[j]>0)
-          mumucand.addDaughter(matchedColl[j],"muon2Trigger");
+          mumucand.addDaughter(matchedColl[j],"lowMuonTrigger");
 
       } else
       {
-        mumucand.addUserInt("muon2TMatch",muonFilters[i]);
-        mumucand.addUserInt("muon1TMatch",muonFilters[j]);
+        mumucand.addUserInt("lowMuonTMatch",muonFilters[i]);
+        mumucand.addUserInt("highMuonTMatch",muonFilters[j]);
         if(muonFilters[i]>0)
-          mumucand.addDaughter(matchedColl[i],"muon2Trigger");
+          mumucand.addDaughter(matchedColl[i],"lowMuonTrigger");
         if(muonFilters[j]>0)
-          mumucand.addDaughter(matchedColl[j],"muon1Trigger");
+          mumucand.addDaughter(matchedColl[j],"highMuonTrigger");
 
       }
 
