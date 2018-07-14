@@ -199,7 +199,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
   doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
   addSameSig_(iConfig.getParameter<bool>("AddSS")),
-  doPionRefit_(iConfig.getParameter<bool>("PionRefit")),
+  doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
   candidates = 0;
@@ -1045,7 +1045,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              }
            }
 
-           std::vector<float> massPionRefits;
+           std::vector<float> massPionRefits,vProbPionRefits,chi2PionRefits,nDofPionRefits;
            if(doPionRefit_)
            {
              KinematicParticleFactoryFromTransientTrack pFactory;
@@ -1076,9 +1076,24 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                     pkTree->movePointerToTheTop();
                     RefCountedKinematicParticle fitPion = pkTree->currentParticle();
+                    RefCountedKinematicVertex vPion = pkTree->currentDecayVertex();
 
-                    if (pkTree->currentState().isValid())
-                      massPionRefits[i]= pkTree->currentState().mass();
+                    double dimuontt_ma_fit = 14000.;
+                    double dimuontt_vp_fit = -9999.;
+                    double dimuontt_x2_fit = 10000.;
+                    double dimuontt_ndof_fit = 10000.;
+
+                    if (fitPsiTT->currentState().isValid()) {
+
+                    }
+
+                    if (fitPion->currentState().isValid())
+                    {
+                      massPionRefits[i] = pkTree->currentState().mass();
+                      chi2PionRefits[i] = vPion->chiSquared();
+                      nDofPionRefits[i] = (double)(vPion->degreesOfFreedom());
+                      vProbPionRefits[i] = ChiSquaredProbability(chi2PionRefits[i],nDofPionRefits[i]);
+                    }
                     }
              }
 
@@ -1086,9 +1101,22 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
+
            DiMuonTTCand.addUserFloat("massPKRefit",massPionRefits[0]);
            DiMuonTTCand.addUserFloat("massKPRefit",massPionRefits[1]);
            DiMuonTTCand.addUserFloat("massPPRefit",massPionRefits[2]);
+
+           DiMuonTTCand.addUserFloat("vChi2PKRefit",chi2PionRefits[0]);
+           DiMuonTTCand.addUserFloat("vChi2KPRefit",chi2PionRefits[1]);
+           DiMuonTTCand.addUserFloat("vChi2PPRefit",chi2PionRefits[2]);
+
+           DiMuonTTCand.addUserFloat("nDofPKRefit",nDofPionRefits[0]);
+           DiMuonTTCand.addUserFloat("nDofKPRefit",nDofPionRefits[1]);
+           DiMuonTTCand.addUserFloat("nDofPPRefit",nDofPionRefits[2]);
+
+           DiMuonTTCand.addUserFloat("vProbPKRefit",vProbPionRefits[0]);
+           DiMuonTTCand.addUserFloat("vProbKPRefit",vProbPionRefits[1]);
+           DiMuonTTCand.addUserFloat("vProbPPRefit",vProbPionRefits[2]);
 
            if (addMCTruth_) {
              reco::GenParticleRef genMu1 = pmu1->genParticleRef();

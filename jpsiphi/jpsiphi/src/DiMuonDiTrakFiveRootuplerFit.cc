@@ -555,6 +555,9 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
   iEvent.getByToken(dimuonditrk_cand_Label, dimuonditrk_cand_handle);
 
+  edm::Handle<std::vector<pat::CompositeCandidate>> fivetracks_cand_hanlde;
+  iEvent.getByToken(fivetracks_cand_Label, fivetracks_cand_hanlde);
+
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
 
@@ -767,11 +770,25 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
+std::map <int,pat::CompositeCandidate*> fourToFiveMap;
+
+if(!OnlyGen_)
+{
+  if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
+  if (!fivetracks_cand_hanlde.isValid()) std::cout<< "No fivetrack information " << run << "," << event <<std::endl;
+  if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid())
+  {
+    for (unsigned int i=0; i< fivetracks_cand_hanlde->size(); i++)
+      fourToFiveMap[fivetracks_cand_hanlde->at(i).userInt("index")] = &(fivetracks_cand_hanlde->at(i));
+  }
+}
+
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if(!OnlyGen_)
   {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-  if (dimuonditrk_cand_handle.isValid()) {
+  if (!fivetracks_cand_hanlde.isValid()) std::cout<< "No fivetrack information " << run << "," << event <<std::endl;
+  if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid()) {
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
 
