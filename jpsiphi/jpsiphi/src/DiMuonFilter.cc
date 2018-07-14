@@ -39,28 +39,28 @@ DiMuonFilter::DiMuonFilter(const edm::ParameterSet& iConfig):
 }
 
 UInt_t DiMuonFilter::isTriggerMatched(const pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
+  const pat::Muon* highMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
+  const pat::Muon* lowMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
 // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
      // std::cout << HLTFilters_[iTr] << std::endl;
-     const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-     const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muon2->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+     const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+     const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
      if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
      // if (!mu1HLTMatches.empty() || !mu2HLTMatches.empty()) std::cout << " MMM " << std::endl;
   }
 
-  // const pat::TriggerObjectStandAloneCollection muon1Collection = muon1->triggerObjectMatches();
-  // const pat::TriggerObjectStandAloneCollection muon2Collection = muon2->triggerObjectMatches();
+  // const pat::TriggerObjectStandAloneCollection highMuonCollection = highMuon->triggerObjectMatches();
+  // const pat::TriggerObjectStandAloneCollection lowMuonCollection = lowMuon->triggerObjectMatches();
   //
-  // for ( size_t i = 0; i < muon1Collection.size(); ++i )
-  //   for ( size_t j = 0; j < muon1->triggerObjectMatch(i)->filterLabels().size(); ++j )
-  //     std::cout << (muon1->triggerObjectMatch(i)->filterLabels())[j] << std::endl;
+  // for ( size_t i = 0; i < highMuonCollection.size(); ++i )
+  //   for ( size_t j = 0; j < highMuon->triggerObjectMatch(i)->filterLabels().size(); ++j )
+  //     std::cout << (highMuon->triggerObjectMatch(i)->filterLabels())[j] << std::endl;
 
   // std::cout << "Triggers matched : " << matched << std::endl;
-  // std::cout << "Sizes : " << muon1Collection.size() << " - " << muon2Collection.size() << std::endl;
+  // std::cout << "Sizes : " << highMuonCollection.size() << " - " << lowMuonCollection.size() << std::endl;
   return matched;
 }
 
@@ -76,8 +76,8 @@ void DiMuonFilter::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        ionia = &(onias_->at(ii));
 
        if (ionia && DiMuonSelection_(*ionia) &&
-           SingleMuonSelection_(*ionia->daughter("muon1")) &&
-           SingleMuonSelection_(*ionia->daughter("muon2")) &&
+           SingleMuonSelection_(*ionia->daughter("highMuon")) &&
+           SingleMuonSelection_(*ionia->daughter("lowMuon")) &&
            ( !do_trigger_match_ || isTriggerMatched(ionia))
           ) mumuOutput->push_back(*ionia);
     }
