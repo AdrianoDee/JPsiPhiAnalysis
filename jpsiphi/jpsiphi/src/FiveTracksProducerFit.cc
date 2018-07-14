@@ -333,6 +333,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          ++ncombo;
        }
+     }
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
   nevents++;
