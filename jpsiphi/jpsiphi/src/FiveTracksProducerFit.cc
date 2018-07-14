@@ -285,7 +285,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (!(fitF->currentState().isValid())) continue;
 
          pion_ma_fit = fitF->currentState().mass();
-         
+
          TVector3 vtx;
          TVector3 pvtx;
          VertexDistanceXY vdistXY;
