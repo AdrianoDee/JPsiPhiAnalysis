@@ -146,8 +146,6 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
   UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
-  Double_t highKaon_d0, highKaon_d0Err, highKaon_dz, highKaon_dxy;
-
   Double_t fivetraks_kaon_m, fivetraks_kaon_vProb, fivetraks_kaon_vChi2, fivetraks_kaon_nDof, fivetraks_kaon_charge;
   Double_t fivetraks_kaon_cosAlpha, fivetraks_kaon_ctauPV, fivetraks_kaon_ctauErrPV, fifthtrak_kaon_m, fifthtrak_kaon_eta;
   Double_t fifthtrak_kaon_pt, fifthtrak_kaon_phi;
