@@ -111,7 +111,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
   float kaonmass, pionmass, trackmass;
 
   int nevents;
-  uint ncombokaon,ncombopion;
+  uint ncombo;
 };
 
 #endif // __DiMuonDiTrakProducerFit_h_

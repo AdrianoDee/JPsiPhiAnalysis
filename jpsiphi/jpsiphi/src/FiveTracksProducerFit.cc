@@ -103,7 +103,6 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracksKaon");
-  produces<pat::CompositeCandidateCollection>("FiveTracksPion");
 
   nevents = 0;
 
@@ -114,7 +113,7 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   maxDPtRel = 2.0;
   trackmass = kaonmass;
 
-  ncombo = 0, ncombopion = 0;
+  ncombo = 0;
 
 }
 
@@ -257,9 +256,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
                                               (double)(fitFVertex->degreesOfFreedom()));
          kaon_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
 
-         float kinChi = 0.;
-         float kinNdf = 0.;
-         fiveTracks.clear()
+         kinChi = 0.;
+         kinNdf = 0.;
+         fiveTracks.clear();
          fiveTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // K+
          fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // K+
          fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K+
@@ -279,8 +278,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (pionVertexFitTree->isEmpty()) continue;
 
          pionVertexFitTree->movePointerToTheTop();
-         RefCountedKinematicParticle fitF = pionVertexFitTree->currentParticle();
-         RefCountedKinematicVertex fitFVertex = pionVertexFitTree->currentDecayVertex();
+         fitF = pionVertexFitTree->currentParticle();
+         fitFVertex = pionVertexFitTree->currentDecayVertex();
 
          double pion_ma_fit = 14000.;
          double pion_vp_fit = -9999.;
@@ -323,7 +322,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
-         fiveCandKaon.addUserFloat("nDof",kaon_ndokaon_fit);
+         fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
          fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
          fiveCandKaon.addUserFloat("ctauPV",ctauPV);
          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
@@ -375,8 +374,7 @@ void FiveTracksProducerFit::endJob(){
   std::cout << "FiveTracks Candidate producer report:" << std::endl;
   std::cout << "###########################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
-  std::cout << "No. dimuonditrak + pion candidates " << ncombopion << std::endl;
-  std::cout << "No. dimuonditrak + kaon candidates " << ncombo << std::endl;
+  std::cout << "No. dimuonditrak + trk candidates " << ncombo << std::endl;
   std::cout << "###########################" << std::endl;
 }
 
