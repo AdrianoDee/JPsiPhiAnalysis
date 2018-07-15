@@ -372,7 +372,8 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
                                           const pat::PackedCandidate& trak
                                          ){
 
-  pat::CompositeCandidate fiveCandKaon, *dimuon, dimuontrak;
+  pat::CompositeCandidate fiveCandKaon, dimuontrak;
+  const pat::CompositeCandidate *dimuon;
   fiveCandKaon.addDaughter(dimuonditrak,"dimuonditrak");
   fiveCandKaon.addDaughter(trak,"fifth");
   fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
