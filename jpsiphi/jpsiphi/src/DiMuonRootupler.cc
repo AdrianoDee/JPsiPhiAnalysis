@@ -1,4 +1,4 @@
-// -*- C++ -*-
+lowMuonhighMuon// -*- C++ -*-
 //
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
@@ -308,11 +308,11 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
-          reco::Candidate::LorentzVector vP = dimuonCand->daughter("muon1")->p4();
-          reco::Candidate::LorentzVector vM = dimuonCand->daughter("muon2")->p4();
-          if ( dimuonCand->daughter("muon1")->charge() < 0 ) {
-              vP = dimuonCand->daughter("muon2")->p4();
-              vM = dimuonCand->daughter("muon1")->p4();
+          reco::Candidate::LorentzVector vP = dimuonCand->daughter("highMuon")->p4();
+          reco::Candidate::LorentzVector vM = dimuonCand->daughter("lowMuon")->p4();
+          if ( dimuonCand->daughter("highMuon")->charge() < 0 ) {
+              vP = dimuonCand->daughter("lowMuon")->p4();
+              vM = dimuonCand->daughter("highMuon")->p4();
           }
           muonP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
           muonN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
