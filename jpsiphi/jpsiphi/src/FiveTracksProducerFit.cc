@@ -377,7 +377,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
   fiveCandKaon.addDaughter(dimuonditrak,"dimuonditrak");
   fiveCandKaon.addDaughter(trak,"fifth");
   fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
-  dimuon = dynamic_cast <pat::CompositeCandidate *>(dimuonditrak.daughter("dimuon"));
+  dimuon = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrak.daughter("dimuon"));
 
   double m_trak = trackmass;
   math::XYZVector mom_trak = trak.momentum();
