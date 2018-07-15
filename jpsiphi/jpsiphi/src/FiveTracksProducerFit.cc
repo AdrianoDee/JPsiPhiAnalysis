@@ -1,5 +1,6 @@
 #include "../interface/FiveTracksProducerFit.h"
 #include <tuple>
+
 float FiveTracksProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
@@ -356,7 +357,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        }
      }
      for (auto const& x : candCollection)
-      fiveCandKaonColl->push_back(candCollection.second);
+      fiveCandKaonColl->push_back(x.second);
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
   nevents++;
