@@ -877,8 +877,8 @@ if(!OnlyGen_)
       if((fourToFiveMap.find(i))!=fourToFiveMap.end())
       {
         fivetrak_cand = fourToFiveMap[(i)];
-        dimuontrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("withpion"));
+        dimuontrak_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrakpion"));
 
         fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
