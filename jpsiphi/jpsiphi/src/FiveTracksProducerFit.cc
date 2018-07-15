@@ -167,7 +167,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        if(dimuonditrakCand.userFloat("vProb")<0.0)
          continue;
 
-       const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("bestPV");
+       const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
        // const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("PVwithmuons");
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("highMuon"));
@@ -300,15 +300,17 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          double kaon_vy_fit = fitFVertex->position().y();
          // double kaon_vz_fit = fitFVertex->position().z();
 
-         std::cout << "1.Fifth Pion Fit" << std::endl;
+
 
          vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
          TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+         std::cout << "1.Fifth Pion Fit" << std::endl;
          pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
          TVector3 vdiff = vtx - pvtx;
          double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
          Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
+         std::cout << "1.1 Fifth Pion Fit" << std::endl;
          double ctauPV = distXY.value()*cosAlpha * kaon_ma_fit/pperp.Perp();
          GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
          GlobalError v2e = thePrimaryV.error();
@@ -336,7 +338,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fiveCandKaon.addDaughter(fiveCandPion,"withpion");
 
          fiveCandKaonColl->push_back(fiveCandKaon);
-         std::cout << "3.Fifth Pion Fit" << std::endl;
+         std::cout << "3  .Fifth Pion Fit" << std::endl;
          ++ncombo;
        }
      }
