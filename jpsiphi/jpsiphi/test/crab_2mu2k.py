@@ -75,7 +75,7 @@ if "2018" in run:
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
-gtag = GlobalTag[run]
+gtag = GlobalTags[run]
 #lumi = jsonfile[jNum]
 lumi = jsonFile
 #HLT = HLTPath[0]
