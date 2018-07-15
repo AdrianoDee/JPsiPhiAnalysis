@@ -234,7 +234,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          KinematicParticleVertexFitter kaonFitter;
          RefCountedKinematicTree kaonVertexFitTree;
-         std::cout << "Fifth Kaon Fit" << std::endl;
          kaonVertexFitTree = kaonFitter.fit(kaonParticles);
 
          if (kaonVertexFitTree->isEmpty()) continue;
@@ -273,7 +272,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          KinematicParticleVertexFitter pionFitter;
          RefCountedKinematicTree pionVertexFitTree;
-         std::cout << "Fifth Pion Fit" << std::endl;
          pionVertexFitTree = pionFitter.fit(pionParticles);
 
          if (pionVertexFitTree->isEmpty()) continue;
