@@ -841,8 +841,7 @@ if(!OnlyGen_)
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    pat::CompositeCandidate *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
-    const pat::CompositeCandidate *fivetrak_cand;
+    const pat::CompositeCandidate *fivetrak_cand, *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
     //UnRefitted Handle
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
@@ -877,9 +876,9 @@ if(!OnlyGen_)
       if((fourToFiveMap.find(i))!=fourToFiveMap.end())
       {
         fivetrak_cand = fourToFiveMap[(i)];
-        dimuontrak_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
-        dimuontrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrakpion"));
+        dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
+        dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrakpion"));
 
         fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
         fivetrakspion_p4.SetPtEtaPhiM(dimuontrak_cand->pt(), dimuontrak_cand->eta(), dimuontrak_cand->phi(), dimuontrak_cand->mass());
