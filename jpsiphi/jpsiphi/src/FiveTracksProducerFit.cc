@@ -328,7 +328,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          fiveCandKaon.addUserInt("index",d);
 
-         fiveCandKaon.addDaughter(dimuot_pion,"dimuotrakpion")
+         fiveCandKaon.addDaughter(dimuot_pion,"dimuotrakpion");
+         fiveCandKaon.addDaughter(fiveCandPion,"withpion")
 
          fiveCandKaonColl->push_back(fiveCandKaon);
 
