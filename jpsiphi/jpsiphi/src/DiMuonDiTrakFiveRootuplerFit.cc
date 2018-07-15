@@ -118,6 +118,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2;
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
+  Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
@@ -152,9 +153,10 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
   UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
-  Double_t fivetraks_kaon_m, fivetraks_kaon_vProb, fivetraks_kaon_vChi2, fivetraks_kaon_nDof, fivetraks_kaon_charge;
-  Double_t fivetraks_kaon_cosAlpha, fivetraks_kaon_ctauPV, fivetraks_kaon_ctauErrPV, fifthtrak_kaon_m, fifthtrak_kaon_eta;
-  Double_t fifthtrak_kaon_pt, fifthtrak_kaon_phi;
+  Double_t fivetraks_kaon_m_rf, fivetraks_pion_m_rf, fivetraks_kaon_m, fivetraks_pion_m;
+  Double_t fivetraks_vProb, fivetraks_vChi2, fivetraks_nDof, fivetraks_charge;
+  Double_t fivetraks_cosAlpha, fivetraks_ctauPV, fivetraks_ctauErrPV;
+  Double_t fifthtrak_pt, fifthtrak_phi, fifthtrak_eta;
 
   Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
 
