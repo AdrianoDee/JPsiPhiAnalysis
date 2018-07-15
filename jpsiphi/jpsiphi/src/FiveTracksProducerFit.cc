@@ -201,11 +201,13 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-         if(doneFlag.find(std::tuple<int,int,int>(i,tpId,tmId))!=doneFlag.end())
+         std::vector<int> ids;
+         ids.push_back(i);ids.push_back(tpId);ids.push_back(tmId);
+         std::sort(ids.begin(),ids.end());
+         if(doneFlag.find(std::tuple<int,int,int>(ids[0],ids[1],ids[2]))!=doneFlag.end())
           continue;
          else
-          doneFlag[std::tuple<int,int,int>(i,tpId,tmId)] = 1.0;
-
+            doneFlag[std::tuple<int,int,int>(ids[0],ids[1],ids[2])] = 1.0;
          trackmass = kaonmass;
          pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
          trackmass = pionmass;
