@@ -819,7 +819,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
-std::map <int,const pat::CompositeCandidate*> fourToFiveMap;
+std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMap;
 
 if(!OnlyGen_)
 {
@@ -828,7 +828,7 @@ if(!OnlyGen_)
   if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid())
   {
     for (unsigned int i=0; i< fivetracks_cand_hanlde->size(); i++)
-      fourToFiveMap[int(fivetracks_cand_hanlde->at(i).userInt("index"))] = &(fivetracks_cand_hanlde->at(i));
+      fourToFiveMap[(fivetracks_cand_hanlde->at(i).userInt("index"))] = &(fivetracks_cand_hanlde->at(i));
   }
 }
 
@@ -874,9 +874,9 @@ if(!OnlyGen_)
       fifthtrak_phi = -1.0;
       fifthtrak_y = -1.0;
 
-      if(std::find(fourToFiveMap.begin(),fourToFiveMap.end(),int(i))!=fourToFiveMap.end())
+      if((fourToFiveMap.find(i))!=fourToFiveMap.end())
       {
-        fivetrak_cand = fourToFiveMap[int(i)];
+        fivetrak_cand = fourToFiveMap[(i)];
         dimuontrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrakpion"));
