@@ -372,7 +372,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
                                           const pat::PackedCandidate& trak
                                          ){
 
-  pat::CompositeCandidate fiveCandKaon, dimuon, dimuontrak;
+  pat::CompositeCandidate fiveCandKaon, dimuon, *dimuontrak;
   fiveCandKaon.addDaughter(dimuonditrak,"dimuonditrak");
   fiveCandKaon.addDaughter(trak,"fifth");
   fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
@@ -384,10 +384,10 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
   math::XYZTLorentzVector p4_trak = math::XYZTLorentzVector(mom_trak.X(),mom_trak.Y(),mom_trak.Z(),e_trak);
 
   reco::Candidate::LorentzVector v = p4_trak + dimuonditrak.p4();
-  reco::Candidate::LorentzVector j = p4_trak + dimuontrak.p4();
+  reco::Candidate::LorentzVector j = p4_trak + dimuon->p4();
 
   fiveCandKaon.setP4(v);
-  dimuontrak.setP4(j);
+  dimuontrak->setP4(j);
   fiveCandKaon.addDaughter(trak,"dimuontrak");
 
   return fiveCandKaon;
