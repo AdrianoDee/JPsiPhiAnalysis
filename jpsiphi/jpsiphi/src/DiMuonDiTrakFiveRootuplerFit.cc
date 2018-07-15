@@ -612,9 +612,9 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
   reco::Vertex theBeamSpotV;
 
-  edm::Handle<reco::BeamSpot> theBeamSpot;
-  iEvent.getByToken(thebeamspot_,theBeamSpot);
-  reco::BeamSpot bs = *theBeamSpot;
+  // edm::Handle<reco::BeamSpot> theBeamSpot;
+  // iEvent.getByToken(thebeamspot_,theBeamSpot);
+  // reco::BeamSpot bs = *theBeamSpot;
 
 
   trigger = 0;
@@ -819,7 +819,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
-std::map <int,const pat::CompositeCandidate*> fourToFiveMap;
+std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMap;
 
 if(!OnlyGen_)
 {
@@ -1055,7 +1055,7 @@ if(!OnlyGen_)
       reco::Candidate::LorentzVector kP = ditrak_cand->daughter("highTrak")->p4();
       reco::Candidate::LorentzVector kM = ditrak_cand->daughter("lowTrak")->p4();
 
-      pat::CompositeCandidate *highKaon = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("highTrak"));
+      pat::CompositeCandidate *highKaon  = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("highTrak"));
       pat::CompositeCandidate *lowKaon  = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("lowTrak"));
 
       highKaon_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
