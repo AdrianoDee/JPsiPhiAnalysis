@@ -883,7 +883,7 @@ if(!OnlyGen_)
         dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
-
+        std::cout << "Got Childrens" << std::endl;
         fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
         fivetrakspion_p4.SetPtEtaPhiM(dimuontrak_cand->pt(), dimuontrak_cand->eta(), dimuontrak_cand->phi(), dimuontrak_cand->mass());
         dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
