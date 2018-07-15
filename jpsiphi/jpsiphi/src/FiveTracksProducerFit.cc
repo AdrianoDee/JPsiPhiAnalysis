@@ -199,7 +199,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
 
-         if(doneFlag.find(std::tuple(i,tpId,tmId)!=doneFlag.end()))
+         if(doneFlag.find(std::tuple(i,tpId,tmId))!=doneFlag.end())
           continue;
          else
           doneFlag[std::tuple(i,tpId,tmId)] = 1.0;
