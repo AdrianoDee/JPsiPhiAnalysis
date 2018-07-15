@@ -941,7 +941,7 @@ if(!OnlyGen_)
       dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
       ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
 
-      dimuon_vProb        = dimuon_cand->userFloat("vHighMuonrob");
+      dimuon_vProb        = dimuon_cand->userFloat("vProb");
       dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
       dimuon_DCA          = dimuon_cand->userFloat("DCA");
       dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
@@ -989,7 +989,7 @@ if(!OnlyGen_)
 
         dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
 
-        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vHighMuonrob_ref");
+        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vProb_ref");
         dimuonditrk_rf_vChi2 = dimuonditrk_cand.userFloat("vChi2_ref");
         dimuonditrk_rf_nDof = dimuonditrk_cand.userFloat("nDof_ref");
         dimuonditrk_rf_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_ref");
@@ -1006,7 +1006,7 @@ if(!OnlyGen_)
 
         dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
 
-        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vHighMuonrob_const_ref");
+        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vProb_const_ref");
         dimuonditrk_rf_vChi2 = dimuonditrk_cand.userFloat("vChi2_const_ref");
         dimuonditrk_rf_nDof = dimuonditrk_cand.userFloat("nDof_const_ref");
         dimuonditrk_rf_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_const_ref");
@@ -1029,7 +1029,7 @@ if(!OnlyGen_)
       else
       isBestCandidate = false;
 
-        // dimuontt candidates are sorted by vHighMuonrob
+        // dimuontt candidates are sorted by vProb
     }
 
   }
