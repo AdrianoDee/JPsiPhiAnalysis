@@ -888,10 +888,10 @@ if(!OnlyGen_)
         fivetrakspion_p4.SetPtEtaPhiM(dimuontrak_cand->pt(), dimuontrak_cand->eta(), dimuontrak_cand->phi(), dimuontrak_cand->mass());
         dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
-
+        std::cout << "Used Childrens" << std::endl;
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
-
+        std::cout << "Got p4" << std::endl;
         fivetraks_kaon_m    = fivetrak_cand->mass();
         fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
         fivetraks_kaon_trim    = fivetrak_cand->userFloat("trim");
