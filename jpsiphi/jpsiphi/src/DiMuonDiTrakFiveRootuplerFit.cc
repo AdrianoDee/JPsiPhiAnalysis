@@ -107,7 +107,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
 
   TLorentzVector fivetraks_p4;
   TLorentzVector fivetrakspion_p4;
-  TLorentzVector fifthkaon_p4;
+  TLorentzVector fifthkaon_p4,fifthpion_p4;
   TLorentzVector dimuontrak_p4;
   TLorentzVector dimuontrakpion_p4;
 
@@ -275,6 +275,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("fivetraks_p4",   "TLorentzVector", &fivetraks_p4);
           dimuonditrk_tree->Branch("fivetrakspion_p4",   "TLorentzVector", &fivetrakspion_p4);
           dimuonditrk_tree->Branch("fifthkaon_p4",   "TLorentzVector", &fifthkaon_p4);
+          dimuonditrk_tree->Branch("fifthpion_p4",   "TLorentzVector", &fifthpion_p4);
           dimuonditrk_tree->Branch("dimuontrak_p4",   "TLorentzVector", &dimuontrak_p4);
           dimuonditrk_tree->Branch("dimuontrakpion_p4",   "TLorentzVector", &dimuontrakpion_p4);
 
@@ -680,6 +681,7 @@ gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 fivetraks_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 fivetrakspion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 fifthkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+fifthpion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 dimuontrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 dimuontrakpion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
@@ -851,71 +853,6 @@ if(!OnlyGen_)
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
 
       const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
-
-      fivetraks_kaon_m    = -1.0;
-      fivetraks_pion_m    = -1.0;
-      fivetraks_kaon_trim    = -1.0;
-      fivetraks_pion_trim    = -1.0;
-      fivetraks_kaon_m_rf    = -1.0;
-      fivetraks_pion_m_rf    = -1.0;
-      fivetraks_vProb    = -1.0;
-      fivetraks_vChi2    = -1.0;
-      fivetraks_nDof    = -1.0;
-      fivetraks_charge    = -1.0;
-      fivetraks_cosAlpha    = -1.0;
-      fivetraks_ctauPV    = -1.0;
-      fivetraks_ctauErrPV    = -1.0;
-      fivetraks_eta    = -1.0;
-      fivetraks_pt    = -1.0;
-      fivetraks_phi    = -1.0;
-      fivetraks_y    = -1.0;
-      fifthtrak_charge = -1.0;
-      fifthtrak_eta = -1.0;
-      fifthtrak_pt = -1.0;
-      fifthtrak_phi = -1.0;
-      fifthtrak_y = -1.0;
-
-      if((fourToFiveMap.find(i))!=fourToFiveMap.end())
-      {
-        std::cout << "Five" << std::endl;
-        fivetrak_cand = fourToFiveMap[(i)];
-        std::cout << "Got Five" << std::endl;
-        // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
-        // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
-        std::cout << "Got Childrens" << std::endl;
-        fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
-        fivetrakspion_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
-        // dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
-        // dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
-        std::cout << "Used Childrens" << std::endl;
-        reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
-        fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
-        std::cout << "Got p4" << std::endl;
-        fivetraks_kaon_m    = fivetrak_cand->mass();
-        fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
-        fivetraks_kaon_trim    = fivetrak_cand->userFloat("trim");
-        fivetraks_pion_trim    = fivetrak_cand->userFloat("trim_pion");
-        fivetraks_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
-        fivetraks_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
-        fivetraks_vProb    = fivetrak_cand->userFloat("vProb");
-        fivetraks_vChi2    = fivetrak_cand->userFloat("vChi2");
-        fivetraks_nDof    = fivetrak_cand->userFloat("nDof");
-        fivetraks_charge    = fivetrak_cand->mass();
-        fivetraks_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
-        fivetraks_ctauPV    = fivetrak_cand->userFloat("ctauPV");
-        fivetraks_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
-        fivetraks_eta    = fivetrak_cand->eta();
-        fivetraks_pt    = fivetrak_cand->pt();
-        fivetraks_phi    = fivetrak_cand->phi();
-        fivetraks_y    = fivetrak_cand->y();
-
-        fifthtrak_charge = fivetrak_cand->daughter("fifth")->charge();
-        fifthtrak_eta = fifth.Eta();
-        fifthtrak_pt = fifth.Pt();
-        fifthtrak_phi = fifth.Phi();
-        fifthtrak_y = fifth.Rapidity();
-      }
 
       std::cout << "Vertex dimdit" << std::endl;
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
@@ -1192,6 +1129,76 @@ std::cout << "kaon" << std::endl;
       dimuon_pt        = dimuon_cand->pt();
       ditrak_m         = ditrak_cand->mass();
       ditrak_pt        = ditrak_cand->pt();
+
+
+      fivetraks_kaon_m    = -1.0;
+      fivetraks_pion_m    = -1.0;
+      fivetraks_kaon_trim    = -1.0;
+      fivetraks_pion_trim    = -1.0;
+      fivetraks_kaon_m_rf    = -1.0;
+      fivetraks_pion_m_rf    = -1.0;
+      fivetraks_vProb    = -1.0;
+      fivetraks_vChi2    = -1.0;
+      fivetraks_nDof    = -1.0;
+      fivetraks_charge    = -1.0;
+      fivetraks_cosAlpha    = -1.0;
+      fivetraks_ctauPV    = -1.0;
+      fivetraks_ctauErrPV    = -1.0;
+      fivetraks_eta    = -1.0;
+      fivetraks_pt    = -1.0;
+      fivetraks_phi    = -1.0;
+      fivetraks_y    = -1.0;
+      fifthtrak_charge = -1.0;
+      fifthtrak_eta = -1.0;
+      fifthtrak_pt = -1.0;
+      fifthtrak_phi = -1.0;
+      fifthtrak_y = -1.0;
+
+      if((fourToFiveMap.find(i))!=fourToFiveMap.end())
+      {
+        std::cout << "Five" << std::endl;
+        fivetrak_cand = fourToFiveMap[(i)];
+        std::cout << "Got Five" << std::endl;
+        // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
+        // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
+        std::cout << "Got Childrens" << std::endl;
+        fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
+        fivetrakspion_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
+        std::cout << "Used Childrens" << std::endl;
+        reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
+        reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
+        fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
+        fifthpion_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        dimuontrak_p4.SetPtEtaPhiM(fifthkaon_p4.Pt() + dimuon_cand->pt(),fifthkaon_p4.Eta() + dimuon_cand->eta(),fifthkaon_p4.Phi() + dimuon_cand->phi(),fifthkaon_p4.M() + dimuon_cand->mass());
+        dimuontrakpion_p4.SetPtEtaPhiM(fifthpion_p4.Pt() + dimuon_cand->pt(),fifthpion_p4.Eta() + dimuon_cand->eta(),fifthpion_p4.Phi() + dimuon_cand->phi(),fifthpion_p4.M() + dimuon_cand->mass());
+        std::cout << "Got p4" << std::endl;
+        fivetraks_kaon_m    = fivetrak_cand->mass();
+        fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
+        fivetraks_kaon_trim    = dimuontrak_p4.M();
+        fivetraks_pion_trim    = dimuontrakpion_p4.M();
+        fivetraks_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
+        fivetraks_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
+        fivetraks_vProb    = fivetrak_cand->userFloat("vProb");
+        fivetraks_vChi2    = fivetrak_cand->userFloat("vChi2");
+        fivetraks_nDof    = fivetrak_cand->userFloat("nDof");
+        fivetraks_charge    = fivetrak_cand->mass();
+        fivetraks_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
+        fivetraks_ctauPV    = fivetrak_cand->userFloat("ctauPV");
+        fivetraks_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
+        fivetraks_eta    = fivetrak_cand->eta();
+        fivetraks_pt    = fivetrak_cand->pt();
+        fivetraks_phi    = fivetrak_cand->phi();
+        fivetraks_y    = fivetrak_cand->y();
+
+        fifthtrak_charge = fivetrak_cand->daughter("fifth")->charge();
+        fifthtrak_eta = fifth.Eta();
+        fifthtrak_pt = fifth.Pt();
+        fifthtrak_phi = fifth.Phi();
+        fifthtrak_y = fifth.Rapidity();
+      }
 
       dimuonditrk_tree->Fill();
 
