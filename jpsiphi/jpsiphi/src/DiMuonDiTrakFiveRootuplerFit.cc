@@ -865,13 +865,10 @@ if(!OnlyGen_)
 
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
 
-      std::cout << "Start" << std::endl;
-
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
 
       const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
 
-      std::cout << "Vertex dimdit" << std::endl;
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
       dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
@@ -922,7 +919,6 @@ if(!OnlyGen_)
       dimuonditrk_tPDZW = dimuonditrk_cand.userFloat("tPDZW");
       dimuonditrk_tMDZW = dimuonditrk_cand.userFloat("tMDZW");
 
-      std::cout << "DCA" << std::endl;
       dimuonditrk_dca_m1m2 = dimuonditrk_cand.userFloat("dca_m1m2");
       dimuonditrk_dca_m1t1 = dimuonditrk_cand.userFloat("dca_m1t1");
       dimuonditrk_dca_m1t2 = dimuonditrk_cand.userFloat("dca_m1t2");
@@ -964,7 +960,6 @@ if(!OnlyGen_)
         highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowMuon"));
       }
 
-      std::cout << "Muons" << std::endl;
       lowMuon_isTight    = lowMuon->isTightMuon(thePrimaryV);
       lowMuon_isLoose    = lowMuon->isLooseMuon();
       lowMuon_isSoft     = lowMuon->isSoftMuon(thePrimaryV);
@@ -1025,7 +1020,7 @@ if(!OnlyGen_)
       lowKaon_pt      = -std::max(-kP.pt(),-kM.pt());
       highMuon_pt     = std::max(vLowMuon.pt(),vHighMuon.pt());
       lowMuon_pt      = -std::max(-vLowMuon.pt(),-vHighMuon.pt());
-std::cout << "kaon" << std::endl;
+
       lowKaon_NPixelHits = lowKaon->bestTrack()->hitPattern().numberOfValidPixelHits();
       lowKaon_NStripHits = lowKaon->bestTrack()->hitPattern().numberOfValidStripHits();
       lowKaon_NTrackhits = lowKaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
@@ -1189,25 +1184,25 @@ std::cout << "kaon" << std::endl;
 
       if((fourToFiveMap.find(i))!=fourToFiveMap.end())
       {
-        std::cout << "Five" << std::endl;
+
         fivetrak_cand = fourToFiveMap[(i)];
-        std::cout << "Got Five" << std::endl;
+
         // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
         // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
-        std::cout << "Got Childrens" << std::endl;
+
         fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
         fivetrakspion_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
-        std::cout << "Used Childrens" << std::endl;
+
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
         fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
         fifthpion_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
         dimuontrak_p4.SetPtEtaPhiM(fifthkaon_p4.Pt() + dimuon_cand->pt(),fifthkaon_p4.Eta() + dimuon_cand->eta(),fifthkaon_p4.Phi() + dimuon_cand->phi(),fifthkaon_p4.M() + dimuon_cand->mass());
         dimuontrakpion_p4.SetPtEtaPhiM(fifthpion_p4.Pt() + dimuon_cand->pt(),fifthpion_p4.Eta() + dimuon_cand->eta(),fifthpion_p4.Phi() + dimuon_cand->phi(),fifthpion_p4.M() + dimuon_cand->mass());
-        std::cout << "Got p4" << std::endl;
+
         fivetraks_kaon_m    = fivetrak_cand->mass();
         fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
         fivetraks_kaon_trim    = dimuontrak_p4.M();
