@@ -305,6 +305,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
          TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+         std::cout << "1.Fifth Pion Fit" << std::endl;
          pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
          TVector3 vdiff = vtx - pvtx;
          double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
