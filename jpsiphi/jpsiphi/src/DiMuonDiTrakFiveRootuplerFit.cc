@@ -876,7 +876,7 @@ if(!OnlyGen_)
 
       if(std::find(fourToFiveMap.begin(),fourToFiveMap.end(),int(i))!=fourToFiveMap.end())
       {
-        fivetrak_cand = fourToFiveMap[i];
+        fivetrak_cand = fourToFiveMap[int(i)];
         dimuontrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrakpion"));
