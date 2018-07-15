@@ -121,7 +121,6 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
   Double_t fivetraks_pion_trim,fivetraks_kaon_trim,fivetraks_eta;
   Double_t fivetraks_pt,fivetraks_phi,fivetraks_y,fifthtrak_charge;
-  Double_t fifthtrak_eta,fifthtrak_pt,fifthtrak_phi,fifthtrak_y;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
@@ -159,7 +158,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t fivetraks_kaon_m_rf, fivetraks_pion_m_rf, fivetraks_kaon_m, fivetraks_pion_m;
   Double_t fivetraks_vProb, fivetraks_vChi2, fivetraks_nDof, fivetraks_charge;
   Double_t fivetraks_cosAlpha, fivetraks_ctauPV, fivetraks_ctauErrPV;
-  Double_t fifthtrak_pt, fifthtrak_phi, fifthtrak_eta;
+  Double_t fifthtrak_pt, fifthtrak_phi, fifthtrak_eta,fifthtrak_y;
 
   Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
 
