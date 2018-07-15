@@ -1055,8 +1055,8 @@ if(!OnlyGen_)
       reco::Candidate::LorentzVector kP = ditrak_cand->daughter("highTrak")->p4();
       reco::Candidate::LorentzVector kM = ditrak_cand->daughter("lowTrak")->p4();
 
-      pat::CompositeCandidate *highTrack = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("highTrak"));
-      pat::CompositeCandidate *lowTrack  = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("lowTrak"));
+      pat::CompositeCandidate *highKaon = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("highTrak"));
+      pat::CompositeCandidate *lowKaon  = dynamic_cast <pat::CompositeCandidate *>(ditrak_cand->daughter("lowTrak"));
 
       highKaon_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
       lowKaon_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
