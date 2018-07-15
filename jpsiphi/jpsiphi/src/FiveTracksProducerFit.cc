@@ -1,5 +1,5 @@
 #include "../interface/FiveTracksProducerFit.h"
-
+#include <tuple>
 float FiveTracksProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
@@ -160,7 +160,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
   KinematicParticleFactoryFromTransientTrack pFactory;
 
-  std::map<std::tuple,int> doneFlag;
+  std::map< std::tuple ,int> doneFlag;
   std::map<size_t,float> bestVertex;
   std::map<size_t,pat::CompositeCandidate> candCollection;
 
