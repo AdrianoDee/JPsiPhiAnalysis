@@ -162,7 +162,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
   KinematicParticleFactoryFromTransientTrack pFactory;
 
-  std::map< std::tuple ,int> doneFlag;
+  std::map< std::tuple <int,int,int> ,int> doneFlag;
   std::map<size_t,float> bestVertex;
   std::map<size_t,pat::CompositeCandidate> candCollection;
 
