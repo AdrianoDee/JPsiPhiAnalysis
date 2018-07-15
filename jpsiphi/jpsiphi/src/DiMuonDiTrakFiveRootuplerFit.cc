@@ -163,6 +163,10 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
 
   Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
 
+  Double_t dimuonditrk_refPK_mass, dimuonditrk_refKP_mass, dimuonditrk_refPP_mass, dimuonditrk_refPK_vChi2;
+  Double_t dimuonditrk_refKP_vChi2, dimuonditrk_refPP_vChi2, dimuonditrk_refPK_nDof, dimuonditrk_refKP_nDof;
+  Double_t dimuonditrk_refPP_nDof, dimuonditrk_refPK_vProb, dimuonditrk_refKP_vProb, dimuonditrk_refPP_vProb;
+
   Double_t highKaon_eta, lowKaon_eta, highMuon_eta, lowMuon_eta, highKaon_phi, lowKaon_phi, highMuon_phi, lowMuon_phi;
   Double_t highKaon_dz, lowKaon_dz, highMuon_dz, lowMuon_dz, highKaon_dxy, lowKaon_dxy, highMuon_dxy, lowMuon_dxy;
   // Double_t highKaon_etaError, lowKaon_etaError, highMuon_etaError, lowMuon_etaError, highKaon_phiError, lowKaon_phiError, highMuon_phiError, lowMuon_phiError;
@@ -1130,6 +1134,22 @@ std::cout << "kaon" << std::endl;
       dimuon_pt        = dimuon_cand->pt();
       ditrak_m         = ditrak_cand->mass();
       ditrak_pt        = ditrak_cand->pt();
+
+      dimuonditrk_refPK_mass  = dimuonditrk_cand.userFloat("massPKRefit");
+      dimuonditrk_refKP_mass  = dimuonditrk_cand.userFloat("massKPRefit");
+      dimuonditrk_refPP_mass  = dimuonditrk_cand.userFloat("massPPRefit");
+
+      dimuonditrk_refPK_vChi2 = dimuonditrk_cand.userFloat("vChi2PKRefit");
+      dimuonditrk_refKP_vChi2 = dimuonditrk_cand.userFloat("vChi2KPRefit");
+      dimuonditrk_refPP_vChi2 = dimuonditrk_cand.userFloat("vChi2PPRefit");
+
+      dimuonditrk_refPK_nDof  = dimuonditrk_cand.userFloat("nDofPKRefit");
+      dimuonditrk_refKP_nDof  = dimuonditrk_cand.userFloat("nDofKPRefit");
+      dimuonditrk_refPP_nDof  = dimuonditrk_cand.userFloat("nDofPPRefit");
+
+      dimuonditrk_refPK_vProb = dimuonditrk_cand.userFloat("vProbPKRefit");
+      dimuonditrk_refKP_vProb = dimuonditrk_cand.userFloat("vProbKPRefit");
+      dimuonditrk_refPP_vProb = dimuonditrk_cand.userFloat("vProbPPRefit");
 
 
       fivetraks_kaon_m    = -1.0;
