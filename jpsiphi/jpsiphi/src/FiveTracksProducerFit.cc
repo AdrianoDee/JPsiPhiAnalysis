@@ -310,14 +310,15 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          TVector3 vdiff = vtx - pvtx;
          double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
          Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
-         std::cout << "1.1 Fifth Pion Fit" << std::endl;
+
          double ctauPV = distXY.value()*cosAlpha * kaon_ma_fit/pperp.Perp();
          GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
          GlobalError v2e = thePrimaryV.error();
          AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
          double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kaon_ma_fit/(pperp.Perp2());
-
+         std::cout << "1.1 Fifth Pion Fit" << std::endl;
          double dimuot = dynamic_cast <pat::CompositeCandidate *>(fiveCandKaon.daughter("dimuontrak"))->mass();
+         std::cout << "1.11 Fifth Pion Fit" << std::endl;
          pat::CompositeCandidate *dimuot_pion = dynamic_cast <pat::CompositeCandidate *>(fiveCandPion.daughter("dimuontrak"));
          std::cout << "2.Fifth Pion Fit" << std::endl;
          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
