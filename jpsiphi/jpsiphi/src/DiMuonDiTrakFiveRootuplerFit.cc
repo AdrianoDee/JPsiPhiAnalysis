@@ -105,11 +105,11 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
-  TLorentzVector fivetraks_p4:
-  TLorentzVector fivetrakspion_p4:
-  TLorentzVector fifthkaon_p4:
-  TLorentzVector dimuontrak_p4:
-  TLorentzVector dimuontrakpion_p4:
+  TLorentzVector fivetraks_p4;
+  TLorentzVector fivetrakspion_p4;
+  TLorentzVector fifthkaon_p4;
+  TLorentzVector dimuontrak_p4;
+  TLorentzVector dimuontrakpion_p4;
 
   Int_t dimuonditrk_charge;
 
