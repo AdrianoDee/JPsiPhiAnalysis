@@ -1,5 +1,6 @@
 #include "../interface/FiveTracksProducerFit.h"
 #include <tuple>
+#include <map>
 
 float FiveTracksProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
