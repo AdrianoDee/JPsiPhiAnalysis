@@ -160,11 +160,15 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
   KinematicParticleFactoryFromTransientTrack pFactory;
 
+  std::map<std::tuple,int> doneFlag;
+  std::map<size_t,float> bestVertex;
+  std::map<size_t,pat::CompositeCandidate> candCollection;
+
   for (size_t d = 0; d < dimuonditrak->size(); d++) {
 
        auto dimuonditrakCand = dimuonditrak->at(d);
 
-       if(dimuonditrakCand.userFloat("vProb")<0.0)
+       if(dimuonditrakCand.userFloat("vProb")<0.01)
          continue;
 
        const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
@@ -184,6 +188,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        for (size_t i = 0; i < trak->size(); i++) {
          auto fifthTrack = trak->at(i);
 
+
          if(fifthTrack.pt()<0.7) continue;
          if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
@@ -193,6 +198,11 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          if (IsTheSame(fifthTrack,*tp) || int(i) == tpId) continue;
          if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
          if ( IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
+
+         if(doneFlag.find(std::tuple(i,tpId,tmId)!=doneFlag.end()))
+          continue;
+         else
+          doneFlag[std::tuple(i,tpId,tmId)] = 1.0;
 
          trackmass = kaonmass;
          pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
@@ -327,13 +337,26 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          fiveCandKaon.addUserInt("index",d);
 
-         // fiveCandKaon.addDaughter(*dimuot_pion,"dimuotrakpion");
          fiveCandKaon.addDaughter(fiveCandPion,"withpion");
+         if(bestVertex.find(d)!=bestVertex.end())
+         {
+           if(kaon_vp_fit>bestVertex[d])
+           {
+             bestVertex[d] = kaon_vp_fit;
+             candCollection[d] = fiveCandKaon;
+           }
+         }else
+         {
+           bestVertex[d] = kaon_vp_fit;
+           candCollection[d] = fiveCandKaon;
+         }
+         // fiveCandKaon.addDaughter(*dimuot_pion,"dimuotrakpion");
 
-         fiveCandKaonColl->push_back(fiveCandKaon);
          ++ncombo;
        }
      }
+     for (auto const& x : candCollection)
+      fiveCandKaonColl->push_back(candCollection.second);
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
   nevents++;
