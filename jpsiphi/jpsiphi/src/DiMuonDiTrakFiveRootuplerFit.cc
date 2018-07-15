@@ -616,7 +616,6 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
 
-  const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("bestPV");
 
   trigger = 0;
 
@@ -850,6 +849,8 @@ if(!OnlyGen_)
 
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
 
+      const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
+
       fivetraks_kaon_m    = -1.0;
       fivetraks_pion_m    = -1.0;
       fivetraks_kaon_trim    = -1.0;
@@ -880,31 +881,31 @@ if(!OnlyGen_)
         fivetrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuontrakpion"));
 
-        fivetraks_p4.SetPtEtaPhiM(fivetrak_cand.pt(), fivetrak_cand.eta(), fivetrak_cand.phi(), fivetrak_cand.mass());
-        fivetrakspion_p4.SetPtEtaPhiM(dimuontrak_cand.pt(), dimuontrak_cand.eta(), dimuontrak_cand.phi(), dimuontrak_cand.mass());
-        dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand.pt(), fivetrakpion_cand.eta(), fivetrakpion_cand.phi(), fivetrakpion_cand.mass());
-        dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand.pt(), dimuontrakpion_cand.eta(), dimuontrakpion_cand.phi(), dimuontrakpion_cand.mass());
+        fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
+        fivetrakspion_p4.SetPtEtaPhiM(dimuontrak_cand->pt(), dimuontrak_cand->eta(), dimuontrak_cand->phi(), dimuontrak_cand->mass());
+        dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
 
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
 
-        fivetraks_kaon_m    = fivetrak_cand.mass();
-        fivetraks_pion_m    = fivetrak_cand.userFloat("mass_pion");
-        fivetraks_kaon_trim    = fivetrak_cand.userFloat("trim");
-        fivetraks_pion_trim    = fivetrak_cand.userFloat("trim_pion");
-        fivetraks_kaon_m_rf    = fivetrak_cand.userFloat("mass_kaon_rf");
-        fivetraks_pion_m_rf    = fivetrak_cand.userFloat("mass_pion_rf");
-        fivetraks_vProb    = fivetrak_cand.userFloat("vProb");
-        fivetraks_vChi2    = fivetrak_cand.userFloat("vChi2");
-        fivetraks_nDof    = fivetrak_cand.userFloat("nDof");
-        fivetraks_charge    = fivetrak_cand.mass();
-        fivetraks_cosAlpha    = fivetrak_cand.userFloat("cosAlpha");
-        fivetraks_ctauPV    = fivetrak_cand.userFloat("ctauPV");
-        fivetraks_ctauErrPV    = fivetrak_cand.userFloat("ctauErrPV");
-        fivetraks_eta    = fivetrak_cand.eta();
-        fivetraks_pt    = fivetrak_cand.pt();
-        fivetraks_phi    = fivetrak_cand.phi();
-        fivetraks_y    = fivetrak_cand.y();
+        fivetraks_kaon_m    = fivetrak_cand->mass();
+        fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
+        fivetraks_kaon_trim    = fivetrak_cand->userFloat("trim");
+        fivetraks_pion_trim    = fivetrak_cand->userFloat("trim_pion");
+        fivetraks_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
+        fivetraks_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
+        fivetraks_vProb    = fivetrak_cand->userFloat("vProb");
+        fivetraks_vChi2    = fivetrak_cand->userFloat("vChi2");
+        fivetraks_nDof    = fivetrak_cand->userFloat("nDof");
+        fivetraks_charge    = fivetrak_cand->mass();
+        fivetraks_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
+        fivetraks_ctauPV    = fivetrak_cand->userFloat("ctauPV");
+        fivetraks_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
+        fivetraks_eta    = fivetrak_cand->eta();
+        fivetraks_pt    = fivetrak_cand->pt();
+        fivetraks_phi    = fivetrak_cand->phi();
+        fivetraks_y    = fivetrak_cand->y();
 
         fifthtrak_charge = fivetrak_cand->daughter("fifth")->charge();
         fifthtrak_eta = fifth.Eta();
