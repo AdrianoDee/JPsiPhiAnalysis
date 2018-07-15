@@ -357,7 +357,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        }
      }
      for (auto const& x : candCollection)
-      fiveCandKaonColl->push_back(x.second);
+      fiveCandKaonColl->push_back(x .second);
 
   iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
   nevents++;
