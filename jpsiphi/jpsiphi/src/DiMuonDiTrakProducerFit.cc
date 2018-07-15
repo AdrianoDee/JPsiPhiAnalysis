@@ -357,7 +357,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
          // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
          int jstart = 0;
          if(addSameSig_) jstart = i+1;
-         for (size_t j = 0; j < trak->size(); j++) {
+         for (size_t j = jstart; j < trak->size(); j++) {
            auto negTrack = trak->at(j);
 
            if(!addSameSig_ && negTrack.charge()>=0) continue;
