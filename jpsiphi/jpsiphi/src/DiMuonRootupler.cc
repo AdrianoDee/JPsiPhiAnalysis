@@ -1,4 +1,4 @@
-lowMuonhighMuon// -*- C++ -*-
+// -*- C++ -*-
 //
 // Package:    DiMuonRootupler
 // Class:      DiMuonRootupler
@@ -81,8 +81,8 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Int_t     charge;
 
 	TLorentzVector dimuon_p4;
-	TLorentzVector muonP_p4;
-	TLorentzVector muonN_p4;
+	TLorentzVector highMuon_p4;
+	TLorentzVector lowMuon_p4;
 
   Float_t MassErr;
   Float_t vProb;
@@ -103,7 +103,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Int_t dimuon_pdgId;
   TLorentzVector gen_mother_p4;
 	TLorentzVector gen_dimuon_p4;
-	TLorentzVector gen_muonP_p4;
+	TLorentzVector gen_highMuon_p4;
 	TLorentzVector gen_muonM_p4;
 
   edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
@@ -142,8 +142,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("tMatch",    &tMatch,      "tMatch/I");
 
     dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
-    dimuon_tree->Branch("muonP_p4",  "TLorentzVector", &muonP_p4);
-    dimuon_tree->Branch("muonN_p4",  "TLorentzVector", &muonN_p4);
+    dimuon_tree->Branch("highMuon_p4",  "TLorentzVector", &highMuon_p4);
+    dimuon_tree->Branch("lowMuon_p4",  "TLorentzVector", &lowMuon_p4);
 
     dimuon_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
     dimuon_tree->Branch("vProb",     &vProb,      "vProb/F");
@@ -165,8 +165,8 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
      dimuon_tree->Branch("gen_mother_p4", "TLorentzVector",  &gen_mother_p4);
      dimuon_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-     dimuon_tree->Branch("gen_muonP_p4",  "TLorentzVector",  &gen_muonP_p4);
-     dimuon_tree->Branch("gen_muonN_p4",  "TLorentzVector",  &gen_muonM_p4);
+     dimuon_tree->Branch("gen_highMuon_p4",  "TLorentzVector",  &gen_highMuon_p4);
+     dimuon_tree->Branch("gen_lowMuon_p4",  "TLorentzVector",  &gen_muonM_p4);
   }
 
   genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"prunedGenParticles");
@@ -253,11 +253,11 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   nmuons = 0;
 
   dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  muonN_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_mother_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_muonP_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   // Pruned particles are the one containing "important" stuff
@@ -282,13 +282,13 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
             foundit++;
           }
           if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(adimuon , motherInPrunedCollection) ) {
-            gen_muonP_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+            gen_highMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
             foundit++;
           }
           if ( foundit == 3 ) break;
         }
         if ( foundit == 3 ) {
-          gen_dimuon_p4 = gen_muonM_p4 + gen_muonP_p4;   // this should take into account FSR
+          gen_dimuon_p4 = gen_muonM_p4 + gen_highMuon_p4;   // this should take into account FSR
           mother_pdgId  = GetAncestor(adimuon)->pdgId();
           auto mother = GetAncestor(adimuon);
           gen_mother_p4.SetPtEtaPhiM(mother->pt(),mother->eta(),mother->phi(),mother->mass());
@@ -314,8 +314,8 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
               vP = dimuonCand->daughter("lowMuon")->p4();
               vM = dimuonCand->daughter("highMuon")->p4();
           }
-          muonP_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
-          muonN_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
+          highMuon_p4.SetPtEtaPhiM(vP.pt(),vP.eta(),vP.phi(),vP.mass());
+          lowMuon_p4.SetPtEtaPhiM(vM.pt(),vM.eta(),vM.phi(),vM.mass());
           MassErr = -1.0;
           if (dimuonCand->hasUserFloat("MassErr"))    MassErr = dimuonCand->userFloat("MassErr");
           vProb = dimuonCand->userFloat("vProb");
