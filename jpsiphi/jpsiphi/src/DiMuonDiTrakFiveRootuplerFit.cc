@@ -843,8 +843,10 @@ if(!OnlyGen_)
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
     const pat::CompositeCandidate *fivetrak_cand, *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
-    //UnRefitted Handle
+
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
+
+      std::cout << "Start" << std::endl;
 
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
 
@@ -875,6 +877,7 @@ if(!OnlyGen_)
 
       if((fourToFiveMap.find(i))!=fourToFiveMap.end())
       {
+        std::cout << "Five" << std::endl;
         fivetrak_cand = fourToFiveMap[(i)];
         dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
@@ -913,6 +916,7 @@ if(!OnlyGen_)
         fifthtrak_y = fifth.Rapidity();
       }
 
+      std::cout << "Vertex dimdit" << std::endl;
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
       dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
@@ -963,6 +967,7 @@ if(!OnlyGen_)
       dimuonditrk_tPDZW = dimuonditrk_cand.userFloat("tPDZW");
       dimuonditrk_tMDZW = dimuonditrk_cand.userFloat("tMDZW");
 
+      std::cout << "DCA" << std::endl;
       dimuonditrk_dca_m1m2 = dimuonditrk_cand.userFloat("dca_m1m2");
       dimuonditrk_dca_m1t1 = dimuonditrk_cand.userFloat("dca_m1t1");
       dimuonditrk_dca_m1t2 = dimuonditrk_cand.userFloat("dca_m1t2");
@@ -1004,6 +1009,7 @@ if(!OnlyGen_)
         highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowMuon"));
       }
 
+      std::cout << "Muons" << std::endl;
       lowMuon_isTight    = lowMuon->isTightMuon(thePrimaryV);
       lowMuon_isLoose    = lowMuon->isLooseMuon();
       lowMuon_isSoft     = lowMuon->isSoftMuon(thePrimaryV);
@@ -1064,7 +1070,7 @@ if(!OnlyGen_)
       lowKaon_pt      = -std::max(-kP.pt(),-kM.pt());
       highMuon_pt     = std::max(vLowMuon.pt(),vHighMuon.pt());
       lowMuon_pt      = -std::max(-vLowMuon.pt(),-vHighMuon.pt());
-
+std::cout << "kaon" << std::endl;
       lowKaon_NPixelHits = lowKaon->bestTrack()->hitPattern().numberOfValidPixelHits();
       lowKaon_NStripHits = lowKaon->bestTrack()->hitPattern().numberOfValidStripHits();
       lowKaon_NTrackhits = lowKaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
