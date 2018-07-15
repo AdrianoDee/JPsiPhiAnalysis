@@ -315,17 +315,6 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
 
           //FiveTracks - Kaon
 
-          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
-          fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
-          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
-          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
-          fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
-          fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
-          fiveCandKaon.addUserFloat("ctauPV",ctauPV);
-          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
-
-          fiveCandKaon.addUserInt("index",d);
-
           dimuonditrk_tree->Branch("fivetraks_kaon_m",     &fivetraks_kaon_m,     "fivetraks_kaon_m/D");
           dimuonditrk_tree->Branch("fivetraks_pion_m",     &fivetraks_pion_m,     "fivetraks_pion_m/D");
           dimuonditrk_tree->Branch("fivetraks_kaon_trim",     &fivetraks_kaon_trim,     "fivetraks_kaon_trim/D");
@@ -806,14 +795,54 @@ if(!OnlyGen_)
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    pat::CompositeCandidate *fivetrak_cand;
+    pat::CompositeCandidate *fivetrak_cand, *fifthtrak_cand, *dimuontrak_cand;
 
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
     //UnRefitted Handle
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
 
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
-      fivetrak_cand = fourToFiveMap[i];
+
+      fivetraks_kaon_m    = -1.0;
+      fivetraks_pion_m    = -1.0;
+      fivetraks_kaon_trim    = -1.0;
+      fivetraks_pion_trim    = -1.0;
+      fivetraks_kaon_m_rf    = -1.0;
+      fivetraks_pion_m_rf    = -1.0;
+      fivetraks_vProb    = -1.0;
+      fivetraks_vChi2    = -1.0;
+      fivetraks_nDof    = -1.0;
+      fivetraks_charge    = -1.0;
+      fivetraks_cosAlpha    = -1.0;
+      fivetraks_ctauPV    = -1.0;
+      fivetraks_ctauErrPV    = -1.0;
+      fivetraks_eta    = -1.0;
+      fivetraks_pt    = -1.0;
+      fivetraks_phi    = -1.0;
+      fivetraks_y    = -1.0;
+
+      if(std::find(fourToFiveMap.begin(),fourToFiveMap.end(),i)!=fourToFiveMap.end())
+      {
+        fivetrak_cand = fourToFiveMap[i];
+
+        fivetraks_kaon_m    = fivetrak_cand.mass();
+        fivetraks_pion_m    = fivetrak_cand.userFloat("mass_pion");
+        fivetraks_kaon_trim    = fivetrak_cand.userFloat("trim");
+        fivetraks_pion_trim    = fivetrak_cand.userFloat("trim_pion");
+        fivetraks_kaon_m_rf    = fivetrak_cand.userFloat("mass_kaon_rf");
+        fivetraks_pion_m_rf    = fivetrak_cand.userFloat("mass_pion_rf");
+        fivetraks_vProb    = fivetrak_cand.userFloat("vProb");
+        fivetraks_vChi2    = fivetrak_cand.userFloat("vChi2");
+        fivetraks_nDof    = fivetrak_cand.userFloat("nDof");
+        fivetraks_charge    = fivetrak_cand.mass();
+        fivetraks_cosAlpha    = fivetrak_cand.userFloat("cosAlpha");
+        fivetraks_ctauPV    = fivetrak_cand.userFloat("ctauPV");
+        fivetraks_ctauErrPV    = fivetrak_cand.userFloat("ctauErrPV");
+        fivetraks_eta    = fivetrak_cand.eta();
+        fivetraks_pt    = fivetrak_cand.pt();
+        fivetraks_phi    = fivetrak_cand.phi();
+        fivetraks_y    = fivetrak_cand.y();
+      }
 
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");

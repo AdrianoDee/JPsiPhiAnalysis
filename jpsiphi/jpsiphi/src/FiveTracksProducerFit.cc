@@ -311,9 +311,14 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
          double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*kaon_ma_fit/(pperp.Perp2());
 
+         double dimuot = dynamic_cast <pat::CompositeCandidate *>(fiveCandKaon.daughter("dimuontrak"))->mass();
+         pat::CompositeCandidate *dimuot_pion = dynamic_cast <pat::CompositeCandidate *>(fiveCandPion.daughter("dimuontrak"));
+
          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
          fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
          fiveCandKaon.addUserFloat("mass_pion",fiveCandPion.mass());
+         fiveCandKaon.addUserFloat("dimuot",dimuot);
+         fiveCandKaon.addUserFloat("dimuont_pion",dimuot_pion->mass());
          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
          fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
@@ -322,6 +327,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
 
          fiveCandKaon.addUserInt("index",d);
+
+         fiveCandKaon.addDaughter(dimuot_pion,"dimuotrakpion")
 
          fiveCandKaonColl->push_back(fiveCandKaon);
 
