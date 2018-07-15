@@ -1,4 +1,4 @@
-#include "../interface/DiMuonDiTrakProducerFit.h"
+iPiP#include "../interface/DiMuonDiTrakProducerFit.h"
 
 float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
@@ -1077,10 +1077,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
              KinematicConstrainedVertexFitter pFitter;
 
-             for(int iP = 0; i < 2; ++i)
+             for(int iP = 0; iP < 2; ++iP)
              {
-                 const ParticleMass oneMass(oneMasses[i]);
-                 const ParticleMass twoMass(twoMasses[i]);
+                 const ParticleMass oneMass(oneMasses[iP]);
+                 const ParticleMass twoMass(twoMasses[iP]);
                  kinChi = 0.;
                  kinNdf = 0.;
 
@@ -1090,7 +1090,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
                  pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma1));
 
-                 std::cout << "Pion Fits " << i <<std::endl;
+                 std::cout << "Pion Fits " << iP <<std::endl;
                  RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
 
                  if (!pkTree->isEmpty()) {
@@ -1101,10 +1101,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                     if (fitPion->currentState().isValid())
                     {
-                      massPionRefits[i] = fitPion->currentState().mass();
-                      chi2PionRefits[i] = vPion->chiSquared();
-                      nDofPionRefits[i] = (double)(vPion->degreesOfFreedom());
-                      vProbPionRefits[i] = ChiSquaredProbability(chi2PionRefits[i],nDofPionRefits[i]);
+                      massPionRefits[iP] = fitPion->currentState().mass();
+                      chi2PionRefits[iP] = vPion->chiSquared();
+                      nDofPionRefits[iP] = (double)(vPion->degreesOfFreedom());
+                      vProbPionRefits[iP] = ChiSquaredProbability(chi2PionRefits[iP],nDofPionRefits[iP]);
                     }
                     }
              }
