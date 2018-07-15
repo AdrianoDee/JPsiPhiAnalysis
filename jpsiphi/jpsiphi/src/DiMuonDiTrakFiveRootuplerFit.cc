@@ -281,6 +281,14 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("dimuonditrk_m_rf_d_c",       &dimuonditrk_m_rf_d_c,        "dimuonditrk_m_rf_d_c/D");
           dimuonditrk_tree->Branch("dimuonditrk_m_rf_c",       &dimuonditrk_m_rf_c,        "dimuonditrk_m_rf_c/D");
           dimuonditrk_tree->Branch("dimuonditrk_pt",          &dimuonditrk_pt,          "dimuonditrk_pt/D");
+          dimuonditrk_tree->Branch("dimuonditrk_eta",          &dimuonditrk_eta,          "dimuonditrk_eta/D");
+          dimuonditrk_tree->Branch("dimuonditrk_phi",          &dimuonditrk_phi,          "dimuonditrk_phi/D");
+          dimuonditrk_tree->Branch("dimuonditrk_y",          &dimuonditrk_y,          "dimuonditrk_y/D");
+
+          dimuonditrk_tree->Branch("dimuonditrk_vx",          &dimuonditrk_vx,          "dimuonditrk_vx/D");
+          dimuonditrk_tree->Branch("dimuonditrk_vy",          &dimuonditrk_vy,          "dimuonditrk_vy/D");
+          dimuonditrk_tree->Branch("dimuonditrk_vz",          &dimuonditrk_vz,          "dimuonditrk_vz/D");
+
           dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
           dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
           dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
@@ -300,34 +308,49 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("highMuon_phi",        &highMuon_phi,        "highMuon_phi/D");
           dimuonditrk_tree->Branch("lowMuon_phi",        &lowMuon_phi,        "lowMuon_phi/D");
 
+          dimuonditrk_tree->Branch("highKaon_y",        &highKaon_y,        "highKaon_y/D");
+          dimuonditrk_tree->Branch("lowKaon_y",        &lowKaon_y,        "lowKaon_y/D");
+          dimuonditrk_tree->Branch("highMuon_y",        &highMuon_y,        "highMuon_y/D");
+          dimuonditrk_tree->Branch("lowMuon_y",        &lowMuon_y,        "lowMuon_y/D");
+
           //FiveTracks - Kaon
+
+          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
+          fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
+          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
+          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
+          fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
+          fiveCandKaon.addUserFloat("cosAlpha",cosAlpha);
+          fiveCandKaon.addUserFloat("ctauPV",ctauPV);
+          fiveCandKaon.addUserFloat("ctauErrPV",ctauErrPV);
+
+          fiveCandKaon.addUserInt("index",d);
+
           dimuonditrk_tree->Branch("fivetraks_kaon_m",     &fivetraks_kaon_m,     "fivetraks_kaon_m/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_vProb",      &fivetraks_kaon_vProb,        "fivetraks_kaon_vProb/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_vChi2",      &fivetraks_kaon_vChi2,        "fivetraks_kaon_vChi2/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_nDof",       &fivetraks_kaon_nDof,         "fivetraks_kaon_nDof/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_charge",     &fivetraks_kaon_charge,       "fivetraks_kaon_charge/I");
-          dimuonditrk_tree->Branch("fivetraks_kaon_cosAlpha",      &fivetraks_kaon_cosAlpha,        "fivetraks_kaon_cosAlpha/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_ctauPV",      &fivetraks_kaon_ctauPV,        "fivetraks_kaon_ctauPV/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_ctauErrPV",      &fivetraks_kaon_ctauErrPV,        "fivetraks_kaon_ctauErrPV/D");
-
-          dimuonditrk_tree->Branch("fifthtrak_kaon_m",     &fifthtrak_kaon_m,     "fifthtrak_kaon_m/D");
-          dimuonditrk_tree->Branch("fifthtrak_kaon_eta",       &fifthtrak_kaon_eta,        "fifthtrak_kaon_eta/D");
-          dimuonditrk_tree->Branch("fifthtrak_kaon_pt",       &fifthtrak_kaon_pt,        "fifthtrak_kaon_pt/D");
-          dimuonditrk_tree->Branch("fifthtrak_kaon_phi",       &fifthtrak_kaon_phi,        "fifthtrak_kaon_phi/D");
-
           dimuonditrk_tree->Branch("fivetraks_pion_m",     &fivetraks_pion_m,     "fivetraks_pion_m/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_vProb",      &fivetraks_pion_vProb,        "fivetraks_pion_vProb/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_vChi2",      &fivetraks_pion_vChi2,        "fivetraks_pion_vChi2/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_nDof",       &fivetraks_pion_nDof,         "fivetraks_pion_nDof/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_charge",     &fivetraks_pion_charge,       "fivetraks_pion_charge/I");
-          dimuonditrk_tree->Branch("fivetraks_pion_cosAlpha",      &fivetraks_pion_cosAlpha,        "fivetraks_pion_cosAlpha/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_ctauPV",      &fivetraks_pion_ctauPV,        "fivetraks_pion_ctauPV/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_ctauErrPV",      &fivetraks_pion_ctauErrPV,        "fivetraks_pion_ctauErrPV/D");
+          dimuonditrk_tree->Branch("fivetraks_kaon_trim",     &fivetraks_kaon_trim,     "fivetraks_kaon_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_pion_trim",     &fivetraks_pion_trim,     "fivetraks_pion_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_kaon_m_rf",     &fivetraks_kaon_m_rf,     "fivetraks_kaon_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_pion_m_rf",     &fivetraks_pion_m_rf,     "fivetraks_pion_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_vProb",      &fivetraks_vProb,        "fivetraks_vProb/D");
+          dimuonditrk_tree->Branch("fivetraks_vChi2",      &fivetraks_vChi2,        "fivetraks_vChi2/D");
+          dimuonditrk_tree->Branch("fivetraks_nDof",       &fivetraks_nDof,         "fivetraks_nDof/D");
+          dimuonditrk_tree->Branch("fivetraks_charge",     &fivetraks_charge,       "fivetraks_charge/I");
+          dimuonditrk_tree->Branch("fivetraks_cosAlpha",      &fivetraks_cosAlpha,        "fivetraks_cosAlpha/D");
+          dimuonditrk_tree->Branch("fivetraks_ctauPV",      &fivetraks_ctauPV,        "fivetraks_ctauPV/D");
+          dimuonditrk_tree->Branch("fivetraks_ctauErrPV",      &fivetraks_ctauErrPV,        "fivetraks_ctauErrPV/D");
+          dimuonditrk_tree->Branch("fivetraks_eta",       &fivetraks_eta,        "fivetraks_eta/D");
+          dimuonditrk_tree->Branch("fivetraks_pt",       &fivetraks_pt,        "fivetraks_pt/D");
+          dimuonditrk_tree->Branch("fivetraks_phi",       &fivetraks_phi,        "fivetraks_phi/D");
+          dimuonditrk_tree->Branch("fivetraks_y",       &fivetraks_y,        "fivetraks_y/D");
 
-          dimuonditrk_tree->Branch("fifthtrak_pion_m",     &fifthtrak_pion_m,     "fifthtrak_pion_m/D");
-          dimuonditrk_tree->Branch("fifthtrak_pion_eta",       &fifthtrak_pion_eta,        "fifthtrak_pion_eta/D");
-          dimuonditrk_tree->Branch("fifthtrak_pion_pt",       &fifthtrak_pion_pt,        "fifthtrak_pion_pt/D");
-          dimuonditrk_tree->Branch("fifthtrak_pion_phi",       &fifthtrak_pion_phi,        "fifthtrak_pion_phi/D");
+
+          dimuonditrk_tree->Branch("fifthtrak_charge",       &fifthtrak_charge,        "fifthtrak_charge/D");
+          dimuonditrk_tree->Branch("fifthtrak_eta",       &fifthtrak_eta,        "fifthtrak_eta/D");
+          dimuonditrk_tree->Branch("fifthtrak_pt",       &fifthtrak_pt,        "fifthtrak_pt/D");
+          dimuonditrk_tree->Branch("fifthtrak_phi",       &fifthtrak_phi,        "fifthtrak_phi/D");
+          dimuonditrk_tree->Branch("fifthtrak_y",       &fifthtrak_y,        "fifthtrak_y/D");
+
 
           // dimuonditrk_tree->Branch("highKaon_trig_pt",          &highKaon_trig_pt,          "highKaon_trig_pt/D");
           // dimuonditrk_tree->Branch("lowKaon_trig_pt",       &lowKaon_trig_pt,       "lowKaon_trig_pt/D");
@@ -565,19 +588,13 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   run = iEvent.id().run();
   event = iEvent.id().event();
 
-  reco::Vertex thePrimaryV;
   reco::Vertex theBeamSpotV;
 
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
 
-  if ( primaryVertices_handle->begin() != primaryVertices_handle->end() ) {
-    thePrimaryV = reco::Vertex(*(primaryVertices_handle->begin()));
-  }
-  else {
-    thePrimaryV = reco::Vertex(bs.position(), bs.covariance3D());
-  }
+  const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("bestPV");
 
   trigger = 0;
 
@@ -787,18 +804,22 @@ if(!OnlyGen_)
   if (!fivetracks_cand_hanlde.isValid()) std::cout<< "No fivetrack information " << run << "," << event <<std::endl;
   if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid()) {
 
-    pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand, *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
+    pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
+    pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
+    pat::CompositeCandidate *fivetrak_cand;
 
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
     //UnRefitted Handle
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
 
       dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
+      fivetrak_cand = fourToFiveMap[i];
 
       dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
       dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
       dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
       dimuonditrk_charge    = dimuonditrk_cand.charge();
+
       dimuonditrk_cosAlphaBS = dimuonditrk_cand.userFloat("cosAlphaBS");
       dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");
@@ -1018,6 +1039,14 @@ if(!OnlyGen_)
       dimuonditrk_m    = dimuonditrk_cand.mass();
       dimuonditrk_m_rf = dimuonditrk_cand.userFloat("mass_rf");
       dimuonditrk_pt   = dimuonditrk_cand.pt();
+
+      dimuonditrk_eta   = dimuonditrk_cand.eta();
+      dimuonditrk_phi   = dimuonditrk_cand.phi();
+      dimuonditrk_y   = dimuonditrk_cand.y();
+      dimuonditrk_vx    = dimuonditrk_cand.userFloat("vtxX");
+      dimuonditrk_vy    = dimuonditrk_cand.userFloat("vtxY");
+      dimuonditrk_vz    = dimuonditrk_cand.userFloat("vtxZ");
+
       dimuon_m         = dimuon_cand->mass();
       dimuon_pt        = dimuon_cand->pt();
       ditrak_m         = ditrak_cand->mass();

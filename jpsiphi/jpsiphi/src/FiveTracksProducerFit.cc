@@ -313,6 +313,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          fiveCandKaon.addUserFloat("mass_kaon_rf",kaon_ma_fit);
          fiveCandKaon.addUserFloat("mass_pion_rf",pion_ma_fit);
+         fiveCandKaon.addUserFloat("mass_pion",fiveCandPion.mass());
          fiveCandKaon.addUserFloat("vProb",kaon_vp_fit);
          fiveCandKaon.addUserFloat("vChi2",kaon_x2_fit);
          fiveCandKaon.addUserFloat("nDof",kaon_ndof_fit);
@@ -361,10 +362,11 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
                                           const pat::PackedCandidate& trak
                                          ){
 
-  pat::CompositeCandidate fiveCandKaon;
+  pat::CompositeCandidate fiveCandKaon, dimuon, dimuontrak;
   fiveCandKaon.addDaughter(dimuonditrak,"dimuonditrak");
   fiveCandKaon.addDaughter(trak,"fifth");
   fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
+  dimuon = dynamic_cast <pat::CompositeCandidate *>(dimuonditrak.daughter("dimuon"));
 
   double m_trak = trackmass;
   math::XYZVector mom_trak = trak.momentum();
@@ -372,7 +374,11 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
   math::XYZTLorentzVector p4_trak = math::XYZTLorentzVector(mom_trak.X(),mom_trak.Y(),mom_trak.Z(),e_trak);
 
   reco::Candidate::LorentzVector v = p4_trak + dimuonditrak.p4();
+  reco::Candidate::LorentzVector j = p4_trak + dimuontrak.p4();
+
   fiveCandKaon.setP4(v);
+  dimuontrak.setP4(j);
+  fiveCandKaon.addDaughter(trak,"dimuontrak");
 
   return fiveCandKaon;
 }

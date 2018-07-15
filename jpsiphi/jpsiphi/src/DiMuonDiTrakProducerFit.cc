@@ -715,6 +715,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            // }
            DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryV));
 
+           DiMuonTTCand.addUserFloat("vtxX",x_vx_fit);
+           DiMuonTTCand.addUserFloat("vtxY",x_vy_fit);
+           DiMuonTTCand.addUserFloat("vtxZ",x_vz_fit);
+
            DiMuonTTCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
            DiMuonTTCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
