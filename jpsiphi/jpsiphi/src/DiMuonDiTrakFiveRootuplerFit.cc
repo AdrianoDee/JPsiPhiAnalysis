@@ -359,7 +359,19 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("fifthtrak_phi",       &fifthtrak_phi,        "fifthtrak_phi/D");
           dimuonditrk_tree->Branch("fifthtrak_y",       &fifthtrak_y,        "fifthtrak_y/D");
 
-
+          //Pion refits
+          dimuonditrk_tree->Branch("dimuonditrk_refPK_mass", &dimuonditrk_refPK_mass, "dimuonditrk_refPK_mass/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refKP_mass", &dimuonditrk_refKP_mass, "dimuonditrk_refKP_mass/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPP_mass", &dimuonditrk_refPP_mass, "dimuonditrk_refPP_mass/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPK_vChi2", &dimuonditrk_refPK_vChi2, "dimuonditrk_refPK_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refKP_vChi2", &dimuonditrk_refKP_vChi2, "dimuonditrk_refKP_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPP_vChi2", &dimuonditrk_refPP_vChi2, "dimuonditrk_refPP_vChi2/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPK_nDof", &dimuonditrk_refPK_nDof, "dimuonditrk_refPK_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refKP_nDof", &dimuonditrk_refKP_nDof, "dimuonditrk_refKP_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPP_nDof", &dimuonditrk_refPP_nDof, "dimuonditrk_refPP_nDof/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPK_vProb", &dimuonditrk_refPK_vProb, "dimuonditrk_refPK_vProb/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refKP_vProb", &dimuonditrk_refKP_vProb, "dimuonditrk_refKP_vProb/D");
+          dimuonditrk_tree->Branch("dimuonditrk_refPP_vProb", &dimuonditrk_refPP_vProb, "dimuonditrk_refPP_vProb/D");
           // dimuonditrk_tree->Branch("highKaon_trig_pt",          &highKaon_trig_pt,          "highKaon_trig_pt/D");
           // dimuonditrk_tree->Branch("lowKaon_trig_pt",       &lowKaon_trig_pt,       "lowKaon_trig_pt/D");
           // dimuonditrk_tree->Branch("highMuon_trig_pt",    &highMuon_trig_pt,    "highMuon_trig_pt/D");
