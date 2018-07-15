@@ -843,8 +843,8 @@ if(!OnlyGen_)
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    pat::CompositeCandidate *fivetrak_cand, *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
-
+    pat::CompositeCandidate *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
+    const pat::CompositeCandidate *fivetrak_cand;
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
     //UnRefitted Handle
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
