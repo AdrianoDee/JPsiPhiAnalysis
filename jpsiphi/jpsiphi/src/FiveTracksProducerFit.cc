@@ -300,8 +300,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          double kaon_vy_fit = fitFVertex->position().y();
          // double kaon_vz_fit = fitFVertex->position().z();
 
-
-
          vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
          TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);

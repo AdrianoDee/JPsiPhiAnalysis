@@ -879,6 +879,7 @@ if(!OnlyGen_)
       {
         std::cout << "Five" << std::endl;
         fivetrak_cand = fourToFiveMap[(i)];
+        std::cout << "Got Five" << std::endl;
         dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
         dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
