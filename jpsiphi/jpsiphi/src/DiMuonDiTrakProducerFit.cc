@@ -409,6 +409,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            xParticles.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
            xParticles.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
 
+           std::cout << "Basic Kin Fit" << std::endl;
            KinematicParticleVertexFitter kFitter;
            RefCountedKinematicTree xVertexFitTree;
            xVertexFitTree = kFitter.fit(xParticles);
@@ -792,6 +793,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
+           std::cout << "Jpsi Fixed Fit" << std::endl;
            RefCountedKinematicTree PsiTTree = vertexFitter.fit(xParticles,jpsi_mtc);
 
            if (!PsiTTree->isEmpty()) {
@@ -950,6 +952,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              KinematicParticleVertexFitter fitter;
              KinematicParticleFitter csFitterJPsi;
              RefCountedKinematicTree jpsiVertexFitTree;
+             std::cout << "JPsi Fit" << std::endl;
              jpsiVertexFitTree = fitter.fit(JPsiParticles);
 
 
@@ -962,6 +965,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                KinematicConstraint * jpsi_c = new MassKinematicConstraint(jpsi_mass,jpsi_sigma);
 
                jpsiVertexFitTree->movePointerToTheTop();
+               std::cout << "Double Fixed JPsi Fit" << std::endl;
                jpsiVertexFitTree = csFitterJPsi.fit(jpsi_c,jpsiVertexFitTree);
 
                if (jpsiVertexFitTree->isValid())
@@ -979,6 +983,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                  KinematicConstrainedVertexFitter vertexFitter;
                  MultiTrackKinematicConstraint *phi_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
+                 std::cout << "Double Fixed Phi Fit" << std::endl;
                  RefCountedKinematicTree PsiPhiTree = vertexFitter.fit(allPsiTDaughters,phi_mtc);
 
                  if (!PsiPhiTree->isEmpty()) {
@@ -1072,7 +1077,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
              KinematicConstrainedVertexFitter pFitter;
 
-             for(int i = 0; i < 2; ++i)
+             for(int iP = 0; i < 2; ++i)
              {
                  const ParticleMass oneMass(oneMasses[i]);
                  const ParticleMass twoMass(twoMasses[i]);
@@ -1085,6 +1090,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
                  pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma1));
 
+                 std::cout << "Pion Fits " << i <<std::endl;
                  RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
 
                  if (!pkTree->isEmpty()) {
