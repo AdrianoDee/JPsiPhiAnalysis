@@ -343,7 +343,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          fiveCandKaon.addDaughter(fiveCandPion,"withpion");
 
-         std::cout << "this is good" << fiveCandKaon.charge() <<std::endl;
+         std::cout << d << " this is good " << fiveCandKaon.charge() <<std::endl;
+
          if(fiveCandKaon.charge()<0)
          {
            if(bestVertexNeg.find(d)!=bestVertexNeg.end())
@@ -363,16 +364,16 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          else
          if(fiveCandKaon.charge()>0)
          {
-           if(bestVertexPos.find(d)!=bestVertexNeg.end())
+           if(bestVertexPos.find(d)!=bestVertexPos.end())
            {
-             if(kaon_vp_fit>bestVertexNeg[d])
+             if(kaon_vp_fit>bestVertexPos[d])
              {
-               bestVertexNeg[d] = kaon_vp_fit;
+               bestVertexPos[d] = kaon_vp_fit;
                posCollection[d] = fiveCandKaon;
              }
            }else
            {
-             bestVertexNeg[d] = kaon_vp_fit;
+             bestVertexPos[d] = kaon_vp_fit;
              posCollection[d] = fiveCandKaon;
            }
 
