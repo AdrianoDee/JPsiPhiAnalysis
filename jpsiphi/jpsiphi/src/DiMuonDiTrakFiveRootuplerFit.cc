@@ -77,7 +77,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   // ----------member data ---------------------------
   std::string file_name;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_cand_Label;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivetracks_cand_Label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivepos_cand_Label;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
@@ -106,11 +106,11 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
-  TLorentzVector fivetraks_p4;
-  TLorentzVector fivetrakspion_p4;
-  TLorentzVector fifthkaon_p4,fifthpion_p4;
-  TLorentzVector dimuontrak_p4;
-  TLorentzVector dimuontrakpion_p4;
+  TLorentzVector fivetraks_pos_p4;
+  TLorentzVector dimuontrak_pos_p4;
+  TLorentzVector fifthkaon_pos_p4,fifthkaon_pos_p4;
+  TLorentzVector dimuontrak_pos_p4;
+  TLorentzVector dimuontrak_pos_p4;
 
   Int_t dimuonditrk_charge;
 
@@ -120,8 +120,8 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
-  Double_t fivetraks_pion_trim,fivetraks_kaon_trim,fivetraks_eta;
-  Double_t fivetraks_pt,fivetraks_phi,fivetraks_y,fifthtrak_charge;
+  Double_t fivetraks_pos_pion_trim,fivetraks_pos_kaon_trim,fivetraks_pos_eta;
+  Double_t fivetraks_pos_pt,fivetraks_pos_phi,fivetraks_pos_y,fifthtrak_pos_charge;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
@@ -156,10 +156,20 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
   UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
-  Double_t fivetraks_kaon_m_rf, fivetraks_pion_m_rf, fivetraks_kaon_m, fivetraks_pion_m;
-  Double_t fivetraks_vProb, fivetraks_vChi2, fivetraks_nDof, fivetraks_charge;
-  Double_t fivetraks_cosAlpha, fivetraks_ctauPV, fivetraks_ctauErrPV;
-  Double_t fifthtrak_pt, fifthtrak_phi, fifthtrak_eta,fifthtrak_y;
+  Double_t fivetraks_pos_kaon_m_rf, fivetraks_pos_pion_m_rf, fivetraks_pos_kaon_m, fivetraks_pos_pion_m;
+  Double_t fivetraks_pos_vProb, fivetraks_pos_vChi2, fivetraks_pos_nDof, fivetraks_pos_charge;
+  Double_t fivetraks_pos_cosAlpha, fivetraks_pos_ctauPV, fivetraks_pos_ctauErrPV;
+  Double_t fifthtrak_pos_pt, fifthtrak_pos_phi, fifthtrak_pos_eta,fifthtrak_pos_y;
+
+  Double_t fivetraks_neu_kaon_m_rf, fivetraks_neu_pion_m_rf, fivetraks_neu_kaon_m, fivetraks_neu_pion_m;
+  Double_t fivetraks_neu_vProb, fivetraks_neu_vChi2, fivetraks_neu_nDof, fivetraks_neu_charge;
+  Double_t fivetraks_neu_cosAlpha, fivetraks_neu_ctauPV, fivetraks_neu_ctauErrPV;
+  Double_t fifthtrak_neu_pt, fifthtrak_neu_phi, fifthtrak_neu_eta,fifthtrak_neu_y;
+
+  Double_t fivetraks_neg_kaon_m_rf, fivetraks_neg_pion_m_rf, fivetraks_neg_kaon_m, fivetraks_neg_pion_m;
+  Double_t fivetraks_neg_vProb, fivetraks_neg_vChi2, fivetraks_neg_nDof, fivetraks_neg_charge;
+  Double_t fivetraks_neg_cosAlpha, fivetraks_neg_ctauPV, fivetraks_neg_ctauErrPV;
+  Double_t fifthtrak_neg_pt, fifthtrak_neg_phi, fifthtrak_neg_eta,fifthtrak_neg_y;
 
   Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
 
@@ -242,7 +252,9 @@ static const Double_t psi1SMass =  3.09691;
 //
 DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterSet& iConfig):
         dimuonditrk_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("dimuonditrk_cand"))),
-        fivetracks_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
+        fivepos_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
+        fiveneg_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
+        fiveneu_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -277,12 +289,12 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("highMuon_p4",   "TLorentzVector", &highMuon_p4);
           dimuonditrk_tree->Branch("highKaon_p4",   "TLorentzVector", &highKaon_p4);
           dimuonditrk_tree->Branch("lowKaon_p4",   "TLorentzVector", &lowKaon_p4);
-          dimuonditrk_tree->Branch("fivetraks_p4",   "TLorentzVector", &fivetraks_p4);
-          dimuonditrk_tree->Branch("fivetrakspion_p4",   "TLorentzVector", &fivetrakspion_p4);
-          dimuonditrk_tree->Branch("fifthkaon_p4",   "TLorentzVector", &fifthkaon_p4);
-          dimuonditrk_tree->Branch("fifthpion_p4",   "TLorentzVector", &fifthpion_p4);
-          dimuonditrk_tree->Branch("dimuontrak_p4",   "TLorentzVector", &dimuontrak_p4);
-          dimuonditrk_tree->Branch("dimuontrakpion_p4",   "TLorentzVector", &dimuontrakpion_p4);
+          dimuonditrk_tree->Branch("fivetraks_pos_p4",   "TLorentzVector", &fivetraks_pos_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
+          dimuonditrk_tree->Branch("fifthkaon_pos_p4",   "TLorentzVector", &fifthkaon_pos_p4);
+          dimuonditrk_tree->Branch("fifthkaon_pos_p4",   "TLorentzVector", &fifthkaon_pos_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
 
           //refitted p4s
           dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
@@ -332,32 +344,85 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("highMuon_y",        &highMuon_y,        "highMuon_y/D");
           dimuonditrk_tree->Branch("lowMuon_y",        &lowMuon_y,        "lowMuon_y/D");
 
-          //FiveTracks - Kaon
+          //FiveTracks - Pos
 
-          dimuonditrk_tree->Branch("fivetraks_kaon_m",     &fivetraks_kaon_m,     "fivetraks_kaon_m/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_m",     &fivetraks_pion_m,     "fivetraks_pion_m/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_trim",     &fivetraks_kaon_trim,     "fivetraks_kaon_trim/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_trim",     &fivetraks_pion_trim,     "fivetraks_pion_trim/D");
-          dimuonditrk_tree->Branch("fivetraks_kaon_m_rf",     &fivetraks_kaon_m_rf,     "fivetraks_kaon_m_rf/D");
-          dimuonditrk_tree->Branch("fivetraks_pion_m_rf",     &fivetraks_pion_m_rf,     "fivetraks_pion_m_rf/D");
-          dimuonditrk_tree->Branch("fivetraks_vProb",      &fivetraks_vProb,        "fivetraks_vProb/D");
-          dimuonditrk_tree->Branch("fivetraks_vChi2",      &fivetraks_vChi2,        "fivetraks_vChi2/D");
-          dimuonditrk_tree->Branch("fivetraks_nDof",       &fivetraks_nDof,         "fivetraks_nDof/D");
-          dimuonditrk_tree->Branch("fivetraks_charge",     &fivetraks_charge,       "fivetraks_charge/I");
-          dimuonditrk_tree->Branch("fivetraks_cosAlpha",      &fivetraks_cosAlpha,        "fivetraks_cosAlpha/D");
-          dimuonditrk_tree->Branch("fivetraks_ctauPV",      &fivetraks_ctauPV,        "fivetraks_ctauPV/D");
-          dimuonditrk_tree->Branch("fivetraks_ctauErrPV",      &fivetraks_ctauErrPV,        "fivetraks_ctauErrPV/D");
-          dimuonditrk_tree->Branch("fivetraks_eta",       &fivetraks_eta,        "fivetraks_eta/D");
-          dimuonditrk_tree->Branch("fivetraks_pt",       &fivetraks_pt,        "fivetraks_pt/D");
-          dimuonditrk_tree->Branch("fivetraks_phi",       &fivetraks_phi,        "fivetraks_phi/D");
-          dimuonditrk_tree->Branch("fivetraks_y",       &fivetraks_y,        "fivetraks_y/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_kaon_m",     &fivetraks_pos_kaon_m,     "fivetraks_pos_kaon_m/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_pion_m",     &fivetraks_pos_pion_m,     "fivetraks_pos_pion_m/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_kaon_trim",     &fivetraks_pos_kaon_trim,     "fivetraks_pos_kaon_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_pion_trim",     &fivetraks_pos_pion_trim,     "fivetraks_pos_pion_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_kaon_m_rf",     &fivetraks_pos_kaon_m_rf,     "fivetraks_pos_kaon_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_pion_m_rf",     &fivetraks_pos_pion_m_rf,     "fivetraks_pos_pion_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_vProb",      &fivetraks_pos_vProb,        "fivetraks_pos_vProb/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_vChi2",      &fivetraks_pos_vChi2,        "fivetraks_pos_vChi2/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_nDof",       &fivetraks_pos_nDof,         "fivetraks_pos_nDof/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_charge",     &fivetraks_pos_charge,       "fivetraks_pos_charge/I");
+          dimuonditrk_tree->Branch("fivetraks_pos_cosAlpha",      &fivetraks_pos_cosAlpha,        "fivetraks_pos_cosAlpha/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_ctauPV",      &fivetraks_pos_ctauPV,        "fivetraks_pos_ctauPV/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_ctauErrPV",      &fivetraks_pos_ctauErrPV,        "fivetraks_pos_ctauErrPV/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_eta",       &fivetraks_pos_eta,        "fivetraks_pos_eta/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_pt",       &fivetraks_pos_pt,        "fivetraks_pos_pt/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_phi",       &fivetraks_pos_phi,        "fivetraks_pos_phi/D");
+          dimuonditrk_tree->Branch("fivetraks_pos_y",       &fivetraks_pos_y,        "fivetraks_pos_y/D");
+
+          dimuonditrk_tree->Branch("fifthtrak_pos_charge",       &fifthtrak_pos_charge,        "fifthtrak_pos_charge/D");
+          dimuonditrk_tree->Branch("fifthtrak_pos_eta",       &fifthtrak_pos_eta,        "fifthtrak_pos_eta/D");
+          dimuonditrk_tree->Branch("fifthtrak_pos_pt",       &fifthtrak_pos_pt,        "fifthtrak_pos_pt/D");
+          dimuonditrk_tree->Branch("fifthtrak_pos_phi",       &fifthtrak_pos_phi,        "fifthtrak_pos_phi/D");
+          dimuonditrk_tree->Branch("fifthtrak_pos_y",       &fifthtrak_pos_y,        "fifthtrak_pos_y/D");
+
+          //FiveTracks - Neg
+
+          dimuonditrk_tree->Branch("fivetraks_neg_kaon_m",     &fivetraks_neg_kaon_m,     "fivetraks_neg_kaon_m/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_pion_m",     &fivetraks_neg_pion_m,     "fivetraks_neg_pion_m/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_kaon_trim",     &fivetraks_neg_kaon_trim,     "fivetraks_neg_kaon_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_pion_trim",     &fivetraks_neg_pion_trim,     "fivetraks_neg_pion_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_kaon_m_rf",     &fivetraks_neg_kaon_m_rf,     "fivetraks_neg_kaon_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_pion_m_rf",     &fivetraks_neg_pion_m_rf,     "fivetraks_neg_pion_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_vProb",      &fivetraks_neg_vProb,        "fivetraks_neg_vProb/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_vChi2",      &fivetraks_neg_vChi2,        "fivetraks_neg_vChi2/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_nDof",       &fivetraks_neg_nDof,         "fivetraks_neg_nDof/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_charge",     &fivetraks_neg_charge,       "fivetraks_neg_charge/I");
+          dimuonditrk_tree->Branch("fivetraks_neg_cosAlpha",      &fivetraks_neg_cosAlpha,        "fivetraks_neg_cosAlpha/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_ctauPV",      &fivetraks_neg_ctauPV,        "fivetraks_neg_ctauPV/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_ctauErrPV",      &fivetraks_neg_ctauErrPV,        "fivetraks_neg_ctauErrPV/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_eta",       &fivetraks_neg_eta,        "fivetraks_neg_eta/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_pt",       &fivetraks_neg_pt,        "fivetraks_neg_pt/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_phi",       &fivetraks_neg_phi,        "fivetraks_neg_phi/D");
+          dimuonditrk_tree->Branch("fivetraks_neg_y",       &fivetraks_neg_y,        "fivetraks_neg_y/D");
 
 
-          dimuonditrk_tree->Branch("fifthtrak_charge",       &fifthtrak_charge,        "fifthtrak_charge/D");
-          dimuonditrk_tree->Branch("fifthtrak_eta",       &fifthtrak_eta,        "fifthtrak_eta/D");
-          dimuonditrk_tree->Branch("fifthtrak_pt",       &fifthtrak_pt,        "fifthtrak_pt/D");
-          dimuonditrk_tree->Branch("fifthtrak_phi",       &fifthtrak_phi,        "fifthtrak_phi/D");
-          dimuonditrk_tree->Branch("fifthtrak_y",       &fifthtrak_y,        "fifthtrak_y/D");
+          dimuonditrk_tree->Branch("fifthtrak_neg_charge",       &fifthtrak_neg_charge,        "fifthtrak_neg_charge/D");
+          dimuonditrk_tree->Branch("fifthtrak_neg_eta",       &fifthtrak_neg_eta,        "fifthtrak_neg_eta/D");
+          dimuonditrk_tree->Branch("fifthtrak_neg_pt",       &fifthtrak_neg_pt,        "fifthtrak_neg_pt/D");
+          dimuonditrk_tree->Branch("fifthtrak_neg_phi",       &fifthtrak_neg_phi,        "fifthtrak_neg_phi/D");
+          dimuonditrk_tree->Branch("fifthtrak_neg_y",       &fifthtrak_neg_y,        "fifthtrak_neg_y/D");
+
+          //FiveTracks - Neu
+
+          dimuonditrk_tree->Branch("fivetraks_neu_kaon_m",     &fivetraks_neu_kaon_m,     "fivetraks_neu_kaon_m/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_pion_m",     &fivetraks_neu_pion_m,     "fivetraks_neu_pion_m/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_kaon_trim",     &fivetraks_neu_kaon_trim,     "fivetraks_neu_kaon_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_pion_trim",     &fivetraks_neu_pion_trim,     "fivetraks_neu_pion_trim/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_kaon_m_rf",     &fivetraks_neu_kaon_m_rf,     "fivetraks_neu_kaon_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_pion_m_rf",     &fivetraks_neu_pion_m_rf,     "fivetraks_neu_pion_m_rf/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_vProb",      &fivetraks_neu_vProb,        "fivetraks_neu_vProb/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_vChi2",      &fivetraks_neu_vChi2,        "fivetraks_neu_vChi2/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_nDof",       &fivetraks_neu_nDof,         "fivetraks_neu_nDof/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_charge",     &fivetraks_neu_charge,       "fivetraks_neu_charge/I");
+          dimuonditrk_tree->Branch("fivetraks_neu_cosAlpha",      &fivetraks_neu_cosAlpha,        "fivetraks_neu_cosAlpha/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_ctauPV",      &fivetraks_neu_ctauPV,        "fivetraks_neu_ctauPV/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_ctauErrPV",      &fivetraks_neu_ctauErrPV,        "fivetraks_neu_ctauErrPV/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_eta",       &fivetraks_neu_eta,        "fivetraks_neu_eta/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_pt",       &fivetraks_neu_pt,        "fivetraks_neu_pt/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_phi",       &fivetraks_neu_phi,        "fivetraks_neu_phi/D");
+          dimuonditrk_tree->Branch("fivetraks_neu_y",       &fivetraks_neu_y,        "fivetraks_neu_y/D");
+
+
+          dimuonditrk_tree->Branch("fifthtrak_neu_charge",       &fifthtrak_neu_charge,        "fifthtrak_neu_charge/D");
+          dimuonditrk_tree->Branch("fifthtrak_neu_eta",       &fifthtrak_neu_eta,        "fifthtrak_neu_eta/D");
+          dimuonditrk_tree->Branch("fifthtrak_neu_pt",       &fifthtrak_neu_pt,        "fifthtrak_neu_pt/D");
+          dimuonditrk_tree->Branch("fifthtrak_neu_phi",       &fifthtrak_neu_phi,        "fifthtrak_neu_phi/D");
+          dimuonditrk_tree->Branch("fifthtrak_neu_y",       &fifthtrak_neu_y,        "fifthtrak_neu_y/D");
 
           //Pion refits
           dimuonditrk_tree->Branch("dimuonditrk_refPK_mass", &dimuonditrk_refPK_mass, "dimuonditrk_refPK_mass/D");
@@ -615,8 +680,14 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
   iEvent.getByToken(dimuonditrk_cand_Label, dimuonditrk_cand_handle);
 
-  edm::Handle<std::vector<pat::CompositeCandidate>> fivetracks_cand_hanlde;
-  iEvent.getByToken(fivetracks_cand_Label, fivetracks_cand_hanlde);
+  edm::Handle<std::vector<pat::CompositeCandidate>> fivepos_cand_hanlde;
+  iEvent.getByToken(fivepos_cand_Label, fivepos_cand_hanlde);
+
+  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneg_cand_hanlde;
+  iEvent.getByToken(fiveneg_cand_Label, fiveneg_cand_hanlde);
+
+  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneu_cand_hanlde;
+  iEvent.getByToken(fiveneu_cand_Label, fiveneu_cand_hanlde);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
@@ -695,12 +766,12 @@ gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd5_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-fivetraks_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-fivetrakspion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-fifthkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-fifthpion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuontrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuontrakpion_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+fivetraks_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+fifthkaon_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+fifthkaon_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -838,25 +909,43 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
-std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMap;
+std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
 
 if(!OnlyGen_)
 {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-  if (!fivetracks_cand_hanlde.isValid()) std::cout<< "No fivetrack information " << run << "," << event <<std::endl;
-  if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid())
+  if (!fivepos_cand_hanlde.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
+  if (!fiveneu_cand_hanlde.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
+  if (!fiveneg_cand_hanlde.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
+
+  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_hanlde.isValid() && )
   {
-    for (unsigned int i=0; i< fivetracks_cand_hanlde->size(); i++)
-      fourToFiveMap[(fivetracks_cand_hanlde->at(i).userInt("index"))] = &(fivetracks_cand_hanlde->at(i));
+    for (unsigned int i=0; i< fivepos_cand_hanlde->size(); i++)
+      fourToFiveMapPos[(fivepos_cand_hanlde->at(i).userInt("index"))] = &(fivepos_cand_hanlde->at(i));
   }
+
+  if (dimuonditrk_cand_handle.isValid() && fiveneg_cand_hanlde.isValid() && )
+  {
+    for (unsigned int i=0; i< fiveneg_cand_hanlde->size(); i++)
+      fourToFiveMapNeg[(fiveneg_cand_hanlde->at(i).userInt("index"))] = &(fiveneg_cand_hanlde->at(i));
+  }
+
+  if (dimuonditrk_cand_handle.isValid() && fiveneu_cand_hanlde.isValid() && )
+  {
+    for (unsigned int i=0; i< fiveneu_cand_hanlde->size(); i++)
+      fourToFiveMapNeu[(fiveneu_cand_hanlde->at(i).userInt("index"))] = &(fiveneu_cand_hanlde->at(i));
+  }
+
 }
 
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if(!OnlyGen_)
   {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-  if (!fivetracks_cand_hanlde.isValid()) std::cout<< "No fivetrack information " << run << "," << event <<std::endl;
-  if (dimuonditrk_cand_handle.isValid() && fivetracks_cand_hanlde.isValid()) {
+  if (!fivepos_cand_hanlde.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
+  if (!fiveneu_cand_hanlde.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
+  if (!fiveneg_cand_hanlde.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
+  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_hanlde.isValid() && fiveneu_cand_hanlde.isValid()  && fiveneg_cand_hanlde.isValid()) {
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
@@ -1158,75 +1247,214 @@ if(!OnlyGen_)
       dimuonditrk_refKP_vProb = dimuonditrk_cand.userFloat("vProbKPRefit");
       dimuonditrk_refPP_vProb = dimuonditrk_cand.userFloat("vProbPPRefit");
 
+      fivetraks_pos_kaon_m    = -1.0;
+      fivetraks_pos_pion_m    = -1.0;
+      fivetraks_pos_kaon_trim    = -1.0;
+      fivetraks_pos_pion_trim    = -1.0;
+      fivetraks_pos_kaon_m_rf    = -1.0;
+      fivetraks_pos_pion_m_rf    = -1.0;
+      fivetraks_pos_vProb    = -1.0;
+      fivetraks_pos_vChi2    = -1.0;
+      fivetraks_pos_nDof    = -1.0;
+      fivetraks_pos_charge    = -1.0;
+      fivetraks_pos_cosAlpha    = -1.0;
+      fivetraks_pos_ctauPV    = -1.0;
+      fivetraks_pos_ctauErrPV    = -1.0;
+      fivetraks_pos_eta    = -1.0;
+      fivetraks_pos_pt    = -1.0;
+      fivetraks_pos_phi    = -1.0;
+      fivetraks_pos_y    = -1.0;
+      fifthtrak_pos_charge = -1.0;
+      fifthtrak_pos_eta = -1.0;
+      fifthtrak_pos_pt = -1.0;
+      fifthtrak_pos_phi = -1.0;
+      fifthtrak_pos_y = -1.0;
 
-      fivetraks_kaon_m    = -1.0;
-      fivetraks_pion_m    = -1.0;
-      fivetraks_kaon_trim    = -1.0;
-      fivetraks_pion_trim    = -1.0;
-      fivetraks_kaon_m_rf    = -1.0;
-      fivetraks_pion_m_rf    = -1.0;
-      fivetraks_vProb    = -1.0;
-      fivetraks_vChi2    = -1.0;
-      fivetraks_nDof    = -1.0;
-      fivetraks_charge    = -1.0;
-      fivetraks_cosAlpha    = -1.0;
-      fivetraks_ctauPV    = -1.0;
-      fivetraks_ctauErrPV    = -1.0;
-      fivetraks_eta    = -1.0;
-      fivetraks_pt    = -1.0;
-      fivetraks_phi    = -1.0;
-      fivetraks_y    = -1.0;
-      fifthtrak_charge = -1.0;
-      fifthtrak_eta = -1.0;
-      fifthtrak_pt = -1.0;
-      fifthtrak_phi = -1.0;
-      fifthtrak_y = -1.0;
-
-      if((fourToFiveMap.find(i))!=fourToFiveMap.end())
+      if((fourToFiveMapPos.find(i))!=fourToFiveMapPos.end())
       {
 
-        fivetrak_cand = fourToFiveMap[(i)];
+        fivetrak_cand = fourToFiveMapPos[(i)];
 
         // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
         fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
         // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
-        fivetraks_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
-        fivetrakspion_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
-        // dimuontrak_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
-        // dimuontrakpion_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
+        fivetraks_pos_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
+        dimuontrak_pos_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_pos_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_pos_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
 
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
-        fifthkaon_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
-        fifthpion_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
-        dimuontrak_p4.SetPtEtaPhiM(fifthkaon_p4.Pt() + dimuon_cand->pt(),fifthkaon_p4.Eta() + dimuon_cand->eta(),fifthkaon_p4.Phi() + dimuon_cand->phi(),fifthkaon_p4.M() + dimuon_cand->mass());
-        dimuontrakpion_p4.SetPtEtaPhiM(fifthpion_p4.Pt() + dimuon_cand->pt(),fifthpion_p4.Eta() + dimuon_cand->eta(),fifthpion_p4.Phi() + dimuon_cand->phi(),fifthpion_p4.M() + dimuon_cand->mass());
+        fifthkaon_pos_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
+        fifthkaon_pos_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        dimuontrak_pos_p4.SetPtEtaPhiM(fifthkaon_pos_p4.Pt() + dimuon_cand->pt(),fifthkaon_pos_p4.Eta() + dimuon_cand->eta(),fifthkaon_pos_p4.Phi() + dimuon_cand->phi(),fifthkaon_pos_p4.M() + dimuon_cand->mass());
+        dimuontrak_pos_p4.SetPtEtaPhiM(fifthkaon_pos_p4.Pt() + dimuon_cand->pt(),fifthkaon_pos_p4.Eta() + dimuon_cand->eta(),fifthkaon_pos_p4.Phi() + dimuon_cand->phi(),fifthkaon_pos_p4.M() + dimuon_cand->mass());
 
-        fivetraks_kaon_m    = fivetrak_cand->mass();
-        fivetraks_pion_m    = fivetrak_cand->userFloat("mass_pion");
-        fivetraks_kaon_trim    = dimuontrak_p4.M();
-        fivetraks_pion_trim    = dimuontrakpion_p4.M();
-        fivetraks_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
-        fivetraks_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
-        fivetraks_vProb    = fivetrak_cand->userFloat("vProb");
-        fivetraks_vChi2    = fivetrak_cand->userFloat("vChi2");
-        fivetraks_nDof    = fivetrak_cand->userFloat("nDof");
-        fivetraks_charge    = fivetrak_cand->mass();
-        fivetraks_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
-        fivetraks_ctauPV    = fivetrak_cand->userFloat("ctauPV");
-        fivetraks_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
-        fivetraks_eta    = fivetrak_cand->eta();
-        fivetraks_pt    = fivetrak_cand->pt();
-        fivetraks_phi    = fivetrak_cand->phi();
-        fivetraks_y    = fivetrak_cand->y();
+        fivetraks_pos_kaon_m    = fivetrak_cand->mass();
+        fivetraks_pos_pion_m    = fivetrak_cand->userFloat("mass_pion");
+        fivetraks_pos_kaon_trim    = dimuontrak_pos_p4.M();
+        fivetraks_pos_pion_trim    = dimuontrak_pos_p4.M();
+        fivetraks_pos_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
+        fivetraks_pos_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
+        fivetraks_pos_vProb    = fivetrak_cand->userFloat("vProb");
+        fivetraks_pos_vChi2    = fivetrak_cand->userFloat("vChi2");
+        fivetraks_pos_nDof    = fivetrak_cand->userFloat("nDof");
+        fivetraks_pos_charge    = fivetrak_cand->mass();
+        fivetraks_pos_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
+        fivetraks_pos_ctauPV    = fivetrak_cand->userFloat("ctauPV");
+        fivetraks_pos_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
+        fivetraks_pos_eta    = fivetrak_cand->eta();
+        fivetraks_pos_pt    = fivetrak_cand->pt();
+        fivetraks_pos_phi    = fivetrak_cand->phi();
+        fivetraks_pos_y    = fivetrak_cand->y();
 
-        fifthtrak_charge = fivetrak_cand->daughter("fifth")->charge();
-        fifthtrak_eta = fifth.Eta();
-        fifthtrak_pt = fifth.Pt();
-        fifthtrak_phi = fifth.Phi();
-        fifthtrak_y = fifth.Rapidity();
+        fifthtrak_pos_charge = fivetrak_cand->daughter("fifth")->charge();
+        fifthtrak_pos_eta = fifth.Eta();
+        fifthtrak_pos_pt = fifth.Pt();
+        fifthtrak_pos_phi = fifth.Phi();
+        fifthtrak_pos_y = fifth.Rapidity();
       }
+
+      fivetraks_neu_kaon_m    = -1.0;
+      fivetraks_neu_pion_m    = -1.0;
+      fivetraks_neu_kaon_trim    = -1.0;
+      fivetraks_neu_pion_trim    = -1.0;
+      fivetraks_neu_kaon_m_rf    = -1.0;
+      fivetraks_neu_pion_m_rf    = -1.0;
+      fivetraks_neu_vProb    = -1.0;
+      fivetraks_neu_vChi2    = -1.0;
+      fivetraks_neu_nDof    = -1.0;
+      fivetraks_neu_charge    = -1.0;
+      fivetraks_neu_cosAlpha    = -1.0;
+      fivetraks_neu_ctauPV    = -1.0;
+      fivetraks_neu_ctauErrPV    = -1.0;
+      fivetraks_neu_eta    = -1.0;
+      fivetraks_neu_pt    = -1.0;
+      fivetraks_neu_phi    = -1.0;
+      fivetraks_neu_y    = -1.0;
+      fifthtrak_neu_charge = -1.0;
+      fifthtrak_neu_eta = -1.0;
+      fifthtrak_neu_pt = -1.0;
+      fifthtrak_neu_phi = -1.0;
+      fifthtrak_neu_y = -1.0;
+
+      if((fourToFiveMapNeu.find(i))!=fourToFiveMapNeu.end())
+      {
+
+        fivetrak_cand = fourToFiveMapNeu[(i)];
+
+        // dimuontrak_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        fivetrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrak_cand->daughter("withpion"));
+        // dimuontrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
+
+        fivetraks_neu_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
+        dimuontrak_neu_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_neu_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_neu_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
+
+        reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
+        reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
+        fifthkaon_neu_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
+        fifthkaon_neu_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        dimuontrak_neu_p4.SetPtEtaPhiM(fifthkaon_neu_p4.Pt() + dimuon_cand->pt(),fifthkaon_neu_p4.Eta() + dimuon_cand->eta(),fifthkaon_neu_p4.Phi() + dimuon_cand->phi(),fifthkaon_neu_p4.M() + dimuon_cand->mass());
+        dimuontrak_neu_p4.SetPtEtaPhiM(fifthkaon_neu_p4.Pt() + dimuon_cand->pt(),fifthkaon_neu_p4.Eta() + dimuon_cand->eta(),fifthkaon_neu_p4.Phi() + dimuon_cand->phi(),fifthkaon_neu_p4.M() + dimuon_cand->mass());
+
+        fivetraks_neu_kaon_m    = fivetrak_cand->mass();
+        fivetraks_neu_pion_m    = fivetrak_cand->userFloat("mass_pion");
+        fivetraks_neu_kaon_trim    = dimuontrak_neu_p4.M();
+        fivetraks_neu_pion_trim    = dimuontrak_neu_p4.M();
+        fivetraks_neu_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
+        fivetraks_neu_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
+        fivetraks_neu_vProb    = fivetrak_cand->userFloat("vProb");
+        fivetraks_neu_vChi2    = fivetrak_cand->userFloat("vChi2");
+        fivetraks_neu_nDof    = fivetrak_cand->userFloat("nDof");
+        fivetraks_neu_charge    = fivetrak_cand->mass();
+        fivetraks_neu_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
+        fivetraks_neu_ctauPV    = fivetrak_cand->userFloat("ctauPV");
+        fivetraks_neu_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
+        fivetraks_neu_eta    = fivetrak_cand->eta();
+        fivetraks_neu_pt    = fivetrak_cand->pt();
+        fivetraks_neu_phi    = fivetrak_cand->phi();
+        fivetraks_neu_y    = fivetrak_cand->y();
+
+        fifthtrak_neu_charge = fivetrak_cand->daughter("fifth")->charge();
+        fifthtrak_neu_eta = fifth.Eta();
+        fifthtrak_neu_pt = fifth.Pt();
+        fifthtrak_neu_phi = fifth.Phi();
+        fifthtrak_neu_y = fifth.Rapidity();
+      }
+
+      fivetraks_neg_kaon_m    = -1.0;
+      fivetraks_neg_pion_m    = -1.0;
+      fivetraks_neg_kaon_trim    = -1.0;
+      fivetraks_neg_pion_trim    = -1.0;
+      fivetraks_neg_kaon_m_rf    = -1.0;
+      fivetraks_neg_pion_m_rf    = -1.0;
+      fivetraks_neg_vProb    = -1.0;
+      fivetraks_neg_vChi2    = -1.0;
+      fivetraks_neg_nDof    = -1.0;
+      fivetraks_neg_charge    = -1.0;
+      fivetraks_neg_cosAlpha    = -1.0;
+      fivetraks_neg_ctauPV    = -1.0;
+      fivetraks_neg_ctauErrPV    = -1.0;
+      fivetraks_neg_eta    = -1.0;
+      fivetraks_neg_pt    = -1.0;
+      fivetraks_neg_phi    = -1.0;
+      fivetraks_neg_y    = -1.0;
+      fifthtrak_neg_charge = -1.0;
+      fifthtrak_neg_eta = -1.0;
+      fifthtrak_neg_pt = -1.0;
+      fifthtrak_neg_phi = -1.0;
+      fifthtrak_neg_y = -1.0;
+
+      if((fourToFiveMapNeg.find(i))!=fourToFiveMapNeg.end())
+      {
+
+        fivetrak_cand = fourToFiveMapNeg[(i)];
+
+        // dimuontrak_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        fivetrakpion_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrak_cand->daughter("withpion"));
+        // dimuontrakpion_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
+
+        fivetraks_neg_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
+        dimuontrak_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        // dimuontrak_neg_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
+
+        reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
+        reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
+        fifthkaon_neg_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
+        fifthkaon_neg_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        dimuontrak_neg_p4.SetPtEtaPhiM(fifthkaon_neg_p4.Pt() + dimuon_cand->pt(),fifthkaon_neg_p4.Eta() + dimuon_cand->eta(),fifthkaon_neg_p4.Phi() + dimuon_cand->phi(),fifthkaon_neg_p4.M() + dimuon_cand->mass());
+        dimuontrak_neg_p4.SetPtEtaPhiM(fifthkaon_neg_p4.Pt() + dimuon_cand->pt(),fifthkaon_neg_p4.Eta() + dimuon_cand->eta(),fifthkaon_neg_p4.Phi() + dimuon_cand->phi(),fifthkaon_neg_p4.M() + dimuon_cand->mass());
+
+        fivetraks_neg_kaon_m    = fivetrak_cand->mass();
+        fivetraks_neg_pion_m    = fivetrak_cand->userFloat("mass_pion");
+        fivetraks_neg_kaon_trim    = dimuontrak_neg_p4.M();
+        fivetraks_neg_pion_trim    = dimuontrak_neg_p4.M();
+        fivetraks_neg_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
+        fivetraks_neg_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
+        fivetraks_neg_vProb    = fivetrak_cand->userFloat("vProb");
+        fivetraks_neg_vChi2    = fivetrak_cand->userFloat("vChi2");
+        fivetraks_neg_nDof    = fivetrak_cand->userFloat("nDof");
+        fivetraks_neg_charge    = fivetrak_cand->mass();
+        fivetraks_neg_cosAlpha    = fivetrak_cand->userFloat("cosAlpha");
+        fivetraks_neg_ctauPV    = fivetrak_cand->userFloat("ctauPV");
+        fivetraks_neg_ctauErrPV    = fivetrak_cand->userFloat("ctauErrPV");
+        fivetraks_neg_eta    = fivetrak_cand->eta();
+        fivetraks_neg_pt    = fivetrak_cand->pt();
+        fivetraks_neg_phi    = fivetrak_cand->phi();
+        fivetraks_neg_y    = fivetrak_cand->y();
+
+        fifthtrak_neg_charge = fivetrak_cand->daughter("fifth")->charge();
+        fifthtrak_neg_eta = fifth.Eta();
+        fifthtrak_neg_pt = fifth.Pt();
+        fifthtrak_neg_phi = fifth.Phi();
+        fifthtrak_neg_y = fifth.Rapidity();
+      }
+
+
 
       dimuonditrk_tree->Fill();
 
