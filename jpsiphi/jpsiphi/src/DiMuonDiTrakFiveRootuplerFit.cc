@@ -988,7 +988,7 @@ if(!OnlyGen_)
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    const pat::CompositeCandidate *fivetrak_cand, *dimuontrak_pion_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
+    const pat::CompositeCandidate *fivetrak_cand;
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
 
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
@@ -1315,7 +1315,7 @@ if(!OnlyGen_)
         fivetrak_cand = fourToFiveMapPos[(i)];
 
         // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
+        const pat::CompositeCandidate* fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate* >(fivetrak_cand->daughter("withpion"));
         // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_pos_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
@@ -1384,7 +1384,7 @@ if(!OnlyGen_)
         fivetrak_cand = fourToFiveMapNeu[(i)];
 
         // dimuontrak_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrak_cand->daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrak_cand->daughter("withpion"));
+        const pat::CompositeCandidate* fivetrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrak_cand->daughter("withpion"));
         // dimuontrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_neu_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
@@ -1452,9 +1452,9 @@ if(!OnlyGen_)
 
         fivetrak_cand = fourToFiveMapNeg[(i)];
 
-        // dimuontrak_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrak_cand->daughter("dimuontrak"));
-        fivetrakpion_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrak_cand->daughter("withpion"));
-        // dimuontrakpion_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
+        // dimuontrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("dimuontrak"));
+        const pat::CompositeCandidate* fivetrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrak_cand->daughter("withpion"));
+        // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_neg_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
         fivetraks_pion_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
