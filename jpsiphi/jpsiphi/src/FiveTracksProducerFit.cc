@@ -354,7 +354,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              }
            }else
            {
-             std::cout << d << " this is good " << fiveCandKaon.charge() <<std::endl;
              bestVertexNeg[d] = kaon_vp_fit;
              negCollection[d] = fiveCandKaon;
            }
@@ -372,7 +371,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              }
            }else
            {
-             std::cout << d << " this is good " << fiveCandKaon.charge() <<std::endl;
              bestVertexPos[d] = kaon_vp_fit;
              posCollection[d] = fiveCandKaon;
            }
@@ -391,7 +389,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              }
            }else
            {
-             std::cout << d << " this is good " << fiveCandKaon.charge() <<std::endl;
              bestVertexNeu[d] = kaon_vp_fit;
              neuCollection[d] = fiveCandKaon;
            }
@@ -404,7 +401,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
        }
      }
 
-     std::cout << posCollection.size() << std::endl;
 
      for (auto const& x : posCollection)
       fiveCandPosColl->push_back(x .second);
@@ -413,9 +409,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
      for (auto const& x : negCollection)
       fiveCandNegColl->push_back(x .second);
 
-     ncomboneu = fiveCandNeuColl->size();
-     ncomboneg = fiveCandNegColl->size();
-     ncombopos = fiveCandPosColl->size();
+     ncomboneu += fiveCandNeuColl->size();
+     ncomboneg += fiveCandNegColl->size();
+     ncombopos += fiveCandPosColl->size();
 
   iEvent.put(std::move(fiveCandPosColl),"FiveTracksPos");
   iEvent.put(std::move(fiveCandNeuColl),"FiveTracksNeu");
