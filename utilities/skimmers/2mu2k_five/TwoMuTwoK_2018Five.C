@@ -11,6 +11,7 @@
 //    SlaveBegin():   called after Begin(), when on PROOF called only on the
 //                    slave servers.
 //    Process():      called for each event, in this function you decide what
+
 //                    to read and fill your histograms.
 //    SlaveTerminate: called at the end of the loop on the tree, when on PROOF
 //                    called only on the slave servers.
@@ -149,7 +150,7 @@ void TwoMuTwoK_2018Five::SlaveTerminate()
   if (fOut)
   {
     fOut->cd();
-    gStyle->SetOptStat(111111) ;
+    //gStyle->SetOptStat(111111) ;
 
 
     outTuple->Write();

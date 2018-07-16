@@ -348,7 +348,7 @@ public :
    virtual void    Terminate();
 
    Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
-   TNtuple *outTuple;
+   TTree *outTuple;
    TProofOutputFile *OutFile;
    TFile            *fOut;
 
