@@ -46,6 +46,8 @@ datasetnames = {
 "A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
 "B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD",
 "B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD",
+"C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD",
+"C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD"
 }
 
 
@@ -61,6 +63,8 @@ GlobalTags = {
 "A2018_3": "101X_dataRun2_Prompt_v10",
 "B2018_1": "101X_dataRun2_Prompt_v10",
 "B2018_2": "101X_dataRun2_Prompt_v11",
+"C2018_1": "101X_dataRun2_Prompt_v11",
+"C2018_2": "101X_dataRun2_Prompt_v11",
 }
 
 runNumber = [
