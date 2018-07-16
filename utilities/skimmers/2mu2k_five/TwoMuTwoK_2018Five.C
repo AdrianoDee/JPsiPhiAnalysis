@@ -88,8 +88,8 @@ Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
 
   fReader.SetEntry(entry);
 
-  std::bitset<16> tt(*trigger);
-  std::bitset<16> dimuonTmatch(*dimuon_triggerMatch);
+  //std::bitset<16> tt(*trigger);
+  //std::bitset<16> dimuonTmatch(*dimuon_triggerMatch);
   bool phiM = (*ditrak_p4).M() > 1.01 && (*ditrak_p4).M() < 1.03;
   bool jpsiM = (*dimuon_p4).M() > 3.00 && (*dimuon_p4).M() < 3.20;
   bool cosAlpha = (*dimuonditrk_cosAlpha) > 0.9;
@@ -98,7 +98,7 @@ Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
   bool pPT = (*ditrak_p4).Pt() > 1.0;
   bool theTrigger = (*trigger) > 0;
   bool tMatchDimuon = dimuonTmatch.test(0);
-  bool isMatched = (*dimuon_triggerMatch)>0;
+  bool isMatched = (*dimuon_triggerMatch)>0 && (*highKaonMatch>0) && (*lowKaonMatch>0);
   bool triggerBit = (*trigger) > 0; //tt.test(0);
   bool isBest = (*isBestCandidate);
 
