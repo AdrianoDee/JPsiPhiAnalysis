@@ -77,7 +77,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   // ----------member data ---------------------------
   std::string file_name;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_cand_Label;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivepos_cand_Label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivepos_cand_Label,fiveneg_cand_Label,fiveneu_cand_Label;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
