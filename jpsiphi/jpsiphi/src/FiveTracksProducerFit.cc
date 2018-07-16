@@ -104,7 +104,9 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
   addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
-  produces<pat::CompositeCandidateCollection>("FiveTracksKaon");
+  produces<pat::CompositeCandidateCollection>("FiveTracksPos");
+  produces<pat::CompositeCandidateCollection>("FiveTracksNeg");
+  produces<pat::CompositeCandidateCollection>("FiveTracksNeu");
 
   nevents = 0;
 
@@ -115,13 +117,16 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   maxDPtRel = 2.0;
   trackmass = kaonmass;
 
-  ncombo = 0;
-
+  ncomboneg = 0;
+  ncombopos = 0;
+  ncomboneu = 0;
 }
 
 void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
-  std::unique_ptr<pat::CompositeCandidateCollection> fiveCandKaonColl(new pat::CompositeCandidateCollection);
+  std::unique_ptr<pat::CompositeCandidateCollection> fiveCandPosColl(new pat::CompositeCandidateCollection);
+  std::unique_ptr<pat::CompositeCandidateCollection> fiveCandNegColl(new pat::CompositeCandidateCollection);
+  std::unique_ptr<pat::CompositeCandidateCollection> fiveCandNeuColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrak;
   iEvent.getByToken(DiMuonDiTrakCollection_,dimuonditrak);
@@ -163,8 +168,8 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
   KinematicParticleFactoryFromTransientTrack pFactory;
 
   std::map< std::tuple <int,int,int> ,int> doneFlag;
-  std::map<size_t,float> bestVertex;
-  std::map<size_t,pat::CompositeCandidate> candCollection;
+  std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
+  std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
 
   for (size_t d = 0; d < dimuonditrak->size(); d++) {
 
@@ -342,27 +347,78 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          fiveCandKaon.addUserInt("index",d);
 
          fiveCandKaon.addDaughter(fiveCandPion,"withpion");
-         if(bestVertex.find(d)!=bestVertex.end())
+
+
+         if(fiveCandKaon.charge()<0)
          {
-           if(kaon_vp_fit>bestVertex[d])
+           if(bestVertexNeg.find(d)!=bestVertexNeg.end())
            {
-             bestVertex[d] = kaon_vp_fit;
-             candCollection[d] = fiveCandKaon;
+             if(kaon_vp_fit>bestVertexNeg[d])
+             {
+               bestVertexNeg[d] = kaon_vp_fit;
+               negCollection[d] = fiveCandKaon;
+             }
+           }else
+           {
+             bestVertexNeg[d] = kaon_vp_fit;
+             negCollection[d] = fiveCandKaon;
+             ++ncomboneg;
            }
-         }else
-         {
-           bestVertex[d] = kaon_vp_fit;
-           candCollection[d] = fiveCandKaon;
+
          }
+         if(fiveCandKaon.charge()>0)
+         {
+           if(bestVertexPos.find(d)!=bestVertexNeg.end())
+           {
+             if(kaon_vp_fit>bestVertexNeg[d])
+             {
+               bestVertexNeg[d] = kaon_vp_fit;
+               posCollection[d] = fiveCandKaon;
+             }
+           }else
+           {
+             bestVertexNeg[d] = kaon_vp_fit;
+             posCollection[d] = fiveCandKaon;
+             ++ncombopos;
+           }
+
+         }
+         if(fiveCandKaon.charge()==0)
+         {
+
+           if(bestVertexNeu.find(d)!=bestVertexNeu.end())
+           {
+             if(kaon_vp_fit>bestVertexNeu[d])
+             {
+               bestVertexNeu[d] = kaon_vp_fit;
+               neuCollection[d] = fiveCandKaon;
+             }
+           }else
+           {
+             bestVertexNeu[d] = kaon_vp_fit;
+             neuCollection[d] = fiveCandKaon;
+             ++ncomboneu;
+           }
+
+         }
+
          // fiveCandKaon.addDaughter(*dimuot_pion,"dimuotrakpion");
 
-         ++ncombo;
+
        }
      }
-     for (auto const& x : candCollection)
-      fiveCandKaonColl->push_back(x .second);
 
-  iEvent.put(std::move(fiveCandKaonColl),"FiveTracksKaon");
+     for (auto const& x : posCollection)
+      fiveCandPosColl->push_back(x .second);
+     for (auto const& x : neuCollection)
+      fiveCandNeuColl->push_back(x .second);
+     for (auto const& x : negCollection)
+      fiveCandNegColl->push_back(x .second);
+
+  iEvent.put(std::move(fiveCandPosColl),"FiveTracksPos");
+  iEvent.put(std::move(fiveCandNeuColl),"FiveTracksNeu");
+  iEvent.put(std::move(fiveCandNegColl),"FiveTracksNeg");
+
   nevents++;
 }
 
@@ -371,7 +427,9 @@ void FiveTracksProducerFit::endJob(){
   std::cout << "FiveTracks Candidate producer report:" << std::endl;
   std::cout << "###########################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
-  std::cout << "No. dimuonditrak + trk candidates " << ncombo << std::endl;
+  std::cout << "No. dimtt + trk neg candidates " << ncomboneg << std::endl;
+  std::cout << "No. dimtt + trk pos candidates " << ncombopos << std::endl;
+  std::cout << "No. dimtt + trk neu candidates " << ncomboneu << std::endl;
   std::cout << "###########################" << std::endl;
 }
 
