@@ -106,18 +106,18 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
-  TLorentzVector fivetraks_pos_p4;
-  TLorentzVector dimuontrak_pos_p4;
-  TLorentzVector fifthkaon_pos_p4,fifthkaon_pos_p4;
+  TLorentzVector fivetraks_pos_p4,fivetraks_pion_pos_p4;
+  TLorentzVector dimuontrak_pos_p4,dimuontrak_pion_pos_p4;
+  TLorentzVector fifthpion_pos_p4,fifthkaon_pos_p4;
 
-  TLorentzVector fivetraks_neg_p4;
-  TLorentzVector dimuontrak_neg_p4;
-  TLorentzVector fifthkaon_neg_p4,fifthkaon_neg_p4;
+  TLorentzVector fivetraks_neg_p4,fivetraks_pion_neg_p4;
+  TLorentzVector dimuontrak_neg_p4,dimuontrak_pion_neg_p4;
+  TLorentzVector fifthpion_neg_p4,fifthkaon_neg_p4;
 
 
-  TLorentzVector fivetraks_neu_p4;
-  TLorentzVector dimuontrak_neu_p4;
-  TLorentzVector fifthkaon_neu_p4,fifthkaon_neu_p4;
+  TLorentzVector fivetraks_neu_p4,fivetraks_pion_neu_p4;
+  TLorentzVector dimuontrak_neu_p4,dimuontrak_pion_neu_p4;
+  TLorentzVector fifthpion_neu_p4,fifthkaon_neu_p4;
 
 
   Int_t dimuonditrk_charge;
@@ -302,11 +302,23 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("highKaon_p4",   "TLorentzVector", &highKaon_p4);
           dimuonditrk_tree->Branch("lowKaon_p4",   "TLorentzVector", &lowKaon_p4);
           dimuonditrk_tree->Branch("fivetraks_pos_p4",   "TLorentzVector", &fivetraks_pos_p4);
+          dimuonditrk_tree->Branch("fivetraks_pion_pos_p4",   "TLorentzVector", &fivetraks_pion_pos_p4);
           dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pion_pos_p4",   "TLorentzVector", &dimuontrak_pion_pos_p4);
           dimuonditrk_tree->Branch("fifthkaon_pos_p4",   "TLorentzVector", &fifthkaon_pos_p4);
-          dimuonditrk_tree->Branch("fifthkaon_pos_p4",   "TLorentzVector", &fifthkaon_pos_p4);
-          dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
-          dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
+          dimuonditrk_tree->Branch("fifthpion_pos_p4",   "TLorentzVector", &fifthpion_pos_p4);
+          dimuonditrk_tree->Branch("fivetraks_neu_p4",   "TLorentzVector", &fivetraks_neu_p4);
+          dimuonditrk_tree->Branch("fivetraks_pion_neu_p4",   "TLorentzVector", &fivetraks_pion_neu_p4);
+          dimuonditrk_tree->Branch("dimuontrak_neu_p4",   "TLorentzVector", &dimuontrak_neu_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pion_neu_p4",   "TLorentzVector", &dimuontrak_pion_neu_p4);
+          dimuonditrk_tree->Branch("fifthkaon_neu_p4",   "TLorentzVector", &fifthkaon_neu_p4);
+          dimuonditrk_tree->Branch("fifthpion_neu_p4",   "TLorentzVector", &fifthpion_neu_p4);
+          dimuonditrk_tree->Branch("fivetraks_neg_p4",   "TLorentzVector", &fivetraks_neg_p4);
+          dimuonditrk_tree->Branch("fivetraks_pion_neg_p4",   "TLorentzVector", &fivetraks_pion_neg_p4);
+          dimuonditrk_tree->Branch("dimuontrak_neg_p4",   "TLorentzVector", &dimuontrak_neg_p4);
+          dimuonditrk_tree->Branch("dimuontrak_pion_neg_p4",   "TLorentzVector", &dimuontrak_pion_neg_p4);
+          dimuonditrk_tree->Branch("fifthkaon_neg_p4",   "TLorentzVector", &fifthkaon_neg_p4);
+          dimuonditrk_tree->Branch("fifthpion_neg_p4",   "TLorentzVector", &fifthpion_neg_p4);
 
           //refitted p4s
           dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
@@ -778,20 +790,6 @@ gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd5_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-fivetraks_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-fifthkaon_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-fifthkaon_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-
-dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 dimuonditrk_pdgid      = 0;
 dimuonditrk_isprompt   = -99.0;
@@ -959,9 +957,38 @@ if(!OnlyGen_)
   if (!fiveneg_cand_handle.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
   if (dimuonditrk_cand_handle.isValid() && fivepos_cand_handle.isValid() && fiveneu_cand_handle.isValid()  && fiveneg_cand_handle.isValid()) {
 
+    fivetraks_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fivetraks_pion_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_pion_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthpion_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthkaon_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    fivetraks_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fivetraks_pion_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_pion_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthpion_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthkaon_neu_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    fivetraks_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fivetraks_pion_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuontrak_pion_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthpion_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    fifthkaon_neg_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-    const pat::CompositeCandidate *fivetrak_cand, *dimuontrak_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
+    const pat::CompositeCandidate *fivetrak_cand, *dimuontrak_pion_cand,*fivetrakpion_cand, *dimuontrakpion_cand;
     noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
 
     for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
@@ -1292,21 +1319,21 @@ if(!OnlyGen_)
         // dimuontrakpion_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_pos_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
-        dimuontrak_pos_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        fivetraks_pion_pos_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_pos_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_pos_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
 
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
         fifthkaon_pos_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
-        fifthkaon_pos_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        fifthpion_pos_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
         dimuontrak_pos_p4.SetPtEtaPhiM(fifthkaon_pos_p4.Pt() + dimuon_cand->pt(),fifthkaon_pos_p4.Eta() + dimuon_cand->eta(),fifthkaon_pos_p4.Phi() + dimuon_cand->phi(),fifthkaon_pos_p4.M() + dimuon_cand->mass());
-        dimuontrak_pos_p4.SetPtEtaPhiM(fifthkaon_pos_p4.Pt() + dimuon_cand->pt(),fifthkaon_pos_p4.Eta() + dimuon_cand->eta(),fifthkaon_pos_p4.Phi() + dimuon_cand->phi(),fifthkaon_pos_p4.M() + dimuon_cand->mass());
+        dimuontrak_pion_pos_p4.SetPtEtaPhiM(fifthpion_pos_p4.Pt() + dimuon_cand->pt(),fifthpion_pos_p4.Eta() + dimuon_cand->eta(),fifthpion_pos_p4.Phi() + dimuon_cand->phi(),fifthpion_pos_p4.M() + dimuon_cand->mass());
 
         fivetraks_pos_kaon_m    = fivetrak_cand->mass();
         fivetraks_pos_pion_m    = fivetrak_cand->userFloat("mass_pion");
         fivetraks_pos_kaon_trim    = dimuontrak_pos_p4.M();
-        fivetraks_pos_pion_trim    = dimuontrak_pos_p4.M();
+        fivetraks_pos_pion_trim    = dimuontrak_pion_pos_p4.M();
         fivetraks_pos_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
         fivetraks_pos_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
         fivetraks_pos_vProb    = fivetrak_cand->userFloat("vProb");
@@ -1361,21 +1388,21 @@ if(!OnlyGen_)
         // dimuontrakpion_cand = dynamic_cast <const pat::ComneuiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_neu_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
-        dimuontrak_neu_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        fivetraks_pion_neu_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_neu_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_neu_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
 
         reco::Candidate::LorentzVector fifth = fivetrak_cand->daughter("fifth")->p4();
         reco::Candidate::LorentzVector fifthpion = fivetrakpion_cand->daughter("fifth")->p4();
         fifthkaon_neu_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
-        fifthkaon_neu_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
+        fifthpion_neu_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
         dimuontrak_neu_p4.SetPtEtaPhiM(fifthkaon_neu_p4.Pt() + dimuon_cand->pt(),fifthkaon_neu_p4.Eta() + dimuon_cand->eta(),fifthkaon_neu_p4.Phi() + dimuon_cand->phi(),fifthkaon_neu_p4.M() + dimuon_cand->mass());
-        dimuontrak_neu_p4.SetPtEtaPhiM(fifthkaon_neu_p4.Pt() + dimuon_cand->pt(),fifthkaon_neu_p4.Eta() + dimuon_cand->eta(),fifthkaon_neu_p4.Phi() + dimuon_cand->phi(),fifthkaon_neu_p4.M() + dimuon_cand->mass());
+        dimuontrak_pion_neu_p4.SetPtEtaPhiM(fifthkaon_neu_p4.Pt() + dimuon_cand->pt(),fifthkaon_neu_p4.Eta() + dimuon_cand->eta(),fifthkaon_neu_p4.Phi() + dimuon_cand->phi(),fifthkaon_neu_p4.M() + dimuon_cand->mass());
 
         fivetraks_neu_kaon_m    = fivetrak_cand->mass();
         fivetraks_neu_pion_m    = fivetrak_cand->userFloat("mass_pion");
         fivetraks_neu_kaon_trim    = dimuontrak_neu_p4.M();
-        fivetraks_neu_pion_trim    = dimuontrak_neu_p4.M();
+        fivetraks_neu_pion_trim    = dimuontrak_pion_neu_p4.M();
         fivetraks_neu_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
         fivetraks_neu_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
         fivetraks_neu_vProb    = fivetrak_cand->userFloat("vProb");
@@ -1430,7 +1457,7 @@ if(!OnlyGen_)
         // dimuontrakpion_cand = dynamic_cast <const pat::ComnegiteCandidate *>(fivetrakpion_cand->daughter("dimuontrak"));
 
         fivetraks_neg_p4.SetPtEtaPhiM(fivetrak_cand->pt(), fivetrak_cand->eta(), fivetrak_cand->phi(), fivetrak_cand->mass());
-        dimuontrak_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
+        fivetraks_pion_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_neg_p4.SetPtEtaPhiM(fivetrakpion_cand->pt(), fivetrakpion_cand->eta(), fivetrakpion_cand->phi(), fivetrakpion_cand->mass());
         // dimuontrak_neg_p4.SetPtEtaPhiM(dimuontrakpion_cand->pt(), dimuontrakpion_cand->eta(), dimuontrakpion_cand->phi(), dimuontrakpion_cand->mass());
 
@@ -1439,12 +1466,12 @@ if(!OnlyGen_)
         fifthkaon_neg_p4.SetPtEtaPhiM(fifth.pt(), fifth.eta(), fifth.phi(), fifth.mass());
         fifthkaon_neg_p4.SetPtEtaPhiM(fifthpion.pt(), fifthpion.eta(), fifthpion.phi(), fifthpion.mass());
         dimuontrak_neg_p4.SetPtEtaPhiM(fifthkaon_neg_p4.Pt() + dimuon_cand->pt(),fifthkaon_neg_p4.Eta() + dimuon_cand->eta(),fifthkaon_neg_p4.Phi() + dimuon_cand->phi(),fifthkaon_neg_p4.M() + dimuon_cand->mass());
-        dimuontrak_neg_p4.SetPtEtaPhiM(fifthkaon_neg_p4.Pt() + dimuon_cand->pt(),fifthkaon_neg_p4.Eta() + dimuon_cand->eta(),fifthkaon_neg_p4.Phi() + dimuon_cand->phi(),fifthkaon_neg_p4.M() + dimuon_cand->mass());
+        dimuontrak_pion_neg_p4.SetPtEtaPhiM(fifthpion_neg_p4.Pt() + dimuon_cand->pt(),fifthpion_neg_p4.Eta() + dimuon_cand->eta(),fifthpion_neg_p4.Phi() + dimuon_cand->phi(),fifthpion_neg_p4.M() + dimuon_cand->mass());
 
         fivetraks_neg_kaon_m    = fivetrak_cand->mass();
         fivetraks_neg_pion_m    = fivetrak_cand->userFloat("mass_pion");
         fivetraks_neg_kaon_trim    = dimuontrak_neg_p4.M();
-        fivetraks_neg_pion_trim    = dimuontrak_neg_p4.M();
+        fivetraks_neg_pion_trim    = dimuontrak_pion_neg_p4.M();
         fivetraks_neg_kaon_m_rf    = fivetrak_cand->userFloat("mass_kaon_rf");
         fivetraks_neg_pion_m_rf    = fivetrak_cand->userFloat("mass_pion_rf");
         fivetraks_neg_vProb    = fivetrak_cand->userFloat("vProb");
