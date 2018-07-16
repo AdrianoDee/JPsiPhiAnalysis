@@ -12,7 +12,7 @@ import pandas as pd
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--path', action='store_true')
+parser.add_argument('--path', type=str,default=".")
 args = parser.parse_args()
 
 for path, subdirs, files in os.walk(args.path):
