@@ -325,8 +325,6 @@ public :
    TProofOutputFile *OutFile;
    TFile            *fOut;
 
-   ClassDef(TwoMuTwoKSkim,0);
-
    ClassDef(TwoMuTwoK_2018Five,0);
 
 };
