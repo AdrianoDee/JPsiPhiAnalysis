@@ -320,6 +320,13 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
+   Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
+   TNtuple *outTuple;
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
+   ClassDef(TwoMuTwoKSkim,0);
+
    ClassDef(TwoMuTwoK_2018Five,0);
 
 };
