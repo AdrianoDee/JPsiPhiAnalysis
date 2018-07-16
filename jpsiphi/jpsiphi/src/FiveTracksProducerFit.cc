@@ -97,7 +97,7 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-  FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
+  FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracksPos");
   produces<pat::CompositeCandidateCollection>("FiveTracksNeg");
