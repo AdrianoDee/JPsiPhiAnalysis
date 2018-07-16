@@ -49,7 +49,6 @@ process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 500
-process.MessageLogger.suppressWarning= cms.untracked.vstring("*")
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(input_file)
