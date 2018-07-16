@@ -343,7 +343,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
          fiveCandKaon.addDaughter(fiveCandPion,"withpion");
 
-
+         std::cout << "this is good" << fiveCandKaon.charge() <<std::endl;
          if(fiveCandKaon.charge()<0)
          {
            if(bestVertexNeg.find(d)!=bestVertexNeg.end())
