@@ -28,6 +28,7 @@
 
 #include "TwoMuTwoK_2018Five.h"
 #include <TH2.h>
+#include <bitset>
 
 void TwoMuTwoK_2018Five::Begin(TTree * /*tree*/)
 {
@@ -59,7 +60,7 @@ void TwoMuTwoK_2018Five::SlaveBegin(TTree * /*tree*/)
   Phi_mean = 1.019723;
   Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-  outTuple = fChain->CloneTree(0);//new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:mmPt:ttPt");
+  outTuple = new TNtuple("outuple","outuple","run:evt:xM:ttM:mmM:xM_ref:ttM_ref:mmM_ref:xL:xPt:xEta:xVtx:xCos:xHlt:muonp_pT:muonn_pT:kaonn_pT:kaonp_pT:mmPt:ttPt");
 
 }
 
