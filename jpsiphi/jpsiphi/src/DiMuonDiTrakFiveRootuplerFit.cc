@@ -76,15 +76,14 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_cand_Label;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivepos_cand_Label,fiveneg_cand_Label,fiveneu_cand_Label;
-  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  bool isMC_,OnlyBest_,OnlyGen_ ;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivetrakpos_,fivetrakneg_,fivetrakneu_;
+  edm::EDGetTokenT<reco::VertexCollection> pVertices_;
+  edm::EDGetTokenT<edm::TriggerResults> triggers_;
+  bool isMC_,onlyBest_,onlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
-  std::vector<std::string>  HLTs_;
-  std::vector<std::string>  HLTFilters_;
+  std::vector<std::string>  hlts_;
+  std::vector<std::string>  hltFilters_;
   std::string treeName_;
 
   UInt_t run,event,numPrimaryVertices, trigger;
@@ -238,12 +237,12 @@ UInt_t DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(pat::CompositeCandidate *d
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
-  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-    // std::cout << HLTFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+  for (unsigned int iTr = 0; iTr<hltFilters_.size(); iTr++ ) {
+    // std::cout << hltFilters_[iTr] << std::endl;
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
-    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
+    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << hltFilters_[iTr] << std::endl;
   }
 
   return matched;
@@ -263,21 +262,20 @@ static const Double_t psi1SMass =  3.09691;
 // constructors and destructor
 //
 DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterSet& iConfig):
-        dimuonditrk_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("dimuonditrk_cand"))),
-        fivepos_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
-        fiveneg_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
-        fiveneu_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("fivetracks_cand"))),
-        thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-        primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
-        triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+        dimuonditrk_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
+        fivetrakpos_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTrackPos"))),
+        fivetrakneg_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTrackNeg"))),
+        fivetrakneu_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTrackNeu"))),
+        pVertices_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
+        triggers_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
-        OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-        OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
+        onlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+        onlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         phipdgid_(iConfig.getParameter<uint32_t>("JPsi_pdg")),
         jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
-        HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
-        HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+        hlts_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+        hltFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         treeName_(iConfig.getParameter<std::string>("TreeName"))
 {
 	      edm::Service<TFileService> fs;
@@ -289,7 +287,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
         dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
 
-        if(!OnlyGen_)
+        if(!onlyGen_)
         {
           dimuonditrk_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
 
@@ -639,7 +637,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         }
         int pdgid_ = 0;
 
-        if (isMC_ || OnlyGen_) {
+        if (isMC_ || onlyGen_) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
 
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
@@ -702,22 +700,22 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
-  iEvent.getByToken(dimuonditrk_cand_Label, dimuonditrk_cand_handle);
+  iEvent.getByToken(dimuonditrk_, dimuonditrk_cand_handle);
 
   edm::Handle<std::vector<pat::CompositeCandidate>> fivepos_cand_handle;
-  iEvent.getByToken(fivepos_cand_Label, fivepos_cand_handle);
+  iEvent.getByToken(fivetrakpos_, fivepos_cand_handle);
 
   edm::Handle<std::vector<pat::CompositeCandidate>> fiveneg_cand_handle;
-  iEvent.getByToken(fiveneg_cand_Label, fiveneg_cand_handle);
+  iEvent.getByToken(fivetrakneg_, fiveneg_cand_handle);
 
   edm::Handle<std::vector<pat::CompositeCandidate>> fiveneu_cand_handle;
-  iEvent.getByToken(fiveneu_cand_Label, fiveneu_cand_handle);
+  iEvent.getByToken(fivetrakneu_, fiveneu_cand_handle);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+  iEvent.getByToken(pVertices_, primaryVertices_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+  iEvent.getByToken( triggers_ , triggerResults_handle);
 
   numPrimaryVertices = primaryVertices_handle->size();
   run = iEvent.id().run();
@@ -734,12 +732,12 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-     unsigned int NTRIGGERS = HLTs_.size();
+     unsigned int NTRIGGERS = hlts_.size();
 
      for (unsigned int i = 0; i < NTRIGGERS; i++) {
         for (int version = 1; version < 20; version++) {
            std::stringstream ss;
-           ss << HLTs_[i] << "_v" << version;
+           ss << hlts_[i] << "_v" << version;
            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
               trigger += (1<<i);
@@ -798,7 +796,7 @@ dimuonditrk_jpsippdl   = -99.0;
 
 gen_dimuonditrk_pdgId = 0;
 
-if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+if ( (isMC_ || onlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
     // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
@@ -917,11 +915,11 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 }
 }  // end if isMC
 
-if(OnlyGen_) dimuonditrk_tree->Fill();
+if(onlyGen_) dimuonditrk_tree->Fill();
 
 std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
 
-if(!OnlyGen_)
+if(!onlyGen_)
 {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
@@ -949,7 +947,7 @@ if(!OnlyGen_)
 }
 
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
-  if(!OnlyGen_)
+  if(!onlyGen_)
   {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
@@ -1055,7 +1053,7 @@ if(!OnlyGen_)
       dimuonditrk_dca_t1t2 = dimuonditrk_cand.userFloat("dca_t1t2");
 
 
-      if(isMC_ || OnlyGen_)
+      if(isMC_ || onlyGen_)
       {
         dimuonditrk_jpsipdg    = dimuonditrk_cand.userInt("jPsiGenPdgId");
         dimuonditrk_jpsippdl   = dimuonditrk_cand.userFloat("jPsiPpdlTrue");
@@ -1497,7 +1495,7 @@ if(!OnlyGen_)
 
       dimuonditrk_tree->Fill();
 
-      if (OnlyBest_) break;
+      if (onlyBest_) break;
       else
       isBestCandidate = false;
 

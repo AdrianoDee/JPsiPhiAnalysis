@@ -228,7 +228,7 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts = cms.vdouble(4.0,5.8),         # traks masses
+    FiveTrakCuts = cms.vdouble(4.0,6.8),         # traks masses
 	Filters = filters,
 	OnlyBest = cms.bool(False),
     IsMC = cms.bool(False),
@@ -272,10 +272,11 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 # )
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
-    dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-	fivetracks_cand = cms.InputTag('FiveTracksProducer','FiveTracksKaon'),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
+	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
+	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
+    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
