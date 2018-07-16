@@ -97,7 +97,7 @@ Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
   bool jPT = (*dimuon_p4).Pt() > 7.0;
   bool pPT = (*ditrak_p4).Pt() > 1.0;
   bool theTrigger = (*trigger) > 0;
-  bool tMatchDimuon = dimuonTmatch.test(0);
+  //bool tMatchDimuon = dimuonTmatch.test(0);
   bool isMatched = (*dimuon_triggerMatch)>0 && (*highKaonMatch>0) && (*lowKaonMatch>0);
   bool triggerBit = (*trigger) > 0; //tt.test(0);
   bool isBest = (*isBestCandidate);
