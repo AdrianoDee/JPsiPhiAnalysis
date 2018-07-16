@@ -112,6 +112,18 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector dimuontrak_pos_p4;
   TLorentzVector dimuontrak_pos_p4;
 
+  TLorentzVector fivetraks_neg_p4;
+  TLorentzVector dimuontrak_neg_p4;
+  TLorentzVector fifthkaon_neg_p4,fifthkaon_neg_p4;
+  TLorentzVector dimuontrak_neg_p4;
+  TLorentzVector dimuontrak_neg_p4;
+
+  TLorentzVector fivetraks_neu_p4;
+  TLorentzVector dimuontrak_neu_p4;
+  TLorentzVector fifthkaon_neu_p4,fifthkaon_neu_p4;
+  TLorentzVector dimuontrak_neu_p4;
+  TLorentzVector dimuontrak_neu_p4;
+
   Int_t dimuonditrk_charge;
 
   UInt_t dimuon_triggerMatch, dimuon_triggerMatch_rf;
@@ -120,8 +132,6 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
-  Double_t fivetraks_pos_pion_trim,fivetraks_pos_kaon_trim,fivetraks_pos_eta;
-  Double_t fivetraks_pos_pt,fivetraks_pos_phi,fivetraks_pos_y,fifthtrak_pos_charge;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
@@ -160,16 +170,22 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t fivetraks_pos_vProb, fivetraks_pos_vChi2, fivetraks_pos_nDof, fivetraks_pos_charge;
   Double_t fivetraks_pos_cosAlpha, fivetraks_pos_ctauPV, fivetraks_pos_ctauErrPV;
   Double_t fifthtrak_pos_pt, fifthtrak_pos_phi, fifthtrak_pos_eta,fifthtrak_pos_y;
+  Double_t fivetraks_pos_pion_trim,fivetraks_pos_kaon_trim,fivetraks_pos_eta;
+  Double_t fivetraks_pos_pt,fivetraks_pos_phi,fivetraks_pos_y,fifthtrak_pos_charge;
 
   Double_t fivetraks_neu_kaon_m_rf, fivetraks_neu_pion_m_rf, fivetraks_neu_kaon_m, fivetraks_neu_pion_m;
   Double_t fivetraks_neu_vProb, fivetraks_neu_vChi2, fivetraks_neu_nDof, fivetraks_neu_charge;
   Double_t fivetraks_neu_cosAlpha, fivetraks_neu_ctauPV, fivetraks_neu_ctauErrPV;
   Double_t fifthtrak_neu_pt, fifthtrak_neu_phi, fifthtrak_neu_eta,fifthtrak_neu_y;
+  Double_t fivetraks_neu_pion_trim,fivetraks_neu_kaon_trim,fivetraks_neu_eta;
+  Double_t fivetraks_neu_pt,fivetraks_neu_phi,fivetraks_neu_y,fifthtrak_neu_charge;
 
   Double_t fivetraks_neg_kaon_m_rf, fivetraks_neg_pion_m_rf, fivetraks_neg_kaon_m, fivetraks_neg_pion_m;
   Double_t fivetraks_neg_vProb, fivetraks_neg_vChi2, fivetraks_neg_nDof, fivetraks_neg_charge;
   Double_t fivetraks_neg_cosAlpha, fivetraks_neg_ctauPV, fivetraks_neg_ctauErrPV;
   Double_t fifthtrak_neg_pt, fifthtrak_neg_phi, fifthtrak_neg_eta,fifthtrak_neg_y;
+  Double_t fivetraks_neg_pion_trim,fivetraks_neg_kaon_trim,fivetraks_neg_eta;
+  Double_t fivetraks_neg_pt,fivetraks_neg_phi,fivetraks_neg_y,fifthtrak_neg_charge;
 
   Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
 
