@@ -104,36 +104,36 @@ Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
 
   if(theTrigger && phiM && jpsiM && cosAlpha && vertexP && isMatched && jPT && pPT)
   {
-    // run_out =  *run;
-    // evt_out =  *event;
-    //
-    // ttM_out = (*ditrak_p4).M();
-    // mmM_out= (*dimuon_p4).M();
-    // xM_out   = (*dimuonditrk_p4).M();
-    //
-    // ttM_ref_out = (*ditrak_rf_p4).M();
-    // mmM_ref_out= (*dimuon_rf_p4).M();
-    // xM_ref_out   = (*dimuonditrk_rf_p4).M();
-    //
-    // xL_out = (*dimuonditrk_ctauPV)/(*dimuonditrk_ctauErrPV);
-    // xPt_out = (*dimuonditrk_rf_p4).Pt();
-    // xEta_out = (*dimuonditrk_rf_p4).Eta();
-    // xVtx_out = *dimuonditrk_vProb;
-    // xCos_out = *dimuonditrk_cosAlpha;
-    // xHlt_out = *trigger;
-    //
-    // muonp_pT_out = (*muonp_rf_p4).Pt();
-    // muonn_pT_out = (*muonn_rf_p4).Pt();
-    // kaonn_pT_out = (*kaonp_rf_p4).Pt();
-    // kaonp_pT_out = (*kaonn_rf_p4).Pt();
-    //
-    // mmPt = (*dimuon_p4).Pt();
-    // ttPt = (*ditrak_p4).Pt();
-    //
-    // Float_t params[] = {run_out,evt_out,xM_out,ttM_out,mmM_out,xM_ref_out,ttM_ref_out,mmM_ref_out,
-    // xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,mmPt,ttPt};
+    run_out =  0.0; //*run;
+    evt_out =  0.0; //*event;
 
-    outTuple->Fill();
+    ttM_out = 0.0; //(*ditrak_p4).M();
+    mmM_out= 0.0; //(*dimuon_p4).M();
+    xM_out   = 0.0; //(*dimuonditrk_p4).M();
+
+    ttM_ref_out = 0.0; //(*ditrak_rf_p4).M();
+    mmM_ref_out= 0.0; //(*dimuon_rf_p4).M();
+    xM_ref_out   = 0.0; //(*dimuonditrk_rf_p4).M();
+
+    xL_out = 0.0; //(*dimuonditrk_ctauPV)/(*dimuonditrk_ctauErrPV);
+    xPt_out = 0.0; //(*dimuonditrk_rf_p4).Pt();
+    xEta_out = 0.0; //(*dimuonditrk_rf_p4).Eta();
+    xVtx_out = 0.0; //*dimuonditrk_vProb;
+    xCos_out = 0.0; //*dimuonditrk_cosAlpha;
+    xHlt_out = 0.0; //*trigger;
+
+    muonp_pT_out = 0.0; //(*muonp_rf_p4).Pt();
+    muonn_pT_out = 0.0; //(*muonn_rf_p4).Pt();
+    kaonn_pT_out = 0.0; //(*kaonp_rf_p4).Pt();
+    kaonp_pT_out = 0.0; //(*kaonn_rf_p4).Pt();
+
+    mmPt = 0.0; //(*dimuon_p4).Pt();
+    ttPt = 0.0; //(*ditrak_p4).Pt();
+
+    Float_t params[] = {run_out,evt_out,xM_out,ttM_out,mmM_out,xM_ref_out,ttM_ref_out,mmM_ref_out,
+    xL_out,xPt_out,xEta_out,xVtx_out,xCos_out,xHlt_out,muonp_pT_out,muonn_pT_out,kaonn_pT_out,kaonp_pT_out,mmPt,ttPt};
+
+    outTuple->Fill(params);
   }
 
 
