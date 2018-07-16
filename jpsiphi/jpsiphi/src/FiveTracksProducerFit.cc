@@ -98,11 +98,6 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
-  OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  isMC_(iConfig.getParameter<bool>("IsMC")),
-  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
-  addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracksPos");
   produces<pat::CompositeCandidateCollection>("FiveTracksNeg");
@@ -362,10 +357,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
            {
              bestVertexNeg[d] = kaon_vp_fit;
              negCollection[d] = fiveCandKaon;
-             ++ncomboneg;
            }
 
          }
+         else
          if(fiveCandKaon.charge()>0)
          {
            if(bestVertexPos.find(d)!=bestVertexNeg.end())
@@ -379,10 +374,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
            {
              bestVertexNeg[d] = kaon_vp_fit;
              posCollection[d] = fiveCandKaon;
-             ++ncombopos;
            }
 
          }
+         else
          if(fiveCandKaon.charge()==0)
          {
 
@@ -397,7 +392,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
            {
              bestVertexNeu[d] = kaon_vp_fit;
              neuCollection[d] = fiveCandKaon;
-             ++ncomboneu;
            }
 
          }
@@ -414,6 +408,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
       fiveCandNeuColl->push_back(x .second);
      for (auto const& x : negCollection)
       fiveCandNegColl->push_back(x .second);
+
+     ncomboneu = fiveCandNeuColl->size();
+     ncomboneg = fiveCandNegColl->size();
+     ncombopos = fiveCandPosColl->size();
 
   iEvent.put(std::move(fiveCandPosColl),"FiveTracksPos");
   iEvent.put(std::move(fiveCandNeuColl),"FiveTracksNeu");

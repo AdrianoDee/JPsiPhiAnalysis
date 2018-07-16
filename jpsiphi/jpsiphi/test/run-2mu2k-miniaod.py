@@ -217,8 +217,8 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     IsMC = cms.bool(False),
     AddMCTruth = cms.bool(False),
 	DoDouble = cms.bool(False),
-	AddSS    = cms.bool(False),
-	PionRefit = cms.bool(False)
+	AddSS    = cms.bool(True),
+	PionRefit = cms.bool(True)
 )
 
 process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
@@ -229,12 +229,6 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
     FiveTrakCuts = cms.vdouble(4.0,6.8),         # traks masses
-	Filters = filters,
-	OnlyBest = cms.bool(False),
-    IsMC = cms.bool(False),
-    AddMCTruth = cms.bool(False),
-	DoDouble = cms.bool(False),
-	AddSS    = cms.bool(False),
 )
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
