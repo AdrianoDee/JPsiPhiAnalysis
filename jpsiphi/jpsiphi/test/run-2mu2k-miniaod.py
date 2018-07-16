@@ -89,7 +89,14 @@ filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
                                 #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
                                 'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
                                 'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
                                 #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
                                 # 'hltDoubleMu4JpsiDisplacedL3Filtered'
                                 # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
