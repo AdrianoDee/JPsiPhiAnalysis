@@ -109,20 +109,16 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   TLorentzVector fivetraks_pos_p4;
   TLorentzVector dimuontrak_pos_p4;
   TLorentzVector fifthkaon_pos_p4,fifthkaon_pos_p4;
-  TLorentzVector dimuontrak_pos_p4;
-  TLorentzVector dimuontrak_pos_p4;
 
   TLorentzVector fivetraks_neg_p4;
   TLorentzVector dimuontrak_neg_p4;
   TLorentzVector fifthkaon_neg_p4,fifthkaon_neg_p4;
-  TLorentzVector dimuontrak_neg_p4;
-  TLorentzVector dimuontrak_neg_p4;
+
 
   TLorentzVector fivetraks_neu_p4;
   TLorentzVector dimuontrak_neu_p4;
   TLorentzVector fifthkaon_neu_p4,fifthkaon_neu_p4;
-  TLorentzVector dimuontrak_neu_p4;
-  TLorentzVector dimuontrak_neu_p4;
+
 
   Int_t dimuonditrk_charge;
 
@@ -696,14 +692,14 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
   iEvent.getByToken(dimuonditrk_cand_Label, dimuonditrk_cand_handle);
 
-  edm::Handle<std::vector<pat::CompositeCandidate>> fivepos_cand_hanlde;
-  iEvent.getByToken(fivepos_cand_Label, fivepos_cand_hanlde);
+  edm::Handle<std::vector<pat::CompositeCandidate>> fivepos_cand_handle;
+  iEvent.getByToken(fivepos_cand_Label, fivepos_cand_handle);
 
-  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneg_cand_hanlde;
-  iEvent.getByToken(fiveneg_cand_Label, fiveneg_cand_hanlde);
+  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneg_cand_handle;
+  iEvent.getByToken(fiveneg_cand_Label, fiveneg_cand_handle);
 
-  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneu_cand_hanlde;
-  iEvent.getByToken(fiveneu_cand_Label, fiveneu_cand_hanlde);
+  edm::Handle<std::vector<pat::CompositeCandidate>> fiveneu_cand_handle;
+  iEvent.getByToken(fiveneu_cand_Label, fiveneu_cand_handle);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
@@ -930,26 +926,26 @@ std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFi
 if(!OnlyGen_)
 {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-  if (!fivepos_cand_hanlde.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
-  if (!fiveneu_cand_hanlde.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
-  if (!fiveneg_cand_hanlde.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
+  if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
+  if (!fiveneu_cand_handle.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
+  if (!fiveneg_cand_handle.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
 
-  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_hanlde.isValid() && )
+  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_handle.isValid())
   {
-    for (unsigned int i=0; i< fivepos_cand_hanlde->size(); i++)
-      fourToFiveMapPos[(fivepos_cand_hanlde->at(i).userInt("index"))] = &(fivepos_cand_hanlde->at(i));
+    for (unsigned int i=0; i< fivepos_cand_handle->size(); i++)
+      fourToFiveMapPos[(fivepos_cand_handle->at(i).userInt("index"))] = &(fivepos_cand_handle->at(i));
   }
 
-  if (dimuonditrk_cand_handle.isValid() && fiveneg_cand_hanlde.isValid() && )
+  if (dimuonditrk_cand_handle.isValid() && fiveneg_cand_handle.isValid())
   {
-    for (unsigned int i=0; i< fiveneg_cand_hanlde->size(); i++)
-      fourToFiveMapNeg[(fiveneg_cand_hanlde->at(i).userInt("index"))] = &(fiveneg_cand_hanlde->at(i));
+    for (unsigned int i=0; i< fiveneg_cand_handle->size(); i++)
+      fourToFiveMapNeg[(fiveneg_cand_handle->at(i).userInt("index"))] = &(fiveneg_cand_handle->at(i));
   }
 
-  if (dimuonditrk_cand_handle.isValid() && fiveneu_cand_hanlde.isValid() && )
+  if (dimuonditrk_cand_handle.isValid() && fiveneu_cand_handle.isValid())
   {
-    for (unsigned int i=0; i< fiveneu_cand_hanlde->size(); i++)
-      fourToFiveMapNeu[(fiveneu_cand_hanlde->at(i).userInt("index"))] = &(fiveneu_cand_hanlde->at(i));
+    for (unsigned int i=0; i< fiveneu_cand_handle->size(); i++)
+      fourToFiveMapNeu[(fiveneu_cand_handle->at(i).userInt("index"))] = &(fiveneu_cand_handle->at(i));
   }
 
 }
@@ -958,10 +954,10 @@ if(!OnlyGen_)
   if(!OnlyGen_)
   {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-  if (!fivepos_cand_hanlde.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
-  if (!fiveneu_cand_hanlde.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
-  if (!fiveneg_cand_hanlde.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
-  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_hanlde.isValid() && fiveneu_cand_hanlde.isValid()  && fiveneg_cand_hanlde.isValid()) {
+  if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
+  if (!fiveneu_cand_handle.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
+  if (!fiveneg_cand_handle.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
+  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_handle.isValid() && fiveneu_cand_handle.isValid()  && fiveneg_cand_handle.isValid()) {
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
