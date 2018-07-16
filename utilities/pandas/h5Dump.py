@@ -16,19 +16,16 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
 
-from rootpy.plotting import Hist, HistStack, Legend, Canvas, Graph
-from rootpy.plotting.shapes import Line
-from rootpy.plotting.style import get_style, set_style
-from rootpy.plotting.utils import draw
-
-style = get_style('ATLAS')
-style.SetEndErrorSize(3)
-set_style(style)
 
 import pandas as pd
 import numpy as np
+import argparse
 
-for path, subdirs, files in os.walk(root):
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', action='store_true')
+args = parser.parse_args()
+
+for path, subdirs, files in os.walk(args.path):
     for name in files:
         print os.path.join(path, name)
         tt = os.path.join(path, name)
