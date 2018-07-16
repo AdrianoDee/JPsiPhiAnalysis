@@ -1,16 +1,7 @@
-import ROOT
-
-from ROOT import TFile,TCanvas
-from ROOT import TH1,RooDataSet,gROOT,gDirectory
-
 import os
 
-import rootpy
 import root_pandas
 from root_pandas import read_root, to_root
-
-import matplotlib
-from matplotlib import pyplot as plt
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -18,7 +9,6 @@ warnings.simplefilter(action='ignore', category=Warning)
 
 
 import pandas as pd
-import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser()
