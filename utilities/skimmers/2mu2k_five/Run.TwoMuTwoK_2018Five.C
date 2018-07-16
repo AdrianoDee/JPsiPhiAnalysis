@@ -17,7 +17,7 @@
   //dataset->Add("/lustre/cms/store/user/adiflori/Charmonium//2mu2k_miniaod_17Nov2017_BCDEF_2017_phi_097_106.root");
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/analysis/utilities/skimmers/2mu2k_five/TwoMuTwoK_2018Five";
-  TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
+  TProof *p = TProof::Open("workers=1"); // 12 workers for qsub
 
   // Processing
   cout << ">> Processing " << selector << " ... " << endl;

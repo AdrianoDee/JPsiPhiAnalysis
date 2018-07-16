@@ -27,7 +27,6 @@
 
 #include "TwoMuTwoK_2018Five.h"
 #include <TH2.h>
-#include <TStyle.h>
 #include <bitset>
 
 void TwoMuTwoK_2018Five::Begin(TTree * /*tree*/)
