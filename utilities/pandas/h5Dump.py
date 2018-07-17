@@ -19,9 +19,9 @@ for path, subdirs, files in os.walk(args.path):
     for name in files:
         print os.path.join(path, name)
         tt = os.path.join(path, name)
-        if os.path.isfile(tt):
+        if os.path.isfile(tt[:-4]+"h5"):
             print "done"
             continue
         theTest = read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree")
         ##print os.path.join(path, name)
-        theTest.to_hdf(os.path.join(path, name)[:-4] + "h5","data")
+        theTest.to_hdf(tt[:-4] + "h5","data")
