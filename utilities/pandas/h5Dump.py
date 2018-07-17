@@ -19,7 +19,7 @@ for path, subdirs, files in os.walk(args.path):
     for name in files:
         print os.path.join(path, name)
         tt = os.path.join(path, name)
-        if os.path.isfile(tt[:-4]+"h5"):
+        if os.path.isfile(tt[:-4]+"h5") or tt.endswith("h5"):
             print "done"
             continue
         theTest = read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree")
