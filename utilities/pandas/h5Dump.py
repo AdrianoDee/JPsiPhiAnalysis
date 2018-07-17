@@ -22,6 +22,6 @@ for path, subdirs, files in os.walk(args.path):
         if os.path.isfile(tt[:-4]+"h5") or tt.endswith("h5"):
             print "done"
             continue
-        theTest = read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree")
-        ##print os.path.join(path, name)
-        theTest.to_hdf(tt[:-4] + "h5","data")
+        with read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree") as theTest:
+            ##print os.path.join(path, name)
+            theTest.to_hdf(tt[:-4] + "h5","data")
