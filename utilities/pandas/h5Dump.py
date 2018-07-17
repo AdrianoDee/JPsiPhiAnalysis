@@ -23,7 +23,7 @@ for path, subdirs, files in os.walk(args.path):
             print "done"
             continue
         try:
-            theTest = read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree") as theTest:
+            theTest = read_root(os.path.join(path, name),ignore=["*p4"],key="rootuple/JPsiPhiTree")
             theTest.to_hdf(tt[:-4] + "h5","data")
             ##print os.path.join(path, name)
         except:
