@@ -207,7 +207,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   ndimuon = 0;
   nreco = 0;
 
-  maxDeltaR = 0.01;
+  maxDeltaR = 0.1;
   maxDPtRel = 2.0;
 
 }
