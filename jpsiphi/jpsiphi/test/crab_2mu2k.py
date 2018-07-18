@@ -41,8 +41,8 @@ datasetnames = {
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
 "E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
-"A2018" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
-"A2018_1": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
+"A2018_1" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
+"A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
 "A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
 "B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD",
 "B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD",
@@ -58,8 +58,8 @@ GlobalTags = {
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
 "E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
-"A2018" :  "101X_dataRun2_Prompt_v9",
-"A2018_1": "101X_dataRun2_Prompt_v9",
+"A2018_1" :  "101X_dataRun2_Prompt_v9",
+"A2018_2": "101X_dataRun2_Prompt_v9",
 "A2018_3": "101X_dataRun2_Prompt_v10",
 "B2018_1": "101X_dataRun2_Prompt_v10",
 "B2018_2": "101X_dataRun2_Prompt_v11",
@@ -72,7 +72,7 @@ runNumber = [
 ]
 
 
-run = 'F'
+run = 'A2018_1'
 
 if "2018" in run:
     jsonFile = jsonFile2018
@@ -116,7 +116,7 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 6
+config.Data.unitsPerJob         = 5
 config.Data.splitting           = 'LumiBased'
 config.Data.runRange            = runNum
 config.Data.lumiMask            = lumi
