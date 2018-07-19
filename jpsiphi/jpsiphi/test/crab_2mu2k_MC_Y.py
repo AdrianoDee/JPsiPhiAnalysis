@@ -33,7 +33,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 
 datasetnames = {
 
-"4700":"/Y4700_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAOD-PU2017_94X_mc2017_realistic_v11-v1/MINIAODSIM",
+"4700":"/Y4700_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
 "4500":"/Y4500_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
 "4300":"/Y4300_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
 "4100":"/Y4100_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM"
