@@ -953,7 +953,7 @@ if(!onlyGen_)
   if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
   if (!fiveneu_cand_handle.isValid()) std::cout<< "No fivetrack neu information " << run << "," << event <<std::endl;
   if (!fiveneg_cand_handle.isValid()) std::cout<< "No fivetrack neg information " << run << "," << event <<std::endl;
-  if (dimuonditrk_cand_handle.isValid() && fivepos_cand_handle.isValid() && fiveneu_cand_handle.isValid()  && fiveneg_cand_handle.isValid()) {
+  if (dimuonditrk_cand_handle.isValid()) {
 
     fivetraks_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     fivetraks_pion_pos_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -1307,7 +1307,7 @@ if(!onlyGen_)
       fifthtrak_pos_phi = -1.0;
       fifthtrak_pos_y = -1.0;
 
-      if((fourToFiveMapPos.find(i))!=fourToFiveMapPos.end())
+      if((fourToFiveMapPos.find(i))!=fourToFiveMapPos.end() && fivepos_cand_handle.isValid() )
       {
 
         fivetrak_cand = fourToFiveMapPos[(i)];
@@ -1376,7 +1376,7 @@ if(!onlyGen_)
       fifthtrak_neu_phi = -1.0;
       fifthtrak_neu_y = -1.0;
 
-      if((fourToFiveMapNeu.find(i))!=fourToFiveMapNeu.end())
+      if((fourToFiveMapNeu.find(i))!=fourToFiveMapNeu.end() && fiveneu_cand_handle.isValid() )
       {
 
         fivetrak_cand = fourToFiveMapNeu[(i)];
@@ -1445,7 +1445,7 @@ if(!onlyGen_)
       fifthtrak_neg_phi = -1.0;
       fifthtrak_neg_y = -1.0;
 
-      if((fourToFiveMapNeg.find(i))!=fourToFiveMapNeg.end())
+      if((fourToFiveMapNeg.find(i))!=fourToFiveMapNeg.end() && fiveneg_cand_handle.isValid())
       {
 
         fivetrak_cand = fourToFiveMapNeg[(i)];
