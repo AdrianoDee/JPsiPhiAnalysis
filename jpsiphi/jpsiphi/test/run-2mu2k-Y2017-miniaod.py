@@ -200,6 +200,7 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
+	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
