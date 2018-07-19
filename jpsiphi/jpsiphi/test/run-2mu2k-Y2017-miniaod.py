@@ -100,12 +100,12 @@ charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi',
 #JPsi
-'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-'HLT_DoubleMu4_JpsiTrk_Displaced',
-'HLT_DoubleMu4_Jpsi_Displaced',
-'HLT_DoubleMu4_3_Jpsi_Displaced',
-'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-'HLT_Dimuon25_Jpsi',
+# 'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
+# 'HLT_DoubleMu4_JpsiTrk_Displaced',
+# 'HLT_DoubleMu4_Jpsi_Displaced',
+# 'HLT_DoubleMu4_3_Jpsi_Displaced',
+# 'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
+# 'HLT_Dimuon25_Jpsi',
 ]
 
 if options.debug:
@@ -117,31 +117,17 @@ hltpaths = cms.vstring(hltList)
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
 filters = cms.vstring(
-                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-                                #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
-                                'hltDoubleMu4JpsiDisplacedL3Filtered'
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                'hltJpsiTkTkVertexFilterPhiKstar',
-                                #HLT_DoubleMu4_JpsiTrk_Displaced_v12
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #'hltJpsiTkVertexProducer',
-                                #'hltJpsiTkVertexFilter',
-                                #HLT_DoubleMu4_Jpsi_Displaced
-                                #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                #HLT_DoubleMu4_3_Jpsi_Displaced
-                                #'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                #HLT_Dimuon20_Jpsi_Barrel_Seagulls
-                                #'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                #HLT_Dimuon25_Jpsi
-                                'hltDisplacedmumuFilterDimuon25Jpsis'
+	                            #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
+	                            #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
+	                            'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
+	                            'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
+								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
+								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
                                 )
 
 process.yfilter = cms.EDFilter("GenFilter",
@@ -226,7 +212,10 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     Product = cms.string("DiMuonDiTrakCandidates"),
     Filters = filters,
     IsMC = cms.bool(True),
-    AddMCTruth = cms.bool(True)
+    AddMCTruth = cms.bool(True),
+	DoDouble = cms.bool(False),
+	AddSS    = cms.bool(True),
+	PionRefit = cms.bool(True)
 )
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
@@ -247,10 +236,11 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
 # )
 
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
-    dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
+	DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
+	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
+	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(True),
     OnlyBest = cms.bool(False),
@@ -260,7 +250,7 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
-    TreeName = cms.string('JPsi Phi Tree')
+    TreeName = cms.string('JPsiPhiTree')
 )
 
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
