@@ -1,14 +1,10 @@
 import sys
 import os
 
-#jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
 #print("Test = " + str(skipevt))
-
-datasetbase = '/Charmonium' # '/Muonia' #
 
 sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ',
  'T2_CH_CERN', 'T2_CH_CERN_AI', 'T2_CH_CERN_HLT',
@@ -16,7 +12,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T2_EE_Estonia', 'T2_ES_CIEMAT', 'T2_ES_IFCA', 'T2_FI_HIP', 'T2_FR_CCIN2P3',
  'T2_FR_GRIF_IRFU', 'T2_FR_GRIF_LLR', 'T2_FR_IPHC', 'T2_GR_Ioannina', 'T2_HU_Budapest',
  'T2_IN_TIFR', 'T2_IT_Bari', 'T2_IT_Legnaro', 'T2_IT_Pisa', 'T2_IT_Rome', 'T2_KR_KISTI',
- 'T2_MY_UPM_BIRUNI', 'T2_PK_NCP', 'T2_PL_Swierk', 'T2_PL_Warsaw',
+  'T2_MY_UPM_BIRUNI', 'T2_PK_NCP', 'T2_PL_Swierk', 'T2_PL_Warsaw',
  'T2_PT_NCG_Lisbon', 'T2_RU_IHEP', 'T2_RU_INR', 'T2_RU_ITEP', 'T2_RU_JINR', 'T2_RU_PNPI',
  'T2_RU_SINP', 'T2_TH_CUNSTDA', 'T2_TR_METU', 'T2_TW_NCHC', 'T2_UA_KIPT', 'T2_UK_London_Brunel',
  'T2_UK_London_IC', 'T2_UK_SGrid_Bristol','T2_UK_SGrid_RALPP', 'T2_US_Caltech', 'T2_US_Florida',
@@ -35,26 +31,33 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 
 datasetnames = {
 
-"bbar": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
-"bJpsi": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
-"Y4700":"/Y4700_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAOD-PU2017_94X_mc2017_realistic_v11-v1/MINIAODSIM",
-"Y4500":"/Y4500_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-"Y4300":"/Y4300_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-"Y4100":"/Y4100_JpsiPhi_MuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM"
+"bbbarphi" : "/BBarMCPhiFilterHardQCD/adiflori-BBBar_PhiFilter_Hard_MC_Jul18_Step3_MINIAODSIMoutput-a4ba9198e50ee6f6156856de3f6e7d5a/USER",
+"bbar_jpsi_filter_hard": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
+"bbar_jpsi_force_soft": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
+"bbar_jpsi_filter_soft": "/BBarMCJPsiFilterSoftQCD/adiflori-BBBar_JPsiFilter_Soft_MC_Jul18_Step3_MINIAODSIMoutput-a4ba9198e50ee6f6156856de3f6e7d5a/USER",
+"bbar_jpsi_force_hard": "/BBarMCJPsiForceHardQCD/adiflori-BBBar_JPsiForce_Hard_MC_Jul18_Step3_MINIAODSIMoutput-a4ba9198e50ee6f6156856de3f6e7d5a/USER"
 }
 
+
+GlobalTags = {
+
+"bbbarphi" : "100X_upgrade2018_realistic_v10",
+"bbar_jpsi_filter_hard": "94X_mc2017_realistic_v10",
+"bbar_jpsi_force_soft": "94X_mc2017_realistic_v10",
+"bbar_jpsi_filter_soft": "100X_upgrade2018_realistic_v10",
+"bbar_jpsi_force_hard": "100X_upgrade2018_realistic_v10",
+}
 
 runNumber = [
 ''
 ]
 
-run = 'Y4500'
+
+run = 'bbar_jpsi_filter_hard'
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
-#lumi = jsonfile[jNum]
-lumi = jsonFile
-#HLT = HLTPath[0]
+gtag = GlobalTags[run]
 
 import datetime
 timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
@@ -66,16 +69,22 @@ jobdir = 'miniaod_2mu2k_' + run
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
 
+if run=="bbbarphi" or run=="bbar_jpsi_filter_soft" or run=="bbar_jpsi_force_hard":
+    inputDataBase = 'phys03'
+else:
+    inputDataBase = 'global'
+
 config.section_('General')
 config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2mu2k_' + run + '_' +runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = 'miniaod_2mu2k_' +run+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = '/lustre/home/adrianodif/jpsiphi/2017/CMSSW_9_4_0/src/jpsiphi/jpsiphi/test/run-2mu2k-miniaod.py'
+config.JobType.psetName         = 'run-2mu2k-miniaod.py'
+config.JobType.pyCfgParams      = ['gtag=' + str(gtag)]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
@@ -85,12 +94,11 @@ config.JobType.allowUndistributedCMSSW = True
 
 config.section_('Data')
 config.Data.inputDataset        = datasetName
-config.Data.inputDBS            = 'global'
+config.Data.inputDBS            = inputDataBase
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 1
+config.Data.unitsPerJob         = 5
 config.Data.splitting           = 'FileBased'
 config.Data.runRange            = runNum
-#config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'
 config.Data.publication         = False
 config.Data.ignoreLocality      = True

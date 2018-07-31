@@ -41,6 +41,9 @@ datasetnames = {
 "C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
 "D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
 "E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
+"bbar_jpsi_filter": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
+"bbar_jpsi_force": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
+
 "A2018_1" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
 "A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
 "A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
