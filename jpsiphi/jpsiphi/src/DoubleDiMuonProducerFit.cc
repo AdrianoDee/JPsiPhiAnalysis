@@ -76,6 +76,10 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
 
+  edm::ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
+
   float HighDiMuonMassMax_ = HighDiMuonMassCuts_[1];
   float HighDiMuonMassMin_ = HighDiMuonMassCuts_[0];
   float LowDiMuonMassMax_ = LowDiMuonMassCuts_[1];
