@@ -9,7 +9,7 @@ DoubleDiMuonProducerFit::DoubleDiMuonProducerFit(const edm::ParameterSet& iConfi
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
-  addSameSig_(iConfig.getParameter<bool>("AddSS")),
+  addSameSig_(iConfig.getParameter<bool>("AddSS"))
 {
   produces<pat::CompositeCandidateCollection>("FourMuonCandidates");
   candidates = 0;
@@ -72,6 +72,10 @@ void DoubleDiMuonProducerFit::produce(edm::Event& event, const edm::EventSetup& 
 
   float DoubleDiMuonMassMax_ = DoubleDiMuonMassCuts_[1];
   float DoubleDiMuonMassMin_ = DoubleDiMuonMassCuts_[0];
+
+  // Kinematic fit
+  edm::ESHandle<TransientTrackBuilder> theB;
+  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
 
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   //Looking for J/Psi
