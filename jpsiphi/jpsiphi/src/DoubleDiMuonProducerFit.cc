@@ -577,6 +577,9 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   }
                 }
 
+                FourMuonCandidate.addUserFloat("has_ref",candRef);
+                FourMuonCandidate.addUserFloat("has_const_ref",cand_const_ref);
+
                 if (addMCTruth_) {
                   reco::GenParticleRef genMu1 = phiMuHigh->genParticleRef();
                   reco::GenParticleRef genMu2 = phiMuLow->genParticleRef();
