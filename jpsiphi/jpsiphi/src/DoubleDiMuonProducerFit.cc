@@ -202,10 +202,10 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                 bool status = ttmd.calculate( GlobalTrajectoryParameters(
                   GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
-                  GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
+                  GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(field)),
                   GlobalTrajectoryParameters(
                     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
-                    GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+                    GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(field)));
                 float extrapZ=-9E20;
 
                 if (status) extrapZ=ttmd.points().first.z();
