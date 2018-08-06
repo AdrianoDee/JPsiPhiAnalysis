@@ -1,14 +1,14 @@
 #include "../interface/DoubleDiMuonProducerFit.h"
 
-DoubleDiMuonProducerFit::DoubleDiMuonProducerFit(const edm::ParameterSet& ps):
-  HighDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("HighDiMuonCollection"))),
-  LowDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(ps.getParameter<edm::InputTag>("LowDiMuonCollection"))),
-  HighDiMuonMassCuts_(ps.getParameter<std::vector<double>>("HighDiMuonMassCuts")),
-  LowDiMuonMassCuts_(ps.getParameter<std::vector<double>>("LowDiMuonMassCuts")),
-  DoubleDiMuonMassCuts_(ps.getParameter<std::vector<double>>("DoubleDiMuonMassCuts")),
+DoubleDiMuonProducerFit::DoubleDiMuonProducerFit(const edm::ParameterSet& iConfig):
+  HighDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("HighDiMuonCollection"))),
+  LowDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("LowDiMuonCollection"))),
+  HighDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("HighDiMuonMassCuts")),
+  LowDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("LowDiMuonMassCuts")),
+  DoubleDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DoubleDiMuonMassCuts")),
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
-  addMCTruth_(ps.getParameter<bool>("AddMCTruth")),
+  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
   addSameSig_(iConfig.getParameter<bool>("AddSS")),
 {
   produces<pat::CompositeCandidateCollection>("FourMuonCandidates");
