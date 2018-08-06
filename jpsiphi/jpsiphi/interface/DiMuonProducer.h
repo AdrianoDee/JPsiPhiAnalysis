@@ -16,6 +16,9 @@
 // DataFormat includes
 #include <DataFormats/PatCandidates/interface/CompositeCandidate.h>
 #include <DataFormats/PatCandidates/interface/Muon.h>
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 
 #include <CommonTools/UtilAlgos/interface/StringCutObjectSelector.h>
 #include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
@@ -47,8 +50,10 @@ class DiMuonProducerPAT : public edm::EDProducer {
   bool isAMixedbHadron(int pdgID, int momPdgID);
   UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
   const pat::TriggerObjectStandAlone BestTriggerMuon(const pat::Muon& m);
+  bool MatchByDRDPt(const pat::Muon t1, const pat::TriggerObjectStandAlone t2);
   UInt_t isTriggerMatched(const pat::Muon& m);
   float DeltaR(const pat::Muon t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaPt(const pat::Muon t1, const pat::TriggerObjectStandAlone t2);
   const pat::CompositeCandidate makeMuMuTriggerCand(const pat::TriggerObjectStandAlone& muonP, const pat::TriggerObjectStandAlone& muonN);
   std::pair<int, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
 
@@ -58,10 +63,8 @@ class DiMuonProducerPAT : public edm::EDProducer {
   edm::EDGetTokenT<edm::View<pat::Muon>> muons_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
-  edm::EDGetTokenT<reco::TrackCollection> revtxtrks_;
-  edm::EDGetTokenT<reco::BeamSpot> revtxbs_;
-  StringCutObjectSelector<pat::Muon> higherPuritySelection_;
-  StringCutObjectSelector<pat::Muon> lowerPuritySelection_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
+  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   StringCutObjectSelector<reco::Candidate, true> dimuonSelection_;
   bool addCommonVertex_, addMuonlessPrimaryVertex_;
   bool resolveAmbiguity_;
@@ -70,6 +73,8 @@ class DiMuonProducerPAT : public edm::EDProducer {
   std::vector<std::string> HLTFilters_;
 
   InvariantMassFromVertex massCalculator;
+
+  float maxDeltaR, maxDPtRel;
 
 };
 

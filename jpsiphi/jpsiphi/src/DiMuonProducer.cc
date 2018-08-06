@@ -40,8 +40,8 @@ DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
-higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
-lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
+TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
+triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 dimuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),
 addCommonVertex_(iConfig.getParameter<bool>("addCommonVertex")),
 addMuonlessPrimaryVertex_(iConfig.getParameter<bool>("addMuonlessPrimaryVertex")),
@@ -49,9 +49,11 @@ resolveAmbiguity_(iConfig.getParameter<bool>("resolvePileUpAmbiguity")),
 addMCTruth_(iConfig.getParameter<bool>("addMCTruth")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("HLTFilters"))
 {
-  revtxtrks_ = consumes<reco::TrackCollection>((edm::InputTag)"generalTracks"); //if that is not true, we will raise an exception
-  revtxbs_ = consumes<reco::BeamSpot>((edm::InputTag)"offlineBeamSpot");
   produces<pat::CompositeCandidateCollection>();
+
+  maxDeltaR = 0.1;
+  maxDPtRel = 2.0;
+
 }
 
 
@@ -77,6 +79,17 @@ float DiMuonProducerPAT::DeltaR(const pat::Muon t1, const pat::TriggerObjectStan
    auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
 
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
+float DiMuonProducerPAT::DeltaPt(const pat::Muon t1, const pat::TriggerObjectStandAlone t2)
+{
+   return (fabs(t1.pt()-t2.pt())/t2.pt());
+}
+
+bool DiMuonProducerPAT::MatchByDRDPt(const pat::Muon t1, const pat::TriggerObjectStandAlone t2)
+{
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+	DeltaR(t1,t2) < maxDeltaR);
 }
 
 const pat::TriggerObjectStandAlone DiMuonProducerPAT::BestTriggerMuon(const pat::Muon& m)
@@ -194,19 +207,25 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   std::unique_ptr<pat::CompositeCandidateCollection> oniaOutput(new pat::CompositeCandidateCollection);
 
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
+
   Vertex thePrimaryV;
   Vertex theBeamSpotV;
 
-  ESHandle<MagneticField> magneticField;
+  edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
-  Handle<BeamSpot> theBeamSpot;
+  edm::Handle<BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   BeamSpot bs = *theBeamSpot;
   theBeamSpotV = Vertex(bs.position(), bs.covariance3D());
 
-  Handle<VertexCollection> priVtxs;
+  edm::Handle<VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
   if ( priVtxs->begin() != priVtxs->end() ) {
     thePrimaryV = Vertex(*(priVtxs->begin()));
@@ -215,8 +234,11 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     thePrimaryV = Vertex(bs.position(), bs.covariance3D());
   }
 
-  Handle< View<pat::Muon> > muons;
+  edm::Handle< View<pat::Muon> > muons;
   iEvent.getByToken(muons_,muons);
+
+  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
+  iEvent.getByToken(TriggerCollection_,trig);
 
   edm::ESHandle<TransientTrackBuilder> theTTBuilder;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theTTBuilder);
@@ -228,19 +250,86 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   float muon_sigma = muon_mass*1.e-6;
 
   std::map<size_t,UInt_t> muonFilters;
+  std::map<size_t,double> muonDeltaR,muonDeltaPt;
+  pat::TriggerObjectStandAloneCollection filteredColl;
   std::map<size_t,pat::TriggerObjectStandAlone> matchedColl;
   //pat::TriggerObjectStandAloneCollection triggerColl;
+  std::vector < UInt_t > filterResults;
 
-  //for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
-  for (size_t i = 0; i < muons->size(); i++)
-  {
-    auto m = muons->at(i);
-    UInt_t M = isTriggerMatched(m);
-    muonFilters[i] = M;
-    if(M > 0)
-      matchedColl[i] = BestTriggerMuon(m);
+  for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
+
+    pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
+
+    unPackedTrigger.unpackPathNames( names );
+    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+
+    bool filtered = false;
+    UInt_t thisFilter = 0;
+
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
+
+    if(filtered)
+    {
+      filteredColl.push_back(unPackedTrigger);
+      filterResults.push_back(thisFilter);
+    }
+  }
+
+  for (size_t i = 0; i < muons->size(); i++) {
+
+    auto t = muons->at(i);
+
+    bool matched = false;
+    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+    for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
+    {
+      auto thisTrig = filteredColl.at(iTrigObj);
+      if(MatchByDRDPt(t,filteredColl[iTrigObj]))
+      {
+        if(matched)
+        {
+          if(muonDeltaR[i] > DeltaR(t,thisTrig))
+          {
+            muonFilters[i] = filterResults[iTrigObj];
+            matchedColl[i] = thisTrig;
+            muonDeltaR[i] = fabs(DeltaR(t,thisTrig));
+            muonDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
+          }
+        }else
+        {
+          muonFilters[i] = filterResults[iTrigObj];
+          matchedColl[i] = thisTrig;
+          muonDeltaR[i] = fabs(DeltaR(t,thisTrig));
+          muonDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
+        }
+
+        matched = true;
+      }
+    }
+    if(!matched)
+    {
+      muonFilters[i] = 0;
+      muonDeltaR[i] = -1.0;
+      muonDeltaPt[i] = -1.0;
+    }
 
   }
+
+  //for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
+  // for (size_t i = 0; i < muons->size(); i++)
+  // {
+  //   auto m = muons->at(i);
+  //   UInt_t M = isTriggerMatched(m);
+  //   muonFilters[i] = M;
+  //   if(M > 0)
+  //     matchedColl[i] = BestTriggerMuon(m);
+  //
+  // }
 
   // MuMu candidates only from muons
   //for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
@@ -286,6 +375,10 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       {
         mumucand.addUserInt("highMuonTMatch",muonFilters[i]);
         mumucand.addUserInt("lowMuonTMatch",muonFilters[j]);
+        mumucand.addUserInt("highMuonDeltaR",muonDeltaR[i]);
+        mumucand.addUserInt("lowMuonDeltaR",muonDeltaR[j]);
+        mumucand.addUserInt("highMuonDeltaPt",muonDeltaPt[i]);
+        mumucand.addUserInt("lowMuonDeltaPt",muonDeltaPt[j]);
         if(muonFilters[i]>0)
           mumucand.addDaughter(matchedColl[i],"highMuonTrigger");
         if(muonFilters[j]>0)
@@ -295,6 +388,10 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       {
         mumucand.addUserInt("lowMuonTMatch",muonFilters[i]);
         mumucand.addUserInt("highMuonTMatch",muonFilters[j]);
+        mumucand.addUserInt("highMuonDeltaR",muonDeltaR[j]);
+        mumucand.addUserInt("lowMuonDeltaR",muonDeltaR[i]);
+        mumucand.addUserInt("highMuonDeltaPt",muonDeltaPt[j]);
+        mumucand.addUserInt("lowMuonDeltaPt",muonDeltaPt[i]);
         if(muonFilters[i]>0)
           mumucand.addDaughter(matchedColl[i],"lowMuonTrigger");
         if(muonFilters[j]>0)
@@ -696,7 +793,10 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
           // ---- Push back output ----
-          mumucand.addUserInt("isTriggerMatched",isTriggerMatched(&mumucand));
+          if(muonFilters[i]>0 && muonFilters[j]>0)
+            mumucand.addUserInt("isTriggerMatched",int(true));
+          else
+            mumucand.addUserInt("isTriggerMatched",int(false));
 
           oniaOutput->push_back(mumucand);
         }

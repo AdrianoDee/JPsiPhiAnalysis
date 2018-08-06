@@ -11,6 +11,11 @@ float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
+float DiMuonDiTrakProducerFit::DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   return (fabs(t1.pt()-t2.pt())/t2.pt());
+}
+
 bool DiMuonDiTrakProducerFit::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
@@ -208,7 +213,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   nreco = 0;
 
   maxDeltaR = 0.1;
-  maxDPtRel = 10.0;
+  maxDPtRel = 2.0;
 
 }
 
@@ -256,6 +261,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   pat::TriggerObjectStandAloneCollection filteredColl;
   std::map<int,pat::TriggerObjectStandAlone> matchedColl;
+  std::map<size_t,double> trackDeltaR,trackDeltaPt;
   std::vector < UInt_t > filterResults;
   std::map<int,UInt_t> filters;
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
@@ -295,15 +301,19 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
       {
         if(matched)
         {
-          if(DeltaR(t,matchedColl[i]) > DeltaR(t,thisTrig))
+          if(trackDeltaR[i] > DeltaR(t,thisTrig))
           {
             filters[i] = filterResults[iTrigObj];
             matchedColl[i] = thisTrig;
+            trackDeltaR[i] = fabs(DeltaR(t,thisTrig));
+            trackDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
           }
         }else
         {
           filters[i] = filterResults[iTrigObj];
           matchedColl[i] = thisTrig;
+          trackDeltaR[i] = fabs(DeltaR(t,thisTrig));
+          trackDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
         }
 
         matched = true;
@@ -312,19 +322,12 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     if(!matched)
     {
       filters[i] = 0;
+      trackDeltaR[i] = -1.0;
+      trackDeltaPt[i] = -1.0;
     }
 
   }
 
-  reco::TrackCollection allTheTracks;
-  for (size_t i = 0; i < trak->size(); i++)
-  {
-    auto t = trak->at(i);
-    if(t.pt()<0.5) continue;
-    if(!(t.hasTrackDetails())) continue;
-    allTheTracks.push_back(*(t.bestTrack()));
-
-  }
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
@@ -587,48 +590,48 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            std::vector<float> m1W,m2W,tPW,tMW;
 
            //NOT GOOD in MINIAOD
-           for(size_t i = 0; i < verteces.size(); i++)
-           {
-              auto thisPV = verteces[i];
-              mu1FromPV.push_back(false);
-              mu2FromPV.push_back(false);
-              tPFromPV.push_back(0.0);
-              tMFromPV.push_back(0.0);
-              m1W.push_back(-1.0);
-              m2W.push_back(-1.0);
-              tPW.push_back(-1.0);
-              tMW.push_back(-1.0);
-
-              if( thisPV.hasRefittedTracks() ) {
-                // Need to go back to the original tracks before taking the key
-                std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
-                std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
-                for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
-                {
-                  if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
-                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
-                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
-                    {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                  if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) )
-                    {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
-                }
-              }
-              else {
-                std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
-                for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
-                  if( isSameTrack(*(rmu1->track()),**itPVtrack))
-                    {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itPVtrack);}
-                  if( isSameTrack(*(rmu2->track()),**itPVtrack))
-                    {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itPVtrack);}
-                  if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack))
-                    {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(*itPVtrack);}
-                  if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack))
-                    {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(*itPVtrack);}
-                }
-              }
-           }
+           // for(size_t i = 0; i < verteces.size(); i++)
+           // {
+           //    auto thisPV = verteces[i];
+           //    mu1FromPV.push_back(false);
+           //    mu2FromPV.push_back(false);
+           //    tPFromPV.push_back(0.0);
+           //    tMFromPV.push_back(0.0);
+           //    m1W.push_back(-1.0);
+           //    m2W.push_back(-1.0);
+           //    tPW.push_back(-1.0);
+           //    tMW.push_back(-1.0);
+           //
+           //    if( thisPV.hasRefittedTracks() ) {
+           //      // Need to go back to the original tracks before taking the key
+           //      std::vector<reco::Track>::const_iterator itRefittedTrack = thisPV.refittedTracks().begin();
+           //      std::vector<reco::Track>::const_iterator refittedTracksEnd = thisPV.refittedTracks().end();
+           //      for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+           //      {
+           //        if( isSameTrack(*(rmu1->track()),*itRefittedTrack))
+           //          {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+           //        if( isSameTrack(*(rmu2->track()),*itRefittedTrack))
+           //          {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+           //        if( isSameTrack(*(posTrack.bestTrack()),*itRefittedTrack))
+           //          {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+           //        if( isSameTrack(*(negTrack.bestTrack()),*itRefittedTrack) )
+           //          {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(thisPV.originalTrack(*itRefittedTrack));}
+           //      }
+           //    }
+           //    else {
+           //      std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thisPV.tracks_begin();
+           //      for( ; itPVtrack != thisPV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+           //        if( isSameTrack(*(rmu1->track()),**itPVtrack))
+           //          {mu1FromPV[i] = true; m1W[i] = thisPV.trackWeight(*itPVtrack);}
+           //        if( isSameTrack(*(rmu2->track()),**itPVtrack))
+           //          {mu2FromPV[i] = true; m2W[i] = thisPV.trackWeight(*itPVtrack);}
+           //        if( isSameTrack(*(posTrack.bestTrack()),**itPVtrack))
+           //          {tPFromPV[i] = 1.0; tPW[i] = thisPV.trackWeight(*itPVtrack);}
+           //        if( isSameTrack(*(negTrack.bestTrack()),**itPVtrack))
+           //          {tMFromPV[i] = 1.0; tMW[i] = thisPV.trackWeight(*itPVtrack);}
+           //      }
+           //    }
+           // }
 
            for(size_t i = 1; i < verteces.size(); i++)
            {
@@ -652,41 +655,41 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            float candRef = -1.0, cand_const_ref = -1.0;
 
            //Weight, PTPV, No.Tks for PV
-           for(size_t i = 0; i < verteces.size(); i++)
-           {
-             auto thisPV = verteces[i];
-             double v = -1.0, s = -1.0;
-             int c = -1;
-             for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
-               const reco::Track& track = **itVtx;
-               if(!track.quality(reco::TrackBase::highPurity)) continue;
-               if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
-               reco::TransientTrack tt = theB->build(track);
-               std::pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thisPV);
-               if (!tkPVdist.first) continue;
-               if (tkPVdist.second.significance()>3) continue;
-               if (track.ptError()/track.pt()>0.1) continue;
-               // do not count the two muons
-               if (rmu1 != nullptr && rmu1->innerTrack().key() == itVtx->key())
-               continue;
-               if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
-               continue;
-               if (isSameTrack(*posTrack.bestTrack(),track))
-               continue;
-               if (isSameTrack(*negTrack.bestTrack(),track))
-               continue;
-
-               v += thisPV.trackWeight(*itVtx);
-               if(thisPV.trackWeight(*itVtx) > 0.5){
-                 c++;
-                 s += track.pt();
-               }
-             }
-
-             vertexWeight.push_back(v);
-             sumPTPV.push_back(s);
-             countTksOfPV.push_back(c);
-           }
+           // for(size_t i = 0; i < verteces.size(); i++)
+           // {
+           //   auto thisPV = verteces[i];
+           //   double v = -1.0, s = -1.0;
+           //   int c = -1;
+           //   for(reco::Vertex::trackRef_iterator itVtx = thisPV.tracks_begin(); itVtx != thisPV.tracks_end(); itVtx++) if(itVtx->isNonnull()){
+           //     const reco::Track& track = **itVtx;
+           //     if(!track.quality(reco::TrackBase::highPurity)) continue;
+           //     if(track.pt() < 0.5) continue; //reject all rejects from counting if less than 900 MeV
+           //     reco::TransientTrack tt = theB->build(track);
+           //     std::pair<bool,Measurement1D> tkPVdist = IPTools::absoluteImpactParameter3D(tt,thisPV);
+           //     if (!tkPVdist.first) continue;
+           //     if (tkPVdist.second.significance()>3) continue;
+           //     if (track.ptError()/track.pt()>0.1) continue;
+           //     // do not count the two muons
+           //     if (rmu1 != nullptr && rmu1->innerTrack().key() == itVtx->key())
+           //     continue;
+           //     if (rmu2 != nullptr && rmu2->innerTrack().key() == itVtx->key())
+           //     continue;
+           //     if (isSameTrack(*posTrack.bestTrack(),track))
+           //     continue;
+           //     if (isSameTrack(*negTrack.bestTrack(),track))
+           //     continue;
+           //
+           //     v += thisPV.trackWeight(*itVtx);
+           //     if(thisPV.trackWeight(*itVtx) > 0.5){
+           //       c++;
+           //       s += track.pt();
+           //     }
+           //   }
+           //
+           //   vertexWeight.push_back(v);
+           //   sumPTPV.push_back(s);
+           //   countTksOfPV.push_back(c);
+           // }
 
            if(posTrack.pt()>=negTrack.pt())
            {
@@ -723,47 +726,47 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
            DiMuonTTCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
-           DiMuonTTCand.addUserFloat("countTksOfPVBS",vertexWeight[0]);
-           DiMuonTTCand.addUserFloat("vertexWeightBS",sumPTPV[0]);
-           DiMuonTTCand.addUserFloat("sumPTPVBS",countTksOfPV[0]);
-           DiMuonTTCand.addUserFloat("mu1FromPVBS",float(mu1FromPV[0]));
-           DiMuonTTCand.addUserFloat("mu2FromPVBS",float(mu2FromPV[0]));
+           // DiMuonTTCand.addUserFloat("countTksOfPVBS",vertexWeight[0]);
+           // DiMuonTTCand.addUserFloat("vertexWeightBS",sumPTPV[0]);
+           // DiMuonTTCand.addUserFloat("sumPTPVBS",countTksOfPV[0]);
+           // DiMuonTTCand.addUserFloat("mu1FromPVBS",float(mu1FromPV[0]));
+           // DiMuonTTCand.addUserFloat("mu2FromPVBS",float(mu2FromPV[0]));
            DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
            DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
-           DiMuonTTCand.addUserFloat("mu1BSW",m1W[0]);
-           DiMuonTTCand.addUserFloat("mu2BSW",m2W[0]);
-           DiMuonTTCand.addUserFloat("tPBSW",tPW[0]);
-           DiMuonTTCand.addUserFloat("tMBSW",tMW[0]);
+           // DiMuonTTCand.addUserFloat("mu1BSW",m1W[0]);
+           // DiMuonTTCand.addUserFloat("mu2BSW",m2W[0]);
+           // DiMuonTTCand.addUserFloat("tPBSW",tPW[0]);
+           // DiMuonTTCand.addUserFloat("tMBSW",tMW[0]);
 
            DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);
            DiMuonTTCand.addUserFloat("ctauPV",ctauPV[1]);
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
-           DiMuonTTCand.addUserFloat("countTksOfPV",countTksOfPV[1]);
-           DiMuonTTCand.addUserFloat("vertexWeight",vertexWeight[1]);
-           DiMuonTTCand.addUserFloat("sumPTPV",sumPTPV[1]);
-           DiMuonTTCand.addUserFloat("mu1FromPV",float(mu1FromPV[1]));
-           DiMuonTTCand.addUserFloat("mu2FromPV",float(mu2FromPV[1]));
+           // DiMuonTTCand.addUserFloat("countTksOfPV",countTksOfPV[1]);
+           // DiMuonTTCand.addUserFloat("vertexWeight",vertexWeight[1]);
+           // DiMuonTTCand.addUserFloat("sumPTPV",sumPTPV[1]);
+           // DiMuonTTCand.addUserFloat("mu1FromPV",float(mu1FromPV[1]));
+           // DiMuonTTCand.addUserFloat("mu2FromPV",float(mu2FromPV[1]));
            DiMuonTTCand.addUserFloat("tPFromPV",float(tPFromPV[1]));
            DiMuonTTCand.addUserFloat("tMFromPV",float(tMFromPV[1]));
-           DiMuonTTCand.addUserFloat("mu1W",m1W[1]);
-           DiMuonTTCand.addUserFloat("mu2W",m2W[1]);
-           DiMuonTTCand.addUserFloat("tPW",tPW[1]);
-           DiMuonTTCand.addUserFloat("tMW",tMW[1]);
+           // DiMuonTTCand.addUserFloat("mu1W",m1W[1]);
+           // DiMuonTTCand.addUserFloat("mu2W",m2W[1]);
+           // DiMuonTTCand.addUserFloat("tPW",tPW[1]);
+           // DiMuonTTCand.addUserFloat("tMW",tMW[1]);
 
            DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[2]);
            DiMuonTTCand.addUserFloat("ctauPVDZ",ctauPV[2]);
            DiMuonTTCand.addUserFloat("ctauErrPVDZ",ctauErrPV[2]);
-           DiMuonTTCand.addUserFloat("countTksOfPVDZ",countTksOfPV[2]);
-           DiMuonTTCand.addUserFloat("vertexWeightDZ",vertexWeight[2]);
-           DiMuonTTCand.addUserFloat("sumPTPVDZ",sumPTPV[2]);
-           DiMuonTTCand.addUserFloat("mu1FromPVDZ",float(mu1FromPV[2]));
-           DiMuonTTCand.addUserFloat("mu2FromPVDZ",float(mu2FromPV[2]));
+           // DiMuonTTCand.addUserFloat("countTksOfPVDZ",countTksOfPV[2]);
+           // DiMuonTTCand.addUserFloat("vertexWeightDZ",vertexWeight[2]);
+           // DiMuonTTCand.addUserFloat("sumPTPVDZ",sumPTPV[2]);
+           // DiMuonTTCand.addUserFloat("mu1FromPVDZ",float(mu1FromPV[2]));
+           // DiMuonTTCand.addUserFloat("mu2FromPVDZ",float(mu2FromPV[2]));
            DiMuonTTCand.addUserFloat("tPFromPVDZ",float(tPFromPV[2]));
            DiMuonTTCand.addUserFloat("tMFromPVDZ",float(tMFromPV[2]));
-           DiMuonTTCand.addUserFloat("mu1DZW",m1W[2]);
-           DiMuonTTCand.addUserFloat("mu2DZW",m2W[2]);
-           DiMuonTTCand.addUserFloat("tPDZW",tPW[2]);
-           DiMuonTTCand.addUserFloat("tMDZW",tMW[2]);
+           // DiMuonTTCand.addUserFloat("mu1DZW",m1W[2]);
+           // DiMuonTTCand.addUserFloat("mu2DZW",m2W[2]);
+           // DiMuonTTCand.addUserFloat("tPDZW",tPW[2]);
+           // DiMuonTTCand.addUserFloat("tMDZW",tMW[2]);
 
            ///DCA
            std::vector<float> DCAs;
@@ -1071,7 +1074,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              std::vector<float> oneMasses,twoMasses;
              oneMasses.push_back(MassTraks_[0]); oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
              twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
-             KinematicConstrainedVertexFitter pFitter;
+
 
              for(int iP = 0; iP < 2; ++iP)
              {
@@ -1086,7 +1089,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
                  pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma1));
 
-                 RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
+                 //RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
+                 KinematicConstrainedVertexFitter pFitter;
+                 RefCountedKinematicTree pkTree;
+                 pkTree = pFitter.fit(xParticles);
 
                  if (!pkTree->isEmpty()) {
 

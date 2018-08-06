@@ -113,6 +113,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
   float maxDeltaR;
   float maxDPtRel;
