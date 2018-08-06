@@ -55,15 +55,15 @@ DoubleDiMuonProducerFit::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
 }
 
-void DoubleDiMuonProducerFit::produce(edm::Event& event, const edm::EventSetup& esetup){
+void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> DoubleDiMuonCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> highDiMuon;
-  event.getByToken(HighDiMuonCollection_,highDiMuon);
+  iEvent.getByToken(HighDiMuonCollection_,highDiMuon);
 
   edm::Handle<pat::CompositeCandidateCollection> lowDiMuon;
-  event.getByToken(LowDiMuonCollection_,lowDiMuon);
+  iEvent.getByToken(LowDiMuonCollection_,lowDiMuon);
 
   float HighDiMuonMassMax_ = HighDiMuonMassCuts_[1];
   float HighDiMuonMassMin_ = HighDiMuonMassCuts_[0];
@@ -602,7 +602,7 @@ void DoubleDiMuonProducerFit::produce(edm::Event& event, const edm::EventSetup& 
      if ( !(highDiMuon->empty()) )  nLdM++;
      if ( !(lowDiMuon->empty()) )  nHdM++;
 
-     event.put(std::move(DoubleDiMuonCandColl),"FourMuonCandidates");
+     iEvent.put(std::move(DoubleDiMuonCandColl),"FourMuonCandidates");
      nevents++;
   }
 
