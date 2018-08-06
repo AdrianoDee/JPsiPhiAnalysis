@@ -11,7 +11,8 @@ DoubleDiMuonProducerFit::DoubleDiMuonProducerFit(const edm::ParameterSet& iConfi
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
-  addSameSig_(iConfig.getParameter<bool>("AddSS"))
+  addSameSig_(iConfig.getParameter<bool>("AddSS")),
+  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble"))
 {
   produces<pat::CompositeCandidateCollection>("FourMuonCandidates");
   candidates = 0;
@@ -271,7 +272,7 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                 }
 
                 float candRef = -1.0, cand_const_ref = -1.0;
-                
+
                 FourMuonCandidate.addUserData("bestPV",reco::Vertex(thePrimaryV));
 
                 FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);

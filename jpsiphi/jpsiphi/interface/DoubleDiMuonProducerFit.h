@@ -62,6 +62,7 @@ class DoubleDiMuonProducerFit : public edm::EDProducer {
   double JPsiMass_,PhiMass_;
   bool addMCTruth_;
   bool addSameSig_;
+  bool doDoubleConstant_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);
