@@ -444,6 +444,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
            DiMuonTTCand.addUserInt("pId",i);
            DiMuonTTCand.addUserInt("mId",j);
+
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
 
@@ -585,9 +586,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //
            // }
 
-           std::vector<bool> mu1FromPV,mu2FromPV;
+           // std::vector<bool> mu1FromPV,mu2FromPV;
            std::vector<float> tPFromPV,tMFromPV;
-           std::vector<float> m1W,m2W,tPW,tMW;
+           // std::vector<float> m1W,m2W,tPW,tMW;
 
            //NOT GOOD in MINIAOD
            // for(size_t i = 0; i < verteces.size(); i++)
@@ -796,21 +797,21 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
-           RefCountedKinematicTree PsiTTree = vertexFitter.fit(xParticles,jpsi_mtc);
+           RefCountedKinematicTree PsiTrTrTree = vertexFitter.fit(xParticles,jpsi_mtc);
 
-           if (!PsiTTree->isEmpty()) {
+           if (!PsiTrTrTree->isEmpty()) {
 
-              PsiTTree->movePointerToTheTop();
-              RefCountedKinematicParticle fitPsiTT = PsiTTree->currentParticle();
-              RefCountedKinematicVertex PsiTDecayVertex = PsiTTree->currentDecayVertex();
+              PsiTrTrTree->movePointerToTheTop();
+              RefCountedKinematicParticle fitPsiTrTr = PsiTrTrTree->currentParticle();
+              RefCountedKinematicVertex PsiTDecayVertex = PsiTrTrTree->currentDecayVertex();
        // Get PsiT reffited
               double dimuontt_ma_fit = 14000.;
               double dimuontt_vp_fit = -9999.;
               double dimuontt_x2_fit = 10000.;
               double dimuontt_ndof_fit = 10000.;
 
-              if (fitPsiTT->currentState().isValid()) {
-                dimuontt_ma_fit = fitPsiTT->currentState().mass();
+              if (fitPsiTrTr->currentState().isValid()) {
+                dimuontt_ma_fit = fitPsiTrTr->currentState().mass();
                 dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
                 dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
                                                      (double)(PsiTDecayVertex->degreesOfFreedom()));
@@ -823,9 +824,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    TVector3 pvtx;
                    VertexDistanceXY vdistXY;
                    int   dimuontt_ch_fit = DiMuonTTCand.charge();
-                   double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
-                   double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
-                   double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
+                   double dimuontt_px_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().x();
+                   double dimuontt_py_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().y();
+                   double dimuontt_pz_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().z();
                    double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
                                              dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
                    double dimuontt_vx_fit = PsiTDecayVertex->position().x();
@@ -858,8 +859,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
 
        // get first muon
-                   bool child = PsiTTree->movePointerToTheFirstChild();
-                   RefCountedKinematicParticle fitMu1 = PsiTTree->currentParticle();
+                   bool child = PsiTrTrTree->movePointerToTheFirstChild();
+                   RefCountedKinematicParticle fitMu1 = PsiTrTrTree->currentParticle();
                    if (!child) break;
                    float m1_ma_fit = fitMu1->currentState().mass();
                    int   m1_ch_fit = fitMu1->currentState().particleCharge();
@@ -871,8 +872,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                                                     math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),13);
                    pat::CompositeCandidate patMu1(recoMu1);
        // get second muon
-                   child = PsiTTree->movePointerToTheNextChild();
-                   RefCountedKinematicParticle fitMu2 = PsiTTree->currentParticle();
+                   child = PsiTrTrTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitMu2 = PsiTrTrTree->currentParticle();
                    if (!child) break;
                    float m2_ma_fit = fitMu2->currentState().mass();
                    int   m2_ch_fit = fitMu2->currentState().particleCharge();
@@ -890,8 +891,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    psi.addDaughter(patMu2,"lowMuon");
                    psi.setP4(patMu1.p4()+patMu2.p4());
        // get kaon
-                   child = PsiTTree->movePointerToTheNextChild();
-                   RefCountedKinematicParticle fitTrk = PsiTTree->currentParticle();
+                   child = PsiTrTrTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitTrk = PsiTrTrTree->currentParticle();
                    if (!child) break;
                    float tk_ma_fit = fitTrk->currentState().mass();
                    int   tk_ch_fit = fitTrk->currentState().particleCharge();
@@ -904,8 +905,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    pat::CompositeCandidate patTk(recoTk);
 
        // get kaon2
-                   child = PsiTTree->movePointerToTheNextChild();
-                   RefCountedKinematicParticle fitTrk2 = PsiTTree->currentParticle();
+                   child = PsiTrTrTree->movePointerToTheNextChild();
+                   RefCountedKinematicParticle fitTrk2 = PsiTrTrTree->currentParticle();
                    if (!child) break;
                    float tk2_ma_fit = fitTrk2->currentState().mass();
                    int   tk2_ch_fit = fitTrk2->currentState().particleCharge();
@@ -987,7 +988,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                  if (!PsiPhiTree->isEmpty()) {
                     PsiPhiTree->movePointerToTheTop();
-                    RefCountedKinematicParticle fitPsiTT = PsiPhiTree->currentParticle();
+                    RefCountedKinematicParticle fitPsiTrTr = PsiPhiTree->currentParticle();
                     RefCountedKinematicVertex PsiTDecayVertex = PsiPhiTree->currentDecayVertex();
              // Get PsiT reffited
                     double dimuontt_ma_fit = 14000.;
@@ -995,8 +996,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                     double dimuontt_x2_fit = 10000.;
                     double dimuontt_ndof_fit = 10000.;
 
-                    if (fitPsiTT->currentState().isValid()) {
-                      dimuontt_ma_fit = fitPsiTT->currentState().mass();
+                    if (fitPsiTrTr->currentState().isValid()) {
+                      dimuontt_ma_fit = fitPsiTrTr->currentState().mass();
                       dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
                       dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
                                                            (double)(PsiTDecayVertex->degreesOfFreedom()));
@@ -1008,9 +1009,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                          TVector3 pvtx;
                          VertexDistanceXY vdistXY;
                          int   dimuontt_ch_fit = DiMuonTTCand.charge();
-                         double dimuontt_px_fit = fitPsiTT->currentState().kinematicParameters().momentum().x();
-                         double dimuontt_py_fit = fitPsiTT->currentState().kinematicParameters().momentum().y();
-                         double dimuontt_pz_fit = fitPsiTT->currentState().kinematicParameters().momentum().z();
+                         double dimuontt_px_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().x();
+                         double dimuontt_py_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().y();
+                         double dimuontt_pz_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().z();
                          double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
                                                    dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
                          double dimuontt_vx_fit = PsiTDecayVertex->position().x();
