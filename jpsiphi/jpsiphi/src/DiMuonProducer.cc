@@ -484,56 +484,56 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               muonLess.clear();
               muonLess.reserve(thePrimaryV.tracksSize());
 
-              if( addMuonlessPrimaryVertex_  && thePrimaryV.tracksSize()>2) {
-                // Primary vertex matched to the dimuon, now refit it removing the two muons
-                DiMuonVtxReProducer revertex(priVtxs, iEvent);
-                edm::Handle<reco::TrackCollection> pvtracks;
-                iEvent.getByToken(revtxtrks_,   pvtracks);
-                if( !pvtracks.isValid()) { std::cout << "pvtracks NOT valid " << std::endl; }
-                else {
-                  edm::Handle<reco::BeamSpot> pvbeamspot;
-                  iEvent.getByToken(revtxbs_, pvbeamspot);
-                  if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
-                  // I need to go back to the reco::Muon object, as the TrackRef in the pat::Muon can be an embedded ref.
-                  const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(m1.originalObject());
-                  const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(m2.originalObject());
-                  // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
-                  // also check that the tracks really come from the track collection used for the BS
-                  if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
-                    // Save the keys of the tracks in the primary vertex
-                    // std::vector<size_t> vertexTracksKeys;
-                    // vertexTracksKeys.reserve(thePrimaryV.tracksSize());
-                    if( thePrimaryV.hasRefittedTracks() ) {
-                      // Need to go back to the original tracks before taking the key
-                      std::vector<reco::Track>::const_iterator itRefittedTrack = thePrimaryV.refittedTracks().begin();
-                      std::vector<reco::Track>::const_iterator refittedTracksEnd = thePrimaryV.refittedTracks().end();
-                      for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
-                      {
-                        if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu1->track().key() ) continue;
-                        if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu2->track().key() ) continue;
-                        // vertexTracksKeys.push_back(thePrimaryV.originalTrack(*itRefittedTrack).key());
-                        muonLess.push_back(*(thePrimaryV.originalTrack(*itRefittedTrack)));
-                      }
-                    }
-                    else {
-                      std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thePrimaryV.tracks_begin();
-                      for( ; itPVtrack != thePrimaryV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
-                        if( itPVtrack->key() == rmu1->track().key() ) continue;
-                        if( itPVtrack->key() == rmu2->track().key() ) continue;
-                        // vertexTracksKeys.push_back(itPVtrack->key());
-                        muonLess.push_back(**itPVtrack);
-                      }
-                    }
-                    if (muonLess.size()>1 && muonLess.size() < thePrimaryV.tracksSize()){
-                      pvs = revertex.makeVertices(muonLess, *pvbeamspot, iSetup) ;
-                      if (!pvs.empty()) {
-                        Vertex muonLessPV = Vertex(pvs.front());
-                        thePrimaryV = muonLessPV;
-                      }
-                    }
-                  }
-                }
-              }
+              // if( addMuonlessPrimaryVertex_  && thePrimaryV.tracksSize()>2) {
+              //   // Primary vertex matched to the dimuon, now refit it removing the two muons
+              //   DiMuonVtxReProducer revertex(priVtxs, iEvent);
+              //   edm::Handle<reco::TrackCollection> pvtracks;
+              //   iEvent.getByToken(revtxtrks_,   pvtracks);
+              //   if( !pvtracks.isValid()) { std::cout << "pvtracks NOT valid " << std::endl; }
+              //   else {
+              //     edm::Handle<reco::BeamSpot> pvbeamspot;
+              //     iEvent.getByToken(revtxbs_, pvbeamspot);
+              //     if (pvbeamspot.id() != theBeamSpot.id()) edm::LogWarning("Inconsistency") << "The BeamSpot used for PV reco is not the same used in this analyzer.";
+              //     // I need to go back to the reco::Muon object, as the TrackRef in the pat::Muon can be an embedded ref.
+              //     const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(m1.originalObject());
+              //     const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(m2.originalObject());
+              //     // check that muons are truly from reco::Muons (and not, e.g., from PF Muons)
+              //     // also check that the tracks really come from the track collection used for the BS
+              //     if (rmu1 != nullptr && rmu2 != nullptr && rmu1->track().id() == pvtracks.id() && rmu2->track().id() == pvtracks.id()) {
+              //       // Save the keys of the tracks in the primary vertex
+              //       // std::vector<size_t> vertexTracksKeys;
+              //       // vertexTracksKeys.reserve(thePrimaryV.tracksSize());
+              //       if( thePrimaryV.hasRefittedTracks() ) {
+              //         // Need to go back to the original tracks before taking the key
+              //         std::vector<reco::Track>::const_iterator itRefittedTrack = thePrimaryV.refittedTracks().begin();
+              //         std::vector<reco::Track>::const_iterator refittedTracksEnd = thePrimaryV.refittedTracks().end();
+              //         for( ; itRefittedTrack != refittedTracksEnd; ++itRefittedTrack )
+              //         {
+              //           if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu1->track().key() ) continue;
+              //           if( thePrimaryV.originalTrack(*itRefittedTrack).key() == rmu2->track().key() ) continue;
+              //           // vertexTracksKeys.push_back(thePrimaryV.originalTrack(*itRefittedTrack).key());
+              //           muonLess.push_back(*(thePrimaryV.originalTrack(*itRefittedTrack)));
+              //         }
+              //       }
+              //       else {
+              //         std::vector<reco::TrackBaseRef>::const_iterator itPVtrack = thePrimaryV.tracks_begin();
+              //         for( ; itPVtrack != thePrimaryV.tracks_end(); ++itPVtrack ) if (itPVtrack->isNonnull()) {
+              //           if( itPVtrack->key() == rmu1->track().key() ) continue;
+              //           if( itPVtrack->key() == rmu2->track().key() ) continue;
+              //           // vertexTracksKeys.push_back(itPVtrack->key());
+              //           muonLess.push_back(**itPVtrack);
+              //         }
+              //       }
+              //       if (muonLess.size()>1 && muonLess.size() < thePrimaryV.tracksSize()){
+              //         pvs = revertex.makeVertices(muonLess, *pvbeamspot, iSetup) ;
+              //         if (!pvs.empty()) {
+              //           Vertex muonLessPV = Vertex(pvs.front());
+              //           thePrimaryV = muonLessPV;
+              //         }
+              //       }
+              //     }
+              //   }
+              // }
 
               // count the number of high Purity tracks with pT > 900 MeV attached to the chosen vertex
               double vertexWeight = -1., sumPTPV = -1.;
