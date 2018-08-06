@@ -3,6 +3,8 @@
 DoubleDiMuonProducerFit::DoubleDiMuonProducerFit(const edm::ParameterSet& iConfig):
   HighDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("HighDiMuonCollection"))),
   LowDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("LowDiMuonCollection"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   HighDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("HighDiMuonMassCuts")),
   LowDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("LowDiMuonMassCuts")),
   DoubleDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DoubleDiMuonMassCuts")),
@@ -65,6 +67,14 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<pat::CompositeCandidateCollection> lowDiMuon;
   iEvent.getByToken(LowDiMuonCollection_,lowDiMuon);
 
+  edm::Handle<reco::BeamSpot> theBeamSpot;
+  iEvent.getByToken(thebeamspot_,theBeamSpot);
+  reco::BeamSpot bs = *theBeamSpot;
+  reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
+
+  edm::Handle<reco::VertexCollection> priVtxs;
+  iEvent.getByToken(thePVs_, priVtxs);
+
   float HighDiMuonMassMax_ = HighDiMuonMassCuts_[1];
   float HighDiMuonMassMin_ = HighDiMuonMassCuts_[0];
   float LowDiMuonMassMax_ = LowDiMuonMassCuts_[1];
@@ -111,6 +121,9 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
             if ( FourMuonCandidate.mass() < DoubleDiMuonMassMax_ && FourMuonCandidate.mass() > DoubleDiMuonMassMin_)
               {
                 candidates++;
+
+                float kinChi = 0.;
+                float kinNdf = 0.;
 
                 const ParticleMass muonMass(0.1056583);
                 float muonSigma = muonMass*1E-6;
@@ -159,8 +172,8 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                 FourMuonCandidate.addUserFloat("vProb",x_vp_fit);
                 FourMuonCandidate.addUserFloat("vChi2",x_x2_fit);
                 FourMuonCandidate.addUserFloat("nDof",x_ndof_fit);
-                FourMuonCandidate.addUserInt("pId",i);
-                FourMuonCandidate.addUserInt("mId",j);
+                // FourMuonCandidate.addUserInt("pId",i);
+                // FourMuonCandidate.addUserInt("mId",j);
 
                 //////////////////////////////////////////////////////////////////////////////
                 //PV Selection(s)
@@ -257,6 +270,8 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
                 }
 
+                float candRef = -1.0, cand_const_ref = -1.0;
+                
                 FourMuonCandidate.addUserData("bestPV",reco::Vertex(thePrimaryV));
 
                 FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);
@@ -481,8 +496,8 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                       //Phi
                       std::vector<RefCountedKinematicParticle> allFourMuDaughters;
 
-                      allFourMuDaughters.push_back(pFactory.particle(xTracks[0],trakMass1,kinChi,kinNdf,trakSigma1));
-                      allFourMuDaughters.push_back(pFactory.particle(xTracks[1],trakMass2,kinChi,kinNdf,trakSigma2));
+                      allFourMuDaughters.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+                      allFourMuDaughters.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
                       allFourMuDaughters.push_back(fitJPsi);
 
                       KinematicConstrainedVertexFitter vertexFitter;

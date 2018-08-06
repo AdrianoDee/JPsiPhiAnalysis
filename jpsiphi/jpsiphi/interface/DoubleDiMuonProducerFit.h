@@ -54,6 +54,8 @@ class DoubleDiMuonProducerFit : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> HighDiMuonCollection_;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> LowDiMuonCollection_;
+  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   std::vector<double> HighDiMuonMassCuts_;
   std::vector<double> LowDiMuonMassCuts_;
   std::vector<double> DoubleDiMuonMassCuts_;
