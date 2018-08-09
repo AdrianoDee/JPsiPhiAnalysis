@@ -13,32 +13,32 @@
 #include <memory>
 
 // user include files
-#include "FWCore/Framework/Dnterface/Frameworkfwd.h"
-#include "FWCore/Framework/Dnterface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
 
-#include "FWCore/Framework/Dnterface/Event.h"
-#include "FWCore/Framework/Dnterface/MakerMacros.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
 
-#include "FWCore/ParameterSet/Dnterface/ParameterSet.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-#include "FWCore/ServiceRegistry/Dnterface/Service.h"
-#include "CommonTools/UtilAlgos/Dnterface/TFileService.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
 
-#include "DataFormats/PatCandidates/Dnterface/CompositeCandidate.h"
-#include "DataFormats/PatCandidates/Dnterface/Muon.h"
-#include "DataFormats/PatCandidates/Dnterface/PackedGenParticle.h"
-#include "DataFormats/Candidate/Dnterface/Candidate.h"
-#include "DataFormats/HepMCCandidate/Dnterface/GenParticle.h"
-#include "DataFormats/PatCandidates/Dnterface/UserData.h"
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/PatCandidates/interface/UserData.h"
 
 #include "TLorentzVector.h"
 #include "TTree.h"
 #include <vector>
 #include <sstream>
 
-#include "DataFormats/VertexReco/Dnterface/Vertex.h"
-#include "DataFormats/Common/Dnterface/TriggerResults.h"
-#include "FWCore/Common/Dnterface/TriggerNames.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 
 //
 // class declaration
