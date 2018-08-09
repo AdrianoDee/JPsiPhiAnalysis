@@ -78,7 +78,6 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  const MagneticField* field = magneticField.product();
 
   float HighDiMuonMassMax_ = HighDiMuonMassCuts_[1];
   float HighDiMuonMassMin_ = HighDiMuonMassCuts_[0];
@@ -202,10 +201,10 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                 bool status = ttmd.calculate( GlobalTrajectoryParameters(
                   GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
-                  GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(field)),
+                  GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
                   GlobalTrajectoryParameters(
                     GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
-                    GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(field)));
+                    GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
                 float extrapZ=-9E20;
 
                 if (status) extrapZ=ttmd.points().first.z();
