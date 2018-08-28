@@ -933,21 +933,6 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_vy    = doubledimuon_cand.userFloat("vtxY");
       doubledimuon_vz    = doubledimuon_cand.userFloat("vtxZ");
 
-      // highDiMM_fit = doubledimuon_rf_cand->userFloat("highDiMM_fit");
-      // highDiMPx_fit = doubledimuon_rf_cand->userFloat("highDiMPx_fit");
-      // highDiMPy_fit = doubledimuon_rf_cand->userFloat("highDiMPy_fit");
-      // highDiMPz_fit = doubledimuon_rf_cand->userFloat("highDiMPz_fit");
-
-      doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->pt(),doubledimuon_rf_cand->eta(),doubledimuon_rf_cand->phi(),doubledimuon_rf_cand->mass());
-      jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("jpsiuon")->pt(),doubledimuon_rf_cand->daughter("jpsiuon")->eta(),
-                              doubledimuon_rf_cand->daughter("jpsiuon")->phi(),doubledimuon_rf_cand->daughter("jpsiuon")->mass());
-      phi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("phiuon")->pt(),doubledimuon_rf_cand->daughter("phiuon")->eta(),
-                              doubledimuon_rf_cand->daughter("phiuon")->phi(),doubledimuon_rf_cand->daughter("phiuon")->mass());
-
-
-      jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("jpsiuon"));
-      phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("phiuon"));
-
 
       // doubledimuon_pdgid    = doubledimuon_rf_cand->userInt("phiGenPdgId");
       // doubledimuon_phipdg   = doubledimuon_rf_cand->userFloat("phiPpdlTrue");
@@ -972,17 +957,6 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
          vPhiHigh = phi_cand_rf->daughter("lowMuon")->p4();
          vPhiLow = phi_cand_rf->daughter("highMuon")->p4();
       }
-
-      pat::CompositeCandidate doubledimuon_not_rf_cand;// = doubledimuon_cand_handle->at(doubledimuon_rf_bindx);
-
-      jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("jpsiuon"));
-      phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("phiuon"));
-
-      doubledimuon_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.pt(),doubledimuon_not_rf_cand.eta(),doubledimuon_not_rf_cand.phi(),doubledimuon_not_rf_cand.mass());
-      jpsi_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("jpsiuon")->pt(),doubledimuon_not_rf_cand.daughter("jpsiuon")->eta(),
-                              doubledimuon_not_rf_cand.daughter("jpsiuon")->phi(),doubledimuon_not_rf_cand.daughter("jpsiuon")->mass());
-      phi_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("phiuon")->pt(),doubledimuon_not_rf_cand.daughter("phiuon")->eta(),
-                              doubledimuon_not_rf_cand.daughter("phiuon")->phi(),doubledimuon_not_rf_cand.daughter("phiuon")->mass());
 
       jpsi_vProb        = jpsi_cand->userFloat("vProb");
       jpsi_vChi2        = jpsi_cand->userFloat("vNChi2");
