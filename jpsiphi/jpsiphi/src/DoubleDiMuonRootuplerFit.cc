@@ -924,7 +924,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
 
       doubledimuon_m     = doubledimuon_cand.mass();
-      doubledimuon_m_rf  = doubledimuon_cand.userFloat("mass_Rf");
+      doubledimuon_m_rf  = doubledimuon_cand.userFloat("mass_rf");
       doubledimuon_pt    = doubledimuon_cand.pt();
       doubledimuon_eta   = doubledimuon_cand.eta();
       doubledimuon_phi   = doubledimuon_cand.phi();
