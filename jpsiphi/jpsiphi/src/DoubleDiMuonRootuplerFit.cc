@@ -881,7 +881,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
-    pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand, *jpsi_cand_rf, *phi_cand_rf;
+    pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand, *jpsi_cand, *jpsi_cand;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
@@ -932,6 +932,31 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_vx    = doubledimuon_cand.userFloat("vtxX");
       doubledimuon_vy    = doubledimuon_cand.userFloat("vtxY");
       doubledimuon_vz    = doubledimuon_cand.userFloat("vtxZ");
+
+
+      // doubledimuon_pdgid    = doubledimuon_rf_cand->userInt("phiGenPdgId");
+      // doubledimuon_phipdg   = doubledimuon_rf_cand->userFloat("phiPpdlTrue");
+      // doubledimuon_isprompt = doubledimuon_rf_cand->userInt("xGenPdgId");
+      // doubledimuon_phippdl  = doubledimuon_rf_cand->userFloat("xGenIsPrompt");
+
+      reco::Candidate::LorentzVector vJPsiHigh = jpsi_cand->daughter("highMuon")->p4();
+      reco::Candidate::LorentzVector vJPsiLow = jpsi_cand->daughter("lowMuon")->p4();
+
+      if (jpsi_cand->daughter("highMuon")->charge() < 0) {
+         vJPsiHigh = jpsi_cand->daughter("lowMuon")->p4();
+         vJPsiLow = jpsi_cand->daughter("highMuon")->p4();
+      }
+
+      mLowPhi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+      mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
+
+      reco::Candidate::LorentzVector vPhiHigh = jpsi_cand->daughter("highMuon")->p4();
+      reco::Candidate::LorentzVector vPhiLow = jpsi_cand->daughter("lowMuon")->p4();
+
+      if (jpsi_cand->daughter("highMuon")->charge() < 0) {
+         vPhiHigh = jpsi_cand->daughter("lowMuon")->p4();
+         vPhiLow = jpsi_cand->daughter("highMuon")->p4();
+      }
 
       jpsi_vProb        = jpsi_cand->userFloat("vProb");
       jpsi_vChi2        = jpsi_cand->userFloat("vNChi2");
@@ -1050,17 +1075,17 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
         jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("phi")->pt(),doubledimuon_rf_cand->daughter("phi")->eta(),
                                 doubledimuon_rf_cand->daughter("phi")->phi(),doubledimuon_rf_cand->daughter("phi")->mass());
 
-        jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("jpsi"));
-        phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("phi"));
+        jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("jpsi"));
+        jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("phi"));
 
-        vJPsiHigh = jpsi_cand_rf->daughter("highMuon")->p4();
-        vJPsiLow = jpsi_cand_rf->daughter("lowMuon")->p4();
+        vJPsiHigh = jpsi_cand->daughter("highMuon")->p4();
+        vJPsiLow = jpsi_cand->daughter("lowMuon")->p4();
 
         mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
         mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
-        vPhiHigh = phi_cand_rf->daughter("highMuon")->p4();
-        vPhiLow = phi_cand_rf->daughter("lowMuon")->p4();
+        vPhiHigh = jpsi_cand->daughter("highMuon")->p4();
+        vPhiLow = jpsi_cand->daughter("lowMuon")->p4();
 
         mHighPhi_rf_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
         mLowPhi_rf_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
