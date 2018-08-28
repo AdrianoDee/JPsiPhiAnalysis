@@ -1082,7 +1082,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
         vJPsiLow = jpsi_cand_rf->daughter("lowMuon")->p4();
 
         mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
-        mLowJPsi_rf_p4.SetPtEtaPhiM(vLowMuon.pt(), vLowMuon.eta(), vLowMuon.phi(), vLowMuon.mass());
+        mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
         vPhiHigh = phi_cand_rf->daughter("highMuon")->p4();
         vPhiLow = phi_cand_rf->daughter("lowMuon")->p4();
