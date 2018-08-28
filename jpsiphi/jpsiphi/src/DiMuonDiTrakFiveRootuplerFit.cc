@@ -993,8 +993,8 @@ if(!onlyGen_)
     dimuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     lowMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     highMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-    highKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-    lowKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    // highKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    // lowKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;

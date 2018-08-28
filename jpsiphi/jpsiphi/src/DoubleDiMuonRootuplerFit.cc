@@ -125,8 +125,6 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   Double_t doubledimuon_rf_c_vProb, doubledimuon_rf_c_vChi2, doubledimuon_rf_c_nDof;
   Double_t doubledimuon_rf_c_cosAlpha, doubledimuon_rf_c_ctauPV, doubledimuon_rf_c_ctauErrPV;
-
-  Double_t doubledimuon_rf_c_cosAlpha, doubledimuon_rf_c_ctauPV, doubledimuon_rf_c_ctauErrPV;
   Double_t doubledimuon_rf_c_lxy, doubledimuon_rf_c_lxyErr, doubledimuon_rf_c_lxyz, doubledimuon_rf_c_lxyzErr;
 
   Double_t doubledimuon_vx, doubledimuon_vy, doubledimuon_vz;
@@ -203,8 +201,6 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   Double_t jpsi_triggerMatch_rf, phi_triggerMatch_rf;
 
-  Double_t doubledimuon_charge;
-
   //Kin variables
   Double_t jpsi_m,jpsi_m_rf,jpsi_m_rf_c,jpsi_m_rf_d_c;
   Double_t jpsi_p, jpsi_theta, jpsi_eta, jpsi_pt, jpsi_y;
@@ -228,6 +224,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   //Kin
 
+  Int_t gen_doubledimuon_pdgId;
   Double_t gen_doubledimuon_prompt, phi_prompt, jpsi_prompt;
   Double_t gen_doubledimuon_pt;
   Double_t gen_doubledimuon_eta;
@@ -877,7 +874,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
-  if (!onlyGen_ && doubledimuon_cand_handle.isValid()) {
+  if (!OnlyGen_ && doubledimuon_cand_handle.isValid()) {
 
     doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -905,10 +902,10 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
 
-      if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
-        std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
-        continue;
-      }
+      // if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
+      //   std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
+      //   continue;
+      // }
 
       doubledimuon_charge    = doubledimuon_cand.charge();
       doubledimuon_vProb     = doubledimuon_cand.userFloat("vProb");
@@ -938,10 +935,10 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
       doubledimuon_m_rf      = doubledimuon_cand.mass();
 
-      highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
-      highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
-      highDiMPy_fit = doubledimuon_rf_cand.userFloat("highDiMPy_fit");
-      highDiMPz_fit = doubledimuon_rf_cand.userFloat("highDiMPz_fit");
+      // highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
+      // highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
+      // highDiMPy_fit = doubledimuon_rf_cand.userFloat("highDiMPy_fit");
+      // highDiMPz_fit = doubledimuon_rf_cand.userFloat("highDiMPz_fit");
 
       doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.pt(),doubledimuon_rf_cand.eta(),doubledimuon_rf_cand.phi(),doubledimuon_rf_cand.mass());
       jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("jpsiuon")->pt(),doubledimuon_rf_cand.daughter("jpsiuon")->eta(),
@@ -957,10 +954,10 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_m_rf= doubledimuon_rf_cand.mass();
       doubledimuon_pt  = doubledimuon_cand.pt();
 
-      doubledimuon_pdgid    = doubledimuon_rf_cand.userInt("phiGenPdgId");
-      doubledimuon_phipdg   = doubledimuon_rf_cand.userFloat("phiPpdlTrue");
-      doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
-      doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
+      // doubledimuon_pdgid    = doubledimuon_rf_cand.userInt("phiGenPdgId");
+      // doubledimuon_phipdg   = doubledimuon_rf_cand.userFloat("phiPpdlTrue");
+      // doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
+      // doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
 
       reco::Candidate::LorentzVector vJpsiP = jpsi_cand_rf->daughter("muon1")->p4();
       reco::Candidate::LorentzVector vJpsiM = jpsi_cand_rf->daughter("muon2")->p4();
@@ -981,7 +978,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
          vPhiM = phi_cand_rf->daughter("muon1")->p4();
       }
 
-      pat::CompositeCandidate doubledimuon_not_rf_cand = doubledimuon_cand_handle->at(doubledimuon_rf_bindx);
+      pat::CompositeCandidate doubledimuon_not_rf_cand;// = doubledimuon_cand_handle->at(doubledimuon_rf_bindx);
 
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("jpsiuon"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("phiuon"));
@@ -1058,10 +1055,10 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
         lowPatMuonN = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon2"));
       }
 
-      highDiM_m        = (Double_t) jpsi_cand->mass();
-      highDiM_pt       = (Double_t) jpsi_cand->pt();
-      lowDiM_m         = (Double_t) phi_cand->mass();
-      lowDiM_pt        = (Double_t) phi_cand->pt();
+      // highDiM_m        = (Double_t) jpsi_cand->mass();
+      // highDiM_pt       = (Double_t) jpsi_cand->pt();
+      // lowDiM_m         = (Double_t) phi_cand->mass();
+      // lowDiM_pt        = (Double_t) phi_cand->pt();
 
       mHighJPsi_pt     = (Double_t) std::max(vJpsiP.pt(),vJpsiM.pt());
       mLowJPsi_pt      = (Double_t) -std::max(-vJpsiP.pt(),-vJpsiM.pt());
