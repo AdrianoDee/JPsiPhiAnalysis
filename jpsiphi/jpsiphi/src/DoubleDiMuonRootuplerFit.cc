@@ -881,7 +881,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
-    pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand, *jpsi_cand, *jpsi_cand;
+    pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//, *jpsi_cand, *jpsi_cand;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
