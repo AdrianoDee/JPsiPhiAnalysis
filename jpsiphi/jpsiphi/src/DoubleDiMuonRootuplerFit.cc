@@ -135,8 +135,8 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   Double_t doubledimuon_dca_m1m2, doubledimuon_dca_m1t1, doubledimuon_dca_m1t2;
   Double_t doubledimuon_dca_t1t2,doubledimuon_dca_m2t1, doubledimuon_dca_m2t2;
 
-  Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlphaDZ3D, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ;
-  Double_t doubledimuon_cosAlphaBS, doubledimuon_cosAlphaBS3D, doubledimuon_ctauPVBS, doubledimuon_ctauErrPVBS;
+  Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlpha3DDZ, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ;
+  Double_t doubledimuon_cosAlphaBS, doubledimuon_cosAlpha3DBS, doubledimuon_ctauPVBS, doubledimuon_ctauErrPVBS;
   Double_t doubledimuon_lxyDZ, doubledimuon_lxyErrDZ, doubledimuon_lxyzDZ, doubledimuon_lxyzErrDZ;
   Double_t doubledimuon_lxyBS, doubledimuon_lxyErrBS, doubledimuon_lxyzBS, doubledimuon_lxyzErrBS;
 
@@ -207,7 +207,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   //Kin variables
   Double_t jpsi_m,jpsi_m_rf,jpsi_m_rf_c,jpsi_m_rf_d_c;
-  Double_t jpsi_p, jpsi_pt, jpsi_eta, jpsi_theta, jpsi_y;
+  Double_t jpsi_p, jpsi_theta, jpsi_eta, jpsi_pt, jpsi_y;
   Double_t jpsi_e, jpsi_dxy,jpsi_dxyErr, jpsi_dz,jpsi_dzErr;
   Double_t jpsi_vProb, jpsi_vChi2, jpsi_DCA, jpsi_ctauPV, jpsi_ctauErrPV, jpsi_cosAlpha;
   Double_t jpsi_lxy,jpsi_lxyz,jpsi_lxyErr,jpsi_lxyzErr,jpsi_cosAlpha3D;
@@ -229,8 +229,8 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   //Kin
 
   Double_t gen_doubledimuon_prompt, phi_prompt, jpsi_prompt;
-  Double_t gen_doubledimuon_pt, phi_pt, jpsi_pt;
-  Double_t gen_doubledimuon_eta, phi_eta, jpsi_eta;
+  Double_t gen_doubledimuon_pt;
+  Double_t gen_doubledimuon_eta;
 
   Double_t isBestCandidate;
 
@@ -634,33 +634,33 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
 
         fourmuon_tree->Branch("isBestCandidate",&isBestCandidate,"isBestCandidate/D");
 
-	if(isMC_)
-	  {
-      fourmuon_tree->Branch("gen_doubledimuon_pdgid",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
-      fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
-      fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
-
-      fourmuon_tree->Branch("gen_mHighJPsi_pdgid",&gen_mHighJPsi_pdgid,"mHighgen_mHighJPsi_pdgidJPsi_pdgid/D");
-      fourmuon_tree->Branch("gen_mLowJPsi_pdgid",&gen_mLowJPsi_pdgid,"gen_mLowJPsi_pdgid/D");
-      fourmuon_tree->Branch("gen_mHighPhi_pdgid",&gen_mHighPhi_pdgid,"gen_mHighPhi_pdgid/D");
-      fourmuon_tree->Branch("gen_mLowPhi_pdgid",&gen_mLowPhi_pdgid,"gen_mLowPhi_pdgid/D");
-
-      fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
-      fourmuon_tree->Branch("gen_doubledimuon_ppdl",&gen_doubledimuon_ppdl,"gen_doubledimuon_ppdl/D");
-      fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
-      fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
-      fourmuon_tree->Branch("gen_phi_ppdl",&gen_phi_ppdl,"gen_phi_ppdl/D");
-      fourmuon_tree->Branch("gen_jpsi_ppdl",&gen_jpsi_ppdl,"gen_jpsi_ppdl/D");
-
-      fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
-      fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
-      fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
-
-      fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
-      fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
-      fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
-
-	  }
+	// if(isMC_)
+	//   {
+  //     fourmuon_tree->Branch("gen_doubledimuon_pdgid",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
+  //     fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+  //     fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
+  //
+  //     fourmuon_tree->Branch("gen_mHighJPsi_pdgid",&gen_mHighJPsi_pdgid,"mHighgen_mHighJPsi_pdgidJPsi_pdgid/D");
+  //     fourmuon_tree->Branch("gen_mLowJPsi_pdgid",&gen_mLowJPsi_pdgid,"gen_mLowJPsi_pdgid/D");
+  //     fourmuon_tree->Branch("gen_mHighPhi_pdgid",&gen_mHighPhi_pdgid,"gen_mHighPhi_pdgid/D");
+  //     fourmuon_tree->Branch("gen_mLowPhi_pdgid",&gen_mLowPhi_pdgid,"gen_mLowPhi_pdgid/D");
+  //
+  //     fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
+  //     fourmuon_tree->Branch("gen_doubledimuon_ppdl",&gen_doubledimuon_ppdl,"gen_doubledimuon_ppdl/D");
+  //     fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+  //     fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+  //     fourmuon_tree->Branch("gen_phi_ppdl",&gen_phi_ppdl,"gen_phi_ppdl/D");
+  //     fourmuon_tree->Branch("gen_jpsi_ppdl",&gen_jpsi_ppdl,"gen_jpsi_ppdl/D");
+  //
+  //     fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
+  //     fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+  //     fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+  //
+  //     fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
+  //     fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+  //     fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+  //
+	//   }
 
     genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
     packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
