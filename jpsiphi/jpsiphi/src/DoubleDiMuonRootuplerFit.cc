@@ -119,11 +119,15 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   Double_t doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV, doubledimuon_cosAlpha3D;
   Double_t doubledimuon_lxy, doubledimuon_lxyErr, doubledimuon_lxyz, doubledimuon_lxyzErr;
 
+  Double_t doubledimuon_rf_lxy,doubledimuon_rf_lxyErr,doubledimuon_rf_lxyz,doubledimuon_rf_lxyzErr;
   Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_nDof;
   Double_t doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
 
   Double_t doubledimuon_rf_c_vProb, doubledimuon_rf_c_vChi2, doubledimuon_rf_c_nDof;
   Double_t doubledimuon_rf_c_cosAlpha, doubledimuon_rf_c_ctauPV, doubledimuon_rf_c_ctauErrPV;
+
+  Double_t doubledimuon_rf_c_cosAlpha, doubledimuon_rf_c_ctauPV, doubledimuon_rf_c_ctauErrPV;
+  Double_t doubledimuon_rf_c_lxy, doubledimuon_rf_c_lxyErr, doubledimuon_rf_c_lxyz, doubledimuon_rf_c_lxyzErr;
 
   Double_t doubledimuon_vx, doubledimuon_vy, doubledimuon_vz;
   Double_t pv_x, pv_y, pv_z;
@@ -131,7 +135,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   Double_t doubledimuon_dca_m1m2, doubledimuon_dca_m1t1, doubledimuon_dca_m1t2;
   Double_t doubledimuon_dca_t1t2,doubledimuon_dca_m2t1, doubledimuon_dca_m2t2;
 
-  Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlphaDZ3D, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ,
+  Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlphaDZ3D, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ;
   Double_t doubledimuon_cosAlphaBS, doubledimuon_cosAlphaBS3D, doubledimuon_ctauPVBS, doubledimuon_ctauErrPVBS;
   Double_t doubledimuon_lxyDZ, doubledimuon_lxyErrDZ, doubledimuon_lxyzDZ, doubledimuon_lxyzErrDZ;
   Double_t doubledimuon_lxyBS, doubledimuon_lxyErrBS, doubledimuon_lxyzBS, doubledimuon_lxyzErrBS;
@@ -210,6 +214,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   Double_t phi_vProb, phi_vChi2, phi_DCA, phi_ctauPV, phi_ctauErrPV, phi_cosAlpha;
   Double_t phi_lxy,phi_lxyz,phi_lxyErr,phi_lxyzErr,phi_cosAlpha3D;
 
+
   //////////////
   //MC variables
 
@@ -282,7 +287,7 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
         fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/D");
         fourmuon_tree->Branch("trigger",            &trigger,            "trigger/D");
 
-        doubledimuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
+        fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
 
         fourmuon_tree->Branch("doubledimuon_p4",   "TLorentzVector", &doubledimuon_not_rf_p4);
         fourmuon_tree->Branch("phi_p4",     "TLorentzVector", &phi_not_rf_p4);
@@ -337,7 +342,7 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
         fourmuon_tree->Branch("doubledimuon_nDof",&doubledimuon_nDof,"doubledimuon_nDof/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_vProb",&doubledimuon_rf_vProb,"doubledimuon_rf_vProb/D");
-        fourmuon_tree->Branch(" doubledimuon_rf_vChi2",& doubledimuon_rf_vChi2," doubledimuon_rf_vChi2/D");
+        fourmuon_tree->Branch(" doubledimuon_rf_vChi2",&doubledimuon_rf_vChi2," doubledimuon_rf_vChi2/D");
         fourmuon_tree->Branch("doubledimuon_rf_nDof",&doubledimuon_rf_nDof,"doubledimuon_rf_nDof/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_c_vProb",&doubledimuon_rf_c_vProb,"doubledimuon_rf_c_vProb/D");
