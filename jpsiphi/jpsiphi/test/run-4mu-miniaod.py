@@ -68,19 +68,21 @@ hltpaths = cms.vstring(hltList)
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
 charmoniumFilters = cms.vstring(
-                                "hltDoubleMu2JpsiDoubleTrkL3Filtered",
-                                "hltDoubleTrkmumuFilterDoubleMu2Jpsi",
-                                "hltJpsiTkTkVertexFilterPhiDoubleTrk1v2",
-
-                                'hltDisplacedmumuFilterDoubleMu4Jpsi',
-
-                                'hltDisplacedmumuFilterDoubleMu43Jpsi',
-
-                                'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-
-                                'hltDisplacedmumuFilterDimuon25Jpsis',
-
-                                'hltJpsiMuonL3Filtered3p5',
+                                "hltDiMuonGlbOrTrk0zFiltered0p2v2",
+                                "hltDiMuonGlbOrTrkFiltered0v2"
+                                # "hltDoubleMu2JpsiDoubleTrkL3Filtered",
+                                # "hltDoubleTrkmumuFilterDoubleMu2Jpsi",
+                                # "hltJpsiTkTkVertexFilterPhiDoubleTrk1v2",
+                                #
+                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
+                                #
+                                # 'hltDisplacedmumuFilterDoubleMu43Jpsi',
+                                #
+                                # 'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
+                                #
+                                # 'hltDisplacedmumuFilterDimuon25Jpsis',
+                                #
+                                # 'hltJpsiMuonL3Filtered3p5',
                                 )
 
 muoniaFilters = cms.vstring("hltDisplacedmumuFilterDimuon14PhiBarrelnoCow")

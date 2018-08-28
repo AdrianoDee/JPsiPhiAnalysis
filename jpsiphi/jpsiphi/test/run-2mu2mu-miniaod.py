@@ -87,40 +87,14 @@ hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
                                 #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v5',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v6',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v5',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',
-                                #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
-                                # 'hltDoubleMu4JpsiDisplacedL3Filtered'
-                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                # 'hltJpsiTkTkVertexFilterPhiKstar',
-                                # #HLT_DoubleMu4_JpsiTrk_Displaced_v12
-                                # #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                # #'hltJpsiTkVertexProducer',
-                                # #'hltJpsiTkVertexFilter',
-                                # #HLT_DoubleMu4_Jpsi_Displaced
-                                # #'hltDoubleMu4JpsiDisplacedL3Filtered',
-                                # #'hltDisplacedmumuVtxProducerDoubleMu4Jpsi',
-                                # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
-                                # #HLT_DoubleMu4_3_Jpsi_Displaced
-                                # #'hltDoubleMu43JpsiDisplacedL3Filtered',
-                                # 'hltDisplacedmumuFilterDoubleMu43Jpsi',
-                                # #HLT_Dimuon20_Jpsi_Barrel_Seagulls
-                                # #'hltDimuon20JpsiBarrelnoCowL3Filtered',
-                                # 'hltDisplacedmumuFilterDimuon20JpsiBarrelnoCow',
-                                # #HLT_Dimuon25_Jpsi
-                                # 'hltDisplacedmumuFilterDimuon25Jpsis'
+                                'hltDiMuonGlbOrTrk0zFiltered0p2v1',
+								'hltDiMuonGlbOrTrk0zFiltered0p2v2',
+								'hltDiMuonGlbOrTrk0zFiltered0p2v3',
+								'hltDiMuonGlbOrTrk0zFiltered0p2v4',
+                                'hltDiMuonGlbOrTrkFiltered0v1',
+								'hltDiMuonGlbOrTrkFiltered0v2',
+								'hltDiMuonGlbOrTrkFiltered0v3',
+								'hltDiMuonGlbOrTrkFiltered0v4',
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
@@ -146,24 +120,61 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 #    ),
 #    filter = cms.bool(True)
 # )
-process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
+process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
+        muons                       = cms.InputTag('softMuons'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-        dimuonSelection             = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
+        higherPuritySelection       = cms.string(""),
+        lowerPuritySelection        = cms.string(""),
+        dimuonSelection             = cms.string("0.6 < mass && mass < 1.2 && charge==0 "),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(True),
+        addMCTruth                  = cms.bool(False),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
 
-process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
+process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
+        muons                       = cms.InputTag('softMuons'),
+        primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+        higherPuritySelection       = cms.string(""),
+        lowerPuritySelection        = cms.string(""),
+        dimuonSelection             = cms.string("2.9 < mass && mass < 3.3 && charge==0 "),
+        addCommonVertex             = cms.bool(True),
+        addMuonlessPrimaryVertex    = cms.bool(False),
+        addMCTruth                  = cms.bool(False),
+        resolvePileUpAmbiguity      = cms.bool(True),
+        HLTFilters                  = filters
+)
+
+process.DiMuonFilteredJpsi = cms.EDProducer('DiMuonFilter',
       OniaTag             = cms.InputTag("JPsi2MuMuPAT"),
       singlemuonSelection = cms.string(""),
-      dimuonSelection     = cms.string("2.95 < mass && mass < 3.25 && userFloat('vProb') > 0.01 && pt > 2.0"),
+      dimuonSelection     = cms.string("2.95 < mass && mass < 3.25 && userFloat('vProb') > 0.005"),
       do_trigger_match    = cms.bool(False),
       HLTFilters          = filters
+)
+
+process.DiMuonFilteredPhi = cms.EDProducer('DiMuonFilter',
+      OniaTag             = cms.InputTag("Phi2MuMuPAT"),
+      singlemuonSelection = cms.string(""),
+      dimuonSelection     = cms.string("0.6 < mass && mass < 1.12 && userFloat('vProb') > 0.005 "),
+      do_trigger_match    = cms.bool(False),
+      HLTFilters          = filters
+
+)
+
+process.DiMuonCounterJPsi = cms.EDFilter('CandViewCountFilter',
+    src       = cms.InputTag("DiMuonFilteredJpsi"),
+    minNumber = cms.uint32(1),
+    filter    = cms.bool(True)
+)
+
+process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
+    src       = cms.InputTag("DiMuonFilteredPhi"),
+    minNumber = cms.uint32(1),
+    filter    = cms.bool(True)
 )
 
 # process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
@@ -207,7 +218,7 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 # )
 
 
-process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
+process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -274,8 +285,8 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 #     TreeName = cms.string('JPsiPhiTree')
 # )
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
-    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
+    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
 	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
 	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
 	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
@@ -292,12 +303,25 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
     TreeName = cms.string('JPsiPhiTree')
 )
 
-process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
-                          dimuons = cms.InputTag("JPsi2MuMuFilter"),
+process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
+                          dimuons = cms.InputTag("JPsi2MuMuPAT"),
                           muons = cms.InputTag("replaceme"),
                           primaryVertices = cms.InputTag("offlinePrimaryVertices"),
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(443),
+                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
+                          isMC = cms.bool(False),
+                          OnlyBest = cms.bool(False),
+                          OnlyGen = cms.bool(False),
+                          HLTs = hltpaths
+                          )
+
+process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
+                          dimuons = cms.InputTag("Phi2MuMuPAT"),
+                          muons = cms.InputTag("replaceme"),
+                          primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+                          TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+                          dimuon_pdgid = cms.uint32(333),
                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
                           isMC = cms.bool(False),
                           OnlyBest = cms.bool(False),
@@ -310,9 +334,11 @@ process.p = cms.Path(process.triggerSelection *
                      process.unpackPatTriggers *
                      #process.softMuons *
                      process.JPsi2MuMuPAT *
-                     process.JPsi2MuMuFilter*
+					 process.Phi2MuMuPAT *
+                     #process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
-					 process.FiveTracksProducer *
+					 #process.FiveTracksProducer *
                      process.rootuple *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+                     process.rootuplePhi*
+					 process.rootupleJPsi)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
