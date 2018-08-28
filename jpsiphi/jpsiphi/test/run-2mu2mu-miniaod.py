@@ -223,26 +223,24 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
 
 
 process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducerFit',
-    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
-    PFCandidates = cms.InputTag('packedPFCandidates'),
+    HighDiMuonCollection  = cms.InputTag('JPsi2MuMuPAT'),
+    LowDiMuonCollection  = cms.InputTag('Phi2MuMuPAT'),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
 	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-    DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
-    MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
+    HighDiMuonMassCuts	= cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    LowDiMuonMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
+    DoubleDiMuonMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
 	JPsiMass = cms.double(3.096916),
 	PhiMass  = cms.double(1.019461),
     OnlyBest  = cms.bool(False),
-    Product = cms.string("DiMuonDiTrakCandidates"),
+    Product = cms.string("FourMuonCandidates"),
     Filters = filters,
     IsMC = cms.bool(False),
     AddMCTruth = cms.bool(False),
 	DoDouble = cms.bool(False),
 	AddSS    = cms.bool(True),
-	PionRefit = cms.bool(True)
 )
 
 process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
@@ -290,7 +288,7 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 # )
 
 process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
-    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
+    doubledimuon_cand = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
 	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
 	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
 	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
