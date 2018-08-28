@@ -67,12 +67,12 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> doubledimuon_cand_Label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> doubledimuons_;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> doubledimuon_rf_cand_Label;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  doubledimuon_pdgid_, higdim_pdgid_, lowdim_pdgid_;
+  int  doubledimuon_pdgid_, jpsi_pdgid_, phi_pdgid_;
   bool isMC_,OnlyBest_,OnlyGen_;
   UInt_t motherpdgid_;
   std::vector<std::string>                            HLTs_;
@@ -81,73 +81,157 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   UInt_t run,event,numPrimaryVertices, trigger;
 
   TLorentzVector doubledimuon_p4;
-  TLorentzVector higdim_p4;
-  TLorentzVector lowdim_p4;
+  TLorentzVector jpsi_p4;
+  TLorentzVector phi_p4;
   TLorentzVector mHighPhi_p4;
   TLorentzVector mLowJPsi_p4;
   TLorentzVector mHighJPsi_p4;
   TLorentzVector mLowPhi_p4;
 
   TLorentzVector doubledimuon_rf_p4;
-  TLorentzVector higdim_rf_p4;
-  TLorentzVector lowdim_rf_p4;
+  TLorentzVector jpsi_rf_p4;
+  TLorentzVector phi_rf_p4;
   TLorentzVector mHighPhi_rf_p4;
   TLorentzVector mLowJPsi_rf_p4;
   TLorentzVector mHighJPsi_rf_p4;
   TLorentzVector mLowPhi_rf_p4;
   TLorentzVector doubledimuon_not_rf_p4;
-  TLorentzVector higdim_not_rf_p4;
-  TLorentzVector lowdim_not_rf_p4;
+  TLorentzVector jpsi_not_rf_p4;
+  TLorentzVector phi_not_rf_p4;
 
-  Int_t    doubledimuon_charge, higdim_triggerMatch, lowdim_triggerMatch, doubledimuon_rf_bindx;
-  Double_t doubledimuon_vProb,  doubledimuon_vChi2, doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV;
-  Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
+  Double_t jpsi_triggerMatch, phi_triggerMatch;
+  Double_t mHighJPsiMatch, mLowJPsiMatch, mHighPhiMatch, mLowPhiMatch;
 
-  Double_t gen_doubledimuon_m,doubledimuon_m,doubledimuon_pt,dimuon_m,dimuon_pt;
-  Double_t mHighPhi_pt,mLowPhi_pt,mHighJPsi_pt,mLowJPsi_pt,doubledimuon_nDof,doubledimuon_m_rf;
+  Double_t noXCandidates;
 
-  Double_t doubledimuon_pdgid, doubledimuon_phipdg, doubledimuon_isprompt, doubledimuon_phippdl;
+  //////////////////////////
+  // Four muons variables
 
-  Double_t highDiM_m, highDiM_pt, lowDiM_m, lowDiM_pt;
-  Int_t    higdim_triggerMatch_rf, lowdim_triggerMatch_rf;
-  Double_t higdim_vProb_rf, higdim_vChi2_rf, higdim_DCA_rf, higdim_ctauPV_rf, higdim_ctauErrPV_rf, higdim_cosAlpha_rf;
-  Double_t lowdim_vProb_rf, lowdim_vChi2_rf, lowdim_DCA_rf, lowdim_ctauPV_rf, lowdim_ctauErrPV_rf, lowdim_cosAlpha_rf;
+  Double_t doubledimuon_charge;
 
-  //Double_t track_d0, track_d0Err, track_dz, track_dxy;
-  Double_t higdim_vProb, higdim_vChi2, higdim_DCA, higdim_ctauPV, higdim_ctauErrPV, higdim_cosAlpha;
-  Double_t lowdim_vProb, lowdim_vChi2, lowdim_DCA, lowdim_ctauPV, lowdim_ctauErrPV, lowdim_cosAlpha;
-  Double_t  highDiMM_fit, highDiMPx_fit, highDiMPy_fit, highDiMPz_fit;
+  //Kin variables
+  Double_t doubledimuon_m,doubledimuon_m_rf,doubledimuon_m_rf_c,doubledimuon_m_rf_d_c;
+  Double_t doubledimuon_p, doubledimuon_pt, doubledimuon_eta, doubledimuon_theta, doubledimuon_y;
+  Double_t doubledimuon_e, doubledimuon_dxy,doubledimuon_dxyErr, doubledimuon_dz,doubledimuon_dzErr;
 
+  //Vertexing variables
+  Double_t doubledimuon_vProb,  doubledimuon_vChi2,doubledimuon_nDof;
+  Double_t doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV, doubledimuon_cosAlpha3D;
+  Double_t doubledimuon_lxy, doubledimuon_lxyErr, doubledimuon_lxyz, doubledimuon_lxyzErr;
+
+  Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_nDof;
+  Double_t doubledimuon_rf_cosAlpha, doubledimuon_rf_ctauPV, doubledimuon_rf_ctauErrPV;
+
+  Double_t doubledimuon_rf_c_vProb, doubledimuon_rf_c_vChi2, doubledimuon_rf_c_nDof;
+  Double_t doubledimuon_rf_c_cosAlpha, doubledimuon_rf_c_ctauPV, doubledimuon_rf_c_ctauErrPV;
+
+  Double_t doubledimuon_vx, doubledimuon_vy, doubledimuon_vz;
+  Double_t pv_x, pv_y, pv_z;
+
+  Double_t doubledimuon_dca_m1m2, doubledimuon_dca_m1t1, doubledimuon_dca_m1t2;
+  Double_t doubledimuon_dca_t1t2,doubledimuon_dca_m2t1, doubledimuon_dca_m2t2;
+
+  Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlphaDZ3D, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ,
+  Double_t doubledimuon_cosAlphaBS, doubledimuon_cosAlphaBS3D, doubledimuon_ctauPVBS, doubledimuon_ctauErrPVBS;
+  Double_t doubledimuon_lxyDZ, doubledimuon_lxyErrDZ, doubledimuon_lxyzDZ, doubledimuon_lxyzErrDZ;
+  Double_t doubledimuon_lxyBS, doubledimuon_lxyErrBS, doubledimuon_lxyzBS, doubledimuon_lxyzErrBS;
+
+  //////////////////////////
+  // Single muons variables
+
+  //Kin variables
+  Double_t mHighPhi_p,mLowPhi_p,mHighJPsi_p,mLowJPsi_p;
+  Double_t mHighPhi_pt,mLowPhi_pt,mHighJPsi_pt,mLowJPsi_pt;
+  Double_t mHighPhi_ptErr,mLowPhi_ptErr,mHighJPsi_ptErr,mLowJPsi_ptErr;
+
+  //Angular variables - Eta;Phi,Theata,Lambda
+  Double_t mHighJPsi_eta, mLowJPsi_eta, mHighPhi_eta, mLowPhi_eta;
+  Double_t mHighJPsi_etaErr, mLowJPsi_etaErr, mHighPhi_etaErr, mLowPhi_etaErr;
+
+  Double_t mHighJPsi_phi, mLowJPsi_phi, mHighPhi_phi, mLowPhi_phi;
+  Double_t mHighJPsi_phiErr, mLowJPsi_phiErr, mHighPhi_phiErr, mLowPhi_phiErr;
+
+  Double_t mHighJPsi_theta, mLowJPsi_theta, mHighPhi_theta, mLowPhi_theta;
+  Double_t mHighJPsi_thetaErr, mLowJPsi_thetaErr, mHighPhi_thetaErr, mLowPhi_thetaErr;
+
+  Double_t mHighJPsi_lambda, mLowJPsi_lambda, mHighPhi_lambda, mLowPhi_lambda;
+  Double_t mHighJPsi_lambdaErr, mLowJPsi_lambdaErr, mHighPhi_lambdaErr, mLowPhi_lambdaErr;
+
+  //Impact variables
+
+  Double_t mLowPhi_dxy, mLowPhi_dxyErr, mLowPhi_dz, mLowPhi_dzErr;
+  Double_t mHighPhi_dxy, mHighPhi_dxyErr, mHighPhi_dz, mHighPhi_dzErr;
+
+  Double_t mHighJPsi_dxy, mHighJPsi_dxyErr, mHighJPsi_dz, mHighJPsi_dzErr;
+  Double_t mLowJPsi_dxy, mLowJPsi_dxyErr, mLowJPsi_dz, mLowJPsi_dzErr;
+
+  //Tracker hits, layers,
+  Double_t mHighJPsi_NPixelHits, mHighJPsi_NStripHits, mHighJPsi_NTrackhits, mHighJPsi_NBPixHits;
+  Double_t mHighJPsi_NPixLayers, mHighJPsi_NTraLayers, mHighJPsi_NStrLayers, mHighJPsi_NBPixLayers;
+
+  Double_t mLowJPsi_NPixelHits, mLowJPsi_NStripHits, mLowJPsi_NTrackhits, mLowJPsi_NBPixHits;
+  Double_t mLowJPsi_NPixLayers, mLowJPsi_NTraLayers, mLowJPsi_NStrLayers, mLowJPsi_NBPixLayers;
+
+  Double_t mHighPhi_NPixelHits, mHighPhi_NStripHits, mHighPhi_NTrackhits, mHighPhi_NBPixHits;
+  Double_t mHighPhi_NPixLayers, mHighPhi_NTraLayers, mHighPhi_NStrLayers, mHighPhi_NBPixLayers;
+
+  Double_t mLowPhi_NPixelHits, mLowPhi_NStripHits, mLowPhi_NTrackhits, mLowPhi_NBPixHits;
+  Double_t mLowPhi_NPixLayers, mLowPhi_NTraLayers, mLowPhi_NStrLayers, mLowPhi_NBPixLayers;
+
+  //Muon Flags
   Double_t mHighJPsi_isLoose, mHighJPsi_isSoft, mHighJPsi_isMedium, mHighJPsi_isHighPt;
   Double_t mLowJPsi_isLoose, mLowJPsi_isSoft, mLowJPsi_isMedium, mLowJPsi_isHighPt;
+
   Double_t mHighPhi_isLoose, mHighPhi_isSoft, mHighPhi_isMedium, mHighPhi_isHighPt;
   Double_t mLowPhi_isLoose, mLowPhi_isSoft, mLowPhi_isMedium, mLowPhi_isHighPt;
 
   Double_t mHighJPsi_isTracker, mHighJPsi_isGlobal, mLowJPsi_isTracker, mLowJPsi_isGlobal;
   Double_t mHighPhi_isTracker, mHighPhi_isGlobal, mLowPhi_isTracker, mLowPhi_isGlobal;
 
+  Double_t mHighJPsi_type, mLowJPsi_type, mHighPhi_type, mLowPhi_type;
+
+  ///////////////////
+  //DiMuons Variables
+
+  Double_t jpsi_triggerMatch_rf, phi_triggerMatch_rf;
+
+  Double_t doubledimuon_charge;
+
+  //Kin variables
+  Double_t jpsi_m,jpsi_m_rf,jpsi_m_rf_c,jpsi_m_rf_d_c;
+  Double_t jpsi_p, jpsi_pt, jpsi_eta, jpsi_theta, jpsi_y;
+  Double_t jpsi_e, jpsi_dxy,jpsi_dxyErr, jpsi_dz,jpsi_dzErr;
+  Double_t jpsi_vProb, jpsi_vChi2, jpsi_DCA, jpsi_ctauPV, jpsi_ctauErrPV, jpsi_cosAlpha;
+  Double_t jpsi_lxy,jpsi_lxyz,jpsi_lxyErr,jpsi_lxyzErr,jpsi_cosAlpha3D;
+
+  Double_t phi_m,phi_m_rf,phi_m_rf_c,phi_m_rf_d_c;
+  Double_t phi_p, phi_pt, phi_eta, phi_theta, phi_y;
+  Double_t phi_e, phi_dxy,phi_dxyErr, phi_dz,phi_dzErr;
+  Double_t phi_vProb, phi_vChi2, phi_DCA, phi_ctauPV, phi_ctauErrPV, phi_cosAlpha;
+  Double_t phi_lxy,phi_lxyz,phi_lxyErr,phi_lxyzErr,phi_cosAlpha3D;
+
+  //////////////
+  //MC variables
+
+  //Pdg
+  Double_t gen_doubledimuon_pdgid, phi_pdg, jpsi_pdg;
+  Double_t mHighJPsi_pdgid, mLowJPsi_pdgid, mHighPhi_pdgid, mLowPhi_pdgid;
+
+  //Kin
+
+  Double_t gen_doubledimuon_prompt, phi_prompt, jpsi_prompt;
+  Double_t gen_doubledimuon_pt, phi_pt, jpsi_pt;
+  Double_t gen_doubledimuon_eta, phi_eta, jpsi_eta;
+
   Double_t isBestCandidate;
 
-  Double_t mHighJPsi_type, mLowJPsi_type, mHighPhi_type, mLowPhi_type;
-  Double_t          gen_doubledimuon_pdgId;
   TLorentzVector gen_doubledimuon_p4;
-  TLorentzVector gen_higdim_p4;
-  TLorentzVector gen_lowdim_p4;
+  TLorentzVector gen_jpsi_p4;
+  TLorentzVector gen_phi_p4;
   TLorentzVector gen_mHighPhi_p4;
   TLorentzVector gen_mLowJPsi_p4;
   TLorentzVector gen_mHighJPsi_p4;
   TLorentzVector gen_mLowPhi_p4;
-
-  TLorentzVector gen_b_p4;
-  TLorentzVector gen_b4_p4;
-  TLorentzVector gen_d1_p4;
-  TLorentzVector gen_d2_p4;
-  TLorentzVector gen_gd1_p4;
-  TLorentzVector gen_gd2_p4;
-  TLorentzVector gen_gd3_p4;
-  TLorentzVector gen_gd4_p4;
-  TLorentzVector gen_gd5_p4;
-  TLorentzVector gen_gd6_p4;
 
   TTree* fourmuon_tree, *fourmuon_tree_rf;
   edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
@@ -179,8 +263,7 @@ UInt_t DoubleDiMuonRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuo
 // constructors and destructor
 //
 DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iConfig):
-        doubledimuon_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("doubledimuon_cand"))),
-        doubledimuon_rf_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("doubledimuon_rf_cand"))),
+        doubledimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("doubledimuon_cand"))),
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -199,237 +282,377 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
         fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/D");
         fourmuon_tree->Branch("trigger",            &trigger,            "trigger/D");
 
+        doubledimuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
+
         fourmuon_tree->Branch("doubledimuon_p4",   "TLorentzVector", &doubledimuon_not_rf_p4);
-        fourmuon_tree->Branch("lowdim_p4",     "TLorentzVector", &lowdim_not_rf_p4);
-        fourmuon_tree->Branch("higdim_p4",     "TLorentzVector", &higdim_not_rf_p4);
+        fourmuon_tree->Branch("phi_p4",     "TLorentzVector", &phi_not_rf_p4);
+        fourmuon_tree->Branch("jpsi_p4",     "TLorentzVector", &jpsi_not_rf_p4);
         fourmuon_tree->Branch("mLowPhi_p4",   "TLorentzVector", &mLowPhi_p4);
         fourmuon_tree->Branch("mLowJPsi_p4",   "TLorentzVector", &mLowJPsi_p4);
         fourmuon_tree->Branch("mHighJPsi_p4",   "TLorentzVector", &mHighJPsi_p4);
         fourmuon_tree->Branch("mLowPhi_p4",   "TLorentzVector", &mLowPhi_p4);
 
         fourmuon_tree->Branch("doubledimuon_rf_p4",   "TLorentzVector", &doubledimuon_rf_p4);
-        fourmuon_tree->Branch("lowdim_rf_p4",     "TLorentzVector", &lowdim_rf_p4);
-        fourmuon_tree->Branch("higdim_rf_p4",     "TLorentzVector", &higdim_rf_p4);
+        fourmuon_tree->Branch("phi_rf_p4",     "TLorentzVector", &phi_rf_p4);
+        fourmuon_tree->Branch("jpsi_rf_p4",     "TLorentzVector", &jpsi_rf_p4);
         fourmuon_tree->Branch("mLowPhi_rf_p4",   "TLorentzVector", &mLowPhi_rf_p4);
         fourmuon_tree->Branch("mLowJPsi_rf_p4",   "TLorentzVector", &mLowJPsi_rf_p4);
         fourmuon_tree->Branch("mHighJPsi_rf_p4",   "TLorentzVector", &mHighJPsi_rf_p4);
         fourmuon_tree->Branch("mLowPhi_rf_p4",   "TLorentzVector", &mLowPhi_rf_p4);
 
-        // fourmuon_tree->Branch("doubledimuon_rf_bindx", &doubledimuon_rf_bindx, "doubledimuon_rf_bindx/D");
+        //Trigger Matching
+        fourmuon_tree->Branch("jpsi_triggerMatch",&jpsi_triggerMatch,"jpsi_triggerMatch/D");
+        fourmuon_tree->Branch("phi_triggerMatch",&phi_triggerMatch,"phi_triggerMatch/D");
+        fourmuon_tree->Branch("mHighJPsiMatch",&mHighJPsiMatch,"mHighJPsiMatch/D");
+        fourmuon_tree->Branch("mLowJPsiMatch",&mLowJPsiMatch,"mLowJPsiMatch/D");
+        fourmuon_tree->Branch("mHighPhiMatch",&mHighPhiMatch,"mHighPhiMatch/D");
+        fourmuon_tree->Branch("mLowPhiMatch",&mLowPhiMatch,"mLowPhiMatch/D");
 
-        fourmuon_tree->Branch("higdim_vProb",        &higdim_vProb,        "higdim_vProb/D");
-        fourmuon_tree->Branch("higdim_vNChi2",       &higdim_vChi2,        "higdim_vNChi2/D");
-        fourmuon_tree->Branch("higdim_DCA",          &higdim_DCA,          "higdim_DCA/D");
-        fourmuon_tree->Branch("higdim_ctauPV",       &higdim_ctauPV,       "higdim_ctauPV/D");
-        fourmuon_tree->Branch("higdim_ctauErrPV",    &higdim_ctauErrPV,    "higdim_ctauErrPV/D");
-        fourmuon_tree->Branch("higdim_cosAlpha",     &higdim_cosAlpha,     "higdim_cosAlpha/D");
-        fourmuon_tree->Branch("higdim_triggerMatch", &higdim_triggerMatch, "higdim_triggerMatch/D");
+        //Four Muons Variables
+        fourmuon_tree->Branch("doubledimuon_charge",&doubledimuon_charge,"doubledimuon_charge/D");
+        //Kin
+        fourmuon_tree->Branch("doubledimuon_m",&doubledimuon_m,"doubledimuon_m/D");
+        fourmuon_tree->Branch("doubledimuon_m_rf",&doubledimuon_m_rf,"doubledimuon_m_rf/D");
+        fourmuon_tree->Branch("doubledimuon_m_rf_c",&doubledimuon_m_rf_c,"doubledimuon_m_rf_c/D");
+        fourmuon_tree->Branch("doubledimuon_m_rf_d_c",&doubledimuon_m_rf_d_c,"doubledimuon_m_rf_d_c/D");
 
-        fourmuon_tree->Branch("lowdim_vProb",        &lowdim_vProb,        "lowdim_vProb/D");
-        fourmuon_tree->Branch("lowdim_vNChi2",       &lowdim_vChi2,        "lowdim_vNChi2/D");
-        fourmuon_tree->Branch("lowdim_DCA",          &lowdim_DCA,          "lowdim_DCA/D");
-        fourmuon_tree->Branch("lowdim_ctauPV",       &lowdim_ctauPV,       "lowdim_ctauPV/D");
-        fourmuon_tree->Branch("lowdim_ctauErrPV",    &lowdim_ctauErrPV,    "lowdim_ctauErrPV/D");
-        fourmuon_tree->Branch("lowdim_cosAlpha",     &lowdim_cosAlpha,     "lowdim_cosAlpha/D");
-        fourmuon_tree->Branch("lowdim_triggerMatch", &lowdim_triggerMatch, "lowdim_triggerMatch/D");
+        fourmuon_tree->Branch("doubledimuon_p",&doubledimuon_p,"doubledimuon_p/D");
+        fourmuon_tree->Branch("doubledimuon_pt",&doubledimuon_pt,"doubledimuon_pt/D");
+        fourmuon_tree->Branch("doubledimuon_e",&doubledimuon_e,"doubledimuon_e/D");
 
-        fourmuon_tree->Branch("doubledimuon_vProb",      &doubledimuon_vProb,        "doubledimuon_vProb/D");
-        fourmuon_tree->Branch("doubledimuon_vChi2",      &doubledimuon_vChi2,        "doubledimuon_vChi2/D");
-        fourmuon_tree->Branch("doubledimuon_nDof",      &doubledimuon_nDof,        "doubledimuon_nDof/D");
-        fourmuon_tree->Branch("doubledimuon_cosAlpha",   &doubledimuon_cosAlpha,     "doubledimuon_cosAlpha/D");
-        fourmuon_tree->Branch("doubledimuon_ctauPV",     &doubledimuon_ctauPV,       "doubledimuon_ctauPV/D");
-        fourmuon_tree->Branch("doubledimuon_ctauErrPV",  &doubledimuon_ctauErrPV,    "doubledimuon_ctauErrPV/D");
-        fourmuon_tree->Branch("doubledimuon_charge",     &doubledimuon_charge,       "doubledimuon_charge/D");
+        //Angular
+        fourmuon_tree->Branch("doubledimuon_eta",&doubledimuon_eta,"doubledimuon_eta/D");
+        fourmuon_tree->Branch("doubledimuon_theta",&doubledimuon_theta,"doubledimuon_theta/D");
+        fourmuon_tree->Branch("doubledimuon_y",&doubledimuon_y,"doubledimuon_y/D");
 
-        fourmuon_tree->Branch("dimuonditrk_cosAlphaDZ",      &dimuonditrk_cosAlphaDZ,        "dimuonditrk_cosAlphaDZ/D");
-        fourmuon_tree->Branch("dimuonditrk_ctauPVDZ",      &dimuonditrk_ctauPVDZ,        "dimuonditrk_ctauPVDZ/D");
-        fourmuon_tree->Branch("dimuonditrk_ctauErrPVDZ",      &dimuonditrk_ctauErrPVDZ,        "dimuonditrk_ctauErrPVDZ/D");
+        //Impact
+        fourmuon_tree->Branch("doubledimuon_dxy",&doubledimuon_dxy,"doubledimuon_dxy/D");
+        fourmuon_tree->Branch("doubledimuon_dxyErr",&doubledimuon_dxyErr,"doubledimuon_dxyErr/D");
+        fourmuon_tree->Branch("doubledimuon_dz",&doubledimuon_dz,"doubledimuon_dz/D");
+        fourmuon_tree->Branch("doubledimuon_dzErr",&doubledimuon_dzErr,"doubledimuon_dzErr/D");
 
-        fourmuon_tree->Branch("dimuonditrk_cosAlphaBS",      &dimuonditrk_cosAlphaBS,        "dimuonditrk_cosAlphaBS/D");
-        fourmuon_tree->Branch("dimuonditrk_ctauPVBS",      &dimuonditrk_ctauPVBS,        "dimuonditrk_ctauPVBS/D");
-        fourmuon_tree->Branch("dimuonditrk_ctauErrPVBS",      &dimuonditrk_ctauErrPVBS,        "dimuonditrk_ctauErrPVBS/D");
+        //Vertex
+        fourmuon_tree->Branch("doubledimuon_vProb",&doubledimuon_vProb,"doubledimuon_vProb/D");
+        fourmuon_tree->Branch("doubledimuon_vChi2",&doubledimuon_vChi2,"doubledimuon_vChi2/D");
+        fourmuon_tree->Branch("doubledimuon_nDof",&doubledimuon_nDof,"doubledimuon_nDof/D");
 
-        fourmuon_tree->Branch("dimuonditrk_vx",          &dimuonditrk_vx,          "dimuonditrk_vx/D");
-        fourmuon_tree->Branch("dimuonditrk_vy",          &dimuonditrk_vy,          "dimuonditrk_vy/D");
-        fourmuon_tree->Branch("dimuonditrk_vz",          &dimuonditrk_vz,          "dimuonditrk_vz/D");
+        fourmuon_tree->Branch("doubledimuon_rf_vProb",&doubledimuon_rf_vProb,"doubledimuon_rf_vProb/D");
+        fourmuon_tree->Branch(" doubledimuon_rf_vChi2",& doubledimuon_rf_vChi2," doubledimuon_rf_vChi2/D");
+        fourmuon_tree->Branch("doubledimuon_rf_nDof",&doubledimuon_rf_nDof,"doubledimuon_rf_nDof/D");
 
-        fourmuon_tree->Branch("dimuonditrk_dca_m1m2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1m2/D");
-        fourmuon_tree->Branch("dimuonditrk_dca_m1t1",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1t1/D");
-        fourmuon_tree->Branch("dimuonditrk_dca_m1t2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1t2/D");
-        fourmuon_tree->Branch("dimuonditrk_dca_m2t1",      &dimuonditrk_vProb,        "dimuonditrk_dca_m2t1/D");
-        fourmuon_tree->Branch("dimuonditrk_dca_m2t2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m2t2/D");
-        fourmuon_tree->Branch("dimuonditrk_dca_t1t2",      &dimuonditrk_vProb,        "dimuonditrk_dca_t1t2/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_vProb",&doubledimuon_rf_c_vProb,"doubledimuon_rf_c_vProb/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_vChi2",&doubledimuon_rf_c_vChi2,"doubledimuon_rf_c_vChi2/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_nDof",&doubledimuon_rf_c_nDof,"doubledimuon_rf_c_nDof/D");
 
-        fourmuon_tree->Branch("dimuonditrk_rf_vProb",      &dimuonditrk_rf_vProb,        "dimuonditrk_rf_vProb/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_vChi2",      &dimuonditrk_rf_vChi2,        "dimuonditrk_rf_vChi2/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_nDof",       &dimuonditrk_rf_nDof,         "dimuonditrk_rf_nDof/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_cosAlpha",   &dimuonditrk_rf_cosAlpha,     "dimuonditrk_rf_cosAlpha/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_ctauPV",     &dimuonditrk_rf_ctauPV,       "dimuonditrk_rf_ctauPV/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_ctauErrPV",  &dimuonditrk_rf_ctauErrPV,    "dimuonditrk_rf_ctauErrPV/D");
+        fourmuon_tree->Branch("doubledimuon_vx",&doubledimuon_vx,"doubledimuon_vx/D");
+        fourmuon_tree->Branch("doubledimuon_vy",&doubledimuon_vy,"doubledimuon_vy/D");
+        fourmuon_tree->Branch("doubledimuon_vz",&doubledimuon_vz,"doubledimuon_vz/D");
+        fourmuon_tree->Branch("pv_x",&pv_x,"pv_x/D");
+        fourmuon_tree->Branch("pv_y",&pv_y,"pv_y/D");
+        fourmuon_tree->Branch("pv_z",&pv_z,"pv_z/D");
 
-        fourmuon_tree->Branch("dimuonditrk_rf_c_vProb",      &dimuonditrk_rf_c_vProb,        "dimuonditrk_rf_c_vProb/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_c_vChi2",      &dimuonditrk_rf_c_vChi2,        "dimuonditrk_rf_c_vChi2/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_c_nDof",       &dimuonditrk_rf_c_nDof,         "dimuonditrk_rf_c_nDof/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_c_cosAlpha",   &dimuonditrk_rf_c_cosAlpha,     "dimuonditrk_rf_c_cosAlpha/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_c_ctauPV",     &dimuonditrk_rf_c_ctauPV,       "dimuonditrk_rf_c_ctauPV/D");
-        fourmuon_tree->Branch("dimuonditrk_rf_c_ctauErrPV",  &dimuonditrk_rf_c_ctauErrPV,    "dimuonditrk_rf_c_ctauErrPV/D");
+        //Pointing Angle & Flight
+        fourmuon_tree->Branch("doubledimuon_cosAlpha",&doubledimuon_cosAlpha,"doubledimuon_cosAlpha/D");
+        fourmuon_tree->Branch("doubledimuon_cosAlpha3D",&doubledimuon_cosAlpha3D,"doubledimuon_cosAlpha3D/D");
+        fourmuon_tree->Branch("doubledimuon_ctauPV",&doubledimuon_ctauPV,"doubledimuon_ctauPV/D");
+        fourmuon_tree->Branch("doubledimuon_ctauErrPV",&doubledimuon_ctauErrPV,"doubledimuon_ctauErrPV/D");
+        fourmuon_tree->Branch("doubledimuon_lxy",&doubledimuon_lxy,"doubledimuon_lxy/D");
+        fourmuon_tree->Branch("doubledimuon_lxyErr",&doubledimuon_lxyErr,"doubledimuon_lxyErr/D");
+        fourmuon_tree->Branch("doubledimuon_lxyz",&doubledimuon_lxyz,"doubledimuon_lxyz/D");
+        fourmuon_tree->Branch("doubledimuon_lxyzErr",&doubledimuon_lxyzErr,"doubledimuon_lxyzErr/D");
 
-        //
-        // fourmuon_tree->Branch("highDiMM_fit",  &highDiMM_fit,    "highDiMM_fit/D");
-        // fourmuon_tree->Branch("highDiMPx_fit",  &highDiMPx_fit,    "highDiMPx_fit/D");
-        // fourmuon_tree->Branch("highDiMPy_fit",  &highDiMPy_fit,    "highDiMPy_fit/D");
-        // fourmuon_tree->Branch("highDiMPz_fit",  &highDiMPz_fit,    "highDiMPz_fit/D");
+        fourmuon_tree->Branch("doubledimuon_rf_cosAlpha",&doubledimuon_rf_cosAlpha,"doubledimuon_rf_cosAlpha/D");
+        fourmuon_tree->Branch("doubledimuon_rf_ctauPV",&doubledimuon_rf_ctauPV,"doubledimuon_rf_ctauPV/D");
+        fourmuon_tree->Branch("doubledimuon_rf_ctauErrPV",&doubledimuon_rf_ctauErrPV,"doubledimuon_rf_ctauErrPV/D");
+        fourmuon_tree->Branch("doubledimuon_rf_lxy",&doubledimuon_rf_lxy,"doubledimuon_rf_lxy/D");
+        fourmuon_tree->Branch("doubledimuon_rf_lxyErr",&doubledimuon_rf_lxyErr,"doubledimuon_rf_lxyErr/D");
+        fourmuon_tree->Branch("doubledimuon_rf_lxyz",&doubledimuon_rf_lxyz,"doubledimuon_rf_lxyz/D");
+        fourmuon_tree->Branch("doubledimuon_rf_lxyzErr",&doubledimuon_rf_lxyzErr,"doubledimuon_rf_lxyzErr/D");
 
-        fourmuon_tree->Branch("gen_doubledimuon_m",        &gen_doubledimuon_m,        "gen_doubledimuon_m/D");
-        fourmuon_tree->Branch("doubledimuon_m",       &doubledimuon_m,        "doubledimuon_m/D");
-        fourmuon_tree->Branch("doubledimuon_m_rf",       &doubledimuon_m_rf,        "doubledimuon_m_rf/D");
-        fourmuon_tree->Branch("doubledimuon_pt",          &doubledimuon_pt,          "doubledimuon_pt/D");
-        fourmuon_tree->Branch("highDiM_m",       &highDiM_m,       "highDiMn_m/D");
-        fourmuon_tree->Branch("highDiM_pt",    &highDiM_pt,    "highDiM_pt/D");
-        fourmuon_tree->Branch("lowDiM_m",     &lowDiM_m,     "lowDiM_m/D");
-        fourmuon_tree->Branch("lowDiM_pt",       &lowDiM_pt,        "lowDiM_pt/D");
-        fourmuon_tree->Branch("mHighJPsi_pt",          &mHighJPsi_pt,          "mHighJPsi_pt/D");
-        fourmuon_tree->Branch("mLowJPsi_pt",       &mLowJPsi_pt,       "mLowJPsi_pt/D");
-        fourmuon_tree->Branch("mHighPhi_pt",    &mHighPhi_pt,    "mHighPhi_pt/D");
-        fourmuon_tree->Branch("mLowPhi_pt",     &mLowPhi_pt,     "mLowPhi_pt/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_cosAlpha",&doubledimuon_rf_c_cosAlpha,"doubledimuon_rf_c_cosAlpha/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_ctauPV",&doubledimuon_rf_c_ctauPV,"doubledimuon_rf_c_ctauPV/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_ctauErrPV",&doubledimuon_rf_c_ctauErrPV,"doubledimuon_rf_c_ctauErrPV/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_lxy",&doubledimuon_rf_c_lxy,"doubledimuon_rf_c_lxy/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_lxyErr",&doubledimuon_rf_c_lxyErr,"doubledimuon_rf_c_lxyErr/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_lxyz",&doubledimuon_rf_c_lxyz,"doubledimuon_rf_c_lxyz/D");
+        fourmuon_tree->Branch("doubledimuon_rf_c_lxyzErr",&doubledimuon_rf_c_lxyzErr,"doubledimuon_rf_c_lxyzErr/D");
 
-        fourmuon_tree->Branch("mHighJPsi_eta",        &mHighJPsi_eta,        "mHighJPsi_eta/D");
-        fourmuon_tree->Branch("lowKaon_eta",        &lowKaon_eta,        "lowKaon_eta/D");
-        fourmuon_tree->Branch("highMuon_eta",        &highMuon_eta,        "highMuon_eta/D");
-        fourmuon_tree->Branch("lowMuon_eta",        &lowMuon_eta,        "lowMuon_eta/D");
+        //DCA
+        fourmuon_tree->Branch("doubledimuon_dca_mp1mp2",&doubledimuon_dca_mp1mp2,"doubledimuon_dca_mp1mp2/D");
+        fourmuon_tree->Branch("doubledimuon_dca_mp1mj1",&doubledimuon_dca_mp1mj1,"doubledimuon_dca_mp1mj1/D");
+        fourmuon_tree->Branch("doubledimuon_dca_mp1mj2",&doubledimuon_dca_mp1mj2,"doubledimuon_dca_mp1mj2/D");
+        fourmuon_tree->Branch("doubledimuon_dca_mp2mj1",&doubledimuon_dca_mp2mj1,"doubledimuon_dca_mp2mj1/D");
+        fourmuon_tree->Branch("doubledimuon_dca_mp2mj2",&doubledimuon_dca_mp2mj2,"doubledimuon_dca_mp2mj2/D");
+        fourmuon_tree->Branch("doubledimuon_dca_mj1mj2",&doubledimuon_dca_mj1mj2,"doubledimuon_dca_mj1mj2/D");
 
-        fourmuon_tree->Branch("mHighJPsi_phi",        &mHighJPsi_phi,        "mHighJPsi_phi/D");
-        fourmuon_tree->Branch("lowKaon_phi",        &lowKaon_phi,        "lowKaon_phi/D");
-        fourmuon_tree->Branch("highMuon_phi",        &highMuon_phi,        "highMuon_phi/D");
-        fourmuon_tree->Branch("lowMuon_phi",        &lowMuon_phi,        "lowMuon_phi/D");
+        //More Vertex
+        fourmuon_tree->Branch("doubledimuon_cosAlphaDZ",&doubledimuon_cosAlphaDZ,"doubledimuon_cosAlphaDZ/D");
+        fourmuon_tree->Branch("doubledimuon_cosAlpha3DDZ",&doubledimuon_cosAlpha3DDZ,"doubledimuon_cosAlpha3DDZ/D");
+        fourmuon_tree->Branch("doubledimuon_ctauPVDZ",&doubledimuon_ctauPVDZ,"doubledimuon_ctauPVDZ/D");
+        fourmuon_tree->Branch("doubledimuon_ctauErrPVDZ",&doubledimuon_ctauErrPVDZ,"doubledimuon_ctauErrPVDZ/D");
+        fourmuon_tree->Branch("doubledimuon_lxyDZ",&doubledimuon_lxyDZ,"doubledimuon_lxyDZ/D");
+        fourmuon_tree->Branch("doubledimuon_lxyErrDZ",&doubledimuon_lxyErrDZ,"doubledimuon_lxyErrDZ/D");
+        fourmuon_tree->Branch("doubledimuon_lxyzDZ",&doubledimuon_lxyzDZ,"doubledimuon_lxyzDZ/D");
+        fourmuon_tree->Branch("doubledimuon_lxyzErrDZ",&doubledimuon_lxyzErrDZ,"doubledimuon_lxyzErrDZ/D");
 
-        fourmuon_tree->Branch("mHighJPsiMatch",     &mHighJPsiMatch,       "mHighJPsiMatch/D");
-        fourmuon_tree->Branch("mHighJPsiMatch",     &mHighJPsiMatch,       "mHighJPsiMatch/D");
-        fourmuon_tree->Branch("mHighPhiMatch",     &mHighPhiMatch,       "mHighPhiMatch/D");
-        fourmuon_tree->Branch("mLowPhiMatch",     &mLowPhiMatch,       "mLowPhiMatch/D");
+        fourmuon_tree->Branch("doubledimuon_cosAlphaBS",&doubledimuon_cosAlphaBS,"doubledimuon_cosAlphaBS/D");
+        fourmuon_tree->Branch("doubledimuon_cosAlpha3DBS",&doubledimuon_cosAlpha3DBS,"doubledimuon_cosAlpha3DBS/D");
+        fourmuon_tree->Branch("doubledimuon_ctauPVBS",&doubledimuon_ctauPVBS,"doubledimuon_ctauPVBS/D");
+        fourmuon_tree->Branch("doubledimuon_ctauErrPVBS",&doubledimuon_ctauErrPVBS,"doubledimuon_ctauErrPVBS/D");
+        fourmuon_tree->Branch("doubledimuon_lxyBS",&doubledimuon_lxyBS,"doubledimuon_lxyBS/D");
+        fourmuon_tree->Branch("doubledimuon_lxyErrBS",&doubledimuon_lxyErrBS,"doubledimuon_lxyErrBS/D");
+        fourmuon_tree->Branch("doubledimuon_lxyzBS",&doubledimuon_lxyzBS,"doubledimuon_lxyzBS/D");
+        fourmuon_tree->Branch("doubledimuon_lxyzErrBS",&doubledimuon_lxyzErrBS,"doubledimuon_lxyzErrBS/D");
+
+        //Single muons variable
+        //Kin
+        fourmuon_tree->Branch("mHighPhi_p",&mHighPhi_p,"mHighPhi_p/D");
+        fourmuon_tree->Branch("mLowPhi_p",&mLowPhi_p,"mLowPhi_p/D");
+        fourmuon_tree->Branch("mHighJPsi_p",&mHighJPsi_p,"mHighJPsi_p/D");
+        fourmuon_tree->Branch("mLowJPsi_p",&mLowJPsi_p,"mLowJPsi_p/D");
+        fourmuon_tree->Branch("mHighPhi_pt",&mHighPhi_pt,"mHighPhi_pt/D");
+        fourmuon_tree->Branch("mLowPhi_pt",&mLowPhi_pt,"mLowPhi_pt/D");
+        fourmuon_tree->Branch("mHighJPsi_pt",&mHighJPsi_pt,"mHighJPsi_pt/D");
+        fourmuon_tree->Branch("mLowJPsi_pt",&mLowJPsi_pt,"mLowJPsi_pt/D");
+        fourmuon_tree->Branch("mHighPhi_ptErr",&mHighPhi_ptErr,"mHighPhi_ptErr/D");
+        fourmuon_tree->Branch("mLowPhi_ptErr",&mLowPhi_ptErr,"mLowPhi_ptErr/D");
+        fourmuon_tree->Branch("mHighJPsi_ptErr",&mHighJPsi_ptErr,"mHighJPsi_ptErr/D");
+        fourmuon_tree->Branch("mLowJPsi_ptErr",&mLowJPsi_ptErr,"mLowJPsi_ptErr/D");
+
+        //Angular
+        fourmuon_tree->Branch("mHighJPsi_eta",&mHighJPsi_eta,"mHighJPsi_eta/D");
+        fourmuon_tree->Branch("mLowJPsi_eta",&mLowJPsi_eta,"mLowJPsi_eta/D");
+        fourmuon_tree->Branch("mHighPhi_eta",&mHighPhi_eta,"mHighPhi_eta/D");
+        fourmuon_tree->Branch("mLowPhi_eta",&mLowPhi_eta,"mLowPhi_eta/D");
+
+        fourmuon_tree->Branch("mHighJPsi_etaErr",&mHighJPsi_etaErr,"mHighJPsi_etaErr/D");
+        fourmuon_tree->Branch("mLowJPsi_etaErr",&mLowJPsi_etaErr,"mLowJPsi_etaErr/D");
+        fourmuon_tree->Branch("mHighPhi_etaErr",&mHighPhi_etaErr,"mHighPhi_etaErr/D");
+        fourmuon_tree->Branch("mLowPhi_etaErr",&mLowPhi_etaErr,"mLowPhi_etaErr/D");
+
+        fourmuon_tree->Branch("mHighJPsi_phi",&mHighJPsi_phi,"mHighJPsi_phi/D");
+        fourmuon_tree->Branch("mLowJPsi_phi",&mLowJPsi_phi,"mLowJPsi_phi/D");
+        fourmuon_tree->Branch("mHighPhi_phi",&mHighPhi_phi,"mHighPhi_phi/D");
+        fourmuon_tree->Branch("mLowPhi_phi",&mLowPhi_phi,"mLowPhi_phi/D");
+
+        fourmuon_tree->Branch("mHighJPsi_phiErr",&mHighJPsi_phiErr,"mHighJPsi_phiErr/D");
+        fourmuon_tree->Branch("mLowJPsi_phiErr",&mLowJPsi_phiErr,"mLowJPsi_phiErr/D");
+        fourmuon_tree->Branch("mHighPhi_phiErr",&mHighPhi_phiErr,"mHighPhi_phiErr/D");
+        fourmuon_tree->Branch("mLowPhi_phiErr",&mLowPhi_phiErr,"mLowPhi_phiErr/D");
+
+        fourmuon_tree->Branch("mHighJPsi_theta",&mHighJPsi_theta,"mHighJPsi_theta/D");
+        fourmuon_tree->Branch("mLowJPsi_theta",&mLowJPsi_theta,"mLowJPsi_theta/D");
+        fourmuon_tree->Branch("mHighPhi_theta",&mHighPhi_theta,"mHighPhi_theta/D");
+        fourmuon_tree->Branch("mLowPhi_theta",&mLowPhi_theta,"mLowPhi_theta/D");
+
+        fourmuon_tree->Branch("mHighJPsi_thetaErr",&mHighJPsi_thetaErr,"mHighJPsi_thetaErr/D");
+        fourmuon_tree->Branch("mLowJPsi_thetaErr",&mLowJPsi_thetaErr,"mLowJPsi_thetaErr/D");
+        fourmuon_tree->Branch("mHighPhi_thetaErr",&mHighPhi_thetaErr,"mHighPhi_thetaErr/D");
+        fourmuon_tree->Branch("mLowPhi_thetaErr",&mLowPhi_thetaErr,"mLowPhi_thetaErr/D");
+
+        fourmuon_tree->Branch("mHighJPsi_lambda",&mHighJPsi_lambda,"mHighJPsi_lambda/D");
+        fourmuon_tree->Branch("mLowJPsi_lambda",&mLowJPsi_lambda,"mLowJPsi_lambda/D");
+        fourmuon_tree->Branch("mHighPhi_lambda",&mHighPhi_lambda,"mHighPhi_lambda/D");
+        fourmuon_tree->Branch("mLowPhi_lambda",&mLowPhi_lambda,"mLowPhi_lambda/D");
+
+        fourmuon_tree->Branch("mHighJPsi_lambdaErr",&mHighJPsi_lambdaErr,"mHighJPsi_lambdaErr/D");
+        fourmuon_tree->Branch("mLowJPsi_lambdaErr",&mLowJPsi_lambdaErr,"mLowJPsi_lambdaErr/D");
+        fourmuon_tree->Branch("mHighPhi_lambdaErr",&mHighPhi_lambdaErr,"mHighPhi_lambdaErr/D");
+        fourmuon_tree->Branch("mLowPhi_lambdaErr",&mLowPhi_lambdaErr,"mLowPhi_lambdaErr/D");
+
+        //Impact
+        fourmuon_tree->Branch("mLowPhi_dxy",&mLowPhi_dxy,"mLowPhi_dxy/D");
+        fourmuon_tree->Branch("mLowPhi_dxyErr",&mLowPhi_dxyErr,"mLowPhi_dxyErr/D");
+        fourmuon_tree->Branch("mLowPhi_dz",&mLowPhi_dz,"mLowPhi_dz/D");
+        fourmuon_tree->Branch("mLowPhi_dzErr",&mLowPhi_dzErr,"mLowPhi_dzErr/D");
+
+        fourmuon_tree->Branch("mHighPhi_dxy",&mHighPhi_dxy,"mHighPhi_dxy/D");
+        fourmuon_tree->Branch("mHighPhi_dxyErr",&mHighPhi_dxyErr,"mHighPhi_dxyErr/D");
+        fourmuon_tree->Branch("mHighPhi_dz",&mHighPhi_dz,"mHighPhi_dz/D");
+        fourmuon_tree->Branch("mHighPhi_dzErr",&mHighPhi_dzErr,"mHighPhi_dzErr/D");
+
+        fourmuon_tree->Branch("mHighJPsi_dxy",&mHighJPsi_dxy,"mHighJPsi_dxy/D");
+        fourmuon_tree->Branch("mHighJPsi_dxyErr",&mHighJPsi_dxyErr,"mHighJPsi_dxyErr/D");
+        fourmuon_tree->Branch("mHighJPsi_dz",&mHighJPsi_dz,"mHighJPsi_dz/D");
+        fourmuon_tree->Branch("mHighJPsi_dzErr",&mHighJPsi_dzErr,"mHighJPsi_dzErr/D");
+
+        fourmuon_tree->Branch("mLowJPsi_dxy",&mLowJPsi_dxy,"mLowJPsi_dxy/D");
+        fourmuon_tree->Branch("mLowJPsi_dxyErr",&mLowJPsi_dxyErr,"mLowJPsi_dxyErr/D");
+        fourmuon_tree->Branch("mLowJPsi_dz",&mLowJPsi_dz,"mLowJPsi_dz/D");
+        fourmuon_tree->Branch("mLowJPsi_dzErr",&mLowJPsi_dzErr,"mLowJPsi_dzErr/D");
+
+        //Tracker
+        fourmuon_tree->Branch("mHighJPsi_NPixelHits",&mHighJPsi_NPixelHits,"mHighJPsi_NPixelHits/D");
+        fourmuon_tree->Branch("mHighJPsi_NStripHits",&mHighJPsi_NStripHits,"mHighJPsi_NStripHits/D");
+        fourmuon_tree->Branch("mHighJPsi_NTrackhits",&mHighJPsi_NTrackhits,"mHighJPsi_NTrackhits/D");
+        fourmuon_tree->Branch("mHighJPsi_NBPixHits",&mHighJPsi_NBPixHits,"mHighJPsi_NBPixHits/D");
+
+        fourmuon_tree->Branch("mHighJPsi_NPixLayers",&mHighJPsi_NPixLayers,"mHighJPsi_NPixLayers/D");
+        fourmuon_tree->Branch("mHighJPsi_NTraLayers",&mHighJPsi_NTraLayers,"mHighJPsi_NTraLayers/D");
+        fourmuon_tree->Branch("mHighJPsi_NStrLayers",&mHighJPsi_NStrLayers,"mHighJPsi_NStrLayers/D");
+        fourmuon_tree->Branch("mHighJPsi_NBPixLayers",&mHighJPsi_NBPixLayers,"mHighJPsi_NBPixLayers/D");
+
+        fourmuon_tree->Branch("mLowJPsi_NPixelHits",&mLowJPsi_NPixelHits,"mLowJPsi_NPixelHits/D");
+        fourmuon_tree->Branch("mLowJPsi_NStripHits",&mLowJPsi_NStripHits,"mLowJPsi_NStripHits/D");
+        fourmuon_tree->Branch("mLowJPsi_NTrackhits",&mLowJPsi_NTrackhits,"mLowJPsi_NTrackhits/D");
+        fourmuon_tree->Branch("mLowJPsi_NBPixHits",&mLowJPsi_NBPixHits,"mLowJPsi_NBPixHits/D");
+
+        fourmuon_tree->Branch("mLowJPsi_NPixLayers",&mLowJPsi_NPixLayers,"mLowJPsi_NPixLayers/D");
+        fourmuon_tree->Branch("mLowJPsi_NTraLayers",&mLowJPsi_NTraLayers,"mLowJPsi_NTraLayers/D");
+        fourmuon_tree->Branch("mLowJPsi_NStrLayers",&mLowJPsi_NStrLayers,"mLowJPsi_NStrLayers/D");
+        fourmuon_tree->Branch("mLowJPsi_NBPixLayers",&mLowJPsi_NBPixLayers,"mLowJPsi_NBPixLayers/D");
+
+        fourmuon_tree->Branch("mHighPhi_NPixelHits",&mHighPhi_NPixelHits,"mHighPhi_NPixelHits/D");
+        fourmuon_tree->Branch("mHighPhi_NStripHits",&mHighPhi_NStripHits,"mHighPhi_NStripHits/D");
+        fourmuon_tree->Branch("mHighPhi_NTrackhits",&mHighPhi_NTrackhits,"mHighPhi_NTrackhits/D");
+        fourmuon_tree->Branch("mHighPhi_NBPixHits",&mHighPhi_NBPixHits,"mHighPhi_NBPixHits/D");
+
+        fourmuon_tree->Branch("mHighPhi_NPixLayers",&mHighPhi_NPixLayers,"mHighPhi_NPixLayers/D");
+        fourmuon_tree->Branch("mHighPhi_NTraLayers",&mHighPhi_NTraLayers,"mHighPhi_NTraLayers/D");
+        fourmuon_tree->Branch("mHighPhi_NStrLayers",&mHighPhi_NStrLayers,"mHighPhi_NStrLayers/D");
+        fourmuon_tree->Branch("mHighPhi_NBPixLayers",&mHighPhi_NBPixLayers,"mHighPhi_NBPixLayers/D");
+
+        fourmuon_tree->Branch("mLowPhi_NPixelHits",&mLowPhi_NPixelHits,"mLowPhi_NPixelHits/D");
+        fourmuon_tree->Branch("mLowPhi_NStripHits",&mLowPhi_NStripHits,"mLowPhi_NStripHits/D");
+        fourmuon_tree->Branch("mLowPhi_NTrackhits",&mLowPhi_NTrackhits,"mLowPhi_NTrackhits/D");
+        fourmuon_tree->Branch("mLowPhi_NBPixHits",&mLowPhi_NBPixHits,"mLowPhi_NBPixHits/D");
+
+        fourmuon_tree->Branch("mLowPhi_NPixLayers",&mLowPhi_NPixLayers,"mLowPhi_NPixLayers/D");
+        fourmuon_tree->Branch("mLowPhi_NTraLayers",&mLowPhi_NTraLayers,"mLowPhi_NTraLayers/D");
+        fourmuon_tree->Branch("mLowPhi_NStrLayers",&mLowPhi_NStrLayers,"mLowPhi_NStrLayers/D");
+        fourmuon_tree->Branch("mLowPhi_NBPixLayers",&mLowPhi_NBPixLayers,"mLowPhi_NBPixLayers/D");
+
+        //Quality flags
+        fourmuon_tree->Branch("mHighJPsi_isLoose",&mHighJPsi_isLoose,"mHighJPsi_isLoose/D");
+        fourmuon_tree->Branch("mHighJPsi_isSoft",&mHighJPsi_isSoft,"mHighJPsi_isSoft/D");
+        fourmuon_tree->Branch("mHighJPsi_isMedium",&mHighJPsi_isMedium,"mHighJPsi_isMedium/D");
+        fourmuon_tree->Branch("mHighJPsi_isHighPt",&mHighJPsi_isHighPt,"mHighJPsi_isHighPt/D");
+
+        fourmuon_tree->Branch("mLowJPsi_isLoose",&mLowJPsi_isLoose,"mLowJPsi_isLoose/D");
+        fourmuon_tree->Branch("mLowJPsi_isSoft",&mLowJPsi_isSoft,"mLowJPsi_isSoft/D");
+        fourmuon_tree->Branch("mLowJPsi_isMedium",&mLowJPsi_isMedium,"mLowJPsi_isMedium/D");
+        fourmuon_tree->Branch("mLowJPsi_isHighPt",&mLowJPsi_isHighPt,"mLowJPsi_isHighPt/D");
+
+        fourmuon_tree->Branch("mHighPhi_isLoose",&mHighPhi_isLoose,"mHighPhi_isLoose/D");
+        fourmuon_tree->Branch("mHighPhi_isSoft",&mHighPhi_isSoft,"mHighPhi_isSoft/D");
+        fourmuon_tree->Branch("mHighPhi_isMedium",&mHighPhi_isMedium,"mHighPhi_isMedium/D");
+        fourmuon_tree->Branch("mHighPhi_isHighPt",&mHighPhi_isHighPt,"mHighPhi_isHighPt/D");
+
+        fourmuon_tree->Branch("mLowPhi_isLoose",&mLowPhi_isLoose,"mLowPhi_isLoose/D");
+        fourmuon_tree->Branch("mLowPhi_isSoft",&mLowPhi_isSoft,"mLowPhi_isSoft/D");
+        fourmuon_tree->Branch("mLowPhi_isMedium",&mLowPhi_isMedium,"mLowPhi_isMedium/D");
+        fourmuon_tree->Branch("mLowPhi_isHighPt",&mLowPhi_isHighPt,"mLowPhi_isHighPt/D");
+
+        fourmuon_tree->Branch("mHighJPsi_isTracker",&mHighJPsi_isTracker,"mHighJPsi_isTracker/D");
+        fourmuon_tree->Branch("mHighJPsi_isGlobal",&mHighJPsi_isGlobal,"mHighJPsi_isGlobal/D");
+        fourmuon_tree->Branch("mLowJPsi_isTracker",&mLowJPsi_isTracker,"mLowJPsi_isTracker/D");
+        fourmuon_tree->Branch("mLowJPsi_isGlobal",&mLowJPsi_isGlobal,"mLowJPsi_isGlobal/D");
+
+        fourmuon_tree->Branch("mHighPhi_isTracker",&mHighPhi_isTracker,"mHighPhi_isTracker/D");
+        fourmuon_tree->Branch("mHighPhi_isGlobal",&mHighPhi_isGlobal,"mHighPhi_isGlobal/D");
+        fourmuon_tree->Branch("mLowPhi_isTracker",&mLowPhi_isTracker,"mLowPhi_isTracker/D");
+        fourmuon_tree->Branch("mLowPhi_isGlobal",&mLowPhi_isGlobal,"mLowPhi_isGlobal/D");
+
+        fourmuon_tree->Branch("mHighJPsi_type",&mHighJPsi_type,"mHighJPsi_type/D");
+        fourmuon_tree->Branch("mLowJPsi_type",&mLowJPsi_type,"mLowJPsi_type/D");
+        fourmuon_tree->Branch("mHighPhi_type",&mHighPhi_type,"mHighPhi_type/D");
+        fourmuon_tree->Branch("mLowPhi_type",&mLowPhi_type,"mLowPhi_type/D");
+
+        //Dimuons
+
+        fourmuon_tree->Branch("jpsi_triggerMatch_rf",&jpsi_triggerMatch_rf,"jpsi_triggerMatch_rf/D");
+        fourmuon_tree->Branch("phi_triggerMatch_rf",&phi_triggerMatch_rf,"phi_triggerMatch_rf/D");
+
+        //JPsi
+        fourmuon_tree->Branch("jpsi_m",&jpsi_m,"jpsi_m/D");
+        fourmuon_tree->Branch("jpsi_m_rf",&jpsi_m_rf,"jpsi_m_rf/D");
+        fourmuon_tree->Branch("jpsi_m_rf_c",&jpsi_m_rf_c,"jpsi_m_rf_c/D");
+        fourmuon_tree->Branch("jpsi_m_rf_d_c",&jpsi_m_rf_d_c,"jpsi_m_rf_d_c/D");
+
+        fourmuon_tree->Branch("jpsi_p",&jpsi_p,"jpsi_p/D");
+        fourmuon_tree->Branch("jpsi_pt",&jpsi_pt,"jpsi_pt/D");
+        fourmuon_tree->Branch("jpsi_eta",&jpsi_eta,"jpsi_eta/D");
+        fourmuon_tree->Branch("jpsi_theta",&jpsi_theta,"jpsi_theta/D");
+        fourmuon_tree->Branch("jpsi_y",&jpsi_y,"jpsi_y/D");
+        fourmuon_tree->Branch("jpsi_e",&jpsi_e,"jpsi_e/D");
+
+        fourmuon_tree->Branch("jpsi_dxy",&jpsi_dxy,"jpsi_dxy/D");
+        fourmuon_tree->Branch("jpsi_dxyErr",&jpsi_dxyErr,"jpsi_dxyErr/D");
+        fourmuon_tree->Branch("jpsi_dz",&jpsi_dz,"jpsi_dz/D");
+        fourmuon_tree->Branch("jpsi_dzErr",&jpsi_dzErr,"jpsi_dzErr/D");
+
+        fourmuon_tree->Branch("jpsi_vProb",&jpsi_vProb,"jpsi_vProb/D");
+        fourmuon_tree->Branch("jpsi_vChi2",&jpsi_vChi2,"jpsi_vChi2/D");
+        fourmuon_tree->Branch("jpsi_DCA",&jpsi_DCA,"jpsi_DCA/D");
+        fourmuon_tree->Branch("jpsi_ctauPV",&jpsi_ctauPV,"jpsi_ctauPV/D");
+        fourmuon_tree->Branch("jpsi_ctauErrPV",&jpsi_ctauErrPV,"jpsi_ctauErrPV/D");
+        fourmuon_tree->Branch("jpsi_cosAlpha",&jpsi_cosAlpha,"jpsi_cosAlpha/D");
+        fourmuon_tree->Branch("jpsi_lxy",&jpsi_lxy,"jpsi_lxy/D");
+        fourmuon_tree->Branch("jpsi_lxyz",&jpsi_lxyz,"jpsi_lxyz/D");
+        fourmuon_tree->Branch("jpsi_lxyErr",&jpsi_lxyErr,"jpsi_lxyErr/D");
+        fourmuon_tree->Branch("jpsi_lxyzErr",&jpsi_lxyzErr,"jpsi_lxyzErr/D");
+        fourmuon_tree->Branch("jpsi_cosAlpha3D",&jpsi_cosAlpha3D,"jpsi_cosAlpha3D/D");
+        //Phi
+        fourmuon_tree->Branch("phi_m",&phi_m,"phi_m/D");
+        fourmuon_tree->Branch("phi_m_rf",&phi_m_rf,"phi_m_rf/D");
+        fourmuon_tree->Branch("phi_m_rf_c",&phi_m_rf_c,"phi_m_rf_c/D");
+        fourmuon_tree->Branch("phi_m_rf_d_c",&phi_m_rf_d_c,"phi_m_rf_d_c/D");
+
+        fourmuon_tree->Branch("phi_p",&phi_p,"phi_p/D");
+        fourmuon_tree->Branch("phi_pt",&phi_pt,"phi_pt/D");
+        fourmuon_tree->Branch("phi_eta",&phi_eta,"phi_eta/D");
+        fourmuon_tree->Branch("phi_theta",&phi_theta,"phi_theta/D");
+        fourmuon_tree->Branch("phi_y",&phi_y,"phi_y/D");
+        fourmuon_tree->Branch("phi_e",&phi_e,"phi_e/D");
+
+        fourmuon_tree->Branch("phi_dxy",&phi_dxy,"phi_dxy/D");
+        fourmuon_tree->Branch("phi_dxyErr",&phi_dxyErr,"phi_dxyErr/D");
+        fourmuon_tree->Branch("phi_dz",&phi_dz,"phi_dz/D");
+        fourmuon_tree->Branch("phi_dzErr",&phi_dzErr,"phi_dzErr/D");
+
+        fourmuon_tree->Branch("phi_vProb",&phi_vProb,"phi_vProb/D");
+        fourmuon_tree->Branch("phi_vChi2",&phi_vChi2,"phi_vChi2/D");
+        fourmuon_tree->Branch("phi_DCA",&phi_DCA,"phi_DCA/D");
+        fourmuon_tree->Branch("phi_ctauPV",&phi_ctauPV,"phi_ctauPV/D");
+        fourmuon_tree->Branch("phi_ctauErrPV",&phi_ctauErrPV,"phi_ctauErrPV/D");
+        fourmuon_tree->Branch("phi_cosAlpha",&phi_cosAlpha,"phi_cosAlpha/D");
+        fourmuon_tree->Branch("phi_lxy",&phi_lxy,"phi_lxy/D");
+        fourmuon_tree->Branch("phi_lxyz",&phi_lxyz,"phi_lxyz/D");
+        fourmuon_tree->Branch("phi_lxyErr",&phi_lxyErr,"phi_lxyErr/D");
+        fourmuon_tree->Branch("phi_lxyzErr",&phi_lxyzErr,"phi_lxyzErr/D");
+        fourmuon_tree->Branch("phi_cosAlpha3D",&phi_cosAlpha3D,"phi_cosAlpha3D/D");
 
 
-        //Muon flags
-        fourmuon_tree->Branch("mHighJPsi_isLoose",       &mHighJPsi_isLoose,        "mHighJPsi_isLoose/D");
-        fourmuon_tree->Branch("mHighJPsi_isSoft",        &mHighJPsi_isSoft,        "mHighJPsi_isSoft/D");
-        fourmuon_tree->Branch("mHighJPsi_isMedium",      &mHighJPsi_isMedium,        "mHighJPsi_isMedium/D");
-        fourmuon_tree->Branch("mHighJPsi_isHighPt",      &mHighJPsi_isHighPt,        "mHighJPsi_isHighPt/D");
-
-        fourmuon_tree->Branch("mHighJPsi_isTracker",        &mHighJPsi_isTracker,        "mHighJPsi_isTracker/D");
-        fourmuon_tree->Branch("mHighJPsi_isGlobal",        &mHighJPsi_isGlobal,        "mHighJPsi_isGlobal/D");
-
-        fourmuon_tree->Branch("mLowJPsi_isLoose",        &mLowJPsi_isLoose,        "mLowJPsi_isLoose/D");
-        fourmuon_tree->Branch("mLowJPsi_isSoft",        &mLowJPsi_isSoft,        "mLowJPsi_isSoft/D");
-        fourmuon_tree->Branch("mLowJPsi_isMedium",        &mLowJPsi_isMedium,        "mLowJPsi_isMedium/D");
-        fourmuon_tree->Branch("mLowJPsi_isHighPt",        &mLowJPsi_isHighPt,        "mLowJPsi_isHighPt/D");
-
-        fourmuon_tree->Branch("mLowJPsi_isTracker",        &mLowJPsi_isTracker,        "mLowJPsi_isTracker/D");
-        fourmuon_tree->Branch("mLowJPsi_isGlobal",        &mLowJPsi_isGlobal,        "mLowJPsi_isGlobal/D");
-
-        fourmuon_tree->Branch("mHighJPsi_type",     &mHighJPsi_type,       "mHighJPsi_type/D");
-        fourmuon_tree->Branch("mLowJPsi_type",     &mLowJPsi_type,       "mLowJPsi_type/D");
-
-        fourmuon_tree->Branch("mHighPhi_isLoose",        &mHighPhi_isLoose,        "mHighPhi_isLoose/D");
-        fourmuon_tree->Branch("mHighPhi_isSoft",        &mHighPhi_isSoft,        "mHighPhi_isSoft/D");
-        fourmuon_tree->Branch("mHighPhi_isMedium",        &mHighPhi_isMedium,        "mHighPhi_isMedium/D");
-        fourmuon_tree->Branch("mHighPhi_isHighPt",        &mHighPhi_isHighPt,        "mHighPhi_isHighPt/D");
-
-        fourmuon_tree->Branch("mHighPhi_isTracker",        &mHighPhi_isTracker,        "mHighPhi_isTracker/D");
-        fourmuon_tree->Branch("mHighPhi_isGlobal",        &mHighPhi_isGlobal,        "mHighPhi_isGlobal/D");
-
-        fourmuon_tree->Branch("mLowPhi_isLoose",        &mLowPhi_isLoose,        "mLowPhi_isLoose/D");
-        fourmuon_tree->Branch("mLowPhi_isSoft",        &mLowPhi_isSoft,        "mLowPhi_isSoft/D");
-        fourmuon_tree->Branch("mLowPhi_isMedium",        &mLowPhi_isMedium,        "mLowPhi_isMedium/D");
-        fourmuon_tree->Branch("mLowPhi_isHighPt",        &mLowPhi_isHighPt,        "mLowPhi_isHighPt/D");
-
-        fourmuon_tree->Branch("mLowPhi_isTracker",        &mLowPhi_isTracker,        "mLowPhi_isTracker/D");
-        fourmuon_tree->Branch("mLowPhi_isGlobal",        &mLowPhi_isGlobal,        "mLowPhi_isGlobal/D");
-
-        fourmuon_tree->Branch("mHighPhi_type",     &mHighPhi_type,       "mHighPhi_type/D");
-        fourmuon_tree->Branch("mLowPhi_type",     &mLowPhi_type,       "mLowPhi_type/D");
-
-        fourmuon_tree->Branch("mLowPhi_NPixelHits",        &mLowPhi_NPixelHits,        "mLowPhi_NPixelHits/D");
-        fourmuon_tree->Branch("mLowPhi_NStripHits",        &mLowPhi_NStripHits,        "mLowPhi_NStripHits/D");
-        fourmuon_tree->Branch("mLowPhi_NTrackhits",        &mLowPhi_NTrackhits,        "mLowPhi_NTrackhits/D");
-        fourmuon_tree->Branch("mLowPhi_NBPixHits",        &mLowPhi_NBPixHits,        "mLowPhi_NBPixHits/D");
-
-        fourmuon_tree->Branch("mLowPhi_NPixLayers",        &mLowPhi_NPixLayers,        "mLowPhi_NPixLayers/D");
-        fourmuon_tree->Branch("mLowPhi_NTraLayers",        &mLowPhi_NTraLayers,        "mLowPhi_NTraLayers/D");
-        fourmuon_tree->Branch("mLowPhi_NStrLayers",        &mLowPhi_NStrLayers,        "mLowPhi_NStrLayers/D");
-        fourmuon_tree->Branch("mLowPhi_NBPixLayers",        &mLowPhi_NBPixLayers,        "mLowPhi_NBPixLayers/D");
-
-        fourmuon_tree->Branch("mHighPhi_NPixelHits",        &mHighPhi_NPixelHits,        "mHighPhi_NPixelHits/D");
-        fourmuon_tree->Branch("mHighPhi_NStripHits",        &mHighPhi_NStripHits,        "mHighPhi_NStripHits/D");
-        fourmuon_tree->Branch("mHighPhi_NTrackhits",        &mHighPhi_NTrackhits,        "mHighPhi_NTrackhits/D");
-        fourmuon_tree->Branch("mHighPhi_NBPixHits",        &mHighPhi_NBPixHits,        "mHighPhi_NBPixHits/D");
-
-        fourmuon_tree->Branch("mHighPhi_NPixLayers",        &mHighPhi_NPixLayers,        "mHighPhi_NPixLayers/D");
-        fourmuon_tree->Branch("mHighPhi_NTraLayers",        &mHighPhi_NTraLayers,        "mHighPhi_NTraLayers/D");
-        fourmuon_tree->Branch("mHighPhi_NStrLayers",        &mHighPhi_NStrLayers,        "mHighPhi_NStrLayers/D");
-        fourmuon_tree->Branch("mHighPhi_NBPixLayers",        &mHighPhi_NBPixLayers,        "mHighPhi_NBPixLayers/D");
-
-        fourmuon_tree->Branch("mLowJPsi_NPixelHits",        &mLowJPsi_NPixelHits,        "mLowJPsi_NPixelHits/D");
-        fourmuon_tree->Branch("mLowJPsi_NStripHits",        &mLowJPsi_NStripHits,        "mLowJPsi_NStripHits/D");
-        fourmuon_tree->Branch("mLowJPsi_NTrackhits",        &mLowJPsi_NTrackhits,        "mLowJPsi_NTrackhits/D");
-        fourmuon_tree->Branch("mLowJPsi_NBPixHits",        &mLowJPsi_NBPixHits,        "mLowJPsi_NBPixHits/D");
-
-        fourmuon_tree->Branch("mLowJPsi_NPixLayers",        &mLowJPsi_NPixLayers,        "mLowJPsi_NPixLayers/D");
-        fourmuon_tree->Branch("mLowJPsi_NTraLayers",        &mLowJPsi_NTraLayers,        "mLowJPsi_NTraLayers/D");
-        fourmuon_tree->Branch("mLowJPsi_NStrLayers",        &mLowJPsi_NStrLayers,        "mLowJPsi_NStrLayers/D");
-        fourmuon_tree->Branch("mLowJPsi_NBPixLayers",        &mLowJPsi_NBPixLayers,        "mLowJPsi_NBPixLayers/D");
-
-        fourmuon_tree->Branch("mHighJPsi_NPixelHits",        &mHighJPsi_NPixelHits,        "mHighJPsi_NPixelHits/D");
-        fourmuon_tree->Branch("mHighJPsi_NStripHits",        &mHighJPsi_NStripHits,        "mHighJPsi_NStripHits/D");
-        fourmuon_tree->Branch("mHighJPsi_NTrackhits",        &mHighJPsi_NTrackhits,        "mHighJPsi_NTrackhits/D");
-        fourmuon_tree->Branch("mHighJPsi_NBPixHits",        &mHighJPsi_NBPixHits,        "mHighJPsi_NBPixHits/D");
-
-        fourmuon_tree->Branch("mHighJPsi_NPixLayers",        &mHighJPsi_NPixLayers,        "mHighJPsi_NPixLayers/D");
-        fourmuon_tree->Branch("mHighJPsi_NTraLayers",        &mHighJPsi_NTraLayers,        "mHighJPsi_NTraLayers/D");
-        fourmuon_tree->Branch("mHighJPsi_NStrLayers",        &mHighJPsi_NStrLayers,        "mHighJPsi_NStrLayers/D");
-        fourmuon_tree->Branch("mHighJPsi_NBPixLayers",        &mHighJPsi_NBPixLayers,        "mHighJPsi_NBPixLayers/D");
-
-
-        fourmuon_tree->Branch("mHighPhi_dpt",    &mHighPhi_dpt,    "mHighPhi_dpt/D");
-        fourmuon_tree->Branch("mLowPhi_dpt",     &mLowPhi_dpt,     "mLowPhi_dpt/D");
-        fourmuon_tree->Branch("mHighPhi_dr",    &mHighPhi_dr,    "mHighPhi_dr/D");
-        fourmuon_tree->Branch("mLowPhi_dr",     &mLowPhi_dr,     "mLowPhi_dr/D");
-
-        fourmuon_tree->Branch("mHighJPsi_dpt",    &mHighJPsi_dpt,    "mHighJPsi_dpt/D");
-        fourmuon_tree->Branch("mLowJPsi_dpt",     &mLowJPsi_dpt,     "mLowJPsi_dpt/D");
-        fourmuon_tree->Branch("mHighJPsi_dr",    &mHighJPsi_dr,    "mHighJPsi_dr/D");
-        fourmuon_tree->Branch("mLowJPsi_dr",     &mLowJPsi_dr,     "mLowJPsi_dr/D");
-
-        fourmuon_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/D");
+        fourmuon_tree->Branch("isBestCandidate",&isBestCandidate,"isBestCandidate/D");
 
 	if(isMC_)
 	  {
-            fourmuon_tree->Branch("gen_doubledimuon_pdgId", &gen_doubledimuon_pdgId, "gen_doubledimuon_pdgId/D");
-      	    fourmuon_tree->Branch("gen_doubledimuon_p4",    "TLorentzVector", &gen_doubledimuon_p4);
-      	    fourmuon_tree->Branch("gen_higdim_p4",      "TLorentzVector", &gen_higdim_p4);
-      	    fourmuon_tree->Branch("gen_lowdim_p4",      "TLorentzVector", &gen_lowdim_p4);
-            fourmuon_tree->Branch("gen_mHighPhi_p4",    "TLorentzVector", &gen_mHighPhi_p4);
-            fourmuon_tree->Branch("gen_mLowJPsi_p4",    "TLorentzVector", &gen_mLowJPsi_p4);
-            fourmuon_tree->Branch("gen_mHighJPsi_p4",    "TLorentzVector", &gen_mHighJPsi_p4);
-            fourmuon_tree->Branch("gen_mLowPhi_p4",    "TLorentzVector", &gen_mLowPhi_p4);
+      fourmuon_tree->Branch("gen_doubledimuon_pdgid",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
+      fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+      fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
-            fourmuon_tree->Branch("gen_doubledimuon_m",  &gen_doubledimuon_m,    "gen_doubledimuon_m/D");
+      fourmuon_tree->Branch("gen_mHighJPsi_pdgid",&gen_mHighJPsi_pdgid,"mHighgen_mHighJPsi_pdgidJPsi_pdgid/D");
+      fourmuon_tree->Branch("gen_mLowJPsi_pdgid",&gen_mLowJPsi_pdgid,"gen_mLowJPsi_pdgid/D");
+      fourmuon_tree->Branch("gen_mHighPhi_pdgid",&gen_mHighPhi_pdgid,"gen_mHighPhi_pdgid/D");
+      fourmuon_tree->Branch("gen_mLowPhi_pdgid",&gen_mLowPhi_pdgid,"gen_mLowPhi_pdgid/D");
 
-            fourmuon_tree->Branch("gen_b4_p4", "TLorentzVector",  &gen_b4_p4);
-            fourmuon_tree->Branch("gen_d1_p4",  "TLorentzVector",  &gen_d1_p4);
-            fourmuon_tree->Branch("gen_d2_p4",  "TLorentzVector",  &gen_d2_p4);
-            fourmuon_tree->Branch("gen_gd1_p4",  "TLorentzVector",  &gen_gd1_p4);
-            fourmuon_tree->Branch("gen_gd2_p4",  "TLorentzVector",  &gen_gd2_p4);
-            fourmuon_tree->Branch("gen_gd3_p4", "TLorentzVector",  &gen_gd3_p4);
-            fourmuon_tree->Branch("gen_gd4_p4",  "TLorentzVector",  &gen_gd4_p4);
-            fourmuon_tree->Branch("gen_gd5_p4",  "TLorentzVector",  &gen_gd5_p4);
-            fourmuon_tree->Branch("gen_gd6_p4",  "TLorentzVector",  &gen_gd6_p4);
+      fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
+      fourmuon_tree->Branch("gen_doubledimuon_ppdl",&gen_doubledimuon_ppdl,"gen_doubledimuon_ppdl/D");
+      fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+      fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+      fourmuon_tree->Branch("gen_phi_ppdl",&gen_phi_ppdl,"gen_phi_ppdl/D");
+      fourmuon_tree->Branch("gen_jpsi_ppdl",&gen_jpsi_ppdl,"gen_jpsi_ppdl/D");
 
-            fourmuon_tree->Branch("doubledimuon_pdgid",  &doubledimuon_pdgid,    "doubledimuon_pdgid/D");
-            fourmuon_tree->Branch("doubledimuon_phipdg",  &doubledimuon_phipdg,    "doubledimuon_phipdg/D");
-            fourmuon_tree->Branch("doubledimuon_isprompt",  &doubledimuon_isprompt,    "doubledimuon_isprompt/D");
-            fourmuon_tree->Branch("doubledimuon_phippdl",  &doubledimuon_phippdl,    "doubledimuon_phippdl/D");
+      fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
+      fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+      fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
+      fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+      fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
 
 	  }
+
     genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
     packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 }
@@ -455,10 +678,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> doubledimuon_cand_handle;
-  iEvent.getByToken(doubledimuon_cand_Label, doubledimuon_cand_handle);
-
-  edm::Handle<std::vector<pat::CompositeCandidate>> doubledimuon_rf_cand_handle;
-  iEvent.getByToken(doubledimuon_rf_cand_Label, doubledimuon_rf_cand_handle);
+  iEvent.getByToken(doubledimuons_, doubledimuon_cand_handle);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
@@ -491,8 +711,8 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 	// ex. 6 = pass 8, 10
         // ex. 1 = pass 0
   gen_doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_higdim_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_lowdim_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_jpsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_mHighJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_mLowJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_mHighPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -632,8 +852,8 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
          {
 
            gen_doubledimuon_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
-           gen_higdim_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
-           gen_lowdim_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
+           gen_jpsi_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
+           gen_phi_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
            gen_mLowJPsi_p4.SetPtEtaPhiM(gdaughters[theJPsiMuN]->pt(),gdaughters[theJPsiMuN]->eta(),gdaughters[theJPsiMuN]->phi(),gdaughters[theJPsiMuN]->mass());
            gen_mHighJPsi_p4.SetPtEtaPhiM(gdaughters[theJPsiMuP]->pt(),gdaughters[theJPsiMuP]->eta(),gdaughters[theJPsiMuP]->phi(),gdaughters[theJPsiMuP]->mass());
            gen_mLowPhi_p4.SetPtEtaPhiM(gdaughters[thePhiMuN]->pt(),gdaughters[thePhiMuN]->eta(),gdaughters[thePhiMuN]->phi(),gdaughters[thePhiMuN]->mass());
@@ -645,31 +865,69 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
    }
 
 // grabbing doubledimuon information
+
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
-  if (!doubledimuon_rf_cand_handle.isValid()) std::cout<< "No doubledimuon_rf information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
-  if (doubledimuon_rf_cand_handle.isValid() && doubledimuon_cand_handle.isValid()) {
+  if (!onlyGen_ && doubledimuon_cand_handle.isValid()) {
 
+    doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    jpsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mHighJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-    pat::CompositeCandidate doubledimuon_rf_cand, doubledimuon_cand, *higdim_cand, *lowdim_cand, *higdim_cand_rf, *lowdim_cand_rf;
+    doubledimuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    phi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    jpsi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowPhi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowJPsi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mHighJPsi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    mLowPhi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
+
+    pat::CompositeCandidate doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand, *jpsi_cand_rf, *phi_cand_rf;
 
     for (unsigned int i=0; i< doubledimuon_rf_cand_handle->size(); i++){
 
-      doubledimuon_rf_cand      = doubledimuon_rf_cand_handle->at(i);
-      doubledimuon_rf_bindx     = doubledimuon_rf_cand.userInt("bIndex");
+      doubledimuon_cand      = doubledimuon_rf_cand_handle->at(i);
+      jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
+      phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
 
       if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
         std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
         continue;
       }
 
-      doubledimuon_vProb     = doubledimuon_rf_cand.userFloat("vProb");
-      doubledimuon_vChi2     = doubledimuon_rf_cand.userFloat("vChi2");
-      doubledimuon_nDof      = doubledimuon_rf_cand.userFloat("nDof");
-      doubledimuon_cosAlpha  = doubledimuon_rf_cand.userFloat("cosAlpha");
-      doubledimuon_ctauPV    = doubledimuon_rf_cand.userFloat("ctauPV");
-      doubledimuon_ctauErrPV = doubledimuon_rf_cand.userFloat("ctauErrPV");
-      doubledimuon_m_rf      = doubledimuon_rf_cand.mass();
+      doubledimuon_charge    = doubledimuon_cand.charge();
+      doubledimuon_vProb     = doubledimuon_cand.userFloat("vProb");
+      doubledimuon_vChi2     = doubledimuon_cand.userFloat("vChi2");
+      doubledimuon_nDof      = doubledimuon_cand.userFloat("nDof");
+      doubledimuon_cosAlpha  = doubledimuon_cand.userFloat("cosAlpha");
+      doubledimuon_ctauPV    = doubledimuon_cand.userFloat("ctauPV");
+      doubledimuon_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV");
+
+      doubledimuon_dca_mp1mp2 = doubledimuon_cand.userFloat("dca_mp1mp2");
+      doubledimuon_dca_mp1mj1 = doubledimuon_cand.userFloat("dca_mp1mj1");
+      doubledimuon_dca_mp1mj2 = doubledimuon_cand.userFloat("dca_mp1mj2");
+      doubledimuon_dca_mp2mj1 = doubledimuon_cand.userFloat("dca_mp2mj1");
+      doubledimuon_dca_mp2mj2 = doubledimuon_cand.userFloat("dca_mp2mj2");
+      doubledimuon_dca_mj1mj2 = doubledimuon_cand.userFloat("dca_mj1mj2");
+
+      doubledimuon_cosAlphaBS = doubledimuon_cand.userFloat("cosAlphaBS");
+      doubledimuon_ctauPVBS = doubledimuon_cand.userFloat("ctauPVBS");
+      doubledimuon_ctauErrPVBS = doubledimuon_cand.userFloat("ctauErrPVBS");
+      doubledimuon_cosAlpha = doubledimuon_cand.userFloat("cosAlpha");
+      doubledimuon_ctauPV = doubledimuon_cand.userFloat("ctauPV");
+      doubledimuon_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV");
+      doubledimuon_cosAlphaDZ = doubledimuon_cand.userFloat("cosAlphaDZ");
+      doubledimuon_ctauPVDZ = doubledimuon_cand.userFloat("ctauPVDZ");
+      doubledimuon_ctauErrPVDZ = doubledimuon_cand.userFloat("ctauErrPVDZ");
+
+
+      doubledimuon_m_rf      = doubledimuon_cand.mass();
 
       highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
       highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
@@ -677,14 +935,14 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       highDiMPz_fit = doubledimuon_rf_cand.userFloat("highDiMPz_fit");
 
       doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.pt(),doubledimuon_rf_cand.eta(),doubledimuon_rf_cand.phi(),doubledimuon_rf_cand.mass());
-      higdim_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("higdimuon")->pt(),doubledimuon_rf_cand.daughter("higdimuon")->eta(),
-                              doubledimuon_rf_cand.daughter("higdimuon")->phi(),doubledimuon_rf_cand.daughter("higdimuon")->mass());
-      lowdim_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("lowdimuon")->pt(),doubledimuon_rf_cand.daughter("lowdimuon")->eta(),
-                              doubledimuon_rf_cand.daughter("lowdimuon")->phi(),doubledimuon_rf_cand.daughter("lowdimuon")->mass());
+      jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("jpsiuon")->pt(),doubledimuon_rf_cand.daughter("jpsiuon")->eta(),
+                              doubledimuon_rf_cand.daughter("jpsiuon")->phi(),doubledimuon_rf_cand.daughter("jpsiuon")->mass());
+      phi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("phiuon")->pt(),doubledimuon_rf_cand.daughter("phiuon")->eta(),
+                              doubledimuon_rf_cand.daughter("phiuon")->phi(),doubledimuon_rf_cand.daughter("phiuon")->mass());
 
 
-      higdim_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("higdimuon"));
-      lowdim_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("lowdimuon"));
+      jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("jpsiuon"));
+      phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("phiuon"));
 
       doubledimuon_m   = doubledimuon_cand.mass();
       doubledimuon_m_rf= doubledimuon_rf_cand.mass();
@@ -695,63 +953,63 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
       doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
 
-      reco::Candidate::LorentzVector vJpsiP = higdim_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vJpsiM = higdim_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vJpsiP = jpsi_cand_rf->daughter("muon1")->p4();
+      reco::Candidate::LorentzVector vJpsiM = jpsi_cand_rf->daughter("muon2")->p4();
 
-      if (higdim_cand_rf->daughter("muon1")->charge() < 0) {
-         vJpsiP = higdim_cand_rf->daughter("muon2")->p4();
-         vJpsiM = higdim_cand_rf->daughter("muon1")->p4();
+      if (jpsi_cand_rf->daughter("muon1")->charge() < 0) {
+         vJpsiP = jpsi_cand_rf->daughter("muon2")->p4();
+         vJpsiM = jpsi_cand_rf->daughter("muon1")->p4();
       }
 
       mLowPhi_rf_p4.SetPtEtaPhiM(vJpsiP.pt(), vJpsiP.eta(), vJpsiP.phi(), vJpsiP.mass());
       mLowJPsi_rf_p4.SetPtEtaPhiM(vJpsiM.pt(), vJpsiM.eta(), vJpsiM.phi(), vJpsiM.mass());
 
-      reco::Candidate::LorentzVector vPhiP = lowdim_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vPhiM = lowdim_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vPhiP = phi_cand_rf->daughter("muon1")->p4();
+      reco::Candidate::LorentzVector vPhiM = phi_cand_rf->daughter("muon2")->p4();
 
-      if (lowdim_cand_rf->daughter("muon1")->charge() < 0) {
-         vPhiP = lowdim_cand_rf->daughter("muon2")->p4();
-         vPhiM = lowdim_cand_rf->daughter("muon1")->p4();
+      if (phi_cand_rf->daughter("muon1")->charge() < 0) {
+         vPhiP = phi_cand_rf->daughter("muon2")->p4();
+         vPhiM = phi_cand_rf->daughter("muon1")->p4();
       }
 
       pat::CompositeCandidate doubledimuon_not_rf_cand = doubledimuon_cand_handle->at(doubledimuon_rf_bindx);
 
-      higdim_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("higdimuon"));
-      lowdim_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("lowdimuon"));
+      jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("jpsiuon"));
+      phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_not_rf_cand.daughter("phiuon"));
 
       doubledimuon_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.pt(),doubledimuon_not_rf_cand.eta(),doubledimuon_not_rf_cand.phi(),doubledimuon_not_rf_cand.mass());
-      higdim_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("higdimuon")->pt(),doubledimuon_not_rf_cand.daughter("higdimuon")->eta(),
-                              doubledimuon_not_rf_cand.daughter("higdimuon")->phi(),doubledimuon_not_rf_cand.daughter("higdimuon")->mass());
-      lowdim_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("lowdimuon")->pt(),doubledimuon_not_rf_cand.daughter("lowdimuon")->eta(),
-                              doubledimuon_not_rf_cand.daughter("lowdimuon")->phi(),doubledimuon_not_rf_cand.daughter("lowdimuon")->mass());
+      jpsi_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("jpsiuon")->pt(),doubledimuon_not_rf_cand.daughter("jpsiuon")->eta(),
+                              doubledimuon_not_rf_cand.daughter("jpsiuon")->phi(),doubledimuon_not_rf_cand.daughter("jpsiuon")->mass());
+      phi_not_rf_p4.SetPtEtaPhiM(doubledimuon_not_rf_cand.daughter("phiuon")->pt(),doubledimuon_not_rf_cand.daughter("phiuon")->eta(),
+                              doubledimuon_not_rf_cand.daughter("phiuon")->phi(),doubledimuon_not_rf_cand.daughter("phiuon")->mass());
 
-      higdim_vProb        = higdim_cand->userFloat("vProb");
-      higdim_vChi2        = higdim_cand->userFloat("vNChi2");
-      higdim_DCA          = higdim_cand->userFloat("DCA");
-      higdim_ctauPV       = higdim_cand->userFloat("ppdlPV");
-      higdim_ctauErrPV    = higdim_cand->userFloat("ppdlErrPV");
-      higdim_cosAlpha     = higdim_cand->userFloat("cosAlpha");
-      higdim_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(higdim_cand);
+      jpsi_vProb        = jpsi_cand->userFloat("vProb");
+      jpsi_vChi2        = jpsi_cand->userFloat("vNChi2");
+      jpsi_DCA          = jpsi_cand->userFloat("DCA");
+      jpsi_ctauPV       = jpsi_cand->userFloat("ppdlPV");
+      jpsi_ctauErrPV    = jpsi_cand->userFloat("ppdlErrPV");
+      jpsi_cosAlpha     = jpsi_cand->userFloat("cosAlpha");
+      jpsi_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(jpsi_cand);
 
-      lowdim_vProb        = lowdim_cand->userFloat("vProb");
-      lowdim_vChi2        = lowdim_cand->userFloat("vNChi2");
-      lowdim_DCA          = lowdim_cand->userFloat("DCA");
-      lowdim_ctauPV       = lowdim_cand->userFloat("ppdlPV");
-      lowdim_ctauErrPV    = lowdim_cand->userFloat("ppdlErrPV");
-      lowdim_cosAlpha     = lowdim_cand->userFloat("cosAlpha");
-      lowdim_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(lowdim_cand);
+      phi_vProb        = phi_cand->userFloat("vProb");
+      phi_vChi2        = phi_cand->userFloat("vNChi2");
+      phi_DCA          = phi_cand->userFloat("DCA");
+      phi_ctauPV       = phi_cand->userFloat("ppdlPV");
+      phi_ctauErrPV    = phi_cand->userFloat("ppdlErrPV");
+      phi_cosAlpha     = phi_cand->userFloat("cosAlpha");
+      phi_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(phi_cand);
 
       const pat::Muon *highPatMuonP,  *highPatMuonN, *lowPatMuonP, *lowPatMuonN;
 
-      if (higdim_cand->daughter("muon1")->charge() < 0) {
-         vJpsiP = higdim_cand->daughter("muon2")->p4();
-         vJpsiM = higdim_cand->daughter("muon1")->p4();
-         highPatMuonN = dynamic_cast<const pat::Muon*>(higdim_cand->daughter("muon1"));
-         highPatMuonP = dynamic_cast<const pat::Muon*>(higdim_cand->daughter("muon2"));
+      if (jpsi_cand->daughter("muon1")->charge() < 0) {
+         vJpsiP = jpsi_cand->daughter("muon2")->p4();
+         vJpsiM = jpsi_cand->daughter("muon1")->p4();
+         highPatMuonN = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon1"));
+         highPatMuonP = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon2"));
       } else
       {
-        highPatMuonP = dynamic_cast<const pat::Muon*>(higdim_cand->daughter("muon1"));
-        highPatMuonN = dynamic_cast<const pat::Muon*>(higdim_cand->daughter("muon2"));
+        highPatMuonP = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon1"));
+        highPatMuonN = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon2"));
       }
 
       mHighJPsi_p4.SetPtEtaPhiM(vJpsiP.pt(), vJpsiP.eta(), vJpsiP.phi(), vJpsiP.mass());
@@ -774,27 +1032,27 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
       //double kmass = 0.4936770;
       doubledimuon_p4.SetPtEtaPhiM(doubledimuon_cand.pt(),doubledimuon_cand.eta(),doubledimuon_cand.phi(),doubledimuon_cand.mass());
-      higdim_p4.SetPtEtaPhiM(higdim_cand->pt(),higdim_cand->eta(),higdim_cand->phi(),higdim_cand->mass());
-      lowdim_p4.SetPtEtaPhiM(lowdim_cand->pt(), lowdim_cand->eta(), lowdim_cand->phi(), lowdim_cand->mass());
+      jpsi_p4.SetPtEtaPhiM(jpsi_cand->pt(),jpsi_cand->eta(),jpsi_cand->phi(),jpsi_cand->mass());
+      phi_p4.SetPtEtaPhiM(phi_cand->pt(), phi_cand->eta(), phi_cand->phi(), phi_cand->mass());
 
-      vPhiP = lowdim_cand->daughter("muon1")->p4();
-      vPhiM = lowdim_cand->daughter("muon2")->p4();
+      vPhiP = phi_cand->daughter("muon1")->p4();
+      vPhiM = phi_cand->daughter("muon2")->p4();
 
-      if (lowdim_cand->daughter("muon1")->charge() < 0) {
-         vPhiP = lowdim_cand->daughter("muon2")->p4();
-         vPhiM = lowdim_cand->daughter("muon1")->p4();
-         lowPatMuonN = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon1"));
-         lowPatMuonP = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon2"));
+      if (phi_cand->daughter("muon1")->charge() < 0) {
+         vPhiP = phi_cand->daughter("muon2")->p4();
+         vPhiM = phi_cand->daughter("muon1")->p4();
+         lowPatMuonN = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon1"));
+         lowPatMuonP = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon2"));
       } else
       {
-        lowPatMuonP = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon1"));
-        lowPatMuonN = dynamic_cast<const pat::Muon*>(lowdim_cand->daughter("muon2"));
+        lowPatMuonP = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon1"));
+        lowPatMuonN = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon2"));
       }
 
-      highDiM_m        = (Double_t) higdim_cand->mass();
-      highDiM_pt       = (Double_t) higdim_cand->pt();
-      lowDiM_m         = (Double_t) lowdim_cand->mass();
-      lowDiM_pt        = (Double_t) lowdim_cand->pt();
+      highDiM_m        = (Double_t) jpsi_cand->mass();
+      highDiM_pt       = (Double_t) jpsi_cand->pt();
+      lowDiM_m         = (Double_t) phi_cand->mass();
+      lowDiM_pt        = (Double_t) phi_cand->pt();
 
       mHighJPsi_pt     = (Double_t) std::max(vJpsiP.pt(),vJpsiM.pt());
       mLowJPsi_pt      = (Double_t) -std::max(-vJpsiP.pt(),-vJpsiM.pt());

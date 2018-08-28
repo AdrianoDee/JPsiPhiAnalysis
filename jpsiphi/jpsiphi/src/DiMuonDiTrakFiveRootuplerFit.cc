@@ -342,6 +342,10 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("dimuonditrk_vy",          &dimuonditrk_vy,          "dimuonditrk_vy/D");
           dimuonditrk_tree->Branch("dimuonditrk_vz",          &dimuonditrk_vz,          "dimuonditrk_vz/D");
 
+          dimuonditrk_tree->Branch("pv_x",          &pv_x,          "pv_x/D");
+          dimuonditrk_tree->Branch("pv_y",          &pv_y,          "pv_y/D");
+          dimuonditrk_tree->Branch("pv_z",          &pv_z,          "pv_z/D");
+
           dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
           dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
           dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
@@ -983,6 +987,14 @@ if(!onlyGen_)
     highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
+    dimuonditrk_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    ditrak_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    dimuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    lowMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    highMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    highKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    lowKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
     pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
     pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;

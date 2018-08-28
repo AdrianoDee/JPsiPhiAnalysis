@@ -280,6 +280,9 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                 FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);
                 FourMuonCandidate.addUserFloat("vtxY",x_vy_fit);
+
+                FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);
+                FourMuonCandidate.addUserFloat("vtxY",x_vy_fit);
                 FourMuonCandidate.addUserFloat("vtxZ",x_vz_fit);
 
                 FourMuonCandidate.addUserFloat("cosAlphaBS",cosAlpha[0]);
@@ -452,8 +455,8 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
 
                         candRef = 1.0;
-                        FourMuonCandidate_rf.addDaughter(phi,"dimuonlow");
-                        FourMuonCandidate_rf.addDaughter(psi,"dimuonhigh");
+                        FourMuonCandidate_rf.addDaughter(phi,"phi");
+                        FourMuonCandidate_rf.addDaughter(psi,"jpsi");
                         FourMuonCandidate.addDaughter(FourMuonCandidate_rf,"ref_cand");
                       }
                    }
