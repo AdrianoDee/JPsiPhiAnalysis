@@ -648,8 +648,8 @@ void DoubleDiMuonProducerFit::endJob(){
 const pat::CompositeCandidate DoubleDiMuonProducerFit::makeCandidate(const pat::CompositeCandidate& lowDiMuon,
   const pat::CompositeCandidate& higDiMuon){
     pat::CompositeCandidate xCand;
-    xCand.addDaughter(lowDiMuon,"lowdimuon");
-    xCand.addDaughter(higDiMuon,"higdimuon");
+    xCand.addDaughter(lowDiMuon,"phi");
+    xCand.addDaughter(higDiMuon,"jpsi");
     reco::Candidate::LorentzVector vX = lowDiMuon.p4() + higDiMuon.p4();
     xCand.setP4(vX);
     return xCand;

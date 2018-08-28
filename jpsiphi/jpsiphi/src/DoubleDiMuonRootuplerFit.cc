@@ -140,7 +140,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   //DCAs
 
-  Double_t doubledimuon_dca_mp1mp2, doubledimuon_dca_mp1mj1, doubledimuon_dca_mp1mj2
+  Double_t doubledimuon_dca_mp1mp2, doubledimuon_dca_mp1mj1, doubledimuon_dca_mp1mj2;
   Double_t doubledimuon_dca_mp2mj1, doubledimuon_dca_mp2mj2, doubledimuon_dca_mj1mj2;
   //////////////////////////
   // Single muons variables
@@ -249,8 +249,8 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 //
 
 UInt_t DoubleDiMuonRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("muon2"));
+  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
+  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
@@ -290,9 +290,9 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
 
         fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
 
-        fourmuon_tree->Branch("doubledimuon_p4",   "TLorentzVector", &doubledimuon_not_rf_p4);
-        fourmuon_tree->Branch("phi_p4",     "TLorentzVector", &phi_not_rf_p4);
-        fourmuon_tree->Branch("jpsi_p4",     "TLorentzVector", &jpsi_not_rf_p4);
+        fourmuon_tree->Branch("doubledimuon_p4",   "TLorentzVector", &doubledimuon_p4);
+        fourmuon_tree->Branch("phi_p4",     "TLorentzVector", &phi_p4);
+        fourmuon_tree->Branch("jpsi_p4",     "TLorentzVector", &jpsi_p4);
         fourmuon_tree->Branch("mLowPhi_p4",   "TLorentzVector", &mLowPhi_p4);
         fourmuon_tree->Branch("mLowJPsi_p4",   "TLorentzVector", &mLowJPsi_p4);
         fourmuon_tree->Branch("mHighJPsi_p4",   "TLorentzVector", &mHighJPsi_p4);
@@ -896,9 +896,12 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
     pat::CompositeCandidate doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand, *jpsi_cand_rf, *phi_cand_rf;
 
-    for (unsigned int i=0; i< doubledimuon_rf_cand_handle->size(); i++){
+    for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
-      doubledimuon_cand      = doubledimuon_rf_cand_handle->at(i);
+      doubledimuon_cand      = doubledimuon_cand_handle->at(i);
+
+      const reco::Vertex thePrimaryV = *(doubledimuon_cand.userData<reco::Vertex>("bestPV"));
+
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
 
@@ -933,7 +936,13 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_ctauErrPVDZ = doubledimuon_cand.userFloat("ctauErrPVDZ");
 
 
-      doubledimuon_m_rf      = doubledimuon_cand.mass();
+      doubledimuon_m     = doubledimuon_cand.mass();
+      doubledimuon_eta   = doubledimuon_cand.eta();
+      doubledimuon_phi   = doubledimuon_cand.phi();
+      doubledimuon_y     = doubledimuon_cand.y();
+      doubledimuon_vx    = doubledimuon_cand.userFloat("vtxX");
+      doubledimuon_vy    = doubledimuon_cand.userFloat("vtxY");
+      doubledimuon_vz    = doubledimuon_cand.userFloat("vtxZ");
 
       // highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
       // highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
@@ -959,23 +968,23 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       // doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
       // doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
 
-      reco::Candidate::LorentzVector vJpsiP = jpsi_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vJpsiM = jpsi_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vJPsiHigh = jpsi_cand_rf->daughter("highMuon")->p4();
+      reco::Candidate::LorentzVector vJpsiLow = jpsi_cand_rf->daughter("lowMuon")->p4();
 
-      if (jpsi_cand_rf->daughter("muon1")->charge() < 0) {
-         vJpsiP = jpsi_cand_rf->daughter("muon2")->p4();
-         vJpsiM = jpsi_cand_rf->daughter("muon1")->p4();
+      if (jpsi_cand_rf->daughter("highMuon")->charge() < 0) {
+         vJPsiHigh = jpsi_cand_rf->daughter("lowMuon")->p4();
+         vJpsiLow = jpsi_cand_rf->daughter("highMuon")->p4();
       }
 
-      mLowPhi_rf_p4.SetPtEtaPhiM(vJpsiP.pt(), vJpsiP.eta(), vJpsiP.phi(), vJpsiP.mass());
-      mLowJPsi_rf_p4.SetPtEtaPhiM(vJpsiM.pt(), vJpsiM.eta(), vJpsiM.phi(), vJpsiM.mass());
+      mLowPhi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+      mLowJPsi_rf_p4.SetPtEtaPhiM(vJpsiLow.pt(), vJpsiLow.eta(), vJpsiLow.phi(), vJpsiLow.mass());
 
-      reco::Candidate::LorentzVector vPhiP = phi_cand_rf->daughter("muon1")->p4();
-      reco::Candidate::LorentzVector vPhiM = phi_cand_rf->daughter("muon2")->p4();
+      reco::Candidate::LorentzVector vPhiHigh = phi_cand_rf->daughter("highMuon")->p4();
+      reco::Candidate::LorentzVector vPhiLow = phi_cand_rf->daughter("lowMuon")->p4();
 
-      if (phi_cand_rf->daughter("muon1")->charge() < 0) {
-         vPhiP = phi_cand_rf->daughter("muon2")->p4();
-         vPhiM = phi_cand_rf->daughter("muon1")->p4();
+      if (phi_cand_rf->daughter("highMuon")->charge() < 0) {
+         vPhiHigh = phi_cand_rf->daughter("lowMuon")->p4();
+         vPhiLow = phi_cand_rf->daughter("highMuon")->p4();
       }
 
       pat::CompositeCandidate doubledimuon_not_rf_cand;// = doubledimuon_cand_handle->at(doubledimuon_rf_bindx);
@@ -995,6 +1004,11 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       jpsi_ctauPV       = jpsi_cand->userFloat("ppdlPV");
       jpsi_ctauErrPV    = jpsi_cand->userFloat("ppdlErrPV");
       jpsi_cosAlpha     = jpsi_cand->userFloat("cosAlpha");
+      jpsi_lxy          = jpsi_cand->userFloat("l_xy");
+      jpsi_lxyz         = jpsi_cand->userFloat("lErr_xy");
+      jpsi_lxyErr       = jpsi_cand->userFloat("l_xyz");
+      jpsi_lxyzErr      = jpsi_cand->userFloat("lErr_xyz");
+      jpsi_cosAlpha3D   = jpsi_cand->userFloat("cosAlpha3D");
       jpsi_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(jpsi_cand);
 
       phi_vProb        = phi_cand->userFloat("vProb");
@@ -1003,85 +1017,145 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       phi_ctauPV       = phi_cand->userFloat("ppdlPV");
       phi_ctauErrPV    = phi_cand->userFloat("ppdlErrPV");
       phi_cosAlpha     = phi_cand->userFloat("cosAlpha");
+      phi_lxy          = phi_cand->userFloat("l_xy");
+      phi_lxyz         = phi_cand->userFloat("lErr_xy");
+      phi_lxyErr       = phi_cand->userFloat("l_xyz");
+      phi_lxyzErr      = phi_cand->userFloat("lErr_xyz");
+      phi_cosAlpha3D   = phi_cand->userFloat("cosAlpha3D");
+
       phi_triggerMatch = DoubleDiMuonRootuplerFit::isTriggerMatched(phi_cand);
 
-      const pat::Muon *highPatMuonP,  *highPatMuonN, *lowPatMuonP, *lowPatMuonN;
+      const pat::Muon *jpsiHighMuon,  *jspiLowMuon, *phiHighMuon, *phiLowMuon;
 
-      if (jpsi_cand->daughter("muon1")->charge() < 0) {
-         vJpsiP = jpsi_cand->daughter("muon2")->p4();
-         vJpsiM = jpsi_cand->daughter("muon1")->p4();
-         highPatMuonN = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon1"));
-         highPatMuonP = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon2"));
-      } else
-      {
-        highPatMuonP = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon1"));
-        highPatMuonN = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("muon2"));
-      }
+      jpsiHighMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("highMuon"));
+      jspiLowMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("lowMuon"));
 
-      mHighJPsi_p4.SetPtEtaPhiM(vJpsiP.pt(), vJpsiP.eta(), vJpsiP.phi(), vJpsiP.mass());
-      mLowJPsi_p4.SetPtEtaPhiM(vJpsiM.pt(), vJpsiM.eta(), vJpsiM.phi(), vJpsiM.mass());
+      mHighJPsi_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+      mLowJPsi_p4.SetPtEtaPhiM(vJpsiLow.pt(), vJpsiLow.eta(), vJpsiLow.phi(), vJpsiLow.mass());
 
-      mHighJPsi_isLoose   = (Double_t) highPatMuonP->isLooseMuon();
-      mHighJPsi_isSoft    = (Double_t) highPatMuonP->isSoftMuon(thePrimaryV);
-      mHighJPsi_isMedium  = (Double_t) highPatMuonP->isMediumMuon();
-      mHighJPsi_isHighPt  = (Double_t) highPatMuonP->isHighPtMuon(thePrimaryV);
-      mHighJPsi_isTracker = (Double_t) highPatMuonP->isTrackerMuon();
-      mHighJPsi_isGlobal  = (Double_t) highPatMuonP->isGlobalMuon();
-      mLowJPsi_isLoose    = (Double_t) highPatMuonN->isLooseMuon();
-      mLowJPsi_isSoft     = (Double_t) highPatMuonN->isSoftMuon(thePrimaryV);
-      mLowJPsi_isMedium   = (Double_t) highPatMuonN->isMediumMuon();
-      mLowJPsi_isHighPt   = (Double_t) highPatMuonN->isHighPtMuon(thePrimaryV);
-      mLowJPsi_isTracker  = (Double_t) highPatMuonN->isTrackerMuon();
-      mLowJPsi_isGlobal   = (Double_t) highPatMuonN->isGlobalMuon();
-      mHighJPsi_type      = (Double_t) highPatMuonP->type();
-      mLowJPsi_type       = (Double_t) highPatMuonN->type();
+      mHighJPsi_isLoose   = (Double_t) jpsiHighMuon->isLooseMuon();
+      mHighJPsi_isSoft    = (Double_t) jpsiHighMuon->isSoftMuon(thePrimaryV);
+      mHighJPsi_isMedium  = (Double_t) jpsiHighMuon->isMediumMuon();
+      mHighJPsi_isHighPt  = (Double_t) jpsiHighMuon->isHighPtMuon(thePrimaryV);
+      mHighJPsi_isTracker = (Double_t) jpsiHighMuon->isTrackerMuon();
+      mHighJPsi_isGlobal  = (Double_t) jpsiHighMuon->isGlobalMuon();
+      mLowJPsi_isLoose    = (Double_t) jspiLowMuon->isLooseMuon();
+      mLowJPsi_isSoft     = (Double_t) jspiLowMuon->isSoftMuon(thePrimaryV);
+      mLowJPsi_isMedium   = (Double_t) jspiLowMuon->isMediumMuon();
+      mLowJPsi_isHighPt   = (Double_t) jspiLowMuon->isHighPtMuon(thePrimaryV);
+      mLowJPsi_isTracker  = (Double_t) jspiLowMuon->isTrackerMuon();
+      mLowJPsi_isGlobal   = (Double_t) jspiLowMuon->isGlobalMuon();
+      mHighJPsi_type      = (Double_t) jpsiHighMuon->type();
+      mLowJPsi_type       = (Double_t) jspiLowMuon->type();
 
       //double kmass = 0.4936770;
       doubledimuon_p4.SetPtEtaPhiM(doubledimuon_cand.pt(),doubledimuon_cand.eta(),doubledimuon_cand.phi(),doubledimuon_cand.mass());
       jpsi_p4.SetPtEtaPhiM(jpsi_cand->pt(),jpsi_cand->eta(),jpsi_cand->phi(),jpsi_cand->mass());
       phi_p4.SetPtEtaPhiM(phi_cand->pt(), phi_cand->eta(), phi_cand->phi(), phi_cand->mass());
 
-      vPhiP = phi_cand->daughter("muon1")->p4();
-      vPhiM = phi_cand->daughter("muon2")->p4();
+      vPhiHigh = phi_cand->daughter("highMuon")->p4();
+      vPhiLow = phi_cand->daughter("lowMuon")->p4();
 
-      if (phi_cand->daughter("muon1")->charge() < 0) {
-         vPhiP = phi_cand->daughter("muon2")->p4();
-         vPhiM = phi_cand->daughter("muon1")->p4();
-         lowPatMuonN = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon1"));
-         lowPatMuonP = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon2"));
-      } else
-      {
-        lowPatMuonP = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon1"));
-        lowPatMuonN = dynamic_cast<const pat::Muon*>(phi_cand->daughter("muon2"));
-      }
+      phiLowMuon = dynamic_cast<const pat::Muon*>(phi_cand->daughter("highMuon"));
+      phiHighMuon = dynamic_cast<const pat::Muon*>(phi_cand->daughter("lowMuon"));
 
       // highDiM_m        = (Double_t) jpsi_cand->mass();
       // highDiM_pt       = (Double_t) jpsi_cand->pt();
       // lowDiM_m         = (Double_t) phi_cand->mass();
       // lowDiM_pt        = (Double_t) phi_cand->pt();
 
-      mHighJPsi_pt     = (Double_t) std::max(vJpsiP.pt(),vJpsiM.pt());
-      mLowJPsi_pt      = (Double_t) -std::max(-vJpsiP.pt(),-vJpsiM.pt());
-      mHighPhi_pt      = (Double_t) std::max(vPhiP.pt(),vPhiP.pt());
-      mLowPhi_pt       = (Double_t) -std::max(-vPhiP.pt(),-vPhiP.pt());
+      jpsi_m      =   jpsi_cand.mass() ;
+      jpsi_p      =   jpsi_cand.p() ;
+      jpsi_theta      =   jpsi_cand.theta() ;
+      jpsi_eta      =   jpsi_cand.eta() ;
+      jpsi_y      =   jpsi_cand.y() ;
+      jpsi_e      =   jpsi_cand.energy();
+      jpsi_dxy      =   jpsi_cand.dxy();
 
-      mHighPhi_isLoose    = (Double_t)  lowPatMuonP->isLooseMuon();
-      mHighPhi_isSoft     = (Double_t)  lowPatMuonP->isSoftMuon(thePrimaryV);
-      mHighPhi_isMedium   = (Double_t) lowPatMuonP->isMediumMuon();
-      mHighPhi_isHighPt   = (Double_t) lowPatMuonP->isHighPtMuon(thePrimaryV);
-      mHighPhi_isTracker  = (Double_t) lowPatMuonP->isTrackerMuon();
-      mHighPhi_isGlobal   = (Double_t) lowPatMuonP->isGlobalMuon();
-      mLowPhi_isLoose     = (Double_t) lowPatMuonN->isLooseMuon();
-      mLowPhi_isSoft      = (Double_t) lowPatMuonN->isSoftMuon(thePrimaryV);
-      mLowPhi_isMedium    = (Double_t) lowPatMuonN->isMediumMuon();
-      mLowPhi_isHighPt    = (Double_t) lowPatMuonN->isHighPtMuon(thePrimaryV);
-      mLowPhi_isTracker   = (Double_t) lowPatMuonN->isTrackerMuon();
-      mLowPhi_isGlobal    = (Double_t) lowPatMuonN->isGlobalMuon();
-      mHighPhi_type       = (Double_t)  lowPatMuonP->type();
-      mLowPhi_type        = (Double_t) lowPatMuonN->type();
+      phi_m      =   phi_cand.mass() ;
+      phi_p      =   phi_cand.p() ;
+      phi_theta      =   phi_cand.theta() ;
+      phi_eta      =   phi_cand.eta() ;
+      phi_y      =   phi_cand.y() ;
+      phi_e      =   phi_cand.energy();
+      phi_dxy      =   phi_cand.dxy();
 
-      mHighPhi_p4.SetPtEtaPhiM(vPhiP.pt(), vPhiP.eta(), vPhiP.phi(), vPhiP.mass());
-      mLowPhi_p4.SetPtEtaPhiM(vPhiM.pt(), vPhiM.eta(), vPhiM.phi(), vPhiM.mass());
+      //jpsi_dxyEr      =   jpsi_cand. ;
+      //jpsi_d      =   jpsi_cand. ;
+      //jpsi_dzErr      =   jpsi_cand. ;
+      mHighJPsi_pt     = vJPsiHigh.pt();
+      mLowJPsi_pt      = vJPsiLow.pt();
+      mHighPhi_pt      = vPhiHigh.pt();
+      mLowPhi_pt       = vPhiLow.pt();
+
+      mHighPhi_isLoose    = (Double_t)  phiHighMuon->isLooseMuon();
+      mHighPhi_isSoft     = (Double_t)  phiHighMuon->isSoftMuon(thePrimaryV);
+      mHighPhi_isMedium   = (Double_t) phiHighMuon->isMediumMuon();
+      mHighPhi_isHighPt   = (Double_t) phiHighMuon->isHighPtMuon(thePrimaryV);
+      mHighPhi_isTracker  = (Double_t) phiHighMuon->isTrackerMuon();
+      mHighPhi_isGlobal   = (Double_t) phiHighMuon->isGlobalMuon();
+      mLowPhi_isLoose     = (Double_t) phiLowMuon->isLooseMuon();
+      mLowPhi_isSoft      = (Double_t) phiLowMuon->isSoftMuon(thePrimaryV);
+      mLowPhi_isMedium    = (Double_t) phiLowMuon->isMediumMuon();
+      mLowPhi_isHighPt    = (Double_t) phiLowMuon->isHighPtMuon(thePrimaryV);
+      mLowPhi_isTracker   = (Double_t) phiLowMuon->isTrackerMuon();
+      mLowPhi_isGlobal    = (Double_t) phiLowMuon->isGlobalMuon();
+      mHighPhi_type       = (Double_t)  phiHighMuon->type();
+      mLowPhi_type        = (Double_t) phiLowMuon->type();
+
+      mHighPhi_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
+      mLowPhi_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
+
+      if (doubledimuon_cand.userFloat("has_ref") >= 0)
+      {
+        doubledimuon_rf_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("ref_cand"));
+        doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->pt(),doubledimuon_rf_cand->eta(),doubledimuon_rf_cand->phi(),doubledimuon_rf_cand->mass());
+        jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("jpsi")->pt(),doubledimuon_rf_cand->daughter("jpsi")->eta(),
+                                doubledimuon_rf_cand->daughter("jpsi")->phi(),doubledimuon_rf_cand->daughter("jpsi")->mass());
+        jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("phi")->pt(),doubledimuon_rf_cand->daughter("phi")->eta(),
+                                doubledimuon_rf_cand->daughter("phi")->phi(),doubledimuon_rf_cand->daughter("phi")->mass());
+
+        jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("jpsi"));
+        phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("phi"));
+
+        vJPsiHigh = jpsi_cand_rf->daughter("highMuon")->p4();
+        vJPsiLow = jpsi_cand_rf->daughter("lowMuon")->p4();
+
+        mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+        mLowJPsi_rf_p4.SetPtEtaPhiM(vLowMuon.pt(), vLowMuon.eta(), vLowMuon.phi(), vLowMuon.mass());
+
+        vPhiHigh = phi_cand_rf->daughter("highMuon")->p4();
+        vPhiLow = phi_cand_rf->daughter("lowMuon")->p4();
+
+        mHighPhi_rf_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
+        mLowPhi_rf_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
+
+        doubledimuon_m_rf_c= doubledimuon_rf_cand->mass();
+
+        doubledimuon_rf_vProb = doubledimuon_cand.userFloat("vProb_ref");
+        doubledimuon_rf_vChi2 = doubledimuon_cand.userFloat("vChi2_ref");
+        doubledimuon_rf_nDof = doubledimuon_cand.userFloat("nDof_ref");
+        doubledimuon_rf_cosAlpha = doubledimuon_cand.userFloat("cosAlpha_ref");
+        doubledimuon_rf_ctauPV = doubledimuon_cand.userFloat("ctauPV_ref");
+        doubledimuon_rf_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_ref");
+
+      }
+
+      if (doubledimuon_cand.userFloat("has_const_ref") >= 0)
+      {
+        doubledimuon_rf_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("ref_const_cand"));
+        doubledimuon_rf_const_p4.SetPtEtaPhiM(doubledimuon_rf_cand->pt(),doubledimuon_rf_cand->eta(),doubledimuon_rf_cand->phi(),doubledimuon_rf_cand->mass());
+
+        doubledimuon_m_rf_d_c= doubledimuon_rf_cand->mass();
+
+        doubledimuon_rf_vProb = doubledimuon_cand.userFloat("vProb_const_ref");
+        doubledimuon_rf_vChi2 = doubledimuon_cand.userFloat("vChi2_const_ref");
+        doubledimuon_rf_nDof = doubledimuon_cand.userFloat("nDof_const_ref");
+        doubledimuon_rf_cosAlpha = doubledimuon_cand.userFloat("cosAlpha_const_ref");
+        doubledimuon_rf_ctauPV = doubledimuon_cand.userFloat("ctauPV_const_ref");
+        doubledimuon_rf_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_const_ref");
+
+      }
 
       fourmuon_tree->Fill();
 
