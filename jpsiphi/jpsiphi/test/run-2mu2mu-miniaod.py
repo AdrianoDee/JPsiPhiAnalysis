@@ -122,6 +122,7 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 # )
 process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('softMuons'),
+		TriggerInput                = cms.InputTag("unpackPatTriggers"),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -136,6 +137,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('softMuons'),
+		TriggerInput                = cms.InputTag("unpackPatTriggers"),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -218,7 +220,7 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
 # )
 
 
-process.DoubleDiMuonProducer = cms.EDProducer('DoubleDiMuonProducerFit',
+process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
