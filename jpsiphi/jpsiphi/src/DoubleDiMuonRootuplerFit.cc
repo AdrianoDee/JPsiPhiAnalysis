@@ -80,24 +80,11 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
 
   UInt_t run,event,numPrimaryVertices, trigger;
 
-  TLorentzVector doubledimuon_p4;
-  TLorentzVector jpsi_p4;
-  TLorentzVector phi_p4;
-  TLorentzVector mHighPhi_p4;
-  TLorentzVector mLowJPsi_p4;
-  TLorentzVector mHighJPsi_p4;
-  TLorentzVector mLowPhi_p4;
+  TLorentzVector doubledimuon_p4, jpsi_p4, phi_p4, mHighPhi_p4;
+  TLorentzVector mLowJPsi_p4, mHighJPsi_p4, mLowPhi_p4;
 
-  TLorentzVector doubledimuon_rf_p4;
-  TLorentzVector jpsi_rf_p4;
-  TLorentzVector phi_rf_p4;
-  TLorentzVector mHighPhi_rf_p4;
-  TLorentzVector mLowJPsi_rf_p4;
-  TLorentzVector mHighJPsi_rf_p4;
-  TLorentzVector mLowPhi_rf_p4;
-  TLorentzVector doubledimuon_not_rf_p4;
-  TLorentzVector jpsi_not_rf_p4;
-  TLorentzVector phi_not_rf_p4;
+  TLorentzVector doubledimuon_rf_p4,doubledimuon_rf_const_p4, jpsi_rf_p4, phi_rf_p4;
+  TLorentzVector mHighPhi_rf_p4, mLowJPsi_rf_p4, mHighJPsi_rf_p4, mLowPhi_rf_p4;
 
   Double_t jpsi_triggerMatch, phi_triggerMatch;
   Double_t mHighJPsiMatch, mLowJPsiMatch, mHighPhiMatch, mLowPhiMatch;
@@ -946,26 +933,26 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       doubledimuon_vy    = doubledimuon_cand.userFloat("vtxY");
       doubledimuon_vz    = doubledimuon_cand.userFloat("vtxZ");
 
-      // highDiMM_fit = doubledimuon_rf_cand.userFloat("highDiMM_fit");
-      // highDiMPx_fit = doubledimuon_rf_cand.userFloat("highDiMPx_fit");
-      // highDiMPy_fit = doubledimuon_rf_cand.userFloat("highDiMPy_fit");
-      // highDiMPz_fit = doubledimuon_rf_cand.userFloat("highDiMPz_fit");
+      // highDiMM_fit = doubledimuon_rf_cand->userFloat("highDiMM_fit");
+      // highDiMPx_fit = doubledimuon_rf_cand->userFloat("highDiMPx_fit");
+      // highDiMPy_fit = doubledimuon_rf_cand->userFloat("highDiMPy_fit");
+      // highDiMPz_fit = doubledimuon_rf_cand->userFloat("highDiMPz_fit");
 
-      doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.pt(),doubledimuon_rf_cand.eta(),doubledimuon_rf_cand.phi(),doubledimuon_rf_cand.mass());
-      jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("jpsiuon")->pt(),doubledimuon_rf_cand.daughter("jpsiuon")->eta(),
-                              doubledimuon_rf_cand.daughter("jpsiuon")->phi(),doubledimuon_rf_cand.daughter("jpsiuon")->mass());
-      phi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand.daughter("phiuon")->pt(),doubledimuon_rf_cand.daughter("phiuon")->eta(),
-                              doubledimuon_rf_cand.daughter("phiuon")->phi(),doubledimuon_rf_cand.daughter("phiuon")->mass());
-
-
-      jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("jpsiuon"));
-      phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand.daughter("phiuon"));
+      doubledimuon_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->pt(),doubledimuon_rf_cand->eta(),doubledimuon_rf_cand->phi(),doubledimuon_rf_cand->mass());
+      jpsi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("jpsiuon")->pt(),doubledimuon_rf_cand->daughter("jpsiuon")->eta(),
+                              doubledimuon_rf_cand->daughter("jpsiuon")->phi(),doubledimuon_rf_cand->daughter("jpsiuon")->mass());
+      phi_rf_p4.SetPtEtaPhiM(doubledimuon_rf_cand->daughter("phiuon")->pt(),doubledimuon_rf_cand->daughter("phiuon")->eta(),
+                              doubledimuon_rf_cand->daughter("phiuon")->phi(),doubledimuon_rf_cand->daughter("phiuon")->mass());
 
 
-      // doubledimuon_pdgid    = doubledimuon_rf_cand.userInt("phiGenPdgId");
-      // doubledimuon_phipdg   = doubledimuon_rf_cand.userFloat("phiPpdlTrue");
-      // doubledimuon_isprompt = doubledimuon_rf_cand.userInt("xGenPdgId");
-      // doubledimuon_phippdl  = doubledimuon_rf_cand.userFloat("xGenIsPrompt");
+      jpsi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("jpsiuon"));
+      phi_cand_rf = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_rf_cand->daughter("phiuon"));
+
+
+      // doubledimuon_pdgid    = doubledimuon_rf_cand->userInt("phiGenPdgId");
+      // doubledimuon_phipdg   = doubledimuon_rf_cand->userFloat("phiPpdlTrue");
+      // doubledimuon_isprompt = doubledimuon_rf_cand->userInt("xGenPdgId");
+      // doubledimuon_phippdl  = doubledimuon_rf_cand->userFloat("xGenIsPrompt");
 
       reco::Candidate::LorentzVector vJPsiHigh = jpsi_cand_rf->daughter("highMuon")->p4();
       reco::Candidate::LorentzVector vJPsiLow = jpsi_cand_rf->daughter("lowMuon")->p4();
@@ -1069,7 +1056,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       jpsi_eta      =   jpsi_cand->eta() ;
       jpsi_y      =   jpsi_cand->y() ;
       jpsi_e      =   jpsi_cand->energy();
-      jpsi_dxy      =   jpsi_cand->dxy();
+      // jpsi_dxy      =   jpsi_cand->dxy();
 
       phi_m      =   phi_cand->mass() ;
       phi_p      =   phi_cand->p() ;
@@ -1077,7 +1064,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       phi_eta      =   phi_cand->eta() ;
       phi_y      =   phi_cand->y() ;
       phi_e      =   phi_cand->energy();
-      phi_dxy      =   phi_cand->dxy();
+      // phi_dxy      =   phi_cand->dxy();
 
       //jpsi_dxyEr      =   jpsi_cand. ;
       //jpsi_d      =   jpsi_cand. ;
