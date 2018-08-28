@@ -303,7 +303,7 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
-    Filters = filters,
+    filters = filters,
     TreeName = cms.string('JPsiPhiTree')
 )
 
