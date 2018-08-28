@@ -121,7 +121,7 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 #    filter = cms.bool(True)
 # )
 process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
 		TriggerInput                = cms.InputTag("unpackPatTriggers"),
 		TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
@@ -137,7 +137,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
 )
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
-        muons                       = cms.InputTag('softMuons'),
+        muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
 		TriggerInput                = cms.InputTag("unpackPatTriggers"),
 		TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
