@@ -205,13 +205,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   //////////////
   //MC variables
 
-  //Pdg
-  Double_t gen_doubledimuon_pdgid, phi_pdg, jpsi_pdg;
-  Double_t mHighJPsi_pdgid, mLowJPsi_pdgid, mHighPhi_pdgid, mLowPhi_pdgid;
-
-  //Kin
-
-  Int_t gen_doubledimuon_pdgId;
+  Double_t gen_doubledimuon_pdg, gen_phi_pdg, gen_jpsi_pdg;
   Double_t gen_doubledimuon_prompt, gen_phi_prompt, gen_jpsi_prompt;
   Double_t gen_doubledimuon_pt, gen_doubledimuon_p, gen_doubledimuon_eta;
   Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
@@ -620,7 +614,8 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
 
 	if(isMC_)
 	  {
-      fourmuon_tree->Branch("gen_doubledimuon_pdgId",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_pdg",&gen_doubledimuon_pdg,"gen_doubledimuon_pdg/D");
       fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
       fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
@@ -728,7 +723,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
      }
    } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
-   gen_doubledimuon_pdgId = 0;
+   gen_doubledimuon_pdg = 0;
 
    edm::Handle< std::vector <reco::GenParticle> > pruned;
    iEvent.getByToken(genCands_, pruned);
@@ -849,7 +844,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
    //         gen_mHighJPsi_p4.SetPtEtaPhiM(gdaughters[theJPsiMuP]->pt(),gdaughters[theJPsiMuP]->eta(),gdaughters[theJPsiMuP]->phi(),gdaughters[theJPsiMuP]->mass());
    //         gen_mLowPhi_p4.SetPtEtaPhiM(gdaughters[thePhiMuN]->pt(),gdaughters[thePhiMuN]->eta(),gdaughters[thePhiMuN]->phi(),gdaughters[thePhiMuN]->mass());
    //         gen_mHighPhi_p4.SetPtEtaPhiM(gdaughters[thePhiMuP]->pt(),gdaughters[thePhiMuP]->eta(),gdaughters[thePhiMuP]->phi(),gdaughters[thePhiMuP]->mass());
-   //         gen_doubledimuon_pdgId = afourmuon->pdgId();
+   //         gen_doubledimuon_pdg = afourmuon->pdgId();
    //     }
    //   } // for (size
    // }
@@ -947,7 +942,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       if (AddMC_)
         {
 
-        gen_doubledimuon_pdgId  = -1.0;
+        gen_doubledimuon_pdg  = -1.0;
         gen_doubledimuon_prompt  = -1.0;
         gen_doubledimuon_p  = -1.0;
         gen_doubledimuon_pt  = -1.0;
@@ -1009,7 +1004,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
               if(jspiMom==phiMom)
               {
-                gen_doubledimuon_pdgId = (float) jspiMom->pdgId();
+                gen_doubledimuon_pdg = (float) jspiMom->pdgId();
                 gen_doubledimuon_prompt = (float) jspiMom->isPrompt();
                 gen_doubledimuon_p = (float) jspiMom->p();
                 gen_doubledimuon_pt = (float) jspiMom->pt();
