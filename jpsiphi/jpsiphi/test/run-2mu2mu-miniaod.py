@@ -307,7 +307,7 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
 )
 
 process.genmc = cms.EDAnalyzer('GenMCRootupler',
-    PdgIds = cms.vint(20443,20443,531),
+    PdgIds = cms.vint32(20443,20443,531),
 )
 
 process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
