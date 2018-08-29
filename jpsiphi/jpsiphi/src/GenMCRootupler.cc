@@ -229,7 +229,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
   event     = iEvent.id().event();
   lumiblock = iEvent.id().luminosityBlock();
 
-  trigger = getTriggerBits(iEvent);
+  trigger = 0;
 
   dimuon_pdgId = 0;
   mother_pdgId = 0;
