@@ -298,12 +298,16 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
-    Mother_pdg = cms.uint32(20443), #20443 #10441
+    Mother_pdg = cms.uint32(20443), #20443 #20443
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
     TreeName = cms.string('JPsiPhiTree')
+)
+
+process.genmc = cms.EDAnalyzer('GenMCRootupler',
+    PdgIds = cms.vdouble(20443,20443,531),
 )
 
 process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
