@@ -64,7 +64,6 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
       void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
 
       UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
-      std::tuple<int, float, float> findMCInfo(reco::GenParticleRef genJpsi)
 
   // ----------member data ---------------------------
   std::string file_name;
@@ -213,10 +212,10 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   //Kin
 
   Int_t gen_doubledimuon_pdgId;
-  Double_t gen_doubledimuon_prompt, phi_prompt, jpsi_prompt;
-  Double_t gen_doubledimuon_pt;
-  Double_t gen_doubledimuon_eta;
-
+  Double_t gen_doubledimuon_prompt, gen_phi_prompt, gen_jpsi_prompt;
+  Double_t gen_doubledimuon_pt, gen_doubledimuon_p, gen_doubledimuon_eta;
+  Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
+  Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
   Double_t isBestCandidate;
 
   TLorentzVector gen_doubledimuon_p4;
@@ -254,24 +253,6 @@ UInt_t DoubleDiMuonRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuo
 }
 
 
-std::tuple<int, float>
-DoubleDiMuonRootuplerFit::findMCInfo(reco::GenParticleRef gen, const reco::Vertex pv) {
-
-  // std::cout << "findJpsiMCInfo 1 " << std::endl;
-  int momJpsiID = 0;
-  float isPrompt = -99.;
-  momJpsiID = Jpsimom->pdgId();
-    isPrompt = Jpsimom->isPromptDecayed();
-    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
-    TVector3 vdiff = trueVtx - trueVtxMom;
-    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
-  }
-}
-  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
-  return result;
-
-}
-//
 // constructors and destructor
 //
 DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iConfig):
@@ -283,9 +264,6 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         AddMC_(iConfig.getParameter<bool>("AddMC")),
-        MomPdgId_(iConfig.getParameter<uint32_t>("MomPdg")),
-        JPsiPdgId_(iConfig.getParameter<uint32_t>("JPsiPdg")),
-        PhiPdgId_(iConfig.getParameter<uint32_t>("PhiPdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
@@ -653,6 +631,10 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
       fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
       fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
       fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_p",&gen_doubledimuon_p,"gen_doubledimuon_p/D");
+      fourmuon_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
+      fourmuon_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
 
       fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
       fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
