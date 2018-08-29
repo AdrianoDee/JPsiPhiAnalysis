@@ -64,7 +64,7 @@ class GenMCRootupler:public edm::EDAnalyzer {
 	edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuon_Label;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  int  PdgIds_;
+  std::vector<int>  PdgIds_;
   std::vector<double> DimuonMassCuts_;
 	bool isMC_;
   bool OnlyBest_;
@@ -272,7 +272,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
           std::cout << " >>>>>> Particle : " << thePdg << std::endl;
           std::cout << " >>> no. daug: " << nDau << std::endl;
 
-          for(int jj = 0; jj<xcand->numberOfDaughters();jj++)
+          for(int jj = 0; jj<nDau;jj++)
           {
             std::cout << " > "<< jj << " - " << xcand->daughter(jj)->pdgId() << std::endl;
           }
