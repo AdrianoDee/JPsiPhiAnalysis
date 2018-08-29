@@ -116,7 +116,7 @@ class GenMCRootupler:public edm::EDAnalyzer {
 //
 
 GenMCRootupler::GenMCRootupler(const edm::ParameterSet & iConfig):
-PdgIds_(iConfig.getParameter<std::vector<uint32_t>>("PdgIds")),
+PdgIds_(iConfig.getParameter<std::vector<uint32_t>>("PdgIds_")),
 {
   edm::Service < TFileService > fs;
   gen_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
@@ -264,7 +264,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
       const reco::Candidate *xcand = &(*pruned)[i];
       int thePdg = xcand->pdgId();
 
-      if ( (PdgIds.find(thePdg) != PdgIds.end()) && ( (xcand->status() == 2) || (xcand->status() >=11 2)) )
+      if ( (PdgIds_.find(thePdg) != PdgIds_.end()) && ( (xcand->status() == 2) || (xcand->status() >=11)) )
       {
         int nDau = xcand->numberOfDaughters();
         if( nDau > 0)
