@@ -225,18 +225,10 @@ UInt_t GenMCRootupler::getTriggerBits(const edm::Event& iEvent ) {
 // ------------ method called for each event  ------------
 void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & iSetup) {
 
-  edm::Handle<pat::CompositeCandidateCollection> dimuons;
-  iEvent.getByToken(dimuon_Label,dimuons);
-
-  edm::Handle<reco::VertexCollection> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
-
   run       = iEvent.id().run();
   event     = iEvent.id().event();
   lumiblock = iEvent.id().luminosityBlock();
 
-  numPrimaryVertices = 0;
-  if (primaryVertices_handle.isValid()) numPrimaryVertices = (int) primaryVertices_handle->size();
   trigger = getTriggerBits(iEvent);
 
   dimuon_pdgId = 0;
