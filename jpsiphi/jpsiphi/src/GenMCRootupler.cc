@@ -264,7 +264,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
       const reco::Candidate *xcand = &(*pruned)[i];
       int thePdg = xcand->pdgId();
 
-      if ( (PdgIds_.find(thePdg) != PdgIds_.end()) && ( (xcand->status() == 2) || (xcand->status() >=11)) )
+      if ( (std::find(PdgIds_.begin(),PdgIds_.end(),thePdg) != PdgIds_.end()) && ( (xcand->status() == 2) || (xcand->status() >=11)) )
       {
         int nDau = xcand->numberOfDaughters();
         if( nDau > 0)
