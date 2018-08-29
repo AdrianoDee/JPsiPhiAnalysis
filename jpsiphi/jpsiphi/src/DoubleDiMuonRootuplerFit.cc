@@ -252,7 +252,7 @@ UInt_t DoubleDiMuonRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuo
 DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iConfig):
         doubledimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FourMuons"))),
         // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
-        // primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
+        primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
