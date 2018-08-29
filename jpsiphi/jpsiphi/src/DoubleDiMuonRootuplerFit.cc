@@ -64,6 +64,7 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
       void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
 
       UInt_t isTriggerMatched(pat::CompositeCandidate *diMuon_cand);
+      std::tuple<int, float, float> findMCInfo(reco::GenParticleRef genJpsi)
 
   // ----------member data ---------------------------
   std::string file_name;
@@ -73,8 +74,8 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  doubledimuon_pdgid_, jpsi_pdgid_, phi_pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_;
-  UInt_t motherpdgid_;
+  bool isMC_,OnlyBest_,OnlyGen_,AddMC_;
+  UInt_t MomPdgId_, JPsiPdgId_, PhiPdgId_;
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
 
@@ -252,20 +253,41 @@ UInt_t DoubleDiMuonRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuo
   return matched;
 }
 
+
+std::tuple<int, float>
+DoubleDiMuonRootuplerFit::findMCInfo(reco::GenParticleRef gen, const reco::Vertex pv) {
+
+  // std::cout << "findJpsiMCInfo 1 " << std::endl;
+  int momJpsiID = 0;
+  float isPrompt = -99.;
+  momJpsiID = Jpsimom->pdgId();
+    isPrompt = Jpsimom->isPromptDecayed();
+    trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
+    TVector3 vdiff = trueVtx - trueVtxMom;
+    trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();
+  }
+}
+  std::tuple<int,float,float> result = std::make_tuple(momJpsiID, trueLife,isPrompt);
+  return result;
+
+}
 //
 // constructors and destructor
 //
 DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iConfig):
-        doubledimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("doubledimuon_cand"))),
-        thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-        primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
+        doubledimuons_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FourMuons"))),
+        // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+        // primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-        motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
+        AddMC_(iConfig.getParameter<bool>("AddMC")),
+        MomPdgId_(iConfig.getParameter<uint32_t>("MomPdg")),
+        JPsiPdgId_(iConfig.getParameter<uint32_t>("JPsiPdg")),
+        PhiPdgId_(iConfig.getParameter<uint32_t>("PhiPdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
-        HLTFilters_(iConfig.getParameter<std::vector<std::string>>("filters"))
+        HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))
 {
 	      edm::Service<TFileService> fs;
         fourmuon_tree = fs->make<TTree>("FourMuonTree","Tree of JPsi and Phi in 4 Muons");
@@ -618,33 +640,25 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
 
         fourmuon_tree->Branch("isBestCandidate",&isBestCandidate,"isBestCandidate/D");
 
-	// if(isMC_)
-	//   {
-  //     fourmuon_tree->Branch("gen_doubledimuon_pdgid",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
-  //     fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
-  //     fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
-  //
-  //     fourmuon_tree->Branch("gen_mHighJPsi_pdgid",&gen_mHighJPsi_pdgid,"mHighgen_mHighJPsi_pdgidJPsi_pdgid/D");
-  //     fourmuon_tree->Branch("gen_mLowJPsi_pdgid",&gen_mLowJPsi_pdgid,"gen_mLowJPsi_pdgid/D");
-  //     fourmuon_tree->Branch("gen_mHighPhi_pdgid",&gen_mHighPhi_pdgid,"gen_mHighPhi_pdgid/D");
-  //     fourmuon_tree->Branch("gen_mLowPhi_pdgid",&gen_mLowPhi_pdgid,"gen_mLowPhi_pdgid/D");
-  //
-  //     fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
-  //     fourmuon_tree->Branch("gen_doubledimuon_ppdl",&gen_doubledimuon_ppdl,"gen_doubledimuon_ppdl/D");
-  //     fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
-  //     fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
-  //     fourmuon_tree->Branch("gen_phi_ppdl",&gen_phi_ppdl,"gen_phi_ppdl/D");
-  //     fourmuon_tree->Branch("gen_jpsi_ppdl",&gen_jpsi_ppdl,"gen_jpsi_ppdl/D");
-  //
-  //     fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
-  //     fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
-  //     fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
-  //
-  //     fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
-  //     fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
-  //     fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
-  //
-	//   }
+	if(isMC_)
+	  {
+      fourmuon_tree->Branch("gen_doubledimuon_pdgId",&gen_doubledimuon_pdgid,"gen_doubledimuon_pdgid/D");
+      fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+      fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
+      fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+      fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
+      fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+      fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+
+      fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
+      fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+      fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+
+	  }
 
     genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
     packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
@@ -683,19 +697,20 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
   run = iEvent.id().run();
   event = iEvent.id().event();
 
-  reco::Vertex thePrimaryV;
-  reco::Vertex theBeamSpotV;
-
-  edm::Handle<reco::BeamSpot> theBeamSpot;
-  iEvent.getByToken(thebeamspot_,theBeamSpot);
-  reco::BeamSpot bs = *theBeamSpot;
-
-  if ( primaryVertices_handle->begin() != primaryVertices_handle->end() ) {
-    thePrimaryV = reco::Vertex(*(primaryVertices_handle->begin()));
-  }
-  else {
-    thePrimaryV = reco::Vertex(bs.position(), bs.covariance3D());
-  }
+  // reco::Vertex thePrimaryV;
+  // reco::Vertex theBeamSpotV;
+  //
+  // edm::Handle<reco::BeamSpot> theBeamSpot;
+  // iEvent.getByToken(thebeamspot_,theBeamSpot);
+  // reco::BeamSpot bs = *theBeamSpot;
+  //
+  // if ( primaryVertices_handle->begin() != primaryVertices_handle->end() ) {
+  //   thePrimaryV = reco::Vertex(*(primaryVertices_handle->begin()));
+  // }
+  // else {
+  //   thePrimaryV = reco::Vertex(bs.position(), bs.covariance3D());
+  // }
+  //
 
 	// grab Trigger information
 	// save it in variable trigger, trigger is an int between 0 and 7, in binary it is:
@@ -712,6 +727,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
   gen_mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   trigger = 0;
+
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
@@ -744,10 +760,10 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
    //     // std::cout << "Valid"<<std::endl;
    //     const reco::Candidate *afourmuon = &(*pruned)[i];
    //
-   //     if ( (abs(afourmuon->pdgId()) == motherpdgid_) && (afourmuon->status() == 2))
+   //     if ( (abs(afourmuon->pdgId()) == MomPdgId_) && (afourmuon->status() == 2))
    //       gen_b_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
    //
-   //     if ( (abs(afourmuon->pdgId()) == motherpdgid_) && (afourmuon->status() == 2) && (afourmuon->numberOfDaughters() > 1) && (afourmuon->numberOfDaughters() < 7) ) {
+   //     if ( (abs(afourmuon->pdgId()) == MomPdgId_) && (afourmuon->status() == 2) && (afourmuon->numberOfDaughters() > 1) && (afourmuon->numberOfDaughters() < 7) ) {
    //       //asking for decay (status==2) && two daughters
    //       bool goToJPsi = false;
    //       bool goToPhi = false;
@@ -882,6 +898,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
+    pat::CompositeCandidate *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
@@ -891,6 +908,11 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
+
+      phiMuHigh  = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("highMuon"));
+      phiMuLow   = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("lowMuon"));
+      jPsiMuLow  = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("lowMuon"));
+      jPsiMuHigh = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("highMuon"));
 
       // if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
       //   std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
@@ -939,6 +961,85 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
       // doubledimuon_isprompt = doubledimuon_rf_cand->userInt("xGenPdgId");
       // doubledimuon_phippdl  = doubledimuon_rf_cand->userFloat("xGenIsPrompt");
 
+
+      if (AddMC_)
+        {
+
+        gen_doubledimuon_pdgId  = -1.0;
+        gen_doubledimuon_prompt  = -1.0;
+        gen_doubledimuon_p  = -1.0;
+        gen_doubledimuon_pt  = -1.0;
+        gen_doubledimuon_eta  = -1.0;
+
+        gen_jpsi_pdg    = -1.0;
+        gen_jpsi_prompt   = -1.0;
+        gen_jpsi_p    = -1.0;
+        gen_jpsi_pt   = -1.0;
+        gen_jpsi_eta   = -1.0;
+        gen_phi_pdg   = -1.0;
+        gen_phi_prompt = -1.0;
+        gen_phi_p =  -1.0;
+        gen_phi_pt = -1.0;
+        gen_phi_eta = -1.0;
+
+        reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
+        reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();
+        reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
+        reco::GenParticleRef genJPsiMuLow  = jPsiMuHigh->genParticleRef();
+
+        if (genJPsiMuLow.isNonnull() && genJPsiMuHigh.isNonnull() && genPhiMuHigh.isNonnull() && genPhiMuLow.isNonnull())
+        {
+          if (genPhiMuHigh->numberOfMothers()>0 && genPhiMuLow->numberOfMothers()>0)
+          {
+          if (genJPsiMuHigh->numberOfMothers()>0 && genJPsiMuLow->numberOfMothers()>0)
+          {
+            reco::GenParticleRef phiMomHigh  = genPhiMuHigh->motherRef();
+            reco::GenParticleRef phiMomLow   = genPhiMuLow->motherRef();
+            reco::GenParticleRef jPsiMomHigh = genJPsiMuHigh->motherRef();
+            reco::GenParticleRef jPsiMomLow  = genJPsiMuLow->motherRef();
+
+            bool momNonNull = jPsiMomHigh.isNonnull();
+            bool sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
+            bool samePhiMom = (phiMomHigh == phiMomLow);
+
+            if(sameJPsiMom)
+            {
+              gen_jpsi_pdg   = jPsiMomHigh->pdgId();
+              gen_jpsi_prompt   = jPsiMomHigh->isPrompt();
+              gen_jpsi_p   = jPsiMomHigh->p();
+              gen_jpsi_pt   = jPsiMomHigh->pt();
+              gen_jpsi_eta   = jPsiMomHigh->eta();
+            }
+
+            if(samePhiMom)
+            {
+              gen_phi_pdg   = phiMomHigh->pdgId();
+              gen_phi_prompt   = phiMomHigh->isPrompt();
+              gen_phi_p   = phiMomHigh->p();
+              gen_phi_pt   = phiMomHigh->pt();
+              gen_phi_eta   = phiMomHigh->eta();
+            }
+
+            if(sameJPsiMom && samePhiMom && jPsiMomHigh->numberOfMothers()>0 && phiMomLow->numberOfMothers()>0)
+            {
+              reco::GenParticleRef jspiMom  = jPsiMomHigh->motherRef();
+              reco::GenParticleRef phiMom   = phiMomHigh->motherRef();
+
+              if(jspiMom==phiMom)
+              {
+                gen_doubledimuon_pdgId = (float) jspiMom->pdgId();
+                gen_doubledimuon_prompt = (float) jspiMom->isPrompt();
+                gen_doubledimuon_p = (float) jspiMom->p();
+                gen_doubledimuon_pt = (float) jspiMom->pt();
+                gen_doubledimuon_eta = (float) jspiMom->eta();
+              }
+
+            }
+
+          }
+       }
+     }
+   }
       reco::Candidate::LorentzVector vJPsiHigh = jpsi_cand->daughter("highMuon")->p4();
       reco::Candidate::LorentzVector vJPsiLow = jpsi_cand->daughter("lowMuon")->p4();
 

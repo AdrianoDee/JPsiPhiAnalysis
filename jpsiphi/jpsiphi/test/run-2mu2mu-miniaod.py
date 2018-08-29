@@ -288,14 +288,14 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 # )
 
 process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
-    doubledimuon_cand = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
+    FourMuons = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
 	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
 	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
 	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
     PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-	primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+	BeamSpot                 = cms.InputTag('offlineBeamSpot'),
+	PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     isMC = cms.bool(False),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
@@ -303,7 +303,7 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
     JPsi_pdg = cms.uint32(443),
     Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
-    filters = filters,
+    Filters = filters,
     TreeName = cms.string('JPsiPhiTree')
 )
 

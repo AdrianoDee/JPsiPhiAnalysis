@@ -582,40 +582,6 @@ void DoubleDiMuonProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                 FourMuonCandidate.addUserFloat("has_ref",candRef);
                 FourMuonCandidate.addUserFloat("has_const_ref",cand_const_ref);
 
-                if (addMCTruth_) {
-                  reco::GenParticleRef genMu1 = phiMuHigh->genParticleRef();
-                  reco::GenParticleRef genMu2 = phiMuLow->genParticleRef();
-                  // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
-                  // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
-
-                  if (genMu1.isNonnull() && genMu2.isNonnull()) {
-                    if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
-                      reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
-                      reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
-
-                      if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
-
-                        std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
-                        FourMuonCandidate.addUserInt("phiGenPdgId",mumu_mom1->pdgId());
-                        FourMuonCandidate.addUserFloat("phiPpdlTrue",std::get<1>(MCinfo));
-                        FourMuonCandidate.addUserInt("xGenPdgId",std::get<0>(MCinfo));
-                        FourMuonCandidate.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
-                      } else {
-                        FourMuonCandidate.addUserInt("phiGenPdgId",0.0);
-                        FourMuonCandidate.addUserFloat("phiPpdlTrue",-99.0);
-                        FourMuonCandidate.addUserInt("xGenPdgId",0.0);
-                        FourMuonCandidate.addUserFloat("xGenIsPrompt",-99.0);
-                      }
-
-                    }
-                 } else {
-                   FourMuonCandidate.addUserInt("phiGenPdgId",0.0);
-                   FourMuonCandidate.addUserFloat("phiPpdlTrue",-99.0);
-                   FourMuonCandidate.addUserInt("xGenPdgId",0.0);
-                   FourMuonCandidate.addUserFloat("xGenIsPrompt",-99.0);
-                  }
-                }
-
                 DoubleDiMuonCandColl->push_back(FourMuonCandidate);
               }
             }
