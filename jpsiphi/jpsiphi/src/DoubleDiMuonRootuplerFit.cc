@@ -982,7 +982,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
             if(sameJPsiMom)
             {
               gen_jpsi_pdg   = jPsiMomHigh->pdgId();
-              gen_jpsi_prompt   = jPsiMomHigh->isPrompt();
+              gen_jpsi_prompt   = jPsiMomHigh->isPromptDecayed();
               gen_jpsi_p   = jPsiMomHigh->p();
               gen_jpsi_pt   = jPsiMomHigh->pt();
               gen_jpsi_eta   = jPsiMomHigh->eta();
@@ -991,7 +991,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
             if(samePhiMom)
             {
               gen_phi_pdg   = phiMomHigh->pdgId();
-              gen_phi_prompt   = phiMomHigh->isPrompt();
+              gen_phi_prompt   = phiMomHigh->isPromptDecayed();
               gen_phi_p   = phiMomHigh->p();
               gen_phi_pt   = phiMomHigh->pt();
               gen_phi_eta   = phiMomHigh->eta();
@@ -1005,7 +1005,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
               if(jspiMom==phiMom)
               {
                 gen_doubledimuon_pdg = (float) jspiMom->pdgId();
-                gen_doubledimuon_prompt = (float) jspiMom->isPrompt();
+                gen_doubledimuon_prompt = (float) jspiMom->isPromptDecayed();
                 gen_doubledimuon_p = (float) jspiMom->p();
                 gen_doubledimuon_pt = (float) jspiMom->pt();
                 gen_doubledimuon_eta = (float) jspiMom->eta();
