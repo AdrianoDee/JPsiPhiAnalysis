@@ -975,6 +975,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
             reco::GenParticleRef jPsiMomHigh = genJPsiMuHigh->motherRef();
             reco::GenParticleRef jPsiMomLow  = genJPsiMuLow->motherRef();
 
+            if( phiMomHigh.isNonnull() &&  phiMomLow.isNonnull() &&  jPsiMomHigh.isNonnull() &&  jPsiMomLow.isNonnull() && )
             bool momNonNull = jPsiMomHigh.isNonnull();
             bool sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
             bool samePhiMom = (phiMomHigh == phiMomLow);
