@@ -975,8 +975,8 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
             reco::GenParticleRef jPsiMomHigh = genJPsiMuHigh->motherRef();
             reco::GenParticleRef jPsiMomLow  = genJPsiMuLow->motherRef();
 
-            if( phiMomHigh.isNonnull() &&  phiMomLow.isNonnull() &&  jPsiMomHigh.isNonnull() &&  jPsiMomLow.isNonnull() && )
-            bool momNonNull = jPsiMomHigh.isNonnull();
+            if( phiMomHigh.isNonnull() &&  phiMomLow.isNonnull() &&  jPsiMomHigh.isNonnull() &&  jPsiMomLow.isNonnull() )
+            {
             bool sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
             bool samePhiMom = (phiMomHigh == phiMomLow);
 
@@ -998,12 +998,13 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
               gen_phi_eta   = phiMomHigh->eta();
             }
 
+
             if(sameJPsiMom && samePhiMom && jPsiMomHigh->numberOfMothers()>0 && phiMomLow->numberOfMothers()>0)
             {
               reco::GenParticleRef jspiMom  = jPsiMomHigh->motherRef();
               reco::GenParticleRef phiMom   = phiMomHigh->motherRef();
 
-              if(jspiMom==phiMom)
+              if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
               {
                 gen_doubledimuon_pdg = (float) jspiMom->pdgId();
                 gen_doubledimuon_prompt = (float) jspiMom->isPromptDecayed();
@@ -1013,7 +1014,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
               }
 
             }
-
+          }
           }
        }
      }
