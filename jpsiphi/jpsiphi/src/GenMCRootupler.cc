@@ -116,7 +116,7 @@ class GenMCRootupler:public edm::EDAnalyzer {
 //
 
 GenMCRootupler::GenMCRootupler(const edm::ParameterSet & iConfig):
-PdgIds_(iConfig.getParameter<std::vector<int>>("PdgIds_"))
+PdgIds_(iConfig.getParameter<std::vector<int>>("PdgIds"))
 {
   edm::Service < TFileService > fs;
   gen_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
