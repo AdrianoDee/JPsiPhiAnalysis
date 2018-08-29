@@ -307,7 +307,7 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
 )
 
 process.genmc = cms.EDAnalyzer('GenMCRootupler',
-    PdgIds = cms.vdouble(20443,20443,531),
+    PdgIds = cms.vint(20443,20443,531),
 )
 
 process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
@@ -346,6 +346,7 @@ process.p = cms.Path(process.triggerSelection *
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
 					 #process.FiveTracksProducer *
+					 procees.genmc *
                      process.rootuple *
                      process.rootuplePhi*
 					 process.rootupleJPsi)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
