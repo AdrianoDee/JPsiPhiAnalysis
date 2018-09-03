@@ -1,4 +1,3 @@
-
 CHANNEL_DECAY='jpsiphi'    # "${2#*=}"
 
 ConfigReleaseReco=CMSSW_10_2_1
