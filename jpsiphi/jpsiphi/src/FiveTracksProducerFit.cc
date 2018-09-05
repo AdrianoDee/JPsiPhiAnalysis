@@ -173,7 +173,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
        const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
        // const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("PVwithmuons");
-       pat::CompositeCandidate * dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrakCand.daughter("dimuon"));
+       const pat::CompositeCandidate * dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrakCand.daughter("dimuon"));
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("highMuon"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("lowMuon"));
