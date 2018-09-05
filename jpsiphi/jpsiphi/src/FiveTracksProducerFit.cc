@@ -365,9 +365,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
                name = "cosAlpha_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksCosAlpha[i]);
                name = "onePsi2S_" + std::to_string(i);
-               fiveCandKaon.addUserFloat(name,onePsi2S[i]);
+               fiveCandKaon.addUserFloat(name,psi2sOne[i]);
                name = "twoPsi2S_" + std::to_string(i);
-               fiveCandKaon.addUserFloat(name,twoPsi2S[i]);
+               fiveCandKaon.addUserFloat(name,psi2sTwo[i]);
 
              }
 
