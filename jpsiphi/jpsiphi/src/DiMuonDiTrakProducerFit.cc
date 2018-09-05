@@ -592,7 +592,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            // std::vector<bool> mu1FromPV,mu2FromPV;
            std::vector<float> tPFromPV,tMFromPV;
            // std::vector<float> m1W,m2W,tPW,tMW;
-
+           for(size_t i = 0; i < verteces.size(); i++)
+           {
+             tPFromPV.push_back(0.0);
+             tMFromPV.push_back(0.0);
+           }
            //NOT GOOD in MINIAOD
            // for(size_t i = 0; i < verteces.size(); i++)
            // {
