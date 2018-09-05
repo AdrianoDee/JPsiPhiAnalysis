@@ -219,6 +219,9 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
 
 void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
+  int debug = 1;
+
+  std::cout << "debug " << debug++ << std::endl;
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
@@ -287,7 +290,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
       filterResults.push_back(thisFilter);
     }
   }
-
+  std::cout << "debug " << debug++ << std::endl;
   for (size_t i = 0; i < trak->size(); i++) {
 
     auto t = trak->at(i);
@@ -327,11 +330,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     }
 
   }
-
+  std::cout << "debug " << debug++ << std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
-
+       std::cout << "debug " << debug++ << std::endl;
        if(dimuonCand->userFloat("vProb")<0.0)
          continue;
 
@@ -355,7 +358,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
          if(!(posTrack.hasTrackDetails())) continue;
 
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
-
+         std::cout << "debug " << debug++ << std::endl;
 // loop over second track candidate, negative charge
          // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
          int jstart = 0;
@@ -395,7 +398,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            float kinChi = 0.;
            float kinNdf = 0.;
-
+           std::cout << "debug " << debug++ << std::endl;
            xTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // µ+
            xTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ+
 
@@ -431,7 +434,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if (!(fitX->currentState().isValid())) continue;
 
-
+           std::cout << "debug " << debug++ << std::endl;
            x_ma_fit = fitX->currentState().mass();
            x_x2_fit = fitXVertex->chiSquared();
            x_vp_fit = ChiSquaredProbability(x_x2_fit,
@@ -450,7 +453,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            std::vector <double> vertexWeight,sumPTPV,cosAlpha,ctauPV,ctauErrPV;
            std::vector <int> countTksOfPV;
-
+           std::cout << "debug " << debug++ << std::endl;
            TVector3 vtx, vdiff, pvtx;
            VertexDistanceXY vdistXY;
            reco::Vertex thePrimaryV,thePrimaryVDZ;
@@ -486,7 +489,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            double maxCosAlpha = -1.0;
            if ( !(priVtxs->begin() != priVtxs->end()) )
            {
-
+             std::cout << "debug " << debug++ << std::endl;
              thePrimaryV = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
              verteces.push_back(thePrimaryV);
@@ -525,7 +528,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              verteces.push_back(pz);
              vKeys.push_back(thispz);
            }
-
+           std::cout << "debug " << debug++ << std::endl;
            //////////////////////////////////////////////////
            //Refit PVs (not BS)
 
@@ -585,7 +588,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //   }
            //
            // }
-
+           std::cout << "debug " << debug++ << std::endl;
            // std::vector<bool> mu1FromPV,mu2FromPV;
            std::vector<float> tPFromPV,tMFromPV;
            // std::vector<float> m1W,m2W,tPW,tMW;
@@ -639,7 +642,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              tPFromPV[i] = posTrack.fromPV(vKeys[i]);
              tMFromPV[i] = negTrack.fromPV(vKeys[i]);
            }
-
+           std::cout << "debug " << debug++ << std::endl;
            for(size_t i = 0; i < verteces.size(); i++)
            {
              pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
@@ -691,7 +694,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            //   sumPTPV.push_back(s);
            //   countTksOfPV.push_back(c);
            // }
-
+           std::cout << "debug " << debug++ << std::endl;
            if(posTrack.pt()>=negTrack.pt())
            {
              DiMuonTTCand.addUserInt("highKaonMatch",filters[i]);
@@ -768,7 +771,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            // DiMuonTTCand.addUserFloat("mu2DZW",m2W[2]);
            // DiMuonTTCand.addUserFloat("tPDZW",tPW[2]);
            // DiMuonTTCand.addUserFloat("tMDZW",tMW[2]);
-
+           std::cout << "debug " << debug++ << std::endl;
            ///DCA
            std::vector<float> DCAs;
            for(size_t i = 0; i < xTracks.size();++i)
@@ -798,7 +801,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
            RefCountedKinematicTree PsiTrTrTree = vertexFitter.fit(xParticles,jpsi_mtc);
-
+           std::cout << "debug " << debug++ << std::endl;
            if (!PsiTrTrTree->isEmpty()) {
 
               PsiTrTrTree->movePointerToTheTop();
@@ -857,7 +860,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                    DiMuonTTCand.addUserFloat("cosAlpha_ref",cosAlpha);
                    DiMuonTTCand.addUserFloat("ctauPV_ref",ctauPV);
                    DiMuonTTCand.addUserFloat("ctauErrPV_ref",ctauErrPV);
-
+                   std::cout << "debug " << debug++ << std::endl;
        // get first muon
                    bool child = PsiTrTrTree->movePointerToTheFirstChild();
                    RefCountedKinematicParticle fitMu1 = PsiTrTrTree->currentParticle();
@@ -941,7 +944,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            //Mass Doubly Constrained fit
            //JPsi
-
+           std::cout << "debug " << debug++ << std::endl;
            if(doDoubleConstant_)
            {
              std::vector<RefCountedKinematicParticle> JPsiParticles;
@@ -1053,7 +1056,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                }
              }
            }
-
+           std::cout << "debug " << debug++ << std::endl;
            std::vector<float> massPionRefits,vProbPionRefits,chi2PionRefits,nDofPionRefits;
 
            for(int i = 0; i < 2; ++i)
@@ -1112,11 +1115,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              }
 
            }
-
-           if (addMCTruth_)
-           {
-
-           }
+           std::cout << "debug " << debug++ << std::endl;
+           // if (addMCTruth_)
+           // {
+           //
+           // }
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
 
@@ -1139,7 +1142,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCandColl->push_back(DiMuonTTCand);
            candidates++;
            ncombo++;
-
+           std::cout << "debug " << debug++ << std::endl;
 
          }
          } // loop over second track
