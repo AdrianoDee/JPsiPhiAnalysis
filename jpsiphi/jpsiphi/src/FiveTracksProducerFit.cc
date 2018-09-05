@@ -228,7 +228,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          double kaon_ma_fit = 14000.;
          double kaon_vp_fit = -9999.;
          double kaon_x2_fit = 10000.;
-         double kaon_ndof_fit = 10000.;
+         // double kaon_ndof_fit = 10000.;
 
          for(size_t i = 0; i<oneMasses.size();i++)
          {
@@ -289,7 +289,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              kaon_x2_fit = fitFVertex->chiSquared();
              kaon_vp_fit = ChiSquaredProbability(kaon_x2_fit,
                                                   (double)(fitFVertex->degreesOfFreedom()));
-             kaon_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
+             //kaon_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
 
 
              double kaon_px_fit = fitF->currentState().kinematicParameters().momentum().x();
