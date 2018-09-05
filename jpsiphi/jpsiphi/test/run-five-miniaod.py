@@ -59,7 +59,7 @@ input_file = runb2018 #gen_file
 n=400
 filename = par.mc
 
-fileLists = {"bbbar_hard" : bbbar_filelist, "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
+fileLists = {"bbbar_hard" : bbbar_file_list, "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
              "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
              "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
              "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
