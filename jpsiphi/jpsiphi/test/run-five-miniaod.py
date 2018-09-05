@@ -190,7 +190,9 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         addMuonlessPrimaryVertex    = cms.bool(False),
         addMCTruth                  = cms.bool(True),
         resolvePileUpAmbiguity      = cms.bool(True),
-        HLTFilters                  = filters
+        TriggerResults              = cms.InputTag("TriggerResults", "", "HLT"),
+        HLTFilters                  = filters,
+        TriggerInput                = cms.InputTag("unpackPatTriggers"),
 )
 
 process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
@@ -327,6 +329,24 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
     TreeName = cms.string('JPsiPhiTree')
 )
 
+
+process.rootuplefive = cms.EDAnalyzer('FiveTracksRootupler',
+    FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
+	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    isMC = cms.bool(False),
+    OnlyBest = cms.bool(False),
+    OnlyGen = cms.bool(False),
+    Mother_pdg = cms.uint32(20443), #20443 #10441
+    JPsi_pdg = cms.uint32(443),
+    Phi_pdg = cms.uint32(333),
+    HLTs = hltpaths,
+    Filters = filters,
+    TreeName = cms.string('FiveTracksTree')
+)
+
+
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           dimuons = cms.InputTag("JPsi2MuMuFilter"),
                           muons = cms.InputTag("replaceme"),
@@ -348,6 +368,7 @@ process.p = cms.Path(process.triggerSelection *
                      process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
-					 process.FiveTracksProducer *
-                     process.rootuple *
+                     proces.FiveTracksProducer *
+					 process.rootuplefive *
+                     #process.rootuplefive *
                      process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
