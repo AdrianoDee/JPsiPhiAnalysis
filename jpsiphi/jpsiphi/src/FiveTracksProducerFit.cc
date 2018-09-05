@@ -230,7 +230,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
          double kaon_x2_fit = 10000.;
          double kaon_ndof_fit = 10000.;
 
-         for(int i = 0; i<oneMasses.size();i++)
+         for(size_t i = 0; i<oneMasses.size();i++)
          {
 
              fiveTracksMass.push_back(-1.0);
@@ -351,21 +351,21 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              }
 
              fiveCandKaon.addUserInt("index",d);
-             for(int i = 0; i<oneMasses.size();i++)
+             for(size_t i = 0; i<oneMasses.size();i++)
              {
-               std::string name = "mass_" + std::tostring(i);
+               std::string name = "mass_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksMass[i]);
-               name = "vProb_" + std::tostring(i);
+               name = "vProb_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksVProb[i]);
-               name = "ctau_" + std::tostring(i);
+               name = "ctau_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksCTau[i]);
-               name = "ctauErr_" + std::tostring(i);
+               name = "ctauErr_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksCTauErr[i]);
-               name = "cosAlpha_" + std::tostring(i);
+               name = "cosAlpha_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,fiveTracksCosAlpha[i]);
-               name = "onePsi2S_" + std::tostring(i);
+               name = "onePsi2S_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,onePsi2S[i]);
-               name = "twoPsi2S_" + std::tostring(i);
+               name = "twoPsi2S_" + std::to_string(i);
                fiveCandKaon.addUserFloat(name,twoPsi2S[i]);
 
              }
