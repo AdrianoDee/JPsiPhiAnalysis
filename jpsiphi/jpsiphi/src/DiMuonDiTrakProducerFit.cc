@@ -1115,6 +1115,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
            if (addMCTruth_)
            {
+
            }
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
@@ -1134,40 +1135,6 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("vProbPKRefit",vProbPionRefits[0]);
            DiMuonTTCand.addUserFloat("vProbKPRefit",vProbPionRefits[1]);
            DiMuonTTCand.addUserFloat("vProbPPRefit",vProbPionRefits[2]);
-
-           if (addMCTruth_) {
-             reco::GenParticleRef genMu1 = pmu1->genParticleRef();
-             reco::GenParticleRef genMu2 = pmu2->genParticleRef();
-             // reco::GenParticleRef genKaon1 = posTrack.genParticleRef();
-             // reco::GenParticleRef genKaon2 = negTrack.genParticleRef();
-
-             if (genMu1.isNonnull() && genMu2.isNonnull()) {
-               if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
-                 reco::GenParticleRef mumu_mom1 = genMu1->motherRef();
-                 reco::GenParticleRef mumu_mom2 = genMu2->motherRef();
-
-                 if (mumu_mom1.isNonnull() && (mumu_mom1 == mumu_mom2)) {
-
-                   std::tuple<int,float,float> MCinfo = findJpsiMCInfo(mumu_mom1);
-                   DiMuonTTCand.addUserInt("jPsiGenPdgId",mumu_mom1->pdgId());
-                   DiMuonTTCand.addUserFloat("jPsiPpdlTrue",std::get<1>(MCinfo));
-                   DiMuonTTCand.addUserInt("xGenPdgId",std::get<0>(MCinfo));
-                   DiMuonTTCand.addUserFloat("xGenIsPrompt",std::get<2>(MCinfo));
-                 } else {
-                   DiMuonTTCand.addUserInt("jPsiGenPdgId",0.0);
-                   DiMuonTTCand.addUserFloat("jPsiPpdlTrue",-99.0);
-                   DiMuonTTCand.addUserInt("xGenPdgId",0.0);
-                   DiMuonTTCand.addUserFloat("xGenIsPrompt",-99.0);
-                 }
-
-               }
-            } else {
-              DiMuonTTCand.addUserInt("jPsiGenPdgId",0.0);
-              DiMuonTTCand.addUserFloat("jPsiPpdlTrue",-99.0);
-              DiMuonTTCand.addUserInt("xGenPdgId",0.0);
-              DiMuonTTCand.addUserFloat("xGenIsPrompt",-99.0);
-             }
-           }
 
            DiMuonTTCandColl->push_back(DiMuonTTCand);
            candidates++;

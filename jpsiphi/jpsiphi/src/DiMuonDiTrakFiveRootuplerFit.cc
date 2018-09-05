@@ -129,7 +129,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
 
   Double_t pv_x, pv_y, pv_z;
-  
+
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
   Double_t dimuonditrk_mu1W, dimuonditrk_mu2W, dimuonditrk_tPW, dimuonditrk_tMW;
@@ -208,25 +208,17 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   UInt_t dimuonditrk_pdgid,  dimuonditrk_jpsipdg;
   Double_t dimuonditrk_isprompt,dimuonditrk_jpsippdl;
 
+  //MC
   Int_t          gen_dimuonditrk_pdgId;
-  TLorentzVector gen_dimuonditrk_p4;
-  TLorentzVector gen_b_p4;
-  TLorentzVector gen_dimuon_p4;
-  TLorentzVector gen_ditrak_p4;
-  TLorentzVector gen_lowMuon_p4;
-  TLorentzVector gen_highMuon_p4;
-  TLorentzVector gen_highKaon_p4;
-  TLorentzVector gen_lowKaon_p4;
+  TLorentzVector gen_dimuonditrk_p4, gen_dimuon_p4, gen_ditrak_p4;
+  TLorentzVector gen_lowMuon_p4, gen_highMuon_p4, gen_highKaon_p4, gen_lowKaon_p4;
 
-  TLorentzVector gen_b4_p4;
-  TLorentzVector gen_d1_p4;
-  TLorentzVector gen_d2_p4;
-  TLorentzVector gen_gd1_p4;
-  TLorentzVector gen_gd2_p4;
-  TLorentzVector gen_gd3_p4;
-  TLorentzVector gen_gd4_p4;
-  TLorentzVector gen_gd5_p4;
-  TLorentzVector gen_gd6_p4;
+  Double_t gen_doubledimuon_pdg, gen_phi_pdg, gen_jpsi_pdg;
+  Double_t gen_doubledimuon_prompt, gen_phi_prompt, gen_jpsi_prompt;
+  Double_t gen_doubledimuon_pt, gen_doubledimuon_p, gen_doubledimuon_eta;
+  Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
+  Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
+  
 
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
@@ -330,7 +322,6 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
 
           //kin
-          dimuonditrk_tree->Branch("gen_dimuonditrk_m",        &gen_dimuonditrk_m,        "gen_dimuonditrk_m/D");
           dimuonditrk_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D");
           dimuonditrk_tree->Branch("dimuonditrk_m_rf",       &dimuonditrk_m_rf,        "dimuonditrk_m_rf/D");
           dimuonditrk_tree->Branch("dimuonditrk_m_rf_d_c",       &dimuonditrk_m_rf_d_c,        "dimuonditrk_m_rf_d_c/D");
@@ -644,34 +635,35 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         int pdgid_ = 0;
 
         if (isMC_ || onlyGen_) {
-           std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
 
-           dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
-           dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
-           dimuonditrk_tree->Branch("gen_b_p4", "TLorentzVector",  &gen_b_p4);
-           dimuonditrk_tree->Branch("gen_dimuon_p4", "TLorentzVector",  &gen_dimuon_p4);
-           dimuonditrk_tree->Branch("gen_ditrak_p4", "TLorentzVector",  &gen_ditrak_p4);
-           dimuonditrk_tree->Branch("gen_lowMuon_p4",  "TLorentzVector",  &gen_lowMuon_p4);
-           dimuonditrk_tree->Branch("gen_highMuon_p4",  "TLorentzVector",  &gen_highMuon_p4);
-           dimuonditrk_tree->Branch("gen_highKaon_p4",  "TLorentzVector",  &gen_highKaon_p4);
-           dimuonditrk_tree->Branch("gen_lowKaon_p4",  "TLorentzVector",  &gen_lowKaon_p4);
+          dimuonditrk_tree->Branch("gen_doubledimuon_p4", "TLorentzVector",  &gen_doubledimuon_p4);
+          dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
+          dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
 
-           dimuonditrk_tree->Branch("gen_dimuonditrk_m",  &gen_dimuonditrk_m,    "gen_dimuonditrk_m/D");
+          dimuonditrk_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
+          dimuonditrk_tree->Branch("gen_mLowJPsi_p4",  "TLorentzVector",  &gen_mLowJPsi_p4);
+          dimuonditrk_tree->Branch("gen_mHighJPsi_p4",  "TLorentzVector",  &gen_mHighJPsi_p4);
+          dimuonditrk_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
 
-           dimuonditrk_tree->Branch("dimuonditrk_pdgid",  &dimuonditrk_pdgid,    "dimuonditrk_pdgid/I");
-           dimuonditrk_tree->Branch("dimuonditrk_jpsipdg",  &dimuonditrk_jpsipdg,    "dimuonditrk_jpsipdg/I");
-           dimuonditrk_tree->Branch("dimuonditrk_isprompt",  &dimuonditrk_isprompt,    "dimuonditrk_isprompt/D");
-           dimuonditrk_tree->Branch("dimuonditrk_jpsippdl",  &dimuonditrk_jpsippdl,    "dimuonditrk_jpsippdl/D");
+          dimuonditrk_tree->Branch("gen_doubledimuon_pdg",&gen_doubledimuon_pdg,"gen_doubledimuon_pdg/D");
+          dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+          dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
-           dimuonditrk_tree->Branch("gen_b4_p4", "TLorentzVector",  &gen_b4_p4);
-           dimuonditrk_tree->Branch("gen_d1_p4",  "TLorentzVector",  &gen_d1_p4);
-           dimuonditrk_tree->Branch("gen_d2_p4",  "TLorentzVector",  &gen_d2_p4);
-           dimuonditrk_tree->Branch("gen_gd1_p4",  "TLorentzVector",  &gen_gd1_p4);
-           dimuonditrk_tree->Branch("gen_gd2_p4",  "TLorentzVector",  &gen_gd2_p4);
-           dimuonditrk_tree->Branch("gen_gd3_p4", "TLorentzVector",  &gen_gd3_p4);
-           dimuonditrk_tree->Branch("gen_gd4_p4",  "TLorentzVector",  &gen_gd4_p4);
-           dimuonditrk_tree->Branch("gen_gd5_p4",  "TLorentzVector",  &gen_gd5_p4);
-           dimuonditrk_tree->Branch("gen_gd6_p4",  "TLorentzVector",  &gen_gd6_p4);
+          dimuonditrk_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
+          dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+          dimuonditrk_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+
+          dimuonditrk_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
+          dimuonditrk_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+          dimuonditrk_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+
+          dimuonditrk_tree->Branch("gen_doubledimuon_p",&gen_doubledimuon_p,"gen_doubledimuon_p/D");
+          dimuonditrk_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
+          dimuonditrk_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
+
+          dimuonditrk_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
+          dimuonditrk_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+          dimuonditrk_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
 
         }
 
@@ -793,7 +785,6 @@ gen_gd3_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd4_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd5_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-
 
 dimuonditrk_pdgid      = 0;
 dimuonditrk_isprompt   = -99.0;

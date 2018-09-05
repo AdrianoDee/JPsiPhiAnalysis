@@ -91,6 +91,9 @@ class FiveTracksProducerFit : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
+  pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuonditrak,
+                                                const pat::PackedCandidate& trak1,
+                                                const pat::PackedCandidate& trak2);
   pat::CompositeCandidate makeFiveCandidate(
                                             const pat::CompositeCandidate& dimuonditrak,
                                             const pat::PackedCandidate& trakN
@@ -111,7 +114,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
   float kaonmass, pionmass, trackmass;
 
   int nevents;
-  uint ncombopos,ncomboneg,ncomboneu;
+  uint ncombo,ncomboneg,ncomboneu;
 };
 
 #endif // __DiMuonDiTrakProducerFit_h_

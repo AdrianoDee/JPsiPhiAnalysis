@@ -212,13 +212,8 @@ class DoubleDiMuonRootuplerFit : public edm::EDAnalyzer {
   Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
   Double_t isBestCandidate;
 
-  TLorentzVector gen_doubledimuon_p4;
-  TLorentzVector gen_jpsi_p4;
-  TLorentzVector gen_phi_p4;
-  TLorentzVector gen_mHighPhi_p4;
-  TLorentzVector gen_mLowJPsi_p4;
-  TLorentzVector gen_mHighJPsi_p4;
-  TLorentzVector gen_mLowPhi_p4;
+  TLorentzVector gen_doubledimuon_p4, gen_jpsi_p4, gen_phi_p4;
+  TLorentzVector gen_mHighPhi_p4, gen_mLowJPsi_p4, gen_mHighJPsi_p4, gen_mLowPhi_p4;
 
   TTree* fourmuon_tree, *fourmuon_tree_rf;
   edm::EDGetTokenT<reco::GenParticleCollection> genCands_;
@@ -254,7 +249,7 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
         // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      isMC_(iConfig.getParameter<bool>("isMC")),
+	      //isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         AddMC_(iConfig.getParameter<bool>("AddMC")),
@@ -612,30 +607,39 @@ DoubleDiMuonRootuplerFit::DoubleDiMuonRootuplerFit(const edm::ParameterSet& iCon
 
         fourmuon_tree->Branch("isBestCandidate",&isBestCandidate,"isBestCandidate/D");
 
-	if(isMC_)
-	  {
+        if(AddMC_)
+          {
 
-      fourmuon_tree->Branch("gen_doubledimuon_pdg",&gen_doubledimuon_pdg,"gen_doubledimuon_pdg/D");
-      fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
-      fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
+            fourmuon_tree->Branch("gen_doubledimuon_p4", "TLorentzVector",  &gen_doubledimuon_p4);
+            fourmuon_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
+            fourmuon_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
 
-      fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
-      fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
-      fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+            fourmuon_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
+            fourmuon_tree->Branch("gen_mLowJPsi_p4",  "TLorentzVector",  &gen_mLowJPsi_p4);
+            fourmuon_tree->Branch("gen_mHighJPsi_p4",  "TLorentzVector",  &gen_mHighJPsi_p4);
+            fourmuon_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
 
-      fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
-      fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
-      fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+            fourmuon_tree->Branch("gen_doubledimuon_pdg",&gen_doubledimuon_pdg,"gen_doubledimuon_pdg/D");
+            fourmuon_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+            fourmuon_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
-      fourmuon_tree->Branch("gen_doubledimuon_p",&gen_doubledimuon_p,"gen_doubledimuon_p/D");
-      fourmuon_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
-      fourmuon_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
+            fourmuon_tree->Branch("gen_doubledimuon_prompt",&gen_doubledimuon_prompt,"gen_doubledimuon_prompt/D");
+            fourmuon_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+            fourmuon_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
 
-      fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
-      fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
-      fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+            fourmuon_tree->Branch("gen_doubledimuon_pt",&gen_doubledimuon_pt,"gen_doubledimuon_pt/D");
+            fourmuon_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+            fourmuon_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
 
-	  }
+            fourmuon_tree->Branch("gen_doubledimuon_p",&gen_doubledimuon_p,"gen_doubledimuon_p/D");
+            fourmuon_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
+            fourmuon_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
+
+            fourmuon_tree->Branch("gen_doubledimuon_eta",&gen_doubledimuon_eta,"gen_doubledimuon_eta/D");
+            fourmuon_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+            fourmuon_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+
+          }
 
     genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
     packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
@@ -695,13 +699,6 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 	// ex. 7 = pass 0, 8 and 10
 	// ex. 6 = pass 8, 10
         // ex. 1 = pass 0
-  gen_doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_jpsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_mHighJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_mLowJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_mHighPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   trigger = 0;
 
@@ -872,6 +869,14 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
     mHighJPsi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
     mLowPhi_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
+    gen_doubledimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_jpsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_mHighJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_mLowJPsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_mHighPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+    gen_mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
@@ -964,6 +969,16 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
         reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
         reco::GenParticleRef genJPsiMuLow  = jPsiMuHigh->genParticleRef();
 
+        if(genJPsiMuLow.isNonnull())
+          gen_mHighJPsi_p4.SetPtEtaPhiM(genJPsiMuLow.pt(),genJPsiMuLow.eta(),genJPsiMuLow.phi(),genJPsiMuLow.mass());
+        if(genJPsiMuHigh.isNonnull())
+          gen_mLowJPsi_p4.SetPtEtaPhiM(genJPsiMuHigh.pt(),genJPsiMuHigh.eta(),genJPsiMuHigh.phi(),genJPsiMuHigh.mass());
+        if(genPhiMuHigh.isNonnull())
+          gen_mHighPhi_p4.SetPtEtaPhiM(genPhiMuHigh.pt(),genPhiMuHigh.eta(),genPhiMuHigh.phi(),genPhiMuHigh.mass());
+        if(genPhiMuLow.isNonnull()))
+          gen_mLowPhi_p4.SetPtEtaPhiM(genPhiMuLow.pt(),genPhiMuLow.eta(),genPhiMuLow.phi(),genPhiMuLow.mass());
+
+
         if (genJPsiMuLow.isNonnull() && genJPsiMuHigh.isNonnull() && genPhiMuHigh.isNonnull() && genPhiMuLow.isNonnull())
         {
           if (genPhiMuHigh->numberOfMothers()>0 && genPhiMuLow->numberOfMothers()>0)
@@ -982,6 +997,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
             if(sameJPsiMom)
             {
+              gen_jpsi_p4.SetPtEtaPhiM(jPsiMomHigh->pt(),jPsiMomHigh->eta(),jPsiMomHigh->phi(),jPsiMomHigh->mass());
               gen_jpsi_pdg   = jPsiMomHigh->pdgId();
               gen_jpsi_prompt   = jPsiMomHigh->isPromptDecayed();
               gen_jpsi_p   = jPsiMomHigh->p();
@@ -991,6 +1007,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
             if(samePhiMom)
             {
+              gen_phi_p4.SetPtEtaPhiM(phiMomHigh->pt(),phiMomHigh->eta(),phiMomHigh->phi(),phiMomHigh->mass());
               gen_phi_pdg   = phiMomHigh->pdgId();
               gen_phi_prompt   = phiMomHigh->isPromptDecayed();
               gen_phi_p   = phiMomHigh->p();
@@ -1006,6 +1023,7 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
 
               if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
               {
+                gen_doubledimuon_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
                 gen_doubledimuon_pdg = (float) jspiMom->pdgId();
                 gen_doubledimuon_prompt = (float) jspiMom->isPromptDecayed();
                 gen_doubledimuon_p = (float) jspiMom->p();
