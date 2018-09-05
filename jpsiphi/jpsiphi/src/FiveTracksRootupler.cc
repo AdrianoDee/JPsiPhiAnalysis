@@ -239,7 +239,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           psi2sTwo.push_back(0.0);
         }
 
-        for(size_t i = 0; i<numMasses.size();i++)
+        for(size_t i = 0; i<numMasses;i++)
         {
           std::string name = "mass_" + std::to_string(i);
           std::string var = name + "/D";
@@ -612,7 +612,7 @@ if(!OnlyGen_)
     {
       fivetracks_cand   = fivetracks_cand_handle->at(i);
 
-      for(size_t i = 0; i<numMasses.size();i++)
+      for(size_t i = 0; i<numMasses;i++)
       {
         std::string name = "mass_" + std::to_string(i);
         fiveTracksMass[i] = fivetracks_cand.userFloat(name);
