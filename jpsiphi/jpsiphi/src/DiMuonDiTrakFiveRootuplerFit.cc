@@ -1177,9 +1177,10 @@ if(!onlyGen_)
       dimuon_ctauPV       = dimuon_cand->userFloat("ppdlPV");
       dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
-      dimuon_triggerMatch = DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(dimuon_cand);
+
       lowMuonMatch   = dimuon_cand->userInt("highMuonTMatch");
       highMuonMatch    = dimuon_cand->userInt("lowMuonTMatch");
+      dimuon_triggerMatch = -std::max(-lowMuonMatch,highMuonMatch);//DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(dimuon_cand);
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
       dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
