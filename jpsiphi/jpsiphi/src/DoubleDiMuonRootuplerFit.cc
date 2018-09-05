@@ -970,13 +970,13 @@ void DoubleDiMuonRootuplerFit::analyze(const edm::Event& iEvent, const edm::Even
         reco::GenParticleRef genJPsiMuLow  = jPsiMuHigh->genParticleRef();
 
         if(genJPsiMuLow.isNonnull())
-          gen_mHighJPsi_p4.SetPtEtaPhiM(genJPsiMuLow.pt(),genJPsiMuLow.eta(),genJPsiMuLow.phi(),genJPsiMuLow.mass());
+          gen_mHighJPsi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
         if(genJPsiMuHigh.isNonnull())
-          gen_mLowJPsi_p4.SetPtEtaPhiM(genJPsiMuHigh.pt(),genJPsiMuHigh.eta(),genJPsiMuHigh.phi(),genJPsiMuHigh.mass());
+          gen_mLowJPsi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
         if(genPhiMuHigh.isNonnull())
-          gen_mHighPhi_p4.SetPtEtaPhiM(genPhiMuHigh.pt(),genPhiMuHigh.eta(),genPhiMuHigh.phi(),genPhiMuHigh.mass());
-        if(genPhiMuLow.isNonnull()))
-          gen_mLowPhi_p4.SetPtEtaPhiM(genPhiMuLow.pt(),genPhiMuLow.eta(),genPhiMuLow.phi(),genPhiMuLow.mass());
+          gen_mHighPhi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
+        if(genPhiMuLow.isNonnull())
+          gen_mLowPhi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
 
 
         if (genJPsiMuLow.isNonnull() && genJPsiMuHigh.isNonnull() && genPhiMuHigh.isNonnull() && genPhiMuLow.isNonnull())
