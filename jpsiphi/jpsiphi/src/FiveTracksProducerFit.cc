@@ -243,8 +243,6 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              fiveTracksCosAlpha.push_back(-1.0);
              fiveTracksMassRef.push_back(-1.0);
              // fiveTracksCharge.push_back(-5.0);
-             fiveTracksMassRefOne.push_back(-1.0);
-             fiveTracksMassRefTwo.push_back(-1.0);
 
              //KaonRefit
              const ParticleMass muonMass(0.1056583);
@@ -302,6 +300,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              double kaon_vy_fit = fitFVertex->position().y();
          // double kaon_vz_fit = fitFVertex->position().z();
 
+             TVector3 vtx;
+             TVector3 pvtx;
+
              vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
              TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
              AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
@@ -328,22 +329,22 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              onePsi2S.setMass(-1.0); twoPsi2S.setMass(-1.0);
              if(i==4)
              {
-               onePsi2S = makePsi2SCandidate(diMuon_cand,tp,tm);
+               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,tm);
 
                if(fifthTrack.charge()<0)
                {
-                 twoPsi2S = makePsi2SCandidate(diMuon_cand,tp,fifthTrack);
+                 twoPsi2S = makePsi2SCandidate(dimuon_cand,tp,fifthTrack);
                }else
                {
-                 twoPsi2S = makePsi2SCandidate(diMuon_cand,fifthTrack,tm);
+                 twoPsi2S = makePsi2SCandidate(dimuon_cand,fifthTrack,tm);
                }
              }
              if(i==1)
-               onePsi2S = makePsi2SCandidate(diMuon_cand,tp,tm);
+               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,tm);
              if(i==2 && fifthTrack.charge()>0)
-               onePsi2S = makePsi2SCandidate(diMuon_cand,fifthTrack,tm);
+               onePsi2S = makePsi2SCandidate(dimuon_cand,fifthTrack,tm);
              if(i==3 && fifthTrack.charge()<0)
-               onePsi2S = makePsi2SCandidate(diMuon_cand,tp,fifthTrack);
+               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,fifthTrack);
 
              psi2sOne[i] = onePsi2S.mass();
              psi2sTwo[i] = onePsi2S.mass();
