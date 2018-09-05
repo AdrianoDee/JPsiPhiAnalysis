@@ -334,18 +334,18 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
                if(fifthTrack.charge()<0)
                {
-                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*fifthTrack);
+                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,*tp,fifthTrack);
                }else
                {
-                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,*fifthTrack,*tm);
+                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,fifthTrack,*tm);
                }
              }
              if(i==1)
                onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*tm);
              if(i==2 && fifthTrack.charge()>0)
-               onePsi2S = makePsi2SCandidate(*dimuon_cand,*fifthTrack,*tm);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,fifthTrack,*tm);
              if(i==3 && fifthTrack.charge()<0)
-               onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*fifthTrack);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,fifthTrack);
 
              psi2sOne[i] = onePsi2S.mass();
              psi2sTwo[i] = onePsi2S.mass();
