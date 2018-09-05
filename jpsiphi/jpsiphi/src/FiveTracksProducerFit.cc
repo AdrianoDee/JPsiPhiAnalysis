@@ -241,7 +241,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              fiveTracksCTau.push_back(-1.0);
              fiveTracksCTauErr.push_back(-1.0);
              fiveTracksCosAlpha.push_back(-1.0);
-             fiveTracksMassRef.push_back(-1.0);
+             //fiveTracksMassRef.push_back(-1.0);
              // fiveTracksCharge.push_back(-5.0);
 
              //KaonRefit
@@ -302,6 +302,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
              TVector3 vtx;
              TVector3 pvtx;
+             VertexDistanceXY vdistXY;
 
              vtx.SetXYZ(kaon_vx_fit,kaon_vy_fit,0);
              TVector3 pperp(kaon_px_fit, kaon_py_fit, 0);
@@ -329,22 +330,22 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              onePsi2S.setMass(-1.0); twoPsi2S.setMass(-1.0);
              if(i==4)
              {
-               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,tm);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*tm);
 
                if(fifthTrack.charge()<0)
                {
-                 twoPsi2S = makePsi2SCandidate(dimuon_cand,tp,fifthTrack);
+                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*fifthTrack);
                }else
                {
-                 twoPsi2S = makePsi2SCandidate(dimuon_cand,fifthTrack,tm);
+                 twoPsi2S = makePsi2SCandidate(*dimuon_cand,*fifthTrack,*tm);
                }
              }
              if(i==1)
-               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,tm);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*tm);
              if(i==2 && fifthTrack.charge()>0)
-               onePsi2S = makePsi2SCandidate(dimuon_cand,fifthTrack,tm);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,*fifthTrack,*tm);
              if(i==3 && fifthTrack.charge()<0)
-               onePsi2S = makePsi2SCandidate(dimuon_cand,tp,fifthTrack);
+               onePsi2S = makePsi2SCandidate(*dimuon_cand,*tp,*fifthTrack);
 
              psi2sOne[i] = onePsi2S.mass();
              psi2sTwo[i] = onePsi2S.mass();
