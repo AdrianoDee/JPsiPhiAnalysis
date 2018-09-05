@@ -635,34 +635,34 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
 
         if (isMC_ || onlyGen_) {
 
-          dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
-          dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
-          dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
-
-          dimuonditrk_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
-          dimuonditrk_tree->Branch("gen_mLowJPsi_p4",  "TLorentzVector",  &gen_mLowJPsi_p4);
-          dimuonditrk_tree->Branch("gen_mHighJPsi_p4",  "TLorentzVector",  &gen_mHighJPsi_p4);
-          dimuonditrk_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
-
-          dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
-          dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
-          dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
-
-          dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
-          dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
-          dimuonditrk_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
-
-          dimuonditrk_tree->Branch("gen_dimuonditrk_pt",&gen_dimuonditrk_pt,"gen_dimuonditrk_pt/D");
-          dimuonditrk_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
-          dimuonditrk_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
-
-          dimuonditrk_tree->Branch("gen_dimuonditrk_p",&gen_dimuonditrk_p,"gen_dimuonditrk_p/D");
-          dimuonditrk_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
-          dimuonditrk_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
-
-          dimuonditrk_tree->Branch("gen_dimuonditrk_eta",&gen_dimuonditrk_eta,"gen_dimuonditrk_eta/D");
-          dimuonditrk_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
-          dimuonditrk_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
+          // dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
+          // dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
+          //
+          // dimuonditrk_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
+          // dimuonditrk_tree->Branch("gen_mLowJPsi_p4",  "TLorentzVector",  &gen_mLowJPsi_p4);
+          // dimuonditrk_tree->Branch("gen_mHighJPsi_p4",  "TLorentzVector",  &gen_mHighJPsi_p4);
+          // dimuonditrk_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
+          //
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
+          // dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+          // dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
+          //
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
+          // dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+          // dimuonditrk_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+          //
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_pt",&gen_dimuonditrk_pt,"gen_dimuonditrk_pt/D");
+          // dimuonditrk_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+          // dimuonditrk_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+          //
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_p",&gen_dimuonditrk_p,"gen_dimuonditrk_p/D");
+          // dimuonditrk_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
+          // dimuonditrk_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
+          //
+          // dimuonditrk_tree->Branch("gen_dimuonditrk_eta",&gen_dimuonditrk_eta,"gen_dimuonditrk_eta/D");
+          // dimuonditrk_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+          // dimuonditrk_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
 
         }
 
