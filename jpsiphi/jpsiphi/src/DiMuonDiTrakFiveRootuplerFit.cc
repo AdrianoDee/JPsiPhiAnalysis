@@ -81,7 +81,6 @@ private:
   edm::EDGetTokenT<reco::VertexCollection> pVertices_;
   edm::EDGetTokenT<edm::TriggerResults> triggers_;
   bool isMC_,onlyBest_,OnlyGen_ ;
-  UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  hlts_;
   std::vector<std::string>  hltFilters_;
   std::string treeName_;
@@ -205,6 +204,7 @@ private:
 
   Bool_t isBestCandidate;
 
+  char *hltword;
   //MC
   TLorentzVector gen_dimuonditrk_p4, gen_jpsi_p4, gen_phi_p4;
   TLorentzVector gen_lowmuon_p4, gen_highmuon_p4, gen_highkaon_p4, gen_lowkaon_p4;
@@ -268,9 +268,6 @@ triggers_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("Tri
 isMC_(iConfig.getParameter<bool>("isMC")),
 onlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
-phipdgid_(iConfig.getParameter<uint32_t>("jpsi_pdg")),
-jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
 hlts_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 hltFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
 treeName_(iConfig.getParameter<std::string>("TreeName"))
@@ -283,6 +280,8 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
   dimuonditrk_tree->Branch("event",              &event,              "event/I");
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
   dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
+
+  dimuonditrk_tree->Branch("hltword",            &hltword,            "hltword/C");
 
   if(!OnlyGen_)
   {
@@ -782,9 +781,19 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
         }
       }
     }
+
+    std::string hltstring = "";
+
+    for (unsigned int i = 0; i < NTRIGGERS; i++)
+    {
+      hltstring = hltstring + hlts_[i];
+    }
+    hltword = hltsring.c_str();
+    
   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
   isBestCandidate = true;
+
 
   // grabbing dimuontt information
 
