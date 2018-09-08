@@ -357,8 +357,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("highMuon"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonCand->daughter("lowMuon"));
-       const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
-       const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
+       // const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
+       // const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
 
 // loop on track candidates, make DiMuonT candidate, positive charge
@@ -1183,6 +1183,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   }
                 }
               }
+              if(hasHighGen * hasLowGen >= 0.0)
+                std::cout << "Has some gen ref " << std::endl;
               DiMuonTTCand.addUserFloat("hasHighGen",hasHighGen);
               DiMuonTTCand.addUserFloat("hasLowGen",hasLowGen);
 
