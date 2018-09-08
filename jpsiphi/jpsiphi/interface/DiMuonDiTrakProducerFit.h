@@ -61,6 +61,13 @@
 #include "TVector3.h"
 #include "../interface/DiMuonVtxReProducer.h"
 
+#include "CommonTools/UtilAlgos/interface/PhysObjectMatcher.h"
+#include "CommonTools/UtilAlgos/interface/MCMatchSelector.h"
+#include "CommonTools/UtilAlgos/interface/MatchByDRDPt.h"
+#include "CommonTools/UtilAlgos/interface/MatchLessByDPt.h"
+
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
@@ -96,7 +103,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool doPionRefit_;
 
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
-  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> MatchMap
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> genMap_:
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
