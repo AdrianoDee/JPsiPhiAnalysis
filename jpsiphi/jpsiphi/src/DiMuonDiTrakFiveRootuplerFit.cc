@@ -206,7 +206,7 @@ private:
   Bool_t isBestCandidate;
 
   //MC
-  TLorentzVector gen_dimuonditrk_p4, gen_dimuon_p4, gen_ditrak_p4;
+  TLorentzVector gen_dimuonditrk_p4, gen_jpsi_p4, gen_phi_p4;
   TLorentzVector gen_lowmuon_p4, gen_highmuon_p4, gen_highkaon_p4, gen_lowkaon_p4;
 
   Double_t gen_dimuonditrk_pdg, gen_phi_pdg, gen_jpsi_pdg;
@@ -1464,7 +1464,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           reco::GenParticleRef genlowmuon   = lowmuon->genParticleRef();
 
           const reco::GenParticle *genhighkaon,*genlowkaon;
-          reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHig, jpsiMomLow;
+          reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHigh, jpsiMomLow;
           reco::GenParticleRef jpsiMom, phiMom;
 
           float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
@@ -1478,7 +1478,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           if(hasHighGen>0.0)
           {
             gen_highkaon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
-            if(genhighkaon.numberOfMothers()>0)
+            if(genhighkaon->SetPtEtaPhiM()>0)
             phiMomLow  = genhighkaon->motherRef();
 
             gen_highkaon_pdg     = (float)genhighkaon->pdgId();
@@ -1497,7 +1497,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           if(hasLowGen>0.0)
           {
             gen_lowkaon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
-            if(genhighkaon.numberOfMothers()>0)
+            if(genhighkaon->SetPtEtaPhiM()>0)
             phiMomLow  = genhighkaon->motherRef();
 
             gen_lowkaon_pdg     = (float)genhighkaon->pdgId();
@@ -1515,7 +1515,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           if(genhighmuon.isNonnull())
           {
             gen_highmuon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
-            if(genhighkaon.numberOfMothers()>0)
+            if(genhighkaon->SetPtEtaPhiM()>0)
             jpsiMomHigh  = genhighkaon->motherRef();
 
             gen_highmuon_pdg     = (float)genhighkaon->pdgId();
@@ -1533,7 +1533,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           if(genlowmuon.isNonnull())
           {
             gen_lowmuon_p4.SetPtEtaPhiM(genlowkaon->pt(),genlowkaon->eta(),genlowkaon->phi(),genlowkaon->mass());
-            if(genlowkaon.numberOfMothers()>0)
+            if(genlowkaon->SetPtEtaPhiM()>0)
             jpsiMomLow  = genlowkaon->motherRef();
 
             gen_lowmuon_pdg     = (float)genlowkaon->pdgId();
