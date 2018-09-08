@@ -1,5 +1,6 @@
 #include "../interface/DiMuonDiTrakProducerFit.h"
 
+
 float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
@@ -216,6 +217,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   maxDPtRel = 2.0;
 
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
+  genMap_ = consumes<edm::Association<reco::GenParticleCollection>>((edm::InputTag)"trackMatch");
 
 }
 
@@ -338,9 +340,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   }
 
-  if(isMC_ && addMCTruth_)
+  if(isMC_)
   {
-
+    if(genMap_.isValid()) std::cout << "Gen Map is Valid" << std::endl;
   }
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
