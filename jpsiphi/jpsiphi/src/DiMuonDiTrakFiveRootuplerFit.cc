@@ -281,7 +281,7 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
   dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
 
-  dimuonditrk_tree->Branch("hltword",            &hltword,            "hltword/C");
+  dimuonditrk_tree->Branch("hltword",            hltword,            "hltword/C");
 
   if(!OnlyGen_)
   {
