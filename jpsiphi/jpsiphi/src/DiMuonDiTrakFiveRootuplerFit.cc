@@ -1522,38 +1522,38 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
           if(genhighMuon.isNonnull())
           {
-            gen_highMuon_p4.SetPtEtaPhiM(genhighKaon->pt(),genhighKaon->eta(),genhighKaon->phi(),genhighKaon->mass());
-            if(genhighKaon->numberOfMothers()>0)
-            jpsiMomHigh  = genhighKaon->motherRef();
+            gen_highMuon_p4.SetPtEtaPhiM(genhighMuon->pt(),genhighMuon->eta(),genhighMuon->phi(),genhighMuon->mass());
+            if(genhighMuon->numberOfMothers()>0)
+            jpsiMomHigh  = genhighMuon->motherRef();
 
-            gen_highMuon_pdg     = (float)genhighKaon->pdgId();
+            gen_highMuon_pdg     = (float)genhighMuon->pdgId();
 
             if(jpsiMomHigh.isNonnull())
             gen_highMuon_mompdg  = jpsiMomHigh->pdgId();
 
-            gen_highMuon_status  = (float)genhighKaon->status();
-            gen_highMuon_pt      = (float)genhighKaon->pt();
-            gen_highMuon_p       = (float)genhighKaon->p();
-            gen_highMuon_eta     = (float)genhighKaon->eta();
-            gen_highMuon_phi     = (float)genhighKaon->phi();
+            gen_highMuon_status  = (float)genhighMuon->status();
+            gen_highMuon_pt      = (float)genhighMuon->pt();
+            gen_highMuon_p       = (float)genhighMuon->p();
+            gen_highMuon_eta     = (float)genhighMuon->eta();
+            gen_highMuon_phi     = (float)genhighMuon->phi();
           }
 
           if(genlowMuon.isNonnull())
           {
-            gen_lowMuon_p4.SetPtEtaPhiM(genlowKaon->pt(),genlowKaon->eta(),genlowKaon->phi(),genlowKaon->mass());
-            if(genlowKaon->numberOfMothers()>0)
-            jpsiMomLow  = genlowKaon->motherRef();
+            gen_lowMuon_p4.SetPtEtaPhiM(genlowMuon->pt(),genlowMuon->eta(),genlowMuon->phi(),genlowMuon->mass());
+            if(genlowMuon->numberOfMothers()>0)
+            jpsiMomLow  = genlowMuon->motherRef();
 
-            gen_lowMuon_pdg     = (float)genlowKaon->pdgId();
+            gen_lowMuon_pdg     = (float)genlowMuon->pdgId();
 
             if(jpsiMomLow.isNonnull())
             gen_lowMuon_mompdg  = jpsiMomLow->pdgId();
 
-            gen_lowMuon_status  = (float)genlowKaon->status();
-            gen_lowMuon_pt      = (float)genlowKaon->pt();
-            gen_lowMuon_p       = (float)genlowKaon->p();
-            gen_lowMuon_eta     = (float)genlowKaon->eta();
-            gen_lowMuon_phi     = (float)genlowKaon->phi();
+            gen_lowMuon_status  = (float)genlowMuon->status();
+            gen_lowMuon_pt      = (float)genlowMuon->pt();
+            gen_lowMuon_p       = (float)genlowMuon->p();
+            gen_lowMuon_eta     = (float)genlowMuon->eta();
+            gen_lowMuon_phi     = (float)genlowMuon->phi();
           }
 
           bool samePhiMom = false, samejpsiMom = false;
