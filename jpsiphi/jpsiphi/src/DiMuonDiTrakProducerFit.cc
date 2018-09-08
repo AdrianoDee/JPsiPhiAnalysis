@@ -1,5 +1,10 @@
 #include "../interface/DiMuonDiTrakProducerFit.h"
 
+#include "CommonTools/UtilAlgos/interface/PhysObjectMatcher.h"
+#include "CommonTools/UtilAlgos/interface/MCMatchSelector.h"
+#include "CommonTools/UtilAlgos/interface/MatchByDRDPt.h"
+#include "CommonTools/UtilAlgos/interface/MatchLessByDPt.h"
+
 float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
@@ -215,6 +220,8 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   maxDeltaR = 0.1;
   maxDPtRel = 2.0;
 
+  packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
+
 }
 
 void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
@@ -236,8 +243,12 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
+  edm::Handle<pat::PackedGenParticleCollection> packed;
+  iEvent.getByToken(packCands_,  packed);
+
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
+
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
@@ -267,6 +278,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   std::map<size_t,double> trackDeltaR,trackDeltaPt;
   std::vector < UInt_t > filterResults;
   std::map<int,UInt_t> filters;
+
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
@@ -330,6 +342,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
     }
 
   }
+
+  if(isMC_ && addMCTruth_)
+  {
+
+  }
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
@@ -356,6 +373,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
+
+         if(isMC_)
+         {
+
+         }
 
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
          // std::cout << "debug    6 "<< std::endl;

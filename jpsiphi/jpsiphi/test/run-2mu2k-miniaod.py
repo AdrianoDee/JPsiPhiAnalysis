@@ -3,6 +3,9 @@ process = cms.Process('PSIKK')
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 
+import sys
+sys.path.append("/home/me/mypy")
+
 from bbbar_filelist import *
 from bbbar_soft_list import *
 from y4140_lhcb_filelist import *
@@ -13,6 +16,9 @@ from y4704_zero_filelist import *
 from y4704_lhcb_filelist import *
 from y4506_lhcb_filelist import *
 from y4506_zero_filelist import *
+from qcd_ml_filelist import *
+from ml_list import *
+
 
 par = VarParsing ('analysis')
 
@@ -241,10 +247,49 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 #     TreeName = cms.string('JPsi Phi Tree')
 # )
 
+process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
+    src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
+    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
+    mcStatus = cms.vint32(1),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
+    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
+    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
+    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
+)
+
+
+process.muonMatchDecay = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
+    src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
+    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
+    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
+    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
+    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
+    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
+)
+
+process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
+    src     = cms.InputTag("packedPFCandidates"), # RECO objects to match
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    mcPdgId     = cms.vint32(321,211,13,2212), # one or more PDG ID (13 = muon); absolute values (see below)
+    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
+    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
+    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
+    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
+    resolveByMatchQuality = cms.bool(False), # False = just match input in order; True = pick lowest deltaR pair first
+)
+
+trackMatch
 
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
+    genMap = cms.InputTag("trackMatch"),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
 	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),

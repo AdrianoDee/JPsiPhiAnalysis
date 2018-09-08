@@ -48,6 +48,10 @@
 #include "TrackingTools/IPTools/interface/IPTools.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 
+#include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
+
 #include <TLorentzVector.h>
 #include <vector>
 #include <tuple>
@@ -91,6 +95,8 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool addSameSig_;
   bool doPionRefit_;
 
+  edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> <C2> MatchMap
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
