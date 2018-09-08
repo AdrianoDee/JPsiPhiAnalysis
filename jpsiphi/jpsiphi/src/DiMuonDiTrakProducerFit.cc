@@ -1183,8 +1183,8 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                   }
                 }
               }
-              if(hasHighGen * hasLowGen >= 0.0)
-                std::cout << "Has some gen ref " << std::endl;
+              // if(hasHighGen * hasLowGen >= 0.0)
+              //   std::cout << "Has some gen ref " << std::endl;
               DiMuonTTCand.addUserFloat("hasHighGen",hasHighGen);
               DiMuonTTCand.addUserFloat("hasLowGen",hasLowGen);
 
