@@ -788,7 +788,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
     {
       hltstring = hltstring + hlts_[i];
     }
-    hltword = hltstring.c_str();
+    strcpy(hltword, hltstring.c_str());
 
   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
