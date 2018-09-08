@@ -84,6 +84,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
   edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrakCollection_;
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;

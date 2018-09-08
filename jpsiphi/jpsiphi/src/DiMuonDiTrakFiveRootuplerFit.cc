@@ -80,7 +80,7 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
   edm::EDGetTokenT<pat::CompositeCandidateCollection> fivetrakpos_,fivetrakneg_,fivetrakneu_;
   edm::EDGetTokenT<reco::VertexCollection> pVertices_;
   edm::EDGetTokenT<edm::TriggerResults> triggers_;
-  bool isMC_,onlyBest_,onlyGen_ ;
+  bool isMC_,onlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  hlts_;
   std::vector<std::string>  hltFilters_;
@@ -263,7 +263,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         triggers_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         onlyBest_(iConfig.getParameter<bool>("OnlyBest")),
-        onlyGen_(iConfig.getParameter<bool>("OnlyGen")),
+        OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
         phipdgid_(iConfig.getParameter<uint32_t>("JPsi_pdg")),
         jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
@@ -280,7 +280,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
         dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
 
-        if(!onlyGen_)
+        if(!OnlyGen_)
         {
           dimuonditrk_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
 
@@ -633,7 +633,7 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
         }
         int pdgid_ = 0;
 
-        if (isMC_ || onlyGen_) {
+        if (isMC_ || OnlyGen_) {
 
           // dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
           // dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
@@ -783,7 +783,7 @@ gen_dimuonditrk_pdgId = 0;
 
 std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
 
-if(!onlyGen_)
+if(!OnlyGen_)
 {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
@@ -811,7 +811,7 @@ if(!onlyGen_)
 }
 
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
-  if(!onlyGen_)
+  if(!OnlyGen_)
   {
   if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
   if (!fivepos_cand_handle.isValid()) std::cout<< "No fivetrack pos information " << run << "," << event <<std::endl;
