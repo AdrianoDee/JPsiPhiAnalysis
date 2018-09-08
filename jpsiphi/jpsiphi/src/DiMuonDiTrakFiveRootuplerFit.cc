@@ -205,15 +205,14 @@ class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
 
   Bool_t isBestCandidate;
 
-  UInt_t dimuonditrk_pdgid,  dimuonditrk_jpsipdg;
-  Double_t dimuonditrk_isprompt,dimuonditrk_jpsippdl;
-
   //MC
-  Int_t          gen_dimuonditrk_pdgId;
   TLorentzVector gen_dimuonditrk_p4, gen_dimuon_p4, gen_ditrak_p4;
-  TLorentzVector gen_lowMuon_p4, gen_highMuon_p4, gen_highKaon_p4, gen_lowKaon_p4;
+  TLorentzVector gen_LowMuon_p4, gen_HighMuon_p4, gen_highKaon_p4, gen_lowKaon_p4;
 
   Double_t gen_dimuonditrk_pdg, gen_phi_pdg, gen_jpsi_pdg;
+  Double_t gen_LowMuon_pdg, gen_HighMuon_pdg, gen_highKaon_pdg, gen_lowKaon_pdg;
+  Double_t gen_LowMuon_mompdg, gen_HighMuon_mompdg, gen_highKaon_mompdg, gen_lowKaon_mompdg;
+  Double_t gen_LowMuon_status, gen_HighMuon_status, gen_highKaon_status, gen_lowKaon_status;
   Double_t gen_dimuonditrk_prompt, gen_phi_prompt, gen_jpsi_prompt;
   Double_t gen_dimuonditrk_pt, gen_dimuonditrk_p, gen_dimuonditrk_eta;
   Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
@@ -635,35 +634,72 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
 
         if (isMC_ || OnlyGen_) {
 
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
-          // dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
-          // dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
-          //
-          // dimuonditrk_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
-          // dimuonditrk_tree->Branch("gen_lowMuon_p4",  "TLorentzVector",  &gen_lowMuon_p4);
-          // dimuonditrk_tree->Branch("gen_highMuon_p4",  "TLorentzVector",  &gen_highMuon_p4);
-          // dimuonditrk_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
-          //
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
-          // dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
-          // dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
-          //
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
-          // dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
-          // dimuonditrk_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
-          //
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_pt",&gen_dimuonditrk_pt,"gen_dimuonditrk_pt/D");
-          // dimuonditrk_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
-          // dimuonditrk_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
-          //
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_p",&gen_dimuonditrk_p,"gen_dimuonditrk_p/D");
-          // dimuonditrk_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
-          // dimuonditrk_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
-          //
-          // dimuonditrk_tree->Branch("gen_dimuonditrk_eta",&gen_dimuonditrk_eta,"gen_dimuonditrk_eta/D");
-          // dimuonditrk_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
-          // dimuonditrk_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+          dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
+          dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
+          dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
 
+          dimuonditrk_tree->Branch("gen_HighKaon_p4", "TLorentzVector",  &gen_HighKaon_p4);
+          dimuonditrk_tree->Branch("gen_LowMuon_p4",  "TLorentzVector",  &gen_LowMuon_p4);
+          dimuonditrk_tree->Branch("gen_HighMuon_p4",  "TLorentzVector",  &gen_HighMuon_p4);
+          dimuonditrk_tree->Branch("gen_LowKaon_p4",  "TLorentzVector",  &gen_LowKaon_p4);
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
+          dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_pdg",&gen_LowMuon_pdg,"gen_LowMuon_pdg/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_pdg",&gen_HighMuon_pdg,"gen_HighMuon_pdg/D");
+          dimuonditrk_tree->Branch("gen_highKaon_pdg",&gen_highKaon_pdg,"gen_highKaon_pdg/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_pdg",&gen_lowKaon_pdg,"gen_lowKaon_pdg/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_mompdg",&gen_LowMuon_mompdg,"gen_LowMuon_mompdg/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_mompdg",&gen_HighMuon_mompdg,"gen_HighMuon_mompdg/D");
+          dimuonditrk_tree->Branch("gen_highKaon_mompdg",&gen_highKaon_mompdg,"gen_highKaon_mompdg/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_mompdg",&gen_lowKaon_mompdg,"gen_lowKaon_mompdg/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_status",&gen_LowMuon_status,"gen_LowMuon_status/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_status",&gen_HighMuon_status,"gen_HighMuon_status/D");
+          dimuonditrk_tree->Branch("gen_highKaon_status",&gen_highKaon_status,"gen_highKaon_status/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_status",&gen_lowKaon_status,"gen_lowKaon_status/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_p",&gen_LowMuon_p,"gen_LowMuon_p/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_p",&gen_HighMuon_p,"gen_HighMuon_p/D");
+          dimuonditrk_tree->Branch("gen_highKaon_p",&gen_highKaon_p,"gen_highKaon_p/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_p",&gen_lowKaon_p,"gen_lowKaon_p/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_pt",&gen_LowMuon_pt,"gen_LowMuon_pt/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_pt",&gen_HighMuon_pt,"gen_HighMuon_pt/D");
+          dimuonditrk_tree->Branch("gen_highKaon_pt",&gen_highKaon_pt,"gen_highKaon_pt/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_pt",&gen_lowKaon_pt,"gen_lowKaon_pt/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_eta",&gen_LowMuon_eta,"gen_LowMuon_eta/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_eta",&gen_HighMuon_eta,"gen_HighMuon_eta/D");
+          dimuonditrk_tree->Branch("gen_highKaon_eta",&gen_highKaon_eta,"gen_highKaon_eta/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_eta",&gen_lowKaon_eta,"gen_lowKaon_eta/D");
+
+          dimuonditrk_tree->Branch("gen_LowMuon_phi",&gen_LowMuon_phi,"gen_LowMuon_phi/D");
+          dimuonditrk_tree->Branch("gen_HighMuon_phi",&gen_HighMuon_phi,"gen_HighMuon_phi/D");
+          dimuonditrk_tree->Branch("gen_highKaon_phi",&gen_highKaon_phi,"gen_highKaon_phi/D");
+          dimuonditrk_tree->Branch("gen_lowKaon_phi",&gen_lowKaon_phi,"gen_lowKaon_phi/D");
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
+          dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
+          dimuonditrk_tree->Branch("gen_jpsi_prompt",&gen_jpsi_prompt,"gen_jpsi_prompt/D");
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_pt",&gen_dimuonditrk_pt,"gen_dimuonditrk_pt/D");
+          dimuonditrk_tree->Branch("gen_phi_pt",&gen_phi_pt,"phigen_phi_pt_pt/D");
+          dimuonditrk_tree->Branch("gen_jpsi_pt",&gen_jpsi_pt,"gen_jpsi_pt/D");
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_p",&gen_dimuonditrk_p,"gen_dimuonditrk_p/D");
+          dimuonditrk_tree->Branch("gen_phi_p",&gen_phi_p,"phigen_phi_p_p/D");
+          dimuonditrk_tree->Branch("gen_jpsi_p",&gen_jpsi_p,"gen_jpsi_p/D");
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_eta",&gen_dimuonditrk_eta,"gen_dimuonditrk_eta/D");
+          dimuonditrk_tree->Branch("gen_phi_eta",&gen_phi_eta,"gen_phi_eta/D");
+          dimuonditrk_tree->Branch("gen_jpsi_eta",&gen_jpsi_eta,"gen_jpsi_eta/D");
+
+          dimuonditrk_tree->Branch("gen_dimuonditrk_phi",&gen_dimuonditrk_phi,"gen_dimuonditrk_phi/D");
+          dimuonditrk_tree->Branch("gen_phi_phi",&gen_phi_phi,"gen_phi_phi/D");
+          dimuonditrk_tree->Branch("gen_jpsi_phi",&gen_jpsi_phi,"gen_jpsi_phi/D");
         }
 
         //Track flags
@@ -757,29 +793,22 @@ iEvent.getByToken(packCands_,  packed);
 
 //
 // if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-//   gen_highMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//   gen_HighMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
 //   foundit++;
 // }
 // if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-//   gen_lowMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+//   gen_LowMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
 //   foundit++;
 // }
 
 gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-gen_lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-gen_highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_LowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+gen_HighMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-
-dimuonditrk_pdgid      = 0;
-dimuonditrk_isprompt   = -99.0;
-dimuonditrk_jpsipdg    = 0;
-dimuonditrk_jpsippdl   = -99.0;
-
-gen_dimuonditrk_pdgId = 0;
 
 std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
 
@@ -1359,10 +1388,79 @@ if(!OnlyGen_)
 
       if(isMC_ || OnlyGen_)
       {
+
+        gen_dimuonditrk_p4,SetPtEtaPhiM(-1.0,0.0,0.0,3.9);
+        gen_jpsi_p4,SetPtEtaPhiM(-1.0,0.0,0.0,2.5);
+        gen_phi_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.9);
+        gen_HighKaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
+        gen_LowMuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
+        gen_HighMuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
+        gen_LowKaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
+
+        gen_dimuonditrk_pdg = 0.0;
+        gen_phi_pdg         = 0.0;
+
+        gen_LowMuon_pdg     = 0.0;
+        gen_HighMuon_pdg    = 0.0;
+        gen_highKaon_pdg    = 0.0;
+        gen_lowKaon_pdg     = 0.0;
+
+        gen_LowMuon_mompdg     = 0.0;
+        gen_HighMuon_mompdg    = 0.0;
+        gen_highKaon_mompdg    = 0.0;
+        gen_lowKaon_mompdg     = 0.0;
+
+        gen_LowMuon_status     = 0.0;
+        gen_HighMuon_status    = 0.0;
+        gen_highKaon_status    = 0.0;
+        gen_lowKaon_status     = 0.0;
+
+        gen_dimuonditrk_prompt = 0.0;
+        gen_phi_prompt      = 0.0;
+        gen_jpsi_prompt     = 0.0;
+
+        gen_dimuonditrk_pt  = 0.0;
+        gen_phi_pt          = 0.0;
+        gen_jpsi_pt         = 0.0;
+
+        gen_dimuonditrk_p   = 0.0;
+        gen_phi_p           = 0.0;
+        gen_jpsi_p          = 0.0;
+
+        gen_dimuonditrk_eta = 0.0;
+        gen_phi_eta         = 0.0;
+        gen_jpsi_eta        = 0.0;
+
+        gen_dimuonditrk_phi = 0.0;
+        gen_phi_phi         = 0.0;
+        gen_jpsi_phi        = 0.0;
+
+        gen_LowMuon_pt     = 0.0;
+        gen_HighMuon_pt    = 0.0;
+        gen_highKaon_pt    = 0.0;
+        gen_lowKaon_pt     = 0.0;
+
+        gen_LowMuon_p     = 0.0;
+        gen_HighMuon_p    = 0.0;
+        gen_highKaon_p    = 0.0;
+        gen_lowKaon_p     = 0.0;
+
+        gen_LowMuon_eta     = 0.0;
+        gen_HighMuon_eta    = 0.0;
+        gen_highKaon_eta    = 0.0;
+        gen_lowKaon_eta     = 0.0;
+
+        gen_LowMuon_phi     = 0.0;
+        gen_HighMuon_phi    = 0.0;
+        gen_highKaon_phi    = 0.0;
+        gen_lowKaon_phi     = 0.0;
+
         reco::GenParticleRef genHighMuon  = highMuon->genParticleRef();
         reco::GenParticleRef genLowMuon   = lowMuon->genParticleRef();
 
         const reco::GenParticle *genHighKaon,*genLowKaon;
+        reco::GenParticleRef phiMomHigh, phiMomLow, jPsiMomHig, jPsiMomLow;
+        reco::GenParticleRef jPsiMom, phiMom;
 
         float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
         float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
@@ -1372,106 +1470,131 @@ if(!OnlyGen_)
         if(hasLowGen>0.0)
         genLowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
 
-        if(hasHighGen>0.0)
-        {
-          std::cout << genHighKaon->pt() << " - " << genHighKaon->pdgId() << " - " << genHighKaon->status() << std::endl;
-        }
-        if(hasLowGen>0.0)
-        {
-          std::cout << genLowKaon->pt() << " - " << genLowKaon->pdgId() << " - " << genLowKaon->status() << std::endl;
-        }
-        if(hasHighGen>0.0)
-         gen_highKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
-        if(hasLowGen>0.0)
-         gen_lowKaon_p4.SetPtEtaPhiM(genLowKaon->pt(),genLowKaon->eta(),genLowKaon->phi(),genLowKaon->mass());
+         if(hasHighGen>0.0)
+         {
+            gen_HighKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+            if(genHighKaon.numberOfMothers()>0)
+              phiMomLow  = genHighKaon->motherRef();
 
-     //    gen_dimuonditrk_pdg  = -1.0;
-     //    gen_dimuonditrk_prompt  = -1.0;
-     //    gen_dimuonditrk_p  = -1.0;
-     //    gen_dimuonditrk_pt  = -1.0;
-     //    gen_dimuonditrk_eta  = -1.0;
-     //
-     //    gen_jpsi_pdg    = -1.0;
-     //    gen_jpsi_prompt   = -1.0;
-     //    gen_jpsi_p    = -1.0;
-     //    gen_jpsi_pt   = -1.0;
-     //    gen_jpsi_eta   = -1.0;
-     //    gen_phi_pdg   = -1.0;
-     //    gen_phi_prompt = -1.0;
-     //    gen_phi_p =  -1.0;
-     //    gen_phi_pt = -1.0;
-     //    gen_phi_eta = -1.0;
-     //
-     //    reco::GenParticleRef genHighMuon  = phiMuHigh->genParticleRef();
-     //    reco::GenParticleRef genLowMuon   = phiMuLow->genParticleRef();
-     //
-     //    if(genLowMuon.isNonnull())
-     //      gen_highMuon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
-     //    if(genHighMuon.isNonnull())
-     //      gen_lowMuon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
-     //    if(hasHighGen>0.0)
-     //      gen_highKaon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
-     //    if(hasLowGen>0.0)
-     //      gen_lowKaon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
-     //
-     //    if (genLowMuon.isNonnull() && genHighMuon.isNonnull() && genHighMuon.isNonnull() && genLowMuon.isNonnull())
-     //    {
-     //      if (genHighMuon->numberOfMothers()>0 && genLowMuon->numberOfMothers()>0)
-     //      {
-     //      if (genHighMuon->numberOfMothers()>0 && genLowMuon->numberOfMothers()>0)
-     //      {
-     //        reco::GenParticleRef phiMomHigh  = genHighMuon->motherRef();
-     //        reco::GenParticleRef phiMomLow   = genLowMuon->motherRef();
-     //        reco::GenParticleRef jPsiMomHigh = genHighMuon->motherRef();
-     //        reco::GenParticleRef jPsiMomLow  = genLowMuon->motherRef();
-     //
-     //        if( phiMomHigh.isNonnull() &&  phiMomLow.isNonnull() &&  jPsiMomHigh.isNonnull() &&  jPsiMomLow.isNonnull() )
-     //        {
-     //        bool sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
-     //        bool samePhiMom = (phiMomHigh == phiMomLow);
-     //
-     //        if(sameJPsiMom)
-     //        {
-     //          gen_jpsi_p4.SetPtEtaPhiM(jPsiMomHigh->pt(),jPsiMomHigh->eta(),jPsiMomHigh->phi(),jPsiMomHigh->mass());
-     //          gen_jpsi_pdg   = jPsiMomHigh->pdgId();
-     //          gen_jpsi_prompt   = jPsiMomHigh->isPromptDecayed();
-     //          gen_jpsi_p   = jPsiMomHigh->p();
-     //          gen_jpsi_pt   = jPsiMomHigh->pt();
-     //          gen_jpsi_eta   = jPsiMomHigh->eta();
-     //        }
-     //
-     //        if(samePhiMom)
-     //        {
-     //          gen_phi_p4.SetPtEtaPhiM(phiMomHigh->pt(),phiMomHigh->eta(),phiMomHigh->phi(),phiMomHigh->mass());
-     //          gen_phi_pdg   = phiMomHigh->pdgId();
-     //          gen_phi_prompt   = phiMomHigh->isPromptDecayed();
-     //          gen_phi_p   = phiMomHigh->p();
-     //          gen_phi_pt   = phiMomHigh->pt();
-     //          gen_phi_eta   = phiMomHigh->eta();
-     //        }
-     //
-     //
-     //        if(sameJPsiMom && samePhiMom && jPsiMomHigh->numberOfMothers()>0 && phiMomLow->numberOfMothers()>0)
-     //        {
-     //          reco::GenParticleRef jspiMom  = jPsiMomHigh->motherRef();
-     //          reco::GenParticleRef phiMom   = phiMomHigh->motherRef();
-     //
-     //          if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
-     //          {
-     //            gen_dimuonditrk_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
-     //            gen_dimuonditrk_pdg = (float) jspiMom->pdgId();
-     //            gen_dimuonditrk_prompt = (float) jspiMom->isPromptDecayed();
-     //            gen_dimuonditrk_p = (float) jspiMom->p();
-     //            gen_dimuonditrk_pt = (float) jspiMom->pt();
-     //            gen_dimuonditrk_eta = (float) jspiMom->eta();
-     //          }
-     //
-     //        }
-     //      }
-     //      }
-     //   }
-     //
-     // }
+            gen_HighKaon_pdg     = (float)genHighKaon->pdgId();
+
+            if(phiMomLow.isNonNull())
+              gen_HighKaon_mompdg  = phiMomLow->pdgId();
+
+            gen_HighKaon_status  = (float)genHighKaon->status();
+            gen_HighKaon_pt      = (float)genHighKaon->pt();
+            gen_HighKaon_p       = (float)genHighKaon->p();
+            gen_HighKaon_eta     = (float)genHighKaon->eta();
+            gen_HighKaon_phi     = (float)genHighKaon->phi();
+
+         }
+
+         if(hasLowGen>0.0)
+         {
+           gen_LowKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+           if(genHighKaon.numberOfMothers()>0)
+             phiMomLow  = genHighKaon->motherRef();
+
+           gen_LowKaon_pdg     = (float)genHighKaon->pdgId();
+
+           if(phiMomLow.isNonNull())
+             gen_LowKaon_mompdg  = phiMomLow->pdgId();
+
+           gen_LowKaon_status  = (float)genHighKaon->status();
+           gen_LowKaon_pt      = (float)genHighKaon->pt();
+           gen_LowKaon_p       = (float)genHighKaon->p();
+           gen_LowKaon_eta     = (float)genHighKaon->eta();
+           gen_LowKaon_phi     = (float)genHighKaon->phi();
+         }
+
+         if(genHighMuon.isNonnull())
+         {
+           gen_HighMuon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+           if(genHighKaon.numberOfMothers()>0)
+             jPsiMomHigh  = genHighKaon->motherRef();
+
+           gen_HighMuon_pdg     = (float)genHighKaon->pdgId();
+
+           if(jPsiMomHigh.isNonNull())
+             gen_HighMuon_mompdg  = jPsiMomHigh->pdgId();
+
+           gen_HighMuon_status  = (float)genHighKaon->status();
+           gen_HighMuon_pt      = (float)genHighKaon->pt();
+           gen_HighMuon_p       = (float)genHighKaon->p();
+           gen_HighMuon_eta     = (float)genHighKaon->eta();
+           gen_HighMuon_phi     = (float)genHighKaon->phi();
+         }
+
+         if(genLowMuon.isNonnull())
+         {
+           gen_LowMuon_p4.SetPtEtaPhiM(genLowKaon->pt(),genLowKaon->eta(),genLowKaon->phi(),genLowKaon->mass());
+           if(genLowKaon.numberOfMothers()>0)
+             jPsiMomLow  = genLowKaon->motherRef();
+
+           gen_LowMuon_pdg     = (float)genLowKaon->pdgId();
+
+           if(jPsiMomLow.isNonNull())
+             gen_LowMuon_mompdg  = jPsiMomLow->pdgId();
+
+           gen_LowMuon_status  = (float)genLowKaon->status();
+           gen_LowMuon_pt      = (float)genLowKaon->pt();
+           gen_LowMuon_p       = (float)genLowKaon->p();
+           gen_LowMuon_eta     = (float)genLowKaon->eta();
+           gen_LowMuon_phi     = (float)genLowKaon->phi();
+         }
+
+         bool samePhiMom = false, sameJPsiMom = false;
+
+         if(phiMomLow.isNonNull() && phiMomHigh.isNonNull())
+         {
+           samePhiMom = (phiMomHigh == phiMomLow);
+
+           if(samePhiMom)
+            {
+              gen_phi_p4.SetPtEtaPhiM(phiMomHigh->pt(),phiMomHigh->eta(),phiMomHigh->phi(),phiMomHigh->mass());
+              gen_phi_pdg     = phiMomHigh->pdgId();
+              gen_phi_prompt  = phiMomHigh->isPromptDecayed();
+              gen_phi_p       = phiMomHigh->p();
+              gen_phi_pt      = phiMomHigh->pt();
+              gen_phi_eta     = phiMomHigh->eta();
+              gen_phi_phi     = phiMomHigh->phi();
+            }
+         }
+
+         if(jPsiMomLow.isNonNull() && jPsiMomHigh.isNonNull())
+         {
+           sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
+
+           if(sameJPsiMom)
+            {
+              gen_jPsi_p4.SetPtEtaPhiM(jPsiMomHigh->pt(),jPsiMomHigh->eta(),jPsiMomHigh->jPsi(),jPsiMomHigh->mass());
+              gen_jPsi_pdg     = jPsiMomHigh->pdgId();
+              gen_jPsi_prompt  = jPsiMomHigh->isPromptDecayed();
+              gen_jPsi_p       = jPsiMomHigh->p();
+              gen_jPsi_pt      = jPsiMomHigh->pt();
+              gen_jPsi_eta     = jPsiMomHigh->eta();
+              gen_jPsi_phi     = jPsiMomHigh->phi();
+            }
+         }
+
+         if(sameJPsiMom && samePhiMom  && jPsiMomHigh->numberOfMothers()>0 && phiMomHihg->numberOfMothers()>0)
+         {
+
+           jPsiMom = jPsiMomHigh->motherRef();
+           phiMom  = phiMomHigh->motherRef();
+
+           if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
+            {
+              gen_dimuonditrk_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
+              gen_dimuonditrk_pdg = (float) jspiMom->pdgId();
+              gen_dimuonditrk_prompt = (float) jspiMom->isPromptDecayed();
+              gen_dimuonditrk_p = (float) jspiMom->p();
+              gen_dimuonditrk_pt = (float) jspiMom->pt();
+              gen_dimuonditrk_eta = (float) jspiMom->eta();
+              gen_dimuonditrk_phi = (float) jspiMom->phi();
+            }
+
+         }
 
       }
 
