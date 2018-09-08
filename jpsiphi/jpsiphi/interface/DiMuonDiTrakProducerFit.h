@@ -83,7 +83,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
 
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
+  edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrakCollection_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
@@ -96,8 +96,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
-  bool isMC_;
-  bool addMCTruth_;
+  bool IsMC_;
   bool doDoubleConstant_;
   bool addSameSig_;
   bool doPionRefit_;

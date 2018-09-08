@@ -640,8 +640,8 @@ DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterS
           // dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
           //
           // dimuonditrk_tree->Branch("gen_mHighPhi_p4", "TLorentzVector",  &gen_mHighPhi_p4);
-          // dimuonditrk_tree->Branch("gen_mLowJPsi_p4",  "TLorentzVector",  &gen_mLowJPsi_p4);
-          // dimuonditrk_tree->Branch("gen_mHighJPsi_p4",  "TLorentzVector",  &gen_mHighJPsi_p4);
+          // dimuonditrk_tree->Branch("gen_lowMuon_p4",  "TLorentzVector",  &gen_lowMuon_p4);
+          // dimuonditrk_tree->Branch("gen_highMuon_p4",  "TLorentzVector",  &gen_highMuon_p4);
           // dimuonditrk_tree->Branch("gen_mLowPhi_p4",  "TLorentzVector",  &gen_mLowPhi_p4);
           //
           // dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
@@ -780,127 +780,6 @@ dimuonditrk_jpsipdg    = 0;
 dimuonditrk_jpsippdl   = -99.0;
 
 gen_dimuonditrk_pdgId = 0;
-//
-// if ( (isMC_ || onlyGen_) && packed.isValid() && pruned.isValid() ) {
-//   for (size_t i=0; i<pruned->size(); i++) {
-//     // std::cout << "Valid"<<std::endl;
-//     const reco::Candidate *aditrkdimu = &(*pruned)[i];
-//
-//     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2))
-//       gen_b_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
-//
-//     if ( (abs(aditrkdimu->pdgId()) == motherpdgid_) && (aditrkdimu->status() == 2) && (aditrkdimu->numberOfDaughters() > 1) && (aditrkdimu->numberOfDaughters() < 7) ) {
-//       //asking for decay (status==2) && two daughters
-//       bool goToJPsi = false;
-//       bool goToPhi = false;
-//
-//       bool muP = false, muN = false, kP = false, kN = false;
-//
-//       int noDaughters = 0, noGDaughters = 0;
-//       int theJPsi = 0, thePhi = 0, theMuP = 0, theMuN = 0, theKP = 0, theKN = 0;
-//
-//       std::vector<const reco::Candidate *> daughters,gdaughters;
-//       for(size_t j = 0; j < aditrkdimu->numberOfDaughters(); ++j)
-//       {
-//         const reco::Candidate * daughter = aditrkdimu->daughter(j);
-//         if(daughter->mother(daughter->numberOfMothers()-1) != aditrkdimu) continue;
-//         if(daughter->pdgId() == 443)
-//         {
-//           goToJPsi=true;
-//           theJPsi = j;
-//         }
-//         if(daughter->pdgId() == 333)
-//         {
-//           thePhi = j;
-//           goToPhi=true;
-//         }
-//
-//         daughters.push_back(daughter);
-//
-//         ++noDaughters;
-//
-//       }
-//
-//       for (size_t j = 0; j < daughters.size(); j++) {
-//
-//         if(daughters[j]->status() != 2) continue;
-//
-//         for(size_t k = 0; k <daughters[j]->numberOfDaughters(); ++k)
-//         {
-//           const reco::Candidate * gdaughter = daughters[j]->daughter(k);
-//           if(gdaughter->mother(gdaughter->numberOfMothers()-1) != daughters[j]) continue;
-//           gdaughters.push_back(gdaughter);
-//
-//           if(goToPhi && goToJPsi)
-//           {
-//             if(gdaughter->pdgId()==-13)
-//             {
-//               theMuP = j;
-//               muP=true;
-//             }
-//             if(gdaughter->pdgId()==13)
-//             {
-//               theMuN = j;
-//               muN=true;
-//             }
-//             if(gdaughter->pdgId()==321)
-//             {
-//               theKP = j;
-//               kP=true;
-//             }
-//             if(gdaughter->pdgId()==-321)
-//             {
-//               theKN = j;
-//               kN=true;
-//             }
-//           }
-//
-//           ++noGDaughters;
-//         }
-//       }
-//
-//       if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi && goToPhi)
-//       {
-//
-//         // for (size_t j = 0; j < daughters.size(); j++)
-//         //   std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
-//         //
-//         // for (size_t j = 0; j < gdaughters.size(); j++)
-//         //   std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
-//
-//         gen_b4_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
-//         gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
-//         gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
-//
-//         gen_gd1_p4.SetPtEtaPhiM(gdaughters[0]->pt(),gdaughters[0]->eta(),gdaughters[0]->phi(),gdaughters[0]->mass());
-//         gen_gd2_p4.SetPtEtaPhiM(gdaughters[1]->pt(),gdaughters[1]->eta(),gdaughters[1]->phi(),gdaughters[1]->mass());
-//         gen_gd3_p4.SetPtEtaPhiM(gdaughters[2]->pt(),gdaughters[2]->eta(),gdaughters[2]->phi(),gdaughters[2]->mass());
-//         gen_gd4_p4.SetPtEtaPhiM(gdaughters[3]->pt(),gdaughters[3]->eta(),gdaughters[3]->phi(),gdaughters[3]->mass());
-//
-//         if(noGDaughters > 4)
-//           gen_gd5_p4.SetPtEtaPhiM(gdaughters[4]->pt(),gdaughters[4]->eta(),gdaughters[4]->phi(),gdaughters[4]->mass());
-//         if(noGDaughters > 5)
-//           gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
-//
-//       }
-//
-//       if(muP && muN && kP && kN)
-//       {
-//
-//         gen_dimuonditrk_p4.SetPtEtaPhiM(aditrkdimu->pt(),aditrkdimu->eta(),aditrkdimu->phi(),aditrkdimu->mass());
-//         gen_dimuon_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
-//         gen_ditrak_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
-//         gen_highMuon_p4.SetPtEtaPhiM(gdaughters[theMuN]->pt(),gdaughters[theMuN]->eta(),gdaughters[theMuN]->phi(),gdaughters[theMuN]->mass());
-//         gen_lowMuon_p4.SetPtEtaPhiM(gdaughters[theMuP]->pt(),gdaughters[theMuP]->eta(),gdaughters[theMuP]->phi(),gdaughters[theMuP]->mass());
-//         gen_lowKaon_p4.SetPtEtaPhiM(gdaughters[theKN]->pt(),gdaughters[theKN]->eta(),gdaughters[theKN]->phi(),gdaughters[theKN]->mass());
-//         gen_highKaon_p4.SetPtEtaPhiM(gdaughters[theKP]->pt(),gdaughters[theKP]->eta(),gdaughters[theKP]->phi(),gdaughters[theKP]->mass());
-//         gen_dimuonditrk_pdgId = aditrkdimu->pdgId();
-//     }
-//   } // for (size
-// }
-// }  // end if isMC
-//
-// if(onlyGen_) dimuonditrk_tree->Fill();
 
 std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
 
@@ -1044,15 +923,6 @@ if(!onlyGen_)
       dimuonditrk_dca_m2t1 = dimuonditrk_cand.userFloat("dca_m2t1");
       dimuonditrk_dca_m2t2 = dimuonditrk_cand.userFloat("dca_m2t2");
       dimuonditrk_dca_t1t2 = dimuonditrk_cand.userFloat("dca_t1t2");
-
-
-      if(isMC_ || onlyGen_)
-      {
-        dimuonditrk_jpsipdg    = dimuonditrk_cand.userInt("jPsiGenPdgId");
-        dimuonditrk_jpsippdl   = dimuonditrk_cand.userFloat("jPsiPpdlTrue");
-        dimuonditrk_pdgid      = dimuonditrk_cand.userInt("xGenPdgId");
-        dimuonditrk_isprompt   = dimuonditrk_cand.userFloat("xGenIsPrompt");
-      }
 
       highKaonMatch = dimuonditrk_cand.userInt("highKaonMatch");
       lowKaonMatch = dimuonditrk_cand.userInt("lowKaonMatch");
@@ -1486,6 +1356,114 @@ if(!onlyGen_)
       }
 
 
+
+      if(isMC_ || OnlyGen_)
+      {
+        reco::GenParticleRef genHighMuon  = highMuon->genParticleRef();
+        reco::GenParticleRef genLowMuon   = lowMuon->genParticleRef();
+
+        const reco::GenParticle *genHighKaon,*genLowKaon;
+
+        genHighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
+        genLowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
+
+        float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
+        float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
+
+        if(hasHighGen>0.0)
+         gen_highKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+        if(hasLowGen>0.0)
+         gen_lowKaon_p4.SetPtEtaPhiM(genLowKaon->pt(),genLowKaon->eta(),genLowKaon->phi(),genLowKaon->mass());
+
+     //    gen_dimuonditrk_pdg  = -1.0;
+     //    gen_dimuonditrk_prompt  = -1.0;
+     //    gen_dimuonditrk_p  = -1.0;
+     //    gen_dimuonditrk_pt  = -1.0;
+     //    gen_dimuonditrk_eta  = -1.0;
+     //
+     //    gen_jpsi_pdg    = -1.0;
+     //    gen_jpsi_prompt   = -1.0;
+     //    gen_jpsi_p    = -1.0;
+     //    gen_jpsi_pt   = -1.0;
+     //    gen_jpsi_eta   = -1.0;
+     //    gen_phi_pdg   = -1.0;
+     //    gen_phi_prompt = -1.0;
+     //    gen_phi_p =  -1.0;
+     //    gen_phi_pt = -1.0;
+     //    gen_phi_eta = -1.0;
+     //
+     //    reco::GenParticleRef genHighMuon  = phiMuHigh->genParticleRef();
+     //    reco::GenParticleRef genLowMuon   = phiMuLow->genParticleRef();
+     //
+     //    if(genLowMuon.isNonnull())
+     //      gen_highMuon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
+     //    if(genHighMuon.isNonnull())
+     //      gen_lowMuon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
+     //    if(hasHighGen>0.0)
+     //      gen_highKaon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
+     //    if(hasLowGen>0.0)
+     //      gen_lowKaon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
+     //
+     //    if (genLowMuon.isNonnull() && genHighMuon.isNonnull() && genHighMuon.isNonnull() && genLowMuon.isNonnull())
+     //    {
+     //      if (genHighMuon->numberOfMothers()>0 && genLowMuon->numberOfMothers()>0)
+     //      {
+     //      if (genHighMuon->numberOfMothers()>0 && genLowMuon->numberOfMothers()>0)
+     //      {
+     //        reco::GenParticleRef phiMomHigh  = genHighMuon->motherRef();
+     //        reco::GenParticleRef phiMomLow   = genLowMuon->motherRef();
+     //        reco::GenParticleRef jPsiMomHigh = genHighMuon->motherRef();
+     //        reco::GenParticleRef jPsiMomLow  = genLowMuon->motherRef();
+     //
+     //        if( phiMomHigh.isNonnull() &&  phiMomLow.isNonnull() &&  jPsiMomHigh.isNonnull() &&  jPsiMomLow.isNonnull() )
+     //        {
+     //        bool sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
+     //        bool samePhiMom = (phiMomHigh == phiMomLow);
+     //
+     //        if(sameJPsiMom)
+     //        {
+     //          gen_jpsi_p4.SetPtEtaPhiM(jPsiMomHigh->pt(),jPsiMomHigh->eta(),jPsiMomHigh->phi(),jPsiMomHigh->mass());
+     //          gen_jpsi_pdg   = jPsiMomHigh->pdgId();
+     //          gen_jpsi_prompt   = jPsiMomHigh->isPromptDecayed();
+     //          gen_jpsi_p   = jPsiMomHigh->p();
+     //          gen_jpsi_pt   = jPsiMomHigh->pt();
+     //          gen_jpsi_eta   = jPsiMomHigh->eta();
+     //        }
+     //
+     //        if(samePhiMom)
+     //        {
+     //          gen_phi_p4.SetPtEtaPhiM(phiMomHigh->pt(),phiMomHigh->eta(),phiMomHigh->phi(),phiMomHigh->mass());
+     //          gen_phi_pdg   = phiMomHigh->pdgId();
+     //          gen_phi_prompt   = phiMomHigh->isPromptDecayed();
+     //          gen_phi_p   = phiMomHigh->p();
+     //          gen_phi_pt   = phiMomHigh->pt();
+     //          gen_phi_eta   = phiMomHigh->eta();
+     //        }
+     //
+     //
+     //        if(sameJPsiMom && samePhiMom && jPsiMomHigh->numberOfMothers()>0 && phiMomLow->numberOfMothers()>0)
+     //        {
+     //          reco::GenParticleRef jspiMom  = jPsiMomHigh->motherRef();
+     //          reco::GenParticleRef phiMom   = phiMomHigh->motherRef();
+     //
+     //          if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
+     //          {
+     //            gen_dimuonditrk_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
+     //            gen_dimuonditrk_pdg = (float) jspiMom->pdgId();
+     //            gen_dimuonditrk_prompt = (float) jspiMom->isPromptDecayed();
+     //            gen_dimuonditrk_p = (float) jspiMom->p();
+     //            gen_dimuonditrk_pt = (float) jspiMom->pt();
+     //            gen_dimuonditrk_eta = (float) jspiMom->eta();
+     //          }
+     //
+     //        }
+     //      }
+     //      }
+     //   }
+     //
+     // }
+
+      }
 
       dimuonditrk_tree->Fill();
 

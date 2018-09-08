@@ -187,7 +187,10 @@ const pat::CompositeCandidate DiMuonDiTrakProducerFit::makeTTTriggerMixedCandida
 
 DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
-  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  TrakCollection_(consumes<edm::View<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  TrackGenMap_(iConfig.existsAs<edm::InputTag>("TrackMatcher") ? consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
+  //DiMuonGenMap_(iConfig.existsAs<edm::InputTag>("DiMuonMatcher") ? consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("DiMuonMatcher"))),
+  DiMuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
@@ -201,8 +204,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  isMC_(iConfig.getParameter<bool>("IsMC")),
-  addMCTruth_(iConfig.getParameter<bool>("AddMCTruth")),
+  IsMC_(iConfig.getParameter<bool>("IsMC")),
   doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
   addSameSig_(iConfig.getParameter<bool>("AddSS")),
   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
@@ -217,7 +219,7 @@ DiMuonDiTrakProducerFit::DiMuonDiTrakProducerFit(const edm::ParameterSet& iConfi
   maxDPtRel = 2.0;
 
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
-  genMap_ = consumes<edm::Association<reco::GenParticleCollection>>((edm::InputTag)"trackMatch");
+  //TrackGenMap_ = consumes<edm::Association<reco::GenParticleCollection>>((edm::InputTag)"trackMatch");
 
 }
 
@@ -231,7 +233,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
-  edm::Handle<edm::View<<pat::PackedCandidate> > trak;
+  edm::Handle<edm::View<pat::PackedCandidate> > trak;
   iEvent.getByToken(TrakCollection_,trak);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
@@ -247,7 +249,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   iEvent.getByToken(thebeamspot_,theBeamSpot);
 
   edm::Handle<edm::Association<reco::GenParticleCollection>> theGenMap;
-  iEvent.getByToken(genMap_,theGenMap);
+  iEvent.getByToken(TrackGenMap_,theGenMap);
 
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
@@ -343,10 +345,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   }
 
-  if(isMC_)
-  {
 
-  }
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
@@ -370,25 +369,11 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
          if(!addSameSig_ && posTrack.charge()<=0) continue;
          if(posTrack.pt()<0.7) continue;
-	       //if(!isMC_ and fabs(posTrack.pdgId())!=211) continue;
+	       //if(!IsMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
 
-         if(isMC_)
-         {
-           if(theGenMap.isValid())
-           {
-             std::cout << "Gen Map is Valid" << std::endl;
-             auto refTrack = trak.refAt(i);
-             if(theGenMap->contains(refTrack.product.id()))
-             {
-               std::cout << "Found - ";
-               std::cout << theGenMap[refTrack.key()] << std::endl;
-             }
 
-           }
-
-         }
 
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
          // std::cout << "debug    6 "<< std::endl;
@@ -402,7 +387,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            if(!addSameSig_ && negTrack.charge()>=0) continue;
            if(negTrack.pt()<0.7) continue;
 
-  	       //if(!isMC_ and fabs(negTrack.pdgId())!=211) continue;
+  	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
            if(!(negTrack.hasTrackDetails())) continue;
 
@@ -1152,11 +1137,58 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              }
 
            }
-           // std::cout << "debug    20 "<< std::endl;
-           // if (addMCTruth_)
-           // {
-           //
-           // }
+
+
+           if(IsMC_)
+            {
+              float hasHighGen = -1.0,hasLowGen = -1.0;
+              if(theGenMap.isValid())
+              {
+                //posTrack
+                auto refPosTrack = trak->refAt(i);
+                auto refNegTrack = trak->retAt(j);
+
+
+                if(theGenMap->contains(refPosTrack.id()))
+                {
+                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]).isNonnull())
+                 {
+                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]);
+                   if(posTrack.pt()>=negTrack.pt())
+                   {
+                     DiMuonTTCand.addDaughter(genP,"highKaonGen");
+                     hasHighGen = 1.0;
+                   }
+                   else
+                   {
+                     DiMuonTTCand.addDaughter(genP,"lowKaonGen");
+                     hasLowGen = 1.0;
+                   }
+                  }
+                }
+                if(theGenMap->contains(refNegTrack.id()))
+                {
+                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, j)]).isNonnull())
+                  {
+                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, j)]);
+                    iif(posTrack.pt()<negTrack.pt())
+                    {
+                      DiMuonTTCand.addDaughter(genP,"highKaonGen");
+                      hasHighGen = 1.0;
+                    }
+                    else
+                    {
+                      DiMuonTTCand.addDaughter(genP,"lowKaonGen");
+                      hasLowGen = 1.0;
+                    }
+                  }
+                }
+              }
+              DiMuonTTCand.addUserFloat("hasHighGen",hasHighGen);
+              DiMuonTTCand.addUserFloat("hasLowGen",hasLowGen);
+
+            }
+
            DiMuonTTCand.addUserFloat("has_ref",candRef);
            DiMuonTTCand.addUserFloat("has_const_ref",cand_const_ref);
 
