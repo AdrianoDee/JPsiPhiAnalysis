@@ -635,7 +635,6 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("lowkaon_NBPixLayers",        &lowkaon_NBPixLayers,        "lowkaon_NBPixLayers/I");
 
   }
-  int pdgid_ = 0;
 
   if (isMC_ || OnlyGen_) {
 
