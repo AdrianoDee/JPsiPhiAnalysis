@@ -5,6 +5,8 @@
 #include "CommonTools/UtilAlgos/interface/MatchByDRDPt.h"
 #include "CommonTools/UtilAlgos/interface/MatchLessByDPt.h"
 
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+
 float DiMuonDiTrakProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();

@@ -96,7 +96,7 @@ class DiMuonDiTrakProducerFit : public edm::EDProducer {
   bool doPionRefit_;
 
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
-  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> <C2> MatchMap
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> MatchMap
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
