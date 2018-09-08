@@ -1479,20 +1479,20 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
 
           if(hasHighGen>0.0)
-          genhighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
+            genhighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
           if(hasLowGen>0.0)
-          genlowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
+            genlowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
 
           if(hasHighGen>0.0)
           {
             gen_highKaon_p4.SetPtEtaPhiM(genhighKaon->pt(),genhighKaon->eta(),genhighKaon->phi(),genhighKaon->mass());
             if(genhighKaon->numberOfMothers()>0)
-            phiMomLow  = genhighKaon->motherRef();
+              phiMomHigh  = genhighKaon->motherRef();
 
             gen_highKaon_pdg     = (float)genhighKaon->pdgId();
 
-            if(phiMomLow.isNonnull())
-            gen_highKaon_mompdg  = phiMomLow->pdgId();
+            if(phiMomHigh.isNonnull())
+              gen_highKaon_mompdg  = phiMomHigh->pdgId();
 
             gen_highKaon_status  = (float)genhighKaon->status();
             gen_highKaon_pt      = (float)genhighKaon->pt();
