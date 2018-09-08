@@ -231,7 +231,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > trak;
+  edm::Handle<edm::View<<pat::PackedCandidate> > trak;
   iEvent.getByToken(TrakCollection_,trak);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
