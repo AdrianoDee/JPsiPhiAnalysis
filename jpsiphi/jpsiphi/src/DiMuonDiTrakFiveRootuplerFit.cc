@@ -219,6 +219,9 @@ private:
   Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
   Double_t gen_lowmuon_phi, gen_highmuon_phi, gen_highkaon_phi, gen_lowkaon_phi;
   Double_t gen_dimuonditrk_phi, gen_phi_phi, gen_jpsi_phi;
+  Double_t gen_lowmuon_p, gen_highmuon_p, gen_highkaon_p, gen_lowkaon_p;
+  Double_t gen_lowmuon_pt, gen_highmuon_pt, gen_highkaon_pt, gen_lowkaon_pt;
+  Double_t gen_lowmuon_eta, gen_highmuon_eta, gen_highkaon_eta, gen_lowkaon_eta;
 
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
