@@ -281,7 +281,7 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
   dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
 
-  dimuonditrk_tree->Branch("hltword",            hltword,            "hltword/C");
+  // dimuonditrk_tree->Branch("hltword",            hltword,            "hltword/C");
 
   if(!OnlyGen_)
   {
@@ -782,13 +782,13 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
       }
     }
 
-    std::string hltstring = "";
-
-    for (unsigned int i = 0; i < NTRIGGERS; i++)
-    {
-      hltstring = hltstring + hlts_[i];
-    }
-    strcpy(hltword, hltstring.c_str());
+    // std::string hltstring = "";
+    //
+    // for (unsigned int i = 0; i < NTRIGGERS; i++)
+    // {
+    //   hltstring = hltstring + hlts_[i];
+    // }
+    // strcpy(hltword, hltstring.c_str());
 
   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
