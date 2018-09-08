@@ -379,7 +379,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            if(theGenMap.isValid())
            {
              std::cout << "Gen Map is Valid" << std::endl;
-             auto refTrack = trak->refAt(i);
+             auto refTrack = trak.refAt(i);
              if(theGenMap->contains(refTrack.product.id()))
              {
                std::cout << "Found - ";
