@@ -807,8 +807,8 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   // }
 
   gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_jpsi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_phi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_lowmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_highmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_highkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
