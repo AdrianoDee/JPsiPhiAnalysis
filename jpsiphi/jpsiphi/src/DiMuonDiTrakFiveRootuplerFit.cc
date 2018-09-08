@@ -91,17 +91,17 @@ private:
   TLorentzVector dimuonditrk_p4;
   TLorentzVector dimuon_p4;
   TLorentzVector ditrak_p4;
-  TLorentzVector lowMuon_p4;
-  TLorentzVector highMuon_p4;
-  TLorentzVector highKaon_p4;
-  TLorentzVector lowKaon_p4;
+  TLorentzVector lowmuon_p4;
+  TLorentzVector highmuon_p4;
+  TLorentzVector highkaon_p4;
+  TLorentzVector lowkaon_p4;
 
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_rf_const_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
   TLorentzVector ditrak_rf_p4, ditrak_not_rf_p4;
-  TLorentzVector lowMuon_rf_p4;
-  TLorentzVector highMuon_rf_p4;
+  TLorentzVector lowmuon_rf_p4;
+  TLorentzVector highmuon_rf_p4;
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
@@ -146,22 +146,22 @@ private:
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
   Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
-  Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
+  Double_t highkaon_pt,lowkaon_pt,highmuon_pt,lowmuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
 
-  Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
-  Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
+  Bool_t lowmuon_isLoose, lowmuon_isSoft, lowmuon_isMedium, lowmuon_isHighPt, lowmuon_isTight;
+  Bool_t highmuon_isLoose, highmuon_isSoft, highmuon_isMedium, highmuon_isHighPt, highmuon_isTight;
 
-  Bool_t lowMuon_isTracker, lowMuon_isGlobal, highMuon_isTracker, highMuon_isGlobal;
-  UInt_t lowMuon_type, highMuon_type;
+  Bool_t lowmuon_isTracker, lowmuon_isGlobal, highmuon_isTracker, highmuon_isGlobal;
+  UInt_t lowmuon_type, highmuon_type;
 
-  Bool_t lowMuon_rf_isLoose, lowMuon_rf_isSoft, lowMuon_rf_isMedium, lowMuon_rf_isHighPt;
-  Bool_t highMuon_rf_isLoose, highMuon_rf_isSoft, highMuon_rf_isMedium, highMuon_rf_isHighPt;
+  Bool_t lowmuon_rf_isLoose, lowmuon_rf_isSoft, lowmuon_rf_isMedium, lowmuon_rf_isHighPt;
+  Bool_t highmuon_rf_isLoose, highmuon_rf_isSoft, highmuon_rf_isMedium, highmuon_rf_isHighPt;
 
-  Bool_t lowMuon_rf_isTracker, lowMuon_rf_isGlobal, highMuon_rf_isTracker, highMuon_rf_isGlobal;
-  UInt_t lowMuon_rf_type, highMuon_rf_type;
+  Bool_t lowmuon_rf_isTracker, lowmuon_rf_isGlobal, highmuon_rf_isTracker, highmuon_rf_isGlobal;
+  UInt_t lowmuon_rf_type, highmuon_rf_type;
 
-  UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
-  UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
+  UInt_t lowmuon_NPixelHits, lowmuon_NStripHits, lowmuon_NTrackhits, lowmuon_NBPixHits, lowmuon_NPixLayers, lowmuon_NTraLayers, lowmuon_NStrLayers, lowmuon_NBPixLayers;
+  UInt_t highmuon_NPixelHits, highmuon_NStripHits, highmuon_NTrackhits, highmuon_NBPixHits, highmuon_NPixLayers, highmuon_NTraLayers, highmuon_NStrLayers, highmuon_NBPixLayers;
 
   Double_t fivetraks_pos_kaon_m_rf, fivetraks_pos_pion_m_rf, fivetraks_pos_kaon_m, fivetraks_pos_pion_m;
   Double_t fivetraks_pos_vProb, fivetraks_pos_vChi2, fivetraks_pos_nDof, fivetraks_pos_charge;
@@ -184,20 +184,20 @@ private:
   Double_t fivetraks_neg_pion_trim,fivetraks_neg_kaon_trim,fivetraks_neg_eta;
   Double_t fivetraks_neg_pt,fivetraks_neg_phi,fivetraks_neg_y,fifthtrak_neg_charge;
 
-  // Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
+  // Double_t highkaon_y, lowkaon_y, highmuon_y, lowmuon_y;
 
   Double_t dimuonditrk_refPK_mass, dimuonditrk_refKP_mass, dimuonditrk_refPP_mass, dimuonditrk_refPK_vChi2;
   Double_t dimuonditrk_refKP_vChi2, dimuonditrk_refPP_vChi2, dimuonditrk_refPK_nDof, dimuonditrk_refKP_nDof;
   Double_t dimuonditrk_refPP_nDof, dimuonditrk_refPK_vProb, dimuonditrk_refKP_vProb, dimuonditrk_refPP_vProb;
 
-  Double_t highKaon_eta, lowKaon_eta, highMuon_eta, lowMuon_eta, highKaon_phi, lowKaon_phi, highMuon_phi, lowMuon_phi;
-  Double_t highKaon_dz, lowKaon_dz, highMuon_dz, lowMuon_dz, highKaon_dxy, lowKaon_dxy, highMuon_dxy, lowMuon_dxy;
-  // Double_t highKaon_etaError, lowKaon_etaError, highMuon_etaError, lowMuon_etaError, highKaon_phiError, lowKaon_phiError, highMuon_phiError, lowMuon_phiError;
-  Int_t highKaon_NPixelHits, highKaon_NStripHits, highKaon_NTrackhits, highKaon_NBPixHits, highKaon_NPixLayers;
-  Int_t highKaon_NTraLayers, highKaon_NStrLayers, highKaon_NBPixLayers, lowKaon_NPixelHits, lowKaon_NStripHits;
-  Int_t lowKaon_NTrackhits, lowKaon_NBPixHits, lowKaon_NPixLayers, lowKaon_NTraLayers, lowKaon_NStrLayers, lowKaon_NBPixLayers;
+  Double_t highkaon_eta, lowkaon_eta, highmuon_eta, lowmuon_eta, highkaon_phi, lowkaon_phi, highmuon_phi, lowmuon_phi;
+  Double_t highkaon_dz, lowkaon_dz, highmuon_dz, lowmuon_dz, highkaon_dxy, lowkaon_dxy, highmuon_dxy, lowmuon_dxy;
+  // Double_t highkaon_etaError, lowkaon_etaError, highmuon_etaError, lowmuon_etaError, highkaon_phiError, lowkaon_phiError, highmuon_phiError, lowmuon_phiError;
+  Int_t highkaon_NPixelHits, highkaon_NStripHits, highkaon_NTrackhits, highkaon_NBPixHits, highkaon_NPixLayers;
+  Int_t highkaon_NTraLayers, highkaon_NStrLayers, highkaon_NBPixLayers, lowkaon_NPixelHits, lowkaon_NStripHits;
+  Int_t lowkaon_NTrackhits, lowkaon_NBPixHits, lowkaon_NPixLayers, lowkaon_NTraLayers, lowkaon_NStrLayers, lowkaon_NBPixLayers;
 
-  UInt_t highKaonMatch, lowKaonMatch,lowMuonMatch, highMuonMatch;
+  UInt_t highkaonMatch, lowkaonMatch,lowmuonMatch, highmuonMatch;
 
   Int_t dimuonditrk_rf_bindx;
 
@@ -207,12 +207,12 @@ private:
 
   //MC
   TLorentzVector gen_dimuonditrk_p4, gen_dimuon_p4, gen_ditrak_p4;
-  TLorentzVector gen_LowMuon_p4, gen_HighMuon_p4, gen_highKaon_p4, gen_lowKaon_p4;
+  TLorentzVector gen_lowmuon_p4, gen_highmuon_p4, gen_highkaon_p4, gen_lowkaon_p4;
 
   Double_t gen_dimuonditrk_pdg, gen_phi_pdg, gen_jpsi_pdg;
-  Double_t gen_LowMuon_pdg, gen_HighMuon_pdg, gen_highKaon_pdg, gen_lowKaon_pdg;
-  Double_t gen_LowMuon_mompdg, gen_HighMuon_mompdg, gen_highKaon_mompdg, gen_lowKaon_mompdg;
-  Double_t gen_LowMuon_status, gen_HighMuon_status, gen_highKaon_status, gen_lowKaon_status;
+  Double_t gen_lowmuon_pdg, gen_highmuon_pdg, gen_highkaon_pdg, gen_lowkaon_pdg;
+  Double_t gen_lowmuon_mompdg, gen_highmuon_mompdg, gen_highkaon_mompdg, gen_lowkaon_mompdg;
+  Double_t gen_lowmuon_status, gen_highmuon_status, gen_highkaon_status, gen_lowkaon_status;
   Double_t gen_dimuonditrk_prompt, gen_phi_prompt, gen_jpsi_prompt;
   Double_t gen_dimuonditrk_pt, gen_dimuonditrk_p, gen_dimuonditrk_eta;
   Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
@@ -224,15 +224,15 @@ private:
 };
 
 UInt_t DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
-  const pat::Muon* highMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
-  const pat::Muon* lowMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
+  const pat::Muon* highmuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highmuon"));
+  const pat::Muon* lowmuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowmuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<hltFilters_.size(); iTr++ ) {
     // std::cout << hltFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highmuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowmuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
     // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << hltFilters_[iTr] << std::endl;
   }
@@ -264,7 +264,7 @@ isMC_(iConfig.getParameter<bool>("isMC")),
 onlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
-phipdgid_(iConfig.getParameter<uint32_t>("JPsi_pdg")),
+phipdgid_(iConfig.getParameter<uint32_t>("jpsi_pdg")),
 jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
 hlts_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 hltFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -287,10 +287,10 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_p4",   "TLorentzVector", &dimuonditrk_p4);
     dimuonditrk_tree->Branch("ditrak_p4",     "TLorentzVector", &ditrak_p4);
     dimuonditrk_tree->Branch("dimuon_p4",     "TLorentzVector", &dimuon_p4);
-    dimuonditrk_tree->Branch("lowMuon_p4",   "TLorentzVector", &lowMuon_p4);
-    dimuonditrk_tree->Branch("highMuon_p4",   "TLorentzVector", &highMuon_p4);
-    dimuonditrk_tree->Branch("highKaon_p4",   "TLorentzVector", &highKaon_p4);
-    dimuonditrk_tree->Branch("lowKaon_p4",   "TLorentzVector", &lowKaon_p4);
+    dimuonditrk_tree->Branch("lowmuon_p4",   "TLorentzVector", &lowmuon_p4);
+    dimuonditrk_tree->Branch("highmuon_p4",   "TLorentzVector", &highmuon_p4);
+    dimuonditrk_tree->Branch("highkaon_p4",   "TLorentzVector", &highkaon_p4);
+    dimuonditrk_tree->Branch("lowkaon_p4",   "TLorentzVector", &lowkaon_p4);
     dimuonditrk_tree->Branch("fivetraks_pos_p4",   "TLorentzVector", &fivetraks_pos_p4);
     dimuonditrk_tree->Branch("fivetraks_pion_pos_p4",   "TLorentzVector", &fivetraks_pion_pos_p4);
     dimuonditrk_tree->Branch("dimuontrak_pos_p4",   "TLorentzVector", &dimuontrak_pos_p4);
@@ -314,8 +314,8 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
     dimuonditrk_tree->Branch("ditrak_rf_p4",     "TLorentzVector", &ditrak_rf_p4);
     dimuonditrk_tree->Branch("dimuon_rf_p4",     "TLorentzVector", &dimuon_rf_p4);
-    dimuonditrk_tree->Branch("lowMuon_rf_p4",   "TLorentzVector", &lowMuon_rf_p4);
-    dimuonditrk_tree->Branch("highMuon_rf_p4",   "TLorentzVector", &highMuon_rf_p4);
+    dimuonditrk_tree->Branch("lowmuon_rf_p4",   "TLorentzVector", &lowmuon_rf_p4);
+    dimuonditrk_tree->Branch("highmuon_rf_p4",   "TLorentzVector", &highmuon_rf_p4);
     dimuonditrk_tree->Branch("kaonp_rf_p4",   "TLorentzVector", &kaonp_rf_p4);
     dimuonditrk_tree->Branch("kaonn_rf_p4",   "TLorentzVector", &kaonn_rf_p4);
 
@@ -341,25 +341,25 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
     dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
     dimuonditrk_tree->Branch("ditrak_pt",       &ditrak_pt,        "ditrak_pt/D");
-    dimuonditrk_tree->Branch("highKaon_pt",          &highKaon_pt,          "highKaon_pt/D");
-    dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
-    dimuonditrk_tree->Branch("highMuon_pt",    &highMuon_pt,    "highMuon_pt/D");
-    dimuonditrk_tree->Branch("lowMuon_pt",     &lowMuon_pt,     "lowMuon_pt/D");
+    dimuonditrk_tree->Branch("highkaon_pt",          &highkaon_pt,          "highkaon_pt/D");
+    dimuonditrk_tree->Branch("lowkaon_pt",       &lowkaon_pt,       "lowkaon_pt/D");
+    dimuonditrk_tree->Branch("highmuon_pt",    &highmuon_pt,    "highmuon_pt/D");
+    dimuonditrk_tree->Branch("lowmuon_pt",     &lowmuon_pt,     "lowmuon_pt/D");
 
-    dimuonditrk_tree->Branch("highKaon_eta",        &highKaon_eta,        "highKaon_eta/D");
-    dimuonditrk_tree->Branch("lowKaon_eta",        &lowKaon_eta,        "lowKaon_eta/D");
-    dimuonditrk_tree->Branch("highMuon_eta",        &highMuon_eta,        "highMuon_eta/D");
-    dimuonditrk_tree->Branch("lowMuon_eta",        &lowMuon_eta,        "lowMuon_eta/D");
+    dimuonditrk_tree->Branch("highkaon_eta",        &highkaon_eta,        "highkaon_eta/D");
+    dimuonditrk_tree->Branch("lowkaon_eta",        &lowkaon_eta,        "lowkaon_eta/D");
+    dimuonditrk_tree->Branch("highmuon_eta",        &highmuon_eta,        "highmuon_eta/D");
+    dimuonditrk_tree->Branch("lowmuon_eta",        &lowmuon_eta,        "lowmuon_eta/D");
 
-    dimuonditrk_tree->Branch("highKaon_phi",        &highKaon_phi,        "highKaon_phi/D");
-    dimuonditrk_tree->Branch("lowKaon_phi",        &lowKaon_phi,        "lowKaon_phi/D");
-    dimuonditrk_tree->Branch("highMuon_phi",        &highMuon_phi,        "highMuon_phi/D");
-    dimuonditrk_tree->Branch("lowMuon_phi",        &lowMuon_phi,        "lowMuon_phi/D");
+    dimuonditrk_tree->Branch("highkaon_phi",        &highkaon_phi,        "highkaon_phi/D");
+    dimuonditrk_tree->Branch("lowkaon_phi",        &lowkaon_phi,        "lowkaon_phi/D");
+    dimuonditrk_tree->Branch("highmuon_phi",        &highmuon_phi,        "highmuon_phi/D");
+    dimuonditrk_tree->Branch("lowmuon_phi",        &lowmuon_phi,        "lowmuon_phi/D");
 
-    // dimuonditrk_tree->Branch("highKaon_y",        &highKaon_y,        "highKaon_y/D");
-    // dimuonditrk_tree->Branch("lowKaon_y",        &lowKaon_y,        "lowKaon_y/D");
-    // dimuonditrk_tree->Branch("highMuon_y",        &highMuon_y,        "highMuon_y/D");
-    // dimuonditrk_tree->Branch("lowMuon_y",        &lowMuon_y,        "lowMuon_y/D");
+    // dimuonditrk_tree->Branch("highkaon_y",        &highkaon_y,        "highkaon_y/D");
+    // dimuonditrk_tree->Branch("lowkaon_y",        &lowkaon_y,        "lowkaon_y/D");
+    // dimuonditrk_tree->Branch("highmuon_y",        &highmuon_y,        "highmuon_y/D");
+    // dimuonditrk_tree->Branch("lowmuon_y",        &lowmuon_y,        "lowmuon_y/D");
 
     //FiveTracks - Pos
 
@@ -454,10 +454,10 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_refPK_vProb", &dimuonditrk_refPK_vProb, "dimuonditrk_refPK_vProb/D");
     dimuonditrk_tree->Branch("dimuonditrk_refKP_vProb", &dimuonditrk_refKP_vProb, "dimuonditrk_refKP_vProb/D");
     dimuonditrk_tree->Branch("dimuonditrk_refPP_vProb", &dimuonditrk_refPP_vProb, "dimuonditrk_refPP_vProb/D");
-    // dimuonditrk_tree->Branch("highKaon_trig_pt",          &highKaon_trig_pt,          "highKaon_trig_pt/D");
-    // dimuonditrk_tree->Branch("lowKaon_trig_pt",       &lowKaon_trig_pt,       "lowKaon_trig_pt/D");
-    // dimuonditrk_tree->Branch("highMuon_trig_pt",    &highMuon_trig_pt,    "highMuon_trig_pt/D");
-    // dimuonditrk_tree->Branch("lowMuon_trig_pt",     &lowMuon_trig_pt,     "lowMuon_trig_pt/D");
+    // dimuonditrk_tree->Branch("highkaon_trig_pt",          &highkaon_trig_pt,          "highkaon_trig_pt/D");
+    // dimuonditrk_tree->Branch("lowkaon_trig_pt",       &lowkaon_trig_pt,       "lowkaon_trig_pt/D");
+    // dimuonditrk_tree->Branch("highmuon_trig_pt",    &highmuon_trig_pt,    "highmuon_trig_pt/D");
+    // dimuonditrk_tree->Branch("lowmuon_trig_pt",     &lowmuon_trig_pt,     "lowmuon_trig_pt/D");
 
     //2mu vertexing
     dimuonditrk_tree->Branch("dimuon_vProb",        &dimuon_vProb,        "dimuon_vProb/D");
@@ -540,94 +540,94 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_rf_c_ctauPV",     &dimuonditrk_rf_c_ctauPV,       "dimuonditrk_rf_c_ctauPV/D");
     dimuonditrk_tree->Branch("dimuonditrk_rf_c_ctauErrPV",  &dimuonditrk_rf_c_ctauErrPV,    "dimuonditrk_rf_c_ctauErrPV/D");
 
-    dimuonditrk_tree->Branch("highKaonMatch",     &highKaonMatch,       "highKaonMatch/I");
-    dimuonditrk_tree->Branch("lowKaonMatch",     &lowKaonMatch,       "lowKaonMatch/I");
-    dimuonditrk_tree->Branch("lowMuonMatch",     &lowMuonMatch,       "lowMuonMatch/I");
-    dimuonditrk_tree->Branch("highMuonMatch",     &highMuonMatch,       "highMuonMatch/I");
+    dimuonditrk_tree->Branch("highkaonMatch",     &highkaonMatch,       "highkaonMatch/I");
+    dimuonditrk_tree->Branch("lowkaonMatch",     &lowkaonMatch,       "lowkaonMatch/I");
+    dimuonditrk_tree->Branch("lowmuonMatch",     &lowmuonMatch,       "lowmuonMatch/I");
+    dimuonditrk_tree->Branch("highmuonMatch",     &highmuonMatch,       "highmuonMatch/I");
 
     //Muon flags
-    dimuonditrk_tree->Branch("lowMuon_isTight",        &lowMuon_isTight,        "lowMuon_isTight/O");
-    dimuonditrk_tree->Branch("lowMuon_isLoose",        &lowMuon_isLoose,        "lowMuon_isLoose/O");
-    dimuonditrk_tree->Branch("lowMuon_isSoft",        &lowMuon_isSoft,        "lowMuon_isSoft/O");
-    dimuonditrk_tree->Branch("lowMuon_isMedium",        &lowMuon_isMedium,        "lowMuon_isMedium/O");
-    dimuonditrk_tree->Branch("lowMuon_isHighPt",        &lowMuon_isHighPt,        "lowMuon_isHighPt/O");
+    dimuonditrk_tree->Branch("lowmuon_isTight",        &lowmuon_isTight,        "lowmuon_isTight/O");
+    dimuonditrk_tree->Branch("lowmuon_isLoose",        &lowmuon_isLoose,        "lowmuon_isLoose/O");
+    dimuonditrk_tree->Branch("lowmuon_isSoft",        &lowmuon_isSoft,        "lowmuon_isSoft/O");
+    dimuonditrk_tree->Branch("lowmuon_isMedium",        &lowmuon_isMedium,        "lowmuon_isMedium/O");
+    dimuonditrk_tree->Branch("lowmuon_isHighPt",        &lowmuon_isHighPt,        "lowmuon_isHighPt/O");
 
-    dimuonditrk_tree->Branch("lowMuon_isTracker",        &lowMuon_isTracker,        "lowMuon_isTracker/O");
-    dimuonditrk_tree->Branch("lowMuon_isGlobal",        &lowMuon_isGlobal,        "lowMuon_isGlobal/O");
+    dimuonditrk_tree->Branch("lowmuon_isTracker",        &lowmuon_isTracker,        "lowmuon_isTracker/O");
+    dimuonditrk_tree->Branch("lowmuon_isGlobal",        &lowmuon_isGlobal,        "lowmuon_isGlobal/O");
 
-    dimuonditrk_tree->Branch("lowMuon_NPixelHits",        &lowMuon_NPixelHits,        "lowMuon_NPixelHits/I");
-    dimuonditrk_tree->Branch("lowMuon_NStripHits",        &lowMuon_NStripHits,        "lowMuon_NStripHits/I");
-    dimuonditrk_tree->Branch("lowMuon_NTrackhits",        &lowMuon_NTrackhits,        "lowMuon_NTrackhits/I");
-    dimuonditrk_tree->Branch("lowMuon_NBPixHits",        &lowMuon_NBPixHits,        "lowMuon_NBPixHits/I");
+    dimuonditrk_tree->Branch("lowmuon_NPixelHits",        &lowmuon_NPixelHits,        "lowmuon_NPixelHits/I");
+    dimuonditrk_tree->Branch("lowmuon_NStripHits",        &lowmuon_NStripHits,        "lowmuon_NStripHits/I");
+    dimuonditrk_tree->Branch("lowmuon_NTrackhits",        &lowmuon_NTrackhits,        "lowmuon_NTrackhits/I");
+    dimuonditrk_tree->Branch("lowmuon_NBPixHits",        &lowmuon_NBPixHits,        "lowmuon_NBPixHits/I");
 
-    dimuonditrk_tree->Branch("lowMuon_NPixLayers",        &lowMuon_NPixLayers,        "lowMuon_NPixLayers/I");
-    dimuonditrk_tree->Branch("lowMuon_NTraLayers",        &lowMuon_NTraLayers,        "lowMuon_NTraLayers/I");
-    dimuonditrk_tree->Branch("lowMuon_NStrLayers",        &lowMuon_NStrLayers,        "lowMuon_NStrLayers/I");
-    dimuonditrk_tree->Branch("lowMuon_NBPixLayers",        &lowMuon_NBPixLayers,        "lowMuon_NBPixLayers/I");
+    dimuonditrk_tree->Branch("lowmuon_NPixLayers",        &lowmuon_NPixLayers,        "lowmuon_NPixLayers/I");
+    dimuonditrk_tree->Branch("lowmuon_NTraLayers",        &lowmuon_NTraLayers,        "lowmuon_NTraLayers/I");
+    dimuonditrk_tree->Branch("lowmuon_NStrLayers",        &lowmuon_NStrLayers,        "lowmuon_NStrLayers/I");
+    dimuonditrk_tree->Branch("lowmuon_NBPixLayers",        &lowmuon_NBPixLayers,        "lowmuon_NBPixLayers/I");
 
-    dimuonditrk_tree->Branch("highMuon_isTight",        &highMuon_isTight,        "highMuon_isTight/O");
-    dimuonditrk_tree->Branch("highMuon_isLoose",        &highMuon_isLoose,        "highMuon_isLoose/O");
-    dimuonditrk_tree->Branch("highMuon_isSoft",        &highMuon_isSoft,        "highMuon_isSoft/O");
-    dimuonditrk_tree->Branch("highMuon_isMedium",        &highMuon_isMedium,        "highMuon_isMedium/O");
-    dimuonditrk_tree->Branch("highMuon_isHighPt",        &highMuon_isHighPt,        "highMuon_isHighPt/O");
+    dimuonditrk_tree->Branch("highmuon_isTight",        &highmuon_isTight,        "highmuon_isTight/O");
+    dimuonditrk_tree->Branch("highmuon_isLoose",        &highmuon_isLoose,        "highmuon_isLoose/O");
+    dimuonditrk_tree->Branch("highmuon_isSoft",        &highmuon_isSoft,        "highmuon_isSoft/O");
+    dimuonditrk_tree->Branch("highmuon_isMedium",        &highmuon_isMedium,        "highmuon_isMedium/O");
+    dimuonditrk_tree->Branch("highmuon_isHighPt",        &highmuon_isHighPt,        "highmuon_isHighPt/O");
 
-    dimuonditrk_tree->Branch("highMuon_isTracker",        &highMuon_isTracker,        "highMuon_isTracker/O");
-    dimuonditrk_tree->Branch("highMuon_isGlobal",        &highMuon_isGlobal,        "highMuon_isGlobal/O");
+    dimuonditrk_tree->Branch("highmuon_isTracker",        &highmuon_isTracker,        "highmuon_isTracker/O");
+    dimuonditrk_tree->Branch("highmuon_isGlobal",        &highmuon_isGlobal,        "highmuon_isGlobal/O");
 
-    dimuonditrk_tree->Branch("highMuon_NPixelHits",        &highMuon_NPixelHits,        "highMuon_NPixelHits/I");
-    dimuonditrk_tree->Branch("highMuon_NStripHits",        &highMuon_NStripHits,        "highMuon_NStripHits/I");
-    dimuonditrk_tree->Branch("highMuon_NTrackhits",        &highMuon_NTrackhits,        "highMuon_NTrackhits/I");
-    dimuonditrk_tree->Branch("highMuon_NBPixHits",        &highMuon_NBPixHits,        "highMuon_NBPixHits/I");
+    dimuonditrk_tree->Branch("highmuon_NPixelHits",        &highmuon_NPixelHits,        "highmuon_NPixelHits/I");
+    dimuonditrk_tree->Branch("highmuon_NStripHits",        &highmuon_NStripHits,        "highmuon_NStripHits/I");
+    dimuonditrk_tree->Branch("highmuon_NTrackhits",        &highmuon_NTrackhits,        "highmuon_NTrackhits/I");
+    dimuonditrk_tree->Branch("highmuon_NBPixHits",        &highmuon_NBPixHits,        "highmuon_NBPixHits/I");
 
-    dimuonditrk_tree->Branch("highMuon_NPixLayers",        &highMuon_NPixLayers,        "highMuon_NPixLayers/I");
-    dimuonditrk_tree->Branch("highMuon_NTraLayers",        &highMuon_NTraLayers,        "highMuon_NTraLayers/I");
-    dimuonditrk_tree->Branch("highMuon_NStrLayers",        &highMuon_NStrLayers,        "highMuon_NStrLayers/I");
-    dimuonditrk_tree->Branch("highMuon_NBPixLayers",        &highMuon_NBPixLayers,        "highMuon_NBPixLayers/I");
+    dimuonditrk_tree->Branch("highmuon_NPixLayers",        &highmuon_NPixLayers,        "highmuon_NPixLayers/I");
+    dimuonditrk_tree->Branch("highmuon_NTraLayers",        &highmuon_NTraLayers,        "highmuon_NTraLayers/I");
+    dimuonditrk_tree->Branch("highmuon_NStrLayers",        &highmuon_NStrLayers,        "highmuon_NStrLayers/I");
+    dimuonditrk_tree->Branch("highmuon_NBPixLayers",        &highmuon_NBPixLayers,        "highmuon_NBPixLayers/I");
 
-    dimuonditrk_tree->Branch("highKaon_eta",        &highKaon_eta,        "highKaon_eta/D");
-    dimuonditrk_tree->Branch("highKaon_phi",        &highKaon_phi,        "highKaon_phi/D");
-    dimuonditrk_tree->Branch("highKaon_dz",        &highKaon_dz,        "highKaon_dz/D");
-    dimuonditrk_tree->Branch("highKaon_dxy",        &highKaon_dxy,        "highKaon_dxy/D");
+    dimuonditrk_tree->Branch("highkaon_eta",        &highkaon_eta,        "highkaon_eta/D");
+    dimuonditrk_tree->Branch("highkaon_phi",        &highkaon_phi,        "highkaon_phi/D");
+    dimuonditrk_tree->Branch("highkaon_dz",        &highkaon_dz,        "highkaon_dz/D");
+    dimuonditrk_tree->Branch("highkaon_dxy",        &highkaon_dxy,        "highkaon_dxy/D");
 
-    dimuonditrk_tree->Branch("lowKaon_eta",        &lowKaon_eta,        "lowKaon_eta/D");
-    dimuonditrk_tree->Branch("lowKaon_phi",        &lowKaon_phi,        "lowKaon_phi/D");
-    dimuonditrk_tree->Branch("lowKaon_dz",        &lowKaon_dz,        "lowKaon_dz/D");
-    dimuonditrk_tree->Branch("lowKaon_dxy",        &lowKaon_dxy,        "lowKaon_dxy/D");
+    dimuonditrk_tree->Branch("lowkaon_eta",        &lowkaon_eta,        "lowkaon_eta/D");
+    dimuonditrk_tree->Branch("lowkaon_phi",        &lowkaon_phi,        "lowkaon_phi/D");
+    dimuonditrk_tree->Branch("lowkaon_dz",        &lowkaon_dz,        "lowkaon_dz/D");
+    dimuonditrk_tree->Branch("lowkaon_dxy",        &lowkaon_dxy,        "lowkaon_dxy/D");
 
-    dimuonditrk_tree->Branch("lowMuon_type",     &lowMuon_type,       "lowMuon_type/i");
-    dimuonditrk_tree->Branch("highMuon_type",     &highMuon_type,       "highMuon_type/i");
+    dimuonditrk_tree->Branch("lowmuon_type",     &lowmuon_type,       "lowmuon_type/i");
+    dimuonditrk_tree->Branch("highmuon_type",     &highmuon_type,       "highmuon_type/i");
 
     //Tracks Flags
 
-    dimuonditrk_tree->Branch("highKaon_eta",        &highKaon_eta,        "highKaon_eta/D");
-    dimuonditrk_tree->Branch("highKaon_phi",        &highKaon_phi,        "highKaon_phi/D");
-    dimuonditrk_tree->Branch("highKaon_dz",        &highKaon_dz,        "highKaon_dz/D");
-    dimuonditrk_tree->Branch("highKaon_dxy",        &highKaon_dxy,        "highKaon_dxy/D");
+    dimuonditrk_tree->Branch("highkaon_eta",        &highkaon_eta,        "highkaon_eta/D");
+    dimuonditrk_tree->Branch("highkaon_phi",        &highkaon_phi,        "highkaon_phi/D");
+    dimuonditrk_tree->Branch("highkaon_dz",        &highkaon_dz,        "highkaon_dz/D");
+    dimuonditrk_tree->Branch("highkaon_dxy",        &highkaon_dxy,        "highkaon_dxy/D");
 
-    dimuonditrk_tree->Branch("lowKaon_eta",        &lowKaon_eta,        "lowKaon_eta/D");
-    dimuonditrk_tree->Branch("lowKaon_phi",        &lowKaon_phi,        "lowKaon_phi/D");
-    dimuonditrk_tree->Branch("lowKaon_dz",        &lowKaon_dz,        "lowKaon_dz/D");
-    dimuonditrk_tree->Branch("lowKaon_dxy",        &lowKaon_dxy,        "lowKaon_dxy/D");
+    dimuonditrk_tree->Branch("lowkaon_eta",        &lowkaon_eta,        "lowkaon_eta/D");
+    dimuonditrk_tree->Branch("lowkaon_phi",        &lowkaon_phi,        "lowkaon_phi/D");
+    dimuonditrk_tree->Branch("lowkaon_dz",        &lowkaon_dz,        "lowkaon_dz/D");
+    dimuonditrk_tree->Branch("lowkaon_dxy",        &lowkaon_dxy,        "lowkaon_dxy/D");
 
-    dimuonditrk_tree->Branch("highKaon_NPixelHits",        &highKaon_NPixelHits,        "highKaon_NPixelHits/I");
-    dimuonditrk_tree->Branch("highKaon_NStripHits",        &highKaon_NStripHits,        "highKaon_NStripHits/I");
-    dimuonditrk_tree->Branch("highKaon_NTrackhits",        &highKaon_NTrackhits,        "highKaon_NTrackhits/I");
-    dimuonditrk_tree->Branch("highKaon_NBPixHits",        &highKaon_NBPixHits,        "highKaon_NBPixHits/I");
+    dimuonditrk_tree->Branch("highkaon_NPixelHits",        &highkaon_NPixelHits,        "highkaon_NPixelHits/I");
+    dimuonditrk_tree->Branch("highkaon_NStripHits",        &highkaon_NStripHits,        "highkaon_NStripHits/I");
+    dimuonditrk_tree->Branch("highkaon_NTrackhits",        &highkaon_NTrackhits,        "highkaon_NTrackhits/I");
+    dimuonditrk_tree->Branch("highkaon_NBPixHits",        &highkaon_NBPixHits,        "highkaon_NBPixHits/I");
 
-    dimuonditrk_tree->Branch("highKaon_NPixLayers",        &highKaon_NPixLayers,        "highKaon_NPixLayers/I");
-    dimuonditrk_tree->Branch("highKaon_NTraLayers",        &highKaon_NTraLayers,        "highKaon_NTraLayers/I");
-    dimuonditrk_tree->Branch("highKaon_NStrLayers",        &highKaon_NStrLayers,        "highKaon_NStrLayers/I");
-    dimuonditrk_tree->Branch("highKaon_NBPixLayers",        &highKaon_NBPixLayers,        "highKaon_NBPixLayers/I");
+    dimuonditrk_tree->Branch("highkaon_NPixLayers",        &highkaon_NPixLayers,        "highkaon_NPixLayers/I");
+    dimuonditrk_tree->Branch("highkaon_NTraLayers",        &highkaon_NTraLayers,        "highkaon_NTraLayers/I");
+    dimuonditrk_tree->Branch("highkaon_NStrLayers",        &highkaon_NStrLayers,        "highkaon_NStrLayers/I");
+    dimuonditrk_tree->Branch("highkaon_NBPixLayers",        &highkaon_NBPixLayers,        "highkaon_NBPixLayers/I");
 
-    dimuonditrk_tree->Branch("lowKaon_NPixelHits",        &lowKaon_NPixelHits,        "lowKaon_NPixelHits/I");
-    dimuonditrk_tree->Branch("lowKaon_NStripHits",        &lowKaon_NStripHits,        "lowKaon_NStripHits/I");
-    dimuonditrk_tree->Branch("lowKaon_NTrackhits",        &lowKaon_NTrackhits,        "lowKaon_NTrackhits/I");
-    dimuonditrk_tree->Branch("lowKaon_NBPixHits",        &lowKaon_NBPixHits,        "lowKaon_NBPixHits/I");
+    dimuonditrk_tree->Branch("lowkaon_NPixelHits",        &lowkaon_NPixelHits,        "lowkaon_NPixelHits/I");
+    dimuonditrk_tree->Branch("lowkaon_NStripHits",        &lowkaon_NStripHits,        "lowkaon_NStripHits/I");
+    dimuonditrk_tree->Branch("lowkaon_NTrackhits",        &lowkaon_NTrackhits,        "lowkaon_NTrackhits/I");
+    dimuonditrk_tree->Branch("lowkaon_NBPixHits",        &lowkaon_NBPixHits,        "lowkaon_NBPixHits/I");
 
-    dimuonditrk_tree->Branch("lowKaon_NPixLayers",        &lowKaon_NPixLayers,        "lowKaon_NPixLayers/I");
-    dimuonditrk_tree->Branch("lowKaon_NTraLayers",        &lowKaon_NTraLayers,        "lowKaon_NTraLayers/I");
-    dimuonditrk_tree->Branch("lowKaon_NStrLayers",        &lowKaon_NStrLayers,        "lowKaon_NStrLayers/I");
-    dimuonditrk_tree->Branch("lowKaon_NBPixLayers",        &lowKaon_NBPixLayers,        "lowKaon_NBPixLayers/I");
+    dimuonditrk_tree->Branch("lowkaon_NPixLayers",        &lowkaon_NPixLayers,        "lowkaon_NPixLayers/I");
+    dimuonditrk_tree->Branch("lowkaon_NTraLayers",        &lowkaon_NTraLayers,        "lowkaon_NTraLayers/I");
+    dimuonditrk_tree->Branch("lowkaon_NStrLayers",        &lowkaon_NStrLayers,        "lowkaon_NStrLayers/I");
+    dimuonditrk_tree->Branch("lowkaon_NBPixLayers",        &lowkaon_NBPixLayers,        "lowkaon_NBPixLayers/I");
 
   }
   int pdgid_ = 0;
@@ -638,48 +638,48 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
     dimuonditrk_tree->Branch("gen_phi_p4", "TLorentzVector",  &gen_phi_p4);
 
-    dimuonditrk_tree->Branch("gen_HighKaon_p4", "TLorentzVector",  &gen_HighKaon_p4);
-    dimuonditrk_tree->Branch("gen_LowMuon_p4",  "TLorentzVector",  &gen_LowMuon_p4);
-    dimuonditrk_tree->Branch("gen_HighMuon_p4",  "TLorentzVector",  &gen_HighMuon_p4);
-    dimuonditrk_tree->Branch("gen_LowKaon_p4",  "TLorentzVector",  &gen_LowKaon_p4);
+    dimuonditrk_tree->Branch("gen_highkaon_p4", "TLorentzVector",  &gen_highkaon_p4);
+    dimuonditrk_tree->Branch("gen_lowmuon_p4",  "TLorentzVector",  &gen_lowmuon_p4);
+    dimuonditrk_tree->Branch("gen_highmuon_p4",  "TLorentzVector",  &gen_highmuon_p4);
+    dimuonditrk_tree->Branch("gen_lowkaon_p4",  "TLorentzVector",  &gen_lowkaon_p4);
 
     dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
     dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_pdg",&gen_LowMuon_pdg,"gen_LowMuon_pdg/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_pdg",&gen_HighMuon_pdg,"gen_HighMuon_pdg/D");
-    dimuonditrk_tree->Branch("gen_highKaon_pdg",&gen_highKaon_pdg,"gen_highKaon_pdg/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_pdg",&gen_lowKaon_pdg,"gen_lowKaon_pdg/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_pdg",&gen_lowmuon_pdg,"gen_lowmuon_pdg/D");
+    dimuonditrk_tree->Branch("gen_highmuon_pdg",&gen_highmuon_pdg,"gen_highmuon_pdg/D");
+    dimuonditrk_tree->Branch("gen_highkaon_pdg",&gen_highkaon_pdg,"gen_highkaon_pdg/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_pdg",&gen_lowkaon_pdg,"gen_lowkaon_pdg/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_mompdg",&gen_LowMuon_mompdg,"gen_LowMuon_mompdg/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_mompdg",&gen_HighMuon_mompdg,"gen_HighMuon_mompdg/D");
-    dimuonditrk_tree->Branch("gen_highKaon_mompdg",&gen_highKaon_mompdg,"gen_highKaon_mompdg/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_mompdg",&gen_lowKaon_mompdg,"gen_lowKaon_mompdg/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_mompdg",&gen_lowmuon_mompdg,"gen_lowmuon_mompdg/D");
+    dimuonditrk_tree->Branch("gen_highmuon_mompdg",&gen_highmuon_mompdg,"gen_highmuon_mompdg/D");
+    dimuonditrk_tree->Branch("gen_highkaon_mompdg",&gen_highkaon_mompdg,"gen_highkaon_mompdg/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_mompdg",&gen_lowkaon_mompdg,"gen_lowkaon_mompdg/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_status",&gen_LowMuon_status,"gen_LowMuon_status/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_status",&gen_HighMuon_status,"gen_HighMuon_status/D");
-    dimuonditrk_tree->Branch("gen_highKaon_status",&gen_highKaon_status,"gen_highKaon_status/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_status",&gen_lowKaon_status,"gen_lowKaon_status/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_status",&gen_lowmuon_status,"gen_lowmuon_status/D");
+    dimuonditrk_tree->Branch("gen_highmuon_status",&gen_highmuon_status,"gen_highmuon_status/D");
+    dimuonditrk_tree->Branch("gen_highkaon_status",&gen_highkaon_status,"gen_highkaon_status/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_status",&gen_lowkaon_status,"gen_lowkaon_status/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_p",&gen_LowMuon_p,"gen_LowMuon_p/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_p",&gen_HighMuon_p,"gen_HighMuon_p/D");
-    dimuonditrk_tree->Branch("gen_highKaon_p",&gen_highKaon_p,"gen_highKaon_p/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_p",&gen_lowKaon_p,"gen_lowKaon_p/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_p",&gen_lowmuon_p,"gen_lowmuon_p/D");
+    dimuonditrk_tree->Branch("gen_highmuon_p",&gen_highmuon_p,"gen_highmuon_p/D");
+    dimuonditrk_tree->Branch("gen_highkaon_p",&gen_highkaon_p,"gen_highkaon_p/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_p",&gen_lowkaon_p,"gen_lowkaon_p/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_pt",&gen_LowMuon_pt,"gen_LowMuon_pt/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_pt",&gen_HighMuon_pt,"gen_HighMuon_pt/D");
-    dimuonditrk_tree->Branch("gen_highKaon_pt",&gen_highKaon_pt,"gen_highKaon_pt/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_pt",&gen_lowKaon_pt,"gen_lowKaon_pt/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_pt",&gen_lowmuon_pt,"gen_lowmuon_pt/D");
+    dimuonditrk_tree->Branch("gen_highmuon_pt",&gen_highmuon_pt,"gen_highmuon_pt/D");
+    dimuonditrk_tree->Branch("gen_highkaon_pt",&gen_highkaon_pt,"gen_highkaon_pt/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_pt",&gen_lowkaon_pt,"gen_lowkaon_pt/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_eta",&gen_LowMuon_eta,"gen_LowMuon_eta/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_eta",&gen_HighMuon_eta,"gen_HighMuon_eta/D");
-    dimuonditrk_tree->Branch("gen_highKaon_eta",&gen_highKaon_eta,"gen_highKaon_eta/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_eta",&gen_lowKaon_eta,"gen_lowKaon_eta/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_eta",&gen_lowmuon_eta,"gen_lowmuon_eta/D");
+    dimuonditrk_tree->Branch("gen_highmuon_eta",&gen_highmuon_eta,"gen_highmuon_eta/D");
+    dimuonditrk_tree->Branch("gen_highkaon_eta",&gen_highkaon_eta,"gen_highkaon_eta/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_eta",&gen_lowkaon_eta,"gen_lowkaon_eta/D");
 
-    dimuonditrk_tree->Branch("gen_LowMuon_phi",&gen_LowMuon_phi,"gen_LowMuon_phi/D");
-    dimuonditrk_tree->Branch("gen_HighMuon_phi",&gen_HighMuon_phi,"gen_HighMuon_phi/D");
-    dimuonditrk_tree->Branch("gen_highKaon_phi",&gen_highKaon_phi,"gen_highKaon_phi/D");
-    dimuonditrk_tree->Branch("gen_lowKaon_phi",&gen_lowKaon_phi,"gen_lowKaon_phi/D");
+    dimuonditrk_tree->Branch("gen_lowmuon_phi",&gen_lowmuon_phi,"gen_lowmuon_phi/D");
+    dimuonditrk_tree->Branch("gen_highmuon_phi",&gen_highmuon_phi,"gen_highmuon_phi/D");
+    dimuonditrk_tree->Branch("gen_highkaon_phi",&gen_highkaon_phi,"gen_highkaon_phi/D");
+    dimuonditrk_tree->Branch("gen_lowkaon_phi",&gen_lowkaon_phi,"gen_lowkaon_phi/D");
 
     dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
     dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
@@ -793,21 +793,21 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
   //
   // if ( motherInPrunedCollection != nullptr && (d->pdgId() ==  13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-  //   gen_HighMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+  //   gen_highmuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
   //   foundit++;
   // }
   // if ( motherInPrunedCollection != nullptr && (d->pdgId() == -13 ) && isAncestor(aditrkdimu , motherInPrunedCollection) ) {
-  //   gen_LowMuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
+  //   gen_lowmuon_p4.SetPtEtaPhiM(d->pt(),d->eta(),d->phi(),d->mass());
   //   foundit++;
   // }
 
   gen_dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_LowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_HighMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_lowmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_highmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_highkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  gen_lowkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 
   std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
@@ -872,18 +872,18 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
       dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      lowmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      highmuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      highkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      lowkaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       ditrak_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       dimuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      lowMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      highMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      // highKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      // lowKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      lowmuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      highmuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      // highkaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      // lowkaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
       pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
       pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
@@ -953,117 +953,117 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
         dimuonditrk_dca_m2t2 = dimuonditrk_cand.userFloat("dca_m2t2");
         dimuonditrk_dca_t1t2 = dimuonditrk_cand.userFloat("dca_t1t2");
 
-        highKaonMatch = dimuonditrk_cand.userInt("highKaonMatch");
-        lowKaonMatch = dimuonditrk_cand.userInt("lowKaonMatch");
+        highkaonMatch = dimuonditrk_cand.userInt("highkaonMatch");
+        lowkaonMatch = dimuonditrk_cand.userInt("lowkaonMatch");
 
         //unref corresponding
 
         dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
         ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
-        const pat::Muon *lowMuon, *highMuon;
+        const pat::Muon *lowmuon, *highmuon;
 
-        reco::Candidate::LorentzVector vHighMuon = dimuon_cand->daughter("highMuon")->p4();
-        reco::Candidate::LorentzVector vLowMuon = dimuon_cand->daughter("lowMuon")->p4();
+        reco::Candidate::LorentzVector vhighmuon = dimuon_cand->daughter("highmuon")->p4();
+        reco::Candidate::LorentzVector vlowmuon = dimuon_cand->daughter("lowmuon")->p4();
 
-        // if (dimuon_cand->daughter("highMuon")->charge() < 0) {
-        if (vHighMuon.pt() < vLowMuon.pt()) {
-          vHighMuon = dimuon_cand->daughter("lowMuon")->p4();
-          vLowMuon = dimuon_cand->daughter("highMuon")->p4();
-          highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("highMuon"));
-          lowMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowMuon"));
+        // if (dimuon_cand->daughter("highmuon")->charge() < 0) {
+        if (vhighmuon.pt() < vlowmuon.pt()) {
+          vhighmuon = dimuon_cand->daughter("lowmuon")->p4();
+          vlowmuon = dimuon_cand->daughter("highmuon")->p4();
+          highmuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("highmuon"));
+          lowmuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowmuon"));
         } else
         {
-          lowMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("highMuon"));
-          highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowMuon"));
+          lowmuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("highmuon"));
+          highmuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowmuon"));
         }
 
-        lowMuon_isTight    = lowMuon->isTightMuon(thePrimaryV);
-        lowMuon_isLoose    = lowMuon->isLooseMuon();
-        lowMuon_isSoft     = lowMuon->isSoftMuon(thePrimaryV);
-        lowMuon_isMedium   = lowMuon->isMediumMuon();
-        lowMuon_isHighPt   = lowMuon->isHighPtMuon(thePrimaryV);
-        lowMuon_isTracker  = lowMuon->isTrackerMuon();
-        lowMuon_isGlobal   = lowMuon->isGlobalMuon();
-        lowMuon_NPixelHits = lowMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
-        lowMuon_NStripHits = lowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
-        lowMuon_NTrackhits = lowMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
-        lowMuon_NBPixHits  = lowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
-        lowMuon_NPixLayers = lowMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
-        lowMuon_NTraLayers = lowMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
-        lowMuon_NStrLayers = lowMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
-        lowMuon_NBPixLayers = lowMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+        lowmuon_isTight    = lowmuon->isTightMuon(thePrimaryV);
+        lowmuon_isLoose    = lowmuon->isLooseMuon();
+        lowmuon_isSoft     = lowmuon->isSoftMuon(thePrimaryV);
+        lowmuon_isMedium   = lowmuon->isMediumMuon();
+        lowmuon_isHighPt   = lowmuon->isHighPtMuon(thePrimaryV);
+        lowmuon_isTracker  = lowmuon->isTrackerMuon();
+        lowmuon_isGlobal   = lowmuon->isGlobalMuon();
+        lowmuon_NPixelHits = lowmuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+        lowmuon_NStripHits = lowmuon->innerTrack()->hitPattern().numberOfValidStripHits();
+        lowmuon_NTrackhits = lowmuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+        lowmuon_NBPixHits  = lowmuon->innerTrack()->hitPattern().numberOfValidStripHits();
+        lowmuon_NPixLayers = lowmuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+        lowmuon_NTraLayers = lowmuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+        lowmuon_NStrLayers = lowmuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+        lowmuon_NBPixLayers = lowmuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-        highMuon_isTight    = highMuon->isTightMuon(thePrimaryV);
-        highMuon_isLoose    = highMuon->isLooseMuon();
-        highMuon_isSoft     = highMuon->isSoftMuon(thePrimaryV);
-        highMuon_isMedium   = highMuon->isMediumMuon();
-        highMuon_isHighPt   = highMuon->isHighPtMuon(thePrimaryV);
-        highMuon_isTracker  = highMuon->isTrackerMuon();
-        highMuon_isGlobal   = highMuon->isGlobalMuon();
-        highMuon_NPixelHits = highMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
-        highMuon_NStripHits = highMuon->innerTrack()->hitPattern().numberOfValidStripHits();
-        highMuon_NTrackhits = highMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
-        highMuon_NBPixHits  = highMuon->innerTrack()->hitPattern().numberOfValidStripHits();
-        highMuon_NPixLayers = highMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
-        highMuon_NTraLayers = highMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
-        highMuon_NStrLayers = highMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
-        highMuon_NBPixLayers = highMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+        highmuon_isTight    = highmuon->isTightMuon(thePrimaryV);
+        highmuon_isLoose    = highmuon->isLooseMuon();
+        highmuon_isSoft     = highmuon->isSoftMuon(thePrimaryV);
+        highmuon_isMedium   = highmuon->isMediumMuon();
+        highmuon_isHighPt   = highmuon->isHighPtMuon(thePrimaryV);
+        highmuon_isTracker  = highmuon->isTrackerMuon();
+        highmuon_isGlobal   = highmuon->isGlobalMuon();
+        highmuon_NPixelHits = highmuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+        highmuon_NStripHits = highmuon->innerTrack()->hitPattern().numberOfValidStripHits();
+        highmuon_NTrackhits = highmuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+        highmuon_NBPixHits  = highmuon->innerTrack()->hitPattern().numberOfValidStripHits();
+        highmuon_NPixLayers = highmuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+        highmuon_NTraLayers = highmuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+        highmuon_NStrLayers = highmuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+        highmuon_NBPixLayers = highmuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-        highMuon_eta  = highMuon->innerTrack()->eta();
-        highMuon_phi  = highMuon->innerTrack()->phi();
-        highMuon_dz  = highMuon->innerTrack()->dz();
-        highMuon_dxy  = highMuon->innerTrack()->dxy();
-        lowMuon_eta  = lowMuon->innerTrack()->eta();
-        lowMuon_phi  = lowMuon->innerTrack()->phi();
-        lowMuon_dz  = lowMuon->innerTrack()->dz();
-        lowMuon_dxy  = lowMuon->innerTrack()->dxy();
+        highmuon_eta  = highmuon->innerTrack()->eta();
+        highmuon_phi  = highmuon->innerTrack()->phi();
+        highmuon_dz  = highmuon->innerTrack()->dz();
+        highmuon_dxy  = highmuon->innerTrack()->dxy();
+        lowmuon_eta  = lowmuon->innerTrack()->eta();
+        lowmuon_phi  = lowmuon->innerTrack()->phi();
+        lowmuon_dz  = lowmuon->innerTrack()->dz();
+        lowmuon_dxy  = lowmuon->innerTrack()->dxy();
 
-        lowMuon_type       = lowMuon->type();
-        highMuon_type       = highMuon->type();
+        lowmuon_type       = lowmuon->type();
+        highmuon_type       = highmuon->type();
 
-        lowMuon_p4.SetPtEtaPhiM(vHighMuon.pt(), vHighMuon.eta(), vHighMuon.phi(), vHighMuon.mass());
-        highMuon_p4.SetPtEtaPhiM(vLowMuon.pt(), vLowMuon.eta(), vLowMuon.phi(), vLowMuon.mass());
+        lowmuon_p4.SetPtEtaPhiM(vhighmuon.pt(), vhighmuon.eta(), vhighmuon.phi(), vhighmuon.mass());
+        highmuon_p4.SetPtEtaPhiM(vlowmuon.pt(), vlowmuon.eta(), vlowmuon.phi(), vlowmuon.mass());
 
         reco::Candidate::LorentzVector kP = ditrak_cand->daughter("highTrak")->p4();
         reco::Candidate::LorentzVector kM = ditrak_cand->daughter("lowTrak")->p4();
 
-        pat::PackedCandidate *highKaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("highTrak"));
-        pat::PackedCandidate *lowKaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("lowTrak"));
+        pat::PackedCandidate *highkaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("highTrak"));
+        pat::PackedCandidate *lowkaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("lowTrak"));
 
-        highKaon_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
-        lowKaon_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
+        highkaon_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
+        lowkaon_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
 
-        highKaon_pt     = std::max(kP.pt(),kM.pt());
-        lowKaon_pt      = -std::max(-kP.pt(),-kM.pt());
-        highMuon_pt     = std::max(vLowMuon.pt(),vHighMuon.pt());
-        lowMuon_pt      = -std::max(-vLowMuon.pt(),-vHighMuon.pt());
+        highkaon_pt     = std::max(kP.pt(),kM.pt());
+        lowkaon_pt      = -std::max(-kP.pt(),-kM.pt());
+        highmuon_pt     = std::max(vlowmuon.pt(),vhighmuon.pt());
+        lowmuon_pt      = -std::max(-vlowmuon.pt(),-vhighmuon.pt());
 
-        lowKaon_NPixelHits = lowKaon->bestTrack()->hitPattern().numberOfValidPixelHits();
-        lowKaon_NStripHits = lowKaon->bestTrack()->hitPattern().numberOfValidStripHits();
-        lowKaon_NTrackhits = lowKaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
-        lowKaon_NBPixHits  = lowKaon->bestTrack()->hitPattern().numberOfValidStripHits();
-        lowKaon_NPixLayers = lowKaon->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-        lowKaon_NTraLayers = lowKaon->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-        lowKaon_NStrLayers = lowKaon->bestTrack()->hitPattern().stripLayersWithMeasurement();
-        lowKaon_NBPixLayers = lowKaon->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
-        highKaon_NPixelHits = highKaon->bestTrack()->hitPattern().numberOfValidPixelHits();
-        highKaon_NStripHits = highKaon->bestTrack()->hitPattern().numberOfValidStripHits();
-        highKaon_NTrackhits = highKaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
-        highKaon_NBPixHits  = highKaon->bestTrack()->hitPattern().numberOfValidStripHits();
-        highKaon_NPixLayers = highKaon->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-        highKaon_NTraLayers = highKaon->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-        highKaon_NStrLayers = highKaon->bestTrack()->hitPattern().stripLayersWithMeasurement();
-        highKaon_NBPixLayers = highKaon->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+        lowkaon_NPixelHits = lowkaon->bestTrack()->hitPattern().numberOfValidPixelHits();
+        lowkaon_NStripHits = lowkaon->bestTrack()->hitPattern().numberOfValidStripHits();
+        lowkaon_NTrackhits = lowkaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
+        lowkaon_NBPixHits  = lowkaon->bestTrack()->hitPattern().numberOfValidStripHits();
+        lowkaon_NPixLayers = lowkaon->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+        lowkaon_NTraLayers = lowkaon->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+        lowkaon_NStrLayers = lowkaon->bestTrack()->hitPattern().stripLayersWithMeasurement();
+        lowkaon_NBPixLayers = lowkaon->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+        highkaon_NPixelHits = highkaon->bestTrack()->hitPattern().numberOfValidPixelHits();
+        highkaon_NStripHits = highkaon->bestTrack()->hitPattern().numberOfValidStripHits();
+        highkaon_NTrackhits = highkaon->bestTrack()->hitPattern().numberOfValidTrackerHits();
+        highkaon_NBPixHits  = highkaon->bestTrack()->hitPattern().numberOfValidStripHits();
+        highkaon_NPixLayers = highkaon->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+        highkaon_NTraLayers = highkaon->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+        highkaon_NStrLayers = highkaon->bestTrack()->hitPattern().stripLayersWithMeasurement();
+        highkaon_NBPixLayers = highkaon->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-        highKaon_eta  = highKaon->bestTrack()->eta();
-        highKaon_phi  = highKaon->bestTrack()->phi();
-        highKaon_dz   = highKaon->bestTrack()->dz();
-        highKaon_dxy  = highKaon->bestTrack()->dxy();
-        lowKaon_eta   = lowKaon->bestTrack()->eta();
-        lowKaon_phi   = lowKaon->bestTrack()->phi();
-        lowKaon_dz    = lowKaon->bestTrack()->dz();
-        lowKaon_dxy   = lowKaon->bestTrack()->dxy();
+        highkaon_eta  = highkaon->bestTrack()->eta();
+        highkaon_phi  = highkaon->bestTrack()->phi();
+        highkaon_dz   = highkaon->bestTrack()->dz();
+        highkaon_dxy  = highkaon->bestTrack()->dxy();
+        lowkaon_eta   = lowkaon->bestTrack()->eta();
+        lowkaon_phi   = lowkaon->bestTrack()->phi();
+        lowkaon_dz    = lowkaon->bestTrack()->dz();
+        lowkaon_dxy   = lowkaon->bestTrack()->dxy();
 
         //double kmass = 0.4936770;
         dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());
@@ -1077,17 +1077,17 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
         dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
         dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
 
-        lowMuonMatch   = dimuon_cand->userInt("highMuonTMatch");
-        highMuonMatch    = dimuon_cand->userInt("lowMuonTMatch");
-        dimuon_triggerMatch = -std::max(-lowMuonMatch,highMuonMatch);//DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(dimuon_cand);
+        lowmuonMatch   = dimuon_cand->userInt("highmuonTMatch");
+        highmuonMatch    = dimuon_cand->userInt("lowmuonTMatch");
+        dimuon_triggerMatch = -std::max(-lowmuonMatch,highmuonMatch);//DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(dimuon_cand);
 
         dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
         dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
         dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,2.4);
         ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.5);
 
-        lowMuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
-        highMuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+        lowmuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
+        highmuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
         kaonp_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
         kaonn_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
         dimuonditrk_m_rf_c = 3.9;
@@ -1105,11 +1105,11 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
           ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
 
-          vHighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
-          vLowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
+          vhighmuon = dimuon_cand_rf->daughter("highmuon")->p4();
+          vlowmuon = dimuon_cand_rf->daughter("lowmuon")->p4();
 
-          lowMuon_rf_p4.SetPtEtaPhiM(vHighMuon.pt(), vHighMuon.eta(), vHighMuon.phi(), vHighMuon.mass());
-          highMuon_rf_p4.SetPtEtaPhiM(vLowMuon.pt(), vLowMuon.eta(), vLowMuon.phi(), vLowMuon.mass());
+          lowmuon_rf_p4.SetPtEtaPhiM(vhighmuon.pt(), vhighmuon.eta(), vhighmuon.phi(), vhighmuon.mass());
+          highmuon_rf_p4.SetPtEtaPhiM(vlowmuon.pt(), vlowmuon.eta(), vlowmuon.phi(), vlowmuon.mass());
 
           kP = ditrak_cand_rf->daughter("highTrak")->p4();
           kM = ditrak_cand_rf->daughter("lowTrak")->p4();
@@ -1392,28 +1392,28 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           gen_dimuonditrk_p4,SetPtEtaPhiM(-1.0,0.0,0.0,3.9);
           gen_jpsi_p4,SetPtEtaPhiM(-1.0,0.0,0.0,2.5);
           gen_phi_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.9);
-          gen_HighKaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
-          gen_LowMuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
-          gen_HighMuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
-          gen_LowKaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
+          gen_highkaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
+          gen_lowmuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
+          gen_highmuon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.0);
+          gen_lowkaon_p4,SetPtEtaPhiM(-1.0,0.0,0.0,0.2);
 
           gen_dimuonditrk_pdg = 0.0;
           gen_phi_pdg         = 0.0;
 
-          gen_LowMuon_pdg     = 0.0;
-          gen_HighMuon_pdg    = 0.0;
-          gen_highKaon_pdg    = 0.0;
-          gen_lowKaon_pdg     = 0.0;
+          gen_lowmuon_pdg     = 0.0;
+          gen_highmuon_pdg    = 0.0;
+          gen_highkaon_pdg    = 0.0;
+          gen_lowkaon_pdg     = 0.0;
 
-          gen_LowMuon_mompdg     = 0.0;
-          gen_HighMuon_mompdg    = 0.0;
-          gen_highKaon_mompdg    = 0.0;
-          gen_lowKaon_mompdg     = 0.0;
+          gen_lowmuon_mompdg     = 0.0;
+          gen_highmuon_mompdg    = 0.0;
+          gen_highkaon_mompdg    = 0.0;
+          gen_lowkaon_mompdg     = 0.0;
 
-          gen_LowMuon_status     = 0.0;
-          gen_HighMuon_status    = 0.0;
-          gen_highKaon_status    = 0.0;
-          gen_lowKaon_status     = 0.0;
+          gen_lowmuon_status     = 0.0;
+          gen_highmuon_status    = 0.0;
+          gen_highkaon_status    = 0.0;
+          gen_lowkaon_status     = 0.0;
 
           gen_dimuonditrk_prompt = 0.0;
           gen_phi_prompt      = 0.0;
@@ -1435,117 +1435,117 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
           gen_phi_phi         = 0.0;
           gen_jpsi_phi        = 0.0;
 
-          gen_LowMuon_pt     = 0.0;
-          gen_HighMuon_pt    = 0.0;
-          gen_highKaon_pt    = 0.0;
-          gen_lowKaon_pt     = 0.0;
+          gen_lowmuon_pt     = 0.0;
+          gen_highmuon_pt    = 0.0;
+          gen_highkaon_pt    = 0.0;
+          gen_lowkaon_pt     = 0.0;
 
-          gen_LowMuon_p     = 0.0;
-          gen_HighMuon_p    = 0.0;
-          gen_highKaon_p    = 0.0;
-          gen_lowKaon_p     = 0.0;
+          gen_lowmuon_p     = 0.0;
+          gen_highmuon_p    = 0.0;
+          gen_highkaon_p    = 0.0;
+          gen_lowkaon_p     = 0.0;
 
-          gen_LowMuon_eta     = 0.0;
-          gen_HighMuon_eta    = 0.0;
-          gen_highKaon_eta    = 0.0;
-          gen_lowKaon_eta     = 0.0;
+          gen_lowmuon_eta     = 0.0;
+          gen_highmuon_eta    = 0.0;
+          gen_highkaon_eta    = 0.0;
+          gen_lowkaon_eta     = 0.0;
 
-          gen_LowMuon_phi     = 0.0;
-          gen_HighMuon_phi    = 0.0;
-          gen_highKaon_phi    = 0.0;
-          gen_lowKaon_phi     = 0.0;
+          gen_lowmuon_phi     = 0.0;
+          gen_highmuon_phi    = 0.0;
+          gen_highkaon_phi    = 0.0;
+          gen_lowkaon_phi     = 0.0;
 
-          reco::GenParticleRef genHighMuon  = highMuon->genParticleRef();
-          reco::GenParticleRef genLowMuon   = lowMuon->genParticleRef();
+          reco::GenParticleRef genhighmuon  = highmuon->genParticleRef();
+          reco::GenParticleRef genlowmuon   = lowmuon->genParticleRef();
 
-          const reco::GenParticle *genHighKaon,*genLowKaon;
-          reco::GenParticleRef phiMomHigh, phiMomLow, jPsiMomHig, jPsiMomLow;
-          reco::GenParticleRef jPsiMom, phiMom;
+          const reco::GenParticle *genhighkaon,*genlowkaon;
+          reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHig, jpsiMomLow;
+          reco::GenParticleRef jpsiMom, phiMom;
 
           float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
           float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
 
           if(hasHighGen>0.0)
-          genHighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
+          genhighkaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highkaonGen"));
           if(hasLowGen>0.0)
-          genLowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
+          genlowkaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowkaonGen"));
 
           if(hasHighGen>0.0)
           {
-            gen_HighKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
-            if(genHighKaon.numberOfMothers()>0)
-            phiMomLow  = genHighKaon->motherRef();
+            gen_highkaon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
+            if(genhighkaon.numberOfMothers()>0)
+            phiMomLow  = genhighkaon->motherRef();
 
-            gen_HighKaon_pdg     = (float)genHighKaon->pdgId();
+            gen_highkaon_pdg     = (float)genhighkaon->pdgId();
 
-            if(phiMomLow.isNonNull())
-            gen_HighKaon_mompdg  = phiMomLow->pdgId();
+            if(phiMomLow.isNonnull())
+            gen_highkaon_mompdg  = phiMomLow->pdgId();
 
-            gen_HighKaon_status  = (float)genHighKaon->status();
-            gen_HighKaon_pt      = (float)genHighKaon->pt();
-            gen_HighKaon_p       = (float)genHighKaon->p();
-            gen_HighKaon_eta     = (float)genHighKaon->eta();
-            gen_HighKaon_phi     = (float)genHighKaon->phi();
+            gen_highkaon_status  = (float)genhighkaon->status();
+            gen_highkaon_pt      = (float)genhighkaon->pt();
+            gen_highkaon_p       = (float)genhighkaon->p();
+            gen_highkaon_eta     = (float)genhighkaon->eta();
+            gen_highkaon_phi     = (float)genhighkaon->phi();
 
           }
 
           if(hasLowGen>0.0)
           {
-            gen_LowKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
-            if(genHighKaon.numberOfMothers()>0)
-            phiMomLow  = genHighKaon->motherRef();
+            gen_lowkaon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
+            if(genhighkaon.numberOfMothers()>0)
+            phiMomLow  = genhighkaon->motherRef();
 
-            gen_LowKaon_pdg     = (float)genHighKaon->pdgId();
+            gen_lowkaon_pdg     = (float)genhighkaon->pdgId();
 
-            if(phiMomLow.isNonNull())
-            gen_LowKaon_mompdg  = phiMomLow->pdgId();
+            if(phiMomLow.isNonnull())
+            gen_lowkaon_mompdg  = phiMomLow->pdgId();
 
-            gen_LowKaon_status  = (float)genHighKaon->status();
-            gen_LowKaon_pt      = (float)genHighKaon->pt();
-            gen_LowKaon_p       = (float)genHighKaon->p();
-            gen_LowKaon_eta     = (float)genHighKaon->eta();
-            gen_LowKaon_phi     = (float)genHighKaon->phi();
+            gen_lowkaon_status  = (float)genhighkaon->status();
+            gen_lowkaon_pt      = (float)genhighkaon->pt();
+            gen_lowkaon_p       = (float)genhighkaon->p();
+            gen_lowkaon_eta     = (float)genhighkaon->eta();
+            gen_lowkaon_phi     = (float)genhighkaon->phi();
           }
 
-          if(genHighMuon.isNonnull())
+          if(genhighmuon.isNonnull())
           {
-            gen_HighMuon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
-            if(genHighKaon.numberOfMothers()>0)
-            jPsiMomHigh  = genHighKaon->motherRef();
+            gen_highmuon_p4.SetPtEtaPhiM(genhighkaon->pt(),genhighkaon->eta(),genhighkaon->phi(),genhighkaon->mass());
+            if(genhighkaon.numberOfMothers()>0)
+            jpsiMomHigh  = genhighkaon->motherRef();
 
-            gen_HighMuon_pdg     = (float)genHighKaon->pdgId();
+            gen_highmuon_pdg     = (float)genhighkaon->pdgId();
 
-            if(jPsiMomHigh.isNonNull())
-            gen_HighMuon_mompdg  = jPsiMomHigh->pdgId();
+            if(jpsiMomHigh.isNonnull())
+            gen_highmuon_mompdg  = jpsiMomHigh->pdgId();
 
-            gen_HighMuon_status  = (float)genHighKaon->status();
-            gen_HighMuon_pt      = (float)genHighKaon->pt();
-            gen_HighMuon_p       = (float)genHighKaon->p();
-            gen_HighMuon_eta     = (float)genHighKaon->eta();
-            gen_HighMuon_phi     = (float)genHighKaon->phi();
+            gen_highmuon_status  = (float)genhighkaon->status();
+            gen_highmuon_pt      = (float)genhighkaon->pt();
+            gen_highmuon_p       = (float)genhighkaon->p();
+            gen_highmuon_eta     = (float)genhighkaon->eta();
+            gen_highmuon_phi     = (float)genhighkaon->phi();
           }
 
-          if(genLowMuon.isNonnull())
+          if(genlowmuon.isNonnull())
           {
-            gen_LowMuon_p4.SetPtEtaPhiM(genLowKaon->pt(),genLowKaon->eta(),genLowKaon->phi(),genLowKaon->mass());
-            if(genLowKaon.numberOfMothers()>0)
-            jPsiMomLow  = genLowKaon->motherRef();
+            gen_lowmuon_p4.SetPtEtaPhiM(genlowkaon->pt(),genlowkaon->eta(),genlowkaon->phi(),genlowkaon->mass());
+            if(genlowkaon.numberOfMothers()>0)
+            jpsiMomLow  = genlowkaon->motherRef();
 
-            gen_LowMuon_pdg     = (float)genLowKaon->pdgId();
+            gen_lowmuon_pdg     = (float)genlowkaon->pdgId();
 
-            if(jPsiMomLow.isNonNull())
-            gen_LowMuon_mompdg  = jPsiMomLow->pdgId();
+            if(jpsiMomLow.isNonnull())
+            gen_lowmuon_mompdg  = jpsiMomLow->pdgId();
 
-            gen_LowMuon_status  = (float)genLowKaon->status();
-            gen_LowMuon_pt      = (float)genLowKaon->pt();
-            gen_LowMuon_p       = (float)genLowKaon->p();
-            gen_LowMuon_eta     = (float)genLowKaon->eta();
-            gen_LowMuon_phi     = (float)genLowKaon->phi();
+            gen_lowmuon_status  = (float)genlowkaon->status();
+            gen_lowmuon_pt      = (float)genlowkaon->pt();
+            gen_lowmuon_p       = (float)genlowkaon->p();
+            gen_lowmuon_eta     = (float)genlowkaon->eta();
+            gen_lowmuon_phi     = (float)genlowkaon->phi();
           }
 
-          bool samePhiMom = false, sameJPsiMom = false;
+          bool samePhiMom = false, samejpsiMom = false;
 
-          if(phiMomLow.isNonNull() && phiMomHigh.isNonNull())
+          if(phiMomLow.isNonnull() && phiMomHigh.isNonnull())
           {
             samePhiMom = (phiMomHigh == phiMomLow);
 
@@ -1561,26 +1561,26 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
             }
           }
 
-          if(jPsiMomLow.isNonNull() && jPsiMomHigh.isNonNull())
+          if(jpsiMomLow.isNonnull() && jpsiMomHigh.isNonnull())
           {
-            sameJPsiMom = (jPsiMomHigh == jPsiMomLow);
+            samejpsiMom = (jpsiMomHigh == jpsiMomLow);
 
-            if(sameJPsiMom)
+            if(samejpsiMom)
             {
-              gen_jPsi_p4.SetPtEtaPhiM(jPsiMomHigh->pt(),jPsiMomHigh->eta(),jPsiMomHigh->jPsi(),jPsiMomHigh->mass());
-              gen_jPsi_pdg     = jPsiMomHigh->pdgId();
-              gen_jPsi_prompt  = jPsiMomHigh->isPromptDecayed();
-              gen_jPsi_p       = jPsiMomHigh->p();
-              gen_jPsi_pt      = jPsiMomHigh->pt();
-              gen_jPsi_eta     = jPsiMomHigh->eta();
-              gen_jPsi_phi     = jPsiMomHigh->phi();
+              gen_jpsi_p4.SetPtEtaPhiM(jpsiMomHigh->pt(),jpsiMomHigh->eta(),jpsiMomHigh->jpsi(),jpsiMomHigh->mass());
+              gen_jpsi_pdg     = jpsiMomHigh->pdgId();
+              gen_jpsi_prompt  = jpsiMomHigh->isPromptDecayed();
+              gen_jpsi_p       = jpsiMomHigh->p();
+              gen_jpsi_pt      = jpsiMomHigh->pt();
+              gen_jpsi_eta     = jpsiMomHigh->eta();
+              gen_jpsi_phi     = jpsiMomHigh->phi();
             }
           }
 
-          if(sameJPsiMom && samePhiMom  && jPsiMomHigh->numberOfMothers()>0 && phiMomHihg->numberOfMothers()>0)
+          if(samejpsiMom && samePhiMom  && jpsiMomHigh->numberOfMothers()>0 && phiMomHigh->numberOfMothers()>0)
           {
 
-            jPsiMom = jPsiMomHigh->motherRef();
+            jpsiMom = jpsiMomHigh->motherRef();
             phiMom  = phiMomHigh->motherRef();
 
             if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
