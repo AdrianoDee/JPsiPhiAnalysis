@@ -1364,13 +1364,13 @@ if(!OnlyGen_)
 
         const reco::GenParticle *genHighKaon,*genLowKaon;
 
+        float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
+        float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
+
         if(hasHighGen>0.0)
         genHighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
         if(hasLowGen>0.0)
         genLowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("lowKaonGen"));
-
-        float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
-        float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
 
         if(hasHighGen>0.0)
         {
