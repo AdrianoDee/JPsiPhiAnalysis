@@ -217,6 +217,8 @@ private:
   Double_t gen_dimuonditrk_pt, gen_dimuonditrk_p, gen_dimuonditrk_eta;
   Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
   Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
+  Double_t gen_lowmuon_phi, gen_highmuon_phi, gen_highkaon_phi, gen_lowkaon_phi;
+  Double_t gen_dimuonditrk_phi, gen_phi_phi, gen_jpsi_phi;
 
   TTree* dimuonditrk_tree, *dimuonditrk_tree_rf;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
@@ -1583,15 +1585,15 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
             jpsiMom = jpsiMomHigh->motherRef();
             phiMom  = phiMomHigh->motherRef();
 
-            if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
+            if(jpsiMom==phiMom && jpsiMom.isNonnull() && phiMom.isNonnull())
             {
-              gen_dimuonditrk_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
-              gen_dimuonditrk_pdg = (float) jspiMom->pdgId();
-              gen_dimuonditrk_prompt = (float) jspiMom->isPromptDecayed();
-              gen_dimuonditrk_p = (float) jspiMom->p();
-              gen_dimuonditrk_pt = (float) jspiMom->pt();
-              gen_dimuonditrk_eta = (float) jspiMom->eta();
-              gen_dimuonditrk_phi = (float) jspiMom->phi();
+              gen_dimuonditrk_p4.SetPtEtaPhiM(jpsiMom->pt(),jpsiMom->eta(),jpsiMom->phi(),jpsiMom->mass());
+              gen_dimuonditrk_pdg = (float) jpsiMom->pdgId();
+              gen_dimuonditrk_prompt = (float) jpsiMom->isPromptDecayed();
+              gen_dimuonditrk_p = (float) jpsiMom->p();
+              gen_dimuonditrk_pt = (float) jpsiMom->pt();
+              gen_dimuonditrk_eta = (float) jpsiMom->eta();
+              gen_dimuonditrk_phi = (float) jpsiMom->phi();
             }
 
           }
