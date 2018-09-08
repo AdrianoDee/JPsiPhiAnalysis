@@ -345,7 +345,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   if(isMC_)
   {
-    if(theGenMap.isValid()) std::cout << "Gen Map is Valid" << std::endl;
+
   }
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
@@ -376,6 +376,17 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
          if(isMC_)
          {
+           if(theGenMap.isValid())
+           {
+             std::cout << "Gen Map is Valid" << std::endl;
+             auto refTrack = trak->refAt(i);
+             if(theGenMap->contains(refTrack.product.id()))
+             {
+               std::cout << "Found - ";
+               std::cout << theGenMap[refTrack.key()] << std::endl;
+             }
+
+           }
 
          }
 
