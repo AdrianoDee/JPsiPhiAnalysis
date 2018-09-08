@@ -1572,7 +1572,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
             if(samejpsiMom)
             {
-              gen_jpsi_p4.SetPtEtaPhiM(jpsiMomHigh->pt(),jpsiMomHigh->eta(),jpsiMomHigh->jpsi(),jpsiMomHigh->mass());
+              gen_jpsi_p4.SetPtEtaPhiM(jpsiMomHigh->pt(),jpsiMomHigh->eta(),jpsiMomHigh->phi(),jpsiMomHigh->mass());
               gen_jpsi_pdg     = jpsiMomHigh->pdgId();
               gen_jpsi_prompt  = jpsiMomHigh->isPromptDecayed();
               gen_jpsi_p       = jpsiMomHigh->p();
