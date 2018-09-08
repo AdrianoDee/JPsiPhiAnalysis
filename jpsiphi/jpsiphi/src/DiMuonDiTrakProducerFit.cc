@@ -246,6 +246,9 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
 
+  edm::Handle<edm::Association<reco::GenParticleCollection>> theGenMap;
+  iEvent.getByToken(genMap_,theGenMap);
+
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
@@ -342,7 +345,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
   if(isMC_)
   {
-    if(genMap_.isValid()) std::cout << "Gen Map is Valid" << std::endl;
+    if(theGenMap.isValid()) std::cout << "Gen Map is Valid" << std::endl;
   }
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
