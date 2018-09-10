@@ -147,7 +147,7 @@ private:
   UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
   UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
-  Double_t highKaon_y, lowKaon_y, highMuon_y, lowMuon_y;
+  // Double_t highKaon_m, lowKaon_m, highMuon_y, lowMuon_y;
 
   Double_t dimuonditrk_refPK_mass, dimuonditrk_refKP_mass, dimuonditrk_refPP_mass, dimuonditrk_refPK_vChi2;
   Double_t dimuonditrk_refKP_vChi2, dimuonditrk_refPP_vChi2, dimuonditrk_refPK_nDof, dimuonditrk_refKP_nDof;
@@ -305,10 +305,6 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("highMuon_phi",        &highMuon_phi,        "highMuon_phi/D");
     dimuonditrk_tree->Branch("lowMuon_phi",        &lowMuon_phi,        "lowMuon_phi/D");
 
-    dimuonditrk_tree->Branch("highKaon_y",        &highKaon_y,        "highKaon_y/D");
-    dimuonditrk_tree->Branch("lowKaon_y",        &lowKaon_y,        "lowKaon_y/D");
-    dimuonditrk_tree->Branch("highMuon_y",        &highMuon_y,        "highMuon_y/D");
-    dimuonditrk_tree->Branch("lowMuon_y",        &lowMuon_y,        "lowMuon_y/D");
 
     //Pion refits
     dimuonditrk_tree->Branch("dimuonditrk_refPK_mass", &dimuonditrk_refPK_mass, "dimuonditrk_refPK_mass/D");
