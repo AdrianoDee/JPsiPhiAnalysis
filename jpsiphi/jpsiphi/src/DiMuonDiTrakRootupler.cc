@@ -1,6 +1,6 @@
 /*
-Package:    DiMuonDiTrakFiveRootuplerFit
-Class:      DiMuonDiTrakFiveRootuplerFit
+Package:    DiMuonDiTrakRootupler
+Class:      DiMuonDiTrakRootupler
 
 Description: make rootuple of DiMuon-DiTrack combination
 
@@ -55,10 +55,10 @@ Created:  based on Alberto Sanchez Hernandez PsiTrkTrk Code
 // class declaration
 //
 
-class DiMuonDiTrakFiveRootuplerFit : public edm::EDAnalyzer {
+class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
 public:
-  explicit DiMuonDiTrakFiveRootuplerFit(const edm::ParameterSet&);
-  ~DiMuonDiTrakFiveRootuplerFit() override;
+  explicit DiMuonDiTrakRootupler(const edm::ParameterSet&);
+  ~DiMuonDiTrakRootupler() override;
 
   bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
@@ -77,7 +77,6 @@ private:
   // ----------member data ---------------------------
   std::string file_name;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> fivetrakpos_,fivetrakneg_,fivetrakneu_;
   edm::EDGetTokenT<reco::VertexCollection> pVertices_;
   edm::EDGetTokenT<edm::TriggerResults> triggers_;
   bool isMC_,onlyBest_,OnlyGen_ ;
@@ -193,7 +192,7 @@ private:
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 };
 
-UInt_t DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
+UInt_t DiMuonDiTrakRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
   const pat::Muon* highMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
   const pat::Muon* lowMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
@@ -223,7 +222,7 @@ static const Double_t psi1SMass =  3.09691;
 //
 // constructors and destructor
 //
-DiMuonDiTrakFiveRootuplerFit::DiMuonDiTrakFiveRootuplerFit(const edm::ParameterSet& iConfig):
+DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 dimuonditrk_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
 pVertices_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
 triggers_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -561,13 +560,13 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
 
 }
 
-DiMuonDiTrakFiveRootuplerFit::~DiMuonDiTrakFiveRootuplerFit() {}
+DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
 
 //
 // member functions
 //
 
-bool DiMuonDiTrakFiveRootuplerFit::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonDiTrakRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
   if (ancestor == particle ) return true;
   for (size_t i=0; i< particle->numberOfMothers(); i++) {
     if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -577,7 +576,7 @@ bool DiMuonDiTrakFiveRootuplerFit::isAncestor(const reco::Candidate* ancestor, c
 
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   //  using namespace edm;
   using namespace std;
 
@@ -659,15 +658,6 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
   gen_highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
   gen_lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
-
-  std::map <unsigned int,const pat::CompositeCandidate*> fourToFiveMapPos,fourToFiveMapNeu,fourToFiveMapNeg;
-
-  if(!OnlyGen_)
-  {
-    if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
-
-  }
-
   // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if(!OnlyGen_)
   {
@@ -691,7 +681,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
       pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
       pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
-      const pat::CompositeCandidate *fivetrak_cand;
+
       noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
 
       for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
@@ -883,7 +873,7 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
 
         lowMuonMatch   = dimuon_cand->userInt("highMuonTMatch");
         highMuonMatch    = dimuon_cand->userInt("lowMuonTMatch");
-        dimuon_triggerMatch = -std::max(-lowMuonMatch,highMuonMatch);//DiMuonDiTrakFiveRootuplerFit::isTriggerMatched(dimuon_cand);
+        dimuon_triggerMatch = -std::max(-lowMuonMatch,highMuonMatch);
 
         dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
         dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
@@ -1206,28 +1196,27 @@ void DiMuonDiTrakFiveRootuplerFit::analyze(const edm::Event& iEvent, const edm::
     }
   }
 
-}
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakFiveRootuplerFit::beginJob() {}
+void DiMuonDiTrakRootupler::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakFiveRootuplerFit::endJob() {}
+void DiMuonDiTrakRootupler::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakFiveRootuplerFit::beginRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootupler::beginRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakFiveRootuplerFit::endRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootupler::endRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakFiveRootuplerFit::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootupler::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakFiveRootuplerFit::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrakRootupler::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakFiveRootuplerFit::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1236,4 +1225,4 @@ void DiMuonDiTrakFiveRootuplerFit::fillDescriptions(edm::ConfigurationDescriptio
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakFiveRootuplerFit);
+DEFINE_FWK_MODULE(DiMuonDiTrakRootupler);
