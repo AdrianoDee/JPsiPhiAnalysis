@@ -1080,7 +1080,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            // std::cout << "debug    19 "<< std::endl;
            std::vector<float> massPionRefits,vProbPionRefits,chi2PionRefits,nDofPionRefits;
 
-           for(int i = 0; i < 2; ++i)
+           for(int i = 0; i < 3; ++i)
            {
              massPionRefits.push_back(-1.0);
              chi2PionRefits.push_back(-1.0);
@@ -1101,7 +1101,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
 
 
-             for(int iP = 0; iP < 2; ++iP)
+             for(int iP = 0; iP < 3; ++iP)
              {
                  const ParticleMass oneMass(oneMasses[iP]);
                  const ParticleMass twoMass(twoMasses[iP]);
@@ -1121,7 +1121,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
                  reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
 
-                 reco::Candidate::LorentzVector vDiMuonT = dimuonCand.p4() + vTT.p4();
+                 reco::Candidate::LorentzVector vDiMuonT = dimuonCand->p4() + vTT;
 
                  massPionRefits[iP] = vDiMuonT.mass();
 
