@@ -618,13 +618,13 @@ pat::CompositeCandidate FiveTracksProducerFit::makePsi2SCandidate(
                                          ){
 
   pat::CompositeCandidate psi2sCand;
-  psi2sCand.setCharge(dimuonditrak.charge()+t1.charge()+t2.charge());
+  psi2sCand.setCharge(dimuon.charge()+t1.charge()+t2.charge());
 
   fiveCand.addDaughter(dimuon,"dimuon");
   fiveCand.addDaughter(t1,"trakOne");
   fiveCand.addDaughter(t2,"trakTwo");
 
-  reco::Candidate::LorentzVector v = t1.p4() + t2.p4() + dimuonditrak.p4();
+  reco::Candidate::LorentzVector v = t1.p4() + t2.p4() + dimuon.p4();
 
   psi2sCand.setP4(v);
 
