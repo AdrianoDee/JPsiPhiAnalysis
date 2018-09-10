@@ -446,7 +446,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
                name = "fiveCand_" + std::to_string(i);
 
-               fiveCandKaon.addDaughter(name,&fiveCands[i]);
+               fiveCandKaon.addDaughter(fiveCands[i]),name,;
              }
 
              fiveCandColl->push_back(fiveCandKaon);
@@ -548,7 +548,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
 
   fiveCand.addDaughter(trakOne,"trakOne");
   fiveCand.addDaughter(trakTwo,"trakTwo");
-  fiveCand.addDaughter(trackThree,"trackThree");
+  fiveCand.addDaughter(trakThree,"trakThree");
 
   psiPrimeOne   = makePsi2SCandidate(trakOne,trakTwo);
 
@@ -574,19 +574,19 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& trak3
                                          ){
 
-  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trackThree;
+  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trakThree;
   pat::CompositeCandidate psiPrimeOne, psiPrimeTwo, psiPrimeThree;
   fiveCand.addDaughter(dimuon,"dimuon");
 
-  fiveCand.setCharge(dimuonditrak.charge()+trakP.charge()+trakN.charge()+trak3.charge());
+  fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
 
   fiveCand.addDaughter(trakP,"trakOne");
   fiveCand.addDaughter(trakN,"trakTwo");
-  fiveCand.addDaughter(trak3,"trackThree");
+  fiveCand.addDaughter(trak3,"trakThree");
 
   psiPrimeOne   = makePsi2SCandidate(trakP,trakN);
 
-  if(trakOne * trackThree <= 0)
+  if(trakP.charge() * trakThree.charge() <= 0)
     psiPrimeTwo   = makePsi2SCandidate(dimuon,trakP,trak3);
   else
     psiPrimeTwo   = makePsi2SCandidate(dimuon,trakN,trak3);
@@ -594,7 +594,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   fiveCand.addDaughter(psiPrimeOne,"psiPrimeOne");
   fiveCand.addDaughter(psiPrimeTwo,"psiPrimeTwo");
 
-  reco::Candidate::LorentzVector v = trakP.p4() + trakN.p4() + trak3.p4() + dimuonditrak.p4();
+  reco::Candidate::LorentzVector v = trakP.p4() + trakN.p4() + trak3.p4() + dimuon.p4();
 
   fiveCand.setP4(v);
 
