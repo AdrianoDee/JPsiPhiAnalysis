@@ -94,7 +94,7 @@ class FiveTracksProducerFit : public edm::EDProducer {
   pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2,
-                                              )
+                                           );
 pat::CompositeCandidate makeFiveCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
                                             const pat::PackedCandidate& trakP,

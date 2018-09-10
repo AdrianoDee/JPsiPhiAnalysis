@@ -183,23 +183,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
 
        //I want the positive and negative track to build psi2S with charge == 0
-       pat::PackedCandidate *tp, pat::PackedCandidate *tm;
-       int tpId, tmId;
-       if (dimuonditrakCand.daughter("ditrak")->daughter("highTrak") > 0)
-        {
-
-          tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("highTrak"));
-          tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
-          tpId = dimuonditrakCand.userInt("pId");
-          tmId = dimuonditrakCand.userInt("mId");
-        }
-       else
-       {
-         tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("highTrak"));
-         tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
-         tmId = dimuonditrakCand.userInt("pId");
-         tpId = dimuonditrakCand.userInt("mId");
-       }
+       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("highTrak"));
+       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
+       int tpId = dimuonditrakCand.userInt("pId");
+       int tmId = dimuonditrakCand.userInt("mId");
 
        std::vector<float> oneMasses,twoMasses,threeMasses, hasRefit;
        oneMasses.push_back(kaonmass); oneMasses.push_back(pionmass);oneMasses.push_back(kaonmass);oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
@@ -273,7 +260,10 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
              //if(i!=5 && fifthTrack.charge() == 0) continue;
 
-             fiveCands.push_back(makeFiveCandidateMixed(dimuon_cand, tp, tm, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
+             if(tp.charge() > 0)
+              fiveCands.push_back(makeFiveCandidateMixed(dimuon_cand, tp, tm, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
+             else
+              fiveCands.push_back(makeFiveCandidateMixed(dimuon_cand, tm, tp, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
 
              //Kinematic Fit
              const ParticleMass muonMass(0.1056583);
@@ -620,9 +610,9 @@ pat::CompositeCandidate FiveTracksProducerFit::makePsi2SCandidate(
   pat::CompositeCandidate psi2sCand;
   psi2sCand.setCharge(dimuon.charge()+t1.charge()+t2.charge());
 
-  fiveCand.addDaughter(dimuon,"dimuon");
-  fiveCand.addDaughter(t1,"trakOne");
-  fiveCand.addDaughter(t2,"trakTwo");
+  psi2sCand.addDaughter(dimuon,"dimuon");
+  psi2sCand.addDaughter(t1,"trakOne");
+  psi2sCand.addDaughter(t2,"trakTwo");
 
   reco::Candidate::LorentzVector v = t1.p4() + t2.p4() + dimuon.p4();
 
