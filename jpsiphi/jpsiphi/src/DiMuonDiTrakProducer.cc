@@ -421,15 +421,15 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 }
 
 void DiMuonDiTrakProducer::endJob(){
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "DiMuonDiTrak Candidate producer report:" << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "Events with DiMuon candidates " << ndimuon << std::endl;
   std::cout << "Events with DiMuonDiTrak candidates " << nreco << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << candidates << " DiMuonDiTrak candidates." << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
 }
 
 bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){

@@ -150,15 +150,15 @@ void DoubleDiMuonProducer::produce(edm::Event& event, const edm::EventSetup& ese
 
 
 void DoubleDiMuonProducer::endJob(){
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "DoubleDiMuon Candidate producer report:" << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "Events with LowDiMuon  candidates " << nLdM << std::endl;
   std::cout << "Events with HighDiMuon candidates " << nHdM << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << candidates << " DoubleDiMuon candidates." << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
 }
 
 

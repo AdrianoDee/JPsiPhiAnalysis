@@ -1078,11 +1078,12 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              }
            }
            // std::cout << "debug    19 "<< std::endl;
-           std::vector<float> massPionRefits,vProbPionRefits,chi2PionRefits,nDofPionRefits;
+           std::vector<float> massPionRefits,massPionRefits_ref,vProbPionRefits,chi2PionRefits,nDofPionRefits;
 
            for(int i = 0; i < 3; ++i)
            {
              massPionRefits.push_back(-1.0);
+             massPionRefits_ref.push_back(-1.0);
              chi2PionRefits.push_back(-1.0);
              nDofPionRefits.push_back(-1.0);
              vProbPionRefits.push_back(-1.0);
@@ -1112,6 +1113,22 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  kinChi = 0.;
                  kinNdf = 0.;
 
+                 pat::CompositeCandidate otherTTCand = makeTTCandidate(posTrack,negTrack);
+
+                 double m_kaon1 = oneMasses[iP];
+                 math::XYZVector mom_kaon1 = posTrack.momentum();
+                 double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+                 math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+                 double m_kaon2 = twoMasses[iP];
+                 math::XYZVector mom_kaon2 = negTrack.momentum();
+                 double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+                 math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+                 reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+
+                 reco::Candidate::LorentzVector vDiMuonT = dimuonCand->p4() + vTT;
+
+                 massPionRefits[iP] = vDiMuonT.mass();
+
                  pkParticles.clear();
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
@@ -1131,7 +1148,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                     if (fitPion->currentState().isValid())
                     {
-                      massPionRefits[iP] = fitPion->currentState().mass();
+                      massPionRefits_ref[iP] = fitPion->currentState().mass();
                       chi2PionRefits[iP] = vPion->chiSquared();
                       nDofPionRefits[iP] = (double)(vPion->degreesOfFreedom());
                       vProbPionRefits[iP] = ChiSquaredProbability(chi2PionRefits[iP],nDofPionRefits[iP]);
@@ -1201,6 +1218,10 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
            DiMuonTTCand.addUserFloat("massKPRefit",massPionRefits[1]);
            DiMuonTTCand.addUserFloat("massPPRefit",massPionRefits[2]);
 
+           DiMuonTTCand.addUserFloat("massPKRefitRef",massPionRefits_ref[0]);
+           DiMuonTTCand.addUserFloat("massKPRefitRef",massPionRefits_ref[1]);
+           DiMuonTTCand.addUserFloat("massPPRefitRef",massPionRefits_ref[2]);
+
            DiMuonTTCand.addUserFloat("vChi2PKRefit",chi2PionRefits[0]);
            DiMuonTTCand.addUserFloat("vChi2KPRefit",chi2PionRefits[1]);
            DiMuonTTCand.addUserFloat("vChi2PPRefit",chi2PionRefits[2]);
@@ -1232,15 +1253,15 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 }
 
 void DiMuonDiTrakProducerFit::endJob(){
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "DiMuonDiTrakFit Candidate producer report:" << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "Events with DiMuon candidates " << ndimuon << std::endl;
   std::cout << "Events with DiMuonDiTrak candidates " << nreco << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
   std::cout << "Found " << candidates << " DiMuonDiTrak candidates." << std::endl;
-  std::cout << "###########################" << std::endl;
+  std::cout << "#########################################" << std::endl;
 }
 
 bool DiMuonDiTrakProducerFit::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){

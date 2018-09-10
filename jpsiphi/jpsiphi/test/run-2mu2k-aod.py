@@ -82,7 +82,7 @@ process.muonMatchHLTCtfTrack.maxDPtRel = 10.0
 process.muonMatchHLTTrackMu.maxDeltaR = 0.1
 process.muonMatchHLTTrackMu.maxDPtRel = 10.0
 
-#######################################################################
+###################################################################################################
 ##Pions
 
 makeTrackCandidates( process,                                # patAODTrackCands
@@ -104,7 +104,7 @@ makeTrackCandidates( process,                                # patAODTrackCands
 l1cands = getattr(process, 'patTrackCands')
 l1cands.addGenMatch = False
 
-###################################################
+#################################################################
 ##Kaons
 
 #process.RungeKuttaTrackerPropagator.Mass = cms.double(0.493677)
@@ -132,7 +132,7 @@ makeTrackCandidates( process,                                        # patAODTra
 l1cands = getattr(process, 'patTrackKaonCands')
 l1cands.addGenMatch = False
 
-########################################################################
+####################################################################################################
 ##Tracks - adding tracks refitted with different mass
 
 #process.RungeKuttaTrackerPropagatorForMuons = TrackingTools.MaterialEffects.RungeKuttaTrackerPropagator_cfi.RungeKuttaTrackerPropagator.clone( Mass = cms.double(0.10565837), ComponentName = cms.string('RungeKuttaTrackerPropagatorForMuons') )
