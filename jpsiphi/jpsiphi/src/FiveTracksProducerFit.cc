@@ -261,9 +261,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              //if(i!=5 && fifthTrack.charge() == 0) continue;
 
              if(tp->charge() > 0)
-              fiveCands.push_back(makeFiveCandidateMixed(dimuon_cand, tp, tm, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
+              fiveCands.push_back(makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
              else
-              fiveCands.push_back(makeFiveCandidateMixed(dimuon_cand, tm, tp, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
+              fiveCands.push_back(makeFiveCandidateMixed(*dimuon_cand, *tm, *tp, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
 
              //Kinematic Fit
              const ParticleMass muonMass(0.1056583);
