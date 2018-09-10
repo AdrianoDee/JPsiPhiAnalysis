@@ -238,7 +238,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
 # )
 
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
+process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
 	DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
 	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
 	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),

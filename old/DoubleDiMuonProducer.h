@@ -7,29 +7,6 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
-
-#include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
-#include "RecoVertex/KinematicFit/interface/KinematicParticleVertexFitter.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
-#include "RecoVertex/KinematicFit/interface/MassKinematicConstraint.h"
-#include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
-#include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticle.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/TransientTrackKinematicParticle.h"
-#include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
-
-#include "MagneticField/Engine/interface/MagneticField.h"
-#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
-#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
-#include "TrackingTools/IPTools/interface/IPTools.h"
-#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
-
-
 #include "DataFormats/Math/interface/LorentzVector.h"
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/PatCandidates/interface/UserData.h"
@@ -54,15 +31,10 @@ class DoubleDiMuonProducer : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> HighDiMuonCollection_;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> LowDiMuonCollection_;
-  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   std::vector<double> HighDiMuonMassCuts_;
   std::vector<double> LowDiMuonMassCuts_;
   std::vector<double> DoubleDiMuonMassCuts_;
-  double JPsiMass_,PhiMass_;
   bool addMCTruth_;
-  bool addSameSig_;
-  bool doDoubleConstant_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genJpsi);

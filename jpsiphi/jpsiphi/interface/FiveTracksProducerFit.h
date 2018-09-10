@@ -1,6 +1,6 @@
 /**
    \file
-   Declaration of FiveTracksProducerFit
+   Declaration of FiveTracksProducer
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
@@ -61,10 +61,10 @@
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class FiveTracksProducerFit : public edm::EDProducer {
+class FiveTracksProducer : public edm::EDProducer {
 
  public:
-  explicit FiveTracksProducerFit(const edm::ParameterSet& ps);
+  explicit FiveTracksProducer(const edm::ParameterSet& ps);
 
  private:
 

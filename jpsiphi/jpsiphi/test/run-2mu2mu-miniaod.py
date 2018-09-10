@@ -222,7 +222,7 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
 # )
 
 
-process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducerFit',
+process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
     HighDiMuonCollection  = cms.InputTag('JPsi2MuMuPAT'),
     LowDiMuonCollection  = cms.InputTag('Phi2MuMuPAT'),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -243,7 +243,7 @@ process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducerFit',
 	AddSS    = cms.bool(True),
 )
 
-process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
+process.FiveTracksProducer = cms.EDProducer('FiveTracksProducer',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
 	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
@@ -287,7 +287,7 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 #     TreeName = cms.string('JPsiPhiTree')
 # )
 
-process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootuplerFit',
+process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootupler',
     FourMuons = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
 	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
 	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),

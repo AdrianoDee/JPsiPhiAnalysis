@@ -1,8 +1,8 @@
-#include "../interface/FiveTracksProducerFit.h"
+#include "../interface/FiveTracksProducer.h"
 #include <tuple>
 #include <map>
 
-float FiveTracksProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float FiveTracksProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -13,14 +13,14 @@ float FiveTracksProducerFit::DeltaR(const pat::PackedCandidate t1, const pat::Tr
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-bool FiveTracksProducerFit::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+bool FiveTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
 bool
-FiveTracksProducerFit::isAbHadron(int pdgID) {
+FiveTracksProducer::isAbHadron(int pdgID) {
 
   if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
   return false;
@@ -28,7 +28,7 @@ FiveTracksProducerFit::isAbHadron(int pdgID) {
 }
 
 bool
-FiveTracksProducerFit::isAMixedbHadron(int pdgID, int momPdgID) {
+FiveTracksProducer::isAMixedbHadron(int pdgID, int momPdgID) {
 
   if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
   (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
@@ -38,7 +38,7 @@ FiveTracksProducerFit::isAMixedbHadron(int pdgID, int momPdgID) {
 }
 
 bool
-FiveTracksProducerFit::isTheCandidate(reco::GenParticleRef genY) {
+FiveTracksProducer::isTheCandidate(reco::GenParticleRef genY) {
 
   bool goToJPsi = false;
   bool goToPhi = false;
@@ -74,7 +74,7 @@ FiveTracksProducerFit::isTheCandidate(reco::GenParticleRef genY) {
 
 }
 
-bool FiveTracksProducerFit::isSameTrack(reco::Track t1, reco::Track t2)
+bool FiveTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 {
 
   float p1 = t1.phi();
@@ -90,7 +90,7 @@ bool FiveTracksProducerFit::isSameTrack(reco::Track t1, reco::Track t2)
 
 }
 
-FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
+FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrakCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
@@ -118,7 +118,7 @@ FiveTracksProducerFit::FiveTracksProducerFit(const edm::ParameterSet& iConfig):
   ncomboneu = 0;
 }
 
-void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
+void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> fiveCandColl(new pat::CompositeCandidateCollection);
 
@@ -439,6 +439,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              std::string name;
              for(size_t i = 0; i<fiveCands.size();i++)
              {
+
                fiveCands[i].addUserFloat("vProb",fiveTracksVProb[i]);
                fiveCands[i].addUserFloat("vChi2",fiveTracksCTau[i]);
                fiveCands[i].addUserFloat("nDof",fiveTracksCTauErr[i]);
@@ -466,7 +467,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
   nevents++;
 }
 
-void FiveTracksProducerFit::endJob(){
+void FiveTracksProducer::endJob(){
   std::cout << "#########################################" << std::endl;
   std::cout << "FiveTracks Candidate producer report:" << std::endl;
   std::cout << "#########################################" << std::endl;
@@ -475,14 +476,14 @@ void FiveTracksProducerFit::endJob(){
   std::cout << "#########################################" << std::endl;
 }
 
-bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
+bool FiveTracksProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
   double DeltaEta = fabs(mu.eta()-tk.eta());
   double DeltaP   = fabs(mu.p()-tk.p());
   if (DeltaEta < 0.01 && DeltaP < 0.01) return true;
   return false;
 }
 
-bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2){
+bool FiveTracksProducer::IsTheSame(const pat::PackedCandidate& t1, const pat::PackedCandidate& t2){
   double DeltaEta = fabs(t1.eta()-t2.eta());
   double DeltaP   = fabs(t1.p()-t2.p());
   if (DeltaEta < 0.01 && DeltaP < 0.01) return true;
@@ -490,7 +491,7 @@ bool FiveTracksProducerFit::IsTheSame(const pat::PackedCandidate& t1, const pat:
 }
 
 
-pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
+pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
                                           const pat::CompositeCandidate& dimuonditrak,
                                           const pat::PackedCandidate& trak
                                          ){
@@ -512,7 +513,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidate(
   return fiveCandKaon;
 }
 
-pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
+pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& dimuon,
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN,
@@ -570,7 +571,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   return fiveCand;
 }
 
-pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
+pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& dimuon,
                                           const pat::CompositeCandidate& trakP,
                                           const pat::CompositeCandidate& trakN,
@@ -604,7 +605,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   return fiveCand;
 }
 
-pat::CompositeCandidate FiveTracksProducerFit::makePsi2SCandidate(
+pat::CompositeCandidate FiveTracksProducer::makePsi2SCandidate(
                                           const pat::CompositeCandidate& dimuon,
                                           const pat::CompositeCandidate& t1,
                                           const pat::CompositeCandidate& t2
@@ -624,9 +625,9 @@ pat::CompositeCandidate FiveTracksProducerFit::makePsi2SCandidate(
   return psi2sCand;
 }
 
-reco::Candidate::LorentzVector FiveTracksProducerFit::convertVector(const math::XYZTLorentzVectorF& v){
+reco::Candidate::LorentzVector FiveTracksProducer::convertVector(const math::XYZTLorentzVectorF& v){
 
   return reco::Candidate::LorentzVector(v.x(),v.y(), v.z(), v.t());
 }
 //define this as a plug-in
-DEFINE_FWK_MODULE(FiveTracksProducerFit);
+DEFINE_FWK_MODULE(FiveTracksProducer);
