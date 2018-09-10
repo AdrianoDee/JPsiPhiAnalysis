@@ -1105,6 +1105,26 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
              {
                  const ParticleMass oneMass(oneMasses[iP]);
                  const ParticleMass twoMass(twoMasses[iP]);
+
+                 float trakSigma1 = oneMass*1E-6;
+                 float trakSigma2 = twoMass*1E-6;
+
+                 pat::CompositeCandidate otherTTCand = makeTTCandidate(posTrack,negTrack);
+
+                 double m_kaon1 = MassTraks_[0];
+                 math::XYZVector mom_kaon1 = posTrack.momentum();
+                 double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
+                 math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
+                 double m_kaon2 = MassTraks_[1];
+                 math::XYZVector mom_kaon2 = negTrack.momentum();
+                 double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
+                 math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
+                 reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
+
+                 reco::Candidate::LorentzVector vDiMuonT = dimuonCand.p4() + vTT.p4();
+
+                 massPionRefits[iP] = vDiMuonT.mass();
+
                  kinChi = 0.;
                  kinNdf = 0.;
 
@@ -1112,7 +1132,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
-                 pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma1));
+                 pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma2));
 
                  //RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
                  KinematicConstrainedVertexFitter pFitter;
@@ -1127,7 +1147,7 @@ void DiMuonDiTrakProducerFit::produce(edm::Event& iEvent, const edm::EventSetup&
 
                     if (fitPion->currentState().isValid())
                     {
-                      massPionRefits[iP] = fitPion->currentState().mass();
+                      
                       chi2PionRefits[iP] = vPion->chiSquared();
                       nDofPionRefits[iP] = (double)(vPion->degreesOfFreedom());
                       vProbPionRefits[iP] = ChiSquaredProbability(chi2PionRefits[iP],nDofPionRefits[iP]);
