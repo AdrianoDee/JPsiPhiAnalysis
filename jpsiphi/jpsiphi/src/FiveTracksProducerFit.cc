@@ -398,7 +398,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
                float tk1_en_fit = sqrt(tk1_ma_fit*tk1_ma_fit+tk1_px_fit*tk1_px_fit+tk1_py_fit*tk1_py_fit+tk1_pz_fit*tk1_pz_fit);
                reco::CompositeCandidate recoTk1(tk1_ch_fit,math::XYZTLorentzVector(tk1_px_fit,tk1_py_fit,tk1_pz_fit,tk1_en_fit),
                                                 math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
-               pat::CompositeCandidate patTk1(recotk1);
+               pat::CompositeCandidate patTk1(recoTk1);
 
    // get tn
                child = fiveVertexFitTree->movePointerToTheNextChild();
@@ -426,7 +426,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
                reco::CompositeCandidate recoTk3(tk3_ch_fit,math::XYZTLorentzVector(tk3_px_fit,tk3_py_fit,tk3_pz_fit,tk3_en_fit),
                                                 math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
-               pat::CompositeCandidate patTk3(recotk3);
+               pat::CompositeCandidate patTk3(recoTk3);
 
                fiveCands[i].addDaughter("fiveRef",makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3));
 
