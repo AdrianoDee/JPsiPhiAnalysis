@@ -310,7 +310,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
              five_ma_fit = fitF->currentState().mass();
              five_x2_fit = fitFVertex->chiSquared();
-             five_nd_fit = (double)(fitFVertex->degreesOfFreedom())
+             five_nd_fit = (double)(fitFVertex->degreesOfFreedom());
              five_vp_fit = ChiSquaredProbability(five_x2_fit,five_nd_fit);
 
              //five_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
@@ -319,7 +319,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              double five_px_fit = fitF->currentState().kinematicParameters().momentum().x();
              double five_py_fit = fitF->currentState().kinematicParameters().momentum().y();
              double five_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
-             double five_en_fit = sqrt(five_ma_fit*five_ma_fit+five_pfive_fit*five_pfive_fit+five_py_fit*five_py_fit+five_pz_fit*five_pz_fit);
+             double five_en_fit = sqrt(five_ma_fit*five_ma_fit+five_px_fit*five_px_fit+five_py_fit*five_py_fit+five_pz_fit*five_pz_fit);
              double five_vx_fit = fitFVertex->position().x();
              double five_vy_fit = fitFVertex->position().y();
              double five_vz_fit = fitFVertex->position().z();
