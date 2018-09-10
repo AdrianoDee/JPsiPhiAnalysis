@@ -428,7 +428,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
                                                 math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
                pat::CompositeCandidate patTk3(recoTk3);
 
-               fiveCands[i].addDaughter("fiveRef",&makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3));
+               fiveCands[i].addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
 
              }
 
@@ -437,12 +437,12 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
              std::string name;
              for(size_t i = 0; i<fiveCands.size();i++)
              {
-               fiveCands[i].addUserFloat("vProb",fiveTracksVProb);
-               fiveCands[i].addUserFloat("vChi2",fiveTracksCTau);
-               fiveCands[i].addUserFloat("nDof",fiveTracksCTauErr);
-               fiveCands[i].addUserFloat("cosAlpha",fiveTracksCosAlpha);
-               fiveCands[i].addUserFloat("ctauPV",fiveTracksVNDof);
-               fiveCands[i].addUserFloat("ctauErrPV",fiveTracksVChi2);
+               fiveCands[i].addUserFloat("vProb",fiveTracksVProb[i]);
+               fiveCands[i].addUserFloat("vChi2",fiveTracksCTau[i]);
+               fiveCands[i].addUserFloat("nDof",fiveTracksCTauErr[i]);
+               fiveCands[i].addUserFloat("cosAlpha",fiveTracksCosAlpha[i]);
+               fiveCands[i].addUserFloat("ctauPV",fiveTracksVNDof[i]);
+               fiveCands[i].addUserFloat("ctauErrPV",fiveTracksVChi2[i]);
 
                name = "fiveCand_" + std::to_string(i);
 
@@ -519,28 +519,28 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
                                           float massThree
                                          ){
 
-  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trackThree;
+  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trakThree;
   pat::CompositeCandidate psiPrimeOne, psiPrimeTwo, psiPrimeThree;
   fiveCand.addDaughter(dimuon,"dimuon");
 
   fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
 
   double m_trakP = massOne;
-  math::XYZVector mom_trakP = trak.momentum();
+  math::XYZVector mom_trakP = trak1.momentum();
   double e_trakP = sqrt(m_trakP*m_trakP + mom_trakP.Mag2());
   math::XYZTLorentzVector p4_trakP = math::XYZTLorentzVector(mom_trakP.X(),mom_trakP.Y(),mom_trakP.Z(),e_trakP);
   trakOne.setCharge(trakP.charge());
   trakOne.setP4(p4_trakP);
 
   double m_trakN = massOne;
-  math::XYZVector mom_trakN = trak.momentum();
+  math::XYZVector mom_trakN = trak2.momentum();
   double e_trakN = sqrt(m_trakN*m_trakN + mom_trakN.Mag2());
   math::XYZTLorentzVector p4_trakN = math::XYZTLorentzVector(mom_trakN.X(),mom_trakN.Y(),mom_trakN.Z(),e_trakN);
   trakTwo.setCharge(trakN.charge());
   trakTwo.setP4(p4_trakN);
 
   double m_trak3 = massOne;
-  math::XYZVector mom_trak3 = trak.momentum();
+  math::XYZVector mom_trak3 = trak3.momentum();
   double e_trak3 = sqrt(m_trak3*m_trak3 + mom_trak3.Mag2());
   math::XYZTLorentzVector p4_trak3 = math::XYZTLorentzVector(mom_trak3.X(),mom_trak3.Y(),mom_trak3.Z(),e_trak3);
   trakThree.setCharge(trak3.charge());
@@ -552,10 +552,10 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
 
   psiPrimeOne   = makePsi2SCandidate(trakOne,trakTwo);
 
-  if(trakOne * trackThree <= 0)
-    psiPrimeTwo   = makePsi2SCandidate(dimuon,trakOne,trackThree);
+  if(trakOne.charge() * trakThree.charge() <= 0)
+    psiPrimeTwo   = makePsi2SCandidate(dimuon,trakOne,trakThree);
   else
-    psiPrimeTwo   = makePsi2SCandidate(dimuon,trakTwo,trackThree);
+    psiPrimeTwo   = makePsi2SCandidate(dimuon,trakTwo,trakThree);
 
   fiveCand.addDaughter(psiPrimeOne,"psiPrimeOne");
   fiveCand.addDaughter(psiPrimeTwo,"psiPrimeTwo");
