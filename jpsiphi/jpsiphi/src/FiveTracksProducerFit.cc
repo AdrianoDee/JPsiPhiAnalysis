@@ -526,14 +526,14 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
 
   double m_trakP = massOne;
-  math::XYZVector mom_trakP = trak1.momentum();
+  math::XYZVector mom_trakP = trakP.momentum();
   double e_trakP = sqrt(m_trakP*m_trakP + mom_trakP.Mag2());
   math::XYZTLorentzVector p4_trakP = math::XYZTLorentzVector(mom_trakP.X(),mom_trakP.Y(),mom_trakP.Z(),e_trakP);
   trakOne.setCharge(trakP.charge());
   trakOne.setP4(p4_trakP);
 
   double m_trakN = massOne;
-  math::XYZVector mom_trakN = trak2.momentum();
+  math::XYZVector mom_trakN = trakN.momentum();
   double e_trakN = sqrt(m_trakN*m_trakN + mom_trakN.Mag2());
   math::XYZTLorentzVector p4_trakN = math::XYZTLorentzVector(mom_trakN.X(),mom_trakN.Y(),mom_trakN.Z(),e_trakN);
   trakTwo.setCharge(trakN.charge());
@@ -550,7 +550,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   fiveCand.addDaughter(trakTwo,"trakTwo");
   fiveCand.addDaughter(trakThree,"trakThree");
 
-  psiPrimeOne   = makePsi2SCandidate(trakOne,trakTwo);
+  psiPrimeOne   = makePsi2SCandidate(dimuon,trakOne,trakTwo);
 
   if(trakOne.charge() * trakThree.charge() <= 0)
     psiPrimeTwo   = makePsi2SCandidate(dimuon,trakOne,trakThree);
@@ -560,7 +560,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   fiveCand.addDaughter(psiPrimeOne,"psiPrimeOne");
   fiveCand.addDaughter(psiPrimeTwo,"psiPrimeTwo");
 
-  reco::Candidate::LorentzVector v = p4_trakP + p4_trak3 + p4_trak3 + dimuonditrak.p4();
+  reco::Candidate::LorentzVector v = p4_trakP + p4_trak3 + p4_trak3 + dimuon.p4();
 
   fiveCand.setP4(v);
 
@@ -584,7 +584,7 @@ pat::CompositeCandidate FiveTracksProducerFit::makeFiveCandidateMixed(
   fiveCand.addDaughter(trakN,"trakTwo");
   fiveCand.addDaughter(trak3,"trakThree");
 
-  psiPrimeOne   = makePsi2SCandidate(trakP,trakN);
+  psiPrimeOne   = makePsi2SCandidate(dimuon,trakP,trakN);
 
   if(trakP.charge() * trakThree.charge() <= 0)
     psiPrimeTwo   = makePsi2SCandidate(dimuon,trakP,trak3);
