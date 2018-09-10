@@ -456,10 +456,9 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
                name = "fiveCand_" + std::to_string(i);
 
-               fiveCandKaon.addDaughter(name,fiveCands[i]);
+               fiveCandKaon.addDaughter(name,&fiveCands[i]);
              }
 
-             fiveCandColl.addUserInt("massSize",int(oneMasses.size()));
              fiveCandColl->push_back(fiveCandKaon);
 
            }

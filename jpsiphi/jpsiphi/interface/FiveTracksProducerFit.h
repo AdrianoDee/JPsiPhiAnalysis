@@ -91,10 +91,10 @@ class FiveTracksProducerFit : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
-  pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuonditrak,
-                                                const pat::CompositeCandidate& t1,
-                                                const pat::CompositeCandidate& t2
-                                              );
+  pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
+                                             const pat::CompositeCandidate& t1,
+                                             const pat::CompositeCandidate& t2,
+                                              )
 pat::CompositeCandidate makeFiveCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
                                             const pat::PackedCandidate& trakP,
