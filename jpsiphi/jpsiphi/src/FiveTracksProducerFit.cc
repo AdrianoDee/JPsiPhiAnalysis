@@ -183,7 +183,7 @@ void FiveTracksProducerFit::produce(edm::Event& iEvent, const edm::EventSetup& i
 
 
        //I want the positive and negative track to build psi2S with charge == 0
-       const pat::PackedCandidate *tp, pat::PackedCandidate *tm;
+       pat::PackedCandidate *tp, pat::PackedCandidate *tm;
        int tpId, tmId;
        if (dimuonditrakCand.daughter("ditrak")->daughter("highTrak") > 0)
         {
