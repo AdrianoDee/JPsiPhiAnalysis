@@ -93,6 +93,7 @@ bool FiveTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrakCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  trakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.8),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
@@ -218,7 +219,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          auto fifthTrack = trak->at(i);
 
 
-         if(fifthTrack.pt()<0.8) continue;
+         if(fifthTrack.pt()<trakPtCut_) continue;
          //if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;

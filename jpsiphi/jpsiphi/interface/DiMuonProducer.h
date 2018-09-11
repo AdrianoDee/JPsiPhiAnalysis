@@ -61,6 +61,7 @@ class DiMuonProducerPAT : public edm::EDProducer {
  private:
 
   edm::EDGetTokenT<edm::View<pat::Muon>> muons_;
+  double muonPtCut_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;

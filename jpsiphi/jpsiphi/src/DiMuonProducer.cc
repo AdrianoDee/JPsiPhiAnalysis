@@ -38,6 +38,7 @@
 
 DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
+muonPtCut_(iConfig.existsAs<double>("muonPtCut") ? iConfig.getParameter<double>("muonPtCut") : 0.7),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
 TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
@@ -339,7 +340,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // both must pass low quality
     if (!(m1.track().isNonnull())) continue;
     if (!(m1.innerTrack().isNonnull())) continue;
-    if (!(m1.track()->pt()>0.7)) continue;
+    if (!(m1.track()->pt()>muonPtCut_)) continue;
     // if(!lowerPuritySelection_(*it)) continue;
     //std::cout << "First muon quality flag" << std::endl;
     for (size_t j = i+1; j < muons->size(); j++) {
@@ -355,7 +356,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       // ---- fit vertex using Tracker tracks (if they have tracks) ----
       if (!(m2.track().isNonnull())) continue;
       if (!(m2.innerTrack().isNonnull())) continue;
-      if (!(m2.track()->pt()>0.7)) continue;
+      if (!(m2.track()->pt()>muonPtCut_)) continue;
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
