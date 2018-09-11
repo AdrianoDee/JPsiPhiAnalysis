@@ -38,7 +38,7 @@
 
 DiMuonProducerPAT::DiMuonProducerPAT(const edm::ParameterSet& iConfig):
 muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
-muonPtCut_(iConfig.existsAs<double>("muonPtCut") ? iConfig.getParameter<double>("muonPtCut") : 0.7),
+muonPtCut_(iConfig.existsAs<double>("MuonPtCut") ? iConfig.getParameter<double>("MuonPtCut") : 0.7),
 thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
 TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
