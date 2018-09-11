@@ -101,6 +101,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector < TLorentzVector > five_p4, five_ref_p4;
   std::vector < TLorentzVector > psiPrimeSame_p4, psiPrimeMixed_p4, psiPrimeSame_ditrak_p4, psiPrimeMixed_ditrak_p4;
   std::vector < TLorentzVector >  dimuonDiTrkOne_p4, dimuonDiTrkTwo_p4, dimuonDiTrkThree_p4;
+  std::vector < TLorentzVector > ditrakOne_p4, ditrakTwo_p4, ditrakThree_p4;
   UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrk_id;
 
   TLorentzVector dimuonditrk_p4, dimuon_p4, ditrak_p4;
@@ -815,9 +816,9 @@ if(!OnlyGen_)
         dimuonDiTrkTwo[j]  = dimuonDiTrkTwo_cand_ref->mass();
         dimuonDiTrkThree[j]  = dimuonDiTrkThree_cand_ref->mass();
 
-        trackOneMass[j]  = trakOne_cand_ref.mass();
-        trackTwoMass[j]  = trakTwo_cand_ref.mass();
-        trackThreeMass[j]  = trakThree_cand_ref.mass();
+        trackOneMass[j]  = trakOne_cand_ref->mass();
+        trackTwoMass[j]  = trakTwo_cand_ref->mass();
+        trackThreeMass[j]  = trakThree_cand_ref->mass();
 
         five_p4[j].SetPtEtaPhiM(five_cand_ref->pt(),five_cand_ref->eta(),five_cand_ref->phi(),five_cand_ref->mass());
         five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
@@ -842,8 +843,8 @@ if(!OnlyGen_)
 
         if(highTrack_charge>0)
         {
-          psiPrimeSame_p_cand_ref = trakOne_cand_ref;
-          psiPrimeSame_m_cand_ref = trakTwo_cand_ref;
+          psiPrimeSame_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
+          psiPrimeSame_m_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
 
           psiPrimeSame_p_n = 1.0;
           psiPrimeSame_m_n = 2.0;
@@ -853,8 +854,8 @@ if(!OnlyGen_)
         }
         else
         {
-          psiPrimeSame_p_cand_ref = trakTwo_cand_ref;
-          psiPrimeSame_m_cand_ref = trakOne_cand_ref;
+          psiPrimeSame_p_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
+          psiPrimeSame_m_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
 
           psiPrimeSame_p_n = 2.0;
           psiPrimeSame_m_n = 1.0;
@@ -883,8 +884,8 @@ if(!OnlyGen_)
 
           if(thirdTrack_charge>0)
           {
-            psiPrimeMixed_p_cand_ref = trakThree_cand_ref;
-            psiPrimeMixed_m_cand_ref = trakOne_cand_ref;
+            psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakThree"));
+            psiPrimeMixed_m_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
 
             psiPrimeMixed_p_n = 3.0;
             psiPrimeMixed_m_n = 1.0;
@@ -895,8 +896,8 @@ if(!OnlyGen_)
           }
           else
           {
-            psiPrimeMixed_p_cand_ref = trakOne_cand_ref;
-            psiPrimeMixed_m_cand_ref = trakThree_cand_ref;
+            psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
+            psiPrimeMixed_m_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakThree"));
 
             psiPrimeMixed_p_n = 1.0;
             psiPrimeMixed_m_n = 3.0;
@@ -913,8 +914,8 @@ if(!OnlyGen_)
 
           if(thirdTrack_charge>0)
           {
-            psiPrimeMixed_p_cand_ref = trakThree_cand_ref;
-            psiPrimeMixed_m_cand_ref = trakTwo_cand_ref;
+            psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakThree"));
+            psiPrimeMixed_m_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
 
             psiPrimeMixed_p_n = 3.0;
             psiPrimeMixed_m_n = 2.0;
@@ -925,8 +926,8 @@ if(!OnlyGen_)
           }
           else
           {
-            psiPrimeMixed_p_cand_ref = trakTwo_cand_ref;
-            psiPrimeMixed_m_cand_ref = trakThree_cand_ref;
+            psiPrimeMixed_p_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
+            psiPrimeMixed_m_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakThree"));
 
             psiPrimeMixed_p_n = 2.0;
             psiPrimeMixed_m_n = 3.0;
@@ -946,15 +947,15 @@ if(!OnlyGen_)
           if(highTrack_charge>0)
           {
 
-            psiPrimeMixed_p_cand_ref = trakOne_cand_ref;
-            psiPrimeMixed_m_cand_ref = trakTwo_cand_ref;
+            psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
+            psiPrimeMixed_m_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
             psiPrimeMixed_m_n[j] = 2.0;
             psiPrimeMixed_p_n[j] = 1.0;
           }
           else
           {
-            psiPrimeMixed_m_cand_ref = trakTwo_cand_ref;
-            psiPrimeMixed_p_cand_ref = trakOne_cand_ref;
+            psiPrimeMixed_m_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
+            psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
             psiPrimeMixed_p_n[j] = 1.0;
             psiPrimeMixed_m_n[j] = 2.0;
           }
@@ -968,9 +969,9 @@ if(!OnlyGen_)
         psiPrimeMixed_ditrak_p4[j].SetPtEtaPhiM(psiPrimeMixed_cand->pt(),psiPrimeMixed_cand->eta(),psiPrimeMixed_cand->phi(),psiPrimeMixed_cand->mass());
         psiPrimeMixed_ditrak[j]  = psiPrimeMixed_ditrak_cand->mass();
 
-        psiPrimeMixed_pt  = psiPrimeMixed_p4[j].pt();
-        psiPrimeMixed_eta = psiPrimeMixed_p4[j].eta();
-        psiPrimeMixed_phi = psiPrimeMixed_p4[j].phi();
+        psiPrimeMixed_pt  = psiPrimeMixed_p4[j].Pt();
+        psiPrimeMixed_eta = psiPrimeMixed_p4[j].Eta();
+        psiPrimeMixed_phi = psiPrimeMixed_p4[j].Phi();
 
         psiPrimeMixed_p_pt   = psiPrimeMixed_p_cand_ref->pt();
         psiPrimeMixed_p_eta  = psiPrimeMixed_p_cand_ref->eta();
