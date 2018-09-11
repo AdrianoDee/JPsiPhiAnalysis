@@ -34,6 +34,7 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
@@ -87,23 +88,23 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
 
-  std::vector < float > fiveTracksMass, fiveTracksMassRef triTrakMass;
-  std::vector < float > fiveTracksVProb, fiveTracksCTau, fiveTracksCTauErr;
-  std::vector < float > fiveTracksCosAlpha, psiPrimeSame, psiPrimeMixed, psiPrimeThree;
+  std::vector < float > fiveTracksMass, fiveTracksMassRef, triTrakMass;
+  std::vector < float > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
+  std::vector < float > fiveTracksCosAlpha, fiveTracksCTau, fiveTracksCTauErr;
+  std::vector < float > psiPrimeSame, psiPrimeMixed, psiPrimeThree;
   std::vector < float > trackOneMass, trackTwoMass, trackThreeMass;
   std::vector < float > psiPrimeSame_p_m, psiPrimeSame_m_m, psiPrimeMixed_p_m, psiPrimeMixed_m_m;
 
   std::vector < TLorentzVector > five_p4, five_ref_p4, psiPrimeSame_p4, psiPrimeMixed_p4;
-  std::vector < TLorentzVector >  dimuonDiTrakOne_p4, dimuonDiTrakTwo_p4, dimuonDiTrakThree_p4;
-  UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrak_id;
+  std::vector < TLorentzVector >  dimuonDiTrkOne_p4, dimuonDiTrkTwo_p4, dimuonDiTrkThree_p4;
+  UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrk_id;
 
-  TLorentzVector , dimuonditrk_p4, dimuon_p4, ditrak_p4;
+  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrak_p4;
   TLorentzVector muonp_p4;
   TLorentzVector muonn_p4;
   TLorentzVector kaonp_p4;
   TLorentzVector kaonn_p4;
 
-  TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_not_rf_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
   TLorentzVector ditrak_rf_p4, ditrak_not_rf_p4;
@@ -120,14 +121,13 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
-  Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuonditrk_pt,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
   Double_t highTrack_pt, highTrack_eta, highTrack_phi, highTrack_charge;
   Double_t lowTrack_pt, lowTrack_eta, lowTrack_phi, lowTrack_charge;
   Double_t thirdTrack_pt, thirdTrack_eta, thirdTrack_phi, thirdTrack_charge;
 
-  Double_t dimuonDiTrakOne_pt, dimuonDiTrakOne_eta, dimuonDiTrakOne_phi, dimuonDiTrakOne_charge;
-  Double_t dimuonDiTrakTwo_pt, dimuonDiTrakTwo_eta, dimuonDiTrakTwo_phi, dimuonDiTrakTwo_charge;
-  Double_t dimuonDiTrakThree_pt, dimuonDiTrakThree_eta, dimuonDiTrakThree_phi, dimuonDiTrakThree_charge;
+  Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge;
+  Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
+  Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge;
 
   Double_t psiPrimeSame_pt, psiPrimeSame_eta, psiPrimeSame_phi;
   Double_t psiPrimeSame_p_pt, psiPrimeSame_p_eta, psiPrimeSame_p_phi, psiPrimeSame_p_n;
@@ -136,6 +136,10 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t psiPrimeMixed_pt, psiPrimeMixed_eta, psiPrimeMixed_phi;
   Double_t psiPrimeMixed_p_pt, psiPrimeMixed_p_eta, psiPrimeMixed_p_phi, psiPrimeMixed_p_n;
   Double_t psiPrimeMixed_m_pt, psiPrimeMixed_m_eta, psiPrimeMixed_m_phi, psiPrimeMixed_m_n;
+
+  Double_t dimuonditrk_eta, dimuonditrk_pt , dimuonditrk_phi, dimuonditrk_eta, dimuonditrk_p;
+  Double_t dimuon_m, dimuon_pt, dimuon_eta, dimuon_phi, dimuon_p;
+  Double_t ditrak_m, ditrak_pt, ditrak_eta, ditrak_phi, ditrak_p;
 
   Double_t triTrak_pt, triTrak_eta, triTrak_phi, triTrak_charge;
 
@@ -247,18 +251,26 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
 
         fivetracks_tree->Branch("noFiveCandidates",      &noFiveCandidates,      "noFiveCandidates/I");
 
-        fivetracks_tree->Branch("dimuonditrak_id",      &dimuonditrak_id,      "dimuonditrak_id/I");
-        fivetracks_tree->Branch("dimuonditrak_p4",     "TLorentzVector", &dimuonditrak_p4);
+        fivetracks_tree->Branch("dimuonditrk_id",      &dimuonditrk_id,      "dimuonditrk_id/I");
+        fivetracks_tree->Branch("dimuonditrk_p4",     "TLorentzVector", &dimuonditrk_p4);
 
         fivetracks_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D");
         fivetracks_tree->Branch("dimuonditrk_pt",      &dimuonditrk_pt,       "dimuonditrk_pt/D");
         fivetracks_tree->Branch("dimuonditrk_eta",     &dimuonditrk_eta,      "dimuonditrk_eta/D");
         fivetracks_tree->Branch("dimuonditrk_phi",     &dimuonditrk_phi,      "dimuonditrk_phi/D");
+        fivetracks_tree->Branch("dimuonditrk_p",       &dimuonditrk_p,      "dimuonditrk_p/D");
 
         fivetracks_tree->Branch("dimuon_m",      &dimuon_m,     "dimuon_m/D");
         fivetracks_tree->Branch("dimuon_pt",     &dimuon_pt,    "dimuon_pt/D");
         fivetracks_tree->Branch("dimuon_eta",    &dimuon_pt,    "dimuon_eta/D");
         fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
+        fivetracks_tree->Branch("dimuon_p",    &dimuon_p,   "dimuon_p/D");
+
+        fivetracks_tree->Branch("ditrak_m",      &ditrak_m,     "ditrak_m/D"); //the original ditrak (supposed to be Phi->KK)
+        fivetracks_tree->Branch("ditrak_pt",     &ditrak_pt,    "ditrak_pt/D");
+        fivetracks_tree->Branch("ditrak_eta",    &ditrak_pt,    "ditrak_eta/D");
+        fivetracks_tree->Branch("ditrak_phi",    &ditrak_phi,   "ditrak_phi/D");
+        fivetracks_tree->Branch("ditrak_p",    &ditrak_p,   "ditrak_p/D");
 
         //The kinematic doesn't change, only mass
         fivetracks_tree->Branch("highTrack_pt",          &highTrack_pt,          "highTrack_pt/D");
@@ -277,20 +289,20 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("thirdTrack_charge",        &thirdTrack_charge,        "thirdTrack_charge/D");
 
         //J/Psi TrTr system
-        fivetracks_tree->Branch("dimuonDiTrakOne_pt",          &dimuonDiTrakOne_pt,          "dimuonDiTrakOne_pt/D");
-        fivetracks_tree->Branch("dimuonDiTrakOne_eta",        &dimuonDiTrakOne_eta,        "dimuonDiTrakOne_eta/D");
-        fivetracks_tree->Branch("dimuonDiTrakOne_phi",        &dimuonDiTrakOne_phi,        "dimuonDiTrakOne_phi/D");
-        fivetracks_tree->Branch("dimuonDiTrakOne_charge",        &dimuonDiTrakOne_charge,        "dimuonDiTrakOne_charge/D");
+        fivetracks_tree->Branch("dimuonDiTrkOne_pt",          &dimuonDiTrkOne_pt,          "dimuonDiTrkOne_pt/D");
+        fivetracks_tree->Branch("dimuonDiTrkOne_eta",        &dimuonDiTrkOne_eta,        "dimuonDiTrkOne_eta/D");
+        fivetracks_tree->Branch("dimuonDiTrkOne_phi",        &dimuonDiTrkOne_phi,        "dimuonDiTrkOne_phi/D");
+        fivetracks_tree->Branch("dimuonDiTrkOne_charge",        &dimuonDiTrkOne_charge,        "dimuonDiTrkOne_charge/D");
 
-        fivetracks_tree->Branch("dimuonDiTrakTwo_pt",          &dimuonDiTrakTwo_pt,          "dimuonDiTrakTwo_pt/D");
-        fivetracks_tree->Branch("dimuonDiTrakTwo_eta",        &dimuonDiTrakTwo_eta,        "dimuonDiTrakTwo_eta/D");
-        fivetracks_tree->Branch("dimuonDiTrakTwo_phi",        &dimuonDiTrakTwo_phi,        "dimuonDiTrakTwo_phi/D");
-        fivetracks_tree->Branch("dimuonDiTrakTwo_charge",        &dimuonDiTrakTwo_charge,        "dimuonDiTrakTwo_charge/D");
+        fivetracks_tree->Branch("dimuonDiTrkTwo_pt",          &dimuonDiTrkTwo_pt,          "dimuonDiTrkTwo_pt/D");
+        fivetracks_tree->Branch("dimuonDiTrkTwo_eta",        &dimuonDiTrkTwo_eta,        "dimuonDiTrkTwo_eta/D");
+        fivetracks_tree->Branch("dimuonDiTrkTwo_phi",        &dimuonDiTrkTwo_phi,        "dimuonDiTrkTwo_phi/D");
+        fivetracks_tree->Branch("dimuonDiTrkTwo_charge",        &dimuonDiTrkTwo_charge,        "dimuonDiTrkTwo_charge/D");
 
-        fivetracks_tree->Branch("dimuonDiTrakThree_pt",          &dimuonDiTrakThree_pt,          "dimuonDiTrakThree_pt/D");
-        fivetracks_tree->Branch("dimuonDiTrakThree_eta",        &dimuonDiTrakThree_eta,        "dimuonDiTrakThree_eta/D");
-        fivetracks_tree->Branch("dimuonDiTrakThree_phi",        &dimuonDiTrakThree_phi,        "dimuonDiTrakThree_phi/D");
-        fivetracks_tree->Branch("dimuonDiTrakThree_charge",        &dimuonDiTrakThree_charge,        "dimuonDiTrakThree_charge/D");
+        fivetracks_tree->Branch("dimuonDiTrkThree_pt",          &dimuonDiTrkThree_pt,          "dimuonDiTrkThree_pt/D");
+        fivetracks_tree->Branch("dimuonDiTrkThree_eta",        &dimuonDiTrkThree_eta,        "dimuonDiTrkThree_eta/D");
+        fivetracks_tree->Branch("dimuonDiTrkThree_phi",        &dimuonDiTrkThree_phi,        "dimuonDiTrkThree_phi/D");
+        fivetracks_tree->Branch("dimuonDiTrkThree_charge",        &dimuonDiTrkThree_charge,        "dimuonDiTrkThree_charge/D");
 
         //PsiPrime
         //One
@@ -354,9 +366,9 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           five_p4.push_back(zero);
           five_ref_p4.push_back(zero);
 
-          dimuonDiTrakOne_p4.push_back(zero);
-          dimuonDiTrakTwo_p4.push_back(zero);
-          dimuonDiTrakThree_p4.push_back(zero);
+          dimuonDiTrkOne_p4.push_back(zero);
+          dimuonDiTrkTwo_p4.push_back(zero);
+          dimuonDiTrkThree_p4.push_back(zero);
 
           psiPrimeSame_p4.push_back(zero);
           psiPrimeMixed_p4.push_back(zero);
@@ -410,12 +422,12 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           fivetracks_tree->Branch(name.c_str(),&psiPrimeMixed_m_m[i],var.c_str());
 
 
-          name = "onedimuonDiTrak_" + refNames[i]; var = name + "/D";
-          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrakOne[i],var.c_str());
-          name = "twodimuonDiTrak_" + refNames[i]; var = name + "/D";
-          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrakTwo[i],var.c_str());
-          name = "threedimuonDiTrak_" + refNames[i]; var = name + "/D";
-          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrakThree[i],var.c_str());
+          name = "onedimuonDiTrk_" + refNames[i]; var = name + "/D";
+          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrkOne[i],var.c_str());
+          name = "twodimuonDiTrk_" + refNames[i]; var = name + "/D";
+          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrkTwo[i],var.c_str());
+          name = "threedimuonDiTrk_" + refNames[i]; var = name + "/D";
+          fivetracks_tree->Branch(name.c_str(),&dimuonDiTrkThree[i],var.c_str());
 
 
           name = "trackOne_m_" + refNames[i]; var = name + "/D";
@@ -430,12 +442,12 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           name = "five_ref_p4_" + refNames[i];
           fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&five_ref_p4[i]);
 
-          name = "dimuonDiTrakOne_p4_" + refNames[i];
-          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrakOne_p4[i]);
-          name = "dimuonDiTrakTwo_p4_" + refNames[i];
-          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrakTwo_p4[i]);
-          name = "dimuonDiTrakThree_p4_" + refNames[i];
-          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrakThree_p4[i]);
+          name = "dimuonDiTrkOne_p4_" + refNames[i];
+          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrkOne_p4[i]);
+          name = "dimuonDiTrkTwo_p4_" + refNames[i];
+          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrkTwo_p4[i]);
+          name = "dimuonDiTrkThree_p4_" + refNames[i];
+          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrkThree_p4[i]);
 
           name = "psiPrimeSame_p4_" + refNames[i];
           fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&psiPrimeSame_p4[i]);
@@ -569,48 +581,58 @@ if(!OnlyGen_)
 
 
 
-    noFiveCandidates = (Int_t)(fivetracks_cand_handle.size());
+    noFiveCandidates = (Int_t)(fivetracks_cand_handle->size());
 
     for (unsigned int i=0; i< fivetracks_cand_handle->size(); i++)
     {
 
       pat::CompositeCandidate five_cand;
       const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand, *first_five_ref;
-      const pat::CompositeCandidate *dimuonDiTrakOne_cand, *dimuonDiTrakTwo_cand,
-      const pat::CompositeCandidate *dimuonDiTrakThree_cand, *dimuonditrak_cand, *dimuon_cand;
+      const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
+      const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrak_cand;
       const pat::CompositeCandidate *triTrak_cand;
 
       five_cand  = fivetracks_cand_handle->at(i);
-      dimuonditrak_id = userInt("dimuontt_index");
+      dimuonditrk_id = five_cand.userInt("dimuontt_index");
 
       std::string name = "fiveCand_" + std::to_string(0);
 
       first_five_ref     = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter(name));
 
-      dimuonditrak_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter("dimuonditrak"));
-      dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrak_cand->daughter("dimuon"));
+      dimuonditrk_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter("dimuonditrk"));
+      dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
+      ditrak_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrak"));
 
       trakOne_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakOne"));
       trakTwo_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakTwo"));
       trakThree_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakThree"));
 
-      dimuonDiTrakOne_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrakOne"));
-      dimuonDiTrakTwo_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrakTwo"));
-      dimuonDiTrakThree_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrakThree"));
+      dimuonDiTrkOne_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrkOne"));
+      dimuonDiTrkTwo_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrkTwo"));
+      dimuonDiTrkThree_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrkThree"));
 
       triTrak_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("triTrak"));
 
-      dimuonditrak_p4.SetPtEtaPhiM(dimuonditrak_cand->pt(),dimuonditrak_cand->eta(),dimuonditrak_cand->phi(),dimuonditrak_cand->mass());
-      dimuonditrk_m = dimuonditrak_cand->mass();
-      dimuonditrk_pt = dimuonditrak_cand->pt();
-      dimuonditrk_eta = dimuonditrak_cand->eta();
-      dimuonditrk_phi = dimuonditrak_cand->phi();
+      dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand->pt(),dimuonditrk_cand->eta(),dimuonditrk_cand->phi(),dimuonditrk_cand->mass());
+      dimuonditrk_m = dimuonditrk_cand->mass();
+      dimuonditrk_pt = dimuonditrk_cand->pt();
+      dimuonditrk_eta = dimuonditrk_cand->eta();
+      dimuonditrk_phi = dimuonditrk_cand->phi();
+      dimuonditrk_p = dimuonditrk_cand->p();
 
       dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
       dimuon_m = dimuon_cand->mass();
       dimuon_pt = dimuon_cand->pt();
       dimuon_eta = dimuon_cand->eta();
       dimuon_phi = dimuon_cand->phi();
+      dimuon_p = dimuon_cand->p();
+
+      ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(),ditrak_cand->eta(),ditrak_cand->phi(),ditrak_cand->mass());
+      ditrak_m = ditrak_cand->mass();
+      ditrak_pt = ditrak_cand->pt();
+      ditrak_eta = ditrak_cand->eta();
+      ditrak_phi = ditrak_cand->phi();
+      ditrak_p = ditrak_cand->p();
 
       //trakOne_cand.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
       highTrack_pt = trakOne_cand->pt();
@@ -628,20 +650,20 @@ if(!OnlyGen_)
       thirdTrack_phi = trakThree_cand->phi();
       thirdTrack_charge = trakThree_cand->charge();
 
-      dimuonDiTrakOne_pt     = dimuonDiTrakOne_cand->pt();
-      dimuonDiTrakOne_eta    = dimuonDiTrakOne_cand->eta();
-      dimuonDiTrakOne_phi    = dimuonDiTrakOne_cand->phi();
-      dimuonDiTrakOne_charge = dimuonDiTrakOne_cand->charge();
+      dimuonDiTrkOne_pt     = dimuonDiTrkOne_cand->pt();
+      dimuonDiTrkOne_eta    = dimuonDiTrkOne_cand->eta();
+      dimuonDiTrkOne_phi    = dimuonDiTrkOne_cand->phi();
+      dimuonDiTrkOne_charge = dimuonDiTrkOne_cand->charge();
 
-      dimuonDiTrakTwo_pt     = dimuonDiTrakTwo_cand->pt();
-      dimuonDiTrakTwo_eta    = dimuonDiTrakTwo_cand->eta();
-      dimuonDiTrakTwo_phi    = dimuonDiTrakTwo_cand->phi();
-      dimuonDiTrakTwo_charge = dimuonDiTrakTwo_cand->charge();
+      dimuonDiTrkTwo_pt     = dimuonDiTrkTwo_cand->pt();
+      dimuonDiTrkTwo_eta    = dimuonDiTrkTwo_cand->eta();
+      dimuonDiTrkTwo_phi    = dimuonDiTrkTwo_cand->phi();
+      dimuonDiTrkTwo_charge = dimuonDiTrkTwo_cand->charge();
 
-      dimuonDiTrakThree_pt     = dimuonDiTrakThree_cand->pt();
-      dimuonDiTrakThree_eta    = dimuonDiTrakThree_cand->eta();
-      dimuonDiTrakThree_phi    = dimuonDiTrakThree_cand->phi();
-      dimuonDiTrakThree_charge = dimuonDiTrakThree_cand->charge();
+      dimuonDiTrkThree_pt     = dimuonDiTrkThree_cand->pt();
+      dimuonDiTrkThree_eta    = dimuonDiTrkThree_cand->eta();
+      dimuonDiTrkThree_phi    = dimuonDiTrkThree_cand->phi();
+      dimuonDiTrkThree_charge = dimuonDiTrkThree_cand->charge();
 
       triTrak_pt     = triTrak_cand->pt();
       triTrak_eta    = triTrak_cand->eta();
@@ -654,7 +676,7 @@ if(!OnlyGen_)
         const pat::CompositeCandidate* five_cand_ref, *five_cand_ref_ref, *triTrak_cand_ref;
         const pat::PackedCandidate *trakOne_cand_ref, *trakTwo_cand_ref, *trakThree_cand_ref;
 
-        const pat::CompositeCandidate *dimuonDiTrakOne_cand_ref, *dimuonDiTrakTwo_cand_ref, *dimuonDiTrakThree_cand_ref;
+        const pat::CompositeCandidate *dimuonDiTrkOne_cand_ref, *dimuonDiTrkTwo_cand_ref, *dimuonDiTrkThree_cand_ref;
         const pat::CompositeCandidate *psiPrimeMixed_cand;
 
         name = "fiveCand_" + std::to_string(j);
@@ -678,15 +700,15 @@ if(!OnlyGen_)
         trakTwo_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
         trakThree_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakThree"));
 
-        dimuonDiTrakOne_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakOne"));
-        dimuonDiTrakTwo_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakTwo"));
-        dimuonDiTrakThree_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakThree"));
+        dimuonDiTrkOne_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkOne"));
+        dimuonDiTrkTwo_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkTwo"));
+        dimuonDiTrkThree_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkThree"));
 
         triTrak_cand_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("triTrak"));
 
-        dimuonDiTrakOne[j]  = dimuonDiTrakOne_cand_ref->mass();
-        dimuonDiTrakTwo[j]  = dimuonDiTrakTwo_cand_ref->mass();
-        dimuonDiTrakThree[j]  = dimuonDiTrakThree_cand_ref->mass();
+        dimuonDiTrkOne[j]  = dimuonDiTrkOne_cand_ref->mass();
+        dimuonDiTrkTwo[j]  = dimuonDiTrkTwo_cand_ref->mass();
+        dimuonDiTrkThree[j]  = dimuonDiTrkThree_cand_ref->mass();
 
         trackOneMass[j]  = trakOne_cand_ref.mass();
         trackTwoMass[j]  = trakTwo_cand_ref.mass();
@@ -695,20 +717,20 @@ if(!OnlyGen_)
         five_p4[j].SetPtEtaPhiM(five_cand_ref->pt(),five_cand_ref->eta(),five_cand_ref->phi(),five_cand_ref->mass());
         five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
 
-        dimuonDiTrakOne_p4[j].SetPtEtaPhiM(dimuonDiTrakOne_cand_ref->pt(),dimuonDiTrakOne_cand_ref->eta(),dimuonDiTrakOne_cand_ref->phi(),dimuonDiTrakOne_cand_ref->mass());
-        dimuonDiTrakTwo_p4[j].SetPtEtaPhiM(dimuonDiTrakTwo_cand_ref->pt(),dimuonDiTrakTwo_cand_ref->eta(),dimuonDiTrakTwo_cand_ref->phi(),dimuonDiTrakTwo_cand_ref->mass());
-        dimuonDiTrakThree_p4[j].SetPtEtaPhiM(dimuonDiTrakThree_cand_ref->pt(),dimuonDiTrakThree_cand_ref->eta(),dimuonDiTrakThree_cand_ref->phi(),dimuonDiTrakThree_cand_ref->mass());
+        dimuonDiTrkOne_p4[j].SetPtEtaPhiM(dimuonDiTrkOne_cand_ref->pt(),dimuonDiTrkOne_cand_ref->eta(),dimuonDiTrkOne_cand_ref->phi(),dimuonDiTrkOne_cand_ref->mass());
+        dimuonDiTrkTwo_p4[j].SetPtEtaPhiM(dimuonDiTrkTwo_cand_ref->pt(),dimuonDiTrkTwo_cand_ref->eta(),dimuonDiTrkTwo_cand_ref->phi(),dimuonDiTrkTwo_cand_ref->mass());
+        dimuonDiTrkThree_p4[j].SetPtEtaPhiM(dimuonDiTrkThree_cand_ref->pt(),dimuonDiTrkThree_cand_ref->eta(),dimuonDiTrkThree_cand_ref->phi(),dimuonDiTrkThree_cand_ref->mass());
 
         //////////////////////////
         ////PSI PRIME SAME
         // My PsiPrime Same come from the original Phi->kk traks + J/Psi
-        // Is simply the dimuonditrak refit with ππ πk kπ masses
-        // psiPrimeSame_cand == dimuonDiTrakOne_cand_ref;
+        // Is simply the dimuonditrk refit with ππ πk kπ masses
+        // psiPrimeSame_cand == dimuonDiTrkOne_cand_ref;
 
         const pat::PackedCandidate *psiPrimeSame_m_cand_ref, *psiPrimeSame_p_cand_ref;
 
-        psiPrimeSame_p4[j].SetPtEtaPhiM(dimuonDiTrakOne_cand_ref->pt(),dimuonDiTrakOne_cand_ref->eta(),dimuonDiTrakOne_cand_ref->phi(),dimuonDiTrakOne_cand_ref->mass());
-        psiPrimeSame[j] = dimuonDiTrakOne_cand_ref->mass();
+        psiPrimeSame_p4[j].SetPtEtaPhiM(dimuonDiTrkOne_cand_ref->pt(),dimuonDiTrkOne_cand_ref->eta(),dimuonDiTrkOne_cand_ref->phi(),dimuonDiTrkOne_cand_ref->mass());
+        psiPrimeSame[j] = dimuonDiTrkOne_cand_ref->mass();
         psiPrimeSame_pt  = psiPrimeSame_p4[j].pt();
         psiPrimeSame_eta = psiPrimeSame_p4[j].eta();
         psiPrimeSame_phi = psiPrimeSame_p4[j].phi();
@@ -749,9 +771,9 @@ if(!OnlyGen_)
         // This depends on the third track charge
 
         const pat::PackedCandidate *psiPrimeMixed_m_cand_ref, psiPrimeMixed_p_cand_ref;
-        if(dimuonDiTrakTwo_cand_ref->charge()==0)
+        if(dimuonDiTrkTwo_cand_ref->charge()==0)
         {
-          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakTwo"));
+          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkTwo"));
 
           if(thirdTrack_charge>0)
           {
@@ -777,9 +799,9 @@ if(!OnlyGen_)
           }
         }
         else
-        if(dimuonDiTrakTwo_cand_ref->charge()==0)
+        if(dimuonDiTrkTwo_cand_ref->charge()==0)
         {
-          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakThree"));
+          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkThree"));
 
           if(thirdTrack_charge>0)
           {
@@ -810,7 +832,7 @@ if(!OnlyGen_)
         if(thirdTrak->charge()==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
         {
 
-          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrakOne"));
+          psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkOne"));
 
           if(highTrack_charge>0)
           {
