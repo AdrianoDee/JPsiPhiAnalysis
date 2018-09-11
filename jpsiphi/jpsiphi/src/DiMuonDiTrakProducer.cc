@@ -367,7 +367,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
          auto posTrack = trak->at(i);
 
          if(!addSameSig_ && posTrack.charge()<=0) continue;
-         if(posTrack.pt()<0.7) continue;
+         if(posTrack.pt()<0.8) continue;
 	       //if(!IsMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
@@ -384,7 +384,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            auto negTrack = trak->at(j);
 
            if(!addSameSig_ && negTrack.charge()>=0) continue;
-           if(negTrack.pt()<0.7) continue;
+           if(negTrack.pt()<0.8) continue;
 
   	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;

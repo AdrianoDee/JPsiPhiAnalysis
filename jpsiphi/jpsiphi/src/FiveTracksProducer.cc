@@ -218,7 +218,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          auto fifthTrack = trak->at(i);
 
 
-         if(fifthTrack.pt()<0.7) continue;
+         if(fifthTrack.pt()<0.8) continue;
          //if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;
