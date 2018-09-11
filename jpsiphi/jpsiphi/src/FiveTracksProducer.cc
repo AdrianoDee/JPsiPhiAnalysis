@@ -544,23 +544,20 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   triTrak.setCharge(trakP.charge()+trakN.charge()+trak3.charge());
   fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
 
-  double m_trakP = massOne;
   math::XYZVector mom_trakP = trakP.momentum();
-  double e_trakP = sqrt(m_trakP*m_trakP + mom_trakP.Mag2());
+  double e_trakP = sqrt(massOne*massOne + mom_trakP.Mag2());
   math::XYZTLorentzVector p4_trakP = math::XYZTLorentzVector(mom_trakP.X(),mom_trakP.Y(),mom_trakP.Z(),e_trakP);
   trakOne.setCharge(trakP.charge());
   trakOne.setP4(p4_trakP);
 
-  double m_trakN = massOne;
   math::XYZVector mom_trakN = trakN.momentum();
-  double e_trakN = sqrt(m_trakN*m_trakN + mom_trakN.Mag2());
+  double e_trakN = sqrt(massTwo*massTwo + mom_trakN.Mag2());
   math::XYZTLorentzVector p4_trakN = math::XYZTLorentzVector(mom_trakN.X(),mom_trakN.Y(),mom_trakN.Z(),e_trakN);
   trakTwo.setCharge(trakN.charge());
   trakTwo.setP4(p4_trakN);
 
-  double m_trak3 = massOne;
   math::XYZVector mom_trak3 = trak3.momentum();
-  double e_trak3 = sqrt(m_trak3*m_trak3 + mom_trak3.Mag2());
+  double e_trak3 = sqrt(massThree*massThree + mom_trak3.Mag2());
   math::XYZTLorentzVector p4_trak3 = math::XYZTLorentzVector(mom_trak3.X(),mom_trak3.Y(),mom_trak3.Z(),e_trak3);
   trakThree.setCharge(trak3.charge());
   trakThree.setP4(p4_trak3);
