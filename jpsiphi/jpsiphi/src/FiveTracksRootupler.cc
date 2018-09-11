@@ -1,4 +1,4 @@
-ditrak/*
+/*
    Package:    FiveTracksRootupler
    Class:      FiveTracksRootupler
 
