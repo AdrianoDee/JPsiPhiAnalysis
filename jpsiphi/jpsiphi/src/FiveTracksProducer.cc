@@ -639,15 +639,20 @@ pat::CompositeCandidate FiveTracksProducer::makePsi2SCandidate(
                                           const pat::CompositeCandidate& t2
                                          ){
 
-  pat::CompositeCandidate psi2sCand;
+  pat::CompositeCandidate psi2sCand, ditrak;
   psi2sCand.setCharge(dimuon.charge()+t1.charge()+t2.charge());
-
+  ditrak.setCharge(t1.charge()+t2.charge());
   psi2sCand.addDaughter(dimuon,"dimuon");
   psi2sCand.addDaughter(t1,"trakOne");
   psi2sCand.addDaughter(t2,"trakTwo");
 
-  reco::Candidate::LorentzVector v = t1.p4() + t2.p4() + dimuon.p4();
+  reco::Candidate::LorentzVector v  = t1.p4() + t2.p4() + dimuon.p4();
+  reco::Candidate::LorentzVector vT = t1.p4() + t2.p4();
 
+  ditrak.setP4(vT);
+
+  psi2sCand.addDaughter(ditrak,"ditrak");
+  
   psi2sCand.setP4(v);
 
   return psi2sCand;
