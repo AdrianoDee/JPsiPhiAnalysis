@@ -803,13 +803,13 @@ if(!OnlyGen_)
 
         fiveTracksMassRef[j] = five_cand_ref->userFloat("mass_ref");
 
-        fiveTracksVProb[j] = five_cand.userFloat("vProb");
-        fiveTracksVNDof[j] = five_cand.userFloat("nDof");
-        fiveTracksVChi2[j] = five_cand.userFloat("vChi2");
+        fiveTracksVProb[j] = five_cand_ref->userFloat("vProb");
+        fiveTracksVNDof[j] = five_cand_ref->userFloat("nDof");
+        fiveTracksVChi2[j] = five_cand_ref->userFloat("vChi2");
 
-        fiveTracksCTau[j] = five_cand.userFloat("ctauPV");
-        fiveTracksCTauErr[j] = five_cand.userFloat("ctauErrPV");
-        fiveTracksCosAlpha[j] = five_cand.userFloat("cosAlpha");
+        fiveTracksCTau[j] = five_cand_ref->userFloat("ctauPV");
+        fiveTracksCTauErr[j] = five_cand_ref->userFloat("ctauErrPV");
+        fiveTracksCosAlpha[j] = five_cand_ref->userFloat("cosAlpha");
 
         trakOne_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakOne"));
         trakTwo_cand_ref = dynamic_cast<const pat::PackedCandidate*>(five_cand_ref->daughter("trakTwo"));
