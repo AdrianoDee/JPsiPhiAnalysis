@@ -424,10 +424,6 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           ditrakTwo_p4.push_back(zero);
           ditrakThree_p4.push_back(zero);
 
-          diTrkOne_p4.push_back(zero);
-          diTrkTwo_p4.push_back(zero);
-          diTrkThree_p4.push_back(zero);
-
           psiPrimeSame_p4.push_back(zero);
           psiPrimeMixed_p4.push_back(zero);
 
@@ -668,7 +664,7 @@ if(!OnlyGen_)
       const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand, *first_five_ref;
       const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
       const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand;
-      const pat::CompositeCandidate *triTrak_cand;
+      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand;
 
       five_cand  = fivetracks_cand_handle->at(i);
       dimuonditrk_id = five_cand.userInt("dimuontt_index");
@@ -938,7 +934,7 @@ if(!OnlyGen_)
 
         }
         else
-        if(thirdTrak->charge()==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
+        if(thirdTrack->charge()==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
         {
 
           psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkOne"));
@@ -981,7 +977,7 @@ if(!OnlyGen_)
         psiPrimeMixed_m_eta  = psiPrimeMixed_m_cand_ref->eta();
         psiPrimeMixed_m_phi  = psiPrimeMixed_m_cand_ref->phi();
 
-        triTrakMass[j] = triTrak_cand_ref->mass()
+        triTrakMass[j] = triTrak_cand_ref->mass();
       }
 
       fivetracks_tree->Fill();

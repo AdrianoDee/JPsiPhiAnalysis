@@ -92,7 +92,6 @@ bool FiveTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 
 FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrakCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
-  TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
@@ -652,7 +651,7 @@ pat::CompositeCandidate FiveTracksProducer::makePsi2SCandidate(
   ditrak.setP4(vT);
 
   psi2sCand.addDaughter(ditrak,"ditrak");
-  
+
   psi2sCand.setP4(v);
 
   return psi2sCand;
