@@ -186,6 +186,7 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
+        MuonPtCut                   = cms.double(0.9),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
@@ -203,7 +204,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
 process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
       OniaTag             = cms.InputTag("JPsi2MuMuPAT"),
       singlemuonSelection = cms.string(""),
-      dimuonSelection     = cms.string("2.95 < mass && mass < 3.25 && userFloat('vProb') > 0.01 && pt > 2.0"),
+      dimuonSelection     = cms.string("2.93 < mass && mass < 3.28 && userFloat('vProb') > 0.001 && pt > 2.0"),
       do_trigger_match    = cms.bool(False),
       HLTFilters          = filters
 )
@@ -274,15 +275,16 @@ process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pi
 
 
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
-    DiMuon = cms.InputTag('JPsi2MuMuPAT'),
-    TrackMatcher = cms.InputTag("trackMatch"),
-    PFCandidates = cms.InputTag('packedPFCandidates'),
-        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-        primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerInput            = cms.InputTag("unpackPatTriggers"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
+    DiMuon              = cms.InputTag('JPsi2MuMuPAT'),
+    TrackMatcher        = cms.InputTag("trackMatch"),
+    PFCandidates        = cms.InputTag('packedPFCandidates'),
+    TrakPtCut           = cms.double(0.85),
+    beamSpotTag         = cms.InputTag('offlineBeamSpot'),
+    primaryVertexTag    = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerInput        = cms.InputTag("unpackPatTriggers"),
+    TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
+    DiMuonMassCuts      = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    TrakTrakMassCuts    = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
     JPsiMass = cms.double(3.096916),
@@ -298,8 +300,9 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
 )
 
 process.FiveTracksProducer = cms.EDProducer('FiveTracksProducer',
-    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    PFCandidates = cms.InputTag('packedPFCandidates'),
+    DiMuoDiTrak         = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
+    PFCandidates        = cms.InputTag('packedPFCandidates'),
+    TrakPtCut           = cms.double(0.85)
     beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
     primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
