@@ -801,7 +801,7 @@ if(!OnlyGen_)
 
         fiveTracksMass[j] = five_cand_ref->mass();
 
-        fiveTracksMassRef[j] = five_cand.userFloat("mass_ref");
+        fiveTracksMassRef[j] = five_cand_ref->userFloat("mass_ref");
 
         fiveTracksVProb[j] = five_cand.userFloat("vProb");
         fiveTracksVNDof[j] = five_cand.userFloat("nDof");

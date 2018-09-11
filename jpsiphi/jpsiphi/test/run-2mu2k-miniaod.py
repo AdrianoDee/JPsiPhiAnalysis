@@ -360,7 +360,7 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     TreeName = cms.string('JPsiPhiTree')
 )
 
-process.fiverootuple = cms.EDAnalyzer('FiveTracksRootupler',
+process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
     FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
     beamSpotTag = cms.InputTag("offlineBeamSpot"),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -403,6 +403,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
                      process.FiveTracksProducer *
-                     #process.rootuplefive *
+                     process.rootupleFive *
                      process.rootuple *
                      process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK
