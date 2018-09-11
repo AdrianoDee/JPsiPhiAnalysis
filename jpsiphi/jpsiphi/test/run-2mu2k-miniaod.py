@@ -1,4 +1,4 @@
-mport FWCore.ParameterSet.Config as cms
+import FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
 from FWCore.ParameterSet.VarParsing import VarParsing
@@ -374,17 +374,17 @@ process.fiverootuple = cms.EDAnalyzer('FiveTracksRootupler',
 )
 
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
-                          dimuons = cms.InputTag("JPsi2MuMuFilter"),
-                          muons = cms.InputTag("replaceme"),
-                          primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-                          TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-                          dimuon_pdgid = cms.uint32(443),
-                          dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-                          isMC = cms.bool(False),
-                          OnlyBest = cms.bool(False),
-                          OnlyGen = cms.bool(False),
-                          HLTs = hltpaths
-                          )
+      dimuons = cms.InputTag("JPsi2MuMuFilter"),
+      muons = cms.InputTag("replaceme"),
+      primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+      TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+      dimuon_pdgid = cms.uint32(443),
+      dimuon_mass_cuts = cms.vdouble(2.5,3.5),
+      isMC = cms.bool(False),
+      OnlyBest = cms.bool(False),
+      OnlyGen = cms.bool(False),
+      HLTs = hltpaths
+      )
 
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 
@@ -400,6 +400,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
                      process.FiveTracksProducer *
-                     #process.rootuplefive * 
+                     #process.rootuplefive *
                      process.rootuple *
                      process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK

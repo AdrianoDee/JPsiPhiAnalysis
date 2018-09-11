@@ -250,7 +250,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          bool atLeastOne = false;
 
-         for(size_t i = 0; i<oneMasses.size();i++)
+         for(size_t j = 0; j<oneMasses.size();j++)
          {
 
              fiveTracksMass.push_back(FiveTrakMassMin-0.2);
@@ -264,24 +264,21 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              hasRefit.push_back(0.0);
 
              //if(i!=5 && fifthTrack.charge() == 0) continue;
-
-             if(tp->charge() > 0)
-              fiveCands.push_back(makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
-             else
-              fiveCands.push_back(makeFiveCandidateMixed(*dimuon_cand, *tm, *tp, fifthTrack,oneMasses[i] ,twoMasses[i] ,threeMasses[i]));
+             pat::CompositeCandidate thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]);
+             fiveCands.push_back(thisFive);
 
              //Kinematic Fit
              const ParticleMass muonMass(0.1056583);
              float muonSigma = muonMass*1E-6;
-             const ParticleMass trakMassP(oneMasses[i]);
+             const ParticleMass trakMassP(oneMasses[j]);
              float trakSigmaP = trakMassP*1E-6;
-             const ParticleMass trakMassM(twoMasses[i]);
+             const ParticleMass trakMassM(twoMasses[j]);
              float trakSigmaM = trakMassM*1E-6;
-             const ParticleMass fifthMass(threeMasses[i]);
+             const ParticleMass fifthMass(threeMasses[j]);
              float fifthSigma = fifthMass*1E-6;
 
 
-             if (fiveCands[i].mass() > FiveTrakMassMax || fiveCands[i].mass() < FiveTrakMassMin)
+             if (thisFive.mass() > FiveTrakMassMax || thisFive.mass() < FiveTrakMassMin)
              atLeastOne = true;
 
              std::vector<reco::TransientTrack> fiveTracks;
@@ -314,7 +311,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
              if (!(fitF->currentState().isValid())) continue;
 
-             hasRefit[i] = 1.0;
+             hasRefit[j] = 1.0;
 
              five_ma_fit = fitF->currentState().mass();
              five_x2_fit = fitFVertex->chiSquared();
@@ -355,13 +352,13 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
              double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*five_ma_fit/(pperp.Perp2());
 
-             fiveTracksMass[i]      = five_ma_fit;
-             fiveTracksVProb[i]     = five_vp_fit;
-             fiveTracksCTau[i]      = ctauPV;
-             fiveTracksCTauErr[i]   = ctauErrPV;
-             fiveTracksCosAlpha[i]  = cosAlpha;
-             fiveTracksVNDof[i]     = five_nd_fit;
-             fiveTracksVChi2[i]     = five_x2_fit;
+             fiveTracksMass[j]      = five_ma_fit;
+             fiveTracksVProb[j]     = five_vp_fit;
+             fiveTracksCTau[j]      = ctauPV;
+             fiveTracksCTauErr[j]   = ctauErrPV;
+             fiveTracksCosAlpha[j]  = cosAlpha;
+             fiveTracksVNDof[j]     = five_nd_fit;
+             fiveTracksVChi2[j]     = five_x2_fit;
 
  // get first muon
              bool child = fiveVertexFitTree->movePointerToTheFirstChild();
@@ -437,7 +434,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                                               math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
              pat::CompositeCandidate patTk3(recoTk3);
 
-               fiveCands[i].addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
+               thisFive.addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
 
             }
 
@@ -449,23 +446,24 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCandKaon.addDaughter(fifthTrack,"trakThree");
 
              std::string name;
-             for(size_t i = 0; i<fiveCands.size();i++)
+             for(size_t j = 0; j<fiveCands.size();j++)
              {
 
-               fiveCands[i].addUserFloat("vProb",fiveTracksVProb[i]);
-               fiveCands[i].addUserFloat("ctauPV",fiveTracksCTau[i]);
-               fiveCands[i].addUserFloat("ctauErrPV",fiveTracksCTauErr[i]);
-               fiveCands[i].addUserFloat("cosAlpha",fiveTracksCosAlpha[i]);
-               fiveCands[i].addUserFloat("nDof",fiveTracksVNDof[i]);
-               fiveCands[i].addUserFloat("vChi2",fiveTracksVChi2[i]);
-               fiveCands[i].addUserFloat("mass_ref",fiveTracksMass[i]);
+               fiveCands[j].addUserFloat("vProb",fiveTracksVProb[j]);
+               fiveCands[j].addUserFloat("ctauPV",fiveTracksCTau[j]);
+               fiveCands[j].addUserFloat("ctauErrPV",fiveTracksCTauErr[j]);
+               fiveCands[j].addUserFloat("cosAlpha",fiveTracksCosAlpha[j]);
+               fiveCands[j].addUserFloat("nDof",fiveTracksVNDof[j]);
+               fiveCands[j].addUserFloat("vChi2",fiveTracksVChi2[j]);
+               fiveCands[j].addUserFloat("mass_ref",fiveTracksMass[j]);
 
                name = "fiveCand_" + std::to_string(i);
 
-               fiveCandKaon.addDaughter(fiveCands[i],name);
+               fiveCandKaon.addDaughter(fiveCands[j],name);
+               std::cout << fiveCands[j].mass() << " - ";
 
              }
-
+             std::cout << std::endl;
              if(atLeastOne)
               fiveCandColl->push_back(fiveCandKaon);
 
@@ -571,7 +569,7 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   fiveCand.addDaughter(trakTwo,"trakTwo");
   fiveCand.addDaughter(trakThree,"trakThree");
 
-  dimuonDiTrakOne   = makePsi2SCandidate(dimuon,trakOne,trakTwo);
+  dimuonDiTrakOne     = makePsi2SCandidate(dimuon,trakOne,trakTwo);
   dimuonDiTrakTwo     = makePsi2SCandidate(dimuon,trakOne,trakThree);
   dimuonDiTrakThree   = makePsi2SCandidate(dimuon,trakTwo,trakThree);
 
