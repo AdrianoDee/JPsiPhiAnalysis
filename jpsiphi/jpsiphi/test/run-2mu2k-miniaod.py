@@ -273,7 +273,7 @@ process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pi
 # )
 
 
-process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
+process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
     TrackMatcher = cms.InputTag("trackMatch"),
     PFCandidates = cms.InputTag('packedPFCandidates'),
@@ -297,15 +297,16 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     PionRefit = cms.bool(True)
 )
 
-process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
+process.FiveTracksProducer = cms.EDProducer('FiveTracksProducer',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
     beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
     primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts = cms.vdouble(2.9,6.0),         # traks masses
+    FiveTrakCuts = cms.vdouble(2.5,6.0),         # traks masses
 )
+
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
 #     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
@@ -341,11 +342,8 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 #     TreeName = cms.string('JPsiPhiTree')
 # )
 
-process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
+process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-        FiveTrakPos = cms.InputTag('FiveTracksProducer','a'),
-        FiveTrakNeg = cms.InputTag('FiveTracksProducer','a'),
-        FiveTrakNeu = cms.InputTag('FiveTracksProducer','a'),
     PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(True),
@@ -357,6 +355,22 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
     HLTs = hltpaths,
     Filters = filters,
     TreeName = cms.string('JPsiPhiTree')
+)
+
+process.fiverootuple = cms.EDAnalyzer('FiveTracksRootupler',
+    FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
+    beamSpotTag = cms.InputTag("offlineBeamSpot"),
+    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    isMC = cms.bool(True),
+    OnlyBest = cms.bool(False),
+    OnlyGen = cms.bool(False),
+    Mother_pdg = cms.uint32(20443), #20443 #10441
+    JPsi_pdg = cms.uint32(443),
+    Phi_pdg = cms.uint32(333),
+    HLTs = hltpaths,
+    Filters = filters,
+    TreeName = cms.string('FiveTracksTree')
 )
 
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
@@ -386,5 +400,6 @@ process.p = cms.Path(process.triggerSelection *
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
                      process.FiveTracksProducer *
+                     #process.rootuplefive * 
                      process.rootuple *
                      process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK

@@ -190,7 +190,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
        int tpId = dimuonditrakCand.userInt("pId");
        int tmId = dimuonditrakCand.userInt("mId");
-    
 
        std::vector<float> oneMasses,twoMasses,threeMasses, hasRefit;
        oneMasses.push_back(kaonmass); oneMasses.push_back(pionmass);oneMasses.push_back(kaonmass);oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
