@@ -84,7 +84,7 @@ private:
   std::vector<std::string>  hltFilters_;
   std::string treeName_;
 
-  UInt_t run,event,numPrimaryVertices, trigger;
+  UInt_t run, event, lumi, numPrimaryVertices, trigger;
 
   TLorentzVector dimuonditrk_p4;
   TLorentzVector dimuon_p4;
@@ -239,6 +239,7 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
 
   dimuonditrk_tree->Branch("run",                &run,                "run/I");
   dimuonditrk_tree->Branch("event",              &event,              "event/I");
+  dimuonditrk_tree->Branch("lumi",              &lumi,              "lumi/I");
   dimuonditrk_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
   dimuonditrk_tree->Branch("trigger",            &trigger,            "trigger/I");
 
@@ -588,6 +589,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   numPrimaryVertices = primaryVertices_handle->size();
   run = iEvent.id().run();
   event = iEvent.id().event();
+  lumi = iEvent.id().luminosityBlock();
 
   reco::Vertex theBeamSpotV;
 

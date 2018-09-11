@@ -72,6 +72,7 @@ class FiveTracksProducer : public edm::EDProducer {
 
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrakCollection_;
+  edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
