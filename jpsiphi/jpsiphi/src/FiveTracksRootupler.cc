@@ -120,8 +120,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Int_t dimuonditrk_charge;
 
-  UInt_t dimuon_triggerMatch, dimuon_triggerMatch_rf;
-
+  UInt_t highKaonMatch, lowKaonMatch, highMuonMatch, lowMuonMatch;
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
 
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
@@ -278,6 +277,14 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuon_eta",    &dimuon_pt,    "dimuon_eta/D");
         fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
         fivetracks_tree->Branch("dimuon_p",    &dimuon_p,   "dimuon_p/D");
+
+        fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
+        fivetracks_tree->Branch("dimuon_p",    &dimuon_p,   "dimuon_p/D");
+
+        fivetracks_tree->Branch("highKaonMatch",    &highKaonMatch,   "highKaonMatch/D");
+        fivetracks_tree->Branch("lowKaonMatch",    &lowKaonMatch,   "lowKaonMatch/D");
+        fivetracks_tree->Branch("lowMuonMatch",    &lowMuonMatch,   "lowMuonMatch/D");
+        fivetracks_tree->Branch("highMuonMatch",    &highMuonMatch,   "highMuonMatch/D");
 
         //Di Traks
         fivetracks_tree->Branch("ditrak_m",      &ditrak_m,     "ditrak_m/D"); //the original ditrak (supposed to be Phi->KK)
@@ -661,8 +668,8 @@ if(!OnlyGen_)
     {
 
       pat::CompositeCandidate five_cand;
-      const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand, *first_five_ref;
-      const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
+      const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand;
+      const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand, *first_five_ref;
       const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand;
       const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand;
 
@@ -676,6 +683,11 @@ if(!OnlyGen_)
       dimuonditrk_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter("dimuonditrk"));
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
       ditrakOne_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrak"));
+
+      highKaonMatch  = (float)dimuonditrk_cand->userInt("highKaonMatch");
+      lowKaonMatch   = (float)dimuonditrk_cand->userInt("lowKaonMatch");
+      lowMuonMatch   = (float)dimuon_cand->userInt("highMuonTMatch");
+      highMuonMatch  = (float)dimuon_cand->userInt("lowMuonTMatch");
 
       trakOne_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakOne"));
       trakTwo_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakTwo"));
@@ -934,7 +946,7 @@ if(!OnlyGen_)
 
         }
         else
-        if(thirdTrack->charge()==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
+        if(thirdTrack_charge==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
         {
 
           psiPrimeMixed_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("dimuonDiTrkOne"));

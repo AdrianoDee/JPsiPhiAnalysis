@@ -137,7 +137,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
   iEvent.getByToken(TriggerCollection_,trig);
 
-  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+  // const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
   // edm::ESHandle<MagneticField> magneticField;
   // iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
@@ -190,8 +190,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
        int tpId = dimuonditrakCand.userInt("pId");
        int tmId = dimuonditrakCand.userInt("mId");
-       int highKaonMatch = dimuonditrakCand.userInt("highKaonMatch");
-       int lowKaonMatch = dimuonditrakCand.userInt("lowKaonMatch");
+    
 
        std::vector<float> oneMasses,twoMasses,threeMasses, hasRefit;
        oneMasses.push_back(kaonmass); oneMasses.push_back(pionmass);oneMasses.push_back(kaonmass);oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
@@ -444,6 +443,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
             }
 
              fiveCandKaon.addUserInt("dimuontt_index",d);
+
              fiveCandKaon.addDaughter(dimuonditrakCand,"dimuonditrak");
              fiveCandKaon.addDaughter(*tp,"trakOne");
              fiveCandKaon.addDaughter(*tm,"trakTwo");
