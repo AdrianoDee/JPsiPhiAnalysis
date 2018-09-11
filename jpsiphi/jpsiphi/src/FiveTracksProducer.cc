@@ -446,9 +446,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
              fiveCandKaon.addUserInt("dimuontt_index",d);
              fiveCandKaon.addDaughter(dimuonditrakCand,"dimuonditrak");
-             fiveCandKaon.addDaughter(*tp,"highTrak");
-             fiveCandKaon.addDaughter(*tm,"lowTrak");
-             fiveCandKaon.addDaughter(fifthTrack,"thirdTrak");
+             fiveCandKaon.addDaughter(*tp,"trakOne");
+             fiveCandKaon.addDaughter(*tm,"trakTwo");
+             fiveCandKaon.addDaughter(fifthTrack,"trakThree");
 
              std::string name;
              for(size_t i = 0; i<fiveCands.size();i++)
@@ -585,6 +585,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   reco::Candidate::LorentzVector vT = trakP.p4() + trakN.p4() + trak3.p4();
 
   triTrak.setP4(vT);
+
+  fiveCand.addDaughter(triTrak,"triTrak");
+
   fiveCand.setP4(v);
 
   return fiveCand;
@@ -622,6 +625,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   reco::Candidate::LorentzVector vT = trakP.p4() + trakN.p4() + trak3.p4();
 
   triTrak.setP4(vT);
+
+  fiveCand.addDaughter(triTrak,"triTrak");
+
   fiveCand.setP4(v);
 
   return fiveCand;
