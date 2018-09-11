@@ -144,7 +144,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t psiPrimeMixed_ditrak_pt, psiPrimeMixed_ditrak_eta, psiPrimeMixed_ditrak_phi, psiPrimeMixed_ditrak_n;
 
 
-  Double_t dimuonditrk_eta, dimuonditrk_pt , dimuonditrk_phi, dimuonditrk_eta, dimuonditrk_p;
+  Double_t dimuonditrk_m, dimuonditrk_eta, dimuonditrk_pt , dimuonditrk_phi, dimuonditrk_p;
   Double_t dimuon_m, dimuon_pt, dimuon_eta, dimuon_phi, dimuon_p;
   Double_t ditrak_m, ditrakOne_pt, ditrakOne_eta, ditrakOne_phi, ditrakOne_p;
   Double_t ditrakTwo_pt, ditrakTwo_eta, ditrakTwo_phi, ditrakTwo_p;
