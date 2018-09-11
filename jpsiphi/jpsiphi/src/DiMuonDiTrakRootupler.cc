@@ -306,6 +306,16 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("highMuon_phi",        &highMuon_phi,        "highMuon_phi/D");
     dimuonditrk_tree->Branch("lowMuon_phi",        &lowMuon_phi,        "lowMuon_phi/D");
 
+    dimuonditrk_tree->Branch("highKaon_dxy",        &highKaon_dxy,        "highKaon_dxy/D");
+    dimuonditrk_tree->Branch("lowKaon_dxy",        &lowKaon_dxy,        "lowKaon_dxy/D");
+    dimuonditrk_tree->Branch("highMuon_dxy",        &highMuon_dxy,        "highMuon_dxy/D");
+    dimuonditrk_tree->Branch("lowMuon_dxy",        &lowMuon_dxy,        "lowMuon_dxy/D");
+
+    dimuonditrk_tree->Branch("highKaon_dz",        &highKaon_dz,        "highKaon_dz/D");
+    dimuonditrk_tree->Branch("lowKaon_dz",        &lowKaon_dz,        "lowKaon_dz/D");
+    dimuonditrk_tree->Branch("highMuon_dz",        &highMuon_dz,        "highMuon_dz/D");
+    dimuonditrk_tree->Branch("lowMuon_dz",        &lowMuon_dz,        "lowMuon_dz/D");
+
 
     //Pion refits
     dimuonditrk_tree->Branch("dimuonditrk_refPK_mass", &dimuonditrk_refPK_mass, "dimuonditrk_refPK_mass/D");

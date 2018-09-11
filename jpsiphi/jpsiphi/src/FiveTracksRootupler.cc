@@ -128,6 +128,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t highTrack_pt, highTrack_eta, highTrack_phi, highTrack_charge;
   Double_t lowTrack_pt, lowTrack_eta, lowTrack_phi, lowTrack_charge;
   Double_t thirdTrack_pt, thirdTrack_eta, thirdTrack_phi, thirdTrack_charge;
+  Double_t thirdTrack_dz, thirdTrack_dxy;
 
   Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge;
   Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
@@ -320,6 +321,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("thirdTrack_eta",        &thirdTrack_eta,        "thirdTrack_eta/D");
         fivetracks_tree->Branch("thirdTrack_phi",        &thirdTrack_phi,        "thirdTrack_phi/D");
         fivetracks_tree->Branch("thirdTrack_charge",        &thirdTrack_charge,        "thirdTrack_charge/D");
+        fivetracks_tree->Branch("thirdTrack_dz",        &thirdTrack_dz,        "thirdTrack_dz/D");
+        fivetracks_tree->Branch("thirdTrack_dxy",        &thirdTrack_dxy,        "thirdTrack_dxy/D");
 
         //J/Psi TrTr system
         fivetracks_tree->Branch("dimuonDiTrkOne_pt",          &dimuonDiTrkOne_pt,          "dimuonDiTrkOne_pt/D");
@@ -744,10 +747,12 @@ if(!OnlyGen_)
       lowTrack_phi = trakTwo_cand->phi();
       lowTrack_charge = trakTwo_cand->charge();
 
-      thirdTrack_pt = trakThree_cand->pt();
-      thirdTrack_eta = trakThree_cand->eta();
-      thirdTrack_phi = trakThree_cand->phi();
+      thirdTrack_pt     = trakThree_cand->pt();
+      thirdTrack_eta    = trakThree_cand->eta();
+      thirdTrack_phi    = trakThree_cand->phi();
       thirdTrack_charge = trakThree_cand->charge();
+      thirdTrack_dz     = trakThree_cand->bestTrack()->dz();
+      thirdTrack_dxy    = trakThree_cand->bestTrack()->dxy();
 
       dimuonDiTrkOne_pt     = dimuonDiTrkOne_cand->pt();
       dimuonDiTrkOne_eta    = dimuonDiTrkOne_cand->eta();
@@ -824,6 +829,10 @@ if(!OnlyGen_)
         dimuonDiTrkTwo[j]  = dimuonDiTrkTwo_cand_ref->mass();
         dimuonDiTrkThree[j]  = dimuonDiTrkThree_cand_ref->mass();
 
+        ditrakOne[j]  = ditrakOne_cand_ref->mass();
+        ditrakTwo[j]  = ditrakTwo_cand_ref->mass();
+        ditrakThree[j]  = ditrakThree_cand_ref->mass();
+
         trackOneMass[j]  = trakOne_cand_ref->mass();
         trackTwoMass[j]  = trakTwo_cand_ref->mass();
         trackThreeMass[j]  = trakThree_cand_ref->mass();
@@ -834,6 +843,10 @@ if(!OnlyGen_)
         dimuonDiTrkOne_p4[j].SetPtEtaPhiM(dimuonDiTrkOne_cand_ref->pt(),dimuonDiTrkOne_cand_ref->eta(),dimuonDiTrkOne_cand_ref->phi(),dimuonDiTrkOne_cand_ref->mass());
         dimuonDiTrkTwo_p4[j].SetPtEtaPhiM(dimuonDiTrkTwo_cand_ref->pt(),dimuonDiTrkTwo_cand_ref->eta(),dimuonDiTrkTwo_cand_ref->phi(),dimuonDiTrkTwo_cand_ref->mass());
         dimuonDiTrkThree_p4[j].SetPtEtaPhiM(dimuonDiTrkThree_cand_ref->pt(),dimuonDiTrkThree_cand_ref->eta(),dimuonDiTrkThree_cand_ref->phi(),dimuonDiTrkThree_cand_ref->mass());
+
+        ditrakOne_p4[j].SetPtEtaPhiM(ditrakOne_cand_ref->pt(),ditrakOne_cand_ref->eta(),ditrakOne_cand_ref->phi(),ditrakOne_cand_ref->mass());
+        ditrakTwo_p4[j].SetPtEtaPhiM(ditrakTwo_cand_ref->pt(),ditrakTwo_cand_ref->eta(),ditrakTwo_cand_ref->phi(),ditrakTwo_cand_ref->mass());
+        ditrakThree_p4[j].SetPtEtaPhiM(ditrakThree_cand_ref->pt(),ditrakThree_cand_ref->eta(),ditrakThree_cand_ref->phi(),ditrakThree_cand_ref->mass());
 
         //////////////////////////
         ////PSI PRIME SAME
