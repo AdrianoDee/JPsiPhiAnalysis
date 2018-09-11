@@ -435,7 +435,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                                               math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
              pat::CompositeCandidate patTk3(recoTk3);
 
-               thisFive.addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
+               fiveCands[j].addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
 
             }
 
