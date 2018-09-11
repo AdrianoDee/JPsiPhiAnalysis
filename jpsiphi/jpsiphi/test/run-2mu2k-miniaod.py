@@ -1,10 +1,10 @@
-import FWCore.ParameterSet.Config as cms
+mport FWCore.ParameterSet.Config as cms
 process = cms.Process('PSIKK')
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 
 import sys
-sys.path.append("/home/me/mypy")
+sys.path.append("mclists/")
 
 from bbbar_filelist import *
 from bbbar_soft_list import *
@@ -17,8 +17,7 @@ from y4704_lhcb_filelist import *
 from y4506_lhcb_filelist import *
 from y4506_zero_filelist import *
 from qcd_ml_filelist import *
-from ml_list import *
-
+from bbbar_ml_filelist import *
 
 par = VarParsing ('analysis')
 
@@ -62,10 +61,10 @@ mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
 input_file = runb2018 #gen_file
 
-n=400
+n=50000
 filename = par.mc
 
-fileLists = {"bbbar_hard" : bbbar_filel_ist, "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
+fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
              "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
              "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
              "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
@@ -92,13 +91,14 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 500
 
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(input_file)
+    fileNames = cms.untracked.vstring(input_file),
+    #eventsToProcess = cms.untracked.VEventRange(eventsToProcess),
 )
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
+        fileName = cms.string('rootuple-2018-dimuonditrak_'+ filename  + '_' + str(i) +'.root'),
 )
 
 kaonmass = 0.493677
@@ -129,18 +129,14 @@ filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
                                 #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
                                 'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
+                                                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
                                 'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v5',
-								'hltJpsiTkTkVertexFilterPhiDoubleTrk1v6',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v5',
-								'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',
+                                                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
+                                                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
+                                                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
+                                                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
+                                                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
+                                                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
                                 #HLT_DoubleMu4_JpsiTrkTrk_Displaced_v4
                                 # 'hltDoubleMu4JpsiDisplacedL3Filtered'
                                 # 'hltDisplacedmumuFilterDoubleMu4Jpsi',
@@ -187,16 +183,21 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 #    ),
 #    filter = cms.bool(True)
 # )
+
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
         beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+        higherPuritySelection       = cms.string(""),
+        lowerPuritySelection        = cms.string(""),
         dimuonSelection             = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
         addMCTruth                  = cms.bool(True),
         resolvePileUpAmbiguity      = cms.bool(True),
-        HLTFilters                  = filters
+        HLTFilters                  = filters,
+        TriggerResults              = cms.InputTag("TriggerResults", "", "HLT"),
+        TriggerInput                = cms.InputTag("unpackPatTriggers")
 )
 
 process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
@@ -205,6 +206,30 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
       dimuonSelection     = cms.string("2.95 < mass && mass < 3.25 && userFloat('vProb') > 0.01 && pt > 2.0"),
       do_trigger_match    = cms.bool(False),
       HLTFilters          = filters
+)
+
+process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
+    src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
+    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
+    mcStatus = cms.vint32(1),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
+    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
+    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
+    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
+)
+
+process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
+    src     = cms.InputTag("packedPFCandidates"), # RECO objects to match
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    mcPdgId     = cms.vint32(321,211,13,2212), # one or more PDG ID (13 = muon); absolute values (see below)
+    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
+    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
+    maxDPtRel = cms.double(2.0),  # Minimum deltaPt/Pt for the match
+    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
+    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
 )
 
 # process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
@@ -247,77 +272,39 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 #     TreeName = cms.string('JPsi Phi Tree')
 # )
 
-process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
-    src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
-    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
-    mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
-    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
-    mcStatus = cms.vint32(1),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
-    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
-    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
-    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
-    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
-)
-
-
-process.muonMatchDecay = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
-    src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
-    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
-    mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
-    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
-    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
-    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
-    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
-    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
-    resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
-)
-
-process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
-    src     = cms.InputTag("packedPFCandidates"), # RECO objects to match
-    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
-    mcPdgId     = cms.vint32(321,211,13,2212), # one or more PDG ID (13 = muon); absolute values (see below)
-    checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
-    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
-    maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
-    maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
-    resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
-    resolveByMatchQuality = cms.bool(False), # False = just match input in order; True = pick lowest deltaR pair first
-)
-
-trackMatch
 
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducerFit',
     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
+    TrackMatcher = cms.InputTag("trackMatch"),
     PFCandidates = cms.InputTag('packedPFCandidates'),
-    genMap = cms.InputTag("trackMatch"),
-	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
+        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+        primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
-	JPsiMass = cms.double(3.096916),
-	PhiMass  = cms.double(1.019461),
+    JPsiMass = cms.double(3.096916),
+    PhiMass  = cms.double(1.019461),
     OnlyBest  = cms.bool(False),
     Product = cms.string("DiMuonDiTrakCandidates"),
     Filters = filters,
-    IsMC = cms.bool(False),
-    AddMCTruth = cms.bool(False),
-	DoDouble = cms.bool(False),
-	AddSS    = cms.bool(True),
-	PionRefit = cms.bool(True)
+    IsMC = cms.bool(True),
+    AddMCTruth = cms.bool(True),
+    DoDouble = cms.bool(False),
+    AddSS    = cms.bool(True),
+    PionRefit = cms.bool(True)
 )
 
 process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     PFCandidates = cms.InputTag('packedPFCandidates'),
-	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+    primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts = cms.vdouble(4.0,6.8),         # traks masses
+    FiveTrakCuts = cms.vdouble(2.9,6.0),         # traks masses
 )
 
 # process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
@@ -356,12 +343,12 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducerFit',
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakFiveRootuplerFit',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-	FiveTrakPos = cms.InputTag('FiveTracksProducer','FiveTracksPos'),
-	FiveTrakNeg = cms.InputTag('FiveTracksProducer','FiveTracksNeg'),
-	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
+        FiveTrakPos = cms.InputTag('FiveTracksProducer','a'),
+        FiveTrakNeg = cms.InputTag('FiveTracksProducer','a'),
+        FiveTrakNeu = cms.InputTag('FiveTracksProducer','a'),
     PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(False),
+    isMC = cms.bool(True),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
     Mother_pdg = cms.uint32(20443), #20443 #10441
@@ -385,14 +372,19 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
                           HLTs = hltpaths
                           )
 
+process.dump=cms.EDAnalyzer('EventContentAnalyzer')
+
 process.p = cms.Path(process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
+                     process.trackMatch*
+                     process.muonMatch*
+                     #process.dump *
                      process.unpackPatTriggers *
                      #process.softMuons *
                      process.JPsi2MuMuPAT *
                      process.JPsi2MuMuFilter*
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
-					 process.FiveTracksProducer *
+                     process.FiveTracksProducer *
                      process.rootuple *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK
