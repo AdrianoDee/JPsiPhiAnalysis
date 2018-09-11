@@ -457,7 +457,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                fiveCands[j].addUserFloat("vChi2",fiveTracksVChi2[j]);
                fiveCands[j].addUserFloat("mass_ref",fiveTracksMass[j]);
 
-               name = "fiveCand_" + std::to_string(i);
+               name = "fiveCand_" + std::to_string(j);
 
                fiveCandKaon.addDaughter(fiveCands[j],name);
                std::cout << fiveCands[j].mass() << " - ";
