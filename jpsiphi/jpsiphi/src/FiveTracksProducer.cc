@@ -250,7 +250,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          std::vector<pat::CompositeCandidate> fiveCands, ref_fiveCands;
 
          bool atLeastOne = false;
-         std::std::vector< bool > insideMass;
+         std::vector< bool > insideMass;
          for(size_t j = 0; j<oneMasses.size();j++)
          {
 
