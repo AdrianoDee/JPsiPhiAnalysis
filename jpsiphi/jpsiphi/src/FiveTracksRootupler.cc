@@ -88,15 +88,17 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
 
-  std::vector < float > fiveTracksMass, fiveTracksMassRef, triTrakMass;
-  std::vector < float > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
-  std::vector < float > fiveTracksCosAlpha, fiveTracksCTau, fiveTracksCTauErr;
-  std::vector < float > psiPrimeSame, psiPrimeMixed;
-  std::vector < float > psiPrimeSame_ditrak, psiPrimeMixed_ditrak;
-  std::vector < float > dimuonDiTrkOne, dimuonDiTrkTwo, dimuonDiTrkThree;
-  std::vector < float > ditrakOne, ditrakTwo, ditrakThree;
-  std::vector < float > trackOneMass, trackTwoMass, trackThreeMass;
-  std::vector < float > psiPrimeSame_p_m, psiPrimeSame_m_m, psiPrimeMixed_p_m, psiPrimeMixed_m_m;
+  std::vector < Double_t > fiveTracksMass, fiveTracksMassRef, triTrakMass;
+  std::vector < Double_t > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
+  std::vector < Double_t > fiveTracksCosAlpha, fiveTracksCTau, fiveTracksCTauErr;
+  std::vector < Double_t > psiPrimeSame, psiPrimeMixed;
+  std::vector < Double_t > psiPrimeSame_ditrak, psiPrimeMixed_ditrak;
+  std::vector < Double_t > dimuonDiTrkOne, dimuonDiTrkTwo, dimuonDiTrkThree;
+  std::vector < Double_t > ditrakOne, ditrakTwo, ditrakThree;
+  std::vector < Double_t > trackOneMass, trackTwoMass, trackThreeMass;
+  std::vector < Double_t > psiPrimeSame_p_m, psiPrimeSame_m_m, psiPrimeMixed_p_m, psiPrimeMixed_m_m;
+
+  Double_t testMass;
 
   std::vector < TLorentzVector > five_p4, five_ref_p4;
   std::vector < TLorentzVector > psiPrimeSame_p4, psiPrimeMixed_p4, psiPrimeSame_ditrak_p4, psiPrimeMixed_ditrak_p4;
@@ -391,6 +393,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("triTrak_eta",        &triTrak_eta,        "triTrak_eta/D");
         fivetracks_tree->Branch("triTrak_phi",        &triTrak_phi,        "triTrak_phi/D");
         fivetracks_tree->Branch("triTrak_charge",     &triTrak_charge,     "triTrak_charge/D");
+
+        fivetracks_tree->Branch("testMass",     &testMass,     "testMass/D");
 
         numMasses = 5;
 
@@ -1091,6 +1095,7 @@ if(!OnlyGen_)
         std::cout << j << " - " << fiveTracksMass[j] << " - ";
       }
 
+      testMass = fiveTracksMass[0];
       std::cout << std::endl;
       std::cout << std::endl;
 
