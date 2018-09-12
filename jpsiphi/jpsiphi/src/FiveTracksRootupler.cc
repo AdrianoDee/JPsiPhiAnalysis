@@ -423,6 +423,11 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           trackTwoMass.push_back(-1.0);
           trackThreeMass.push_back(-1.0);
 
+          psiPrimeSame.push_back(-1.0);
+          psiPrimeMixed.push_back(-1.0);
+          psiPrimeSame_ditrak.push_back(-1.0);
+          psiPrimeMixed_ditrak.push_back(-1.0);
+
           five_p4.push_back(zero);
           five_ref_p4.push_back(zero);
 
