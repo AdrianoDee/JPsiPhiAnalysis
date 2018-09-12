@@ -101,9 +101,9 @@ pat::CompositeCandidate makeFiveCandidateMixed(
                                             const pat::PackedCandidate& trakP,
                                             const pat::PackedCandidate& trakN,
                                             const pat::PackedCandidate& trak3,
-                                            float massOne,
-                                            float massTwo,
-                                            float massThree
+                                            double massOne,
+                                            double massTwo,
+                                            double massThree
                                           );
 pat::CompositeCandidate makeFiveCandidateMixed(
                                               const pat::CompositeCandidate& dimuon,
