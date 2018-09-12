@@ -315,7 +315,7 @@ process.FiveTracksProducer = cms.EDProducer('FiveTracksProducer',
     primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts = cms.vdouble(2.5,6.0),         # traks masses
+    FiveTrakCuts = cms.vdouble(2.5,7.0),         # traks masses
 )
 
 

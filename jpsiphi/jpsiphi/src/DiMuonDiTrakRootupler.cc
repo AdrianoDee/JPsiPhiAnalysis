@@ -699,6 +699,10 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
         const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
 
+        pv_x = thePrimaryV.position().x();
+        pv_y = thePrimaryV.position().y();
+        pv_z = thePrimaryV.position().z();
+
         dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
         dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
         dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
@@ -1057,8 +1061,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
           reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHigh, jpsiMomLow;
           reco::GenParticleRef jpsiMom, phiMom;
 
-          float hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
-          float hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
+          Double_t hasHighGen = dimuonditrk_cand.userFloat("hasHighGen");
+          Double_t hasLowGen = dimuonditrk_cand.userFloat("hasLowGen");
 
           if(hasHighGen>0.0)
             genhighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand.daughter("highKaonGen"));
@@ -1071,16 +1075,16 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
             if(genhighKaon->numberOfMothers()>0)
               phiMomHigh  = genhighKaon->motherRef();
 
-            gen_highKaon_pdg     = (float)genhighKaon->pdgId();
+            gen_highKaon_pdg     = (Double_t)genhighKaon->pdgId();
 
             if(phiMomHigh.isNonnull() && genhighKaon->numberOfMothers()>0)
               gen_highKaon_mompdg  = phiMomHigh->pdgId();
 
-            gen_highKaon_status  = (float)genhighKaon->status();
-            gen_highKaon_pt      = (float)genhighKaon->pt();
-            gen_highKaon_p       = (float)genhighKaon->p();
-            gen_highKaon_eta     = (float)genhighKaon->eta();
-            gen_highKaon_phi     = (float)genhighKaon->phi();
+            gen_highKaon_status  = (Double_t)genhighKaon->status();
+            gen_highKaon_pt      = (Double_t)genhighKaon->pt();
+            gen_highKaon_p       = (Double_t)genhighKaon->p();
+            gen_highKaon_eta     = (Double_t)genhighKaon->eta();
+            gen_highKaon_phi     = (Double_t)genhighKaon->phi();
 
           }
 
@@ -1091,16 +1095,16 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
             if(genlowKaon->numberOfMothers()>0)
               phiMomLow  = genlowKaon->motherRef();
 
-            gen_lowKaon_pdg     = (float)genlowKaon->pdgId();
+            gen_lowKaon_pdg     = (Double_t)genlowKaon->pdgId();
 
             if(phiMomLow.isNonnull() && genlowKaon->numberOfMothers()>0)
               gen_lowKaon_mompdg  = phiMomLow->pdgId();
 
-            gen_lowKaon_status  = (float)genlowKaon->status();
-            gen_lowKaon_pt      = (float)genlowKaon->pt();
-            gen_lowKaon_p       = (float)genlowKaon->p();
-            gen_lowKaon_eta     = (float)genlowKaon->eta();
-            gen_lowKaon_phi     = (float)genlowKaon->phi();
+            gen_lowKaon_status  = (Double_t)genlowKaon->status();
+            gen_lowKaon_pt      = (Double_t)genlowKaon->pt();
+            gen_lowKaon_p       = (Double_t)genlowKaon->p();
+            gen_lowKaon_eta     = (Double_t)genlowKaon->eta();
+            gen_lowKaon_phi     = (Double_t)genlowKaon->phi();
           }
 
           if(genhighMuon.isNonnull())
@@ -1109,16 +1113,16 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
             if(genhighMuon->numberOfMothers()>0)
             jpsiMomHigh  = genhighMuon->motherRef();
 
-            gen_highMuon_pdg     = (float)genhighMuon->pdgId();
+            gen_highMuon_pdg     = (Double_t)genhighMuon->pdgId();
 
             if(jpsiMomHigh.isNonnull() && genhighMuon->numberOfMothers()>0)
               gen_highMuon_mompdg  = jpsiMomHigh->pdgId();
 
-            gen_highMuon_status  = (float)genhighMuon->status();
-            gen_highMuon_pt      = (float)genhighMuon->pt();
-            gen_highMuon_p       = (float)genhighMuon->p();
-            gen_highMuon_eta     = (float)genhighMuon->eta();
-            gen_highMuon_phi     = (float)genhighMuon->phi();
+            gen_highMuon_status  = (Double_t)genhighMuon->status();
+            gen_highMuon_pt      = (Double_t)genhighMuon->pt();
+            gen_highMuon_p       = (Double_t)genhighMuon->p();
+            gen_highMuon_eta     = (Double_t)genhighMuon->eta();
+            gen_highMuon_phi     = (Double_t)genhighMuon->phi();
           }
 
           if(genlowMuon.isNonnull())
@@ -1127,16 +1131,16 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
             if(genlowMuon->numberOfMothers()>0)
               jpsiMomLow  = genlowMuon->motherRef();
 
-            gen_lowMuon_pdg     = (float)genlowMuon->pdgId();
+            gen_lowMuon_pdg     = (Double_t)genlowMuon->pdgId();
 
             if(jpsiMomLow.isNonnull() && genlowMuon->numberOfMothers()>0)
               gen_lowMuon_mompdg  = jpsiMomLow->pdgId();
 
-            gen_lowMuon_status  = (float)genlowMuon->status();
-            gen_lowMuon_pt      = (float)genlowMuon->pt();
-            gen_lowMuon_p       = (float)genlowMuon->p();
-            gen_lowMuon_eta     = (float)genlowMuon->eta();
-            gen_lowMuon_phi     = (float)genlowMuon->phi();
+            gen_lowMuon_status  = (Double_t)genlowMuon->status();
+            gen_lowMuon_pt      = (Double_t)genlowMuon->pt();
+            gen_lowMuon_p       = (Double_t)genlowMuon->p();
+            gen_lowMuon_eta     = (Double_t)genlowMuon->eta();
+            gen_lowMuon_phi     = (Double_t)genlowMuon->phi();
           }
 
           bool samePhiMom = false, samejpsiMom = false;
@@ -1182,12 +1186,12 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
             if(jpsiMom==phiMom && jpsiMom.isNonnull() && phiMom.isNonnull())
             {
               gen_dimuonditrk_p4.SetPtEtaPhiM(jpsiMom->pt(),jpsiMom->eta(),jpsiMom->phi(),jpsiMom->mass());
-              gen_dimuonditrk_pdg = (float) jpsiMom->pdgId();
-              gen_dimuonditrk_prompt = (float) jpsiMom->isPromptDecayed();
-              gen_dimuonditrk_p = (float) jpsiMom->p();
-              gen_dimuonditrk_pt = (float) jpsiMom->pt();
-              gen_dimuonditrk_eta = (float) jpsiMom->eta();
-              gen_dimuonditrk_phi = (float) jpsiMom->phi();
+              gen_dimuonditrk_pdg = (Double_t) jpsiMom->pdgId();
+              gen_dimuonditrk_prompt = (Double_t) jpsiMom->isPromptDecayed();
+              gen_dimuonditrk_p = (Double_t) jpsiMom->p();
+              gen_dimuonditrk_pt = (Double_t) jpsiMom->pt();
+              gen_dimuonditrk_eta = (Double_t) jpsiMom->eta();
+              gen_dimuonditrk_phi = (Double_t) jpsiMom->phi();
             }
 
           }

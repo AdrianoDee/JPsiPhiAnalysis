@@ -122,7 +122,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Int_t dimuonditrk_charge;
 
-  UInt_t highKaonMatch, lowKaonMatch, highMuonMatch, lowMuonMatch;
+  Double_t highKaonMatch, lowKaonMatch, highMuonMatch, lowMuonMatch;
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2, dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
 
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
@@ -700,10 +700,10 @@ if(!OnlyGen_)
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
       ditrakOne_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrak"));
 
-      highKaonMatch  = (float)dimuonditrk_cand->userInt("highKaonMatch");
-      lowKaonMatch   = (float)dimuonditrk_cand->userInt("lowKaonMatch");
-      lowMuonMatch   = (float)dimuon_cand->userInt("highMuonTMatch");
-      highMuonMatch  = (float)dimuon_cand->userInt("lowMuonTMatch");
+      highKaonMatch  = (Double_t)dimuonditrk_cand->userInt("highKaonMatch");
+      lowKaonMatch   = (Double_t)dimuonditrk_cand->userInt("lowKaonMatch");
+      lowMuonMatch   = (Double_t)dimuon_cand->userInt("highMuonTMatch");
+      highMuonMatch  = (Double_t)dimuon_cand->userInt("lowMuonTMatch");
 
       trakOne_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakOne"));
       trakTwo_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trakTwo"));
