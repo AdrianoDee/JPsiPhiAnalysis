@@ -439,7 +439,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
             }
 
-             fiveCandKaon.addUserInt("dimuontt_index",d);
+             fiveCandKaon.addUserInt("dimuontt_index",int(d));
 
              // fiveCandKaon.addDaughter(dimuonditrakCand,"dimuonditrak");
              fiveCandKaon.addDaughter(*tp,"trakOne");
