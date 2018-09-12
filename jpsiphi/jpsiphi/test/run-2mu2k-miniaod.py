@@ -6,19 +6,6 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 import sys
 sys.path.append("mclists/")
 
-from bbbar_filelist import *
-from bbbar_soft_list import *
-from y4140_lhcb_filelist import *
-from y4140_zero_filelist import *
-from y4273_lhcb_filelist import *
-from y4273_zero_filelist import *
-from y4704_zero_filelist import *
-from y4704_lhcb_filelist import *
-from y4506_lhcb_filelist import *
-from y4506_zero_filelist import *
-from qcd_ml_filelist import *
-from bbbar_ml_filelist import *
-
 par = VarParsing ('analysis')
 
 par.register ('gtag',
@@ -32,6 +19,12 @@ par.register ('mc',
                                   VarParsing.varType.string,
                                   "MC Dataset")
 
+par.register ('filein',
+                                  "y4506_lhcb",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "Inputfile")
+
 par.register ('ss',
                                   True,
                                   VarParsing.multiplicity.singleton,
@@ -43,6 +36,12 @@ par.register ('isMC',
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.bool,
                                   "Is MC?")
+
+par.register ('isLocal',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Is local?")
 
 par.register ('kMass',
                                   0.493677,
@@ -76,19 +75,35 @@ mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
 input_file = runb2018 #gen_file
 
-n= par.n
-filename = par.mc
+if par.isLocal:
 
-fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
-             "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
-             "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
-             "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
-             "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
+    from bbbar_filelist import *
+    from bbbar_soft_list import *
+    from y4140_lhcb_filelist import *
+    from y4140_zero_filelist import *
+    from y4273_lhcb_filelist import *
+    from y4273_zero_filelist import *
+    from y4704_zero_filelist import *
+    from y4704_lhcb_filelist import *
+    from y4506_lhcb_filelist import *
+    from y4506_zero_filelist import *
+    from qcd_ml_filelist import *
+    from bbbar_ml_filelist import *
 
-filelist = fileLists[filename] #bbbar_soft_list#bbbar_file_list
-size = (len(filelist) + n) / n
-input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
-print min((i+1)*size,len(filelist))
+    filename = par.mc
+
+    fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
+                 "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
+                 "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
+                 "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
+                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
+
+    n= par.n
+
+    filelist = fileLists[filename] #bbbar_soft_list#bbbar_file_list
+    size = (len(filelist) + n) / n
+    input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
+    print min((i+1)*size,len(filelist))
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -398,18 +413,9 @@ jpsiing    = process.JPsi2MuMuPAT * process.JPsi2MuMuFilter
 tracking   = process.PsiPhiProducer * process.FiveTracksProducer
 rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu
 
-process.p = cms.Path(process.triggerSelection *
-                     process.slimmedMuonsWithTriggerSequence *
-                     process.trackMatch*
-                     process.muonMatch*
-                     #process.dump *
+if ismc:
+    allsteps = triggering * mcmatching * jpsiing * tracking * rootupling
+else:
+    allsteps = triggering * jpsiing * tracking * rootupling
 
-                     #process.softMuons *
-                     process.JPsi2MuMuPAT *
-                     process.JPsi2MuMuFilter*
-                     process.PsiPhiProducer *
-                     #process.PsiPhiFitter *
-                     process.FiveTracksProducer *
-                     process.rootupleFive *
-                     process.rootuple *
-                     process.rootupleMuMu)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK
+process.p = cms.Path(allsteps)
