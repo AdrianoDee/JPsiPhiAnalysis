@@ -33,7 +33,7 @@ par.register ('mc',
                                   "MC Dataset")
 
 par.register ('ss',
-                                  False,
+                                  True,
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.bool,
                                   "Do Same Sign")
