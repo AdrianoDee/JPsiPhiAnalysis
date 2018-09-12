@@ -434,7 +434,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           psiPrimeMixed_m_m.push_back(-1.0);
 
           five_p4.push_back(zero);
-          five_ref_p4.push_back(zero);
+          // five_ref_p4.push_back(zero);
 
           dimuonDiTrkOne_p4.push_back(zero);
           dimuonDiTrkTwo_p4.push_back(zero);
@@ -521,8 +521,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
 
           name = "five_p4_" + refNames[i];
           fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&five_p4[i]);
-          name = "five_ref_p4_" + refNames[i];
-          fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&five_ref_p4[i]);
+          // name = "five_ref_p4_" + refNames[i];
+          // fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&five_ref_p4[i]);
 
           name = "dimuonDiTrkOne_p4_" + refNames[i];
           fivetracks_tree->Branch(name.c_str(),"TLorentzVector",&dimuonDiTrkOne_p4[i]);
@@ -808,12 +808,12 @@ if(!OnlyGen_)
         name = "fiveCand_" + std::to_string(j);
 
         five_cand_ref     = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter(name));
-
-        if(five_cand_ref->userFloat("has_ref")>0.0)
-        {
-          five_cand_ref_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("fiveRef"));
-          five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
-        }
+        //
+        // if(five_cand_ref->userFloat("has_ref")>0.0)
+        // {
+        //   five_cand_ref_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("fiveRef"));
+        //   five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
+        // }
 
         fiveTracksMass[j] = five_cand_ref->mass();
 
