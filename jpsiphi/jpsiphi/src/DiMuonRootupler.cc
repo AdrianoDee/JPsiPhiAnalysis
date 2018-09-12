@@ -95,6 +95,8 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   Float_t lxyPV;
   Float_t lxyBS;
 
+  Float_t dimuon_m, dimuon_pt, dimuon_eta, dimuon_phi, dimuon_p;
+
 	UInt_t numPrimaryVertices;
 
 	TTree *dimuon_tree;
@@ -144,6 +146,12 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("dimuon_p4", "TLorentzVector", &dimuon_p4);
     dimuon_tree->Branch("highMuon_p4",  "TLorentzVector", &highMuon_p4);
     dimuon_tree->Branch("lowMuon_p4",  "TLorentzVector", &lowMuon_p4);
+
+    dimuon_tree->Branch("dimuon_m",      &dimuon_m,    "dimuon_m/F");
+    dimuon_tree->Branch("dimuon_pt",     &dimuon_pt,   "dimuon_pt/F");
+    dimuon_tree->Branch("dimuon_eta",    &dimuon_eta,  "dimuon_eta/F");
+    dimuon_tree->Branch("dimuon_phi",    &dimuon_phi,  "dimuon_phi/F");
+    dimuon_tree->Branch("dimuon_p",     &dimuon_p,     "dimuon_p/F");
 
     dimuon_tree->Branch("MassErr",   &MassErr,    "MassErr/F");
     dimuon_tree->Branch("vProb",     &vProb,      "vProb/F");
@@ -308,9 +316,16 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
       for ( pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuons->begin(); dimuonCand != dimuons->end(); ++dimuonCand ) {
         if (dimuonCand->mass() > DimuonMassMin_ && dimuonCand->mass() < DimuonMassMax_ && dimuonCand->charge() == 0) {
           dimuon_p4.SetPtEtaPhiM(dimuonCand->pt(),dimuonCand->eta(),dimuonCand->phi(),dimuonCand->mass());
+
+          dimuon_m    = dimuonCand->mass();
+          dimuon_pt   = dimuonCand->pt();
+          dimuon_eta  = dimuonCand->eta();
+          dimuon_phi  = dimuonCand->phi();
+          dimuon_p    = dimuonCand->p();
+
           reco::Candidate::LorentzVector vP = dimuonCand->daughter("highMuon")->p4();
           reco::Candidate::LorentzVector vM = dimuonCand->daughter("lowMuon")->p4();
-          if ( dimuonCand->daughter("highMuon")->charge() < 0 ) {
+          if ( dimuonCand->daughter("highMuon")->pt() < dimuonCand->daughter("lowMuon")->pt() ) {
               vP = dimuonCand->daughter("lowMuon")->p4();
               vM = dimuonCand->daughter("highMuon")->p4();
           }
