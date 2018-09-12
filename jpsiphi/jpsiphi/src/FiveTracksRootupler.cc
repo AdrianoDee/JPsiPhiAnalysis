@@ -808,7 +808,12 @@ if(!OnlyGen_)
         name = "fiveCand_" + std::to_string(j);
 
         five_cand_ref     = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter(name));
-        five_cand_ref_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("fiveRef"));
+
+        if(five_cand_ref->userFloat("mass_ref"))
+        {
+          five_cand_ref_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("fiveRef"));
+          five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
+        }
 
         fiveTracksMass[j] = five_cand_ref->mass();
 
@@ -849,7 +854,6 @@ if(!OnlyGen_)
         trackThreeMass[j]  = trakThree_cand_ref->mass();
 
         five_p4[j].SetPtEtaPhiM(five_cand_ref->pt(),five_cand_ref->eta(),five_cand_ref->phi(),five_cand_ref->mass());
-        five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
 
         dimuonDiTrkOne_p4[j].SetPtEtaPhiM(dimuonDiTrkOne_cand_ref->pt(),dimuonDiTrkOne_cand_ref->eta(),dimuonDiTrkOne_cand_ref->phi(),dimuonDiTrkOne_cand_ref->mass());
         dimuonDiTrkTwo_p4[j].SetPtEtaPhiM(dimuonDiTrkTwo_cand_ref->pt(),dimuonDiTrkTwo_cand_ref->eta(),dimuonDiTrkTwo_cand_ref->phi(),dimuonDiTrkTwo_cand_ref->mass());
