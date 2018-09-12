@@ -192,7 +192,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        int tpId = dimuonditrakCand.userInt("pId");
        int tmId = dimuonditrakCand.userInt("mId");
 
-       std::vector<float> oneMasses,twoMasses,threeMasses, hasRefit;
+       std::vector<double> oneMasses,twoMasses,threeMasses, hasRefit;
        oneMasses.push_back(kaonmass); oneMasses.push_back(pionmass);oneMasses.push_back(kaonmass);oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
        twoMasses.push_back(kaonmass); twoMasses.push_back(pionmass);twoMasses.push_back(pionmass);twoMasses.push_back(kaonmass);twoMasses.push_back(pionmass);
        threeMasses.push_back(kaonmass); threeMasses.push_back(kaonmass);threeMasses.push_back(pionmass);threeMasses.push_back(pionmass);threeMasses.push_back(pionmass);
@@ -535,9 +535,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
                                           const pat::PackedCandidate& trakP,
                                           const pat::PackedCandidate& trakN,
                                           const pat::PackedCandidate& trak3,
-                                          float massOne,
-                                          float massTwo,
-                                          float massThree
+                                          double massOne,
+                                          double massTwo,
+                                          double massThree
                                          ){
 
   pat::CompositeCandidate fiveCand, trakOne, trakTwo, trakThree;

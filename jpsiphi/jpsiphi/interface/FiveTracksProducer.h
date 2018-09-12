@@ -128,7 +128,7 @@ pat::CompositeCandidate makeFiveCandidateMixed(
 
   float maxDeltaR;
   float maxDPtRel;
-  float kaonmass, pionmass, trackmass, psi2smass;
+  double kaonmass, pionmass, trackmass, psi2smass;
 
   int nevents;
   uint ncombo,ncomboneg,ncomboneu;

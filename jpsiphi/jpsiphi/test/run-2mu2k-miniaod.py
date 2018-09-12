@@ -49,6 +49,13 @@ par.register ('i',
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.int,
                                   "i")
+
+par.register ('n',
+                                  50000,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.int,
+                                  "n")
+
 par.parseArguments()
 
 i = par.i
@@ -61,7 +68,7 @@ mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
 input_file = runb2018 #gen_file
 
-n=50000
+n= par.n
 filename = par.mc
 
 fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
