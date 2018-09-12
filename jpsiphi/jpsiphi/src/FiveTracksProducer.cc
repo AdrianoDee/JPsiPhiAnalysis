@@ -279,10 +279,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              float fifthSigma = fifthMass*1E-6;
 
 
-             if (thisFive.mass() > FiveTrakMassMax || thisFive.mass() < FiveTrakMassMin)
+             if (thisFive.mass() < FiveTrakMassMax && thisFive.mass() > FiveTrakMassMin)
              atLeastOne = true;
 
-             if (thisFive.mass() > FiveTrakMassMax || thisFive.mass() < FiveTrakMassMin)
+             if (thisFive.mass() < FiveTrakMassMax && thisFive.mass() > FiveTrakMassMin)
              insideMass[j] = true;
 
              std::vector<reco::TransientTrack> fiveTracks;
@@ -468,6 +468,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
               std::cout << fiveCands[j].mass() << " - ";
 
              }
+
              std::cout << std::endl;
              if(atLeastOne)
               fiveCandColl->push_back(fiveCandKaon);
