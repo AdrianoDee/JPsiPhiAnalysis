@@ -465,11 +465,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                name = "fiveCand_" + std::to_string(j);
 
                fiveCandKaon.addDaughter(fiveCands[j],name);
-              std::cout << fiveCands[j].mass() << " - ";
+              // std::cout << fiveCands[j].mass() << " - ";
 
              }
 
-             std::cout << std::endl;
+             // std::cout << std::endl;
              if(atLeastOne)
               fiveCandColl->push_back(fiveCandKaon);
 
