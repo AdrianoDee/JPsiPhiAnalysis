@@ -346,7 +346,7 @@ process.p = cms.Path(process.triggerSelection *
                      process.PsiPhiProducer *
                      #process.PsiPhiFitter *
 					 #process.FiveTracksProducer *
-					 procees.genmc *
+					 #procees.genmc *
                      process.rootuple *
                      process.rootuplePhi*
 					 process.rootupleJPsi)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)

@@ -1024,11 +1024,11 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
               if(jspiMom==phiMom && jspiMom.isNonnull() && phiMom.isNonnull())
               {
                 gen_doubledimuon_p4.SetPtEtaPhiM(jspiMom->pt(),jspiMom->eta(),jspiMom->phi(),jspiMom->mass());
-                gen_doubledimuon_pdg = (float) jspiMom->pdgId();
-                gen_doubledimuon_prompt = (float) jspiMom->isPromptDecayed();
-                gen_doubledimuon_p = (float) jspiMom->p();
-                gen_doubledimuon_pt = (float) jspiMom->pt();
-                gen_doubledimuon_eta = (float) jspiMom->eta();
+                gen_doubledimuon_pdg = (Double_t) jspiMom->pdgId();
+                gen_doubledimuon_prompt = (Double_t) jspiMom->isPromptDecayed();
+                gen_doubledimuon_p = (Double_t) jspiMom->p();
+                gen_doubledimuon_pt = (Double_t) jspiMom->pt();
+                gen_doubledimuon_eta = (Double_t) jspiMom->eta();
               }
 
             }

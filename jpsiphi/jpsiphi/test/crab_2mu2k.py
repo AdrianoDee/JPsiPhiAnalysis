@@ -3,7 +3,7 @@ import os
 
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-318876_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-321777_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -44,13 +44,15 @@ datasetnames = {
 "bbar_jpsi_filter": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
 "bbar_jpsi_force": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
 
-"A2018_1" :  datasetbase + "/Run2018A-PromptReco-v1/MINIAOD",
-"A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD",
-"A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD",
-"B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD",
-"B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD",
-"C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD",
-"C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD"
+"A2018_1": datasetbase + "/Run2018A-PromptReco-v1/MINIAOD", #CMSSW_10_1_4_patch1
+"A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD", #CMSSW_10_1_5
+"A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD", #CMSSW_10_1_5
+"B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD", #CMSSW_10_1_6
+"B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD", #CMSSW_10_1_7
+"C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD", #CMSSW_10_1_7
+"C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD", #CMSSW_10_1_8
+"C2018_3": datasetbase + "/Run2018C-PromptReco-v3/MINIAOD", #CMSSW_10_1_9
+"D2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD"  #CMSSW_10_2_1
 }
 
 
@@ -68,6 +70,8 @@ GlobalTags = {
 "B2018_2": "101X_dataRun2_Prompt_v11",
 "C2018_1": "101X_dataRun2_Prompt_v11",
 "C2018_2": "101X_dataRun2_Prompt_v11",
+"C2018_3": "101X_dataRun2_Prompt_v11",
+"D2018_2": "102X_dataRun2_Prompt_v5",
 }
 
 runNumber = [
@@ -92,7 +96,7 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 
 dataset = filter(None, datasetName.split('/'))
 
-jobdir = 'miniaod_2mu2k_' + run
+jobdir = 'miniaod_2mu2k_five' + run
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
@@ -102,7 +106,7 @@ config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2mu2k_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = 'miniaod_2mu2k_five_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
 config.General.transferLogs     = False
 
 config.section_('JobType')
