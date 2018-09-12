@@ -1087,7 +1087,7 @@ if(!OnlyGen_)
         //std::cout << "Debug  11" << std::endl;
       }
 
-      for (size_t j = 0; j < count; j++) {
+      for (size_t j = 0; j < numMasses; j++) {
         std::cout << j << " - " << fiveTracksMass[j] << " - ";
       }
 
