@@ -809,7 +809,7 @@ if(!OnlyGen_)
 
         five_cand_ref     = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter(name));
 
-        if(five_cand_ref->userFloat("mass_ref"))
+        if(five_cand_ref->userFloat("has_ref"))
         {
           five_cand_ref_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("fiveRef"));
           five_ref_p4[j].SetPtEtaPhiM(five_cand_ref_ref->pt(),five_cand_ref_ref->eta(),five_cand_ref_ref->phi(),five_cand_ref_ref->mass());
