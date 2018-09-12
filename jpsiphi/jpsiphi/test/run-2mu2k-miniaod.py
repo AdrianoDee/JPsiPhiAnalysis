@@ -20,10 +20,16 @@ par.register ('mc',
                                   "MC Dataset")
 
 par.register ('filein',
-                                  "y4506_lhcb",
+                                  "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root",
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.string,
                                   "Inputfile")
+
+par.register ('dataset',
+                                  "Av1",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "Dataset")
 
 par.register ('ss',
                                   True,
@@ -73,7 +79,9 @@ mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
 mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
 mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
 runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
-input_file = runb2018 #gen_file
+input_file = par.filein #runb2018 #gen_file
+
+filename = "data" + par.dataset
 
 if par.isLocal:
 
@@ -129,7 +137,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2018-dimuonditrak_'+ filename  + '_' + str(i) +'.root'),
+        fileName = cms.string('rootuple-2018-dimuonditrak_five'+ filename  + '_' + str(i) +'.root'),
 )
 
 kaonmass = 0.493677
