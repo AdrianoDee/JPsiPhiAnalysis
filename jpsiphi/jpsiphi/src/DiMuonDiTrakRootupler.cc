@@ -500,6 +500,7 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
 
     dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
     dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
+    dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
     dimuonditrk_tree->Branch("gen_lowMuon_pdg",&gen_lowMuon_pdg,"gen_lowMuon_pdg/D");
     dimuonditrk_tree->Branch("gen_highMuon_pdg",&gen_highMuon_pdg,"gen_highMuon_pdg/D");
@@ -992,6 +993,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
           gen_dimuonditrk_pdg = 0.0;
           gen_phi_pdg         = 0.0;
+          gen_jpsi_pdg        = 0.0;
 
           gen_lowMuon_pdg     = 0.0;
           gen_highMuon_pdg    = 0.0;

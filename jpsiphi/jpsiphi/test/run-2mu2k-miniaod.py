@@ -64,7 +64,8 @@ input_file = runb2018 #gen_file
 n=50000
 filename = par.mc
 
-fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
+fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
+             "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
              "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
              "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
              "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
@@ -228,7 +229,7 @@ process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pi
     checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
     mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
     maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
-    maxDPtRel = cms.double(2.0),  # Minimum deltaPt/Pt for the match
+    maxDPtRel = cms.double(0.75),  # Minimum deltaPt/Pt for the match
     resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
     resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
 )

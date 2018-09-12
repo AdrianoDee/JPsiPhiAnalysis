@@ -250,7 +250,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          std::vector<pat::CompositeCandidate> fiveCands, ref_fiveCands;
 
          bool atLeastOne = false;
-
+         std::std::vector< bool > insideMass;
          for(size_t j = 0; j<oneMasses.size();j++)
          {
 
@@ -261,7 +261,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveTracksCTau.push_back(-1000.0);
              fiveTracksCTauErr.push_back(-1000.0);
              fiveTracksCosAlpha.push_back(-1.1);
-
+             insideMass.push_back(false);
              hasRefit.push_back(0.0);
 
              //if(i!=5 && fifthTrack.charge() == 0) continue;
@@ -281,6 +281,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
              if (thisFive.mass() > FiveTrakMassMax || thisFive.mass() < FiveTrakMassMin)
              atLeastOne = true;
+
+             if (thisFive.mass() > FiveTrakMassMax || thisFive.mass() < FiveTrakMassMin)
+             insideMass[j] = true;
 
              std::vector<reco::TransientTrack> fiveTracks;
              std::vector<RefCountedKinematicParticle> kaonParticles, pionParticles;
@@ -462,10 +465,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                name = "fiveCand_" + std::to_string(j);
 
                fiveCandKaon.addDaughter(fiveCands[j],name);
-               // std::cout << fiveCands[j].mass() << " - ";
+              std::cout << fiveCands[j].mass() << " - ";
 
              }
-             // std::cout << std::endl;
+             std::cout << std::endl;
              if(atLeastOne)
               fiveCandColl->push_back(fiveCandKaon);
 
