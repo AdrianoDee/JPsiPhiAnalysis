@@ -668,14 +668,12 @@ gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 gen_dimuonditrk_pdgId = 0;
 
-std::cout << "Debug  1" << std::endl;
 if(!OnlyGen_)
   if (!fivetracks_cand_handle.isValid()) std::cout<< "No five tracks information " << run << "," << event <<std::endl;
 
   if (fivetracks_cand_handle.isValid()) {
 
 
-    std::cout << "Debug  2" << std::endl;
     noFiveCandidates = (Int_t)(fivetracks_cand_handle->size());
 
     for (unsigned int i=0; i< fivetracks_cand_handle->size(); i++)
@@ -792,7 +790,7 @@ if(!OnlyGen_)
       psiPrimeSame_ditrak_pt  = dimuonDiTrkOne_cand->pt();
       psiPrimeSame_ditrak_eta = dimuonDiTrkOne_cand->eta();
       psiPrimeSame_ditrak_phi = dimuonDiTrkOne_cand->phi();
-      std::cout << "Debug  3" << std::endl;
+
       for(size_t j = 0; j<numMasses;j++)
       {
 
@@ -800,7 +798,6 @@ if(!OnlyGen_)
         const pat::CompositeCandidate *trakOne_cand_ref, *trakTwo_cand_ref, *trakThree_cand_ref;
 
         const pat::CompositeCandidate *dimuonDiTrkOne_cand_ref, *dimuonDiTrkTwo_cand_ref, *dimuonDiTrkThree_cand_ref;
-        const pat::CompositeCandidate *psiPrimeMixed_cand;
 
         const pat::CompositeCandidate *ditrakOne_cand_ref, *ditrakTwo_cand_ref, *ditrakThree_cand_ref;
         // const pat::CompositeCandidate *psiPrimeMixed_ditrak_cand;
@@ -862,7 +859,6 @@ if(!OnlyGen_)
         ditrakOne_p4[j].SetPtEtaPhiM(ditrakOne_cand_ref->pt(),ditrakOne_cand_ref->eta(),ditrakOne_cand_ref->phi(),ditrakOne_cand_ref->mass());
         ditrakTwo_p4[j].SetPtEtaPhiM(ditrakTwo_cand_ref->pt(),ditrakTwo_cand_ref->eta(),ditrakTwo_cand_ref->phi(),ditrakTwo_cand_ref->mass());
         ditrakThree_p4[j].SetPtEtaPhiM(ditrakThree_cand_ref->pt(),ditrakThree_cand_ref->eta(),ditrakThree_cand_ref->phi(),ditrakThree_cand_ref->mass());
-        std::cout << "Debug  5" << std::endl;
         //////////////////////////
         ////PSI PRIME SAME
         // My PsiPrime Same come from the original Phi->kk traks + J/Psi
@@ -899,7 +895,6 @@ if(!OnlyGen_)
           psiPrimeSame_p_m[j] = trakTwo_cand_ref->mass();
           psiPrimeSame_m_m[j] = trakOne_cand_ref->mass();
         }
-        std::cout << "Debug  6" << std::endl;
         psiPrimeSame_p_pt   = psiPrimeSame_p_cand_ref->pt();
         psiPrimeSame_p_eta  = psiPrimeSame_p_cand_ref->eta();
         psiPrimeSame_p_phi  = psiPrimeSame_p_cand_ref->phi();
@@ -952,7 +947,6 @@ if(!OnlyGen_)
 
           psiPrimeMixed_n = 3.0;
 
-          std::cout << "Debug  8" << std::endl;
           if(thirdTrack_charge>0)
           {
             psiPrimeMixed_p_cand_ref  = dynamic_cast<const pat::CompositeCandidate*>(five_cand_ref->daughter("trakThree"));
@@ -981,7 +975,6 @@ if(!OnlyGen_)
         else
         if(thirdTrack_charge==0) //K0, in this case the PsiPrimeMixed is just a copy of PsiPrimeSame
         {
-          std::cout << "Debug  9" << std::endl;
 
           psiPrimeMixed_p4[j].SetPtEtaPhiM(dimuonDiTrkOne_cand_ref->pt(),dimuonDiTrkOne_cand_ref->eta(),dimuonDiTrkOne_cand_ref->phi(),dimuonDiTrkOne_cand_ref->mass());
           psiPrimeMixed[j]  = dimuonDiTrkOne_cand_ref->mass();
@@ -1013,7 +1006,7 @@ if(!OnlyGen_)
         psiPrimeMixed_pt  = psiPrimeMixed_p4[j].Pt();
         psiPrimeMixed_eta = psiPrimeMixed_p4[j].Eta();
         psiPrimeMixed_phi = psiPrimeMixed_p4[j].Phi();
-        std::cout << "Debug  10" << std::endl;
+
         psiPrimeMixed_p_pt   = psiPrimeMixed_p_cand_ref->pt();
         psiPrimeMixed_p_eta  = psiPrimeMixed_p_cand_ref->eta();
         psiPrimeMixed_p_phi  = psiPrimeMixed_p_cand_ref->phi();
@@ -1023,7 +1016,7 @@ if(!OnlyGen_)
         psiPrimeMixed_m_phi  = psiPrimeMixed_m_cand_ref->phi();
 
         triTrakMass[j] = triTrak_cand_ref->mass();
-        std::cout << "Debug  11" << std::endl;
+
       }
 
       fivetracks_tree->Fill();
