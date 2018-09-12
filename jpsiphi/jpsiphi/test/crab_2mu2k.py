@@ -111,7 +111,7 @@ config.General.transferLogs     = False
 
 config.section_('JobType')
 config.JobType.psetName         = 'run-2mu2k-miniaod.py'
-config.JobType.pyCfgParams      = ['gtag=' + str(gtag)]
+config.JobType.pyCfgParams      = ['gtag=' + str(gtag), 'dataset=' + str(run)]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
