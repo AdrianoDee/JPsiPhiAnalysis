@@ -867,7 +867,24 @@ if(!OnlyGen_)
         std::cout << trakTwo_cand_ref->mass() << " - ";
         std::cout << trakThree_cand_ref->mass() << " - ";
 
-        std::cout << triTrak_cand_ref->mass() << " - ";
+        // std::cout << triTrak_cand_ref->mass() << " - ";
+        std::cout << std::endl;
+
+        std::cout << fiveTracksMass[j] << " - ";
+
+        std::cout << dimuonDiTrkOne[j] << " - ";
+        std::cout << dimuonDiTrkTwo[j] << " - ";
+        std::cout << dimuonDiTrkThree[j] << " - ";
+
+        std::cout << ditrakOne[j] << " - ";
+        std::cout << ditrakTwo[j] << " - ";
+        std::cout << ditrakThree[j] << " - ";
+
+        std::cout << trackOneMass[j] << " - ";
+        std::cout << trackTwoMass[j] << " - ";
+        std::cout << trackThreeMass[j] << " - ";
+
+        std::cout << std::endl;
         std::cout << std::endl;
         
         five_p4[j].SetPtEtaPhiM(five_cand_ref->pt(),five_cand_ref->eta(),five_cand_ref->phi(),five_cand_ref->mass());
