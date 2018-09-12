@@ -668,14 +668,14 @@ gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 gen_dimuonditrk_pdgId = 0;
 
-std::cout << "Debug  1" << std::endl;
+//std::cout << "Debug  1" << std::endl;
 if(!OnlyGen_)
   if (!fivetracks_cand_handle.isValid()) std::cout<< "No five tracks information " << run << "," << event <<std::endl;
 
   if (fivetracks_cand_handle.isValid()) {
 
 
-    std::cout << "Debug  2" << std::endl;
+    //std::cout << "Debug  2" << std::endl;
     noFiveCandidates = (Int_t)(fivetracks_cand_handle->size());
 
     for (unsigned int i=0; i< fivetracks_cand_handle->size(); i++)
@@ -792,7 +792,7 @@ if(!OnlyGen_)
       psiPrimeSame_ditrak_pt  = dimuonDiTrkOne_cand->pt();
       psiPrimeSame_ditrak_eta = dimuonDiTrkOne_cand->eta();
       psiPrimeSame_ditrak_phi = dimuonDiTrkOne_cand->phi();
-      std::cout << "Debug  3" << std::endl;
+      //std::cout << "Debug  3" << std::endl;
       for(size_t j = 0; j<numMasses;j++)
       {
 
@@ -862,7 +862,7 @@ if(!OnlyGen_)
         ditrakOne_p4[j].SetPtEtaPhiM(ditrakOne_cand_ref->pt(),ditrakOne_cand_ref->eta(),ditrakOne_cand_ref->phi(),ditrakOne_cand_ref->mass());
         ditrakTwo_p4[j].SetPtEtaPhiM(ditrakTwo_cand_ref->pt(),ditrakTwo_cand_ref->eta(),ditrakTwo_cand_ref->phi(),ditrakTwo_cand_ref->mass());
         ditrakThree_p4[j].SetPtEtaPhiM(ditrakThree_cand_ref->pt(),ditrakThree_cand_ref->eta(),ditrakThree_cand_ref->phi(),ditrakThree_cand_ref->mass());
-        std::cout << "Debug  5" << std::endl;
+        //std::cout << "Debug  5" << std::endl;
         //////////////////////////
         ////PSI PRIME SAME
         // My PsiPrime Same come from the original Phi->kk traks + J/Psi
@@ -899,7 +899,7 @@ if(!OnlyGen_)
           psiPrimeSame_p_m[j] = trakTwo_cand_ref->mass();
           psiPrimeSame_m_m[j] = trakOne_cand_ref->mass();
         }
-        std::cout << "Debug  6" << std::endl;
+        //std::cout << "Debug  6" << std::endl;
         psiPrimeSame_p_pt   = psiPrimeSame_p_cand_ref->pt();
         psiPrimeSame_p_eta  = psiPrimeSame_p_cand_ref->eta();
         psiPrimeSame_p_phi  = psiPrimeSame_p_cand_ref->phi();
@@ -1047,11 +1047,11 @@ if(!OnlyGen_)
         psiPrimeMixed_pt  = psiPrimeMixed_p4[j].Pt();
         psiPrimeMixed_eta = psiPrimeMixed_p4[j].Eta();
         psiPrimeMixed_phi = psiPrimeMixed_p4[j].Phi();
-        std::cout << "Debug  10" << std::endl;
+        //std::cout << "Debug  10" << std::endl;
 
 
         triTrakMass[j] = triTrak_cand_ref->mass();
-        std::cout << "Debug  11" << std::endl;
+        //std::cout << "Debug  11" << std::endl;
       }
 
       fivetracks_tree->Fill();
