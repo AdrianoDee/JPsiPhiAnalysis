@@ -294,7 +294,7 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
 
   fReader.SetEntry(entry);
 
-  bool test = (*out_run) < 320000;
+  bool test = (*run) < 320000;
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //
@@ -456,8 +456,8 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
     out_lowKaon_NBPixLayers  = (*lowKaon_NBPixLayers);
 
     out_isBestCandidate      = (*isBestCandidate);
-    
 
+    outTree->Fill();
   }
 
   return kTRUE;
@@ -468,6 +468,21 @@ void TwoMuTwoK::SlaveTerminate()
   // The SlaveTerminate() function is called after all entries or objects
   // have been processed. When running with PROOF SlaveTerminate() is called
   // on each slave server.
+
+  TDirectory *savedir = gDirectory;
+  if (fOut)
+  {
+    fOut->cd();
+    gStyle->SetOptStat(111111) ;
+
+
+    outTuple->Write();
+    OutFile->Print();
+    fOutput->Add(OutFile);
+    gDirectory = savedir;
+    fOut->Close();
+
+  }
 
 }
 
