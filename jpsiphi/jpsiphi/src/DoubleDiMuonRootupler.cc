@@ -762,7 +762,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
-    pat::CompositeCandidate *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
+    pat::Muon *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
@@ -965,7 +965,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
       phi_triggerMatch = DoubleDiMuonRootupler::isTriggerMatched(phi_cand);
 
-      const pat::Muon *jpsiHighMuon,  *jspiLowMuon, *phiHighMuon, *phiLowMuon;
+      const pat::Muon *jpsiHighMuon, *jspiLowMuon, *phiHighMuon, *phiLowMuon;
 
       jpsiHighMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("highMuon"));
       jspiLowMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("lowMuon"));
