@@ -1,5 +1,6 @@
-#define TwoMuTwoK_2018Five_cxx
-// The class definition in TwoMuTwoK_2018Five.h has been generated automatically
+#define TwoMuTwoKFive_cxx
+
+// The class definition in TwoMuTwoKFive.h has been generated automatically
 // by the ROOT utility TTree::MakeSelector(). This class is derived
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
@@ -19,17 +20,23 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// root> T->Process("TwoMuTwoK_2018Five.C")
-// root> T->Process("TwoMuTwoK_2018Five.C","some options")
-// root> T->Process("TwoMuTwoK_2018Five.C+")
+// root> T->Process("TwoMuTwoKFive.C")
+// root> T->Process("TwoMuTwoKFive.C","some options")
+// root> T->Process("TwoMuTwoKFive.C+")
 //
 
 
-#include "TwoMuTwoK_2018Five.h"
+#include "TwoMuTwoKFive.h"
 #include <TH2.h>
 #include <TStyle.h>
 
-void TwoMuTwoK_2018Five::Begin(TTree * /*tree*/)
+
+Double_t out;
+
+//TTree* outTuple = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
+//TBranch* b = outTuple->Branch("out",       &out,        "out/D");
+
+void TwoMuTwoKFive::Begin(TTree * /*tree*/)
 {
    // The Begin() function is called at the start of the query.
    // When running with PROOF Begin() is only called on the client.
@@ -38,7 +45,7 @@ void TwoMuTwoK_2018Five::Begin(TTree * /*tree*/)
    TString option = GetOption();
 }
 
-void TwoMuTwoK_2018Five::SlaveBegin(TTree * /*tree*/)
+void TwoMuTwoKFive::SlaveBegin(TTree * /*tree*/)
 {
    // The SlaveBegin() function is called after the Begin() function.
    // When running with PROOF SlaveBegin() is called on each slave server.
@@ -60,13 +67,12 @@ void TwoMuTwoK_2018Five::SlaveBegin(TTree * /*tree*/)
    Phi_mean = 1.019723;
    Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-   outTuple = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
 
-   outTuple->Branch("out",       &out,        "out/D");
+//   outTuple->Branch("out",       &out,        "out/D");
 
 }
 
-Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
+Bool_t TwoMuTwoKFive::Process(Long64_t entry)
 {
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
@@ -86,20 +92,24 @@ Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
-   bool test = highKaon_pt > 5.00;
-
+   bool test = (*run) > 5.00;
+   //int a = (int) (*trigger);
+   //std::cout << (*trigger);
+//
+ 
    if(test)
    {
-     out = (Double_t) highKaon_pt;
-
-     outTuple->Fill();
-     
+    std::cout << (*trigger) << std::endl;
+ //    Double_t out = (Double_t) (*run);
+//      std::cout << out << std::endl;
+     //outTuple->Fill();
+    //out = (Double_t) (*run);     
    }
 
    return kTRUE;
 }
 
-void TwoMuTwoK_2018Five::SlaveTerminate()
+void TwoMuTwoKFive::SlaveTerminate()
 {
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
@@ -107,7 +117,7 @@ void TwoMuTwoK_2018Five::SlaveTerminate()
 
 }
 
-void TwoMuTwoK_2018Five::Terminate()
+void TwoMuTwoKFive::Terminate()
 {
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present

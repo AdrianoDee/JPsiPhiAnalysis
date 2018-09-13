@@ -5,8 +5,8 @@
 // found on file: ../../../../../CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/rootuple-2018-dimuonditrak_bbbar_hard_0.root
 //////////////////////////////////////////////////////////
 
-#ifndef TwoMuTwoK_2018Five_h
-#define TwoMuTwoK_2018Five_h
+#ifndef TwoMuTwoKFive_h
+#define TwoMuTwoKFive_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -16,20 +16,49 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+//
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <map>
+
+
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
 
 
-class TwoMuTwoK_2018Five : public TSelector {
+class TwoMuTwoKFive : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
 
    Float_t JPsi_mass, Phi_mass, Phi_mean, Phi_sigma;
-   TTree *outTuple;
+   //TTree *outTuple;
 
-   Double_t out;
+   //Double_t out;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -254,8 +283,8 @@ public :
    TTreeReaderValue<Bool_t> isBestCandidate = {fReader, "isBestCandidate"};
 
 
-   TwoMuTwoK_2018Five(TTree * /*tree*/ =0) { }
-   virtual ~TwoMuTwoK_2018Five() { }
+   TwoMuTwoKFive(TTree * /*tree*/ =0) { }
+   virtual ~TwoMuTwoKFive() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -273,14 +302,14 @@ public :
    TProofOutputFile *OutFile;
    TFile            *fOut;
 
-   ClassDef(TwoMuTwoK_2018Five,0);
+   ClassDef(TwoMuTwoKFive,0);
 
 };
 
 #endif
 
-#ifdef TwoMuTwoK_2018Five_cxx
-void TwoMuTwoK_2018Five::Init(TTree *tree)
+#ifdef TwoMuTwoKFive_cxx
+void TwoMuTwoKFive::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -292,7 +321,7 @@ void TwoMuTwoK_2018Five::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t TwoMuTwoK_2018Five::Notify()
+Bool_t TwoMuTwoKFive::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -304,4 +333,4 @@ Bool_t TwoMuTwoK_2018Five::Notify()
 }
 
 
-#endif // #ifdef TwoMuTwoK_2018Five_cxx
+#endif // #ifdef TwoMuTwoKFive_cxx

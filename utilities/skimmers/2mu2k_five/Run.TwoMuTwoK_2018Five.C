@@ -15,10 +15,12 @@
   //phi mass window [0.97-1.06]
   //dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/2018/2mu2k-Run2018A-PromptReco-v3.root");
   //dataset->Add("/lustre/cms/store/user/adiflori/Charmonium//2mu2k_miniaod_17Nov2017_BCDEF_2017_phi_097_106.root");
-  dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/rootuple-2018-dimuonditrak_bbbar_hard_0.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018C-PromptReco-v3_MINIAOD___20180913_014624/180912_234632/0000/rootuple-2018-dimuonditrak_fivedataC2018_3_0_101.root");
 
-  TString selector = "/lustre/home/adrianodif/jpsiphi/analysis/utilities/skimmers/2mu2k_five/TwoMuTwoK_Five";
+  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k_five/TwoMuTwoKFive";
   TProof *p = TProof::Open("workers=1"); // 12 workers for qsub
+  //gProofDebugMask = TProofDebug::kAll;
+  //gProofDebugLevel = 5;
 
   // Processing
   cout << ">> Processing " << selector << " ... " << endl;
