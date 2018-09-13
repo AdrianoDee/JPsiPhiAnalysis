@@ -75,9 +75,8 @@ private:
   Double_t   run;
   ULong64_t  event;
   UInt_t     lumiblock, ndimuon, nmuons, trigger, tMatch;
-  Int_t      charge;
 
-  Double_t status, charge, pdgId, pt, eta, phi;
+  Double_t charge, pdgId, pt, eta, phi;
   Double_t mass, status, isPrompt, ndaughter, ngdaughter;
 
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
