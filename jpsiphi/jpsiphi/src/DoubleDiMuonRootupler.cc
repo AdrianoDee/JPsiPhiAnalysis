@@ -954,8 +954,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       jpsi_lxyzErr      = (Double_t) jpsi_cand->userFloat("lErr_xyz");
       jpsi_cosAlpha3D   = (Double_t) jpsi_cand->userFloat("cosAlpha3D");
 
-      mHighJPsiMatch    = dimuon_cand->userInt("highMuonTMatch");
-      mLowJPsiMatch     = dimuon_cand->userInt("lowMuonTMatch");
+      mHighJPsiMatch    = jpsi_cand->userInt("highMuonTMatch");
+      mLowJPsiMatch     = jpsi_cand->userInt("lowMuonTMatch");
       jpsi_triggerMatch = -std::max(-mLowJPsiMatch,mHighJPsiMatch);
 
       //jpsi_triggerMatch = DoubleDiMuonRootupler::isTriggerMatched(jpsi_cand);
