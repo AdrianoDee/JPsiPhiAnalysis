@@ -195,11 +195,30 @@ MaxNumOfDaughters_(iConfig.existsAs<int>("MaxDaughters") ? iConfig.getParameter<
 
       for (size_t j = 0; j < MaxNumOfDaughters_; j++)
       {
-        name = "gen_gdau_" + std::to_string(i) + "_p4";
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
         gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
 
-        name = "gen_dau_" + std::to_string(i) + "_status"; var = name + "/D";
-        gen_tree->Branch(name.c_str(),&gen_dau_status[i],var.c_str());
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pt"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_pt[i],var.c_str());
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_eta"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_eta[i],var.c_str());
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_phi"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_phi[i],var.c_str());
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_p[i],var.c_str());
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_m"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_m[i],var.c_str());
+
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pdg"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_pdg[i],var.c_str());
+
+        name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_status"; var = name + "/D";
+        gen_tree->Branch(name.c_str(),&gen_gdau_status[i],var.c_str());
 
       }
 

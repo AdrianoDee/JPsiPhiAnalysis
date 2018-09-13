@@ -766,7 +766,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     std::cout << "Debug  2" << std::endl;
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
-    pat::CompositeCandidate *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
+    pat::Muon *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
