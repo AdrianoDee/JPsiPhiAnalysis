@@ -257,6 +257,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //pat::TriggerObjectStandAloneCollection triggerColl;
   std::vector < UInt_t > filterResults;
 
+  std::cout << "Debug  1" << std::endl;
+
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
@@ -280,6 +282,8 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       filterResults.push_back(thisFilter);
     }
   }
+
+  std::cout << "Debug  2" << std::endl;
 
   for (size_t i = 0; i < muons->size(); i++) {
 
@@ -320,6 +324,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
   }
+  std::cout << "Debug  3" << std::endl;
 
   //for(View<pat::Muon>::const_iterator m = muons->begin(), itend = muons->end(); m != itend; ++m)
   // for (size_t i = 0; i < muons->size(); i++)
@@ -332,6 +337,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //
   // }
 
+  std::cout << "Debug  4" << std::endl;
   // MuMu candidates only from muons
   //for(View<pat::Muon>::const_iterator it = muons->begin(), itend = muons->end(); it != itend; ++it){
   for (size_t i = 0; i < muons->size(); i++) {
@@ -360,7 +366,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
-
+      std::cout << "Debug  5" << std::endl;
       // ---- no explicit order defined ----
       if(m1.pt() > m2.pt())
       {
@@ -417,7 +423,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       // ---- apply the dimuon cut ----
 
       if(!dimuonSelection_(mumucand)) continue;
-
+      std::cout << "Debug  6" << std::endl;
 
       vector<TransientTrack> muon_ttks;
       muon_ttks.push_back(theTTBuilder->build(m1.track()));  // pass the reco::Track, not  the reco::TrackRef (which can be transient)
@@ -457,7 +463,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
           TVector3 pperp3D(mumu.px(), mumu.py(), mumu.pz());
           AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
           AlgebraicVector3 vpperp3D(pperp.x(),pperp.y(),pperp.z());
-
+          std::cout << "Debug  7" << std::endl;
           if (resolveAmbiguity_) {
 
             float minDz = 999999.;
@@ -568,7 +574,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserInt("countTksOfPV", countTksOfPV);
               mumucand.addUserFloat("vertexWeight", (float) vertexWeight);
               mumucand.addUserFloat("sumPTPV", (float) sumPTPV);
-
+              std::cout << "Debug  8" << std::endl;
               ///DCA
               TrajectoryStateClosestToPoint mu1TS = muon_ttks[0].impactPointTSCP();
               TrajectoryStateClosestToPoint mu2TS = muon_ttks[1].impactPointTSCP();
@@ -658,7 +664,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               vDiff3D[0] = vdiff3D.x(); vDiff3D[1] = vdiff3D.y(); vDiff3D[2] = vdiff3D.z() ;
               lErr_xyzBS = sqrt(ROOT::Math::Similarity(vDiff3D,vXYe)) / vdiff3D.Mag();
 
-
+              std::cout << "Debug  9" << std::endl;
               mumucand.addUserFloat("ppdlBS",ppdlBS);
               mumucand.addUserFloat("ppdlErrBS",ppdlErrBS);
               mumucand.addUserFloat("cosAlphaBS",cosAlphaBS);
@@ -713,7 +719,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               }
 
             }
-
+            std::cout << "Debug  10" << std::endl;
             //Muon mass Vertex Refit
             float refittedMass = -1.0, mumuVtxCL = -1.0;
 
@@ -791,7 +797,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
               mumucand.addUserFloat("ppdlTrue",-99.);
             }
           }
-
+          std::cout << "Debug  11" << std::endl;
 
           // ---- Push back output ----
           if(muonFilters[i]>0 && muonFilters[j]>0)
@@ -838,7 +844,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (genJpsi->numberOfMothers()>0) {
 
         // std::cout << "findJpsiMCInfo 1 " << std::endl;
-
+        std::cout << "Debug  12" << std::endl;
         TVector3 trueVtx(0.0,0.0,0.0);
         TVector3 trueP(0.0,0.0,0.0);
         TVector3 trueVtxMom(0.0,0.0,0.0);
@@ -881,7 +887,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             trueVtxMom.SetXYZ(Jpsimom->vertex().x(),Jpsimom->vertex().y(),Jpsimom->vertex().z());
           }
         }
-
+        std::cout << "Debug  13" << std::endl;
         TVector3 vdiff = trueVtx - trueVtxMom;
         //trueLife = vdiff.Perp()*3.09688/trueP.Perp();
         trueLife = vdiff.Perp()*genJpsi->mass()/trueP.Perp();

@@ -231,11 +231,11 @@ UInt_t DoubleDiMuonRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_c
 
   // if matched a given trigger, set the bit, in the same order as listed
   for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
-    // std::cout << HLTFilters_[iTr] << std::endl;
+    // //std::cout << HLTFilters_[iTr] << std::endl;
     const pat::TriggerObjectStandAloneCollection mu1HLTMatches = muon1->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     const pat::TriggerObjectStandAloneCollection mu2HLTMatches = muon2->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
-    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
+    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) //std::cout << std::endl << HLTFilters_[iTr] << std::endl;
   }
 
   return matched;
@@ -718,7 +718,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
            }
         }
      }
-   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
+   } else //std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
    gen_doubledimuon_pdg = 0;
 
@@ -731,7 +731,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
 // grabbing doubledimuon information
 
-  std::cout << "Debug  1" << std::endl;
+  //std::cout << "Debug  1" << std::endl;
 
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
@@ -763,7 +763,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
 
-    std::cout << "Debug  2" << std::endl;
+    //std::cout << "Debug  2" << std::endl;
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
     pat::Muon *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
@@ -783,7 +783,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       jPsiMuHigh = dynamic_cast <pat::Muon *>(jpsi_cand->daughter("highMuon"));
 
       // if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
-      //   std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
+      //   //std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
       //   continue;
       // }
 
@@ -812,7 +812,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       doubledimuon_ctauPVDZ = doubledimuon_cand.userFloat("ctauPVDZ");
       doubledimuon_ctauErrPVDZ = doubledimuon_cand.userFloat("ctauErrPVDZ");
 
-      std::cout << "Debug  3" << std::endl;
+      //std::cout << "Debug  3" << std::endl;
       doubledimuon_m     = doubledimuon_cand.mass();
       doubledimuon_m_rf  = doubledimuon_cand.userFloat("mass_rf");
       doubledimuon_pt    = doubledimuon_cand.pt();
@@ -849,7 +849,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         gen_phi_p =  -1.0;
         gen_phi_pt = -1.0;
         gen_phi_eta = -1.0;
-        std::cout << "Debug  4" << std::endl;
+        //std::cout << "Debug  4" << std::endl;
         reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
         reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();
         reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
@@ -864,7 +864,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         if(genPhiMuLow.isNonnull())
           gen_mLowPhi_p4.SetPtEtaPhiM(genPhiMuLow->pt(),genPhiMuLow->eta(),genPhiMuLow->phi(),genPhiMuLow->mass());
 
-        std::cout << "Debug  5" << std::endl;
+        //std::cout << "Debug  5" << std::endl;
         if (genJPsiMuLow.isNonnull() && genJPsiMuHigh.isNonnull() && genPhiMuHigh.isNonnull() && genPhiMuLow.isNonnull())
         {
           if (genPhiMuHigh->numberOfMothers()>0 && genPhiMuLow->numberOfMothers()>0)
@@ -901,7 +901,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
               gen_phi_eta   = phiMomHigh->eta();
             }
 
-            std::cout << "Debug  6" << std::endl;
+            //std::cout << "Debug  6" << std::endl;
             if(sameJPsiMom && samePhiMom && jPsiMomHigh->numberOfMothers()>0 && phiMomLow->numberOfMothers()>0)
             {
               reco::GenParticleRef jspiMom  = jPsiMomHigh->motherRef();
@@ -930,7 +930,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
          vJPsiHigh = jpsi_cand->daughter("lowMuon")->p4();
          vJPsiLow = jpsi_cand->daughter("highMuon")->p4();
       }
-      std::cout << "Debug  7" << std::endl;
+      //std::cout << "Debug  7" << std::endl;
       mLowPhi_rf_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
       mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
@@ -983,7 +983,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
       mHighJPsi_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
       mLowJPsi_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
-      std::cout << "Debug  8" << std::endl;
+      //std::cout << "Debug  8" << std::endl;
       mHighJPsi_isLoose   = (Double_t) jpsiHighMuon->isLooseMuon();
       mHighJPsi_isSoft    = (Double_t) jpsiHighMuon->isSoftMuon(thePrimaryV);
       mHighJPsi_isMedium  = (Double_t) jpsiHighMuon->isMediumMuon();
@@ -1089,7 +1089,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         doubledimuon_rf_cosAlpha = doubledimuon_cand.userFloat("cosAlpha_ref");
         doubledimuon_rf_ctauPV = doubledimuon_cand.userFloat("ctauPV_ref");
         doubledimuon_rf_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_ref");
-        std::cout << "Debug  9" << std::endl;
+        //std::cout << "Debug  9" << std::endl;
       }
 
       if (doubledimuon_cand.userFloat("has_const_ref") >= 0)
@@ -1107,7 +1107,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         doubledimuon_rf_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_const_ref");
 
       }
-      std::cout << "Debug  10" << std::endl;
+      //std::cout << "Debug  10" << std::endl;
       fourmuon_tree->Fill();
 
       if (OnlyBest_) break;
