@@ -731,6 +731,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
 // grabbing doubledimuon information
 
+  //std::cout << "Debug  1" << std::endl;
+
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
 // get rf information. Notice we are just keeping combinations with succesfull vertex fit
   if (!OnlyGen_ && doubledimuon_cand_handle.isValid()) {
@@ -760,6 +762,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     gen_mLowPhi_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
     noXCandidates = (Double_t)(doubledimuon_cand_handle->size());
+
+    //std::cout << "Debug  1" << std::endl;
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
     pat::Muon *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
@@ -808,7 +812,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       doubledimuon_ctauPVDZ = doubledimuon_cand.userFloat("ctauPVDZ");
       doubledimuon_ctauErrPVDZ = doubledimuon_cand.userFloat("ctauErrPVDZ");
 
-
+      //std::cout << "Debug  1" << std::endl;
       doubledimuon_m     = doubledimuon_cand.mass();
       doubledimuon_m_rf  = doubledimuon_cand.userFloat("mass_rf");
       doubledimuon_pt    = doubledimuon_cand.pt();
@@ -845,7 +849,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         gen_phi_p =  -1.0;
         gen_phi_pt = -1.0;
         gen_phi_eta = -1.0;
-
+        //std::cout << "Debug  1" << std::endl;
         reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
         reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();
         reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
@@ -854,13 +858,13 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         if(genJPsiMuLow.isNonnull())
           gen_mHighJPsi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
         if(genJPsiMuHigh.isNonnull())
-          gen_mLowJPsi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
+          gen_mLowJPsi_p4.SetPtEtaPhiM(genJPsiMuHigh->pt(),genJPsiMuHigh->eta(),genJPsiMuHigh->phi(),genJPsiMuHigh->mass());
         if(genPhiMuHigh.isNonnull())
-          gen_mHighPhi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
+          gen_mHighPhi_p4.SetPtEtaPhiM(genPhiMuHigh->pt(),genPhiMuHigh->eta(),genPhiMuHigh->phi(),genPhiMuHigh->mass());
         if(genPhiMuLow.isNonnull())
-          gen_mLowPhi_p4.SetPtEtaPhiM(genJPsiMuLow->pt(),genJPsiMuLow->eta(),genJPsiMuLow->phi(),genJPsiMuLow->mass());
+          gen_mLowPhi_p4.SetPtEtaPhiM(genPhiMuLow->pt(),genPhiMuLow->eta(),genPhiMuLow->phi(),genPhiMuLow->mass());
 
-
+        //std::cout << "Debug  1" << std::endl;
         if (genJPsiMuLow.isNonnull() && genJPsiMuHigh.isNonnull() && genPhiMuHigh.isNonnull() && genPhiMuLow.isNonnull())
         {
           if (genPhiMuHigh->numberOfMothers()>0 && genPhiMuLow->numberOfMothers()>0)
