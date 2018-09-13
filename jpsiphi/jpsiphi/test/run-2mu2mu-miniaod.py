@@ -108,13 +108,6 @@ if par.isLocal:
     input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
     print min((i+1)*size,len(filelist))
 
-gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
-input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
-mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
-mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
-mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
-runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
-input_file = runb2018 #gen_file
 
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')

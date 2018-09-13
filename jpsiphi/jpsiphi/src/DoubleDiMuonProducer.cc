@@ -592,8 +592,8 @@ void DoubleDiMuonProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
       }
      // if (OnlyBest_) break;
 
-     if ( !(highDiMuon->empty()) )  nLdM++;
-     if ( !(lowDiMuon->empty()) )  nHdM++;
+     if ( !(highDiMuon->empty()) )  nHdM++;
+     if ( !(lowDiMuon->empty()) )  nLdM++;
 
      iEvent.put(std::move(DoubleDiMuonCandColl),"FourMuonCandidates");
      nevents++;

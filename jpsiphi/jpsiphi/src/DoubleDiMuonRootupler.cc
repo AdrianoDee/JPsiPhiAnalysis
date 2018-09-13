@@ -729,124 +729,6 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
    edm::Handle<pat::PackedGenParticleCollection> packed;
    iEvent.getByToken(packCands_,  packed);
 
-   // if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
-   //   for (size_t i=0; i<pruned->size(); i++) {
-   //     // std::cout << "Valid"<<std::endl;
-   //     const reco::Candidate *afourmuon = &(*pruned)[i];
-   //
-   //     if ( (abs(afourmuon->pdgId()) == MomPdgId_) && (afourmuon->status() == 2))
-   //       gen_b_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
-   //
-   //     if ( (abs(afourmuon->pdgId()) == MomPdgId_) && (afourmuon->status() == 2) && (afourmuon->numberOfDaughters() > 1) && (afourmuon->numberOfDaughters() < 7) ) {
-   //       //asking for decay (status==2) && two daughters
-   //       bool goToJPsi = false;
-   //       bool goToPhi = false;
-   //
-   //       bool muJPsiP = false, muJPsiN = false, muPhiP = false, muPhiN = false;
-   //
-   //       int noDaughters = 0, noGDaughters = 0;
-   //       int theJPsi = 0, thePhi = 0, theJPsiMuP = 0, theJPsiMuN = 0, thePhiMuP = 0, thePhiMuN = 0;
-   //
-   //       std::vector<const reco::Candidate *> daughters,gdaughters;
-   //       for(size_t j = 0; j < afourmuon->numberOfDaughters(); ++j)
-   //       {
-   //         const reco::Candidate * daughter = afourmuon->daughter(j);
-   //         if(daughter->mother(daughter->numberOfMothers()-1) != afourmuon) continue;
-   //         if(daughter->pdgId() == 443)
-   //         {
-   //           goToJPsi=true;
-   //           theJPsi = j;
-   //         }
-   //         if(daughter->pdgId() == 333)
-   //         {
-   //           thePhi = j;
-   //           goToPhi=true;
-   //         }
-   //
-   //         daughters.push_back(daughter);
-   //
-   //         ++noDaughters;
-   //
-   //       }
-   //
-   //       for (size_t j = 0; j < daughters.size(); j++) {
-   //
-   //         if(daughters[j]->status() != 2) continue;
-   //
-   //         for(size_t k = 0; k <daughters[j]->numberOfDaughters(); ++k)
-   //         {
-   //           const reco::Candidate * gdaughter = daughters[j]->daughter(k);
-   //           if(gdaughter->mother(gdaughter->numberOfMothers()-1) != daughters[j]) continue;
-   //           gdaughters.push_back(gdaughter);
-   //
-   //           if(goToPhi && goToJPsi)
-   //           {
-   //             if(gdaughter->pdgId()==-13)
-   //             {
-   //               theJPsiMuP = j;
-   //               muJPsiP=true;
-   //             }
-   //             if(gdaughter->pdgId()==13)
-   //             {
-   //               theJPsiMuN = j;
-   //               muJPsiN=true;
-   //             }
-   //             if(gdaughter->pdgId()==13)
-   //             {
-   //               thePhiMuP = j;
-   //               muPhiP=true;
-   //             }
-   //             if(gdaughter->pdgId()==-13)
-   //             {
-   //               thePhiMuN = j;
-   //               muPhiN=true;
-   //             }
-   //           }
-   //
-   //           ++noGDaughters;
-   //         }
-   //       }
-   //
-   //       if(noDaughters == 2 && noGDaughters > 3 && noGDaughters < 7 && goToJPsi)
-   //       {
-   //
-   //         // for (size_t j = 0; j < daughters.size(); j++)
-   //         //   std::cout << "Daughter no. " << j << " - id : " << daughters[j]->pdgId() << std::endl;
-   //         //
-   //         // for (size_t j = 0; j < gdaughters.size(); j++)
-   //         //   std::cout << "GrandDaughter no. " << j << " - id : " << gdaughters[j]->pdgId() << std::endl;
-   //
-   //         gen_b4_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
-   //         gen_d1_p4.SetPtEtaPhiM(daughters[0]->pt(),daughters[0]->eta(),daughters[0]->phi(),daughters[0]->mass());
-   //         gen_d2_p4.SetPtEtaPhiM(daughters[1]->pt(),daughters[1]->eta(),daughters[1]->phi(),daughters[1]->mass());
-   //
-   //         gen_gd1_p4.SetPtEtaPhiM(gdaughters[0]->pt(),gdaughters[0]->eta(),gdaughters[0]->phi(),gdaughters[0]->mass());
-   //         gen_gd2_p4.SetPtEtaPhiM(gdaughters[1]->pt(),gdaughters[1]->eta(),gdaughters[1]->phi(),gdaughters[1]->mass());
-   //         gen_gd3_p4.SetPtEtaPhiM(gdaughters[2]->pt(),gdaughters[2]->eta(),gdaughters[2]->phi(),gdaughters[2]->mass());
-   //         gen_gd4_p4.SetPtEtaPhiM(gdaughters[3]->pt(),gdaughters[3]->eta(),gdaughters[3]->phi(),gdaughters[3]->mass());
-   //
-   //         if(noGDaughters > 4)
-   //           gen_gd5_p4.SetPtEtaPhiM(gdaughters[4]->pt(),gdaughters[4]->eta(),gdaughters[4]->phi(),gdaughters[4]->mass());
-   //         if(noGDaughters > 5)
-   //           gen_gd6_p4.SetPtEtaPhiM(gdaughters[5]->pt(),gdaughters[5]->eta(),gdaughters[5]->phi(),gdaughters[5]->mass());
-   //       }
-   //
-   //       if(muJPsiP && muJPsiN && muPhiP && muPhiN)
-   //       {
-   //
-   //         gen_doubledimuon_p4.SetPtEtaPhiM(afourmuon->pt(),afourmuon->eta(),afourmuon->phi(),afourmuon->mass());
-   //         gen_jpsi_p4.SetPtEtaPhiM(daughters[theJPsi]->pt(),daughters[theJPsi]->eta(),daughters[theJPsi]->phi(),daughters[theJPsi]->mass());
-   //         gen_phi_p4.SetPtEtaPhiM(daughters[thePhi]->pt(),daughters[thePhi]->eta(),daughters[thePhi]->phi(),daughters[thePhi]->mass());
-   //         gen_mLowJPsi_p4.SetPtEtaPhiM(gdaughters[theJPsiMuN]->pt(),gdaughters[theJPsiMuN]->eta(),gdaughters[theJPsiMuN]->phi(),gdaughters[theJPsiMuN]->mass());
-   //         gen_mHighJPsi_p4.SetPtEtaPhiM(gdaughters[theJPsiMuP]->pt(),gdaughters[theJPsiMuP]->eta(),gdaughters[theJPsiMuP]->phi(),gdaughters[theJPsiMuP]->mass());
-   //         gen_mLowPhi_p4.SetPtEtaPhiM(gdaughters[thePhiMuN]->pt(),gdaughters[thePhiMuN]->eta(),gdaughters[thePhiMuN]->phi(),gdaughters[thePhiMuN]->mass());
-   //         gen_mHighPhi_p4.SetPtEtaPhiM(gdaughters[thePhiMuP]->pt(),gdaughters[thePhiMuP]->eta(),gdaughters[thePhiMuP]->phi(),gdaughters[thePhiMuP]->mass());
-   //         gen_doubledimuon_pdg = afourmuon->pdgId();
-   //     }
-   //   } // for (size
-   // }
-   // }
-
 // grabbing doubledimuon information
 
   if (!doubledimuon_cand_handle.isValid()) std::cout<< "No doubledimuon information " << run << "," << event <<std::endl;
@@ -891,10 +773,10 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
 
-      phiMuHigh  = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("highMuon"));
-      phiMuLow   = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("lowMuon"));
-      jPsiMuLow  = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("lowMuon"));
-      jPsiMuHigh = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("highMuon"));
+      phiMuHigh  = dynamic_cast <pat::Muon *>(phi_cand->daughter("highMuon"));
+      phiMuLow   = dynamic_cast <pat::Muon *>(phi_cand->daughter("lowMuon"));
+      jPsiMuLow  = dynamic_cast <pat::Muon *>(jpsi_cand->daughter("lowMuon"));
+      jPsiMuHigh = dynamic_cast <pat::Muon *>(jpsi_cand->daughter("highMuon"));
 
       // if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
       //   std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
