@@ -1,4 +1,4 @@
-//std::cout#include "../interface/DiMuonProducer.h"
+#include "../interface/DiMuonProducer.h"
 
 //Headers for the data items
 #include <DataFormats/TrackReco/interface/TrackFwd.h>
