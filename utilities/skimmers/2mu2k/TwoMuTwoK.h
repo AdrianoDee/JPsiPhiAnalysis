@@ -293,6 +293,8 @@ class TwoMuTwoK : public TSelector {
 
 
   //Output variables
+  Float_t out_run, out_event, out_lumi, out_numPrimaryVertices, out_trigger;
+
   Float_t out_dimuonditrk_vProb, out_out_dimuonditrk_vChi2;
   Float_t out_dimuonditrk_rf_vProb, out_dimuonditrk_rf_vChi2, out_dimuonditrk_rf_nDof, out_dimuonditrk_rf_cosAlpha, out_dimuonditrk_rf_ctauPV, out_dimuonditrk_rf_ctauErrPV;
   Float_t out_dimuonditrk_rf_c_vProb, out_dimuonditrk_rf_c_vChi2, out_dimuonditrk_rf_c_nDof, out_dimuonditrk_rf_c_cosAlpha, out_dimuonditrk_rf_c_ctauPV, out_dimuonditrk_rf_c_ctauErrPV;
@@ -315,8 +317,8 @@ class TwoMuTwoK : public TSelector {
   Float_t out_dimuonditrk_dca_m1m2, out_dimuonditrk_dca_m1t1, out_dimuonditrk_dca_m1t2, out_dimuonditrk_dca_m2t1, out_dimuonditrk_dca_m2t2, out_dimuonditrk_dca_t1t2;
   Float_t out_dimuon_vProb, out_dimuon_vChi2, out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV, out_dimuon_cosAlpha;
 
-  Float_t out_gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
-  Float_t out_highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
+  Float_t out_gen_dimuonditrk_m, out_dimuonditrk_m, out_dimuon_m, out_dimuon_pt, out_ditrak_m, out_ditrak_pt;
+  Float_t out_highKaon_pt, out_lowKaon_pt, out_highMuon_pt, out_lowMuon_pt, out_dimuonditrk_nDof, out_dimuonditrk_m_rf, out_dimuonditrk_m_rf_c, out_dimuonditrk_m_rf_d_c;
 
   Float_t out_lowMuon_isLoose, out_lowMuon_isSoft, out_lowMuon_isMedium, out_lowMuon_isHighPt, out_lowMuon_isTight;
   Float_t out_highMuon_isLoose, out_highMuon_isSoft, out_highMuon_isMedium, out_highMuon_isHighPt, out_highMuon_isTight;
@@ -344,7 +346,7 @@ class TwoMuTwoK : public TSelector {
   Float_t out_highKaon_NTraLayers, out_highKaon_NStrLayers, out_highKaon_NBPixLayers, out_lowKaon_NPixelHits, out_lowKaon_NStripHits;
   Float_t out_lowKaon_NTrackhits, out_lowKaon_NBPixHits, out_lowKaon_NPixLayers, out_lowKaon_NTraLayers, out_lowKaon_NStrLayers, out_lowKaon_NBPixLayers;
 
-  Float_t out_highKaonMatch, out_lowKaonMatch,lowMuonMatch, out_highMuonMatch;
+  Float_t out_highKaonMatch, out_lowKaonMatch, out_lowMuonMatch, out_highMuonMatch;
 
   Float_t out_dimuonditrk_rf_bindx;
 
