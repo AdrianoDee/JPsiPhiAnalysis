@@ -131,25 +131,25 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuonditrk_pt,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
   Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
 
-  Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt, muonP_isTight;
-  Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt, muonN_isTight;
+  Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
+  Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
 
-  Bool_t muonP_isTracker, muonP_isGlobal, muonN_isTracker, muonN_isGlobal;
-  UInt_t muonP_type, muonN_type;
+  Bool_t highMuon_isTracker, highMuon_isGlobal, lowMuon_isTracker, lowMuon_isGlobal;
+  UInt_t highMuon_type, lowMuon_type;
 
-  Bool_t muonP_rf_isLoose, muonP_rf_isSoft, muonP_rf_isMedium, muonP_rf_isHighPt;
-  Bool_t muonN_rf_isLoose, muonN_rf_isSoft, muonN_rf_isMedium, muonN_rf_isHighPt;
+  Bool_t highMuon_rf_isLoose, highMuon_rf_isSoft, highMuon_rf_isMedium, highMuon_rf_isHighPt;
+  Bool_t lowMuon_rf_isLoose, lowMuon_rf_isSoft, lowMuon_rf_isMedium, lowMuon_rf_isHighPt;
 
-  Bool_t muonP_rf_isTracker, muonP_rf_isGlobal, muonN_rf_isTracker, muonN_rf_isGlobal;
-  UInt_t muonP_rf_type, muonN_rf_type;
+  Bool_t highMuon_rf_isTracker, highMuon_rf_isGlobal, lowMuon_rf_isTracker, lowMuon_rf_isGlobal;
+  UInt_t highMuon_rf_type, lowMuon_rf_type;
 
-  UInt_t muonP_NPixelHits, muonP_NStripHits, muonP_NTrackhits, muonP_NBPixHits, muonP_NPixLayers, muonP_NTraLayers, muonP_NStrLayers, muonP_NBPixLayers;
-  UInt_t muonN_NPixelHits, muonN_NStripHits, muonN_NTrackhits, muonN_NBPixHits, muonN_NPixLayers, muonN_NTraLayers, muonN_NStrLayers, muonN_NBPixLayers;
+  UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
+  UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
 
   Double_t track_KP_d0, track_KP_d0Err, track_KP_dz, track_KP_dxy;
   Int_t track_KP_nvsh, track_KP_nvph;
 
-  UInt_t tPMatch, tNMatch,muonPMatch, muonNMatch;
+  UInt_t tPMatch, tNMatch,highMuonMatch, lowMuonMatch;
 
   Int_t track_KN_nvsh, track_KN_nvph;
 
@@ -367,50 +367,50 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
 
           dimuonditrk_tree->Branch("tPMatch",     &tPMatch,       "tPMatch/I");
           dimuonditrk_tree->Branch("tNMatch",     &tNMatch,       "tNMatch/I");
-          dimuonditrk_tree->Branch("muonPMatch",     &muonPMatch,       "muonPMatch/I");
-          dimuonditrk_tree->Branch("muonNMatch",     &muonNMatch,       "muonNMatch/I");
+          dimuonditrk_tree->Branch("highMuonMatch",     &highMuonMatch,       "highMuonMatch/I");
+          dimuonditrk_tree->Branch("lowMuonMatch",     &lowMuonMatch,       "lowMuonMatch/I");
 
           //Muon flags
-          dimuonditrk_tree->Branch("muonP_isTight",        &muonP_isTight,        "muonP_isTight/O");
-          dimuonditrk_tree->Branch("muonP_isLoose",        &muonP_isLoose,        "muonP_isLoose/O");
-          dimuonditrk_tree->Branch("muonP_isSoft",        &muonP_isSoft,        "muonP_isSoft/O");
-          dimuonditrk_tree->Branch("muonP_isMedium",        &muonP_isMedium,        "muonP_isMedium/O");
-          dimuonditrk_tree->Branch("muonP_isHighPt",        &muonP_isHighPt,        "muonP_isHighPt/O");
+          dimuonditrk_tree->Branch("highMuon_isTight",        &highMuon_isTight,        "highMuon_isTight/O");
+          dimuonditrk_tree->Branch("highMuon_isLoose",        &highMuon_isLoose,        "highMuon_isLoose/O");
+          dimuonditrk_tree->Branch("highMuon_isSoft",        &highMuon_isSoft,        "highMuon_isSoft/O");
+          dimuonditrk_tree->Branch("highMuon_isMedium",        &highMuon_isMedium,        "highMuon_isMedium/O");
+          dimuonditrk_tree->Branch("highMuon_isHighPt",        &highMuon_isHighPt,        "highMuon_isHighPt/O");
 
-          dimuonditrk_tree->Branch("muonP_isTracker",        &muonP_isTracker,        "muonP_isTracker/O");
-          dimuonditrk_tree->Branch("muonP_isGlobal",        &muonP_isGlobal,        "muonP_isGlobal/O");
+          dimuonditrk_tree->Branch("highMuon_isTracker",        &highMuon_isTracker,        "highMuon_isTracker/O");
+          dimuonditrk_tree->Branch("highMuon_isGlobal",        &highMuon_isGlobal,        "highMuon_isGlobal/O");
 
-          dimuonditrk_tree->Branch("muonP_NPixelHits",        &muonP_NPixelHits,        "muonP_NPixelHits/I");
-          dimuonditrk_tree->Branch("muonP_NStripHits",        &muonP_NStripHits,        "muonP_NStripHits/I");
-          dimuonditrk_tree->Branch("muonP_NTrackhits",        &muonP_NTrackhits,        "muonP_NTrackhits/I");
-          dimuonditrk_tree->Branch("muonP_NBPixHits",        &muonP_NBPixHits,        "muonP_NBPixHits/I");
+          dimuonditrk_tree->Branch("highMuon_NPixelHits",        &highMuon_NPixelHits,        "highMuon_NPixelHits/I");
+          dimuonditrk_tree->Branch("highMuon_NStripHits",        &highMuon_NStripHits,        "highMuon_NStripHits/I");
+          dimuonditrk_tree->Branch("highMuon_NTrackhits",        &highMuon_NTrackhits,        "highMuon_NTrackhits/I");
+          dimuonditrk_tree->Branch("highMuon_NBPixHits",        &highMuon_NBPixHits,        "highMuon_NBPixHits/I");
 
-          dimuonditrk_tree->Branch("muonP_NPixLayers",        &muonP_NPixLayers,        "muonP_NPixLayers/I");
-          dimuonditrk_tree->Branch("muonP_NTraLayers",        &muonP_NTraLayers,        "muonP_NTraLayers/I");
-          dimuonditrk_tree->Branch("muonP_NStrLayers",        &muonP_NStrLayers,        "muonP_NStrLayers/I");
-          dimuonditrk_tree->Branch("muonP_NBPixLayers",        &muonP_NBPixLayers,        "muonP_NBPixLayers/I");
+          dimuonditrk_tree->Branch("highMuon_NPixLayers",        &highMuon_NPixLayers,        "highMuon_NPixLayers/I");
+          dimuonditrk_tree->Branch("highMuon_NTraLayers",        &highMuon_NTraLayers,        "highMuon_NTraLayers/I");
+          dimuonditrk_tree->Branch("highMuon_NStrLayers",        &highMuon_NStrLayers,        "highMuon_NStrLayers/I");
+          dimuonditrk_tree->Branch("highMuon_NBPixLayers",        &highMuon_NBPixLayers,        "highMuon_NBPixLayers/I");
 
-          dimuonditrk_tree->Branch("muonN_isTight",        &muonN_isTight,        "muonN_isTight/O");
-          dimuonditrk_tree->Branch("muonN_isLoose",        &muonN_isLoose,        "muonN_isLoose/O");
-          dimuonditrk_tree->Branch("muonN_isSoft",        &muonN_isSoft,        "muonN_isSoft/O");
-          dimuonditrk_tree->Branch("muonN_isMedium",        &muonN_isMedium,        "muonN_isMedium/O");
-          dimuonditrk_tree->Branch("muonN_isHighPt",        &muonN_isHighPt,        "muonN_isHighPt/O");
+          dimuonditrk_tree->Branch("lowMuon_isTight",        &lowMuon_isTight,        "lowMuon_isTight/O");
+          dimuonditrk_tree->Branch("lowMuon_isLoose",        &lowMuon_isLoose,        "lowMuon_isLoose/O");
+          dimuonditrk_tree->Branch("lowMuon_isSoft",        &lowMuon_isSoft,        "lowMuon_isSoft/O");
+          dimuonditrk_tree->Branch("lowMuon_isMedium",        &lowMuon_isMedium,        "lowMuon_isMedium/O");
+          dimuonditrk_tree->Branch("lowMuon_isHighPt",        &lowMuon_isHighPt,        "lowMuon_isHighPt/O");
 
-          dimuonditrk_tree->Branch("muonN_isTracker",        &muonN_isTracker,        "muonN_isTracker/O");
-          dimuonditrk_tree->Branch("muonN_isGlobal",        &muonN_isGlobal,        "muonN_isGlobal/O");
+          dimuonditrk_tree->Branch("lowMuon_isTracker",        &lowMuon_isTracker,        "lowMuon_isTracker/O");
+          dimuonditrk_tree->Branch("lowMuon_isGlobal",        &lowMuon_isGlobal,        "lowMuon_isGlobal/O");
 
-          dimuonditrk_tree->Branch("muonN_NPixelHits",        &muonN_NPixelHits,        "muonN_NPixelHits/I");
-          dimuonditrk_tree->Branch("muonN_NStripHits",        &muonN_NStripHits,        "muonN_NStripHits/I");
-          dimuonditrk_tree->Branch("muonN_NTrackhits",        &muonN_NTrackhits,        "muonN_NTrackhits/I");
-          dimuonditrk_tree->Branch("muonN_NBPixHits",        &muonN_NBPixHits,        "muonN_NBPixHits/I");
+          dimuonditrk_tree->Branch("lowMuon_NPixelHits",        &lowMuon_NPixelHits,        "lowMuon_NPixelHits/I");
+          dimuonditrk_tree->Branch("lowMuon_NStripHits",        &lowMuon_NStripHits,        "lowMuon_NStripHits/I");
+          dimuonditrk_tree->Branch("lowMuon_NTrackhits",        &lowMuon_NTrackhits,        "lowMuon_NTrackhits/I");
+          dimuonditrk_tree->Branch("lowMuon_NBPixHits",        &lowMuon_NBPixHits,        "lowMuon_NBPixHits/I");
 
-          dimuonditrk_tree->Branch("muonN_NPixLayers",        &muonN_NPixLayers,        "muonN_NPixLayers/I");
-          dimuonditrk_tree->Branch("muonN_NTraLayers",        &muonN_NTraLayers,        "muonN_NTraLayers/I");
-          dimuonditrk_tree->Branch("muonN_NStrLayers",        &muonN_NStrLayers,        "muonN_NStrLayers/I");
-          dimuonditrk_tree->Branch("muonN_NBPixLayers",        &muonN_NBPixLayers,        "muonN_NBPixLayers/I");
+          dimuonditrk_tree->Branch("lowMuon_NPixLayers",        &lowMuon_NPixLayers,        "lowMuon_NPixLayers/I");
+          dimuonditrk_tree->Branch("lowMuon_NTraLayers",        &lowMuon_NTraLayers,        "lowMuon_NTraLayers/I");
+          dimuonditrk_tree->Branch("lowMuon_NStrLayers",        &lowMuon_NStrLayers,        "lowMuon_NStrLayers/I");
+          dimuonditrk_tree->Branch("lowMuon_NBPixLayers",        &lowMuon_NBPixLayers,        "lowMuon_NBPixLayers/I");
 
-          dimuonditrk_tree->Branch("muonP_type",     &muonP_type,       "muonP_type/i");
-          dimuonditrk_tree->Branch("muonN_type",     &muonN_type,       "muonN_type/i");
+          dimuonditrk_tree->Branch("highMuon_type",     &highMuon_type,       "highMuon_type/i");
+          dimuonditrk_tree->Branch("lowMuon_type",     &lowMuon_type,       "lowMuon_type/i");
         }
         int pdgid_ = 0;
 
@@ -764,6 +764,11 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
 
       if(isMC_ || OnlyGen_)
       {
+        reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
+        reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();
+        reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
+        reco::GenParticleRef genJPsiMuLow  = jPsiMuHigh->genParticleRef();
+
         dimuonditrk_jpsipdg    = dimuonditrk_cand.userInt("jPsiGenPdgId");
         dimuonditrk_jpsippdl   = dimuonditrk_cand.userFloat("jPsiPpdlTrue");
         dimuonditrk_pdgid      = dimuonditrk_cand.userInt("xGenPdgId");
@@ -778,7 +783,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
       ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
 
-      const pat::Muon *muonP, *muonN;
+      const pat::Muon *highMuon, *lowMuon;
 
       reco::Candidate::LorentzVector vP = dimuon_cand->daughter("muon1")->p4();
       reco::Candidate::LorentzVector vM = dimuon_cand->daughter("muon2")->p4();
@@ -787,48 +792,53 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       if (vP.pt() < vM.pt()) {
          vP = dimuon_cand->daughter("muon2")->p4();
          vM = dimuon_cand->daughter("muon1")->p4();
-         muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
-         muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
+         lowMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
+         highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
       } else
       {
-        muonP = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
-        muonN = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
+        highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon1"));
+        lowMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("muon2"));
       }
 
-      muonP_isTight    = muonP->isTightMuon(thePrimaryV);
-      muonP_isLoose    = muonP->isLooseMuon();
-      muonP_isSoft     = muonP->isSoftMuon(thePrimaryV);
-      muonP_isMedium   = muonP->isMediumMuon();
-      muonP_isHighPt   = muonP->isHighPtMuon(thePrimaryV);
-      muonP_isTracker  = muonP->isTrackerMuon();
-      muonP_isGlobal   = muonP->isGlobalMuon();
-      muonP_NPixelHits = muonP->innerTrack()->hitPattern().numberOfValidPixelHits();
-      muonP_NStripHits = muonP->innerTrack()->hitPattern().numberOfValidStripHits();
-      muonP_NTrackhits = muonP->innerTrack()->hitPattern().numberOfValidTrackerHits();
-      muonP_NBPixHits  = muonP->innerTrack()->hitPattern().numberOfValidStripHits();
-      muonP_NPixLayers = muonP->innerTrack()->hitPattern().pixelLayersWithMeasurement();
-      muonP_NTraLayers = muonP->innerTrack()->hitPattern().trackerLayersWithMeasurement();
-      muonP_NStrLayers = muonP->innerTrack()->hitPattern().stripLayersWithMeasurement();
-      muonP_NBPixLayers = muonP->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
+      reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();
+      reco::GenParticleRef genJPsiMuHigh = jPsiMuLow->genParticleRef();
+      reco::GenParticleRef genJPsiMuLow  = jPsiMuHigh->genParticleRef();
 
-      muonN_isTight    = muonN->isTightMuon(thePrimaryV);
-      muonN_isLoose    = muonN->isLooseMuon();
-      muonN_isSoft     = muonN->isSoftMuon(thePrimaryV);
-      muonN_isMedium   = muonN->isMediumMuon();
-      muonN_isHighPt   = muonN->isHighPtMuon(thePrimaryV);
-      muonN_isTracker  = muonN->isTrackerMuon();
-      muonN_isGlobal   = muonN->isGlobalMuon();
-      muonN_NPixelHits = muonN->innerTrack()->hitPattern().numberOfValidPixelHits();
-      muonN_NStripHits = muonN->innerTrack()->hitPattern().numberOfValidStripHits();
-      muonN_NTrackhits = muonN->innerTrack()->hitPattern().numberOfValidTrackerHits();
-      muonN_NBPixHits  = muonN->innerTrack()->hitPattern().numberOfValidStripHits();
-      muonN_NPixLayers = muonN->innerTrack()->hitPattern().pixelLayersWithMeasurement();
-      muonN_NTraLayers = muonN->innerTrack()->hitPattern().trackerLayersWithMeasurement();
-      muonN_NStrLayers = muonN->innerTrack()->hitPattern().stripLayersWithMeasurement();
-      muonN_NBPixLayers = muonN->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      highMuon_isTight    = highMuon->isTightMuon(thePrimaryV);
+      highMuon_isLoose    = highMuon->isLooseMuon();
+      highMuon_isSoft     = highMuon->isSoftMuon(thePrimaryV);
+      highMuon_isMedium   = highMuon->isMediumMuon();
+      highMuon_isHighPt   = highMuon->isHighPtMuon(thePrimaryV);
+      highMuon_isTracker  = highMuon->isTrackerMuon();
+      highMuon_isGlobal   = highMuon->isGlobalMuon();
+      highMuon_NPixelHits = highMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      highMuon_NStripHits = highMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      highMuon_NTrackhits = highMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      highMuon_NBPixHits  = highMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      highMuon_NPixLayers = highMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      highMuon_NTraLayers = highMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      highMuon_NStrLayers = highMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      highMuon_NBPixLayers = highMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-      muonP_type       = muonP->type();
-      muonN_type       = muonN->type();
+      lowMuon_isTight    = lowMuon->isTightMuon(thePrimaryV);
+      lowMuon_isLoose    = lowMuon->isLooseMuon();
+      lowMuon_isSoft     = lowMuon->isSoftMuon(thePrimaryV);
+      lowMuon_isMedium   = lowMuon->isMediumMuon();
+      lowMuon_isHighPt   = lowMuon->isHighPtMuon(thePrimaryV);
+      lowMuon_isTracker  = lowMuon->isTrackerMuon();
+      lowMuon_isGlobal   = lowMuon->isGlobalMuon();
+      lowMuon_NPixelHits = lowMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      lowMuon_NStripHits = lowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      lowMuon_NTrackhits = lowMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      lowMuon_NBPixHits  = lowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      lowMuon_NPixLayers = lowMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      lowMuon_NTraLayers = lowMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      lowMuon_NStrLayers = lowMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      lowMuon_NBPixLayers = lowMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+
+      highMuon_type       = highMuon->type();
+      lowMuon_type       = lowMuon->type();
 
       muonp_p4.SetPtEtaPhiM(vP.pt(), vP.eta(), vP.phi(), vP.mass());
       muonn_p4.SetPtEtaPhiM(vM.pt(), vM.eta(), vM.phi(), vM.mass());
@@ -862,8 +872,8 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuon_ctauErrPV    = dimuon_cand->userFloat("ppdlErrPV");
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
       dimuon_triggerMatch = DiMuonDiTrakRootuplerFit::isTriggerMatched(dimuon_cand);
-      muonPMatch   = dimuon_cand->userInt("muon1TMatch");
-      muonNMatch    = dimuon_cand->userInt("muon2TMatch");
+      highMuonMatch   = dimuon_cand->userInt("muon1TMatch");
+      lowMuonMatch    = dimuon_cand->userInt("muon2TMatch");
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
       dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);

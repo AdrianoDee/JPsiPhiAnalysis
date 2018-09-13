@@ -1,5 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-process = cms.Process('PSIKK')
+process = cms.Process('2mu2k')
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 
@@ -256,46 +256,6 @@ process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pi
     resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
     resolveByMatchQuality = cms.bool(True), # False = just match input in order; True = pick lowest deltaR pair first
 )
-
-# process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
-#     DiMuon = cms.InputTag('JPsi2MuMuPAT'),
-#     PFCandidates = cms.InputTag('packedPFCandidates'),
-#     TriggerInput            = cms.InputTag("unpackPatTriggers"),
-#     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#     DiMuonMassCuts = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-#     TrakTrakMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-#     DiMuonDiTrakMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
-#     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
-#     OnlyBest  = cms.bool(False),
-#     Product = cms.string("DiMuonDiTrakCandidates"),
-#     Filters = filters,
-#     IsMC = cms.bool(True),
-# )
-
-# process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
-#     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
-#     DiMuonTrakTrakMassCuts    = cms.vdouble(4.1,5.5),            # b-hadron mass window
-#     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
-#     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
-# )
-
-# process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
-#     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     dimuonditrk_rf_cand = cms.InputTag("PsiPhiFitter","DiMuonDiTrakCandidatesRef"),
-#     beamSpotTag = cms.InputTag("offlineBeamSpot"),
-#     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-#     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#     isMC = cms.bool(True),
-#     OnlyBest = cms.bool(False),
-#     OnlyGen = cms.bool(False),
-#     Mother_pdg = cms.uint32(10441), #20443 #10441
-#     JPsi_pdg = cms.uint32(443),
-#     Phi_pdg = cms.uint32(333),
-#     HLTs = hltpaths,
-#     Filters = filters,
-#     TreeName = cms.string('JPsi Phi Tree')
-# )
 
 
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',

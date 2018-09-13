@@ -1,30 +1,112 @@
 import FWCore.ParameterSet.Config as cms
-process = cms.Process('mumukk')
+process = cms.Process('2mu2mu')
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 from Y_MC_Files import *
 
+import sys
+sys.path.append("mclists/")
+
 par = VarParsing ('analysis')
 
 par.register ('gtag',
-				  "101X_dataRun2_Prompt_v11",
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.string,
-				  "Global Tag")
+                                  "101X_dataRun2_Prompt_v11",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "Global Tag")
+par.register ('mc',
+                                  "y4506_lhcb",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "MC Dataset")
+
+par.register ('filein',
+                                  "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "Inputfile")
+
+par.register ('dataset',
+                                  "Av1",
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.string,
+                                  "Dataset")
 
 par.register ('ss',
-				  False,
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.bool,
-				  "Do Same Sign")
+                                  True,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Do Same Sign")
 
-par.register ('kMass',
-				  0.493677,
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.bool,
-				  "KMass")
+par.register ('isMC',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Is MC?")
+
+par.register ('isLocal',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Is local?")
+
+par.register ('i',
+                                  0,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.int,
+                                  "i")
+
+par.register ('n',
+                                  50000,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.int,
+                                  "n")
 
 par.parseArguments()
+
+i = par.i
+ismc = par.isMC
+doss = par.ss
+
+gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
+input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
+mc_file = "file:py8_JPsiMM_EvtGen_13TeV_TuneCP5_cfi.root"
+mc_file = "file:02CA3723-CEF3-E711-B1CC-4C79BA1810EF.root"
+mc_file = "file:FCD01A2E-A6F5-E711-ACA1-003048F5ADF6.root"
+runb2018 = "file:1401AF4A-447C-E811-8EEB-FA163E35DF95.root"
+input_file = par.filein #runb2018 #gen_file
+
+filename = "data" + par.dataset
+
+if par.isLocal:
+
+    from bbbar_filelist import *
+    from bbbar_soft_list import *
+    from y4140_lhcb_filelist import *
+    from y4140_zero_filelist import *
+    from y4273_lhcb_filelist import *
+    from y4273_zero_filelist import *
+    from y4704_zero_filelist import *
+    from y4704_lhcb_filelist import *
+    from y4506_lhcb_filelist import *
+    from y4506_zero_filelist import *
+    from qcd_ml_filelist import *
+    from bbbar_ml_filelist import *
+
+    filename = par.mc
+
+    fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
+                 "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
+                 "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
+                 "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
+                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
+
+    n= par.n
+
+    filelist = fileLists[filename] #bbbar_soft_list#bbbar_file_list
+    size = (len(filelist) + n) / n
+    input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
+    print min((i+1)*size,len(filelist))
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
 input_file = "file:006425F0-6DED-E711-850C-0025904C66E8.root"
@@ -57,7 +139,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2017-dimuonditrak.root'),
+        fileName = cms.string('rootuple-2018-dimuonditrak_five'+ filename  + '_' + str(i) +'.root'),
 )
 
 kaonmass = 0.493677
@@ -86,15 +168,20 @@ hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
 filters = cms.vstring(
                                 #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                #'hltDoubleMu2JpsiDoubleTrkL3Filtered',
+                                'hltDoubleMu2JpsiDoubleTrkL3Filtered',
                                 'hltDiMuonGlbOrTrk0zFiltered0p2v1',
 								'hltDiMuonGlbOrTrk0zFiltered0p2v2',
 								'hltDiMuonGlbOrTrk0zFiltered0p2v3',
 								'hltDiMuonGlbOrTrk0zFiltered0p2v4',
+								'hltDiMuonGlbOrTrk0zFiltered0p2v5',
+								'hltDiMuonGlbOrTrk0zFiltered0p2v6',
+
                                 'hltDiMuonGlbOrTrkFiltered0v1',
 								'hltDiMuonGlbOrTrkFiltered0v2',
 								'hltDiMuonGlbOrTrkFiltered0v3',
 								'hltDiMuonGlbOrTrkFiltered0v4',
+								'hltDiMuonGlbOrTrkFiltered0v5',
+								'hltDiMuonGlbOrTrkFiltered0v6',
                                 )
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
@@ -131,7 +218,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("0.6 < mass && mass < 1.2 && charge==0 "),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(False),
+        addMCTruth                  = cms.bool(ismc),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
@@ -147,7 +234,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("2.9 < mass && mass < 3.3 && charge==0 "),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(False),
+        addMCTruth                  = cms.bool(ismc),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
@@ -230,62 +317,18 @@ process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     HighDiMuonMassCuts	= cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    LowDiMuonMassCuts = cms.vdouble(1.0,1.04),  # phi mass window 1.019461 +/- .015
-    DoubleDiMuonMassCuts = cms.vdouble(4.0,5.8),            # b-hadron mass window
+    LowDiMuonMassCuts = cms.vdouble(0.95,1.05),  # phi mass window 1.019461 +/- .015
+    DoubleDiMuonMassCuts = cms.vdouble(4.0,6.0),            # b-hadron mass window
 	JPsiMass = cms.double(3.096916),
 	PhiMass  = cms.double(1.019461),
     OnlyBest  = cms.bool(False),
     Product = cms.string("FourMuonCandidates"),
     Filters = filters,
-    IsMC = cms.bool(False),
-    AddMCTruth = cms.bool(False),
+    IsMC = cms.bool(ismc),
+    AddMCTruth = cms.bool(ismc),
 	DoDouble = cms.bool(False),
-	AddSS    = cms.bool(True),
+	AddSS    = cms.bool(doss),
 )
-
-process.FiveTracksProducer = cms.EDProducer('FiveTracksProducer',
-    DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    PFCandidates = cms.InputTag('packedPFCandidates'),
-	beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
-	primaryVertexTag = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerInput            = cms.InputTag("unpackPatTriggers"),
-    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts = cms.vdouble(4.0,6.8),         # traks masses
-)
-
-# process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakKinematicFit',
-#     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     DiMuonMass                = cms.double(3.096916),              # J/psi mass in GeV
-#     DiMuonTrakTrakMassCuts    = YMassCut,            # b-hadron mass window
-#     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
-#     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
-# )
-
-# process.PsiPhiFitter = cms.EDProducer('DiMuonDiTrakFits',
-#     DiMuonDiTrak              = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     JPsiMass                  = cms.double(3.096916),
-#     PhiMass                   = cms.double(1.019461),              # J/psi mass in GeV
-#     DiMuonTrakTrakMassCuts    = YMassCut,            # b-hadron mass window
-#     MassTraks                 = cms.vdouble(kaonmass,kaonmass),         # traks masses
-#     Product                   = cms.string('DiMuonDiTrakCandidatesRef')
-# )
-
-
-# process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
-#     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     beamSpotTag = cms.InputTag("offlineBeamSpot"),
-#     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-#     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#     isMC = cms.bool(False),
-#     OnlyBest = cms.bool(False),
-#     OnlyGen = cms.bool(False),
-#     Mother_pdg = cms.uint32(20443), #20443 #10441
-#     JPsi_pdg = cms.uint32(443),
-#     Phi_pdg = cms.uint32(333),
-#     HLTs = hltpaths,
-#     Filters = filters,
-#     TreeName = cms.string('JPsiPhiTree')
-# )
 
 process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootupler',
     FourMuons = cms.InputTag('PsiPhiProducer','FourMuonCandidates'),
@@ -294,8 +337,8 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootupler',
 	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
     PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-	AddMC = cms.bool(True),
-    isMC = cms.bool(False),
+	AddMC = cms.bool(ismc),
+    isMC = cms.bool(ismc),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
     Mother_pdg = cms.uint32(20443), #20443 #20443
