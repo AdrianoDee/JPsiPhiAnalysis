@@ -379,18 +379,20 @@ process.genstep = cms.EDAnalyzer('GenMCRootupler',
                       TriggerResults = cms.InputTag("TriggerResults", "", "HLT")
                        )
 
-process.p = cms.Path(process.genstep *
-                     process.triggerSelection *
-                     process.slimmedMuonsWithTriggerSequence *
-                     process.unpackPatTriggers *
-                     #process.softMuons *
-                     process.JPsi2MuMuPAT *
-					 process.Phi2MuMuPAT *
-                     #process.JPsi2MuMuFilter*
-                     process.PsiPhiProducer *
-                     #process.PsiPhiFitter *
-					 #process.FiveTracksProducer *
-					 #procees.genmc *
-                     process.rootuple *
-                     process.rootuplePhi*
-					 process.rootupleJPsi)# * process.Phi2KKPAT * process.patSelectedTracks *process.rootupleKK)
+process.dump=cms.EDAnalyzer('EventContentAnalyzer')
+
+
+genparting = process.genstep
+triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence * process.unpackPatTriggers
+mcmatching = process.trackMatch * process.muonMatch
+dimunoing  = process.JPsi2MuMuPAT * process.Phi2MuMuPAT
+tracking   = process.PsiPhiProducer
+rootupling = process.rootupleFive * process.rootuple * process.rootuplePhi * process.rootupleJPsi
+debugging  = process.dump
+
+if ismc:
+    allsteps = genparting * triggering * dimunoing * tracking * rootupling
+else:
+    allsteps = triggering * dimunoing * tracking * rootupling
+
+process.p = cms.Path(allsteps)

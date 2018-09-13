@@ -79,9 +79,14 @@ private:
 
   Double_t status, charge, pdgId, pt, eta, phi;
   Double_t mass, status, isPrompt, ndaughter, ngdaughte;
-  
+
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
   std::vector < std::vector < TLorentzVector > > gen_gda_p4;
+
+  std::vector < Double_t > gen_dau_pt, gen_dau_eta, gen_dau_phi, gen_dau_p;
+  std::vector < Double_t > gen_dau_m, gen_dau_pdg, gen_dau_status, dummy;
+  std::vector < std::vector < Double_t > > gen_gdau_pt, gen_gdau_eta, gen_gdau_phi;
+  std::vector < std::vector < Double_t > > gen_gdau_p, gen_gdau_m, gen_gdau_pdg, gen_gdau_status;
 
   TLorentzVector gen_p4;
 
@@ -138,13 +143,36 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
     gen_dau_p4.push_back(zero);
 
     for (int j = 0; j < MaxNumOfDaughters_; j++)
-    dummyP4.push_back(zero);
+      dummyP4.push_back(zero);
 
     gen_gda_p4.push_back(dummyP4);
   }
 
   std::string name, var;
 
+  for (int i = 0; i < MaxNumOfDaughters_; i++)
+  {
+    gen_dau_pt.push_back(-1.0);
+    gen_dau_eta.push_back(-5.0);
+    gen_dau_phi.push_back(-10.0);
+    gen_dau_p.push_back(-1.0);
+    gen_dau_m.push_back(-1.0);
+    gen_dau_pdg.push_back(0.0);
+    gen_dau_status.push_back(-10.0);
+
+    for (int j = 0; j < MaxNumOfDaughters_; j++)
+      dummy.push_back(-100.0);
+
+    gen_gdau_pt.push_back(dummy);
+    gen_gdau_eta.push_back(dummy);
+    gen_gdau_phi.push_back(dummy);
+    gen_gdau_p.push_back(dummy);
+    gen_gdau_m.push_back(dummy);
+    gen_gdau_pdg.push_back(dummy);
+    gen_gdau_status.push_back(dummy);
+
+  }
+  
   for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
     name = "gen_dau_" + std::to_string(i) + "_p4";
@@ -177,29 +205,29 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
     for (int j = 0; j < MaxNumOfDaughters_; j++)
     {
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
-      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
+      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[j][i][j]);
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pt"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_pt[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_pt[j][i],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_eta"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_eta[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_eta[j][i],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_phi"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_phi[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_phi[j][i],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_p[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_p[j][i],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_m"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_m[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_m[j][i],var.c_str());
 
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pdg"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_pdg[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_pdg[j][i],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_status"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_status[i],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_status[j][i],var.c_str());
 
     }
 

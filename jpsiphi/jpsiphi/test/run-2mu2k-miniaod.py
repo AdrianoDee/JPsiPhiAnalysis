@@ -49,6 +49,12 @@ par.register ('isLocal',
                                   VarParsing.varType.bool,
                                   "Is local?")
 
+par.register ('isDebug',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Debug for you,sir?")
+
 par.register ('kMass',
                                   0.493677,
                                   VarParsing.multiplicity.singleton,
@@ -385,5 +391,8 @@ if ismc:
     allsteps = triggering * mcmatching * jpsiing * tracking * rootupling
 else:
     allsteps = triggering * jpsiing * tracking * rootupling
+
+if par.isDebug:
+    allsteps = allsteps * process.dump
 
 process.p = cms.Path(allsteps)
