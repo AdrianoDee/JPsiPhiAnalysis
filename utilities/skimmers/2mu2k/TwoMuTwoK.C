@@ -307,20 +307,7 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
     out_numPrimaryVertices   = (*numPrimaryVertices);
     out_trigger      = (*trigger);
     out_noXCandidates        = (*noXCandidates);
-    out_dimuonditrk_p4       = (*dimuonditrk_p4);
-    out_ditrak_p4    = (*ditrak_p4);
-    out_dimuon_p4    = (*dimuon_p4);
-    out_lowMuon_p4   = (*lowMuon_p4);
-    out_highMuon_p4  = (*highMuon_p4);
-    out_highKaon_p4  = (*highKaon_p4);
-    out_lowKaon_p4   = (*lowKaon_p4);
-    out_dimuonditrk_rf_p4    = (*dimuonditrk_rf_p4);
-    out_ditrak_rf_p4         = (*ditrak_rf_p4);
-    out_dimuon_rf_p4         = (*dimuon_rf_p4);
-    out_lowMuon_rf_p4        = (*lowMuon_rf_p4);
-    out_highMuon_rf_p4       = (*highMuon_rf_p4);
-    out_kaonp_rf_p4  = (*kaonp_rf_p4);
-    out_kaonn_rf_p4  = (*kaonn_rf_p4);
+
     out_dimuonditrk_m        = (*dimuonditrk_m);
     out_dimuonditrk_m_rf     = (*dimuonditrk_m_rf);
     out_dimuonditrk_m_rf_d_c         = (*dimuonditrk_m_rf_d_c);
@@ -467,60 +454,9 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
     out_lowKaon_NTraLayers   = (*lowKaon_NTraLayers);
     out_lowKaon_NStrLayers   = (*lowKaon_NStrLayers);
     out_lowKaon_NBPixLayers  = (*lowKaon_NBPixLayers);
-    out_gen_dimuonditrk_p4   = (*gen_dimuonditrk_p4);
-    out_gen_jpsi_p4  = (*gen_jpsi_p4);
-    out_gen_phi_p4   = (*gen_phi_p4);
-    out_gen_highKaon_p4      = (*gen_highKaon_p4);
-    out_gen_lowMuon_p4       = (*gen_lowMuon_p4);
-    out_gen_highMuon_p4      = (*gen_highMuon_p4);
-    out_gen_lowKaon_p4       = (*gen_lowKaon_p4);
-    out_gen_dimuonditrk_pdg  = (*gen_dimuonditrk_pdg);
-    out_gen_phi_pdg  = (*gen_phi_pdg);
-    out_gen_jpsi_pdg         = (*gen_jpsi_pdg);
-    out_gen_lowMuon_pdg      = (*gen_lowMuon_pdg);
-    out_gen_highMuon_pdg     = (*gen_highMuon_pdg);
-    out_gen_highKaon_pdg     = (*gen_highKaon_pdg);
-    out_gen_lowKaon_pdg      = (*gen_lowKaon_pdg);
-    out_gen_lowMuon_mompdg   = (*gen_lowMuon_mompdg);
-    out_gen_highMuon_mompdg  = (*gen_highMuon_mompdg);
-    out_gen_highKaon_mompdg  = (*gen_highKaon_mompdg);
-    out_gen_lowKaon_mompdg   = (*gen_lowKaon_mompdg);
-    out_gen_lowMuon_status   = (*gen_lowMuon_status);
-    out_gen_highMuon_status  = (*gen_highMuon_status);
-    out_gen_highKaon_status  = (*gen_highKaon_status);
-    out_gen_lowKaon_status   = (*gen_lowKaon_status);
-    out_gen_lowMuon_p        = (*gen_lowMuon_p);
-    out_gen_highMuon_p       = (*gen_highMuon_p);
-    out_gen_highKaon_p       = (*gen_highKaon_p);
-    out_gen_lowKaon_p        = (*gen_lowKaon_p);
-    out_gen_lowMuon_pt       = (*gen_lowMuon_pt);
-    out_gen_highMuon_pt      = (*gen_highMuon_pt);
-    out_gen_highKaon_pt      = (*gen_highKaon_pt);
-    out_gen_lowKaon_pt       = (*gen_lowKaon_pt);
-    out_gen_lowMuon_eta      = (*gen_lowMuon_eta);
-    out_gen_highMuon_eta     = (*gen_highMuon_eta);
-    out_gen_highKaon_eta     = (*gen_highKaon_eta);
-    out_gen_lowKaon_eta      = (*gen_lowKaon_eta);
-    out_gen_lowMuon_phi      = (*gen_lowMuon_phi);
-    out_gen_highMuon_phi     = (*gen_highMuon_phi);
-    out_gen_highKaon_phi     = (*gen_highKaon_phi);
-    out_gen_lowKaon_phi      = (*gen_lowKaon_phi);
-    out_gen_dimuonditrk_prompt       = (*gen_dimuonditrk_prompt);
-    out_gen_phi_prompt       = (*gen_phi_prompt);
-    out_gen_jpsi_prompt      = (*gen_jpsi_prompt);
-    out_gen_dimuonditrk_pt   = (*gen_dimuonditrk_pt);
-    out_gen_phi_pt   = (*gen_phi_pt);
-    out_gen_jpsi_pt  = (*gen_jpsi_pt);
-    out_gen_dimuonditrk_p    = (*gen_dimuonditrk_p);
-    out_gen_phi_p    = (*gen_phi_p);
-    out_gen_jpsi_p   = (*gen_jpsi_p);
-    out_gen_dimuonditrk_eta  = (*gen_dimuonditrk_eta);
-    out_gen_phi_eta  = (*gen_phi_eta);
-    out_gen_jpsi_eta         = (*gen_jpsi_eta);
-    out_gen_dimuonditrk_phi  = (*gen_dimuonditrk_phi);
-    out_gen_phi_phi  = (*gen_phi_phi);
-    out_gen_jpsi_phi         = (*gen_jpsi_phi);
+
     out_isBestCandidate      = (*isBestCandidate);
+    
 
   }
 
