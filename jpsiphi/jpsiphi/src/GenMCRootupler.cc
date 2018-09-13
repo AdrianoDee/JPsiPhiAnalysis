@@ -78,7 +78,7 @@ private:
   Int_t      charge;
 
   Double_t status, charge, pdgId, pt, eta, phi;
-  Double_t mass, status, isPrompt, ndaughter, ngdaughte;
+  Double_t mass, status, isPrompt, ndaughter, ngdaughter;
 
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
   std::vector < std::vector < TLorentzVector > > gen_gda_p4;
@@ -172,7 +172,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
     gen_gdau_status.push_back(dummy);
 
   }
-  
+
   for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
     name = "gen_dau_" + std::to_string(i) + "_p4";
