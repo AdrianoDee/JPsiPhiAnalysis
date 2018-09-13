@@ -1,54 +1,27 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Jul 16 18:08:53 2018 by ROOT version 6.10/09
+// Thu Sep 13 02:14:52 2018 by ROOT version 6.12/07
 // from TTree JPsiPhiTree/Tree of DiMuon and DiTrak
-// found on file: test.root
+// found on file: ../../../../../CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/rootuple-2018-dimuonditrak_bbbar_hard_0.root
 //////////////////////////////////////////////////////////
 
-#ifndef TwoMuTwoK_2018Five_h
-#define TwoMuTwoK_2018Five_h
+#ifndef 2mu2k_five_skimmer_h
+#define 2mu2k_five_skimmer_h
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TSelector.h>
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
-
-#include <TSystem.h>
-#include <TTree.h>
-#include <TNtuple.h>
-#include <TBranch.h>
-//#include <TCint.h>
-#include <TRandom.h>
-#include <TMath.h>
-#include <TDirectory.h>
-#include "TEnv.h"
-#include <TString.h>
-#include <TSelector.h>
-#include <TProof.h>
-#include <TProofOutputFile.h>
-#include <TLorentzVector.h>
-#include "TPoint.h"
-#include <TH1.h>
-#include <TH2.h>
-#include <TH2F.h>
-#include <TF1.h>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <tuple>
-#include <map>
 
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
 
 
-class TwoMuTwoK_2018Five : public TSelector {
+class 2mu2k_five_skimmer : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
@@ -56,6 +29,7 @@ public :
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
    TTreeReaderValue<Int_t> event = {fReader, "event"};
+   TTreeReaderValue<Int_t> lumi = {fReader, "lumi"};
    TTreeReaderValue<Int_t> numPrimaryVertices = {fReader, "numPrimaryVertices"};
    TTreeReaderValue<Int_t> trigger = {fReader, "trigger"};
    TTreeReaderValue<Int_t> noXCandidates = {fReader, "noXCandidates"};
@@ -66,24 +40,6 @@ public :
    TTreeReaderValue<TLorentzVector> highMuon_p4 = {fReader, "highMuon_p4"};
    TTreeReaderValue<TLorentzVector> highKaon_p4 = {fReader, "highKaon_p4"};
    TTreeReaderValue<TLorentzVector> lowKaon_p4 = {fReader, "lowKaon_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_pos_p4 = {fReader, "fivetraks_pos_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_pion_pos_p4 = {fReader, "fivetraks_pion_pos_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_pos_p4 = {fReader, "dimuontrak_pos_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_pion_pos_p4 = {fReader, "dimuontrak_pion_pos_p4"};
-   TTreeReaderValue<TLorentzVector> fifthkaon_pos_p4 = {fReader, "fifthkaon_pos_p4"};
-   TTreeReaderValue<TLorentzVector> fifthpion_pos_p4 = {fReader, "fifthpion_pos_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_neu_p4 = {fReader, "fivetraks_neu_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_pion_neu_p4 = {fReader, "fivetraks_pion_neu_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_neu_p4 = {fReader, "dimuontrak_neu_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_pion_neu_p4 = {fReader, "dimuontrak_pion_neu_p4"};
-   TTreeReaderValue<TLorentzVector> fifthkaon_neu_p4 = {fReader, "fifthkaon_neu_p4"};
-   TTreeReaderValue<TLorentzVector> fifthpion_neu_p4 = {fReader, "fifthpion_neu_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_neg_p4 = {fReader, "fivetraks_neg_p4"};
-   TTreeReaderValue<TLorentzVector> fivetraks_pion_neg_p4 = {fReader, "fivetraks_pion_neg_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_neg_p4 = {fReader, "dimuontrak_neg_p4"};
-   TTreeReaderValue<TLorentzVector> dimuontrak_pion_neg_p4 = {fReader, "dimuontrak_pion_neg_p4"};
-   TTreeReaderValue<TLorentzVector> fifthkaon_neg_p4 = {fReader, "fifthkaon_neg_p4"};
-   TTreeReaderValue<TLorentzVector> fifthpion_neg_p4 = {fReader, "fifthpion_neg_p4"};
    TTreeReaderValue<TLorentzVector> dimuonditrk_rf_p4 = {fReader, "dimuonditrk_rf_p4"};
    TTreeReaderValue<TLorentzVector> ditrak_rf_p4 = {fReader, "ditrak_rf_p4"};
    TTreeReaderValue<TLorentzVector> dimuon_rf_p4 = {fReader, "dimuon_rf_p4"};
@@ -91,7 +47,6 @@ public :
    TTreeReaderValue<TLorentzVector> highMuon_rf_p4 = {fReader, "highMuon_rf_p4"};
    TTreeReaderValue<TLorentzVector> kaonp_rf_p4 = {fReader, "kaonp_rf_p4"};
    TTreeReaderValue<TLorentzVector> kaonn_rf_p4 = {fReader, "kaonn_rf_p4"};
-   TTreeReaderValue<Double_t> gen_dimuonditrk_m = {fReader, "gen_dimuonditrk_m"};
    TTreeReaderValue<Double_t> dimuonditrk_m = {fReader, "dimuonditrk_m"};
    TTreeReaderValue<Double_t> dimuonditrk_m_rf = {fReader, "dimuonditrk_m_rf"};
    TTreeReaderValue<Double_t> dimuonditrk_m_rf_d_c = {fReader, "dimuonditrk_m_rf_d_c"};
@@ -103,6 +58,9 @@ public :
    TTreeReaderValue<Double_t> dimuonditrk_vx = {fReader, "dimuonditrk_vx"};
    TTreeReaderValue<Double_t> dimuonditrk_vy = {fReader, "dimuonditrk_vy"};
    TTreeReaderValue<Double_t> dimuonditrk_vz = {fReader, "dimuonditrk_vz"};
+   TTreeReaderValue<Double_t> pv_x = {fReader, "pv_x"};
+   TTreeReaderValue<Double_t> pv_y = {fReader, "pv_y"};
+   TTreeReaderValue<Double_t> pv_z = {fReader, "pv_z"};
    TTreeReaderValue<Double_t> dimuon_m = {fReader, "dimuon_m"};
    TTreeReaderValue<Double_t> dimuon_pt = {fReader, "dimuon_pt"};
    TTreeReaderValue<Double_t> ditrak_m = {fReader, "ditrak_m"};
@@ -119,76 +77,14 @@ public :
    TTreeReaderValue<Double_t> lowKaon_phi = {fReader, "lowKaon_phi"};
    TTreeReaderValue<Double_t> highMuon_phi = {fReader, "highMuon_phi"};
    TTreeReaderValue<Double_t> lowMuon_phi = {fReader, "lowMuon_phi"};
-   TTreeReaderValue<Double_t> highKaon_y = {fReader, "highKaon_y"};
-   TTreeReaderValue<Double_t> lowKaon_y = {fReader, "lowKaon_y"};
-   TTreeReaderValue<Double_t> highMuon_y = {fReader, "highMuon_y"};
-   TTreeReaderValue<Double_t> lowMuon_y = {fReader, "lowMuon_y"};
-   TTreeReaderValue<Double_t> fivetraks_pos_kaon_m = {fReader, "fivetraks_pos_kaon_m"};
-   TTreeReaderValue<Double_t> fivetraks_pos_pion_m = {fReader, "fivetraks_pos_pion_m"};
-   TTreeReaderValue<Double_t> fivetraks_pos_kaon_trim = {fReader, "fivetraks_pos_kaon_trim"};
-   TTreeReaderValue<Double_t> fivetraks_pos_pion_trim = {fReader, "fivetraks_pos_pion_trim"};
-   TTreeReaderValue<Double_t> fivetraks_pos_kaon_m_rf = {fReader, "fivetraks_pos_kaon_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_pos_pion_m_rf = {fReader, "fivetraks_pos_pion_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_pos_vProb = {fReader, "fivetraks_pos_vProb"};
-   TTreeReaderValue<Double_t> fivetraks_pos_vChi2 = {fReader, "fivetraks_pos_vChi2"};
-   TTreeReaderValue<Double_t> fivetraks_pos_nDof = {fReader, "fivetraks_pos_nDof"};
-   TTreeReaderValue<Int_t> fivetraks_pos_charge = {fReader, "fivetraks_pos_charge"};
-   TTreeReaderValue<Double_t> fivetraks_pos_cosAlpha = {fReader, "fivetraks_pos_cosAlpha"};
-   TTreeReaderValue<Double_t> fivetraks_pos_ctauPV = {fReader, "fivetraks_pos_ctauPV"};
-   TTreeReaderValue<Double_t> fivetraks_pos_ctauErrPV = {fReader, "fivetraks_pos_ctauErrPV"};
-   TTreeReaderValue<Double_t> fivetraks_pos_eta = {fReader, "fivetraks_pos_eta"};
-   TTreeReaderValue<Double_t> fivetraks_pos_pt = {fReader, "fivetraks_pos_pt"};
-   TTreeReaderValue<Double_t> fivetraks_pos_phi = {fReader, "fivetraks_pos_phi"};
-   TTreeReaderValue<Double_t> fivetraks_pos_y = {fReader, "fivetraks_pos_y"};
-   TTreeReaderValue<Double_t> fifthtrak_pos_charge = {fReader, "fifthtrak_pos_charge"};
-   TTreeReaderValue<Double_t> fifthtrak_pos_eta = {fReader, "fifthtrak_pos_eta"};
-   TTreeReaderValue<Double_t> fifthtrak_pos_pt = {fReader, "fifthtrak_pos_pt"};
-   TTreeReaderValue<Double_t> fifthtrak_pos_phi = {fReader, "fifthtrak_pos_phi"};
-   TTreeReaderValue<Double_t> fifthtrak_pos_y = {fReader, "fifthtrak_pos_y"};
-   TTreeReaderValue<Double_t> fivetraks_neg_kaon_m = {fReader, "fivetraks_neg_kaon_m"};
-   TTreeReaderValue<Double_t> fivetraks_neg_pion_m = {fReader, "fivetraks_neg_pion_m"};
-   TTreeReaderValue<Double_t> fivetraks_neg_kaon_trim = {fReader, "fivetraks_neg_kaon_trim"};
-   TTreeReaderValue<Double_t> fivetraks_neg_pion_trim = {fReader, "fivetraks_neg_pion_trim"};
-   TTreeReaderValue<Double_t> fivetraks_neg_kaon_m_rf = {fReader, "fivetraks_neg_kaon_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_neg_pion_m_rf = {fReader, "fivetraks_neg_pion_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_neg_vProb = {fReader, "fivetraks_neg_vProb"};
-   TTreeReaderValue<Double_t> fivetraks_neg_vChi2 = {fReader, "fivetraks_neg_vChi2"};
-   TTreeReaderValue<Double_t> fivetraks_neg_nDof = {fReader, "fivetraks_neg_nDof"};
-   TTreeReaderValue<Int_t> fivetraks_neg_charge = {fReader, "fivetraks_neg_charge"};
-   TTreeReaderValue<Double_t> fivetraks_neg_cosAlpha = {fReader, "fivetraks_neg_cosAlpha"};
-   TTreeReaderValue<Double_t> fivetraks_neg_ctauPV = {fReader, "fivetraks_neg_ctauPV"};
-   TTreeReaderValue<Double_t> fivetraks_neg_ctauErrPV = {fReader, "fivetraks_neg_ctauErrPV"};
-   TTreeReaderValue<Double_t> fivetraks_neg_eta = {fReader, "fivetraks_neg_eta"};
-   TTreeReaderValue<Double_t> fivetraks_neg_pt = {fReader, "fivetraks_neg_pt"};
-   TTreeReaderValue<Double_t> fivetraks_neg_phi = {fReader, "fivetraks_neg_phi"};
-   TTreeReaderValue<Double_t> fivetraks_neg_y = {fReader, "fivetraks_neg_y"};
-   TTreeReaderValue<Double_t> fifthtrak_neg_charge = {fReader, "fifthtrak_neg_charge"};
-   TTreeReaderValue<Double_t> fifthtrak_neg_eta = {fReader, "fifthtrak_neg_eta"};
-   TTreeReaderValue<Double_t> fifthtrak_neg_pt = {fReader, "fifthtrak_neg_pt"};
-   TTreeReaderValue<Double_t> fifthtrak_neg_phi = {fReader, "fifthtrak_neg_phi"};
-   TTreeReaderValue<Double_t> fifthtrak_neg_y = {fReader, "fifthtrak_neg_y"};
-   TTreeReaderValue<Double_t> fivetraks_neu_kaon_m = {fReader, "fivetraks_neu_kaon_m"};
-   TTreeReaderValue<Double_t> fivetraks_neu_pion_m = {fReader, "fivetraks_neu_pion_m"};
-   TTreeReaderValue<Double_t> fivetraks_neu_kaon_trim = {fReader, "fivetraks_neu_kaon_trim"};
-   TTreeReaderValue<Double_t> fivetraks_neu_pion_trim = {fReader, "fivetraks_neu_pion_trim"};
-   TTreeReaderValue<Double_t> fivetraks_neu_kaon_m_rf = {fReader, "fivetraks_neu_kaon_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_neu_pion_m_rf = {fReader, "fivetraks_neu_pion_m_rf"};
-   TTreeReaderValue<Double_t> fivetraks_neu_vProb = {fReader, "fivetraks_neu_vProb"};
-   TTreeReaderValue<Double_t> fivetraks_neu_vChi2 = {fReader, "fivetraks_neu_vChi2"};
-   TTreeReaderValue<Double_t> fivetraks_neu_nDof = {fReader, "fivetraks_neu_nDof"};
-   TTreeReaderValue<Int_t> fivetraks_neu_charge = {fReader, "fivetraks_neu_charge"};
-   TTreeReaderValue<Double_t> fivetraks_neu_cosAlpha = {fReader, "fivetraks_neu_cosAlpha"};
-   TTreeReaderValue<Double_t> fivetraks_neu_ctauPV = {fReader, "fivetraks_neu_ctauPV"};
-   TTreeReaderValue<Double_t> fivetraks_neu_ctauErrPV = {fReader, "fivetraks_neu_ctauErrPV"};
-   TTreeReaderValue<Double_t> fivetraks_neu_eta = {fReader, "fivetraks_neu_eta"};
-   TTreeReaderValue<Double_t> fivetraks_neu_pt = {fReader, "fivetraks_neu_pt"};
-   TTreeReaderValue<Double_t> fivetraks_neu_phi = {fReader, "fivetraks_neu_phi"};
-   TTreeReaderValue<Double_t> fivetraks_neu_y = {fReader, "fivetraks_neu_y"};
-   TTreeReaderValue<Double_t> fifthtrak_neu_charge = {fReader, "fifthtrak_neu_charge"};
-   TTreeReaderValue<Double_t> fifthtrak_neu_eta = {fReader, "fifthtrak_neu_eta"};
-   TTreeReaderValue<Double_t> fifthtrak_neu_pt = {fReader, "fifthtrak_neu_pt"};
-   TTreeReaderValue<Double_t> fifthtrak_neu_phi = {fReader, "fifthtrak_neu_phi"};
-   TTreeReaderValue<Double_t> fifthtrak_neu_y = {fReader, "fifthtrak_neu_y"};
+   TTreeReaderValue<Double_t> highKaon_dxy = {fReader, "highKaon_dxy"};
+   TTreeReaderValue<Double_t> lowKaon_dxy = {fReader, "lowKaon_dxy"};
+   TTreeReaderValue<Double_t> highMuon_dxy = {fReader, "highMuon_dxy"};
+   TTreeReaderValue<Double_t> lowMuon_dxy = {fReader, "lowMuon_dxy"};
+   TTreeReaderValue<Double_t> highKaon_dz = {fReader, "highKaon_dz"};
+   TTreeReaderValue<Double_t> lowKaon_dz = {fReader, "lowKaon_dz"};
+   TTreeReaderValue<Double_t> highMuon_dz = {fReader, "highMuon_dz"};
+   TTreeReaderValue<Double_t> lowMuon_dz = {fReader, "lowMuon_dz"};
    TTreeReaderValue<Double_t> dimuonditrk_refPK_mass = {fReader, "dimuonditrk_refPK_mass"};
    TTreeReaderValue<Double_t> dimuonditrk_refKP_mass = {fReader, "dimuonditrk_refKP_mass"};
    TTreeReaderValue<Double_t> dimuonditrk_refPP_mass = {fReader, "dimuonditrk_refPP_mass"};
@@ -215,45 +111,18 @@ public :
    TTreeReaderValue<Double_t> dimuonditrk_cosAlpha = {fReader, "dimuonditrk_cosAlpha"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauPV = {fReader, "dimuonditrk_ctauPV"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauErrPV = {fReader, "dimuonditrk_ctauErrPV"};
-   TTreeReaderValue<Double_t> dimuonditrk_countTksOfPV = {fReader, "dimuonditrk_countTksOfPV"};
-   TTreeReaderValue<Double_t> dimuonditrk_vertexWeight = {fReader, "dimuonditrk_vertexWeight"};
-   TTreeReaderValue<Double_t> dimuonditrk_sumPTPV = {fReader, "dimuonditrk_sumPTPV"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1FromPV = {fReader, "dimuonditrk_mu1FromPV"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2FromPV = {fReader, "dimuonditrk_mu2FromPV"};
    TTreeReaderValue<Double_t> dimuonditrk_tPFromPV = {fReader, "dimuonditrk_tPFromPV"};
    TTreeReaderValue<Double_t> dimuonditrk_tMFromPV = {fReader, "dimuonditrk_tMFromPV"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1W = {fReader, "dimuonditrk_mu1W"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2W = {fReader, "dimuonditrk_mu2W"};
-   TTreeReaderValue<Double_t> dimuonditrk_tPW = {fReader, "dimuonditrk_tPW"};
-   TTreeReaderValue<Double_t> dimuonditrk_tMW = {fReader, "dimuonditrk_tMW"};
    TTreeReaderValue<Double_t> dimuonditrk_cosAlphaDZ = {fReader, "dimuonditrk_cosAlphaDZ"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauPVDZ = {fReader, "dimuonditrk_ctauPVDZ"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauErrPVDZ = {fReader, "dimuonditrk_ctauErrPVDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_countTksOfPVDZ = {fReader, "dimuonditrk_countTksOfPVDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_vertexWeightDZ = {fReader, "dimuonditrk_vertexWeightDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_sumPTPVDZ = {fReader, "dimuonditrk_sumPTPVDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1FromPVDZ = {fReader, "dimuonditrk_mu1FromPVDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2FromPVDZ = {fReader, "dimuonditrk_mu2FromPVDZ"};
    TTreeReaderValue<Double_t> dimuonditrk_tPFromPVDZ = {fReader, "dimuonditrk_tPFromPVDZ"};
    TTreeReaderValue<Double_t> dimuonditrk_tMFromPVDZ = {fReader, "dimuonditrk_tMFromPVDZ"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1DZW = {fReader, "dimuonditrk_mu1DZW"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2DZW = {fReader, "dimuonditrk_mu2DZW"};
-   TTreeReaderValue<Double_t> dimuonditrk_tPDZW = {fReader, "dimuonditrk_tPDZW"};
-   TTreeReaderValue<Double_t> dimuonditrk_tMDZW = {fReader, "dimuonditrk_tMDZW"};
    TTreeReaderValue<Double_t> dimuonditrk_cosAlphaBS = {fReader, "dimuonditrk_cosAlphaBS"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauPVBS = {fReader, "dimuonditrk_ctauPVBS"};
    TTreeReaderValue<Double_t> dimuonditrk_ctauErrPVBS = {fReader, "dimuonditrk_ctauErrPVBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_countTksOfPVBS = {fReader, "dimuonditrk_countTksOfPVBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_vertexWeightBS = {fReader, "dimuonditrk_vertexWeightBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_sumPTPVBS = {fReader, "dimuonditrk_sumPTPVBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1FromPVBS = {fReader, "dimuonditrk_mu1FromPVBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2FromPVBS = {fReader, "dimuonditrk_mu2FromPVBS"};
    TTreeReaderValue<Double_t> dimuonditrk_tPFromPVBS = {fReader, "dimuonditrk_tPFromPVBS"};
    TTreeReaderValue<Double_t> dimuonditrk_tMFromPVBS = {fReader, "dimuonditrk_tMFromPVBS"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu1BSW = {fReader, "dimuonditrk_mu1BSW"};
-   TTreeReaderValue<Double_t> dimuonditrk_mu2BSW = {fReader, "dimuonditrk_mu2BSW"};
-   TTreeReaderValue<Double_t> dimuonditrk_tPBSW = {fReader, "dimuonditrk_tPBSW"};
-   TTreeReaderValue<Double_t> dimuonditrk_tMBSW = {fReader, "dimuonditrk_tMBSW"};
    TTreeReaderValue<Double_t> dimuonditrk_dca_m1m2 = {fReader, "dimuonditrk_dca_m1m2"};
    TTreeReaderValue<Double_t> dimuonditrk_dca_m1t1 = {fReader, "dimuonditrk_dca_m1t1"};
    TTreeReaderValue<Double_t> dimuonditrk_dca_m1t2 = {fReader, "dimuonditrk_dca_m1t2"};
@@ -306,10 +175,6 @@ public :
    TTreeReaderValue<Int_t> highMuon_NTraLayers = {fReader, "highMuon_NTraLayers"};
    TTreeReaderValue<Int_t> highMuon_NStrLayers = {fReader, "highMuon_NStrLayers"};
    TTreeReaderValue<Int_t> highMuon_NBPixLayers = {fReader, "highMuon_NBPixLayers"};
-   TTreeReaderValue<Double_t> highKaon_dz = {fReader, "highKaon_dz"};
-   TTreeReaderValue<Double_t> highKaon_dxy = {fReader, "highKaon_dxy"};
-   TTreeReaderValue<Double_t> lowKaon_dz = {fReader, "lowKaon_dz"};
-   TTreeReaderValue<Double_t> lowKaon_dxy = {fReader, "lowKaon_dxy"};
    TTreeReaderValue<UInt_t> lowMuon_type = {fReader, "lowMuon_type"};
    TTreeReaderValue<UInt_t> highMuon_type = {fReader, "highMuon_type"};
    TTreeReaderValue<Int_t> highKaon_NPixelHits = {fReader, "highKaon_NPixelHits"};
@@ -328,11 +193,64 @@ public :
    TTreeReaderValue<Int_t> lowKaon_NTraLayers = {fReader, "lowKaon_NTraLayers"};
    TTreeReaderValue<Int_t> lowKaon_NStrLayers = {fReader, "lowKaon_NStrLayers"};
    TTreeReaderValue<Int_t> lowKaon_NBPixLayers = {fReader, "lowKaon_NBPixLayers"};
+   TTreeReaderValue<TLorentzVector> gen_dimuonditrk_p4 = {fReader, "gen_dimuonditrk_p4"};
+   TTreeReaderValue<TLorentzVector> gen_jpsi_p4 = {fReader, "gen_jpsi_p4"};
+   TTreeReaderValue<TLorentzVector> gen_phi_p4 = {fReader, "gen_phi_p4"};
+   TTreeReaderValue<TLorentzVector> gen_highKaon_p4 = {fReader, "gen_highKaon_p4"};
+   TTreeReaderValue<TLorentzVector> gen_lowMuon_p4 = {fReader, "gen_lowMuon_p4"};
+   TTreeReaderValue<TLorentzVector> gen_highMuon_p4 = {fReader, "gen_highMuon_p4"};
+   TTreeReaderValue<TLorentzVector> gen_lowKaon_p4 = {fReader, "gen_lowKaon_p4"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_pdg = {fReader, "gen_dimuonditrk_pdg"};
+   TTreeReaderValue<Double_t> gen_phi_pdg = {fReader, "gen_phi_pdg"};
+   TTreeReaderValue<Double_t> gen_jpsi_pdg = {fReader, "gen_jpsi_pdg"};
+   TTreeReaderValue<Double_t> gen_lowMuon_pdg = {fReader, "gen_lowMuon_pdg"};
+   TTreeReaderValue<Double_t> gen_highMuon_pdg = {fReader, "gen_highMuon_pdg"};
+   TTreeReaderValue<Double_t> gen_highKaon_pdg = {fReader, "gen_highKaon_pdg"};
+   TTreeReaderValue<Double_t> gen_lowKaon_pdg = {fReader, "gen_lowKaon_pdg"};
+   TTreeReaderValue<Double_t> gen_lowMuon_mompdg = {fReader, "gen_lowMuon_mompdg"};
+   TTreeReaderValue<Double_t> gen_highMuon_mompdg = {fReader, "gen_highMuon_mompdg"};
+   TTreeReaderValue<Double_t> gen_highKaon_mompdg = {fReader, "gen_highKaon_mompdg"};
+   TTreeReaderValue<Double_t> gen_lowKaon_mompdg = {fReader, "gen_lowKaon_mompdg"};
+   TTreeReaderValue<Double_t> gen_lowMuon_status = {fReader, "gen_lowMuon_status"};
+   TTreeReaderValue<Double_t> gen_highMuon_status = {fReader, "gen_highMuon_status"};
+   TTreeReaderValue<Double_t> gen_highKaon_status = {fReader, "gen_highKaon_status"};
+   TTreeReaderValue<Double_t> gen_lowKaon_status = {fReader, "gen_lowKaon_status"};
+   TTreeReaderValue<Double_t> gen_lowMuon_p = {fReader, "gen_lowMuon_p"};
+   TTreeReaderValue<Double_t> gen_highMuon_p = {fReader, "gen_highMuon_p"};
+   TTreeReaderValue<Double_t> gen_highKaon_p = {fReader, "gen_highKaon_p"};
+   TTreeReaderValue<Double_t> gen_lowKaon_p = {fReader, "gen_lowKaon_p"};
+   TTreeReaderValue<Double_t> gen_lowMuon_pt = {fReader, "gen_lowMuon_pt"};
+   TTreeReaderValue<Double_t> gen_highMuon_pt = {fReader, "gen_highMuon_pt"};
+   TTreeReaderValue<Double_t> gen_highKaon_pt = {fReader, "gen_highKaon_pt"};
+   TTreeReaderValue<Double_t> gen_lowKaon_pt = {fReader, "gen_lowKaon_pt"};
+   TTreeReaderValue<Double_t> gen_lowMuon_eta = {fReader, "gen_lowMuon_eta"};
+   TTreeReaderValue<Double_t> gen_highMuon_eta = {fReader, "gen_highMuon_eta"};
+   TTreeReaderValue<Double_t> gen_highKaon_eta = {fReader, "gen_highKaon_eta"};
+   TTreeReaderValue<Double_t> gen_lowKaon_eta = {fReader, "gen_lowKaon_eta"};
+   TTreeReaderValue<Double_t> gen_lowMuon_phi = {fReader, "gen_lowMuon_phi"};
+   TTreeReaderValue<Double_t> gen_highMuon_phi = {fReader, "gen_highMuon_phi"};
+   TTreeReaderValue<Double_t> gen_highKaon_phi = {fReader, "gen_highKaon_phi"};
+   TTreeReaderValue<Double_t> gen_lowKaon_phi = {fReader, "gen_lowKaon_phi"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_prompt = {fReader, "gen_dimuonditrk_prompt"};
+   TTreeReaderValue<Double_t> gen_phi_prompt = {fReader, "gen_phi_prompt"};
+   TTreeReaderValue<Double_t> gen_jpsi_prompt = {fReader, "gen_jpsi_prompt"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_pt = {fReader, "gen_dimuonditrk_pt"};
+   TTreeReaderValue<Double_t> phigen_phi_pt_pt = {fReader, "gen_phi_pt"};
+   TTreeReaderValue<Double_t> gen_jpsi_pt = {fReader, "gen_jpsi_pt"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_p = {fReader, "gen_dimuonditrk_p"};
+   TTreeReaderValue<Double_t> phigen_phi_p_p = {fReader, "gen_phi_p"};
+   TTreeReaderValue<Double_t> gen_jpsi_p = {fReader, "gen_jpsi_p"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_eta = {fReader, "gen_dimuonditrk_eta"};
+   TTreeReaderValue<Double_t> gen_phi_eta = {fReader, "gen_phi_eta"};
+   TTreeReaderValue<Double_t> gen_jpsi_eta = {fReader, "gen_jpsi_eta"};
+   TTreeReaderValue<Double_t> gen_dimuonditrk_phi = {fReader, "gen_dimuonditrk_phi"};
+   TTreeReaderValue<Double_t> gen_phi_phi = {fReader, "gen_phi_phi"};
+   TTreeReaderValue<Double_t> gen_jpsi_phi = {fReader, "gen_jpsi_phi"};
    TTreeReaderValue<Bool_t> isBestCandidate = {fReader, "isBestCandidate"};
 
 
-   TwoMuTwoK_2018Five(TTree * /*tree*/ =0) { }
-   virtual ~TwoMuTwoK_2018Five() { }
+   2mu2k_five_skimmer(TTree * /*tree*/ =0) { }
+   virtual ~2mu2k_five_skimmer() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -347,19 +265,14 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   Float_t JPsi_mass = 0.0, Phi_mass = 0.0, Phi_mean = 0.0, Phi_sigma = 0.0;
-   TNtuple *outTuple;
-   TProofOutputFile *OutFile;
-   TFile            *fOut;
-
-   ClassDef(TwoMuTwoK_2018Five,0);
+   ClassDef(2mu2k_five_skimmer,0);
 
 };
 
 #endif
 
-#ifdef TwoMuTwoK_2018Five_cxx
-void TwoMuTwoK_2018Five::Init(TTree *tree)
+#ifdef 2mu2k_five_skimmer_cxx
+void 2mu2k_five_skimmer::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -371,7 +284,7 @@ void TwoMuTwoK_2018Five::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t TwoMuTwoK_2018Five::Notify()
+Bool_t 2mu2k_five_skimmer::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -383,4 +296,4 @@ Bool_t TwoMuTwoK_2018Five::Notify()
 }
 
 
-#endif // #ifdef TwoMuTwoK_2018Five_cxx
+#endif // #ifdef 2mu2k_five_skimmer_cxx
