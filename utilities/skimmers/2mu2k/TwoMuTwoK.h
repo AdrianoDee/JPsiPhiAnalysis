@@ -293,66 +293,64 @@ class TwoMuTwoK : public TSelector {
 
 
   //Output variables
-  Float_t dimuonditrk_vProb, out_out_dimuonditrk_vChi2;
-  Float_t dimuonditrk_rf_vProb, out_dimuonditrk_rf_vChi2, out_dimuonditrk_rf_nDof, out_dimuonditrk_rf_cosAlpha, out_dimuonditrk_rf_ctauPV, out_dimuonditrk_rf_ctauErrPV;
-  Float_t dimuonditrk_rf_c_vProb, out_dimuonditrk_rf_c_vChi2, out_dimuonditrk_rf_c_nDof, out_dimuonditrk_rf_c_cosAlpha, out_dimuonditrk_rf_c_ctauPV, out_dimuonditrk_rf_c_ctauErrPV;
-  Float_t dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi, out_dimuonditrk_y, out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz;
-  
-  Float_t pv_x, out_pv_y, out_pv_z;
+  Float_t out_dimuonditrk_vProb, out_out_dimuonditrk_vChi2;
+  Float_t out_dimuonditrk_rf_vProb, out_dimuonditrk_rf_vChi2, out_dimuonditrk_rf_nDof, out_dimuonditrk_rf_cosAlpha, out_dimuonditrk_rf_ctauPV, out_dimuonditrk_rf_ctauErrPV;
+  Float_t out_dimuonditrk_rf_c_vProb, out_dimuonditrk_rf_c_vChi2, out_dimuonditrk_rf_c_nDof, out_dimuonditrk_rf_c_cosAlpha, out_dimuonditrk_rf_c_ctauPV, out_dimuonditrk_rf_c_ctauErrPV;
+  Float_t out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi, out_dimuonditrk_y, out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz;
 
-  Float_t dimuonditrk_cosAlpha, out_dimuonditrk_ctauPV, out_dimuonditrk_ctauErrPV, out_dimuonditrk_countTksOfPV, out_dimuonditrk_vertexWeight;
-  Float_t dimuonditrk_sumPTPV, out_dimuonditrk_mu1FromPV, out_dimuonditrk_mu2FromPV, out_dimuonditrk_tPFromPV, out_dimuonditrk_tMFromPV;
-  Float_t dimuonditrk_mu1W, out_dimuonditrk_mu2W, out_dimuonditrk_tPW, out_dimuonditrk_tMW;
+  Float_t out_pv_x, out_pv_y, out_pv_z;
 
-  Float_t dimuonditrk_cosAlphaDZ, out_dimuonditrk_ctauPVDZ, out_dimuonditrk_ctauErrPVDZ, out_dimuonditrk_countTksOfPVDZ, out_dimuonditrk_vertexWeightDZ;
-  Float_t dimuonditrk_sumPTPVDZ, out_dimuonditrk_mu1FromPVDZ, out_dimuonditrk_mu2FromPVDZ, out_dimuonditrk_tPFromPVDZ, out_dimuonditrk_tMFromPVDZ;
-  Float_t dimuonditrk_mu1DZW, out_dimuonditrk_mu2DZW, out_dimuonditrk_tPDZW, out_dimuonditrk_tMDZW;
+  Float_t out_dimuonditrk_cosAlpha, out_dimuonditrk_ctauPV, out_dimuonditrk_ctauErrPV, out_dimuonditrk_countTksOfPV, out_dimuonditrk_vertexWeight;
+  Float_t out_dimuonditrk_sumPTPV, out_dimuonditrk_mu1FromPV, out_dimuonditrk_mu2FromPV, out_dimuonditrk_tPFromPV, out_dimuonditrk_tMFromPV;
+  Float_t out_dimuonditrk_mu1W, out_dimuonditrk_mu2W, out_dimuonditrk_tPW, out_dimuonditrk_tMW;
 
-  Float_t dimuonditrk_cosAlphaBS, out_dimuonditrk_ctauPVBS, out_dimuonditrk_ctauErrPVBS, out_dimuonditrk_countTksOfPVBS, out_dimuonditrk_vertexWeightBS;
-  Float_t dimuonditrk_sumPTPVBS, out_dimuonditrk_mu1FromPVBS, out_dimuonditrk_mu2FromPVBS, out_dimuonditrk_tPFromPVBS, out_dimuonditrk_tMFromPVBS;
-  Float_t dimuonditrk_mu1BSW, out_dimuonditrk_mu2BSW, out_dimuonditrk_tPBSW, out_dimuonditrk_tMBSW;
+  Float_t out_dimuonditrk_cosAlphaDZ, out_dimuonditrk_ctauPVDZ, out_dimuonditrk_ctauErrPVDZ, out_dimuonditrk_countTksOfPVDZ, out_dimuonditrk_vertexWeightDZ;
+  Float_t out_dimuonditrk_sumPTPVDZ, out_dimuonditrk_mu1FromPVDZ, out_dimuonditrk_mu2FromPVDZ, out_dimuonditrk_tPFromPVDZ, out_dimuonditrk_tMFromPVDZ;
+  Float_t out_dimuonditrk_mu1DZW, out_dimuonditrk_mu2DZW, out_dimuonditrk_tPDZW, out_dimuonditrk_tMDZW;
 
-  Float_t dimuonditrk_dca_m1m2, out_dimuonditrk_dca_m1t1, out_dimuonditrk_dca_m1t2, out_dimuonditrk_dca_m2t1, out_dimuonditrk_dca_m2t2, out_dimuonditrk_dca_t1t2;
-  Float_t dimuon_vProb, out_dimuon_vChi2, out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV, out_dimuon_cosAlpha;
+  Float_t out_dimuonditrk_cosAlphaBS, out_dimuonditrk_ctauPVBS, out_dimuonditrk_ctauErrPVBS, out_dimuonditrk_countTksOfPVBS, out_dimuonditrk_vertexWeightBS;
+  Float_t out_dimuonditrk_sumPTPVBS, out_dimuonditrk_mu1FromPVBS, out_dimuonditrk_mu2FromPVBS, out_dimuonditrk_tPFromPVBS, out_dimuonditrk_tMFromPVBS;
+  Float_t out_dimuonditrk_mu1BSW, out_dimuonditrk_mu2BSW, out_dimuonditrk_tPBSW, out_dimuonditrk_tMBSW;
 
-  Float_t gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
-  Float_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
+  Float_t out_dimuonditrk_dca_m1m2, out_dimuonditrk_dca_m1t1, out_dimuonditrk_dca_m1t2, out_dimuonditrk_dca_m2t1, out_dimuonditrk_dca_m2t2, out_dimuonditrk_dca_t1t2;
+  Float_t out_dimuon_vProb, out_dimuon_vChi2, out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV, out_dimuon_cosAlpha;
 
-  Float_t lowMuon_isLoose, out_lowMuon_isSoft, out_lowMuon_isMedium, out_lowMuon_isHighPt, out_lowMuon_isTight;
-  Float_t highMuon_isLoose, out_highMuon_isSoft, out_highMuon_isMedium, out_highMuon_isHighPt, out_highMuon_isTight;
+  Float_t out_gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
+  Float_t out_highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
 
-  Float_t lowMuon_isTracker, out_lowMuon_isGlobal, out_highMuon_isTracker, out_highMuon_isGlobal;
-  Float_t lowMuon_type, out_highMuon_type;
+  Float_t out_lowMuon_isLoose, out_lowMuon_isSoft, out_lowMuon_isMedium, out_lowMuon_isHighPt, out_lowMuon_isTight;
+  Float_t out_highMuon_isLoose, out_highMuon_isSoft, out_highMuon_isMedium, out_highMuon_isHighPt, out_highMuon_isTight;
 
-  Float_t lowMuon_rf_isLoose, out_lowMuon_rf_isSoft, out_lowMuon_rf_isMedium, out_lowMuon_rf_isHighPt;
-  Float_t highMuon_rf_isLoose, out_highMuon_rf_isSoft, out_highMuon_rf_isMedium, out_highMuon_rf_isHighPt;
+  Float_t out_lowMuon_isTracker, out_lowMuon_isGlobal, out_highMuon_isTracker, out_highMuon_isGlobal;
+  Float_t out_lowMuon_type, out_highMuon_type;
 
-  Float_t lowMuon_rf_isTracker, out_lowMuon_rf_isGlobal, out_highMuon_rf_isTracker, out_highMuon_rf_isGlobal;
-  Float_t lowMuon_rf_type, out_highMuon_rf_type;
+  Float_t out_lowMuon_rf_isLoose, out_lowMuon_rf_isSoft, out_lowMuon_rf_isMedium, out_lowMuon_rf_isHighPt;
+  Float_t out_highMuon_rf_isLoose, out_highMuon_rf_isSoft, out_highMuon_rf_isMedium, out_highMuon_rf_isHighPt;
 
-  Float_t lowMuon_NPixelHits, out_lowMuon_NStripHits, out_lowMuon_NTrackhits, out_lowMuon_NBPixHits, out_lowMuon_NPixLayers, out_lowMuon_NTraLayers, out_lowMuon_NStrLayers, out_lowMuon_NBPixLayers;
-  Float_t highMuon_NPixelHits, out_highMuon_NStripHits, out_highMuon_NTrackhits, out_highMuon_NBPixHits, out_highMuon_NPixLayers, out_highMuon_NTraLayers, out_highMuon_NStrLayers, out_highMuon_NBPixLayers;
+  Float_t out_lowMuon_rf_isTracker, out_lowMuon_rf_isGlobal, out_highMuon_rf_isTracker, out_highMuon_rf_isGlobal;
+  Float_t out_lowMuon_rf_type, out_highMuon_rf_type;
 
-  // Float_t highKaon_m, out_lowKaon_m, out_highMuon_y, out_lowMuon_y;
+  Float_t out_lowMuon_NPixelHits, out_lowMuon_NStripHits, out_lowMuon_NTrackhits, out_lowMuon_NBPixHits, out_lowMuon_NPixLayers, out_lowMuon_NTraLayers, out_lowMuon_NStrLayers, out_lowMuon_NBPixLayers;
+  Float_t out_highMuon_NPixelHits, out_highMuon_NStripHits, out_highMuon_NTrackhits, out_highMuon_NBPixHits, out_highMuon_NPixLayers, out_highMuon_NTraLayers, out_highMuon_NStrLayers, out_highMuon_NBPixLayers;
 
-  Float_t dimuonditrk_refPK_mass, out_dimuonditrk_refKP_mass, out_dimuonditrk_refPP_mass, out_dimuonditrk_refPK_vChi2;
-  Float_t dimuonditrk_refKP_vChi2, out_dimuonditrk_refPP_vChi2, out_dimuonditrk_refPK_nDof, out_dimuonditrk_refKP_nDof;
-  Float_t dimuonditrk_refPP_nDof, out_dimuonditrk_refPK_vProb, out_dimuonditrk_refKP_vProb, out_dimuonditrk_refPP_vProb;
+  Float_t out_dimuonditrk_refPK_mass, out_dimuonditrk_refKP_mass, out_dimuonditrk_refPP_mass, out_dimuonditrk_refPK_vChi2;
+  Float_t out_dimuonditrk_refKP_vChi2, out_dimuonditrk_refPP_vChi2, out_dimuonditrk_refPK_nDof, out_dimuonditrk_refKP_nDof;
+  Float_t out_dimuonditrk_refPP_nDof, out_dimuonditrk_refPK_vProb, out_dimuonditrk_refKP_vProb, out_dimuonditrk_refPP_vProb;
 
-  Float_t highKaon_eta, out_lowKaon_eta, out_highMuon_eta, out_lowMuon_eta, out_highKaon_phi, out_lowKaon_phi, out_highMuon_phi, out_lowMuon_phi;
-  Float_t highKaon_dz, out_lowKaon_dz, out_highMuon_dz, out_lowMuon_dz, out_highKaon_dxy, out_lowKaon_dxy, out_highMuon_dxy, out_lowMuon_dxy;
-  // Float_t highKaon_etaError, out_lowKaon_etaError, out_highMuon_etaError, out_lowMuon_etaError, out_highKaon_phiError, out_lowKaon_phiError, out_highMuon_phiError, out_lowMuon_phiError;
-  Float_t highKaon_NPixelHits, out_highKaon_NStripHits, out_highKaon_NTrackhits, out_highKaon_NBPixHits, out_highKaon_NPixLayers;
-  Float_t highKaon_NTraLayers, out_highKaon_NStrLayers, out_highKaon_NBPixLayers, out_lowKaon_NPixelHits, out_lowKaon_NStripHits;
-  Float_t lowKaon_NTrackhits, out_lowKaon_NBPixHits, out_lowKaon_NPixLayers, out_lowKaon_NTraLayers, out_lowKaon_NStrLayers, out_lowKaon_NBPixLayers;
+  Float_t out_highKaon_eta, out_lowKaon_eta, out_highMuon_eta, out_lowMuon_eta, out_highKaon_phi, out_lowKaon_phi, out_highMuon_phi, out_lowMuon_phi;
+  Float_t out_highKaon_dz, out_lowKaon_dz, out_highMuon_dz, out_lowMuon_dz, out_highKaon_dxy, out_lowKaon_dxy, out_highMuon_dxy, out_lowMuon_dxy;
 
-  Float_t highKaonMatch, out_lowKaonMatch,lowMuonMatch, out_highMuonMatch;
+  Float_t out_highKaon_NPixelHits, out_highKaon_NStripHits, out_highKaon_NTrackhits, out_highKaon_NBPixHits, out_highKaon_NPixLayers;
+  Float_t out_highKaon_NTraLayers, out_highKaon_NStrLayers, out_highKaon_NBPixLayers, out_lowKaon_NPixelHits, out_lowKaon_NStripHits;
+  Float_t out_lowKaon_NTrackhits, out_lowKaon_NBPixHits, out_lowKaon_NPixLayers, out_lowKaon_NTraLayers, out_lowKaon_NStrLayers, out_lowKaon_NBPixLayers;
 
-  Float_t dimuonditrk_rf_bindx;
+  Float_t out_highKaonMatch, out_lowKaonMatch,lowMuonMatch, out_highMuonMatch;
 
-  Float_t noXCandidates;
+  Float_t out_dimuonditrk_rf_bindx;
 
-  Float_t isBestCandidate;
+  Float_t out_noXCandidates;
+
+  Float_t out_isBestCandidate;
 
   TwoMuTwoK(TTree * /*tree*/ =0) { }
   virtual ~TwoMuTwoK() { }
