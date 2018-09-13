@@ -480,7 +480,7 @@ void TwoMuTwoK::SlaveTerminate()
     gStyle->SetOptStat(111111) ;
 
 
-    outTuple->Write();
+    outTree->Write();
     OutFile->Print();
     fOutput->Add(OutFile);
     gDirectory = savedir;
