@@ -373,8 +373,14 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           OnlyGen = cms.bool(False),
                           HLTs = hltpaths
                           )
+process.genstep = cms.EDAnalyzer('GenMCRootupler',
+                      PdgIds_        = cms.vint32(20443,10441,531),
+                      MaxDaughters   = cms.uint32(4),
+                      TriggerResults = cms.InputTag("TriggerResults", "", "HLT")
+                       )
 
-process.p = cms.Path(process.triggerSelection *
+process.p = cms.Path(process.genstep *
+                     process.triggerSelection *
                      process.slimmedMuonsWithTriggerSequence *
                      process.unpackPatTriggers *
                      #process.softMuons *
