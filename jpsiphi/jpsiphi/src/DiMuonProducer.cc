@@ -753,50 +753,50 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             mumucand.addUserFloat("mumuVtxCL", mumuVtxCL);
 
           // ---- MC Truth, if enabled ----
-          if (addMCTruth_) {
-            reco::GenParticleRef genMu1 = m1.genParticleRef();
-            reco::GenParticleRef genMu2 = m2.genParticleRef();
-            if (genMu1.isNonnull() && genMu2.isNonnull()) {
-              if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
-                reco::GenParticleRef mom1 = genMu1->motherRef();
-                reco::GenParticleRef mom2 = genMu2->motherRef();
-                if (mom1.isNonnull() && (mom1 == mom2)) {
-                  mumucand.setGenParticleRef(mom1); // set
-                  mumucand.embedGenParticle();      // and embed
-                  std::pair<int, float> MCinfo = findJpsiMCInfo(mom1);
-                  mumucand.addUserInt("momPDGId",MCinfo.first);
-                  mumucand.addUserFloat("ppdlTrue",MCinfo.second);
-                } else {
-                  mumucand.addUserInt("momPDGId",0);
-                  mumucand.addUserFloat("ppdlTrue",-99.);
-                }
-              } else {
-                edm::Handle<reco::GenParticleCollection> theGenParticles;
-                edm::EDGetTokenT<reco::GenParticleCollection> genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"genParticles");
-                iEvent.getByToken(genCands_, theGenParticles);
-                if (theGenParticles.isValid()){
-                  for(size_t iGenParticle=0; iGenParticle<theGenParticles->size();++iGenParticle) {
-                    const Candidate & genCand = (*theGenParticles)[iGenParticle];
-                    if (genCand.pdgId()==443 || genCand.pdgId()==100443 ||
-                    genCand.pdgId()==553 || genCand.pdgId()==100553 || genCand.pdgId()==200553) {
-                      reco::GenParticleRef mom1(theGenParticles,iGenParticle);
-                      mumucand.setGenParticleRef(mom1);
-                      mumucand.embedGenParticle();
-                      std::pair<int, float> MCinfo = findJpsiMCInfo(mom1);
-                      mumucand.addUserInt("momPDGId",MCinfo.first);
-                      mumucand.addUserFloat("ppdlTrue",MCinfo.second);
-                    }
-                  }
-                } else {
-                  mumucand.addUserInt("momPDGId",0);
-                  mumucand.addUserFloat("ppdlTrue",-99.);
-                }
-              }
-            } else {
-              mumucand.addUserInt("momPDGId",0);
-              mumucand.addUserFloat("ppdlTrue",-99.);
-            }
-          }
+          // if (addMCTruth_) {
+          //   reco::GenParticleRef genMu1 = m1.genParticleRef();
+          //   reco::GenParticleRef genMu2 = m2.genParticleRef();
+          //   if (genMu1.isNonnull() && genMu2.isNonnull()) {
+          //     if (genMu1->numberOfMothers()>0 && genMu2->numberOfMothers()>0){
+          //       reco::GenParticleRef mom1 = genMu1->motherRef();
+          //       reco::GenParticleRef mom2 = genMu2->motherRef();
+          //       if (mom1.isNonnull() && (mom1 == mom2)) {
+          //         mumucand.setGenParticleRef(mom1); // set
+          //         mumucand.embedGenParticle();      // and embed
+          //         std::pair<int, float> MCinfo = findJpsiMCInfo(mom1);
+          //         mumucand.addUserInt("momPDGId",MCinfo.first);
+          //         mumucand.addUserFloat("ppdlTrue",MCinfo.second);
+          //       } else {
+          //         mumucand.addUserInt("momPDGId",0);
+          //         mumucand.addUserFloat("ppdlTrue",-99.);
+          //       }
+          //     } else {
+          //       edm::Handle<reco::GenParticleCollection> theGenParticles;
+          //       edm::EDGetTokenT<reco::GenParticleCollection> genCands_ = consumes<reco::GenParticleCollection>((edm::InputTag)"genParticles");
+          //       iEvent.getByToken(genCands_, theGenParticles);
+          //       if (theGenParticles.isValid()){
+          //         for(size_t iGenParticle=0; iGenParticle<theGenParticles->size();++iGenParticle) {
+          //           const Candidate & genCand = (*theGenParticles)[iGenParticle];
+          //           if (genCand.pdgId()==443 || genCand.pdgId()==100443 ||
+          //           genCand.pdgId()==553 || genCand.pdgId()==100553 || genCand.pdgId()==200553) {
+          //             reco::GenParticleRef mom1(theGenParticles,iGenParticle);
+          //             mumucand.setGenParticleRef(mom1);
+          //             mumucand.embedGenParticle();
+          //             std::pair<int, float> MCinfo = findJpsiMCInfo(mom1);
+          //             mumucand.addUserInt("momPDGId",MCinfo.first);
+          //             mumucand.addUserFloat("ppdlTrue",MCinfo.second);
+          //           }
+          //         }
+          //       } else {
+          //         mumucand.addUserInt("momPDGId",0);
+          //         mumucand.addUserFloat("ppdlTrue",-99.);
+          //       }
+          //     }
+          //   } else {
+          //     mumucand.addUserInt("momPDGId",0);
+          //     mumucand.addUserFloat("ppdlTrue",-99.);
+          //   }
+          // }
           std::cout << "Debug  11" << std::endl;
 
           // ---- Push back output ----
