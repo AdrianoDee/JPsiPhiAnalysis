@@ -266,29 +266,29 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 
         fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
 
-        fourmuon_tree->Branch("doubledimuon_p4",   "TLorentzVector", &doubledimuon_p4);
-        fourmuon_tree->Branch("phi_p4",     "TLorentzVector", &phi_p4);
-        fourmuon_tree->Branch("jpsi_p4",     "TLorentzVector", &jpsi_p4);
-        fourmuon_tree->Branch("mLowPhi_p4",   "TLorentzVector", &mLowPhi_p4);
-        fourmuon_tree->Branch("mLowJPsi_p4",   "TLorentzVector", &mLowJPsi_p4);
-        fourmuon_tree->Branch("mHighJPsi_p4",   "TLorentzVector", &mHighJPsi_p4);
-        fourmuon_tree->Branch("mLowPhi_p4",   "TLorentzVector", &mLowPhi_p4);
+        fourmuon_tree->Branch("doubledimuon_p4",  "TLorentzVector", &doubledimuon_p4);
+        fourmuon_tree->Branch("phi_p4",           "TLorentzVector", &phi_p4);
+        fourmuon_tree->Branch("jpsi_p4",          "TLorentzVector", &jpsi_p4);
+        fourmuon_tree->Branch("mLowPhi_p4",       "TLorentzVector", &mLowPhi_p4);
+        fourmuon_tree->Branch("mLowJPsi_p4",      "TLorentzVector", &mLowJPsi_p4);
+        fourmuon_tree->Branch("mHighJPsi_p4",     "TLorentzVector", &mHighJPsi_p4);
+        fourmuon_tree->Branch("mLowPhi_p4",       "TLorentzVector", &mLowPhi_p4);
 
-        fourmuon_tree->Branch("doubledimuon_rf_p4",   "TLorentzVector", &doubledimuon_rf_p4);
-        fourmuon_tree->Branch("phi_rf_p4",     "TLorentzVector", &phi_rf_p4);
-        fourmuon_tree->Branch("jpsi_rf_p4",     "TLorentzVector", &jpsi_rf_p4);
-        fourmuon_tree->Branch("mLowPhi_rf_p4",   "TLorentzVector", &mLowPhi_rf_p4);
-        fourmuon_tree->Branch("mLowJPsi_rf_p4",   "TLorentzVector", &mLowJPsi_rf_p4);
-        fourmuon_tree->Branch("mHighJPsi_rf_p4",   "TLorentzVector", &mHighJPsi_rf_p4);
-        fourmuon_tree->Branch("mLowPhi_rf_p4",   "TLorentzVector", &mLowPhi_rf_p4);
+        fourmuon_tree->Branch("doubledimuon_rf_p4", "TLorentzVector", &doubledimuon_rf_p4);
+        fourmuon_tree->Branch("phi_rf_p4",          "TLorentzVector", &phi_rf_p4);
+        fourmuon_tree->Branch("jpsi_rf_p4",         "TLorentzVector", &jpsi_rf_p4);
+        fourmuon_tree->Branch("mLowPhi_rf_p4",      "TLorentzVector", &mLowPhi_rf_p4);
+        fourmuon_tree->Branch("mLowJPsi_rf_p4",     "TLorentzVector", &mLowJPsi_rf_p4);
+        fourmuon_tree->Branch("mHighJPsi_rf_p4",    "TLorentzVector", &mHighJPsi_rf_p4);
+        fourmuon_tree->Branch("mLowPhi_rf_p4",      "TLorentzVector", &mLowPhi_rf_p4);
 
         //Trigger Matching
-        fourmuon_tree->Branch("jpsi_triggerMatch",&jpsi_triggerMatch,"jpsi_triggerMatch/D");
-        fourmuon_tree->Branch("phi_triggerMatch",&phi_triggerMatch,"phi_triggerMatch/D");
-        fourmuon_tree->Branch("mHighJPsiMatch",&mHighJPsiMatch,"mHighJPsiMatch/D");
-        fourmuon_tree->Branch("mLowJPsiMatch",&mLowJPsiMatch,"mLowJPsiMatch/D");
-        fourmuon_tree->Branch("mHighPhiMatch",&mHighPhiMatch,"mHighPhiMatch/D");
-        fourmuon_tree->Branch("mLowPhiMatch",&mLowPhiMatch,"mLowPhiMatch/D");
+        fourmuon_tree->Branch("jpsi_triggerMatch",  &jpsi_triggerMatch, "jpsi_triggerMatch/D");
+        fourmuon_tree->Branch("phi_triggerMatch",   &phi_triggerMatch,  "phi_triggerMatch/D");
+        fourmuon_tree->Branch("mHighJPsiMatch",     &mHighJPsiMatch,    "mHighJPsiMatch/D");
+        fourmuon_tree->Branch("mLowJPsiMatch",      &mLowJPsiMatch,     "mLowJPsiMatch/D");
+        fourmuon_tree->Branch("mHighPhiMatch",      &mHighPhiMatch,     "mHighPhiMatch/D");
+        fourmuon_tree->Branch("mLowPhiMatch",       &mLowPhiMatch,      "mLowPhiMatch/D");
 
         //Four Muons Variables
         fourmuon_tree->Branch("doubledimuon_charge",&doubledimuon_charge,"doubledimuon_charge/D");
@@ -540,10 +540,10 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         fourmuon_tree->Branch("mHighPhi_type",&mHighPhi_type,"mHighPhi_type/D");
         fourmuon_tree->Branch("mLowPhi_type",&mLowPhi_type,"mLowPhi_type/D");
 
-        //Dimuons
-
-        fourmuon_tree->Branch("jpsi_triggerMatch_rf",&jpsi_triggerMatch_rf,"jpsi_triggerMatch_rf/D");
-        fourmuon_tree->Branch("phi_triggerMatch_rf",&phi_triggerMatch_rf,"phi_triggerMatch_rf/D");
+        // //Dimuons
+        //
+        // fourmuon_tree->Branch("jpsi_triggerMatch_rf",&jpsi_triggerMatch_rf,"jpsi_triggerMatch_rf/D");
+        // fourmuon_tree->Branch("phi_triggerMatch_rf",&phi_triggerMatch_rf,"phi_triggerMatch_rf/D");
 
         //JPsi
         fourmuon_tree->Branch("jpsi_m",&jpsi_m,"jpsi_m/D");
@@ -924,7 +924,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
      }
    }
       reco::Candidate::LorentzVector vJPsiHigh = jpsi_cand->daughter("highMuon")->p4();
-      reco::Candidate::LorentzVector vJPsiLow = jpsi_cand->daughter("lowMuon")->p4();
+      reco::Candidate::LorentzVector vJPsiLow  = jpsi_cand->daughter("lowMuon")->p4();
 
       if (jpsi_cand->daughter("highMuon")->charge() < 0) {
          vJPsiHigh = jpsi_cand->daughter("lowMuon")->p4();
@@ -935,39 +935,46 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mLowJPsi_rf_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
       reco::Candidate::LorentzVector vPhiHigh = jpsi_cand->daughter("highMuon")->p4();
-      reco::Candidate::LorentzVector vPhiLow = jpsi_cand->daughter("lowMuon")->p4();
+      reco::Candidate::LorentzVector vPhiLow  = jpsi_cand->daughter("lowMuon")->p4();
 
       if (jpsi_cand->daughter("highMuon")->charge() < 0) {
          vPhiHigh = jpsi_cand->daughter("lowMuon")->p4();
          vPhiLow = jpsi_cand->daughter("highMuon")->p4();
       }
 
-      jpsi_vProb        = jpsi_cand->userFloat("vProb");
-      jpsi_vChi2        = jpsi_cand->userFloat("vNChi2");
-      jpsi_DCA          = jpsi_cand->userFloat("DCA");
-      jpsi_ctauPV       = jpsi_cand->userFloat("ppdlPV");
-      jpsi_ctauErrPV    = jpsi_cand->userFloat("ppdlErrPV");
-      jpsi_cosAlpha     = jpsi_cand->userFloat("cosAlpha");
-      jpsi_lxy          = jpsi_cand->userFloat("l_xy");
-      jpsi_lxyz         = jpsi_cand->userFloat("lErr_xy");
-      jpsi_lxyErr       = jpsi_cand->userFloat("l_xyz");
-      jpsi_lxyzErr      = jpsi_cand->userFloat("lErr_xyz");
-      jpsi_cosAlpha3D   = jpsi_cand->userFloat("cosAlpha3D");
-      jpsi_triggerMatch = DoubleDiMuonRootupler::isTriggerMatched(jpsi_cand);
+      jpsi_vProb        = (Double_t) jpsi_cand->userFloat("vProb");
+      jpsi_vChi2        = (Double_t) jpsi_cand->userFloat("vNChi2");
+      jpsi_DCA          = (Double_t) jpsi_cand->userFloat("DCA");
+      jpsi_ctauPV       = (Double_t) jpsi_cand->userFloat("ppdlPV");
+      jpsi_ctauErrPV    = (Double_t) jpsi_cand->userFloat("ppdlErrPV");
+      jpsi_cosAlpha     = (Double_t) jpsi_cand->userFloat("cosAlpha");
+      jpsi_lxy          = (Double_t) jpsi_cand->userFloat("l_xy");
+      jpsi_lxyz         = (Double_t) jpsi_cand->userFloat("lErr_xy");
+      jpsi_lxyErr       = (Double_t) jpsi_cand->userFloat("l_xyz");
+      jpsi_lxyzErr      = (Double_t) jpsi_cand->userFloat("lErr_xyz");
+      jpsi_cosAlpha3D   = (Double_t) jpsi_cand->userFloat("cosAlpha3D");
 
-      phi_vProb        = phi_cand->userFloat("vProb");
-      phi_vChi2        = phi_cand->userFloat("vNChi2");
-      phi_DCA          = phi_cand->userFloat("DCA");
-      phi_ctauPV       = phi_cand->userFloat("ppdlPV");
-      phi_ctauErrPV    = phi_cand->userFloat("ppdlErrPV");
-      phi_cosAlpha     = phi_cand->userFloat("cosAlpha");
-      phi_lxy          = phi_cand->userFloat("l_xy");
-      phi_lxyz         = phi_cand->userFloat("lErr_xy");
-      phi_lxyErr       = phi_cand->userFloat("l_xyz");
-      phi_lxyzErr      = phi_cand->userFloat("lErr_xyz");
-      phi_cosAlpha3D   = phi_cand->userFloat("cosAlpha3D");
+      mHighJPsiMatch    = dimuon_cand->userInt("highMuonTMatch");
+      mLowJPsiMatch     = dimuon_cand->userInt("lowMuonTMatch");
+      jpsi_triggerMatch = -std::max(-mLowJPsiMatch,mHighJPsiMatch);
 
-      phi_triggerMatch = DoubleDiMuonRootupler::isTriggerMatched(phi_cand);
+      //jpsi_triggerMatch = DoubleDiMuonRootupler::isTriggerMatched(jpsi_cand);
+
+      phi_vProb        = (Double_t) phi_cand->userFloat("vProb");
+      phi_vChi2        = (Double_t) phi_cand->userFloat("vNChi2");
+      phi_DCA          = (Double_t) phi_cand->userFloat("DCA");
+      phi_ctauPV       = (Double_t) phi_cand->userFloat("ppdlPV");
+      phi_ctauErrPV    = (Double_t) phi_cand->userFloat("ppdlErrPV");
+      phi_cosAlpha     = (Double_t) phi_cand->userFloat("cosAlpha");
+      phi_lxy          = (Double_t) phi_cand->userFloat("l_xy");
+      phi_lxyz         = (Double_t) phi_cand->userFloat("lErr_xy");
+      phi_lxyErr       = (Double_t) phi_cand->userFloat("l_xyz");
+      phi_lxyzErr      = (Double_t) phi_cand->userFloat("lErr_xyz");
+      phi_cosAlpha3D   = (Double_t) phi_cand->userFloat("cosAlpha3D");
+
+      mHighPhiMatch    = (Double_t) phi_cand->userInt("highMuonTMatch");
+      mLowPhiMatch     = (Double_t) phi_cand->userInt("lowMuonTMatch");
+      phi_triggerMatch = -std::max(-mLowPhiMatch,mHighPhiMatch);
 
       const pat::Muon *jpsiHighMuon, *jspiLowMuon, *phiHighMuon, *phiLowMuon;
 
@@ -1008,20 +1015,20 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       // lowDiM_m         = (Double_t) phi_cand->mass();
       // lowDiM_pt        = (Double_t) phi_cand->pt();
 
-      jpsi_m      =   jpsi_cand->mass() ;
-      jpsi_p      =   jpsi_cand->p() ;
-      jpsi_theta      =   jpsi_cand->theta() ;
-      jpsi_eta      =   jpsi_cand->eta() ;
-      jpsi_y      =   jpsi_cand->y() ;
-      jpsi_e      =   jpsi_cand->energy();
+      jpsi_m      =   (Double_t) jpsi_cand->mass() ;
+      jpsi_p      =   (Double_t) jpsi_cand->p() ;
+      jpsi_theta  =   (Double_t) jpsi_cand->theta() ;
+      jpsi_eta    =   (Double_t) jpsi_cand->eta() ;
+      jpsi_y      =   (Double_t) jpsi_cand->y() ;
+      jpsi_e      =   (Double_t) jpsi_cand->energy();
       // jpsi_dxy      =   jpsi_cand->dxy();
 
-      phi_m      =   phi_cand->mass() ;
-      phi_p      =   phi_cand->p() ;
-      phi_theta      =   phi_cand->theta() ;
-      phi_eta      =   phi_cand->eta() ;
-      phi_y      =   phi_cand->y() ;
-      phi_e      =   phi_cand->energy();
+      phi_m      =   (Double_t) phi_cand->mass() ;
+      phi_p      =   (Double_t) phi_cand->p() ;
+      phi_theta  =   (Double_t) phi_cand->theta() ;
+      phi_eta    =   (Double_t) phi_cand->eta() ;
+      phi_y      =   (Double_t) phi_cand->y() ;
+      phi_e      =   (Double_t) phi_cand->energy();
       // phi_dxy      =   phi_cand->dxy();
 
       //jpsi_dxyEr      =   jpsi_cand. ;
