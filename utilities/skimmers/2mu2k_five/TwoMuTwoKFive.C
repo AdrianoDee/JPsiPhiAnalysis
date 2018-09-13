@@ -1,5 +1,5 @@
-#define 2mu2k_five_skimmer_cxx
-// The class definition in 2mu2k_five_skimmer.h has been generated automatically
+#define TwoMuTwoK_2018Five_cxx
+// The class definition in TwoMuTwoK_2018Five.h has been generated automatically
 // by the ROOT utility TTree::MakeSelector(). This class is derived
 // from the ROOT class TSelector. For more information on the TSelector
 // framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
@@ -19,17 +19,17 @@
 //
 // To use this file, try the following session on your Tree T:
 //
-// root> T->Process("2mu2k_five_skimmer.C")
-// root> T->Process("2mu2k_five_skimmer.C","some options")
-// root> T->Process("2mu2k_five_skimmer.C+")
+// root> T->Process("TwoMuTwoK_2018Five.C")
+// root> T->Process("TwoMuTwoK_2018Five.C","some options")
+// root> T->Process("TwoMuTwoK_2018Five.C+")
 //
 
 
-#include "2mu2k_five_skimmer.h"
+#include "TwoMuTwoK_2018Five.h"
 #include <TH2.h>
 #include <TStyle.h>
 
-void 2mu2k_five_skimmer::Begin(TTree * /*tree*/)
+void TwoMuTwoK_2018Five::Begin(TTree * /*tree*/)
 {
    // The Begin() function is called at the start of the query.
    // When running with PROOF Begin() is only called on the client.
@@ -38,7 +38,7 @@ void 2mu2k_five_skimmer::Begin(TTree * /*tree*/)
    TString option = GetOption();
 }
 
-void 2mu2k_five_skimmer::SlaveBegin(TTree * /*tree*/)
+void TwoMuTwoK_2018Five::SlaveBegin(TTree * /*tree*/)
 {
    // The SlaveBegin() function is called after the Begin() function.
    // When running with PROOF SlaveBegin() is called on each slave server.
@@ -46,9 +46,27 @@ void 2mu2k_five_skimmer::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   std::string outputString = "2mu2k_five_tree.root";
+   OutFile = new TProofOutputFile( outputString.data() );
+   fOut = OutFile->OpenFile("RECREATE");
+   if (!(fOut=OutFile->OpenFile("RECREATE")))
+   {
+     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+   }
+
+   ////////////////// Histograms //////////////////
+   JPsi_mass = 3.096916; /// pdg mass
+   Phi_mass = 1.019455; /// pdg mass
+   Phi_mean = 1.019723;
+   Phi_sigma = 2.35607e-03;//2.28400e-03;
+
+   outTuple = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
+
+   outTuple->Branch("out",       &out,        "out/D");
+
 }
 
-Bool_t 2mu2k_five_skimmer::Process(Long64_t entry)
+Bool_t TwoMuTwoK_2018Five::Process(Long64_t entry)
 {
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
@@ -68,10 +86,20 @@ Bool_t 2mu2k_five_skimmer::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
+   bool test = highKaon_pt > 5.00;
+
+   if(test)
+   {
+     out = (Double_t) highKaon_pt;
+
+     outTuple->Fill();
+     
+   }
+
    return kTRUE;
 }
 
-void 2mu2k_five_skimmer::SlaveTerminate()
+void TwoMuTwoK_2018Five::SlaveTerminate()
 {
    // The SlaveTerminate() function is called after all entries or objects
    // have been processed. When running with PROOF SlaveTerminate() is called
@@ -79,7 +107,7 @@ void 2mu2k_five_skimmer::SlaveTerminate()
 
 }
 
-void 2mu2k_five_skimmer::Terminate()
+void TwoMuTwoK_2018Five::Terminate()
 {
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present

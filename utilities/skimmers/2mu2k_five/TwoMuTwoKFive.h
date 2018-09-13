@@ -5,8 +5,8 @@
 // found on file: ../../../../../CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/rootuple-2018-dimuonditrak_bbbar_hard_0.root
 //////////////////////////////////////////////////////////
 
-#ifndef 2mu2k_five_skimmer_h
-#define 2mu2k_five_skimmer_h
+#ifndef TwoMuTwoK_2018Five_h
+#define TwoMuTwoK_2018Five_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -21,10 +21,15 @@
 
 
 
-class 2mu2k_five_skimmer : public TSelector {
+class TwoMuTwoK_2018Five : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   Float_t JPsi_mass, Phi_mass, Phi_mean, Phi_sigma;
+   TTree *outTuple;
+
+   Double_t out;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -249,8 +254,8 @@ public :
    TTreeReaderValue<Bool_t> isBestCandidate = {fReader, "isBestCandidate"};
 
 
-   2mu2k_five_skimmer(TTree * /*tree*/ =0) { }
-   virtual ~2mu2k_five_skimmer() { }
+   TwoMuTwoK_2018Five(TTree * /*tree*/ =0) { }
+   virtual ~TwoMuTwoK_2018Five() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -265,14 +270,17 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(2mu2k_five_skimmer,0);
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
+   ClassDef(TwoMuTwoK_2018Five,0);
 
 };
 
 #endif
 
-#ifdef 2mu2k_five_skimmer_cxx
-void 2mu2k_five_skimmer::Init(TTree *tree)
+#ifdef TwoMuTwoK_2018Five_cxx
+void TwoMuTwoK_2018Five::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -284,7 +292,7 @@ void 2mu2k_five_skimmer::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t 2mu2k_five_skimmer::Notify()
+Bool_t TwoMuTwoK_2018Five::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -296,4 +304,4 @@ Bool_t 2mu2k_five_skimmer::Notify()
 }
 
 
-#endif // #ifdef 2mu2k_five_skimmer_cxx
+#endif // #ifdef TwoMuTwoK_2018Five_cxx
