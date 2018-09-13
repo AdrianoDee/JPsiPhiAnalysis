@@ -374,7 +374,7 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           HLTs = hltpaths
                           )
 process.genstep = cms.EDAnalyzer('GenMCRootupler',
-                      PdgIds_        = cms.vint32(20443,10441,531),
+                      PdgIds         = cms.vint32(20443,10441,531),
                       MaxDaughters   = cms.uint32(4),
                       TriggerResults = cms.InputTag("TriggerResults", "", "HLT")
                        )
@@ -384,10 +384,10 @@ process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 
 genparting = process.genstep
 triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence * process.unpackPatTriggers
-mcmatching = process.trackMatch * process.muonMatch
+##mcmatching = process.trackMatch * process.muonMatch
 dimunoing  = process.JPsi2MuMuPAT * process.Phi2MuMuPAT
 tracking   = process.PsiPhiProducer
-rootupling = process.rootupleFive * process.rootuple * process.rootuplePhi * process.rootupleJPsi
+rootupling = process.rootuple * process.rootuplePhi * process.rootupleJPsi
 debugging  = process.dump
 
 if ismc:

@@ -139,6 +139,8 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
 
   for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
+    dummyP4.clear();
+
     gen_dau_p4.push_back(zero);
 
     for (int j = 0; j < MaxNumOfDaughters_; j++)
@@ -149,8 +151,11 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
 
   std::string name, var;
 
+
   for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
+    dummy.clear();
+
     gen_dau_pt.push_back(-1.0);
     gen_dau_eta.push_back(-5.0);
     gen_dau_phi.push_back(-10.0);
@@ -204,7 +209,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
     for (int j = 0; j < MaxNumOfDaughters_; j++)
     {
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
-      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[j][i][j]);
+      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[j][i]);
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pt"; var = name + "/D";
       gen_tree->Branch(name.c_str(),&gen_gdau_pt[j][i],var.c_str());
