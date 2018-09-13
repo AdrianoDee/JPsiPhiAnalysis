@@ -3,10 +3,7 @@
 // // Package:    GenMCRootupler
 // // Class:      GenMCRootupler
 // //
-// // Description: Dimuon(mu+ mu-)  producer
-// //
 // // Author:  Adriano Di Florio
-// //    based on : Alberto Sanchez Hernandez Onia2MuMu code
 // //
 //
 // // system include files
@@ -65,11 +62,13 @@
 //   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
 //   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
 //   std::vector<int>  PdgIds_;
+//   int MaxNumOfDaughters_;
 //   std::vector<double> DimuonMassCuts_;
 // 	bool isMC_;
 //   bool OnlyBest_;
 //   bool OnlyGen_;
 //   std::vector<std::string>  HLTs_;
+//
 //
 // 	Double_t    run;
 // 	ULong64_t event;
@@ -80,7 +79,8 @@
 //   UInt_t    tMatch;
 //   Int_t     charge;
 //
-//   std::vector < TLorentzVector > gen_dau_p4, gen_gda_p4;
+//   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
+//   std::vector < std::vector < TLorentzVector > > gen_gda_p4;
 //
 // 	TLorentzVector dimuon_p4;
 // 	TLorentzVector highMuon_p4;
@@ -118,11 +118,13 @@
 // //
 //
 // GenMCRootupler::GenMCRootupler(const edm::ParameterSet & iConfig):
-// PdgIds_(iConfig.getParameter<std::vector<int>>("PdgIds"))
+// PdgIds_(iConfig.getParameter<std::vector<int>>("PdgIds")),
+// MaxNumOfDaughters_(iConfig.existsAs<int>("MaxDaughters") ? iConfig.getParameter<double>("MaxDaughters") : 4)
 // {
 //   edm::Service < TFileService > fs;
-//   gen_tree = fs->make < TTree > ("dimuonTree", "Tree of DiMuon");
+//   gen_tree = fs->make < TTree > ("genTree", "Tree of Gen Particles");
 //
+//   maxNum
 //   gen_tree->Branch("run",      &run,      "run/D");
 //   gen_tree->Branch("event",    &event,    "event/l");
 //   gen_tree->Branch("lumiblock",&lumiblock,"lumiblock/D");
@@ -142,13 +144,35 @@
 //   gen_tree->Branch("ndaughter",   &ndaughter,   "ndaughter/D");
 //   gen_tree->Branch("ngdaughter",   &ngdaughter,   "ngdaughter/D");
 //
-//   //Up to 4 daughtes
-//   gen_tree->Branch("gen_dau1_p4", "TLorentzVector", &dimuon_p4);
-//   gen_tree->Branch("gen_dau2_p4", "TLorentzVector", &dimuon_p4);
-//   gen_tree->Branch("gen_dau3_p4", "TLorentzVector", &dimuon_p4);
-//   gen_tree->Branch("gen_dau4_p4", "TLorentzVector", &dimuon_p4);
+//   TLorentzVector zero;
+//   zero.SetPtEtaPhiM(-10.0,-10.0,-10.0,-10.0);
 //
-//   //Upt to 8 gdaughters
+//   //Up to n daughtes (n**2 gran daughters)
+//
+//   for (size_t i = 0; i < MaxNumOfDaughters_; i++)
+//   {
+//     gen_dau_p4.push_back(zero);
+//
+//     for (size_t j = 0; j < MaxNumOfDaughters_; i++)
+//       dummyP4.push_back(zero);
+//
+//     gen_gda_p4.push_back(dummyP4);
+//   }
+//
+//   std::string name;
+//
+//   for (size_t i = 0; i < MaxNumOfDaughters_; i++)
+//   {
+//       name = "gen_dau_" + std::to_string(i) + "_p4";
+//       gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_dau_p4[i]);
+//       for (size_t j = 0; j < MaxNumOfDaughters_; i++)
+//       {
+//         name = "gen_gdau_" + std::to_string(i) + "_p4";
+//         gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
+//       }
+//   }
+//
+//
 //
 //   if (!OnlyGen_) {
 //     gen_tree->Branch("ndimuon",    &ndimuon,    "ndimuon/D");

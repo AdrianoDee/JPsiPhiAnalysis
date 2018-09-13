@@ -766,7 +766,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     std::cout << "Debug  2" << std::endl;
 
     pat::CompositeCandidate *doubledimuon_rf_cand, doubledimuon_cand, *jpsi_cand, *phi_cand;//  , *jpsi_cand, *jpsi_cand;
-    pat::Muon *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
+    pat::CompositeCandidate *phiMuHigh, *phiMuLow, *jPsiMuLow, *jPsiMuHigh;
 
     for (unsigned int i=0; i< doubledimuon_cand_handle->size(); i++){
 
@@ -777,10 +777,10 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       jpsi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("jpsi"));
       phi_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("phi"));
 
-      phiMuHigh  = dynamic_cast <pat::Muon *>(phi_cand->daughter("highMuon"));
-      phiMuLow   = dynamic_cast <pat::Muon *>(phi_cand->daughter("lowMuon"));
-      jPsiMuLow  = dynamic_cast <pat::Muon *>(jpsi_cand->daughter("lowMuon"));
-      jPsiMuHigh = dynamic_cast <pat::Muon *>(jpsi_cand->daughter("highMuon"));
+      phiMuHigh  = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("highMuon"));
+      phiMuLow   = dynamic_cast <pat::CompositeCandidate *>(phi_cand->daughter("lowMuon"));
+      jPsiMuLow  = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("lowMuon"));
+      jPsiMuHigh = dynamic_cast <pat::CompositeCandidate *>(jpsi_cand->daughter("highMuon"));
 
       // if (doubledimuon_rf_bindx<0 || doubledimuon_rf_bindx>(int) doubledimuon_cand_handle->size()) {
       //   std::cout << "Incorrect index for oniatt combination " << run << "," << event <<"," << doubledimuon_rf_bindx << std::endl;
