@@ -77,6 +77,9 @@ private:
   UInt_t     lumiblock, ndimuon, nmuons, trigger, tMatch;
   Int_t      charge;
 
+  Double_t status, charge, pdgId, pt, eta, phi;
+  Double_t mass, status, isPrompt, ndaughter, ngdaughte;
+  
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
   std::vector < std::vector < TLorentzVector > > gen_gda_p4;
 
@@ -108,7 +111,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
   gen_tree->Branch("lumiblock",&lumiblock,"lumiblock/D");
 
   gen_tree->Branch("trigger",  &trigger,  "trigger/D");
-  gen_tree->Branch("gen_p4", "TLorentzVector", &dimuon_p4);
+  gen_tree->Branch("gen_p4", "TLorentzVector", &gen_p4);
 
   gen_tree->Branch("status",    &status,  "status/D");
   gen_tree->Branch("charge",    &charge,  "charge/D");
@@ -130,11 +133,11 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
 
   //Up to n daughtes (n**2 gran daughters)
 
-  for (size_t i = 0; i < MaxNumOfDaughters_; i++)
+  for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
     gen_dau_p4.push_back(zero);
 
-    for (size_t j = 0; j < MaxNumOfDaughters_; j++)
+    for (int j = 0; j < MaxNumOfDaughters_; j++)
     dummyP4.push_back(zero);
 
     gen_gda_p4.push_back(dummyP4);
@@ -142,7 +145,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
 
   std::string name, var;
 
-  for (size_t i = 0; i < MaxNumOfDaughters_; i++)
+  for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
     name = "gen_dau_" + std::to_string(i) + "_p4";
     gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_dau_p4[i]);
@@ -171,7 +174,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
     gen_tree->Branch(name.c_str(),&gen_dau_status[i],var.c_str());
 
 
-    for (size_t j = 0; j < MaxNumOfDaughters_; j++)
+    for (int j = 0; j < MaxNumOfDaughters_; j++)
     {
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
       gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
@@ -272,18 +275,18 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
   trigger = 0;
 
-  dimuon_pdgId = 0;
-  mother_pdgId = 0;
-  ndimuon  = 0;
-  nmuons = 0;
+  // dimuon_pdgId = 0;
+  // mother_pdgId = 0;
+  // ndimuon  = 0;
+  // nmuons = 0;
 
-  dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_mother_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-  gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // gen_dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // gen_mother_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // gen_highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+  // gen_muonM_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
   // Pruned particles are the one containing "important" stuff
   edm::Handle<reco::GenParticleCollection> pruned;
