@@ -71,7 +71,7 @@
 //   bool OnlyGen_;
 //   std::vector<std::string>  HLTs_;
 //
-// 	UInt_t    run;
+// 	Double_t    run;
 // 	ULong64_t event;
 //   UInt_t    lumiblock;
 //   UInt_t    ndimuon;
@@ -79,6 +79,8 @@
 //   UInt_t    trigger;
 //   UInt_t    tMatch;
 //   Int_t     charge;
+//
+//   std::vector < TLorentzVector > gen_dau_p4, gen_gda_p4;
 //
 // 	TLorentzVector dimuon_p4;
 // 	TLorentzVector highMuon_p4;
@@ -136,6 +138,17 @@
 //   gen_tree->Branch("eta",   &eta,   "eta/D");
 //   gen_tree->Branch("phi",   &phi,   "phi/D");
 //   gen_tree->Branch("mass",   &mass,   "mass/D");
+//
+//   gen_tree->Branch("ndaughter",   &ndaughter,   "ndaughter/D");
+//   gen_tree->Branch("ngdaughter",   &ngdaughter,   "ngdaughter/D");
+//
+//   //Up to 4 daughtes
+//   gen_tree->Branch("gen_dau1_p4", "TLorentzVector", &dimuon_p4);
+//   gen_tree->Branch("gen_dau2_p4", "TLorentzVector", &dimuon_p4);
+//   gen_tree->Branch("gen_dau3_p4", "TLorentzVector", &dimuon_p4);
+//   gen_tree->Branch("gen_dau4_p4", "TLorentzVector", &dimuon_p4);
+//
+//   //Upt to 8 gdaughters
 //
 //   if (!OnlyGen_) {
 //     gen_tree->Branch("ndimuon",    &ndimuon,    "ndimuon/D");
