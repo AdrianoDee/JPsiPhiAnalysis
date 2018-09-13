@@ -52,7 +52,7 @@ datasetnames = {
 "C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD", #CMSSW_10_1_7
 "C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD", #CMSSW_10_1_8
 "C2018_3": datasetbase + "/Run2018C-PromptReco-v3/MINIAOD", #CMSSW_10_1_9
-"D2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD"  #CMSSW_10_2_1
+"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD"  #CMSSW_10_2_1
 }
 
 
