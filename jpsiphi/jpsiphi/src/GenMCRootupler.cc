@@ -494,7 +494,10 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
         // for (size_t i = 0; i < GoodGDaughters_.size(); i++)  std::cout << GoodGDaughters_[i] << " - ";
         // std::cout << std::endl;
 
-        isGood = thisIsGood;
+        isGood = (Double_t)thisIsGood;
+
+        gen_tree->Fill()
+
         // std::cout << " >>> Is Good : " << thisIsGood << std::endl;
         // std::cout << " >>> dau     : " << (theDaughters.size()  == GoodDaughters_.size()) << std::endl;
         // std::cout << " >>> gdau    : " << (theGDaughters.size() == GoodGDaughters_.size()) << std::endl;
