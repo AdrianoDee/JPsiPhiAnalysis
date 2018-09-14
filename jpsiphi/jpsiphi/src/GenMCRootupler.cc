@@ -78,7 +78,7 @@ private:
   Double_t mass, status, isPrompt;
 
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
-  std::vector < std::vector < TLorentzVector > > gen_gda_p4;
+  std::vector < std::vector < TLorentzVector > > gen_gdau_p4;
 
   std::vector < Double_t > gen_dau_pt, gen_dau_eta, gen_dau_phi, gen_dau_p;
   std::vector < Double_t > gen_dau_mass, gen_dau_pdg, gen_dau_status, dummy;
@@ -399,13 +399,13 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
         gen_p4.SetPtEtaPhiM(pt,eta,phi,mass);
 
-        isPrompt      = (Double_t)xcand->isPrompt();
+        isPrompt      = (Double_t)xcand->isPromptDecayed();
         ndaughter     = (UInt_t)xcand->numberOfDaughters();
 
         ngdaughter    = 0;
         thisIsGood        = (ndaughter==(UInt_t)(GoodDaughters_.size()));
 
-        int maxD = -std::max(-MaxNumOfDaughters_,-ndaughter);
+        int maxD = -std::max(-MaxNumOfDaughters_,-(int)ndaughter);
 
         for(int jj = 0; jj<maxD;jj++)
         {
@@ -432,7 +432,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
           ngdaughter += thisDau->numberOfDaughters();
 
 
-          int maxGD = -std::max(-MaxNumOfDaughters_,-gen_dau_ndaughter[jj]);
+          int maxGD = -std::max(-MaxNumOfDaughters_,-(int)gen_dau_ndaughter[jj]);
 
           for(int kk = 0; kk<maxGD;kk++)
           {
