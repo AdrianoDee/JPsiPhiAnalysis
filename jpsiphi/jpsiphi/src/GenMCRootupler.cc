@@ -434,26 +434,26 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
           int maxGD = -std::max(-MaxNumOfDaughters_,-gen_dau_ndaughter[jj]);
 
-          for(int kk = 0; kk<maxD;kk++)
+          for(int kk = 0; kk<maxGD;kk++)
           {
             auto thisGDau = thisDau->daughter(kk);
 
-            gen_dau_pt[jj][kk]     = (Double_t)thisGDau->pt();
-            gen_dau_eta[jj][kk]    = (Double_t)thisGDau->eta();
-            gen_dau_phi[jj][kk]    = (Double_t)thisGDau->phi();
-            gen_dau_mass[jj][kk]   = (Double_t)thisGDau->mass();
+            gen_gdau_pt[jj][kk]     = (Double_t)thisGDau->pt();
+            gen_gdau_eta[jj][kk]    = (Double_t)thisGDau->eta();
+            gen_gdau_phi[jj][kk]    = (Double_t)thisGDau->phi();
+            gen_gdau_mass[jj][kk]   = (Double_t)thisGDau->mass();
 
-            gen_dau_p4[jj][kk].SetPtEtaPhiM(gen_dau_pt[jj][kk],gen_dau_eta[jj][kk],gen_dau_phi[jj][kk],gen_dau_mass[jj][kk]);
+            gen_gdau_p4[jj][kk].SetPtEtaPhiM(gen_gdau_pt[jj],gen_gdau_eta[jj],gen_gdau_phi[jj],gen_gdau_mass[jj]);
 
-            gen_dau_p[jj][kk]      = thisGDau->p();
+            gen_gdau_p[jj][kk]      = thisGDau->p();
 
-            gen_dau_charge[jj][kk] = (Double_t)thisGDau->charge();
-            gen_dau_pdg[jj][kk]    = (Double_t)thisGDau->pdgId();
-            gen_dau_status[jj][kk] = (Double_t)thisGDau->status();
+            gen_gdau_charge[jj][kk] = (Double_t)thisGDau->charge();
+            gen_gdau_pdg[jj][kk]    = (Double_t)thisGDau->pdgId();
+            gen_gdau_status[jj][kk] = (Double_t)thisGDau->status();
 
-            theGDaughters.push_back(gen_dau_pdg[jj][kk]);
+            theGDaughters.push_back(gen_gdau_pdg[jj][kk]);
 
-            gen_dau_isPrompt[jj][kk]      = (Double_t)thisGDau->isPromptDecayed();
+            // gen_gdau_isPrompt[jj][kk]      = 0.0;//(Double_t)thisGDau->isPromptDecayed();
 
           }//gdaugher cycle
 
@@ -469,8 +469,8 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
         thisIsGood = (theDaughters.size()  == GoodDaughters_.size())  && thisIsGood;
         thisIsGood = (theGDaughters.size() == GoodGDaughters_.size()) && thisIsGood;
-        thisIsGood = (theDaughters.size()  == gdComparison.size())    && thisIsGood
-        thisIsGood = (theGDaughters.size() == gdComparison.size())    && thisIsGood
+        thisIsGood = (theDaughters.size()  == gdComparison.size())    && thisIsGood;
+        thisIsGood = (theGDaughters.size() == gdComparison.size())    && thisIsGood;
 
         std::cout << " >>>>>> " << i << " Particle : " << thePdg << std::endl;
         std::cout << " >>> no. daug  : " << ndaughter << std::endl;
