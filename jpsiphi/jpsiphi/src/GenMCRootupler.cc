@@ -153,7 +153,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
     for (int j = 0; j < MaxNumOfDaughters_; j++)
     dummyP4.push_back(zero);
 
-    gen_gda_p4.push_back(dummyP4);
+    gen_gdau_p4.push_back(dummyP4);
   }
 
   std::string name, var;
@@ -226,7 +226,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
     for (int j = 0; j < MaxNumOfDaughters_; j++)
     {
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
-      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
+      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gdau_p4[i][j]);
 
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pdg"; var = name + "/D";
