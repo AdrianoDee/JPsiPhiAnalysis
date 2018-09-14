@@ -378,7 +378,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
     for (size_t i=0; i<pruned->size(); i++)
     {
       bool thisIsGood;
-      const reco::Candidate *xcand = &(*pruned)[i];
+      const reco::GenParticle *xcand = &(*pruned)[i];
       int thePdg = xcand->pdgId();
 
       theDaughters.clear();
@@ -426,7 +426,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
           theDaughters.push_back(gen_dau_pdg[jj]);
 
-          gen_dau_isPrompt[jj]      = (Double_t)thisDau->isPromptDecayed();
+          gen_dau_isPrompt[jj]      = 0.0;//(Double_t)thisDau->isPromptDecayed();
           gen_dau_ndaughter[jj]     = (Double_t)thisDau->numberOfDaughters();
 
           ngdaughter += thisDau->numberOfDaughters();
