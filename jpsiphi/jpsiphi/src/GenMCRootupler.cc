@@ -443,7 +443,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
             gen_gdau_phi[jj][kk]    = (Double_t)thisGDau->phi();
             gen_gdau_mass[jj][kk]   = (Double_t)thisGDau->mass();
 
-            gen_gdau_p4[jj][kk].SetPtEtaPhiM(gen_gdau_pt[jj],gen_gdau_eta[jj],gen_gdau_phi[jj],gen_gdau_mass[jj]);
+            gen_gdau_p4[jj][kk].SetPtEtaPhiM(gen_gdau_pt[jj][kk],gen_gdau_eta[jj][kk],gen_gdau_phi[jj][kk],gen_gdau_mass[jj][kk]);
 
             gen_gdau_p[jj][kk]      = thisGDau->p();
 
