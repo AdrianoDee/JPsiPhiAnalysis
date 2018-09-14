@@ -188,75 +188,75 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
   for (int i = 0; i < MaxNumOfDaughters_; i++)
   {
     name = "gen_dau_" + std::to_string(i) + "_p4";
-    gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_dau_p4[jj]);
+    gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_dau_p4[i]);
 
 
     name = "gen_dau_" + std::to_string(i) + "_pdg"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_pdg[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_pdg[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_charge"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_charge[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_charge[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_status"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_status[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_status[i],var.c_str());
 
 
     name = "gen_dau_" + std::to_string(i) + "_pt"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_pt[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_pt[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_eta"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_eta[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_eta[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_phi"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_phi[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_phi[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_mass"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_mass[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_mass[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_p"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_p[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_p[i],var.c_str());
 
 
     name = "gen_dau_" + std::to_string(i) + "_isPrompt"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_isPrompt[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_isPrompt[i],var.c_str());
 
     name = "gen_dau_" + std::to_string(i) + "_ndaughter"; var = name + "/D";
-    gen_tree->Branch(name.c_str(),&gen_dau_ndaughter[jj],var.c_str());
+    gen_tree->Branch(name.c_str(),&gen_dau_ndaughter[i],var.c_str());
 
     for (int j = 0; j < MaxNumOfDaughters_; j++)
     {
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p4";
-      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[j][jj]);
+      gen_tree->Branch(name.c_str(), "TLorentzVector", &gen_gda_p4[i][j]);
 
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pdg"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_pdg[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_pdg[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_charge"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_charge[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_charge[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_status"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_status[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_status[i][j],var.c_str());
 
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_pt"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_pt[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_pt[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_eta"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_eta[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_eta[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_phi"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_phi[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_phi[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_m"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_mass[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_mass[i][j],var.c_str());
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_p[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_p[i][j],var.c_str());
 
 
       name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_isPrompt[j][jj],var.c_str());
+      gen_tree->Branch(name.c_str(),&gen_gdau_isPrompt[i][j],var.c_str());
 
     }
 
@@ -310,7 +310,7 @@ UInt_t GenMCRootupler::getTriggerBits(const edm::Event& iEvent ) {
     for (unsigned int i = 0; i < NTRIGGERS; i++) {
       for (int version = 1; version < 20; version++) {
         std::stringstream ss;
-        ss << HLTs_[jj] << "_v" << version;
+        ss << HLTs_[i] << "_v" << version;
         unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
         if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
           trigger += (1<<i);
@@ -373,12 +373,12 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
   if (pruned.isValid() )
   {
-    std::std::vector<int> theDaughters,theGDaughters;
+    std::vector<int> theDaughters,theGDaughters;
 
     for (size_t i=0; i<pruned->size(); i++)
     {
       bool thisIsGood;
-      const reco::Candidate *xcand = &(*pruned)[jj];
+      const reco::Candidate *xcand = &(*pruned)[i];
       int thePdg = xcand->pdgId();
 
       theDaughters.clear();
@@ -426,7 +426,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
           theDaughters.push_back(gen_dau_pdg[jj]);
 
-          gen_dau_isPrompt[jj]      = (Double_t)thisDau->isPrompt();
+          gen_dau_isPrompt[jj]      = (Double_t)thisDau->isPromptDecayed();
           gen_dau_ndaughter[jj]     = (Double_t)thisDau->numberOfDaughters();
 
           ngdaughter += thisDau->numberOfDaughters();
@@ -453,7 +453,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
             theGDaughters.push_back(gen_dau_pdg[jj][kk]);
 
-            gen_dau_isPrompt[jj][kk]      = (Double_t)thisGDau->isPrompt();
+            gen_dau_isPrompt[jj][kk]      = (Double_t)thisGDau->isPromptDecayed();
 
           }//gdaugher cycle
 
@@ -494,7 +494,7 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
         isGood = thisIsGood;
         std::cout << " >>> Is Good : " << thisIsGood << std::endl;
         std::cout << " >>> dau     : " << (theDaughters.size()  == GoodDaughters_.size()) << std::endl;
-        std::cout << " >>> gdau    : " << (theGDaughters.size() == GoodGDaughters_.size() << std::endl;
+        std::cout << " >>> gdau    : " << (theGDaughters.size() == GoodGDaughters_.size()) << std::endl;
         std::cout << " >>> dau in  : " << (theDaughters.size()  == gdComparison.size()) << std::endl;
         std::cout << " >>> gdau in : " << (theGDaughters.size() == gdComparison.size()) << std::endl;
       }
