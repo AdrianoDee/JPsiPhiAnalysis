@@ -50,6 +50,19 @@ par.register ('isLocal',
                                   VarParsing.varType.bool,
                                   "Is local?")
 
+par.register ('isDebug',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Debug for you,sir?")
+
+
+par.register ('isGen',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Is gen counting only?")
+
 par.register ('i',
                                   0,
                                   VarParsing.multiplicity.singleton,
@@ -61,6 +74,7 @@ par.register ('n',
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.int,
                                   "n")
+
 
 par.parseArguments()
 
@@ -108,7 +122,9 @@ if par.isLocal:
     input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
     print min((i+1)*size,len(filelist))
 
-
+if par.isGen:
+    filename = filename + "_genOnly_"
+    
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
@@ -132,7 +148,7 @@ process.source = cms.Source("PoolSource",
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TFileService = cms.Service("TFileService",
-        fileName = cms.string('rootuple-2018-dimuonditrak_five'+ filename  + '_' + str(i) +'.root'),
+        fileName = cms.string('rootuple-2018-fourmuons_'+ filename  + '_' + str(i) +'.root'),
 )
 
 kaonmass = 0.493677
@@ -397,5 +413,11 @@ if ismc:
     allsteps = genparting * triggering * dimunoing * tracking * rootupling
 else:
     allsteps = triggering * dimunoing * tracking * rootupling
+
+if par.isGen:
+    allsteps = genparting
+
+if par.isDebug:
+    allsteps = allsteps * process.dump
 
 process.p = cms.Path(allsteps)

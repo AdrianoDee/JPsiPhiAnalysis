@@ -119,6 +119,9 @@ if par.isLocal:
     input_file = filelist[min(i*size,len(filelist)):min((i+1)*size,len(filelist))]
     print min((i+1)*size,len(filelist))
 
+if par.isGen:
+    filename = filename + "_genOnly_"
+    
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
@@ -381,6 +384,15 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
 
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 
+process.genstep = cms.EDAnalyzer('GenMCRootupler',
+                      PdgIds          = cms.vint32(20443,10441,531),
+                      GoodDaughters   = cms.vint32(443,333),
+                      GoodGDaughters  = cms.vint32(13,-13,13,-13),
+                      MaxDaughters    = cms.uint32(4),
+                      TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
+                      primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+                       )
+
 triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence * process.unpackPatTriggers
 mcmatching = process.trackMatch * process.muonMatch
 jpsiing    = process.JPsi2MuMuPAT * process.JPsi2MuMuFilter
@@ -388,9 +400,12 @@ tracking   = process.PsiPhiProducer * process.FiveTracksProducer
 rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu
 
 if ismc:
-    allsteps = triggering * mcmatching * jpsiing * tracking * rootupling
+    allsteps = genparting * triggering * mcmatching * jpsiing * tracking * rootupling
 else:
     allsteps = triggering * jpsiing * tracking * rootupling
+
+if par.isGen:
+    allsteps = genparting
 
 if par.isDebug:
     allsteps = allsteps * process.dump
