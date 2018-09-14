@@ -171,6 +171,8 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
     gen_dau_pdg.push_back(0.0);
     gen_dau_status.push_back(-10.0);
     gen_dau_charge.push_back(-10.0);
+    gen_dau_ndaughter.push_back(-10.0);
+    gen_dau_isPrompt.push_back(-10.0);
 
     for (int j = 0; j < MaxNumOfDaughters_; j++)
       dummy.push_back(-100.0);
@@ -470,34 +472,34 @@ void GenMCRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup & 
 
         thisIsGood = (theDaughters.size()  == GoodDaughters_.size())  && thisIsGood;
         thisIsGood = (theGDaughters.size() == GoodGDaughters_.size()) && thisIsGood;
-        thisIsGood = (theDaughters.size()  == gdComparison.size())    && thisIsGood;
+        thisIsGood = (theDaughters.size()  == dComparison.size())     && thisIsGood;
         thisIsGood = (theGDaughters.size() == gdComparison.size())    && thisIsGood;
 
-        std::cout << " >>>>>> " << i << " Particle : " << thePdg << std::endl;
-        std::cout << " >>> no. daug  : " << ndaughter << std::endl;
-        std::cout << " >>> no. gdaug : " << ngdaughter << std::endl;
-        std::cout << " >>> status    : " << xcand->status() << std::endl;
-        std::cout << " >>> ancestor  : " << GetAncestor(xcand)->pdgId() << std::endl;
-        std::cout << " >>> Daughters : ";
-        for (size_t i = 0; i < theDaughters.size(); i++)  std::cout << theDaughters[i] << " - ";
-        std::cout << std::endl;
-        std::cout << " >>> GDaughters : ";
-        for (size_t i = 0; i < theGDaughters.size(); i++)  std::cout << theGDaughters[i] << " - ";
-        std::cout << std::endl;
-
-        std::cout << " >>> Good Daughters : ";
-        for (size_t i = 0; i < GoodDaughters_.size(); i++)  std::cout << GoodDaughters_[i] << " - ";
-        std::cout << std::endl;
-        std::cout << " >>> Good GDaughters : ";
-        for (size_t i = 0; i < GoodGDaughters_.size(); i++)  std::cout << GoodGDaughters_[i] << " - ";
-        std::cout << std::endl;
+        // std::cout << " >>>>>> " << i << " Particle : " << thePdg << std::endl;
+        // std::cout << " >>> no. daug  : " << ndaughter << std::endl;
+        // std::cout << " >>> no. gdaug : " << ngdaughter << std::endl;
+        // std::cout << " >>> status    : " << xcand->status() << std::endl;
+        // std::cout << " >>> ancestor  : " << GetAncestor(xcand)->pdgId() << std::endl;
+        // std::cout << " >>> Daughters : ";
+        // for (size_t i = 0; i < theDaughters.size(); i++)  std::cout << theDaughters[i] << " - ";
+        // std::cout << std::endl;
+        // std::cout << " >>> GDaughters : ";
+        // for (size_t i = 0; i < theGDaughters.size(); i++)  std::cout << theGDaughters[i] << " - ";
+        // std::cout << std::endl;
+        //
+        // std::cout << " >>> Good Daughters : ";
+        // for (size_t i = 0; i < GoodDaughters_.size(); i++)  std::cout << GoodDaughters_[i] << " - ";
+        // std::cout << std::endl;
+        // std::cout << " >>> Good GDaughters : ";
+        // for (size_t i = 0; i < GoodGDaughters_.size(); i++)  std::cout << GoodGDaughters_[i] << " - ";
+        // std::cout << std::endl;
 
         isGood = thisIsGood;
-        std::cout << " >>> Is Good : " << thisIsGood << std::endl;
-        std::cout << " >>> dau     : " << (theDaughters.size()  == GoodDaughters_.size()) << std::endl;
-        std::cout << " >>> gdau    : " << (theGDaughters.size() == GoodGDaughters_.size()) << std::endl;
-        std::cout << " >>> dau in  : " << (theDaughters.size()  == gdComparison.size()) << std::endl;
-        std::cout << " >>> gdau in : " << (theGDaughters.size() == gdComparison.size()) << std::endl;
+        // std::cout << " >>> Is Good : " << thisIsGood << std::endl;
+        // std::cout << " >>> dau     : " << (theDaughters.size()  == GoodDaughters_.size()) << std::endl;
+        // std::cout << " >>> gdau    : " << (theGDaughters.size() == GoodGDaughters_.size()) << std::endl;
+        // std::cout << " >>> dau in  : " << (theDaughters.size()  == gdComparison.size()) << std::endl;
+        // std::cout << " >>> gdau in : " << (theGDaughters.size() == gdComparison.size()) << std::endl;
       }
 
     }
