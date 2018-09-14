@@ -241,10 +241,10 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 
 process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
     src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
-    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    matched = cms.InputTag("packedGenParticles"),   # mc-truth particle collection
     mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
     checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
-    mcStatus = cms.vint32(1),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    mcStatus = cms.vint32(1,3,91),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
     maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
     maxDPtRel = cms.double(0.5),  # Minimum deltaPt/Pt for the match
     resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
@@ -253,10 +253,10 @@ process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pic
 
 process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
     src     = cms.InputTag("packedPFCandidates"), # RECO objects to match
-    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
+    matched = cms.InputTag("packedGenParticles"),   # mc-truth particle collection
     mcPdgId     = cms.vint32(321,211,13,2212), # one or more PDG ID (13 = muon); absolute values (see below)
     checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
-    mcStatus = cms.vint32(1,3),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
+    mcStatus = cms.vint32(1,3,91),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
     maxDeltaR = cms.double(0.5),  # Minimum deltaR for the match
     maxDPtRel = cms.double(0.75),  # Minimum deltaPt/Pt for the match
     resolveAmbiguities = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object

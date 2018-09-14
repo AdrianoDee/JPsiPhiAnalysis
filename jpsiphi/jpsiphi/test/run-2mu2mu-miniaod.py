@@ -374,9 +374,12 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           HLTs = hltpaths
                           )
 process.genstep = cms.EDAnalyzer('GenMCRootupler',
-                      PdgIds         = cms.vint32(20443,10441,531),
-                      MaxDaughters   = cms.uint32(4),
-                      TriggerResults = cms.InputTag("TriggerResults", "", "HLT")
+                      PdgIds          = cms.vint32(20443,10441,531),
+                      GoodDaughters   = cms.vint32(443,333),
+                      GoodGDaughters  = cms.vint32(13,-13,13,-13),
+                      MaxDaughters    = cms.uint32(4),
+                      TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
+                      primaryVertices = cms.InputTag("offlinePrimaryVertices"),
                        )
 
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')
