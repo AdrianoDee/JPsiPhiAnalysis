@@ -173,7 +173,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
     gen_dau_charge.push_back(-10.0);
 
     for (int j = 0; j < MaxNumOfDaughters_; j++)
-    dummy.push_back(-100.0);
+      dummy.push_back(-100.0);
 
     gen_gdau_pt.push_back(dummy);
     gen_gdau_eta.push_back(dummy);
@@ -182,6 +182,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
     gen_gdau_mass.push_back(dummy);
     gen_gdau_pdg.push_back(dummy);
     gen_gdau_status.push_back(dummy);
+    gen_gdau_charge.push_back(dummy);
 
   }
 
@@ -255,8 +256,8 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
       gen_tree->Branch(name.c_str(),&gen_gdau_p[i][j],var.c_str());
 
 
-      name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
-      gen_tree->Branch(name.c_str(),&gen_gdau_isPrompt[i][j],var.c_str());
+      // name = "gen_gdau_" + std::to_string(i) + "_" + std::to_string(j) + "_p"; var = name + "/D";
+      // gen_tree->Branch(name.c_str(),&gen_gdau_isPrompt[i][j],var.c_str());
 
     }
 
