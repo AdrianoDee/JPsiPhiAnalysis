@@ -55,6 +55,12 @@ par.register ('isDebug',
                                   VarParsing.varType.bool,
                                   "Debug for you,sir?")
 
+par.register ('isY',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Y for you,sir?")
+
 par.register ('kMass',
                                   0.493677,
                                   VarParsing.multiplicity.singleton,
@@ -121,7 +127,7 @@ if par.isLocal:
 
 if par.isGen:
     filename = filename + "_genOnly_"
-    
+
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
@@ -256,7 +262,7 @@ process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pic
 
 process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
     src     = cms.InputTag("packedPFCandidates"), # RECO objects to match
-    matched = cms.InputTag("packedGenParticles"),   # mc-truth particle collection
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
     mcPdgId     = cms.vint32(321,211,13,2212), # one or more PDG ID (13 = muon); absolute values (see below)
     checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
     mcStatus = cms.vint32(1,3,91),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
@@ -270,7 +276,7 @@ process.trackMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pi
 process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuon              = cms.InputTag('JPsi2MuMuPAT'),
     TrackMatcher        = cms.InputTag("trackMatch"),
-    PFCandidates        = cms.InputTag('packedPFCandidates'),
+    PFCandidates        = cms.InputTag('prunedGenParticles'),
     TrakPtCut           = cms.double(0.85),
     beamSpotTag         = cms.InputTag('offlineBeamSpot'),
     primaryVertexTag    = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -397,8 +403,12 @@ triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence 
 mcmatching = process.trackMatch * process.muonMatch
 jpsiing    = process.JPsi2MuMuPAT * process.JPsi2MuMuFilter
 tracking   = process.PsiPhiProducer * process.FiveTracksProducer
-rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu
-
+if par.isY:
+    tracking   = process.PsiPhiProducer
+    rootupling = process.rootuple * process.rootupleMuMu
+else:
+    tracking   = process.PsiPhiProducer * process.FiveTracksProducer
+    rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu
 if ismc:
     allsteps = genparting * triggering * mcmatching * jpsiing * tracking * rootupling
 else:
