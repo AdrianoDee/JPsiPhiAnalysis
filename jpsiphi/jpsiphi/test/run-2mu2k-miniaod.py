@@ -399,12 +399,13 @@ process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 process.genstep = cms.EDAnalyzer('GenMCRootupler',
                       PdgIds          = cms.vint32(20443,10441,531),
                       GoodDaughters   = cms.vint32(443,333),
-                      GoodGDaughters  = cms.vint32(13,-13,13,-13),
+                      GoodGDaughters  = cms.vint32(13,-13,321,-321),
                       MaxDaughters    = cms.uint32(4),
                       TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
                       primaryVertices = cms.InputTag("offlinePrimaryVertices"),
                        )
 
+genparting = process.genstep
 triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence * process.unpackPatTriggers
 mcmatching = process.trackMatch * process.muonMatch
 jpsiing    = process.JPsi2MuMuPAT * process.JPsi2MuMuFilter
