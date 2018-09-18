@@ -366,7 +366,7 @@ DiMuonProducerPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       pat::CompositeCandidate mumucand;
       vector<TransientVertex> pvs;
-      std::cout << "Debug  5" << std::endl;
+      // std::cout << "Debug  5" << std::endl;
       // ---- no explicit order defined ----
       if(m1.pt() > m2.pt())
       {
