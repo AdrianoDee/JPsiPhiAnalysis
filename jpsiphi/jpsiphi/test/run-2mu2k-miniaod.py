@@ -256,7 +256,7 @@ process.JPsi2MuMuFilter = cms.EDProducer('DiMuonFilter',
 
 process.muonMatch = cms.EDProducer("MCMatcher", # cut on deltaR, deltaPt/Pt; pick best by deltaR
     src     = cms.InputTag("slimmedMuonsWithTrigger"), # RECO objects to match
-    matched = cms.InputTag("packedGenParticles"),   # mc-truth particle collection
+    matched = cms.InputTag("prunedGenParticles"),   # mc-truth particle collection
     mcPdgId     = cms.vint32(13), # one or more PDG ID (13 = muon); absolute values (see below)
     checkCharge = cms.bool(True), # True = require RECO and MC objects to have the same charge
     mcStatus = cms.vint32(1,3,91),     # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
