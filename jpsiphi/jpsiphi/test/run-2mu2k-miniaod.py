@@ -67,6 +67,12 @@ par.register ('kMass',
                                   VarParsing.varType.bool,
                                   "KMass")
 
+par.register ('isGen',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Is gen counting only?")
+
 par.register ('i',
                                   0,
                                   VarParsing.multiplicity.singleton,
