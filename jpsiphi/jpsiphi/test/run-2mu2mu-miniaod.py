@@ -124,7 +124,7 @@ if par.isLocal:
 
 if par.isGen:
     filename = filename + "_genOnly_"
-    
+
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
@@ -158,15 +158,12 @@ process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
-#Phi
-'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05',
-#JPsi
-#'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-#'HLT_DoubleMu4_JpsiTrk_Displaced',
+'HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
 #'HLT_DoubleMu4_Jpsi_Displaced',
 #'HLT_DoubleMu4_3_Jpsi_Displaced',
 #'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
 #'HLT_Dimuon25_Jpsi',
+#'HLT_Dimuon0_Jpsi3p5_Muon2'
 ]
 
 hltList = charmoniumHLT #muoniaHLT
