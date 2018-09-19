@@ -119,7 +119,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
 
   gen_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
-  gen_tree->Branch("trigger",  &trigger,  "trigger/D");
+  gen_tree->Branch("trigger",  &trigger,  "trigger/i");
   gen_tree->Branch("gen_p4", "TLorentzVector", &gen_p4);
 
   gen_tree->Branch("status",    &status,  "status/D");
