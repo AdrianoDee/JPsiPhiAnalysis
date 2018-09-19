@@ -228,7 +228,7 @@ config.General.requestName      = 'miniaod_4mu_' + dataset[0]+'_'+dataset[1]+'_'
 config.General.transferLogs     = False
 
 config.section_('JobType')
-config.JobType.psetName         = 'run-4mu-miniaod.py'
+config.JobType.psetName         = 'run-2mu2mu-miniaod.py'
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
