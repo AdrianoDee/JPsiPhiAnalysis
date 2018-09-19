@@ -133,7 +133,7 @@ if par.isLocal:
                  "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10",
                  "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10" }
 
-    par.gtag = gtags
+    par.gtag = gtags[filename]
     n= par.n
 
     filelist = fileLists[filename] #bbbar_soft_list#bbbar_file_list
