@@ -73,9 +73,10 @@ private:
   std::vector<std::string>  HLTs_;
 
 
-  Double_t   run, isGood, event, lumiblock, ndimuon, nmuons, trigger, tMatch;
+  UInt_t   run, event, lumiblock, trigger;
   Double_t charge, pdgId, pt, eta, phi, p;
   Double_t mass, status, isPrompt;
+  Double_t isGood;
 
   std::vector < TLorentzVector > gen_dau_p4, dummyP4;
   std::vector < std::vector < TLorentzVector > > gen_gdau_p4;
@@ -112,9 +113,9 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
   edm::Service < TFileService > fs;
   gen_tree = fs->make < TTree > ("genTree", "Tree of Gen Particles");
 
-  gen_tree->Branch("run",      &run,      "run/D");
-  gen_tree->Branch("event",    &event,    "event/D");
-  gen_tree->Branch("lumiblock",&lumiblock,"lumiblock/D");
+  gen_tree->Branch("run",      &run,      "run/i");
+  gen_tree->Branch("event",    &event,    "event/i");
+  gen_tree->Branch("lumiblock",&lumiblock,"lumiblock/i");
 
   gen_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
 
