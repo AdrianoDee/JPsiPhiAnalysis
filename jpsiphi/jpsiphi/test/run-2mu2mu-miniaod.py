@@ -393,6 +393,7 @@ process.genstep = cms.EDAnalyzer('GenMCRootupler',
                       MaxDaughters    = cms.uint32(4),
                       TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
                       primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+                      HLTs = hltpaths
                        )
 
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')

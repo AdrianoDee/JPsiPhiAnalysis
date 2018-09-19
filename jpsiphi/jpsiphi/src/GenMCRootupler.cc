@@ -108,7 +108,8 @@ GoodDaughters_(iConfig.getParameter<std::vector<int>>("GoodDaughters")),
 GoodGDaughters_(iConfig.getParameter<std::vector<int>>("GoodGDaughters")),
 MaxNumOfDaughters_(iConfig.existsAs<int>("MaxDaughters") ? iConfig.getParameter<double>("MaxDaughters") : 4),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices")))
+primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
 {
   edm::Service < TFileService > fs;
   gen_tree = fs->make < TTree > ("genTree", "Tree of Gen Particles");
