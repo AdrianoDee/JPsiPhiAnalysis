@@ -53,7 +53,7 @@ void FiveTracks::SlaveBegin(TTree * /*tree*/)
 
   TString option = GetOption();
 
-  std::string outputString = "2mu2k_five_tree.root";
+  std::string outputString = "2mu3trk_five_tree.root";
   OutFile = new TProofOutputFile( outputString.data() );
   fOut = OutFile->OpenFile("RECREATE");
   if (!(fOut=OutFile->OpenFile("RECREATE")))
@@ -318,7 +318,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
 
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
 
-  test = test && (*vProb_ppk> 0.01 || *vProb_kkk > 0.01 || *vProb_ppp > 0.01 || *vProb_kpp > 0.01 || *vProb_pkp > 0.01);
+  test = test && (*vProb_ppk> 0.001 || *vProb_kkk > 0.001 || *vProb_ppp > 0.001 || *vProb_kpp > 0.001 || *vProb_pkp > 0.001);
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //
