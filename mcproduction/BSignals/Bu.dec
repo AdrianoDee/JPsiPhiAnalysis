@@ -10,7 +10,10 @@ Alias	   MyJpsi      J/psi
 ChargeConj MyJpsi      MyJpsi
 #
 Decay MyB+
-  1.000    MyPsi      K+             SVS;
+  0.25    MyPsi      K+             SVS;
+  0.25    MyJpsi     K+     pi+    pi-
+  0.25    MyJpsi      
+  0.25    MyPsi      pi+
 Enddecay
 CDecay MyB-
 #
