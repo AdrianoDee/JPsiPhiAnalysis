@@ -316,8 +316,6 @@ Bool_t FiveTracks::Process(Long64_t entry)
 
   bool test = true;
 
-  test = test && ((*highMuon_pt) >= 1.0) && ((*highMuon_pt) >= 1.0);
-
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
@@ -332,9 +330,6 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trigger =   (Float_t)(*trigger);
     out_noFiveCandidates =  (Float_t)(*noFiveCandidates);
     out_dimuonditrk_id =    (Float_t)(*dimuonditrk_id);
-    out_dimuonditrk_ =      (Float_t)(*dimuonditrk_);
-    out_ditrak_ =   (Float_t)(*ditrak_);
-    out_dimuon_ =   (Float_t)(*dimuon_);
     out_dimuonditrk_m =     (Float_t)(*dimuonditrk_m);
     out_dimuonditrk_pt =    (Float_t)(*dimuonditrk_pt);
     out_dimuonditrk_eta =   (Float_t)(*dimuonditrk_eta);
@@ -447,17 +442,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trackOne_m_kkk =    (Float_t)(*trackOne_m_kkk);
     out_trackTwo_m_kkk =    (Float_t)(*trackTwo_m_kkk);
     out_trackThree_m_kkk =  (Float_t)(*trackThree_m_kkk);
-    out_five__kkk =         (Float_t)(*five__kkk);
-    out_dimuonDiTrkOne__kkk =       (Float_t)(*dimuonDiTrkOne__kkk);
-    out_dimuonDiTrkTwo__kkk =       (Float_t)(*dimuonDiTrkTwo__kkk);
-    out_dimuonDiTrkThree__kkk =     (Float_t)(*dimuonDiTrkThree__kkk);
-    out_ditrakOne__kkk =    (Float_t)(*ditrakOne__kkk);
-    out_ditrakTwo__kkk =    (Float_t)(*ditrakTwo__kkk);
-    out_ditrakThree__kkk =  (Float_t)(*ditrakThree__kkk);
-    out_psiPrimeSame__kkk =         (Float_t)(*psiPrimeSame__kkk);
-    out_psiPrimeMixed__kkk =        (Float_t)(*psiPrimeMixed__kkk);
-    out_psiPrimeSame_ditrak__kkk =  (Float_t)(*psiPrimeSame_ditrak__kkk);
-    out_psiPrimeMixed_ditrak__kkk =         (Float_t)(*psiPrimeMixed_ditrak__kkk);
+
     out_triTrak_m_kkk =     (Float_t)(*triTrak_m_kkk);
     out_mass_ppk =  (Float_t)(*mass_ppk);
     out_mass_ref_ppk =      (Float_t)(*mass_ref_ppk);
@@ -482,17 +467,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trackOne_m_ppk =    (Float_t)(*trackOne_m_ppk);
     out_trackTwo_m_ppk =    (Float_t)(*trackTwo_m_ppk);
     out_trackThree_m_ppk =  (Float_t)(*trackThree_m_ppk);
-    out_five__ppk =         (Float_t)(*five__ppk);
-    out_dimuonDiTrkOne__ppk =       (Float_t)(*dimuonDiTrkOne__ppk);
-    out_dimuonDiTrkTwo__ppk =       (Float_t)(*dimuonDiTrkTwo__ppk);
-    out_dimuonDiTrkThree__ppk =     (Float_t)(*dimuonDiTrkThree__ppk);
-    out_ditrakOne__ppk =    (Float_t)(*ditrakOne__ppk);
-    out_ditrakTwo__ppk =    (Float_t)(*ditrakTwo__ppk);
-    out_ditrakThree__ppk =  (Float_t)(*ditrakThree__ppk);
-    out_psiPrimeSame__ppk =         (Float_t)(*psiPrimeSame__ppk);
-    out_psiPrimeMixed__ppk =        (Float_t)(*psiPrimeMixed__ppk);
-    out_psiPrimeSame_ditrak__ppk =  (Float_t)(*psiPrimeSame_ditrak__ppk);
-    out_psiPrimeMixed_ditrak__ppk =         (Float_t)(*psiPrimeMixed_ditrak__ppk);
+
     out_triTrak_m_ppk =     (Float_t)(*triTrak_m_ppk);
     out_mass_kpp =  (Float_t)(*mass_kpp);
     out_mass_ref_kpp =      (Float_t)(*mass_ref_kpp);
@@ -517,17 +492,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trackOne_m_kpp =    (Float_t)(*trackOne_m_kpp);
     out_trackTwo_m_kpp =    (Float_t)(*trackTwo_m_kpp);
     out_trackThree_m_kpp =  (Float_t)(*trackThree_m_kpp);
-    out_five__kpp =         (Float_t)(*five__kpp);
-    out_dimuonDiTrkOne__kpp =       (Float_t)(*dimuonDiTrkOne__kpp);
-    out_dimuonDiTrkTwo__kpp =       (Float_t)(*dimuonDiTrkTwo__kpp);
-    out_dimuonDiTrkThree__kpp =     (Float_t)(*dimuonDiTrkThree__kpp);
-    out_ditrakOne__kpp =    (Float_t)(*ditrakOne__kpp);
-    out_ditrakTwo__kpp =    (Float_t)(*ditrakTwo__kpp);
-    out_ditrakThree__kpp =  (Float_t)(*ditrakThree__kpp);
-    out_psiPrimeSame__kpp =         (Float_t)(*psiPrimeSame__kpp);
-    out_psiPrimeMixed__kpp =        (Float_t)(*psiPrimeMixed__kpp);
-    out_psiPrimeSame_ditrak__kpp =  (Float_t)(*psiPrimeSame_ditrak__kpp);
-    out_psiPrimeMixed_ditrak__kpp =         (Float_t)(*psiPrimeMixed_ditrak__kpp);
+
     out_triTrak_m_kpp =     (Float_t)(*triTrak_m_kpp);
     out_mass_pkp =  (Float_t)(*mass_pkp);
     out_mass_ref_pkp =      (Float_t)(*mass_ref_pkp);
@@ -552,17 +517,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trackOne_m_pkp =    (Float_t)(*trackOne_m_pkp);
     out_trackTwo_m_pkp =    (Float_t)(*trackTwo_m_pkp);
     out_trackThree_m_pkp =  (Float_t)(*trackThree_m_pkp);
-    out_five__pkp =         (Float_t)(*five__pkp);
-    out_dimuonDiTrkOne__pkp =       (Float_t)(*dimuonDiTrkOne__pkp);
-    out_dimuonDiTrkTwo__pkp =       (Float_t)(*dimuonDiTrkTwo__pkp);
-    out_dimuonDiTrkThree__pkp =     (Float_t)(*dimuonDiTrkThree__pkp);
-    out_ditrakOne__pkp =    (Float_t)(*ditrakOne__pkp);
-    out_ditrakTwo__pkp =    (Float_t)(*ditrakTwo__pkp);
-    out_ditrakThree__pkp =  (Float_t)(*ditrakThree__pkp);
-    out_psiPrimeSame__pkp =         (Float_t)(*psiPrimeSame__pkp);
-    out_psiPrimeMixed__pkp =        (Float_t)(*psiPrimeMixed__pkp);
-    out_psiPrimeSame_ditrak__pkp =  (Float_t)(*psiPrimeSame_ditrak__pkp);
-    out_psiPrimeMixed_ditrak__pkp =         (Float_t)(*psiPrimeMixed_ditrak__pkp);
+
     out_triTrak_m_pkp =     (Float_t)(*triTrak_m_pkp);
     out_mass_ppp =  (Float_t)(*mass_ppp);
     out_mass_ref_ppp =      (Float_t)(*mass_ref_ppp);
@@ -587,18 +542,6 @@ Bool_t FiveTracks::Process(Long64_t entry)
     out_trackOne_m_ppp =    (Float_t)(*trackOne_m_ppp);
     out_trackTwo_m_ppp =    (Float_t)(*trackTwo_m_ppp);
     out_trackThree_m_ppp =  (Float_t)(*trackThree_m_ppp);
-    out_five__ppp =         (Float_t)(*five__ppp);
-    out_dimuonDiTrkOne__ppp =       (Float_t)(*dimuonDiTrkOne__ppp);
-    out_dimuonDiTrkTwo__ppp =       (Float_t)(*dimuonDiTrkTwo__ppp);
-    out_dimuonDiTrkThree__ppp =     (Float_t)(*dimuonDiTrkThree__ppp);
-    out_ditrakOne__ppp =    (Float_t)(*ditrakOne__ppp);
-    out_ditrakTwo__ppp =    (Float_t)(*ditrakTwo__ppp);
-    out_ditrakThree__ppp =  (Float_t)(*ditrakThree__ppp);
-    out_psiPrimeSame__ppp =         (Float_t)(*psiPrimeSame__ppp);
-    out_psiPrimeMixed__ppp =        (Float_t)(*psiPrimeMixed__ppp);
-    out_psiPrimeSame_ditrak__ppp =  (Float_t)(*psiPrimeSame_ditrak__ppp);
-    out_psiPrimeMixed_ditrak__ppp =         (Float_t)(*psiPrimeMixed_ditrak__ppp);
-    out_triTrak_m_ppp =     (Float_t)(*triTrak_m_ppp);
 
 
     outTree->Fill();
