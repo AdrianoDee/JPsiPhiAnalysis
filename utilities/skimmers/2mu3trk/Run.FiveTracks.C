@@ -64,7 +64,7 @@
 
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018C-PromptReco-v3_MINIAOD___20180913_014624/180912_234632/0000/rootuple-2018-dimuonditrak_fivedataC2018_3_0_207.root");
 
-  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2trk/FiveTracks";
+  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu3trk/FiveTracks";
   TProof *p = TProof::Open("workers=5"); // 12 workers for qsub
   //gProofDebugMask = TProofDebug::kAll;
   //gProofDebugLevel = 5;

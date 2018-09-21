@@ -299,6 +299,9 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
   test = test && ((*highMuon_pt) >= 1.0) && ((*highMuon_pt) >= 1.0);
 
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
+
+  test = test && (*dimuonditrk_vProb> 0.005);
+  
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //
