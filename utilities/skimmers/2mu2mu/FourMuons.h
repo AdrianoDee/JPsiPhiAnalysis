@@ -300,6 +300,59 @@ public :
    TTreeReaderValue<Double_t> isBestCandidate = {fReader, "isBestCandidate"};
 
 
+   Float_t out_run, out_event, out_numPrimaryVertices, out_trigger, out_noXCandidates;
+Float_t out_jpsi_triggerMatch, out_phi_triggerMatch, out_mHighJPsiMatch;
+Float_t out_mLowJPsiMatch, out_mHighPhiMatch, out_mLowPhiMatch, out_doubledimuon_charge, out_doubledimuon_m;
+Float_t out_doubledimuon_m_rf, out_doubledimuon_m_rf_c, out_doubledimuon_m_rf_d_c, out_doubledimuon_p, out_doubledimuon_pt;
+Float_t out_doubledimuon_e, out_doubledimuon_eta, out_doubledimuon_theta, out_doubledimuon_y, out_doubledimuon_dxy;
+Float_t out_doubledimuon_dxyErr, out_doubledimuon_dz, out_doubledimuon_dzErr, out_doubledimuon_vProb, out_doubledimuon_vChi2;
+Float_t out_doubledimuon_nDof, out_doubledimuon_rf_vProb, out_doubledimuon_rf_nDof, out_doubledimuon_rf_c_vProb, out_doubledimuon_rf_c_vChi2;
+Float_t out_doubledimuon_rf_c_nDof, out_doubledimuon_vx, out_doubledimuon_vy, out_doubledimuon_vz, out_pv_x;
+Float_t out_pv_y, out_pv_z, out_doubledimuon_cosAlpha, out_doubledimuon_cosAlpha3D, out_doubledimuon_ctauPV;
+Float_t out_doubledimuon_ctauErrPV, out_doubledimuon_lxy, out_doubledimuon_lxyErr, out_doubledimuon_lxyz, out_doubledimuon_lxyzErr;
+Float_t out_doubledimuon_rf_cosAlpha, out_doubledimuon_rf_ctauPV, out_doubledimuon_rf_ctauErrPV, out_doubledimuon_rf_lxy, out_doubledimuon_rf_lxyErr;
+Float_t out_doubledimuon_rf_lxyz, out_doubledimuon_rf_lxyzErr, out_doubledimuon_rf_c_cosAlpha, out_doubledimuon_rf_c_ctauPV, out_doubledimuon_rf_c_ctauErrPV;
+Float_t out_doubledimuon_rf_c_lxy, out_doubledimuon_rf_c_lxyErr, out_doubledimuon_rf_c_lxyz, out_doubledimuon_rf_c_lxyzErr, out_doubledimuon_dca_mp1mp2;
+Float_t out_doubledimuon_dca_mp1mj1, out_doubledimuon_dca_mp1mj2, out_doubledimuon_dca_mp2mj1, out_doubledimuon_dca_mp2mj2, out_doubledimuon_dca_mj1mj2;
+Float_t out_doubledimuon_cosAlphaDZ, out_doubledimuon_cosAlpha3DDZ, out_doubledimuon_ctauPVDZ, out_doubledimuon_ctauErrPVDZ, out_doubledimuon_lxyDZ;
+Float_t out_doubledimuon_lxyErrDZ, out_doubledimuon_lxyzDZ, out_doubledimuon_lxyzErrDZ, out_doubledimuon_cosAlphaBS, out_doubledimuon_cosAlpha3DBS;
+Float_t out_doubledimuon_ctauPVBS, out_doubledimuon_ctauErrPVBS, out_doubledimuon_lxyBS, out_doubledimuon_lxyErrBS, out_doubledimuon_lxyzBS;
+Float_t out_doubledimuon_lxyzErrBS, out_mHighPhi_p, out_mLowPhi_p, out_mHighJPsi_p, out_mLowJPsi_p;
+Float_t out_mHighPhi_pt, out_mLowPhi_pt, out_mHighJPsi_pt, out_mLowJPsi_pt, out_mHighPhi_ptErr;
+Float_t out_mLowPhi_ptErr, out_mHighJPsi_ptErr, out_mLowJPsi_ptErr, out_mHighJPsi_eta, out_mLowJPsi_eta;
+Float_t out_mHighPhi_eta, out_mLowPhi_eta, out_mHighJPsi_etaErr, out_mLowJPsi_etaErr, out_mHighPhi_etaErr;
+Float_t out_mLowPhi_etaErr, out_mHighJPsi_phi, out_mLowJPsi_phi, out_mHighPhi_phi, out_mLowPhi_phi;
+Float_t out_mHighJPsi_phiErr, out_mLowJPsi_phiErr, out_mHighPhi_phiErr, out_mLowPhi_phiErr, out_mHighJPsi_theta;
+Float_t out_mLowJPsi_theta, out_mHighPhi_theta, out_mLowPhi_theta, out_mHighJPsi_thetaErr, out_mLowJPsi_thetaErr;
+Float_t out_mHighPhi_thetaErr, out_mLowPhi_thetaErr, out_mHighJPsi_lambda, out_mLowJPsi_lambda, out_mHighPhi_lambda;
+Float_t out_mLowPhi_lambda, out_mHighJPsi_lambdaErr, out_mLowJPsi_lambdaErr, out_mHighPhi_lambdaErr, out_mLowPhi_lambdaErr;
+Float_t out_mLowPhi_dxy, out_mLowPhi_dxyErr, out_mLowPhi_dz, out_mLowPhi_dzErr, out_mHighPhi_dxy;
+Float_t out_mHighPhi_dxyErr, out_mHighPhi_dz, out_mHighPhi_dzErr, out_mHighJPsi_dxy, out_mHighJPsi_dxyErr;
+Float_t out_mHighJPsi_dz, out_mHighJPsi_dzErr, out_mLowJPsi_dxy, out_mLowJPsi_dxyErr, out_mLowJPsi_dz;
+Float_t out_mLowJPsi_dzErr, out_mHighJPsi_NPixelHits, out_mHighJPsi_NStripHits, out_mHighJPsi_NTrackhits, out_mHighJPsi_NBPixHits;
+Float_t out_mHighJPsi_NPixLayers, out_mHighJPsi_NTraLayers, out_mHighJPsi_NStrLayers, out_mHighJPsi_NBPixLayers, out_mLowJPsi_NPixelHits;
+Float_t out_mLowJPsi_NStripHits, out_mLowJPsi_NTrackhits, out_mLowJPsi_NBPixHits, out_mLowJPsi_NPixLayers, out_mLowJPsi_NTraLayers;
+Float_t out_mLowJPsi_NStrLayers, out_mLowJPsi_NBPixLayers, out_mHighPhi_NPixelHits, out_mHighPhi_NStripHits, out_mHighPhi_NTrackhits;
+Float_t out_mHighPhi_NBPixHits, out_mHighPhi_NPixLayers, out_mHighPhi_NTraLayers, out_mHighPhi_NStrLayers, out_mHighPhi_NBPixLayers;
+Float_t out_mLowPhi_NPixelHits, out_mLowPhi_NStripHits, out_mLowPhi_NTrackhits, out_mLowPhi_NBPixHits, out_mLowPhi_NPixLayers;
+Float_t out_mLowPhi_NTraLayers, out_mLowPhi_NStrLayers, out_mLowPhi_NBPixLayers, out_mHighJPsi_isLoose, out_mHighJPsi_isSoft;
+Float_t out_mHighJPsi_isMedium, out_mHighJPsi_isHighPt, out_mLowJPsi_isLoose, out_mLowJPsi_isSoft, out_mLowJPsi_isMedium;
+Float_t out_mLowJPsi_isHighPt, out_mHighPhi_isLoose, out_mHighPhi_isSoft, out_mHighPhi_isMedium, out_mHighPhi_isHighPt;
+Float_t out_mLowPhi_isLoose, out_mLowPhi_isSoft, out_mLowPhi_isMedium, out_mLowPhi_isHighPt, out_mHighJPsi_isTracker;
+Float_t out_mHighJPsi_isGlobal, out_mLowJPsi_isTracker, out_mLowJPsi_isGlobal, out_mHighPhi_isTracker, out_mHighPhi_isGlobal;
+Float_t out_mLowPhi_isTracker, out_mLowPhi_isGlobal, out_mHighJPsi_type, out_mLowJPsi_type, out_mHighPhi_type;
+Float_t out_mLowPhi_type, out_jpsi_m, out_jpsi_m_rf, out_jpsi_m_rf_c, out_jpsi_m_rf_d_c;
+Float_t out_jpsi_p, out_jpsi_pt, out_jpsi_eta, out_jpsi_theta, out_jpsi_y;
+Float_t out_jpsi_e, out_jpsi_dxy, out_jpsi_dxyErr, out_jpsi_dz, out_jpsi_dzErr;
+Float_t out_jpsi_vProb, out_jpsi_vChi2, out_jpsi_DCA, out_jpsi_ctauPV, out_jpsi_ctauErrPV;
+Float_t out_jpsi_cosAlpha, out_jpsi_lxy, out_jpsi_lxyz, out_jpsi_lxyErr, out_jpsi_lxyzErr;
+Float_t out_jpsi_cosAlpha3D, out_phi_m, out_phi_m_rf, out_phi_m_rf_c, out_phi_m_rf_d_c;
+Float_t out_phi_p, out_phi_pt, out_phi_eta, out_phi_theta, out_phi_y;
+Float_t out_phi_e, out_phi_dxy, out_phi_dxyErr, out_phi_dz, out_phi_dzErr;
+Float_t out_phi_vProb, out_phi_vChi2, out_phi_DCA, out_phi_ctauPV, out_phi_ctauErrPV;
+Float_t out_phi_cosAlpha, out_phi_lxy, out_phi_lxyz, out_phi_lxyErr, out_phi_lxyzErr;
+Float_t out_phi_cosAlpha3D, out_isBestCandidate;
+
    FourMuons(TTree * /*tree*/ =0) { }
    virtual ~FourMuons() { }
    virtual Int_t   Version() const { return 2; }
