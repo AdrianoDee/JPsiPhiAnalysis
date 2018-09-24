@@ -23,7 +23,7 @@ sed -i -e '$ s/, $/;/g' vars.txt #replace , at the end of file with ;
 #Output branches
 sed -i -e 's/^/outTree->Branch("/g' first.txt && sed -i -e 's/$/", /g' first.txt
 sed -i -e 's/^/\&out_/g' mid.txt && sed -i -e 's/$/, /g' mid.txt
-sed -i -e 's/^/\"/g' last.txt && sed -i -e 's/$/\");/g' last.txt
+sed -i -e 's/^/\"/g' last.txt && sed -i -e 's/$/\");/g' last.txt  
 
 paste first.txt mid.txt last.txt > branches.txt
 
