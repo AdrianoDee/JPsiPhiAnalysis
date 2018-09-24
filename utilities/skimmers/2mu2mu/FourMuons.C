@@ -354,7 +354,7 @@ Bool_t FourMuons::Process(Long64_t entry)
 
   test = test && (*mHighJPsiMatch>0.0) && (*mLowJPsiMatch>0.0);
 
-  test = test && (*out_doubledimuon_vProb> 0.0005);
+  test = test && (*doubledimuon_vProb> 0.0005);
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //
