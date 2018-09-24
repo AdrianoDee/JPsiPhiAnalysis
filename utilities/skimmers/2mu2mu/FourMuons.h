@@ -430,3 +430,4 @@ Bool_t FourMuons::Notify()
 
    return kTRUE;
 }
+#endif
