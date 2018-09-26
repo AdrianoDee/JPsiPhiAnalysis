@@ -1,0 +1,10 @@
+<tool name="cuda-stubs" version="9.2.88-gnimlf">
+  <info url="https://docs.nvidia.com/cuda/index.html"/>
+  <lib name="cuda"/>
+  <client>
+    <environment name="CUDA_STUBS_BASE" default="/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/cuda/9.2.88-gnimlf"/>
+    <environment name="LIBDIR"          default="$CUDA_STUBS_BASE/lib64/stubs"/>
+    <environment name="INCLUDE"         default="$CUDA_STUBS_BASE/include"/>
+  </client>
+  <flags SKIP_TOOL_SYMLINKS="1"/>
+</tool>

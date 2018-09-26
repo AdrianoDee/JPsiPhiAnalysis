@@ -1,0 +1,9 @@
+<tool name="tinyxml" version="2.5.3-giojec3">
+  <info url="https://sourceforge.net/projects/tinyxml/"/>
+   <lib name="tinyxml"/>
+  <client>
+    <environment name="TINYXML_BASE" default="/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/tinyxml/2.5.3-giojec3"/>
+    <environment name="LIBDIR" default="$TINYXML_BASE/lib"/>
+    <environment name="INCLUDE" default="$TINYXML_BASE/include"/>
+  </client>  
+</tool>

@@ -1,0 +1,7 @@
+<tool name="py2-root_numpy" version="4.4.0-giojec2">
+  <info url="https://github.com/rootpy/root_numpy"/>
+  <client>
+    <environment name="PY2_ROOT_NUMPY" default="/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/py2-root_numpy/4.4.0-giojec2"/>
+    <runtime name="PYTHONPATH" value="$PY2_ROOT_NUMPY/lib/python2.7/site-packages" type="path"/>
+  </client>
+</tool>

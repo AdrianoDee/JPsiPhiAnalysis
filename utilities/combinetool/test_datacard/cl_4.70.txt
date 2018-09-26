@@ -1,0 +1,15 @@
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 124.1320
+Expected  2.5%: r < 20.4531
+Expected 16.0%: r < 27.5027
+Expected 50.0%: r < 38.5000
+Expected 84.0%: r < 54.6136
+Expected 97.5%: r < 74.6201
+
+Done in 0.00 min (cpu), 0.01 min (real)

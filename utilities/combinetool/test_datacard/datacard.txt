@@ -1,0 +1,21 @@
+# Simple parametric shape based on a RooChebyChev background with freely floating normalisation and a RooVoigtian signal model.
+# To run, make sure to add the option `-m 30` since the MH parameter is contained in the input workspace
+
+imax 1
+jmax 1
+kmax *
+---------------
+shapes * * test_datacard.root w:$PROCESS
+---------------
+bin bin1
+observation 16845 
+------------------------------
+bin          bin1       bin1
+process      sig        bkg
+process      0          1
+rate         2.853      14263
+--------------------------------
+lumi    lnN  1.1       1.0
+sigma param 0.03699 0.000919
+alpha param -2.5891 0.03329
+
