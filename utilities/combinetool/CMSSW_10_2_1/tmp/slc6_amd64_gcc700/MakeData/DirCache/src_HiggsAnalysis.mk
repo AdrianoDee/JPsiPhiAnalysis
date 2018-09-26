@@ -1,2 +1,0 @@
-ALL_SUBSYSTEMS+=HiggsAnalysis
-subdirs_src_HiggsAnalysis = src_HiggsAnalysis_CombinedLimit

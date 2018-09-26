@@ -65,17 +65,7 @@ public :
    TTreeReaderValue<Double_t> trigger = {fReader, "trigger"};
    TTreeReaderValue<Double_t> noXCandidates = {fReader, "noXCandidates"};
    TTreeReaderValue<TLorentzVector> doubledimuon_p4 = {fReader, "doubledimuon_p4"};
-   TTreeReaderValue<TLorentzVector> phi_p4 = {fReader, "phi_p4"};
-   TTreeReaderValue<TLorentzVector> jpsi_p4 = {fReader, "jpsi_p4"};
-   TTreeReaderValue<TLorentzVector> mLowPhi_p4 = {fReader, "mLowPhi_p4"};
-   TTreeReaderValue<TLorentzVector> mLowJPsi_p4 = {fReader, "mLowJPsi_p4"};
-   TTreeReaderValue<TLorentzVector> mHighJPsi_p4 = {fReader, "mHighJPsi_p4"};
-   TTreeReaderValue<TLorentzVector> doubledimuon_rf_p4 = {fReader, "doubledimuon_rf_p4"};
-   TTreeReaderValue<TLorentzVector> phi_rf_p4 = {fReader, "phi_rf_p4"};
-   TTreeReaderValue<TLorentzVector> jpsi_rf_p4 = {fReader, "jpsi_rf_p4"};
-   TTreeReaderValue<TLorentzVector> mLowPhi_rf_p4 = {fReader, "mLowPhi_rf_p4"};
-   TTreeReaderValue<TLorentzVector> mLowJPsi_rf_p4 = {fReader, "mLowJPsi_rf_p4"};
-   TTreeReaderValue<TLorentzVector> mHighJPsi_rf_p4 = {fReader, "mHighJPsi_rf_p4"};
+
    TTreeReaderValue<Double_t> jpsi_triggerMatch = {fReader, "jpsi_triggerMatch"};
    TTreeReaderValue<Double_t> phi_triggerMatch = {fReader, "phi_triggerMatch"};
    TTreeReaderValue<Double_t> mHighJPsiMatch = {fReader, "mHighJPsiMatch"};

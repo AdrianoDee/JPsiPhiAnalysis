@@ -27,9 +27,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--path', type=str, default="test.h5")
 args = parser.parse_args()
 
-x_min = b_min
-x_max = b_max
-x_mass = b_mass
+x_min = 4.5
+x_max = 5.5
+x_mass = 5.35
 
 data = pd.read_hdf(args.path)
 
@@ -67,7 +67,7 @@ sig = RooAddPdf("sig","g+g",sig_1,sig_2,gFrac)
 tot = RooAddPdf("tot","g+cheb",RooArgList(sig,sig_3,bkg),RooArgList(sFrac,bumpFrac))
 
 h1 = TH1F("hist","hist",00, 4.5,5.75)
-map(h1.Fill, spectrum)
+map(h1.Fill, data["mass"].values)
 
 masslist = RooArgList(mass)
 dh = RooDataHist("dh","dh",masslist,h1)
