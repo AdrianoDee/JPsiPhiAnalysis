@@ -602,9 +602,12 @@ if(false)
     out_phi_lxyzErr =       (Float_t)(*phi_lxyzErr);
     out_phi_cosAlpha3D =    (Float_t)(*phi_cosAlpha3D);
     out_isBestCandidate =   (Float_t)(*isBestCandidate);
+
+    outTree->Fill();
+    
   }
 
-  outTree->Fill();
+
 
    return kTRUE;
 }

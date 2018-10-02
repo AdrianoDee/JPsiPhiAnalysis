@@ -388,10 +388,10 @@ Float_t out_phi_cosAlpha3D, out_isBestCandidate;
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(FourMuons,0);
-
    TProofOutputFile *OutFile;
    TFile            *fOut;
+   
+   ClassDef(FourMuons,0);
 
 };
 
