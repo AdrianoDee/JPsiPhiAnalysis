@@ -14,7 +14,6 @@ from root_pandas import read_root, to_root
 
 import matplotlib
 from matplotlib import pyplot as plt
-%matplotlib inline
 
 from ROOT import TMinuit, RooWorkspace
 
