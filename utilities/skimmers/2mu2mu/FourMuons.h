@@ -91,7 +91,7 @@ public :
    TTreeReaderValue<Double_t> doubledimuon_vChi2 = {fReader, "doubledimuon_vChi2"};
    TTreeReaderValue<Double_t> doubledimuon_nDof = {fReader, "doubledimuon_nDof"};
    TTreeReaderValue<Double_t> doubledimuon_rf_vProb = {fReader, "doubledimuon_rf_vProb"};
-   TTreeReaderValue<Double_t> doubledimuon_rf_vChi2 = {fReader, "doubledimuon_rf_vChi2"};
+   //TTreeReaderValue<Double_t> doubledimuon_rf_vChi2 = {fReader, "doubledimuon_rf_vChi2"};
    TTreeReaderValue<Double_t> doubledimuon_rf_nDof = {fReader, "doubledimuon_rf_nDof"};
    TTreeReaderValue<Double_t> doubledimuon_rf_c_vProb = {fReader, "doubledimuon_rf_c_vProb"};
    TTreeReaderValue<Double_t> doubledimuon_rf_c_vChi2 = {fReader, "doubledimuon_rf_c_vChi2"};
@@ -390,7 +390,7 @@ Float_t out_phi_cosAlpha3D, out_isBestCandidate;
 
    TProofOutputFile *OutFile;
    TFile            *fOut;
-   
+
    ClassDef(FourMuons,0);
 
 };
