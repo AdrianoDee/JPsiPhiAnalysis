@@ -259,12 +259,12 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 	      edm::Service<TFileService> fs;
         fourmuon_tree = fs->make<TTree>("FourMuonTree","Tree of JPsi and Phi in 4 Muons");
 
-        fourmuon_tree->Branch("run",                &run,                "run/D");
-        fourmuon_tree->Branch("event",              &event,              "event/D");
-        fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/D");
-        fourmuon_tree->Branch("trigger",            &trigger,            "trigger/D");
+        fourmuon_tree->Branch("run",                &run,                "run/I");
+        fourmuon_tree->Branch("event",              &event,              "event/I");
+        fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
+        fourmuon_tree->Branch("trigger",            &trigger,            "trigger/I");
 
-        fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
+        fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
 
         fourmuon_tree->Branch("doubledimuon_p4",  "TLorentzVector", &doubledimuon_p4);
         fourmuon_tree->Branch("phi_p4",           "TLorentzVector", &phi_p4);
