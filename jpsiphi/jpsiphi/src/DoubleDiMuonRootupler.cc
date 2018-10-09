@@ -319,7 +319,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         fourmuon_tree->Branch("doubledimuon_nDof",&doubledimuon_nDof,"doubledimuon_nDof/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_vProb",&doubledimuon_rf_vProb,"doubledimuon_rf_vProb/D");
-        fourmuon_tree->Branch(" doubledimuon_rf_vChi2",&doubledimuon_rf_vChi2," doubledimuon_rf_vChi2/D");
+        fourmuon_tree->Branch("doubledimuon_rf_vChi2",&doubledimuon_rf_vChi2," doubledimuon_rf_vChi2/D");
         fourmuon_tree->Branch("doubledimuon_rf_nDof",&doubledimuon_rf_nDof,"doubledimuon_rf_nDof/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_c_vProb",&doubledimuon_rf_c_vProb,"doubledimuon_rf_c_vProb/D");
