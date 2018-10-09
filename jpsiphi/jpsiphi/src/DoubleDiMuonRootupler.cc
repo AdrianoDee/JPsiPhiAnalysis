@@ -78,7 +78,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
 
-  UInt_t run,event,numPrimaryVertices, trigger;
+  Double_t run,event,numPrimaryVertices, trigger;
 
   TLorentzVector doubledimuon_p4, jpsi_p4, phi_p4, mHighPhi_p4;
   TLorentzVector mLowJPsi_p4, mHighJPsi_p4, mLowPhi_p4;
@@ -259,12 +259,12 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 	      edm::Service<TFileService> fs;
         fourmuon_tree = fs->make<TTree>("FourMuonTree","Tree of JPsi and Phi in 4 Muons");
 
-        fourmuon_tree->Branch("run",                &run,                "run/I");
-        fourmuon_tree->Branch("event",              &event,              "event/I");
-        fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/I");
-        fourmuon_tree->Branch("trigger",            &trigger,            "trigger/I");
+        fourmuon_tree->Branch("run",                &run,                "run/D");
+        fourmuon_tree->Branch("event",              &event,              "event/D");
+        fourmuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/D");
+        fourmuon_tree->Branch("trigger",            &trigger,            "trigger/D");
 
-        fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
+        fourmuon_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/D");
 
         fourmuon_tree->Branch("doubledimuon_p4",  "TLorentzVector", &doubledimuon_p4);
         fourmuon_tree->Branch("phi_p4",           "TLorentzVector", &phi_p4);
@@ -674,9 +674,9 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( triggerResults_Label , triggerResults_handle);
 
-  numPrimaryVertices = primaryVertices_handle->size();
-  run = iEvent.id().run();
-  event = iEvent.id().event();
+  numPrimaryVertices = (Double_t) primaryVertices_handle->size();
+  run = (Double_t) iEvent.id().run();
+  event = (Double_t) iEvent.id().event();
 
   // reco::Vertex thePrimaryV;
   // reco::Vertex theBeamSpotV;
@@ -700,8 +700,9 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 	// ex. 6 = pass 8, 10
         // ex. 1 = pass 0
 
-  trigger = 0;
+  trigger = 0.0;
 
+  int intTrigger = 0;
 
   if (triggerResults_handle.isValid()) {
      const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
@@ -713,13 +714,14 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
            ss << HLTs_[i] << "_v" << version;
            unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
            if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
-              trigger += (1<<i);
+              intTrigger += (1<<i);
               break;
            }
         }
      }
    } else //std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
 
+   trigger = (Double_t) intTrigger;
    gen_doubledimuon_pdg = 0;
 
    edm::Handle< std::vector <reco::GenParticle> > pruned;
