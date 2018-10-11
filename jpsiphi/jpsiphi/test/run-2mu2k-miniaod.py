@@ -134,7 +134,7 @@ if par.isLocal:
                  "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
                  "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
                  "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10",
-                 "bujpsi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10",
+                 "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10",
                  "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10" }
 
     par.gtag = gtags[filename]
