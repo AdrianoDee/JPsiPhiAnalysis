@@ -981,25 +981,12 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       const pat::Muon *jpsiHighMuon, *jspiLowMuon, *phiHighMuon, *phiLowMuon;
 
       jpsiHighMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("highMuon"));
-      jspiLowMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("lowMuon"));
+      jpsiLowMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("lowMuon"));
 
       mHighJPsi_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
       mLowJPsi_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
       //std::cout << "Debug  8" << std::endl;
-      mHighJPsi_isLoose   = (Double_t) jpsiHighMuon->isLooseMuon();
-      mHighJPsi_isSoft    = (Double_t) jpsiHighMuon->isSoftMuon(thePrimaryV);
-      mHighJPsi_isMedium  = (Double_t) jpsiHighMuon->isMediumMuon();
-      mHighJPsi_isHighPt  = (Double_t) jpsiHighMuon->isHighPtMuon(thePrimaryV);
-      mHighJPsi_isTracker = (Double_t) jpsiHighMuon->isTrackerMuon();
-      mHighJPsi_isGlobal  = (Double_t) jpsiHighMuon->isGlobalMuon();
-      mLowJPsi_isLoose    = (Double_t) jspiLowMuon->isLooseMuon();
-      mLowJPsi_isSoft     = (Double_t) jspiLowMuon->isSoftMuon(thePrimaryV);
-      mLowJPsi_isMedium   = (Double_t) jspiLowMuon->isMediumMuon();
-      mLowJPsi_isHighPt   = (Double_t) jspiLowMuon->isHighPtMuon(thePrimaryV);
-      mLowJPsi_isTracker  = (Double_t) jspiLowMuon->isTrackerMuon();
-      mLowJPsi_isGlobal   = (Double_t) jspiLowMuon->isGlobalMuon();
-      mHighJPsi_type      = (Double_t) jpsiHighMuon->type();
-      mLowJPsi_type       = (Double_t) jspiLowMuon->type();
+  
 
       //double kmass = 0.4936770;
       doubledimuon_p4.SetPtEtaPhiM(doubledimuon_cand.pt(),doubledimuon_cand.eta(),doubledimuon_cand.phi(),doubledimuon_cand.mass());
