@@ -1047,17 +1047,76 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mHighPhi_isHighPt   = (Double_t) phiHighMuon->isHighPtMuon(thePrimaryV);
       mHighPhi_isTracker  = (Double_t) phiHighMuon->isTrackerMuon();
       mHighPhi_isGlobal   = (Double_t) phiHighMuon->isGlobalMuon();
+
+      mHighPhi_NPixelHits  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      mHighPhi_NStripHits  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mHighPhi_NTrackhits  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      mHighPhi_NBPixHits   = (Double_t)  phiHighMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mHighPhi_NPixLayers  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      mHighPhi_NTraLayers  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      mHighPhi_NStrLayers  = (Double_t)  phiHighMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      mHighPhi_NBPixLayers = (Double_t)  phiHighMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+
       mLowPhi_isLoose     = (Double_t) phiLowMuon->isLooseMuon();
       mLowPhi_isSoft      = (Double_t) phiLowMuon->isSoftMuon(thePrimaryV);
       mLowPhi_isMedium    = (Double_t) phiLowMuon->isMediumMuon();
       mLowPhi_isHighPt    = (Double_t) phiLowMuon->isHighPtMuon(thePrimaryV);
       mLowPhi_isTracker   = (Double_t) phiLowMuon->isTrackerMuon();
       mLowPhi_isGlobal    = (Double_t) phiLowMuon->isGlobalMuon();
+
+      mLowPhi_NPixelHits  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      mLowPhi_NStripHits  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mLowPhi_NTrackhits  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      mLowPhi_NBPixHits   = (Double_t)  phiLowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mLowPhi_NPixLayers  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      mLowPhi_NTraLayers  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      mLowPhi_NStrLayers  = (Double_t)  phiLowMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      mLowPhi_NBPixLayers = (Double_t)  phiLowMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+
+      mHighJPsi_isLoose    = (Double_t)  jpsiHighMuon->isLooseMuon();
+      mHighJPsi_isSoft     = (Double_t)  jpsiHighMuon->isSoftMuon(thePrimaryV);
+      mHighJPsi_isMedium   = (Double_t) jpsiHighMuon->isMediumMuon();
+      mHighJPsi_isHighPt   = (Double_t) jpsiHighMuon->isHighPtMuon(thePrimaryV);
+      mHighJPsi_isTracker  = (Double_t) jpsiHighMuon->isTrackerMuon();
+      mHighJPsi_isGlobal   = (Double_t) jpsiHighMuon->isGlobalMuon();
+
+      mHighJPsi_NPixelHits  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      mHighJPsi_NStripHits  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mHighJPsi_NTrackhits  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      mHighJPsi_NBPixHits   = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mHighJPsi_NPixLayers  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      mHighJPsi_NTraLayers  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      mHighJPsi_NStrLayers  = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      mHighJPsi_NBPixLayers = (Double_t)  jpsiHighMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+
+      mLowJPsi_isLoose     = (Double_t) jpsiLowMuon->isLooseMuon();
+      mLowJPsi_isSoft      = (Double_t) jpsiLowMuon->isSoftMuon(thePrimaryV);
+      mLowJPsi_isMedium    = (Double_t) jpsiLowMuon->isMediumMuon();
+      mLowJPsi_isHighPt    = (Double_t) jpsiLowMuon->isHighPtMuon(thePrimaryV);
+      mLowJPsi_isTracker   = (Double_t) jpsiLowMuon->isTrackerMuon();
+      mLowJPsi_isGlobal    = (Double_t) jpsiLowMuon->isGlobalMuon();
+
+      mLowJPsi_NPixelHits  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
+      mLowJPsi_NStripHits  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mLowJPsi_NTrackhits  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().numberOfValidTrackerHits();
+      mLowJPsi_NBPixHits   = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().numberOfValidStripHits();
+      mLowJPsi_NPixLayers  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
+      mLowJPsi_NTraLayers  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().trackerLayersWithMeasurement();
+      mLowJPsi_NStrLayers  = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
+      mLowJPsi_NBPixLayers = (Double_t)  jpsiLowMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+
       mHighPhi_type       = (Double_t)  phiHighMuon->type();
       mLowPhi_type        = (Double_t) phiLowMuon->type();
 
+      mHighJPsi_type       = (Double_t)  jpsiHighMuon->type();
+      mLowJPsi_type        = (Double_t) jpsiLowMuon->type();
+
+
       mHighPhi_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
       mLowPhi_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
+
+      mHighJPsi_p4.SetPtEtaJPsiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+      mLowJPsi_p4.SetPtEtaJPsiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
       if (doubledimuon_cand.userFloat("has_ref") >= 0)
       {
