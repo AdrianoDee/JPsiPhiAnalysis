@@ -103,8 +103,10 @@ filename = "data" + par.dataset
 
 if par.isLocal:
 
+    from bujpsi_filelist import *
+    from bsjpsiphi_filelist import *
     from bbbar_filelist import *
-    from bbbar_soft_list import *
+    from bbbar_soft_filelist import *
     from y4140_lhcb_filelist import *
     from y4140_zero_filelist import *
     from y4273_lhcb_filelist import *
@@ -124,13 +126,15 @@ if par.isLocal:
                  "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
                  "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
-                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list }
+                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist
+                 "bujpsi" : bujpsi_filelist}
 
     gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
                  "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  ,
                  "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
                  "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
                  "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10",
+                 "bujpsi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10",
                  "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10" }
 
     par.gtag = gtags[filename]
