@@ -130,6 +130,7 @@ if par.isLocal:
                  "bujpsiphi" : bujpsiphi_filelist}
 
     gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
+                 "bbbar_soft" : "100X_upgrade2018_realistic_v10",
                  "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  ,
                  "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
                  "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
