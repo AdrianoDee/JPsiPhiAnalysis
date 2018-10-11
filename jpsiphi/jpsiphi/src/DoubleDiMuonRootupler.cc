@@ -104,7 +104,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   //Vertexing variables
   Double_t doubledimuon_vProb,  doubledimuon_vChi2,doubledimuon_nDof;
   Double_t doubledimuon_cosAlpha, doubledimuon_ctauPV, doubledimuon_ctauErrPV, doubledimuon_cosAlpha3D;
-  Double_t doubledimuon_lxy, doubledimuon_lxyErr, doubledimuon_lxyz, doubledimuon_lxyzErr;
+  // Double_t doubledimuon_lxy, doubledimuon_lxyErr, doubledimuon_lxyz, doubledimuon_lxyzErr;
 
   Double_t doubledimuon_rf_lxy,doubledimuon_rf_lxyErr,doubledimuon_rf_lxyz,doubledimuon_rf_lxyzErr;
   Double_t doubledimuon_rf_vProb,  doubledimuon_rf_vChi2, doubledimuon_rf_nDof;
@@ -122,8 +122,8 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
 
   Double_t doubledimuon_cosAlphaDZ, doubledimuon_cosAlpha3DDZ, doubledimuon_ctauPVDZ, doubledimuon_ctauErrPVDZ;
   Double_t doubledimuon_cosAlphaBS, doubledimuon_cosAlpha3DBS, doubledimuon_ctauPVBS, doubledimuon_ctauErrPVBS;
-  Double_t doubledimuon_lxyDZ, doubledimuon_lxyErrDZ, doubledimuon_lxyzDZ, doubledimuon_lxyzErrDZ;
-  Double_t doubledimuon_lxyBS, doubledimuon_lxyErrBS, doubledimuon_lxyzBS, doubledimuon_lxyzErrBS;
+  // Double_t doubledimuon_lxyDZ, doubledimuon_lxyErrDZ, doubledimuon_lxyzDZ, doubledimuon_lxyzErrDZ;
+  // Double_t doubledimuon_lxyBS, doubledimuon_lxyErrBS, doubledimuon_lxyzBS, doubledimuon_lxyzErrBS;
 
   //DCAs
 
@@ -282,6 +282,8 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         fourmuon_tree->Branch("mHighJPsi_rf_p4",    "TLorentzVector", &mHighJPsi_rf_p4);
         fourmuon_tree->Branch("mLowPhi_rf_p4",      "TLorentzVector", &mLowPhi_rf_p4);
 
+        fourmuon_tree->Branch("doubledimuon_rf_const_p4", "TLorentzVector", &doubledimuon_rf_const_p4);
+
         //Trigger Matching
         fourmuon_tree->Branch("jpsi_triggerMatch",  &jpsi_triggerMatch, "jpsi_triggerMatch/D");
         fourmuon_tree->Branch("phi_triggerMatch",   &phi_triggerMatch,  "phi_triggerMatch/D");
@@ -296,7 +298,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         fourmuon_tree->Branch("doubledimuon_m",&doubledimuon_m,"doubledimuon_m/D");
         fourmuon_tree->Branch("doubledimuon_m_rf",&doubledimuon_m_rf,"doubledimuon_m_rf/D");
         fourmuon_tree->Branch("doubledimuon_m_rf_c",&doubledimuon_m_rf_c,"doubledimuon_m_rf_c/D");
-        fourmuon_tree->Branch("doubledimuon_m_rf_d_c",&doubledimuon_m_rf_d_c,"doubledimuon_m_rf_d_c/D");
+        // fourmuon_tree->Branch("doubledimuon_m_rf_d_c",&doubledimuon_m_rf_d_c,"doubledimuon_m_rf_d_c/D");
 
         fourmuon_tree->Branch("doubledimuon_p",&doubledimuon_p,"doubledimuon_p/D");
         fourmuon_tree->Branch("doubledimuon_pt",&doubledimuon_pt,"doubledimuon_pt/D");
@@ -335,29 +337,29 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 
         //Pointing Angle & Flight
         fourmuon_tree->Branch("doubledimuon_cosAlpha",&doubledimuon_cosAlpha,"doubledimuon_cosAlpha/D");
-        fourmuon_tree->Branch("doubledimuon_cosAlpha3D",&doubledimuon_cosAlpha3D,"doubledimuon_cosAlpha3D/D");
+        // fourmuon_tree->Branch("doubledimuon_cosAlpha3D",&doubledimuon_cosAlpha3D,"doubledimuon_cosAlpha3D/D");
         fourmuon_tree->Branch("doubledimuon_ctauPV",&doubledimuon_ctauPV,"doubledimuon_ctauPV/D");
         fourmuon_tree->Branch("doubledimuon_ctauErrPV",&doubledimuon_ctauErrPV,"doubledimuon_ctauErrPV/D");
-        fourmuon_tree->Branch("doubledimuon_lxy",&doubledimuon_lxy,"doubledimuon_lxy/D");
-        fourmuon_tree->Branch("doubledimuon_lxyErr",&doubledimuon_lxyErr,"doubledimuon_lxyErr/D");
-        fourmuon_tree->Branch("doubledimuon_lxyz",&doubledimuon_lxyz,"doubledimuon_lxyz/D");
-        fourmuon_tree->Branch("doubledimuon_lxyzErr",&doubledimuon_lxyzErr,"doubledimuon_lxyzErr/D");
+        // fourmuon_tree->Branch("doubledimuon_lxy",&doubledimuon_lxy,"doubledimuon_lxy/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyErr",&doubledimuon_lxyErr,"doubledimuon_lxyErr/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyz",&doubledimuon_lxyz,"doubledimuon_lxyz/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyzErr",&doubledimuon_lxyzErr,"doubledimuon_lxyzErr/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_cosAlpha",&doubledimuon_rf_cosAlpha,"doubledimuon_rf_cosAlpha/D");
         fourmuon_tree->Branch("doubledimuon_rf_ctauPV",&doubledimuon_rf_ctauPV,"doubledimuon_rf_ctauPV/D");
         fourmuon_tree->Branch("doubledimuon_rf_ctauErrPV",&doubledimuon_rf_ctauErrPV,"doubledimuon_rf_ctauErrPV/D");
-        fourmuon_tree->Branch("doubledimuon_rf_lxy",&doubledimuon_rf_lxy,"doubledimuon_rf_lxy/D");
-        fourmuon_tree->Branch("doubledimuon_rf_lxyErr",&doubledimuon_rf_lxyErr,"doubledimuon_rf_lxyErr/D");
-        fourmuon_tree->Branch("doubledimuon_rf_lxyz",&doubledimuon_rf_lxyz,"doubledimuon_rf_lxyz/D");
-        fourmuon_tree->Branch("doubledimuon_rf_lxyzErr",&doubledimuon_rf_lxyzErr,"doubledimuon_rf_lxyzErr/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_lxy",&doubledimuon_rf_lxy,"doubledimuon_rf_lxy/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_lxyErr",&doubledimuon_rf_lxyErr,"doubledimuon_rf_lxyErr/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_lxyz",&doubledimuon_rf_lxyz,"doubledimuon_rf_lxyz/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_lxyzErr",&doubledimuon_rf_lxyzErr,"doubledimuon_rf_lxyzErr/D");
 
         fourmuon_tree->Branch("doubledimuon_rf_c_cosAlpha",&doubledimuon_rf_c_cosAlpha,"doubledimuon_rf_c_cosAlpha/D");
         fourmuon_tree->Branch("doubledimuon_rf_c_ctauPV",&doubledimuon_rf_c_ctauPV,"doubledimuon_rf_c_ctauPV/D");
         fourmuon_tree->Branch("doubledimuon_rf_c_ctauErrPV",&doubledimuon_rf_c_ctauErrPV,"doubledimuon_rf_c_ctauErrPV/D");
-        fourmuon_tree->Branch("doubledimuon_rf_c_lxy",&doubledimuon_rf_c_lxy,"doubledimuon_rf_c_lxy/D");
-        fourmuon_tree->Branch("doubledimuon_rf_c_lxyErr",&doubledimuon_rf_c_lxyErr,"doubledimuon_rf_c_lxyErr/D");
-        fourmuon_tree->Branch("doubledimuon_rf_c_lxyz",&doubledimuon_rf_c_lxyz,"doubledimuon_rf_c_lxyz/D");
-        fourmuon_tree->Branch("doubledimuon_rf_c_lxyzErr",&doubledimuon_rf_c_lxyzErr,"doubledimuon_rf_c_lxyzErr/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_c_lxy",&doubledimuon_rf_c_lxy,"doubledimuon_rf_c_lxy/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_c_lxyErr",&doubledimuon_rf_c_lxyErr,"doubledimuon_rf_c_lxyErr/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_c_lxyz",&doubledimuon_rf_c_lxyz,"doubledimuon_rf_c_lxyz/D");
+        // fourmuon_tree->Branch("doubledimuon_rf_c_lxyzErr",&doubledimuon_rf_c_lxyzErr,"doubledimuon_rf_c_lxyzErr/D");
 
         //DCA
         fourmuon_tree->Branch("doubledimuon_dca_mp1mp2",&doubledimuon_dca_mp1mp2,"doubledimuon_dca_mp1mp2/D");
@@ -369,22 +371,22 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 
         //More Vertex
         fourmuon_tree->Branch("doubledimuon_cosAlphaDZ",&doubledimuon_cosAlphaDZ,"doubledimuon_cosAlphaDZ/D");
-        fourmuon_tree->Branch("doubledimuon_cosAlpha3DDZ",&doubledimuon_cosAlpha3DDZ,"doubledimuon_cosAlpha3DDZ/D");
+        // fourmuon_tree->Branch("doubledimuon_cosAlpha3DDZ",&doubledimuon_cosAlpha3DDZ,"doubledimuon_cosAlpha3DDZ/D");
         fourmuon_tree->Branch("doubledimuon_ctauPVDZ",&doubledimuon_ctauPVDZ,"doubledimuon_ctauPVDZ/D");
         fourmuon_tree->Branch("doubledimuon_ctauErrPVDZ",&doubledimuon_ctauErrPVDZ,"doubledimuon_ctauErrPVDZ/D");
-        fourmuon_tree->Branch("doubledimuon_lxyDZ",&doubledimuon_lxyDZ,"doubledimuon_lxyDZ/D");
-        fourmuon_tree->Branch("doubledimuon_lxyErrDZ",&doubledimuon_lxyErrDZ,"doubledimuon_lxyErrDZ/D");
-        fourmuon_tree->Branch("doubledimuon_lxyzDZ",&doubledimuon_lxyzDZ,"doubledimuon_lxyzDZ/D");
-        fourmuon_tree->Branch("doubledimuon_lxyzErrDZ",&doubledimuon_lxyzErrDZ,"doubledimuon_lxyzErrDZ/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyDZ",&doubledimuon_lxyDZ,"doubledimuon_lxyDZ/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyErrDZ",&doubledimuon_lxyErrDZ,"doubledimuon_lxyErrDZ/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyzDZ",&doubledimuon_lxyzDZ,"doubledimuon_lxyzDZ/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyzErrDZ",&doubledimuon_lxyzErrDZ,"doubledimuon_lxyzErrDZ/D");
 
         fourmuon_tree->Branch("doubledimuon_cosAlphaBS",&doubledimuon_cosAlphaBS,"doubledimuon_cosAlphaBS/D");
-        fourmuon_tree->Branch("doubledimuon_cosAlpha3DBS",&doubledimuon_cosAlpha3DBS,"doubledimuon_cosAlpha3DBS/D");
+        // fourmuon_tree->Branch("doubledimuon_cosAlpha3DBS",&doubledimuon_cosAlpha3DBS,"doubledimuon_cosAlpha3DBS/D");
         fourmuon_tree->Branch("doubledimuon_ctauPVBS",&doubledimuon_ctauPVBS,"doubledimuon_ctauPVBS/D");
         fourmuon_tree->Branch("doubledimuon_ctauErrPVBS",&doubledimuon_ctauErrPVBS,"doubledimuon_ctauErrPVBS/D");
-        fourmuon_tree->Branch("doubledimuon_lxyBS",&doubledimuon_lxyBS,"doubledimuon_lxyBS/D");
-        fourmuon_tree->Branch("doubledimuon_lxyErrBS",&doubledimuon_lxyErrBS,"doubledimuon_lxyErrBS/D");
-        fourmuon_tree->Branch("doubledimuon_lxyzBS",&doubledimuon_lxyzBS,"doubledimuon_lxyzBS/D");
-        fourmuon_tree->Branch("doubledimuon_lxyzErrBS",&doubledimuon_lxyzErrBS,"doubledimuon_lxyzErrBS/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyBS",&doubledimuon_lxyBS,"doubledimuon_lxyBS/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyErrBS",&doubledimuon_lxyErrBS,"doubledimuon_lxyErrBS/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyzBS",&doubledimuon_lxyzBS,"doubledimuon_lxyzBS/D");
+        // fourmuon_tree->Branch("doubledimuon_lxyzErrBS",&doubledimuon_lxyzErrBS,"doubledimuon_lxyzErrBS/D");
 
         //Single muons variable
         //Kin
@@ -1098,6 +1100,63 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mHighJPsi_type       = (Double_t)  jpsiHighMuon->type();
       mLowJPsi_type        = (Double_t) jpsiLowMuon->type();
 
+      mHighJPsi_eta  = jpsiHighMuon->innerTrack()->eta();
+      mHighJPsi_phi  = jpsiHighMuon->innerTrack()->phi();
+      mHighJPsi_dz   = jpsiHighMuon->innerTrack()->dz();
+      mHighJPsi_dxy  = jpsiHighMuon->innerTrack()->dxy();
+      mHighJPsi_theta  = jpsiHighMuon->innerTrack()->theta();
+      mHighJPsi_lambda  = jpsiHighMuon->innerTrack()->lambda();
+
+      mLowJPsi_eta  = jpsiLowMuon->innerTrack()->eta();
+      mLowJPsi_phi  = jpsiLowMuon->innerTrack()->phi();
+      mLowJPsi_dz   = jpsiLowMuon->innerTrack()->dz();
+      mLowJPsi_dxy  = jpsiLowMuon->innerTrack()->dxy();
+      mLowJPsi_theta  = jpsiLowMuon->innerTrack()->theta();
+      mLowJPsi_lambda  = jpsiLowMuon->innerTrack()->lambda();
+
+      mHighPhi_eta  = phiHighMuon->innerTrack()->eta();
+      mHighPhi_phi  = phiHighMuon->innerTrack()->phi();
+      mHighPhi_dz   = phiHighMuon->innerTrack()->dz();
+      mHighPhi_dxy  = phiHighMuon->innerTrack()->dxy();
+      mHighPhi_theta  = phiHighMuon->innerTrack()->theta();
+      mHighPhi_lambda  = phiHighMuon->innerTrack()->lambda();
+
+      mLowPhi_eta  = phiLowMuon->innerTrack()->eta();
+      mLowPhi_phi  = phiLowMuon->innerTrack()->phi();
+      mLowPhi_dz   = phiLowMuon->innerTrack()->dz();
+      mLowPhi_dxy  = phiLowMuon->innerTrack()->dxy();
+      mLowPhi_theta  = phiLowMuon->innerTrack()->theta();
+      mLowPhi_lambda  = phiLowMuon->innerTrack()->lambda();
+
+
+      mHighJPsi_etaErr  = jpsiHighMuon->innerTrack()->etaError();
+      mHighJPsi_phiErr  = jpsiHighMuon->innerTrack()->phiError();
+      mHighJPsi_dzErr  = jpsiHighMuon->innerTrack()->dzError();
+      mHighJPsi_dxyErr  = jpsiHighMuon->innerTrack()->dxyError();
+      mHighJPsi_thetaErr  = jpsiHighMuon->innerTrack()->thetaError();
+      mHighJPsi_lambdaErr  = jpsiHighMuon->innerTrack()->lambdaError();
+
+      mLowJPsi_etaErr  = jpsiLowMuon->innerTrack()->etaError();
+      mLowJPsi_phiErr  = jpsiLowMuon->innerTrack()->phiError();
+      mLowJPsi_dzErr  = jpsiLowMuon->innerTrack()->dzError();
+      mLowJPsi_dxyErr  = jpsiLowMuon->innerTrack()->dxyError();
+      mLowJPsi_thetaErr  = jpsiLowMuon->innerTrack()->thetaError();
+      mLowJPsi_lambdaErr  = jpsiLowMuon->innerTrack()->lambdaError();
+
+      mHighPhi_etaErr  = phiHighMuon->innerTrack()->etaError();
+      mHighPhi_phiErr  = phiHighMuon->innerTrack()->phiError();
+      mHighPhi_dzErr  = phiHighMuon->innerTrack()->dzError();
+      mHighPhi_dxyErr  = phiHighMuon->innerTrack()->dxyError();
+      mHighPhi_thetaErr  = phiHighMuon->innerTrack()->thetaError();
+      mHighPhi_lambdaErr  = phiHighMuon->innerTrack()->lambdaError();
+
+      mLowPhi_etaErr  = phiLowMuon->innerTrack()->etaError();
+      mLowPhi_phiErr  = phiLowMuon->innerTrack()->phiError();
+      mLowPhi_dzErr  = phiLowMuon->innerTrack()->dzError();
+      mLowPhi_dxyErr  = phiLowMuon->innerTrack()->dxyError();
+      mLowPhi_thetaErr  = phiLowMuon->innerTrack()->thetaError();
+      mLowPhi_lambdaErr  = phiLowMuon->innerTrack()->lambdaError();
+
 
       mHighPhi_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
       mLowPhi_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
@@ -1129,7 +1188,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         mHighPhi_rf_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
         mLowPhi_rf_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
 
-        doubledimuon_m_rf_c= doubledimuon_rf_cand->mass();
+        doubledimuon_m_rf= doubledimuon_rf_cand->mass();
 
         doubledimuon_rf_vProb = doubledimuon_cand.userFloat("vProb_ref");
         doubledimuon_rf_vChi2 = doubledimuon_cand.userFloat("vChi2_ref");
@@ -1145,14 +1204,14 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         doubledimuon_rf_cand = dynamic_cast <pat::CompositeCandidate *>(doubledimuon_cand.daughter("ref_const_cand"));
         doubledimuon_rf_const_p4.SetPtEtaPhiM(doubledimuon_rf_cand->pt(),doubledimuon_rf_cand->eta(),doubledimuon_rf_cand->phi(),doubledimuon_rf_cand->mass());
 
-        doubledimuon_m_rf_d_c= doubledimuon_rf_cand->mass();
+        doubledimuon_m_rf_c= doubledimuon_rf_cand->mass();
 
-        doubledimuon_rf_vProb = doubledimuon_cand.userFloat("vProb_const_ref");
-        doubledimuon_rf_vChi2 = doubledimuon_cand.userFloat("vChi2_const_ref");
-        doubledimuon_rf_nDof = doubledimuon_cand.userFloat("nDof_const_ref");
-        doubledimuon_rf_cosAlpha = doubledimuon_cand.userFloat("cosAlpha_const_ref");
-        doubledimuon_rf_ctauPV = doubledimuon_cand.userFloat("ctauPV_const_ref");
-        doubledimuon_rf_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_const_ref");
+        doubledimuon_rf_c_vProb = doubledimuon_cand.userFloat("vProb_const_ref");
+        doubledimuon_rf_c_vChi2 = doubledimuon_cand.userFloat("vChi2_const_ref");
+        doubledimuon_rf_c_nDof = doubledimuon_cand.userFloat("nDof_const_ref");
+        doubledimuon_rf_c_cosAlpha = doubledimuon_cand.userFloat("cosAlpha_const_ref");
+        doubledimuon_rf_c_ctauPV = doubledimuon_cand.userFloat("ctauPV_const_ref");
+        doubledimuon_rf_c_ctauErrPV = doubledimuon_cand.userFloat("ctauErrPV_const_ref");
 
       }
       //std::cout << "Debug  10" << std::endl;

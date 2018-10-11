@@ -281,9 +281,6 @@ void DoubleDiMuonProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
                 FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);
                 FourMuonCandidate.addUserFloat("vtxY",x_vy_fit);
-
-                FourMuonCandidate.addUserFloat("vtxX",x_vx_fit);
-                FourMuonCandidate.addUserFloat("vtxY",x_vy_fit);
                 FourMuonCandidate.addUserFloat("vtxZ",x_vz_fit);
 
                 FourMuonCandidate.addUserFloat("cosAlphaBS",cosAlpha[0]);
