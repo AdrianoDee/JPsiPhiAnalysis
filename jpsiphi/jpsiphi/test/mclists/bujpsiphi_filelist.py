@@ -1,4 +1,4 @@
-["file:/lustre/cms/store/user/adiflori/GEN-MINIAODSIMBuJPsiFilter_SoftQCD_GEN_SIM/crab_GEN-MINIAODSIM_BuJPsiFilter_SoftQCD_GEN_SIM_20180921_134333/180921_114353/0000/BuJPsiFilter_SoftQCD_MINIAODSIM_PU40_100.root",
+bujpsiphi_filelist = ["file:/lustre/cms/store/user/adiflori/GEN-MINIAODSIMBuJPsiFilter_SoftQCD_GEN_SIM/crab_GEN-MINIAODSIM_BuJPsiFilter_SoftQCD_GEN_SIM_20180921_134333/180921_114353/0000/BuJPsiFilter_SoftQCD_MINIAODSIM_PU40_100.root",
 "file:/lustre/cms/store/user/adiflori/GEN-MINIAODSIMBuJPsiFilter_SoftQCD_GEN_SIM/crab_GEN-MINIAODSIM_BuJPsiFilter_SoftQCD_GEN_SIM_20180921_134333/180921_114353/0000/BuJPsiFilter_SoftQCD_MINIAODSIM_PU40_101.root",
 "file:/lustre/cms/store/user/adiflori/GEN-MINIAODSIMBuJPsiFilter_SoftQCD_GEN_SIM/crab_GEN-MINIAODSIM_BuJPsiFilter_SoftQCD_GEN_SIM_20180921_134333/180921_114353/0000/BuJPsiFilter_SoftQCD_MINIAODSIM_PU40_102.root",
 "file:/lustre/cms/store/user/adiflori/GEN-MINIAODSIMBuJPsiFilter_SoftQCD_GEN_SIM/crab_GEN-MINIAODSIM_BuJPsiFilter_SoftQCD_GEN_SIM_20180921_134333/180921_114353/0000/BuJPsiFilter_SoftQCD_MINIAODSIM_PU40_103.root",

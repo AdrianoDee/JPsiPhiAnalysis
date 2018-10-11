@@ -103,7 +103,7 @@ filename = "data" + par.dataset
 
 if par.isLocal:
 
-    from bujpsi_filelist import *
+    from bujpsiphi_filelist import *
     from bsjpsiphi_filelist import *
     from bbbar_filelist import *
     from bbbar_soft_filelist import *
@@ -126,8 +126,8 @@ if par.isLocal:
                  "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
                  "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
-                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist
-                 "bujpsi" : bujpsi_filelist}
+                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist,
+                 "bujpsiphi" : bujpsiphi_filelist}
 
     gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
                  "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  ,
