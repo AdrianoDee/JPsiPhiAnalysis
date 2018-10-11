@@ -978,7 +978,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mLowPhiMatch     = (Double_t) phi_cand->userInt("lowMuonTMatch");
       phi_triggerMatch = -std::max(-mLowPhiMatch,mHighPhiMatch);
 
-      const pat::Muon *jpsiHighMuon, *jspiLowMuon, *phiHighMuon, *phiLowMuon;
+      const pat::Muon *jpsiHighMuon, *jpsiLowMuon, *phiHighMuon, *phiLowMuon;
 
       jpsiHighMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("highMuon"));
       jpsiLowMuon = dynamic_cast<const pat::Muon*>(jpsi_cand->daughter("lowMuon"));
@@ -986,7 +986,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mHighJPsi_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
       mLowJPsi_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
       //std::cout << "Debug  8" << std::endl;
-  
+
 
       //double kmass = 0.4936770;
       doubledimuon_p4.SetPtEtaPhiM(doubledimuon_cand.pt(),doubledimuon_cand.eta(),doubledimuon_cand.phi(),doubledimuon_cand.mass());
@@ -1102,8 +1102,8 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       mHighPhi_p4.SetPtEtaPhiM(vPhiHigh.pt(), vPhiHigh.eta(), vPhiHigh.phi(), vPhiHigh.mass());
       mLowPhi_p4.SetPtEtaPhiM(vPhiLow.pt(), vPhiLow.eta(), vPhiLow.phi(), vPhiLow.mass());
 
-      mHighJPsi_p4.SetPtEtaJPsiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
-      mLowJPsi_p4.SetPtEtaJPsiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
+      mHighJPsi_p4.SetPtEtaPhiM(vJPsiHigh.pt(), vJPsiHigh.eta(), vJPsiHigh.phi(), vJPsiHigh.mass());
+      mLowJPsi_p4.SetPtEtaPhiM(vJPsiLow.pt(), vJPsiLow.eta(), vJPsiLow.phi(), vJPsiLow.mass());
 
       if (doubledimuon_cand.userFloat("has_ref") >= 0)
       {
