@@ -57,7 +57,7 @@ process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(20971520),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_25_GEN_SIM.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_10_GEN_SIM.root'),
     outputCommands = process.RAWSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -109,7 +109,12 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
         ),
         processParameters = cms.vstring(
             'HardQCD:all = on',
-            'PhaseSpace:pTHatMin = 25.',
+            'PhaseSpace:pTHatMin = 8.',
+
+            'PTFilter:filter = on',
+            'PTFilter:quarkToFilter = 5',
+            'PTFilter:scaleToFilter = 1.0',
+
             '300553:new = 300553 -300553 1 0 0 1.0579400e+01 2.0500001e-02 10.5584 10.6819 0.0000000e+00',
             '100313:new = 100313 -100313 1 0 0 1.4140000e+00 2.3199996e-01 0.254 2.574 0.0000000e+00',
             '100323:new = 100323 -100323 1 1 0 1.4140000e+00 2.3199996e-01 0.254 2.574 0.0000000e+00',

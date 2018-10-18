@@ -57,7 +57,7 @@ process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(20971520),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_25_GEN_SIM.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_8_GEN_SIM.root'),
     outputCommands = process.RAWSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -78,7 +78,7 @@ process.bfilter = cms.EDFilter("PythiaFilter",
 process.oniafilter = cms.EDFilter("PythiaFilter",
     MaxEta = cms.untracked.double(1000.0),
     MinEta = cms.untracked.double(-1000.0),
-    MinPt = cms.untracked.double(0.5),
+    MinPt = cms.untracked.double(-1.0),
     ParticleID = cms.untracked.int32(443),
     Status = cms.untracked.int32(2)
 )
@@ -101,7 +101,12 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
         ),
         processParameters = cms.vstring(
             'HardQCD:all = on',
-            'PhaseSpace:pTHatMin = 25.',
+            'PhaseSpace:pTHatMin = 8.',
+
+            'PTFilter:filter = on',
+            'PTFilter:quarkToFilter = 5',
+            'PTFilter:scaleToFilter = 1.0',
+
             '300553:new = 300553 -300553 1 0 0 1.0579400e+01 2.0500001e-02 10.5584 10.6819 0.0000000e+00',
             '100313:new = 100313 -100313 1 0 0 1.4140000e+00 2.3199996e-01 0.254 2.574 0.0000000e+00',
             '100323:new = 100323 -100323 1 1 0 1.4140000e+00 2.3199996e-01 0.254 2.574 0.0000000e+00',
@@ -182,7 +187,7 @@ process.mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     MinEta = cms.untracked.vdouble(-2.6, -2.6),
     MinInvMass = cms.untracked.double(2.0),
     MinP = cms.untracked.vdouble(0.0, 0.0),
-    MinPt = cms.untracked.vdouble(0.0, 0.0),
+    MinPt = cms.untracked.vdouble(-1.0, -1.0),
     ParticleCharge = cms.untracked.int32(-1),
     ParticleID1 = cms.untracked.vint32(13),
     ParticleID2 = cms.untracked.vint32(13),

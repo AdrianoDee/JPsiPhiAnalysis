@@ -33,7 +33,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_25_DIGI_HLT_RAW_L1_PU40.root'),
+    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_8_DIGI_HLT_RAW_L1_PU45.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -55,7 +55,7 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-RECO'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_25_RECOSIM_PU40.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_8_RECOSIM_PU45.root'),
     outputCommands = process.RECOSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -70,7 +70,7 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     dropMetaData = cms.untracked.string('ALL'),
     eventAutoFlushCompressedSize = cms.untracked.int32(-900),
     fastCloning = cms.untracked.bool(False),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_25_MINIAODSIM_PU40.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_8_MINIAODSIM_PU45.root'),
     outputCommands = process.MINIAODSIMEventContent.outputCommands,
     overrideBranchesSplitLevel = cms.untracked.VPSet(
         cms.untracked.PSet(

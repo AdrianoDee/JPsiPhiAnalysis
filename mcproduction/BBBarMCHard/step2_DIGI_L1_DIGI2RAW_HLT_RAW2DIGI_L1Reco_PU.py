@@ -32,7 +32,7 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     dropDescendantsOfDroppedBranches = cms.untracked.bool(False),
-    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQC_25_GEN_SIM.root'),
+    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_8_GEN_SIM.root'),
     inputCommands = cms.untracked.vstring(
         'keep *',
         'drop *_genParticles_*_*',
@@ -73,7 +73,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-DIGI-RAW'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:BBbar_JpsiFilter_HardQCD_25_DIGI_HLT_RAW_L1_PU40.root'),
+    fileName = cms.untracked.string('file:BBbar_JpsiFilter_HardQCD_25_DIGI_HLT_RAW_L1_PU45.root'),
     outputCommands = process.FEVTDEBUGHLTEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -81,7 +81,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
 # Additional output definition
 
 # Other statements
-process.mix.input.nbPileupEvents.averageNumber = cms.double(40.000000)
+process.mix.input.nbPileupEvents.averageNumber = cms.double(45.000000)
 process.mix.bunchspace = cms.int32(25)
 process.mix.minBunch = cms.int32(-12)
 process.mix.maxBunch = cms.int32(3)
