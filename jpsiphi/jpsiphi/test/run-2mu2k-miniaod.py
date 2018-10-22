@@ -195,31 +195,75 @@ charmoniumHLT = [
 #'HLT_Dimuon25_Jpsi',
 ]
 
-hltList = charmoniumHLT #muoniaHLT
+year = "2018"
+
+if "2017" in par.dataset:
+    year = "2017"
+if "2016" in par.dataset:
+    year = "2016"
+
+hlts = {}
+
+hlts["2018"] = charmoniumHLT
+
+hlts["2017"] =
+[
+    "HLT_Dimuon25_Jpsi",
+    "HLT_Dimuon20_Jpsi_Barrel_Seagulls",
+    "HLT_DoubleMu4_JpsiTrkTrk_Displaced"
+
+]
+
+hlts["2016"]=
+[
+    "HLT_Dimuon20_Jpsi",
+    "HLT_Dimuon16_Jpsi",
+    "HLT_Dimuon10_Jpsi_Barrel",
+    "HLT_DoubleMu4_JpsiTrk_Displaced"
+
+]
+
+filts = {}
+
+filts["2018"] = ['hltDoubleMu2JpsiDoubleTrkL3Filtered',
+'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v5',
+'hltJpsiTkTkVertexFilterPhiDoubleTrk1v6',
+
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v5',
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',]
+
+filts["2017"] =
+["hltDimuon25JpsiL3fL3Filtered",
+"hltDimuon20JpsiBarrelnoCowL3Filtered",
+"hltDisplacedmumuFilterDoubleMu4Jpsi",
+"hltDoubleMu4JpsiDisplacedL3Filtered",
+"hltJpsiTkTkVertexFilterPhiKstar"]
+
+filts["2016"] =
+["hltDimuon20JpsiL3Filtered",
+"hltDimuon16JpsiL3Filtered",
+"hltDisplacedmumuFilterDimuon10JpsiBarrel",
+"hltDisplacedmumuFilterDoubleMu4Jpsi",
+"hltDoubleMu4JpsiDisplacedL3Filtered",
+"hltJpsiTkVertexFilter"]
+
+
+hltList = hlts[year] #charmoniumHLT #muoniaHLT
 
 hltpaths = cms.vstring(hltList)
 
 hltpathsV = cms.vstring([h + '_v*' for h in hltList])
 
-filters = cms.vstring(
-                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                'hltDoubleTrkmumuFilterDoubleMu2Jpsi',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v1',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v2',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v3',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v4',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v5',
-                                'hltJpsiTkTkVertexFilterPhiDoubleTrk1v6',
-
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v1',
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v2',
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v5',
-                                'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',
-
-                                )
+filters = cms.vstring(filts[year])
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         triggerConditions = cms.vstring(hltpathsV),
