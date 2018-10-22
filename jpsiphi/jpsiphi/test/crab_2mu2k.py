@@ -123,6 +123,10 @@ run = 'A2018_1'
 
 if "2018" in run:
     jsonFile = jsonFile2018
+if "2017" in run:
+    jsonFile = jsonFile2017
+if "2016" in run:
+    jsonFile = jsonFile2016
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
