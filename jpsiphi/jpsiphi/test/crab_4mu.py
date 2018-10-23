@@ -1,9 +1,9 @@
 import sys
 import os
 
-#jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-321777_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
+jsonFile2016="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
+jsonFile2017="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-324209_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -44,6 +44,13 @@ datasetnames = {
 "bbar_jpsi_filter": '/bbbarToMuMu_MuonPt2_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',
 "bbar_jpsi_force": '/InclusiveBtoJpsitoMuMu_JpsiPt3_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM',
 
+#b0s->JpsiPhi exclusive MCs Official
+
+"bsJpsiPhiSoftQCD_PU" : "/BsToJpsiPhi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+"bsJpsiPhiSoftQCD"    : "/BsToJpsiPhi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM",
+"bsJpsiPhiBMuon_PU"   : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAODv2-PU2017_12Apr2018_N1_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+"bsJpsiPhiBMuon"      : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-N1_94X_mc2017_realistic_v10-v2/MINIAODSIM",
+
 "A2018_1": datasetbase + "/Run2018A-PromptReco-v1/MINIAOD", #CMSSW_10_1_4_patch1
 "A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD", #CMSSW_10_1_5
 "A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD", #CMSSW_10_1_5
@@ -52,26 +59,58 @@ datasetnames = {
 "C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD", #CMSSW_10_1_7
 "C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD", #CMSSW_10_1_8
 "C2018_3": datasetbase + "/Run2018C-PromptReco-v3/MINIAOD", #CMSSW_10_1_9
-"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD"  #CMSSW_10_2_1
+"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_1
+
+"B2017" : datasetbase + "/Run2017B-31Mar2018-v1/MINIAOD", #CMSSW_9_4_5_cand1
+"C2017" : datasetbase + "/Run2017C-31Mar2018-v1/MINIAOD",
+"D2017" : datasetbase + "/Run2017D-31Mar2018-v1/MINIAOD",
+"E2017" : datasetbase + "/Run2017E-31Mar2018-v1/MINIAOD",
+"F2017" : datasetbase + "/Run2017F-31Mar2018-v1/MINIAOD",
+
+"B2016_1" :  datasetbase + "/Run2016B-17Jul2018_ver1-v1/MINIAOD",
+"B2016_2" :  datasetbase + "/Run2016B-17Jul2018_ver2-v1/MINIAOD",
+"C2016"   :  datasetbase + "/Run2016C-17Jul2018-v1/MINIAOD",
+"D2016"   :  datasetbase + "/Run2016D-17Jul2018-v1/MINIAOD",
+"E2016"   :  datasetbase + "/Run2016E-17Jul2018-v1/MINIAOD",
+"F2016"   :  datasetbase + "/Run2016F-17Jul2018-v1/MINIAOD",
+"G2016"   :  datasetbase + "/Run2016G-17Jul2018-v1/MINIAOD",
+"H2016"   :  datasetbase + "/Run2016H-17Jul2018-v1/MINIAOD",
+
 }
 
 
 GlobalTags = {
 
-"F" :  datasetbase + '/Run2017F-17Nov2017-v1/MINIAOD',
-"B" : datasetbase + '/Run2017B-17Nov2017-v1/MINIAOD',
-"C" : datasetbase + '/Run2017C-17Nov2017-v1/MINIAOD',
-"D" : datasetbase + '/Run2017D-17Nov2017-v1/MINIAOD',
-"E" : datasetbase + '/Run2017E-17Nov2017-v1/MINIAOD',
-"A2018_1" :  "101X_dataRun2_Prompt_v9",
-"A2018_2": "101X_dataRun2_Prompt_v9",
-"A2018_3": "101X_dataRun2_Prompt_v10",
-"B2018_1": "101X_dataRun2_Prompt_v10",
-"B2018_2": "101X_dataRun2_Prompt_v11",
-"C2018_1": "101X_dataRun2_Prompt_v11",
-"C2018_2": "101X_dataRun2_Prompt_v11",
-"C2018_3": "101X_dataRun2_Prompt_v11",
-"D2018_2": "102X_dataRun2_Prompt_v5",
+    "B2017" : "94X_dataRun2_ReReco_EOY17_v6", #CMSSW_9_4_5_cand1
+    "C2017" : "94X_dataRun2_ReReco_EOY17_v6",
+    "D2017" : "94X_dataRun2_ReReco_EOY17_v6",
+    "E2017" : "94X_dataRun2_ReReco_EOY17_v6",
+    "F2017" : "94X_dataRun2_ReReco_EOY17_v6",
+
+    "B2016_1" :  "94X_dataRun2_v10", #CMSSW_9_4_9
+    "B2016_2" :  "94X_dataRun2_v10",
+    "C2016"   :  "94X_dataRun2_v10",
+    "D2016"   :  "94X_dataRun2_v10",
+    "E2016"   :  "94X_dataRun2_v10",
+    "F2016"   :  "94X_dataRun2_v10",
+    "G2016"   :  "94X_dataRun2_v10",
+    "H2016"   :  "94X_dataRun2_v10",
+
+    "A2018_1" :  "101X_dataRun2_Prompt_v9",
+    "A2018_2": "101X_dataRun2_Prompt_v9",
+    "A2018_3": "101X_dataRun2_Prompt_v10",
+    "B2018_1": "101X_dataRun2_Prompt_v10",
+    "B2018_2": "101X_dataRun2_Prompt_v11",
+    "C2018_1": "101X_dataRun2_Prompt_v11",
+    "C2018_2": "101X_dataRun2_Prompt_v11",
+    "C2018_3": "101X_dataRun2_Prompt_v11",
+    "D2018_2": "102X_dataRun2_Prompt_v5",
+
+    "bsJpsiPhiSoftQCD_PU" : "94X_mc2017_realistic_v14",
+    "bsJpsiPhiSoftQCD"    : "94X_mc2017_realistic_v10",
+    "bsJpsiPhiBMuon_PU"   : "94X_mc2017_realistic_v14",
+    "bsJpsiPhiBMuon"      : "94X_mc2017_realistic_v10"
+
 }
 
 runNumber = [
@@ -83,6 +122,10 @@ run = 'A2018_1'
 
 if "2018" in run:
     jsonFile = jsonFile2018
+if "2017" in run:
+    jsonFile = jsonFile2017
+if "2016" in run:
+    jsonFile = jsonFile2016
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
