@@ -247,11 +247,8 @@ filts["2016"] =["hltDimuon20JpsiL3Filtered",
 "hltJpsiTkVertexFilter"]
 
 
-hltList = hlts[year] #charmoniumHLT #muoniaHLT
-
-hltpaths = cms.vstring(hltList)
-
-hltpathsV = cms.vstring([h + '_v*' for h in hltList])
+hltpaths = cms.vstring(hlts[year] )
+hltpathsV = cms.vstring([h + '_v*' for h in hlts[year] ])
 
 filters = cms.vstring(filts[year])
 

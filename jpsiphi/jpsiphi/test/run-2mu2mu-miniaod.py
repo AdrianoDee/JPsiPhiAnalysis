@@ -157,38 +157,58 @@ pionmass = 0.13957061
 process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 # process.load("jpsiphi.jpsiphi.slimmedTracksTriggerMatcher2017_cfi")
 
-charmoniumHLT = [
-'HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
+year = "2018"
+
+if "2017" in par.dataset:
+    year = "2017"
+if "2016" in par.dataset:
+    year = "2016"
+
+charmoniumHLT = ['HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
 #'HLT_DoubleMu4_Jpsi_Displaced',
 #'HLT_DoubleMu4_3_Jpsi_Displaced',
 #'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
 #'HLT_Dimuon25_Jpsi',
-#'HLT_Dimuon0_Jpsi3p5_Muon2'
+'HLT_Dimuon0_Jpsi3p5_Muon2'
 ]
 
-hltList = charmoniumHLT #muoniaHLT
+hlts = {}
 
-hltpaths = cms.vstring(hltList)
+hlts["2018"] = charmoniumHLT
 
-hltpathsV = cms.vstring([h + '_v*' for h in hltList])
+hlts["2017"] =["HLT_Dimuon0_Jpsi3p5_Muon2"]
 
-filters = cms.vstring(
-                                #HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi
-                                'hltDoubleMu2JpsiDoubleTrkL3Filtered',
-                                'hltDiMuonGlbOrTrk0zFiltered0p2v1',
-								'hltDiMuonGlbOrTrk0zFiltered0p2v2',
-								'hltDiMuonGlbOrTrk0zFiltered0p2v3',
-								'hltDiMuonGlbOrTrk0zFiltered0p2v4',
-								'hltDiMuonGlbOrTrk0zFiltered0p2v5',
-								'hltDiMuonGlbOrTrk0zFiltered0p2v6',
+hlts["2016"]=["HLT_Dimuon0_Jpsi_Muon"]
 
-                                'hltDiMuonGlbOrTrkFiltered0v1',
-								'hltDiMuonGlbOrTrkFiltered0v2',
-								'hltDiMuonGlbOrTrkFiltered0v3',
-								'hltDiMuonGlbOrTrkFiltered0v4',
-								'hltDiMuonGlbOrTrkFiltered0v5',
-								'hltDiMuonGlbOrTrkFiltered0v6',
-                                )
+filts = {}
+
+filts["2018"] = ['hltDoubleMu2JpsiDoubleTrkL3Filtered',
+'hltDiMuonGlbOrTrk0zFiltered0p2v1',
+'hltDiMuonGlbOrTrk0zFiltered0p2v2',
+'hltDiMuonGlbOrTrk0zFiltered0p2v3',
+'hltDiMuonGlbOrTrk0zFiltered0p2v4',
+'hltDiMuonGlbOrTrk0zFiltered0p2v5',
+'hltDiMuonGlbOrTrk0zFiltered0p2v6',
+
+'hltDiMuonGlbOrTrkFiltered0v1',
+'hltDiMuonGlbOrTrkFiltered0v2',
+'hltDiMuonGlbOrTrkFiltered0v3',
+'hltDiMuonGlbOrTrkFiltered0v4',
+'hltDiMuonGlbOrTrkFiltered0v5',
+'hltDiMuonGlbOrTrkFiltered0v6'
+
+'hltJpsiMuonL3Filtered3p5',
+'hltVertexmumuFilterJpsiMuon3p5'
+]
+
+filts["2016"] = ["hltJpsiMuonL3Filtered","hltVertexmumuFilterJpsiMuon"]
+
+filts["2017"] = ["hltJpsiMuonL3Filtered3p5","hltVertexmumuFilterJpsiMuon3p5"]
+
+hltpaths = cms.vstring(hlts[year])
+hltpathsV = cms.vstring([h + '_v*' for h in hlts[year]])
+
+filters = cms.vstring(filts[year])
 
 process.triggerSelection = cms.EDFilter("TriggerResultsFilter",
                                         triggerConditions = cms.vstring(hltpathsV),
