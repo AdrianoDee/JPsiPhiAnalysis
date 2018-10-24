@@ -10,9 +10,9 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
                          maxEventsToPrint = cms.untracked.int32(0),
                          ExternalDecays = cms.PSet(
         EvtGen130 = cms.untracked.PSet(
-            decay_table = cms.string('GeneratorInterface/EvtGenInterface/data/DECAY_2010.DEC'),
-            operates_on_particles = cms.vint32(),
-            particle_property_file = cms.FileInPath('GeneratorInterface/EvtGenInterface/data/evt.pdl')
+            decay_table = cms.string('GeneratorInterface/EvtGenInterface/data/DECAY_2014_NOLONGLIFE.DEC'),
+            particle_property_file = cms.FileInPath('GeneratorInterface/EvtGenInterface/data/evt_2014.pdl'),
+            operates_on_particles = cms.vint32()
         ),
         parameterSets = cms.vstring('EvtGen130')
         ),
@@ -39,9 +39,9 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
 generator.PythiaParameters.processParameters.extend(EvtGenExtraParticles)
 
 configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.1 $'),
-    name = cms.untracked.string('$Source: Configuration/Generator/python/BuToKstarMuMu_forSTEAM_13TeV_TuneCUETP8M1_cfi.py $'),
-    annotation = cms.untracked.string('Summer14: Pythia8+EvtGen130 generation of Bu --> K* Mu+Mu-, 13TeV, Tune CUETP8M1')
+    version = cms.untracked.string('$1.0$'),
+    name = cms.untracked.string('$Generic BBbar with a JPsi$'),
+    annotation = cms.untracked.string('Generic BBbar with a JPsi')
     )
 
 ###########
@@ -59,17 +59,17 @@ oniafilter = cms.EDFilter("PythiaFilter",
                           Status = cms.untracked.int32(2),
                           MaxEta = cms.untracked.double(1000.0),
                           MinEta = cms.untracked.double(-1000.0),
-                          MinPt = cms.untracked.double(1.0),
+                          MinPt = cms.untracked.double(2.0),
                           ParticleID = cms.untracked.int32(443)
                           )
 
 
 mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     Status = cms.untracked.vint32(1, 1),
-    MinPt = cms.untracked.vdouble(0.0, 0.0),
+    MinPt = cms.untracked.vdouble(1.0, 1.0),
     MinP = cms.untracked.vdouble(0., 0.),
-    MaxEta = cms.untracked.vdouble(2.6, 2.6),
-    MinEta = cms.untracked.vdouble(-2.6, -2.6),
+    MaxEta = cms.untracked.vdouble(2.5, 2.5),
+    MinEta = cms.untracked.vdouble(-2.5, -2.5),
     MinInvMass = cms.untracked.double(2.0),
     MaxInvMass = cms.untracked.double(4.0),
     ParticleCharge = cms.untracked.int32(-1),
@@ -79,4 +79,4 @@ mumugenfilter = cms.EDFilter("MCParticlePairFilter",
 
 
 
-ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter)
+ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter*phifilter*kkgenfilter)
