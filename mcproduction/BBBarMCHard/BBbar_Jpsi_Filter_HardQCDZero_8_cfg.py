@@ -59,17 +59,17 @@ oniafilter = cms.EDFilter("PythiaFilter",
                           Status = cms.untracked.int32(2),
                           MaxEta = cms.untracked.double(1000.0),
                           MinEta = cms.untracked.double(-1000.0),
-                          MinPt = cms.untracked.double(2.0),
+                          MinPt = cms.untracked.double(1.0),
                           ParticleID = cms.untracked.int32(443)
                           )
 
 
 mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     Status = cms.untracked.vint32(1, 1),
-    MinPt = cms.untracked.vdouble(1.0, 1.0),
+    MinPt = cms.untracked.vdouble(0.0, 0.0),
     MinP = cms.untracked.vdouble(0., 0.),
-    MaxEta = cms.untracked.vdouble(2.5, 2.5),
-    MinEta = cms.untracked.vdouble(-2.5, -2.5),
+    MaxEta = cms.untracked.vdouble(2.6, 2.6),
+    MinEta = cms.untracked.vdouble(-2.6, -2.6),
     MinInvMass = cms.untracked.double(2.0),
     MaxInvMass = cms.untracked.double(4.0),
     ParticleCharge = cms.untracked.int32(-1),
@@ -79,4 +79,4 @@ mumugenfilter = cms.EDFilter("MCParticlePairFilter",
 
 
 
-ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter*phifilter*kkgenfilter)
+ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter)
