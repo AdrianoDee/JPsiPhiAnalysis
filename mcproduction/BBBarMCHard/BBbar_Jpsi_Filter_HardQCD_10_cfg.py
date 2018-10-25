@@ -79,4 +79,4 @@ mumugenfilter = cms.EDFilter("MCParticlePairFilter",
 
 
 
-ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter*phifilter*kkgenfilter)
+ProductionFilterSequence = cms.Sequence(generator*bfilter*oniafilter*mumugenfilter)
