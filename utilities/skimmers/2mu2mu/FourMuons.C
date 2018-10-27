@@ -345,7 +345,7 @@ Bool_t FourMuons::Process(Long64_t entry)
 
 
     out_run =       (Float_t)(*run);
-if(false)
+if((*doubledimuon_vProb)>0.001)
 {
     out_event =     (Float_t)(*event);
     out_numPrimaryVertices =        (Float_t)(*numPrimaryVertices);

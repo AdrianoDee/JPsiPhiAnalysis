@@ -269,6 +269,8 @@ void TwoMuTwoK::SlaveBegin(TTree * /*tree*/)
   outTree->Branch("lowKaon_NStrLayers",        &out_lowKaon_NStrLayers,        "lowKaon_NStrLayers/F");
   outTree->Branch("lowKaon_NBPixLayers",        &out_lowKaon_NBPixLayers,        "lowKaon_NBPixLayers/F");
 
+  outTree->Branch("isBestCandidate",        &out_isBestCandidate,        "isBestCandidate/F");
+
 
 
 
@@ -301,7 +303,7 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
 
   test = test && (*dimuonditrk_vProb> 0.005);
-  
+
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //
