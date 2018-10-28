@@ -7,7 +7,7 @@ fi
 
 
 f=$1
-d=$2
+d=${2:-./}
 
 echo "Building python library with MC file list for ${f} in ${d}"
 
