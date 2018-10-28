@@ -118,6 +118,7 @@ if par.isLocal:
     from qcd_ml_filelist import *
     from bbbar_ml_filelist import *
     from bstojpsiphi_softqcd_filelist import *
+    from bbhook_filelist import *
 
     filename = par.mc
 
@@ -127,10 +128,10 @@ if par.isLocal:
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
                  "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
                  "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist,
-                 "bujpsiphi" : bujpsiphi_filelist}
+                 "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist}
 
     gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
-                 "bbbar_soft" : "100X_upgrade2018_realistic_v10",
+                 "bbbar_soft" : "100X_upgrade2018_realistic_v10", "bbbar_hook" : "100X_upgrade2018_realistic_v10",
                  "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  ,
                  "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
                  "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
