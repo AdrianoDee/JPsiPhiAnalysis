@@ -109,7 +109,66 @@
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2017F-31Mar2018-v1_MINIAOD___20181023_000853/181022_220909/0005/sum.root");
   */
 
-  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018C-PromptReco-v3_MINIAOD___20180913_014624/180912_234632/0000/rootuple-2018-dimuonditrak_fivedataC2018_3_0_207.root");
+  /// 2016
+
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0003/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0004/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0005/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0006/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0007/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016B-17Jul2018_ver2-v1_MINIAOD___20181023_104525/181023_084536/0008/sum.root");
+
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016C-17Jul2018-v1_MINIAOD___20181023_100656/181023_080711/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016C-17Jul2018-v1_MINIAOD___20181023_100656/181023_080711/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016C-17Jul2018-v1_MINIAOD___20181023_100656/181023_080711/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016C-17Jul2018-v1_MINIAOD___20181023_100656/181023_080711/0003/sum.root");
+  */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0003/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0004/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016D-17Jul2018-v1_MINIAOD___20181023_103007/181023_083021/0005/sum.root");
+  */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016E-17Jul2018-v1_MINIAOD___20181023_103035/181023_083048/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016E-17Jul2018-v1_MINIAOD___20181023_103035/181023_083048/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016E-17Jul2018-v1_MINIAOD___20181023_103035/181023_083048/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016E-17Jul2018-v1_MINIAOD___20181023_103035/181023_083048/0003/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016E-17Jul2018-v1_MINIAOD___20181023_103035/181023_083048/0004/sum.root");
+  */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016F-17Jul2018-v1_MINIAOD___20181023_104610/181023_084620/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016F-17Jul2018-v1_MINIAOD___20181023_104610/181023_084620/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016F-17Jul2018-v1_MINIAOD___20181023_104610/181023_084620/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016F-17Jul2018-v1_MINIAOD___20181023_104610/181023_084620/0003/sum.root");
+  */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0003/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0004/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0005/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0006/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016G-17Jul2018-v1_MINIAOD___20181023_104628/181023_084638/0007/sum.root");
+  */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0001/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0002/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0003/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0004/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0005/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0006/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0007/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0008/sum.root");
+  */
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/TwoMuTwoK";
   TProof *p = TProof::Open("workers=5"); // 12 workers for qsub
