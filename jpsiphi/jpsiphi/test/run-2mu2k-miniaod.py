@@ -115,6 +115,8 @@ if par.isLocal:
     from y4704_lhcb_filelist import *
     from y4506_lhcb_filelist import *
     from y4506_zero_filelist import *
+    from y4273_spin_filelist import *
+    from y4506_spin_filelist import *
     from qcd_ml_filelist import *
     from bbbar_ml_filelist import *
     from bstojpsiphi_softqcd_filelist import *
@@ -127,6 +129,7 @@ if par.isLocal:
                  "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
                  "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
+                 "y4273_spin" : y4273_spin_filelist, "y4506_spin" : y4506_spin_filelist,
                  "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist,
                  "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist}
 
@@ -136,6 +139,7 @@ if par.isLocal:
                  "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
                  "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
                  "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10",
+                 "y4273_spin" : "100X_upgrade2018_realistic_v10",  "y4506_spin" : "100X_upgrade2018_realistic_v10",
                  "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10",
                  "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10" }
 
