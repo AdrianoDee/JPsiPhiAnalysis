@@ -61,7 +61,7 @@ decayfilter = cms.EDFilter("PythiaDauVFilter",
     DaughterIDs = cms.untracked.vint32(443, 333),
     MaxEta = cms.untracked.vdouble(9999.0, 9999.0),
     MinEta = cms.untracked.vdouble(-9999.0, -9999.0),
-    MinPt = cms.untracked.vdouble(0.5, 0.5),
+    MinPt = cms.untracked.vdouble(1.5, 0.5),
     verbose = cms.untracked.int32(4*3)
 )
 
