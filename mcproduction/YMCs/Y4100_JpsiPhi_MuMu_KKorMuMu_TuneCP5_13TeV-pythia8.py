@@ -82,7 +82,7 @@ phipositivelegfilter = cms.EDFilter("PythiaDauVFilter",
     NumberDaughters = cms.untracked.int32(1),
     DaughterIDs     = cms.untracked.vint32(321, 13), # either K+ or mu+
     MinPt           = cms.untracked.vdouble(0.5, 0.5),
-    MinEta          = cms.untracked.vdouble(-2.5, 2.5),
+    MinEta          = cms.untracked.vdouble(-2.5, -2.5),
     MaxEta          = cms.untracked.vdouble( 2.5, 2.5),
     verbose         = cms.untracked.int32(4*1),
     )
@@ -93,7 +93,7 @@ phinegativelegfilter = cms.EDFilter("PythiaDauVFilter",
     NumberDaughters = cms.untracked.int32(1),
     DaughterIDs     = cms.untracked.vint32(-321, -13), # either K- or mu-
     MinPt           = cms.untracked.vdouble(0.5, 0.5),
-    MinEta          = cms.untracked.vdouble(-2.5, 2.5),
+    MinEta          = cms.untracked.vdouble(-2.5, -2.5),
     MaxEta          = cms.untracked.vdouble( 2.5, 2.5),
     verbose         = cms.untracked.int32(4*1),
 )
