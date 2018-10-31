@@ -100,8 +100,8 @@ void TwoMuTwoK::SlaveBegin(TTree * /*tree*/)
   outTree->Branch("ditrak_m",     &out_ditrak_m,     "ditrak_m/F");
   outTree->Branch("ditrak_pt",       &out_ditrak_pt,        "ditrak_pt/F");
 
-  outTree->Branch("highKaon_pt",          &out_highKaon_pt,          "highKaon_pt/F");
-  outTree->Branch("lowKaon_pt",       &out_lowKaon_pt,       "lowKaon_pt/F");
+  outTree->Branch("highKaon_pt",    &out_highKaon_pt,          "highKaon_pt/F");
+  outTree->Branch("lowKaon_pt",     &out_lowKaon_pt,       "lowKaon_pt/F");
   outTree->Branch("highMuon_pt",    &out_highMuon_pt,    "highMuon_pt/F");
   outTree->Branch("lowMuon_pt",     &out_lowMuon_pt,     "lowMuon_pt/F");
 
