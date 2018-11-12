@@ -171,6 +171,10 @@
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0007/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2016H-17Jul2018-v1_MINIAOD___20181023_104708/181023_084719/0008/sum.root");
   */
+  /*
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20181106_172137/181106_162145/0000/sum.root");
+  dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20181106_172137/181106_162145/0001/sum.root");
+  */
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/TwoMuTwoK";
   TProof *p = TProof::Open("workers=5"); // 12 workers for qsub
