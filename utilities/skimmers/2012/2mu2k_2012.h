@@ -5,8 +5,8 @@
 // found on file: runD_split_01.root
 //////////////////////////////////////////////////////////
 
-#ifndef 2mu2k_2012_h
-#define 2mu2k_2012_h
+#ifndef TwoMuTwoK_2012_h
+#define TwoMuTwoK_2012_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -16,18 +16,42 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
-// Headers needed by this particular selector
-#include <vector>
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
 
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+//
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
+#include <vector>
+#include <tuple>
+#include <map>
 
 
 
-class 2mu2k_2012 : public TSelector {
+class TwoMuTwoK_2012 : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
 
+   TTree *outTree;
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderArray<unsigned int> TrigRes = {fReader, "TrigRes"};
    TTreeReaderArray<string> TrigNames = {fReader, "TrigNames"};
@@ -77,6 +101,7 @@ public :
    TTreeReaderArray<float> tr_dedxErr_byHits = {fReader, "tr_dedxErr_byHits"};
    TTreeReaderArray<int> tr_saturMeas_byHits = {fReader, "tr_saturMeas_byHits"};
    TTreeReaderArray<int> tr_Meas_byHits = {fReader, "tr_Meas_byHits"};
+
    TTreeReaderValue<UInt_t> nMu = {fReader, "nMu"};
    TTreeReaderArray<float> muPx = {fReader, "muPx"};
    TTreeReaderArray<float> muPy = {fReader, "muPy"};
@@ -112,6 +137,7 @@ public :
    TTreeReaderValue<vector<bool>> muFirstEndCap = {fReader, "muFirstEndCap"};
    TTreeReaderArray<float> muDzVtx = {fReader, "muDzVtx"};
    TTreeReaderArray<float> muDxyVtx = {fReader, "muDxyVtx"};
+
    TTreeReaderValue<UInt_t> nMuMu = {fReader, "nMuMu"};
    TTreeReaderArray<float> MuMuMass = {fReader, "MuMuMass"};
    TTreeReaderArray<float> MuMuPx = {fReader, "MuMuPx"};
@@ -163,6 +189,7 @@ public :
    TTreeReaderArray<float> KKDecayVtx_XE = {fReader, "KKDecayVtx_XE"};
    TTreeReaderArray<float> KKDecayVtx_YE = {fReader, "KKDecayVtx_YE"};
    TTreeReaderArray<float> KKDecayVtx_ZE = {fReader, "KKDecayVtx_ZE"};
+
    TTreeReaderArray<int> ka1Idx = {fReader, "ka1Idx"};
    TTreeReaderArray<int> ka2Idx = {fReader, "ka2Idx"};
    TTreeReaderArray<float> ka1Px_KK = {fReader, "ka1Px_KK"};
@@ -196,6 +223,7 @@ public :
    TTreeReaderValue<UInt_t> nX_pre13 = {fReader, "nX_pre13"};
    TTreeReaderValue<UInt_t> nX_pre14 = {fReader, "nX_pre14"};
    TTreeReaderValue<UInt_t> nX_pre15 = {fReader, "nX_pre15"};
+
    TTreeReaderArray<float> XMass = {fReader, "XMass"};
    TTreeReaderArray<float> XPx = {fReader, "XPx"};
    TTreeReaderArray<float> XPy = {fReader, "XPy"};
@@ -393,8 +421,86 @@ public :
    TTreeReaderArray<int> kaon2_Meas_byHits = {fReader, "kaon2_Meas_byHits"};
 
 
-   2mu2k_2012(TTree * /*tree*/ =0) { }
-   virtual ~2mu2k_2012() { }
+
+   Float_t out_TrigRes, out_TrigNames, out_MatchTriggerNames, out_L1TrigRes, out_evtNum;
+Float_t out_runNum, out_lumiNum, out_priVtx_n, out_priVtx_X, out_priVtx_Y;
+Float_t out_priVtx_Z, out_priVtx_XE, out_priVtx_YE, out_priVtx_ZE, out_priVtx_NormChi2;
+Float_t out_priVtx_Chi2, out_priVtx_CL, out_priVtx_tracks, out_priVtx_tracksPtSq, out_trNotRef;
+Float_t out_trRef, out_trackPx, out_trackPy, out_trackPz, out_trackEnergy;
+Float_t out_trackNDF, out_trackPhits, out_trackShits, out_trackChi2, out_trackD0;
+Float_t out_trackD0Err, out_trackCharge, out_TrackHighPurity, out_TrackTight, out_trackfHits;
+Float_t out_trackFirstBarrel, out_trackFirstEndCap, out_trackDzVtx, out_trackDxyVtx, out_tr_nsigdedx;
+Float_t out_tr_dedx, out_tr_dedxMass, out_tr_theo, out_tr_sigma, out_tr_dedx_byHits;
+Float_t out_tr_dedxErr_byHits, out_tr_saturMeas_byHits, out_tr_Meas_byHits, out_nMu, out_muPx;
+Float_t out_muPy, out_muPz, out_muCharge, out_muD0, out_muDz;
+Float_t out_muChi2, out_muNDF, out_muPhits, out_muShits, out_muLayersTr;
+Float_t out_muLayersPix, out_muD0E, out_muDzVtxErr, out_muKey, out_muIsGlobal;
+Float_t out_muIsPF, out_muGlMuHits, out_muGlChi2, out_muGlNDF, out_muGlMatchedStation;
+Float_t out_muGlDzVtx, out_muGlDxyVtx, out_nMatchedStations, out_muType, out_muQual;
+Float_t out_muTrack, out_muNOverlap, out_muNSharingSegWith, out_mufHits, out_muFirstBarrel;
+Float_t out_muFirstEndCap, out_muDzVtx, out_muDxyVtx, out_nMuMu, out_MuMuMass;
+Float_t out_MuMuPx, out_MuMuPy, out_MuMuPz, out_MuMuVtx_CL, out_MuMuVtx_Chi2;
+Float_t out_MuMuDecayVtx_X, out_MuMuDecayVtx_Y, out_MuMuDecayVtx_Z, out_MuMuDecayVtx_XE, out_MuMuDecayVtx_YE;
+Float_t out_MuMuDecayVtx_ZE, out_mu1Idx, out_mu2Idx, out_mu1Px_MuMu, out_mu1Py_MuMu;
+Float_t out_mu1Pz_MuMu, out_mu1Chi2_MuMu, out_mu1NDF_MuMu, out_mu2Px_MuMu, out_mu2Py_MuMu;
+Float_t out_mu2Pz_MuMu, out_mu2Chi2_MuMu, out_mu2NDF_MuMu, out_MuMuType, out_MuMuMuonTrigMatch;
+Float_t out_PriVtxMuMuCorr_n, out_PriVtxMuMuCorr_X, out_PriVtxMuMuCorr_Y, out_PriVtxMuMuCorr_Z, out_PriVtxMuMuCorr_EX;
+Float_t out_PriVtxMuMuCorr_EY, out_PriVtxMuMuCorr_EZ, out_PriVtxMuMuCorr_Chi2, out_PriVtxMuMuCorr_CL, out_PriVtxMuMuCorr_tracks;
+Float_t out_nTrk_afterMuMu, out_nKK, out_KKMass, out_KKPx, out_KKPy;
+Float_t out_KKPz, out_KKVtx_CL, out_KKVtx_Chi2, out_KKDecayVtx_X, out_KKDecayVtx_Y;
+Float_t out_KKDecayVtx_Z, out_KKDecayVtx_XE, out_KKDecayVtx_YE, out_KKDecayVtx_ZE, out_ka1Idx;
+Float_t out_ka2Idx, out_ka1Px_KK, out_ka1Py_KK, out_ka1Pz_KK, out_ka1Chi2_KK;
+Float_t out_ka1NDF_KK, out_ka2Px_KK, out_ka2Py_KK, out_ka2Pz_KK, out_ka2Chi2_KK;
+Float_t out_ka2NDF_KK, out_DR_MuMu_K1, out_DR_MuMu_K2, out_DR_MuMuKK_K1, out_DR_MuMuKK_K2;
+Float_t out_nX, out_nX_pre0, out_nX_pre1, out_nX_pre2, out_nX_pre3;
+Float_t out_nX_pre4, out_nX_pre5, out_nX_pre6, out_nX_pre7, out_nX_pre8;
+Float_t out_nX_pre9, out_nX_pre10, out_nX_pre11, out_nX_pre12, out_nX_pre13;
+Float_t out_nX_pre14, out_nX_pre15;
+Float_t out_XMass, out_XPx, out_XPy;
+Float_t out_XPz, out_XPxE, out_XPyE, out_XPzE, out_XVtx_CL;
+Float_t out_XVtx_Chi2, out_XDecayVtx_X, out_XDecayVtx_Y, out_XDecayVtx_Z, out_XDecayVtx_XE;
+Float_t out_XDecayVtx_YE, out_XDecayVtx_ZE, out_XCosAlphaBS, out_XCosAlpha3DBS, out_XCTauBS;
+Float_t out_XCTauBSE, out_XLxyBS, out_XLxyBSE, out_XLxyzBS, out_XLxyzBSE;
+Float_t out_XCosAlphaPV, out_XCosAlpha3DPV, out_XCTauPV, out_XCTauPVE, out_XLxyPV;
+Float_t out_XLxyPVE, out_XLxyzPV, out_XLxyzPVE, out_PriVtx_XCosAlpha_n, out_PriVtx_XCosAlpha_X;
+Float_t out_PriVtx_XCosAlpha_Y, out_PriVtx_XCosAlpha_Z, out_PriVtx_XCosAlpha_EX, out_PriVtx_XCosAlpha_EY, out_PriVtx_XCosAlpha_EZ;
+Float_t out_PriVtx_XCosAlpha_Chi2, out_PriVtx_XCosAlpha_CL, out_PriVtx_XCosAlpha_tracks, out_XCosAlphaPVCosAlpha, out_XCosAlpha3DPVCosAlpha;
+Float_t out_XCTauPVCosAlpha, out_XCTauPVCosAlphaE, out_XLxyPVCosAlpha, out_XLxyPVCosAlphaE, out_XLxyzPVCosAlpha;
+Float_t out_XLxyzPVCosAlphaE, out_PriVtx_XCosAlpha3D_n, out_PriVtx_XCosAlpha3D_X, out_PriVtx_XCosAlpha3D_Y, out_PriVtx_XCosAlpha3D_Z;
+Float_t out_PriVtx_XCosAlpha3D_EX, out_PriVtx_XCosAlpha3D_EY, out_PriVtx_XCosAlpha3D_EZ, out_PriVtx_XCosAlpha3D_Chi2, out_PriVtx_XCosAlpha3D_CL;
+Float_t out_PriVtx_XCosAlpha3D_tracks, out_XCosAlphaPVCosAlpha3D, out_XCosAlpha3DPVCosAlpha3D, out_XCTauPVCosAlpha3D, out_XCTauPVCosAlpha3DE;
+Float_t out_XLxyPVCosAlpha3D, out_XLxyPVCosAlpha3DE, out_XLxyzPVCosAlpha3D, out_XLxyzPVCosAlpha3DE, out_XLessPV_tracksPtSq;
+Float_t out_XLessPV_4tracksPtSq, out_PriVtxXLess_n, out_PriVtxXLess_X, out_PriVtxXLess_Y, out_PriVtxXLess_Z;
+Float_t out_PriVtxXLess_EX, out_PriVtxXLess_EY, out_PriVtxXLess_EZ, out_PriVtxXLess_Chi2, out_PriVtxXLess_CL;
+Float_t out_PriVtxXLess_tracks, out_XCosAlphaXLessPV, out_XCosAlpha3DXLessPV, out_XCTauXLessPV, out_XCTauXLessPVE;
+Float_t out_XLxyXLessPV, out_XLxyXLessPVE, out_XLxyzXLessPV, out_XLxyzXLessPVE, out_PriVtxXLess_XCosAlpha_n;
+Float_t out_PriVtxXLess_XCosAlpha_X, out_PriVtxXLess_XCosAlpha_Y, out_PriVtxXLess_XCosAlpha_Z, out_PriVtxXLess_XCosAlpha_EX, out_PriVtxXLess_XCosAlpha_EY;
+Float_t out_PriVtxXLess_XCosAlpha_EZ, out_PriVtxXLess_XCosAlpha_Chi2, out_PriVtxXLess_XCosAlpha_CL, out_PriVtxXLess_XCosAlpha_tracks, out_XCosAlphaXLessPVCosAlpha;
+Float_t out_XCosAlpha3DXLessPVCosAlpha, out_XCTauXLessPVCosAlpha, out_XCTauXLessPVCosAlphaE, out_XLxyXLessPVCosAlpha, out_XLxyXLessPVCosAlphaE;
+Float_t out_XLxyzXLessPVCosAlpha, out_XLxyzXLessPVCosAlphaE, out_PriVtxXLess_XCosAlpha3D_n, out_PriVtxXLess_XCosAlpha3D_X, out_PriVtxXLess_XCosAlpha3D_Y;
+Float_t out_PriVtxXLess_XCosAlpha3D_Z, out_PriVtxXLess_XCosAlpha3D_EX, out_PriVtxXLess_XCosAlpha3D_EY, out_PriVtxXLess_XCosAlpha3D_EZ, out_PriVtxXLess_XCosAlpha3D_Chi2;
+Float_t out_PriVtxXLess_XCosAlpha3D_CL, out_PriVtxXLess_XCosAlpha3D_tracks, out_XCosAlphaXLessPVCosAlpha3D, out_XCosAlpha3DXLessPVCosAlpha3D, out_XCTauXLessPVCosAlpha3D;
+Float_t out_XCTauXLessPVCosAlpha3DE, out_XLxyXLessPVCosAlpha3D, out_XLxyXLessPVCosAlpha3DE, out_XLxyzXLessPVCosAlpha3D, out_XLxyzXLessPVCosAlpha3DE;
+Float_t out_PriVtxXCorr_n, out_PriVtxXCorr_X, out_PriVtxXCorr_Y, out_PriVtxXCorr_Z, out_PriVtxXCorr_EX;
+Float_t out_PriVtxXCorr_EY, out_PriVtxXCorr_EZ, out_PriVtxXCorr_Chi2, out_PriVtxXCorr_CL, out_PriVtxXCorr_tracks;
+Float_t out_XCosAlphaPVX, out_XCTauPVX, out_XCTauPVXE, out_XLxyPVX, out_XLxyzPVX;
+Float_t out_XCTauPVX_3D, out_XCTauPVX_3D_err, out_kaon1_dxy_PV, out_kaon1_dz_PV, out_kaon2_dxy_PV;
+Float_t out_kaon2_dz_PV, out_kaon1_dxy_BS, out_kaon1_dz_BS, out_kaon2_dxy_BS, out_kaon2_dz_BS;
+Float_t out_kaon1_dxy_XLessPV, out_kaon1_dz_XLessPV, out_kaon2_dxy_XLessPV, out_kaon2_dz_XLessPV, out_kaon1_dxyE;
+Float_t out_kaon1_dzE, out_kaon2_dxyE, out_kaon2_dzE, out_XMuMuIdx, out_XKaon1Idx;
+Float_t out_XKaon2Idx, out_Kaon1FromPV, out_Kaon2FromPV, out_Muon1Px_MuMuKK, out_Muon1Py_MuMuKK;
+Float_t out_Muon1Pz_MuMuKK, out_Muon1E_MuMuKK, out_Muon2Px_MuMuKK, out_Muon2Py_MuMuKK, out_Muon2Pz_MuMuKK;
+Float_t out_Muon2E_MuMuKK, out_Kaon1Px_MuMuKK, out_Kaon1Py_MuMuKK, out_Kaon1Pz_MuMuKK, out_Kaon1E_MuMuKK;
+Float_t out_kaon1_nsigdedx, out_kaon1_dedx, out_kaon1_dedxMass, out_kaon1_theo, out_kaon1_sigma;
+Float_t out_kaon1_dedx_byHits, out_kaon1_dedxErr_byHits, out_kaon1_saturMeas_byHits, out_kaon1_Meas_byHits, out_Kaon2Px_MuMuKK;
+Float_t out_Kaon2Py_MuMuKK, out_Kaon2Pz_MuMuKK, out_Kaon2E_MuMuKK, out_kaon2_nsigdedx, out_kaon2_dedx;
+Float_t out_kaon2_dedxMass, out_kaon2_theo, out_kaon2_sigma, out_kaon2_dedx_byHits, out_kaon2_dedxErr_byHits;
+Float_t out_kaon2_saturMeas_byHits, out_kaon2_Meas_byHits;
+Float_ out_JpsiMass, out_JpsiMass_ref, out_PhiMass;
+
+
+   TwoMuTwoK_2012(TTree * /*tree*/ =0) { }
+   virtual ~TwoMuTwoK_2012() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -409,14 +515,17 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(2mu2k_2012,0);
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
+   ClassDef(TwoMuTwoK_2012,0);
 
 };
 
 #endif
 
-#ifdef 2mu2k_2012_cxx
-void 2mu2k_2012::Init(TTree *tree)
+#ifdef TwoMuTwoK_2012_cxx
+void TwoMuTwoK_2012::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -428,7 +537,7 @@ void 2mu2k_2012::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t 2mu2k_2012::Notify()
+Bool_t TwoMuTwoK_2012::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -440,4 +549,4 @@ Bool_t 2mu2k_2012::Notify()
 }
 
 
-#endif // #ifdef 2mu2k_2012_cxx
+#endif // #ifdef TwoMuTwoK_2012_cxx
