@@ -211,7 +211,7 @@ hlts = {}
 
 hlts["2018"] = charmoniumHLT
 
-hlts["2017"] =["HLT_Dimuon25_Jpsi",
+hlts["2017"] =["HLT_Dimuon25_Jpsi",             #0
     "HLT_Dimuon20_Jpsi_Barrel_Seagulls",
     "HLT_DoubleMu4_JpsiTrkTrk_Displaced"]
 
