@@ -306,7 +306,6 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
 
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
-  //
 
   if(test)
   {

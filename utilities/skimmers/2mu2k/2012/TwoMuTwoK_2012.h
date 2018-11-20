@@ -5,8 +5,8 @@
 // found on file: runD_split_01.root
 //////////////////////////////////////////////////////////
 
-#ifndef 2mu2k_2012_h
-#define 2mu2k_2012_h
+#ifndef TwoMuTwoK_2012_h
+#define TwoMuTwoK_2012_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -16,17 +16,46 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
-// Headers needed by this particular selector
-#include <vector>
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
 
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+//
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
+#include <vector>
+#include <tuple>
+#include <map>
 
 
+// Headers needed by this particular selector
+#include "TLorentzVector.h"
 
-class 2mu2k_2012 : public TSelector {
+
+class TwoMuTwoK_2012 : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   Float_t JPsi_mass, Phi_mass, Phi_mean, Phi_sigma;
+   TTree *outTree;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderArray<unsigned int> TrigRes = {fReader, "TrigRes"};
@@ -392,9 +421,10 @@ public :
    TTreeReaderArray<int> kaon2_saturMeas_byHits = {fReader, "kaon2_saturMeas_byHits"};
    TTreeReaderArray<int> kaon2_Meas_byHits = {fReader, "kaon2_Meas_byHits"};
 
+   Double_t out_mass;
 
-   2mu2k_2012(TTree * /*tree*/ =0) { }
-   virtual ~2mu2k_2012() { }
+   TwoMuTwoK_2012(TTree * /*tree*/ =0) { }
+   virtual ~TwoMuTwoK_2012() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -409,14 +439,17 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(2mu2k_2012,0);
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
+   ClassDef(TwoMuTwoK_2012,0);
 
 };
 
 #endif
 
-#ifdef 2mu2k_2012_cxx
-void 2mu2k_2012::Init(TTree *tree)
+#ifdef TwoMuTwoK_2012_cxx
+void TwoMuTwoK_2012::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the reader is initialized.
@@ -428,7 +461,7 @@ void 2mu2k_2012::Init(TTree *tree)
    fReader.SetTree(tree);
 }
 
-Bool_t 2mu2k_2012::Notify()
+Bool_t TwoMuTwoK_2012::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -440,4 +473,4 @@ Bool_t 2mu2k_2012::Notify()
 }
 
 
-#endif // #ifdef 2mu2k_2012_cxx
+#endif // #ifdef TwoMuTwoK_2012_cxx
