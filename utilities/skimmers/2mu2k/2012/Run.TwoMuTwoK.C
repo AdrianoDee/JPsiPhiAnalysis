@@ -8,12 +8,9 @@
 
   // INPUT DATA SAMPLE ON LOCAL DISK
 
-  TDSet* dataset = new TDSet("TTree", "JPsiPhiTree", "rootuple");
+  dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_14.root");
 
-  /// 2012
-
-  dataset->Add("/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_14.root");
-
+   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/2012/TwoMuTwoK_2012";
 
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/TwoMuTwoK";

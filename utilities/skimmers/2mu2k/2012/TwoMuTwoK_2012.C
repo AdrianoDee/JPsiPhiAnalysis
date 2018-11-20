@@ -118,127 +118,128 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
   for(int iX=0; iX<nX; ++iX)
   {
 
-    std::map<std::string,bool> allCuts;
-    std::map<std::string,bool> hltCuts;
-    std::map<std::string,bool> lxyCuts;
+    // std::map<std::string,bool> allCuts;
+    // std::map<std::string,bool> hltCuts;
+    // std::map<std::string,bool> lxyCuts;
+    //
+    // std::vector<bool> cutsFlags, winsFlags, regsFlags;
+    //
+    // bool muonQualityCut = false, muonChiCut = false, muonPhitsCut = false, muonShitsCut = false;
+    // bool muonDZPVCut= false, muonDXYPVCut = false, muonSoftCuts = false, muonsCuts = false;
+    //
+    // bool jPsiPtCut = false,jPsiMassCut = false, jPsiVtxCut = false, jPsiMuEtaPtCut = false, jPsiMusPtCut = false, jPsiCuts = false;
+    //
+    // bool kaonOneChiCut = false, kaonOnePhitsCut = false, kaonOneShitsCut = false, kaonTwoChiCut = false;
+    // bool kaonTwoPhitsCut = false, kaonTwoShitsCut = false, kaonsPt = false;
+    //
+    // bool kaonOneCuts = false, kaonTwoCuts = false, kaonsCuts = false;
+    // bool cosAlphaCut = false, vtxCLCut = false;
+    //
+    // bool CWMass = false, SWMass = false;
+    // bool promptRegion = false, mixedRegion = false, nonPromptRegion = false;
+    //
+    // bool extraCuts = false;
+    //
+    // bool b0_side = false, b0_signal = false, b0_side_l = false, b0_side_r = false;
+    // bool y_side = false, y_signal = false, y_side_l = false, y_side_r = false;
+    // bool y_NP_side = false, y_NP_signal = false, y_NP_side_l = false, y_NP_side_r = false;
+    //
+    // int iJPsi = (*XMuMuIdx)[iX];
+    //
+    // //doneJPsiIt = doneJPsi.find(iJPsi);
+    //
+    // //if(doneJPsiIt!=doneJPsi.end())
+    // //continue;
+    // //else
+    // //doneJPsi[iJPsi] = 1.0;
+    //
+    // ++jPsis;
+    //
+    // int iMu1 = (*mu1Idx)[iJPsi] ; // define for original muon1
+    // int iMu2 = (*mu2Idx)[iJPsi] ; // define for original muon2
+    // int iK1 = (*ka1Idx)[iX] ; // define for original kaon1
+    // int iK2 = (*ka2Idx)[iX] ;
+    //
+    // double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
+    //
+    // TLorentzVector mu1, mu2, oMu1, oMu2;
+    //
+    // mu1.SetPxPyPzE((*Muon1Px_MuMuKK)[iX],(*Muon1Py_MuMuKK)[iX],(*Muon1Pz_MuMuKK)[iX],(*Muon1E_MuMuKK)[iX]);
+    // mu2.SetPxPyPzE((*Muon2Px_MuMuKK)[iX],(*Muon2Py_MuMuKK)[iX],(*Muon2Pz_MuMuKK)[iX],(*Muon2E_MuMuKK)[iX]);
+    //
+    // mu1_E = sqrt( pow((*muPx)[iMu1], 2) + pow((*muPy)[iMu1], 2) + pow((*muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
+    // mu2_E = sqrt( pow((*muPx)[iMu2], 2) + pow((*muPy)[iMu2], 2) + pow((*muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
+    // oMu1.SetPxPyPzE( (*muPx)[iMu1], (*muPy)[iMu1], (*muPz)[iMu1], mu1_E) ;
+    // oMu2.SetPxPyPzE( (*muPx)[iMu2], (*muPy)[iMu2], (*muPz)[iMu2], mu2_E) ;
+    //
+    // TLorentzVector JPsi;
+    // JPsi = mu1 + mu2;
+    //
+    // TLorentzVector JPsiOriginal;
+    // JPsiOriginal = oMu1 + oMu2;
+    //
+    // TLorentzVector kaon1,kaon2;
+    //
+    // K1_E=sqrt(pow((*Kaon1Px_MuMuKK)[iX],2)+pow((*Kaon1Py_MuMuKK)[iX],2)+pow((*Kaon1Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
+    // kaon1.SetPxPyPzE((*Kaon1Px_MuMuKK)[iX],(*Kaon1Py_MuMuKK)[iX],(*Kaon1Pz_MuMuKK)[iX],K1_E);
+    // K2_E=sqrt(pow((*Kaon2Px_MuMuKK)[iX],2)+pow((*Kaon2Py_MuMuKK)[iX],2)+pow((*Kaon2Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
+    // kaon2.SetPxPyPzE((*Kaon2Px_MuMuKK)[iX],(*Kaon2Py_MuMuKK)[iX],(*Kaon2Pz_MuMuKK)[iX],K2_E);
+    //
+    // TLorentzVector Phi;
+    // Phi = kaon1 + kaon2;
+    //
+    // // Muon1_Mass->Fill(mu1.M());
+    // // Muon2_Mass->Fill(mu2.M());
+    //
+    // TLorentzVector XCand;
+    // XCand = JPsi + Phi;
+    //
+    // SWMass = (((XCand.M() > 4.0) && (XCand.M() < 5.0)));
+    // CWMass = ((XCand.M() > 5.15) && (XCand.M() < 5.55));
+    //
+    //
+    // mixedRegion     = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) >= 2. && ((*XLxyPV)[iX] / (*XLxyPVE)[iX])  <= 3.0);
+    // nonPromptRegion = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) > 3.0);
+    // promptRegion    = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) < 2.);
+    //
+    // // muonQualityCut = ( ((*muQual)[iMu1]) & (1 << muonQual[3]) ) && ( ((*muQual)[iMu2]) & (1 << muonQual[3]) );
+    // // muonChiCut     = (( ( (*muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 ) && ( ( (*muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 ));
+    // // muonPhitsCut   = ((*muPhits)[iMu1] > 0 && (*muPhits)[iMu2] > 0);
+    // // muonShitsCut   = ((*muShits)[iMu1] > 5 && (*muShits)[iMu2] > 5);
+    // muonDZPVCut    = (fabs((*muDzVtx)[iMu1]) < 20.0 && fabs((*muDzVtx)[iMu2]) < 20.0);
+    // muonDXYPVCut   = (fabs((*muDxyVtx)[iMu1]) < 0.3 && fabs((*muDxyVtx)[iMu2]) < 0.3);
+    //
+    // muonsCuts = muonQualityCut && muonChiCut && muonShitsCut && muonPhitsCut && muonDZPVCut && muonDXYPVCut;
+    // muonsCuts = muonDZPVCut && muonDXYPVCut;
+    //
+    // jPsiPtCut      = (JPsi.Pt() > 7.0);
+    // jPsiMassCut    =  (JPsiOriginal.M()<3.4 && JPsiOriginal.M()>2.8);
+    // jPsiVtxCut     = ((*MuMuVtx_CL)[iJPsi]) > 0.1;
+    // jPsiMuEtaPtCut = (fabs(mu1.Eta()) < 2.2) && (fabs(mu2.Eta()) < 2.2);
+    // jPsiMusPtCut   = ((mu1.Pt() > 4.0) && (mu2.Pt() > 4.0));
+    //
+    // jPsiCuts = jPsiPtCut && jPsiMassCut && jPsiVtxCut  && jPsiMuEtaPtCut && jPsiMuEtaPtCut && jPsiMusPtCut;
+    //
+    // // kaonOneChiCut    = (((*trackChi2)[iK1] / (*trackNDF)[iK1]) < 5.0);
+    // // kaonOnePhitsCut  = ((*trackPhits)[iK1] > 0);
+    // // kaonOneShitsCut  = ((*trackShits)[iK1] >= 7);
+    // // kaonTwoChiCut    = (((*trackChi2)[iK2] / (*trackNDF)[iK2]) < 5.0);
+    // // kaonTwoPhitsCut  = ((*trackPhits)[iK2] > 0);
+    // // kaonTwoShitsCut  = ((*trackShits)[iK2] >= 7);
+    // kaonsPt = ((kaon1.Pt()>0.7) && (kaon2.Pt()>0.7));
+    //
+    // kaonOneCuts = kaonOneChiCut && kaonOnePhitsCut && kaonOneShitsCut;
+    // kaonTwoCuts = kaonTwoChiCut && kaonTwoPhitsCut && kaonTwoShitsCut;
+    // kaonsCuts = kaonOneCuts && kaonTwoCuts && kaonsPt;
+    // kaonsCuts = kaonsPt;
+    //
+    // cosAlphaCut = (fabs((*XCosAlphaPV)[iX]) > 0.99);
+    // vtxCLCut =  (((*XVtx_CL)[iX]) > 0.01);
+    //
+    // extraCuts = vtxCLCut && cosAlphaCut;
 
-    std::vector<bool> cutsFlags, winsFlags, regsFlags;
-
-    bool muonQualityCut = false, muonChiCut = false, muonPhitsCut = false, muonShitsCut = false;
-    bool muonDZPVCut= false, muonDXYPVCut = false, muonSoftCuts = false, muonsCuts = false;
-
-    bool jPsiPtCut = false,jPsiMassCut = false, jPsiVtxCut = false, jPsiMuEtaPtCut = false, jPsiMusPtCut = false, jPsiCuts = false;
-
-    bool kaonOneChiCut = false, kaonOnePhitsCut = false, kaonOneShitsCut = false, kaonTwoChiCut = false;
-    bool kaonTwoPhitsCut = false, kaonTwoShitsCut = false, kaonsPt = false;
-
-    bool kaonOneCuts = false, kaonTwoCuts = false, kaonsCuts = false;
-    bool cosAlphaCut = false, vtxCLCut = false;
-
-    bool CWMass = false, SWMass = false;
-    bool promptRegion = false, mixedRegion = false, nonPromptRegion = false;
-
-    bool extraCuts = false;
-
-    bool b0_side = false, b0_signal = false, b0_side_l = false, b0_side_r = false;
-    bool y_side = false, y_signal = false, y_side_l = false, y_side_r = false;
-    bool y_NP_side = false, y_NP_signal = false, y_NP_side_l = false, y_NP_side_r = false;
-
-    int iJPsi = (*XMuMuIdx)[iX];
-
-    //doneJPsiIt = doneJPsi.find(iJPsi);
-
-    //if(doneJPsiIt!=doneJPsi.end())
-    //continue;
-    //else
-    //doneJPsi[iJPsi] = 1.0;
-
-    ++jPsis;
-
-    int iMu1 = (*mu1Idx)[iJPsi] ; // define for original muon1
-    int iMu2 = (*mu2Idx)[iJPsi] ; // define for original muon2
-    int iK1 = (*ka1Idx)[iX] ; // define for original kaon1
-    int iK2 = (*ka2Idx)[iX] ;
-
-    double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
-
-    TLorentzVector mu1, mu2, oMu1, oMu2;
-
-    mu1.SetPxPyPzE((*Muon1Px_MuMuKK)[iX],(*Muon1Py_MuMuKK)[iX],(*Muon1Pz_MuMuKK)[iX],(*Muon1E_MuMuKK)[iX]);
-    mu2.SetPxPyPzE((*Muon2Px_MuMuKK)[iX],(*Muon2Py_MuMuKK)[iX],(*Muon2Pz_MuMuKK)[iX],(*Muon2E_MuMuKK)[iX]);
-
-    mu1_E = sqrt( pow((*muPx)[iMu1], 2) + pow((*muPy)[iMu1], 2) + pow((*muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
-    mu2_E = sqrt( pow((*muPx)[iMu2], 2) + pow((*muPy)[iMu2], 2) + pow((*muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
-    oMu1.SetPxPyPzE( (*muPx)[iMu1], (*muPy)[iMu1], (*muPz)[iMu1], mu1_E) ;
-    oMu2.SetPxPyPzE( (*muPx)[iMu2], (*muPy)[iMu2], (*muPz)[iMu2], mu2_E) ;
-
-    TLorentzVector JPsi;
-    JPsi = mu1 + mu2;
-
-    TLorentzVector JPsiOriginal;
-    JPsiOriginal = oMu1 + oMu2;
-
-    TLorentzVector kaon1,kaon2;
-
-    K1_E=sqrt(pow((*Kaon1Px_MuMuKK)[iX],2)+pow((*Kaon1Py_MuMuKK)[iX],2)+pow((*Kaon1Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
-    kaon1.SetPxPyPzE((*Kaon1Px_MuMuKK)[iX],(*Kaon1Py_MuMuKK)[iX],(*Kaon1Pz_MuMuKK)[iX],K1_E);
-    K2_E=sqrt(pow((*Kaon2Px_MuMuKK)[iX],2)+pow((*Kaon2Py_MuMuKK)[iX],2)+pow((*Kaon2Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
-    kaon2.SetPxPyPzE((*Kaon2Px_MuMuKK)[iX],(*Kaon2Py_MuMuKK)[iX],(*Kaon2Pz_MuMuKK)[iX],K2_E);
-
-    TLorentzVector Phi;
-    Phi = kaon1 + kaon2;
-
-    // Muon1_Mass->Fill(mu1.M());
-    // Muon2_Mass->Fill(mu2.M());
-
-    TLorentzVector XCand;
-    XCand = JPsi + Phi;
-
-    SWMass = (((XCand.M() > 4.0) && (XCand.M() < 5.0)));
-    CWMass = ((XCand.M() > 5.15) && (XCand.M() < 5.55));
-
-
-    mixedRegion     = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) >= 2. && ((*XLxyPV)[iX] / (*XLxyPVE)[iX])  <= 3.0);
-    nonPromptRegion = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) > 3.0);
-    promptRegion    = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) < 2.);
-
-    // muonQualityCut = ( ((*muQual)[iMu1]) & (1 << muonQual[3]) ) && ( ((*muQual)[iMu2]) & (1 << muonQual[3]) );
-    // muonChiCut     = (( ( (*muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 ) && ( ( (*muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 ));
-    // muonPhitsCut   = ((*muPhits)[iMu1] > 0 && (*muPhits)[iMu2] > 0);
-    // muonShitsCut   = ((*muShits)[iMu1] > 5 && (*muShits)[iMu2] > 5);
-    muonDZPVCut    = (fabs((*muDzVtx)[iMu1]) < 20.0 && fabs((*muDzVtx)[iMu2]) < 20.0);
-    muonDXYPVCut   = (fabs((*muDxyVtx)[iMu1]) < 0.3 && fabs((*muDxyVtx)[iMu2]) < 0.3);
-
-    muonsCuts = muonQualityCut && muonChiCut && muonShitsCut && muonPhitsCut && muonDZPVCut && muonDXYPVCut;
-    muonsCuts = muonDZPVCut && muonDXYPVCut;
-
-    jPsiPtCut      = (JPsi.Pt() > 7.0);
-    jPsiMassCut    =  (JPsiOriginal.M()<3.4 && JPsiOriginal.M()>2.8);
-    jPsiVtxCut     = ((*MuMuVtx_CL)[iJPsi]) > 0.1;
-    jPsiMuEtaPtCut = (fabs(mu1.Eta()) < 2.2) && (fabs(mu2.Eta()) < 2.2);
-    jPsiMusPtCut   = ((mu1.Pt() > 4.0) && (mu2.Pt() > 4.0));
-
-    jPsiCuts = jPsiPtCut && jPsiMassCut && jPsiVtxCut  && jPsiMuEtaPtCut && jPsiMuEtaPtCut && jPsiMusPtCut;
-
-    // kaonOneChiCut    = (((*trackChi2)[iK1] / (*trackNDF)[iK1]) < 5.0);
-    // kaonOnePhitsCut  = ((*trackPhits)[iK1] > 0);
-    // kaonOneShitsCut  = ((*trackShits)[iK1] >= 7);
-    // kaonTwoChiCut    = (((*trackChi2)[iK2] / (*trackNDF)[iK2]) < 5.0);
-    // kaonTwoPhitsCut  = ((*trackPhits)[iK2] > 0);
-    // kaonTwoShitsCut  = ((*trackShits)[iK2] >= 7);
-    kaonsPt = ((kaon1.Pt()>0.7) && (kaon2.Pt()>0.7));
-
-    kaonOneCuts = kaonOneChiCut && kaonOnePhitsCut && kaonOneShitsCut;
-    kaonTwoCuts = kaonTwoChiCut && kaonTwoPhitsCut && kaonTwoShitsCut;
-    kaonsCuts = kaonOneCuts && kaonTwoCuts && kaonsPt;
-    kaonsCuts = kaonsPt;
-
-    cosAlphaCut = (fabs((*XCosAlphaPV)[iX]) > 0.99);
-    vtxCLCut =  (((*XVtx_CL)[iX]) > 0.01);
-
-    extraCuts = vtxCLCut && cosAlphaCut;
-
-    if(muonsCuts && kaonsCuts && jPsiCuts && extraCuts && HLT_Any)
+    if(true)
+    //if(muonsCuts && kaonsCuts && jPsiCuts && extraCuts && HLT_Any)
     {
       outTree->Fill();
     }
