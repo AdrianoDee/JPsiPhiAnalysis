@@ -58,7 +58,7 @@ void TwoMuTwoK_2012::SlaveBegin(TTree * /*tree*/)
    Phi_mass = 1.019455; /// pdg mass
    Phi_mean = 1.019723;
    Phi_sigma = 2.35607e-03;//2.28400e-03;
-
+   
    outTree = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
 
    outTree->Branch("mass",      &out_mass,   "out_mass/F");
@@ -86,7 +86,8 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
 
    fReader.SetEntry(entry);
 
-
+  float muon_mass = 0.1056583745;
+  float kaon_mass = 0.493677;
    ////////////////// Bs0 & X(4140) Loop //////////////////
   bool HLT_4_v9 = false, HLT_4_v10 = false, HLT_4_v11 = false, HLT_4_v12 = false ;
   bool HLT_8_v3 = false, HLT_8_v4 = false, HLT_8_v5 = false, HLT_8_v6 = false, HLT_8_v7 = false ;
@@ -96,18 +97,18 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
 
   std::vector<bool> hltsFlags;
 
-  for (Int_t i = 0; i != abs((int)(TrigRes->size())); ++i)
+  for (Int_t i = 0; i != abs((int)(TrigRes.GetSize())); ++i)
   {
-    if ( (*TrigNames)->at(i).find("HLT_DoubleMu4_Jpsi_Displaced_v9") != string::npos  &&  TrigRes->at(i) == 1) HLT_4_v9 = true;
-    if ( (*TrigNames)->at(i).find("HLT_DoubleMu4_Jpsi_Displaced_v10") != string::npos  &&  TrigRes->at(i) == 1) HLT_4_v10 = true;
-    if ( (*TrigNames)->at(i).find("HLT_DoubleMu4_Jpsi_Displaced_v11") != string::npos  &&  TrigRes->at(i) == 1) HLT_4_v11 = true;
-    if ( (*TrigNames)->at(i).find("HLT_DoubleMu4_Jpsi_Displaced_v12") != string::npos  &&  TrigRes->at(i) == 1) HLT_4_v12 = true;
+    if ( TrigNames[i].find("HLT_DoubleMu4_Jpsi_Displaced_v9") != string::npos  &&  TrigRes[i] == 1) HLT_4_v9 = true;
+    if ( TrigNames[i].find("HLT_DoubleMu4_Jpsi_Displaced_v10") != string::npos  &&  TrigRes[i] == 1) HLT_4_v10 = true;
+    if ( TrigNames[i].find("HLT_DoubleMu4_Jpsi_Displaced_v11") != string::npos  &&  TrigRes[i] == 1) HLT_4_v11 = true;
+    if ( TrigNames[i].find("HLT_DoubleMu4_Jpsi_Displaced_v12") != string::npos  &&  TrigRes[i] == 1) HLT_4_v12 = true;
 
-    if ( (*TrigNames)->at(i).find("HLT_Dimuon8_Jpsi_v3") != string::npos  &&  TrigRes->at(i) == 1) HLT_8_v3 = true;
-    if ( (*TrigNames)->at(i).find("HLT_Dimuon8_Jpsi_v4") != string::npos  &&  TrigRes->at(i) == 1) HLT_8_v4 = true;
-    if ( (*TrigNames)->at(i).find("HLT_Dimuon8_Jpsi_v5") != string::npos  &&  TrigRes->at(i) == 1) HLT_8_v5 = true;
-    if ( (*TrigNames)->at(i).find("HLT_Dimuon8_Jpsi_v6") != string::npos  &&  TrigRes->at(i) == 1) HLT_8_v6 = true;
-    if ( (*TrigNames)->at(i).find("HLT_Dimuon8_Jpsi_v7") != string::npos  &&  TrigRes->at(i) == 1) HLT_8_v7 = true;
+    if ( TrigNames[i].find("HLT_Dimuon8_Jpsi_v3") != string::npos  &&  TrigRes[i] == 1) HLT_8_v3 = true;
+    if ( TrigNames[i].find("HLT_Dimuon8_Jpsi_v4") != string::npos  &&  TrigRes[i] == 1) HLT_8_v4 = true;
+    if ( TrigNames[i].find("HLT_Dimuon8_Jpsi_v5") != string::npos  &&  TrigRes[i] == 1) HLT_8_v5 = true;
+    if ( TrigNames[i].find("HLT_Dimuon8_Jpsi_v6") != string::npos  &&  TrigRes[i] == 1) HLT_8_v6 = true;
+    if ( TrigNames[i].find("HLT_Dimuon8_Jpsi_v7") != string::npos  &&  TrigRes[i] == 1) HLT_8_v7 = true;
   }
 
   if (HLT_4_v9 || HLT_4_v10 || HLT_4_v11 || HLT_4_v12) HLT_4_vAny = true;
@@ -115,25 +116,25 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
   if (HLT_8_vAny || HLT_4_vAny) HLT_Any = true;
 
   if(HLT_Any)
-  for(int iX=0; iX<nX; ++iX)
+  for(int iX=0; iX<*nX; ++iX)
   {
-
-    // std::map<std::string,bool> allCuts;
-    // std::map<std::string,bool> hltCuts;
-    // std::map<std::string,bool> lxyCuts;
+    
+    std::map<std::string,bool> allCuts;
+    std::map<std::string,bool> hltCuts;
+    std::map<std::string,bool> lxyCuts;
+    
+    std::vector<bool> cutsFlags, winsFlags, regsFlags;
     //
-    // std::vector<bool> cutsFlags, winsFlags, regsFlags;
+    bool muonQualityCut = false, muonChiCut = false, muonPhitsCut = false, muonShitsCut = false;
+    bool muonDZPVCut= false, muonDXYPVCut = false, muonSoftCuts = false, muonsCuts = false;
     //
-    // bool muonQualityCut = false, muonChiCut = false, muonPhitsCut = false, muonShitsCut = false;
-    // bool muonDZPVCut= false, muonDXYPVCut = false, muonSoftCuts = false, muonsCuts = false;
+    bool jPsiPtCut = false,jPsiMassCut = false, jPsiVtxCut = false, jPsiMuEtaPtCut = false, jPsiMusPtCut = false, jPsiCuts = false;
     //
-    // bool jPsiPtCut = false,jPsiMassCut = false, jPsiVtxCut = false, jPsiMuEtaPtCut = false, jPsiMusPtCut = false, jPsiCuts = false;
+    bool kaonOneChiCut = false, kaonOnePhitsCut = false, kaonOneShitsCut = false, kaonTwoChiCut = false;
+    bool kaonTwoPhitsCut = false, kaonTwoShitsCut = false, kaonsPt = false;
     //
-    // bool kaonOneChiCut = false, kaonOnePhitsCut = false, kaonOneShitsCut = false, kaonTwoChiCut = false;
-    // bool kaonTwoPhitsCut = false, kaonTwoShitsCut = false, kaonsPt = false;
-    //
-    // bool kaonOneCuts = false, kaonTwoCuts = false, kaonsCuts = false;
-    // bool cosAlphaCut = false, vtxCLCut = false;
+    bool kaonOneCuts = false, kaonTwoCuts = false, kaonsCuts = false;
+    bool cosAlphaCut = false, vtxCLCut = false;
     //
     // bool CWMass = false, SWMass = false;
     // bool promptRegion = false, mixedRegion = false, nonPromptRegion = false;
@@ -144,7 +145,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     // bool y_side = false, y_signal = false, y_side_l = false, y_side_r = false;
     // bool y_NP_side = false, y_NP_signal = false, y_NP_side_l = false, y_NP_side_r = false;
     //
-    // int iJPsi = (*XMuMuIdx)[iX];
+      int iJPsi = XMuMuIdx[iX];
     //
     // //doneJPsiIt = doneJPsi.find(iJPsi);
     //
@@ -155,44 +156,46 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     //
     // ++jPsis;
     //
-    // int iMu1 = (*mu1Idx)[iJPsi] ; // define for original muon1
-    // int iMu2 = (*mu2Idx)[iJPsi] ; // define for original muon2
-    // int iK1 = (*ka1Idx)[iX] ; // define for original kaon1
-    // int iK2 = (*ka2Idx)[iX] ;
+      int iMu1 = (mu1Idx)[iJPsi] ; // define for original muon1
+      int iMu2 = (mu2Idx)[iJPsi] ; // define for original muon2
+      int iK1 = (ka1Idx)[iX] ; // define for original kaon1
+      int iK2 = (ka2Idx)[iX] ;
     //
-    // double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
+       double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
     //
-    // TLorentzVector mu1, mu2, oMu1, oMu2;
+       TLorentzVector mu1, mu2, oMu1, oMu2;
     //
-    // mu1.SetPxPyPzE((*Muon1Px_MuMuKK)[iX],(*Muon1Py_MuMuKK)[iX],(*Muon1Pz_MuMuKK)[iX],(*Muon1E_MuMuKK)[iX]);
-    // mu2.SetPxPyPzE((*Muon2Px_MuMuKK)[iX],(*Muon2Py_MuMuKK)[iX],(*Muon2Pz_MuMuKK)[iX],(*Muon2E_MuMuKK)[iX]);
+       mu1.SetPxPyPzE((Muon1Px_MuMuKK)[iX],(Muon1Py_MuMuKK)[iX],(Muon1Pz_MuMuKK)[iX],(Muon1E_MuMuKK)[iX]);
+       mu2.SetPxPyPzE((Muon2Px_MuMuKK)[iX],(Muon2Py_MuMuKK)[iX],(Muon2Pz_MuMuKK)[iX],(Muon2E_MuMuKK)[iX]);
     //
-    // mu1_E = sqrt( pow((*muPx)[iMu1], 2) + pow((*muPy)[iMu1], 2) + pow((*muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
-    // mu2_E = sqrt( pow((*muPx)[iMu2], 2) + pow((*muPy)[iMu2], 2) + pow((*muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
-    // oMu1.SetPxPyPzE( (*muPx)[iMu1], (*muPy)[iMu1], (*muPz)[iMu1], mu1_E) ;
-    // oMu2.SetPxPyPzE( (*muPx)[iMu2], (*muPy)[iMu2], (*muPz)[iMu2], mu2_E) ;
+       mu1_E = sqrt( pow((muPx)[iMu1], 2) + pow((muPy)[iMu1], 2) + pow((muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
+       mu2_E = sqrt( pow((muPx)[iMu2], 2) + pow((muPy)[iMu2], 2) + pow((muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
+       oMu1.SetPxPyPzE( (muPx)[iMu1], (muPy)[iMu1], (muPz)[iMu1], mu1_E) ;
+       oMu2.SetPxPyPzE( (muPx)[iMu2], (muPy)[iMu2], (muPz)[iMu2], mu2_E) ;
     //
-    // TLorentzVector JPsi;
-    // JPsi = mu1 + mu2;
+       TLorentzVector JPsi;
+       JPsi = mu1 + mu2;
     //
-    // TLorentzVector JPsiOriginal;
-    // JPsiOriginal = oMu1 + oMu2;
+       TLorentzVector JPsiOriginal;
+       JPsiOriginal = oMu1 + oMu2;
     //
-    // TLorentzVector kaon1,kaon2;
+       TLorentzVector kaon1,kaon2;
     //
-    // K1_E=sqrt(pow((*Kaon1Px_MuMuKK)[iX],2)+pow((*Kaon1Py_MuMuKK)[iX],2)+pow((*Kaon1Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
-    // kaon1.SetPxPyPzE((*Kaon1Px_MuMuKK)[iX],(*Kaon1Py_MuMuKK)[iX],(*Kaon1Pz_MuMuKK)[iX],K1_E);
-    // K2_E=sqrt(pow((*Kaon2Px_MuMuKK)[iX],2)+pow((*Kaon2Py_MuMuKK)[iX],2)+pow((*Kaon2Pz_MuMuKK)[iX],2)+pow(kaonCh_mass,2));
-    // kaon2.SetPxPyPzE((*Kaon2Px_MuMuKK)[iX],(*Kaon2Py_MuMuKK)[iX],(*Kaon2Pz_MuMuKK)[iX],K2_E);
+       K1_E=sqrt(pow((Kaon1Px_MuMuKK)[iX],2)+pow((Kaon1Py_MuMuKK)[iX],2)+pow((Kaon1Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
+       kaon1.SetPxPyPzE((Kaon1Px_MuMuKK)[iX],(Kaon1Py_MuMuKK)[iX],(Kaon1Pz_MuMuKK)[iX],K1_E);
+       K2_E=sqrt(pow((Kaon2Px_MuMuKK)[iX],2)+pow((Kaon2Py_MuMuKK)[iX],2)+pow((Kaon2Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
+       kaon2.SetPxPyPzE((Kaon2Px_MuMuKK)[iX],(Kaon2Py_MuMuKK)[iX],(Kaon2Pz_MuMuKK)[iX],K2_E);
     //
-    // TLorentzVector Phi;
-    // Phi = kaon1 + kaon2;
+       TLorentzVector Phi;
+       Phi = kaon1 + kaon2;
     //
     // // Muon1_Mass->Fill(mu1.M());
     // // Muon2_Mass->Fill(mu2.M());
     //
-    // TLorentzVector XCand;
-    // XCand = JPsi + Phi;
+       TLorentzVector XCand;
+       XCand = JPsi + Phi;
+       
+       out_mass = XCand.M();
     //
     // SWMass = (((XCand.M() > 4.0) && (XCand.M() < 5.0)));
     // CWMass = ((XCand.M() > 5.15) && (XCand.M() < 5.55));
@@ -204,7 +207,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     //
     // // muonQualityCut = ( ((*muQual)[iMu1]) & (1 << muonQual[3]) ) && ( ((*muQual)[iMu2]) & (1 << muonQual[3]) );
     // // muonChiCut     = (( ( (*muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 ) && ( ( (*muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 ));
-    // // muonPhitsCut   = ((*muPhits)[iMu1] > 0 && (*muPhits)[iMu2] > 0);
+    // // muonPhitsCut   = ((muPhits)[iMu1] > 0 && (muPhits)[iMu2] > 0);
     // // muonShitsCut   = ((*muShits)[iMu1] > 5 && (*muShits)[iMu2] > 5);
     // muonDZPVCut    = (fabs((*muDzVtx)[iMu1]) < 20.0 && fabs((*muDzVtx)[iMu2]) < 20.0);
     // muonDXYPVCut   = (fabs((*muDxyVtx)[iMu1]) < 0.3 && fabs((*muDxyVtx)[iMu2]) < 0.3);
