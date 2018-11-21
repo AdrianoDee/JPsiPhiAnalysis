@@ -8,7 +8,7 @@ RooAbsData.setDefaultStorageType ( RooAbsData.Tree )
 from array import array
 import sys
 
-
+import argparse
 import numpy as np
 
 
@@ -19,16 +19,20 @@ from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta,RooVoigtian
 from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,SelectVars
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', type=str, default="./sPlot_psi_2016.root")
+args = parser.parse_args()
 
 phimean = 1.020
 phimin = 1.020-0.015
 phimax = 1.020+0.015
 
-rootfile = "./sPlot_psi_2016.root"
-inputfile = TFile(rootfile,"READ") 
-xTuple = (inputfile.Get("tree")) 
+rootfile = args.path
+inputfile = TFile(rootfile,"READ")
+xTuple = (inputfile.Get("tree"))
 
 
+print rootfile[:5]
 # In[6]:
 
 
@@ -103,7 +107,7 @@ gamma.setConstant(False)
 rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
 nfits = nfits + 1
 
-c = TCanvas("canvas","canvas",1200,800) 
+c = TCanvas("canvas","canvas",1200,800)
 phiFrame = masskk.frame(Range(phimin,phimax),Normalization((nSig.getValV() + nBkg.getValV())))
 splotData.plotOn(phiFrame)
 ratio = 1.0/float(nfits)
@@ -135,8 +139,8 @@ lineup.Draw()
 #tot.paramOn(phiFrame,RooFit.Layout(0.57,0.99,0.65))
 
 
-c.SaveAs("phimassSPlot.png")
-c.SaveAs("phimassSPlot.root")
+c.SaveAs('phimassSPlot_'+ rootfile[:5] + '.png')
+c.SaveAs('phimassSPlot_' + rootfile[:5] + '.root")
 c.Clear()
 
 
@@ -149,55 +153,51 @@ dstree  = splotData.store().tree()
 #S plot hist for signal
 shistSig   = TH1F('shistSig','shistSig', 50, 4.0, 6.0)
 shistSig.Sumw2()
-shistSig.SetLineColor(2)    
+shistSig.SetLineColor(2)
 shistSig.SetMarkerColor(2); shistSig.SetMinimum(0.)
-dstree.Project('shistSig','dimuonditrk_m_rf_c','nSig_sw');  
+dstree.Project('shistSig','dimuonditrk_m_rf_c','nSig_sw');
 
 shistSig.Draw('e0');
-cD.SaveAs('SigSPlotPhi.gif')
-cD.SaveAs('SigSPlotPhi.root')
+cD.SaveAs('SigSPlotPhi_' + rootfile[:5] + '_' + rootfile[:5] + '.gif  ')
+cD.SaveAs('SigSPlotPhi_' + rootfile[:5] + '.root')
 
 
 sweightSig   = TH1F('sweightSig','sweightSig', 50, 4.0, 6.0)
 sweightSig.Sumw2()
-sweightSig.SetLineColor(2)    
+sweightSig.SetLineColor(2)
 sweightSig.SetMarkerColor(2); sweightSig.SetMinimum(0.)
-dstree.Project('sweightSig','nSig_sw');  
+dstree.Project('sweightSig','nSig_sw');
 
 sweightSig.Draw('e0');
-cD.SaveAs('SigWeightPlotPhi.gif')
-cD.SaveAs('SigWeightPlotPhi.root')
+cD.SaveAs('SigWeightPlotPhi_' + rootfile[:5] + '.gif ')
+cD.SaveAs('SigWeightPlotPhi_' + rootfile[:5] + '.root')
 
 
 #S plot hist for bkg
 shistBkg   = TH1F('shistBkg','shistBkg', 50, 4.0, 6.0)
 shistBkg.Sumw2()
-shistBkg.SetLineColor(2)    
+shistBkg.SetLineColor(2)
 shistBkg.SetMarkerColor(2); shistBkg.SetMinimum(0.)
-dstree.Project('shistBkg','dimuonditrk_m_rf_c','nBkg_sw');  
+dstree.Project('shistBkg','dimuonditrk_m_rf_c','nBkg_sw');
 
 shistBkg.Draw('e0');
-cD.SaveAs('BkgSPlotPhi.gif')
-cD.SaveAs('BkgSPlotPhi.root')
+cD.SaveAs('BkgSPlotPhi_' + rootfile[:5] + '.gif ')
+cD.SaveAs('BkgSPlotPhi_' + rootfile[:5] + '.root')
 
 
 sweightBkg   = TH1F('sweightBkg','sweightBkg', 50, 4.0, 6.0)
 sweightBkg.Sumw2()
-sweightBkg.SetLineColor(2)    
+sweightBkg.SetLineColor(2)
 sweightBkg.SetMarkerColor(2); sweightBkg.SetMinimum(0.)
-dstree.Project('sweightBkg','nBkg_sw');  
+dstree.Project('sweightBkg','nBkg_sw');
 
 sweightBkg.Draw('e0');
-cD.SaveAs('BkgWeightPlotPhi.gif')
-cD.SaveAs('BkgWeightPlotPhi.root')
+cD.SaveAs('BkgWeightPlotPhi_' + rootfile[:5] + '.gif ')
+cD.SaveAs('BkgWeightPlotPhi_' + rootfile[:5] + '.root')
 
 
-outputFile = TFile("sPlot2018_outtree_psi.root","RECREATE")
+outputFile = TFile("sPlot2018_outtree_psi_' + rootfile[:5] + '.root","RECREATE")
 outputFile.cd()
 
 dstree.Write()
 outputFile.Close()
-
-
-
-
