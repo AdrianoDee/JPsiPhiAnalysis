@@ -425,7 +425,7 @@ public :
    Float_t out_TrigRes, out_TrigNames, out_MatchTriggerNames, out_L1TrigRes, out_evtNum;
    Float_t out_kaonOnePx,out_kaonOnePy,out_kaonOnePz,out_kaonOneE,out_kaonOneChiOne,out_kaonOneNDF;
    Float_t out_kaonOneD0,out_kaonOneDzVtx,out_kaonOneDxyVtx,out_kaonOnetrackPhits,out_kaonOnetrackShits;
-   Float_t out_kaonOnetrackCharge,out_kaonOneHighPurity;
+   Float_t out_kaonOnetrackCharge,out_kaonOneHighPurity,out_KKPt;
    Float_t hlt8, hlt4;
    Float_t event,run,lumi;
 

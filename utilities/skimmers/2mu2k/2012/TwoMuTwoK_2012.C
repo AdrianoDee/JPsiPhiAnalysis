@@ -341,7 +341,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     // nonPromptRegion = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) > 3.0);
     // promptRegion    = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) < 2.);
     //
-    muonOneIsSoft = true
+    bool muonOneIsSoft = true
     muonOneIsSoft = muonOneIsSoft && ( ((muQual)[iMu1]) & (1 << muonQual[3]) );
     muonOneIsSoft = muonOneIsSoft && ( ( (muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 );
     muonOneIsSoft = muonOneIsSoft && ((muPhits)[iMu1] > 0);
@@ -349,7 +349,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     muonOneIsSoft = muonOneIsSoft && (fabs((muDzVtx)[iMu1]) < 20.0;
     muonOneIsSoft = muonOneIsSoft && (fabs((muDxyVtx)[iMu1]) < 0.3;
 
-    muonTwoIsSoft = true
+    bool muonTwoIsSoft = true
     muonTwoIsSoft = muonTwoIsSoft && ( ((muQual)[iMu2]) & (1 << muonQual[3]) );
     muonTwoIsSoft = muonTwoIsSoft && ( ( (muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 );
     muonTwoIsSoft = muonTwoIsSoft && ((muPhits)[iMu2] > 0);
@@ -357,7 +357,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     muonTwoIsSoft = muonTwoIsSoft && (fabs((muDzVtx)[iMu2]) < 20.0;
     muonTwoIsSoft = muonTwoIsSoft && (fabs((muDxyVtx)[iMu2]) < 0.3;
 
-    MuMuMass_original = JPsi.M();
+    MuMuMass_original = (Float_t)  JPsi.M();
 
     out_muOnePx =      (Float_t)(muPx[iMu1]);
     out_muOnePy =      (Float_t)(muPy[iMu1]);
@@ -403,7 +403,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
    out_kaonTwotrackPhits  = ( trackPhits[iK2]);
    out_kaonTwotrackShits  = ( trackShits[iK2]);
    out_kaonTwoHighPurity = (TrackHighPurity[iK2]);
-   out_kaonTwotrackCharge  = ( trackCharge[iK2]);
+   out_kaonTwotrackCharge  = (Float_t)  ( trackCharge[iK2]);
 
     out_muTwoPx =      (Float_t)(muPx[iMu2]);
     out_muTwoPy =      (Float_t)(muPy[iMu2]);
@@ -421,7 +421,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_muTwoDzVtxErr =        (Float_t)(muDzVtxErr[iMu2]);
     out_muTwoIsGlobal =        (Float_t)(muIsGlobal[iMu2]);
     out_muTwoIsPF =    (Float_t)(muIsPF[iMu2]);
-    out_muTwoIsSoft  = muonTwoIsSoft;
+    out_muTwoIsSoft  = (Float_t) muonTwoIsSoft;
 
     out_MuMuMass =  (Float_t)(MuMuMass);
     out_MuMuPx =    (Float_t)(MuMuPx);
