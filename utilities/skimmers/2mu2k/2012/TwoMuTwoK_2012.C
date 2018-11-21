@@ -261,7 +261,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     lumi = (Float_t) *lumiNum;
 
     out_priVtx_n = (Float_t)(*priVtx_n);
-    out_priVtx_X (Float_t)(*priVtx_X);
+    out_priVtx_X = (Float_t)(*priVtx_X);
     out_priVtx_Y = (Float_t)(*priVtx_Y);
     out_priVtx_Z = (Float_t)(*priVtx_Z);
 
