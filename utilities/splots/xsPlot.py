@@ -53,7 +53,7 @@ dimuon_pt             = RooRealVar("dimuon_pt_x","dimuon_pt_x",0.0,1000.0)
 dimuonditrk_ctauErrPV = RooRealVar("dimuonditrk_ctauErrPV","dimuonditrk_ctauErrPV",-1000.0,1000.0)
 ditrak_pt             = RooRealVar("ditrak_pt","ditrak_pt",0.0,1000.0)
 
-theSet = RooArgSet(masskk,dimuonditrk_m_rf_c,dimuonditrk_ctauPV,dimuonditrk_ctauErrPV,dimuon_pt,ditrak_pt,psiPrimeMass)
+theSet = RooArgSet(masskk,dimuonditrk_m_rf_c,dimuonditrk_ctauPV,dimuonditrk_ctauErrPV,dimuon_pt,ditrak_pt)
 splotData = RooDataSet("alldata","alldata",xTuple,theSet)
 #
 print "Tree entries %d"%(splotData.numEntries())
@@ -140,7 +140,7 @@ lineup.Draw()
 
 
 c.SaveAs('phimassSPlot_'+ outname + '.png')
-c.SaveAs('phimassSPlot_' + outname + '.root")
+c.SaveAs('phimassSPlot_' + outname + '.root')
 c.Clear()
 
 
