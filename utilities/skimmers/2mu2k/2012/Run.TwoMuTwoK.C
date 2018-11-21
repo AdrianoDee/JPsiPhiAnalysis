@@ -10,9 +10,10 @@
 
   TDSet* dataset = new TDSet("TTree", "X_data", "mkcands");
 
-  /// 2018
 
-  dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_add_01.root");
+
+ dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_add_01.root");
+/*
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_00.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_01.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_02.root");
@@ -33,6 +34,7 @@ dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_17.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_18.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runB_resplit_Oct17/runB_split_19.root");
+
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runC_resplit_Oct17/runC_add_01.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runC_resplit_Oct17/runC_split_00.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runC_resplit_Oct17/runC_split_01.root");
@@ -75,7 +77,7 @@ dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runD_resplit_Oct17/
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runD_resplit_Oct17/runD_split_17.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runD_resplit_Oct17/runD_split_18.root");
 dataset->Add("/lustre/home/adrianodif/MuOniaParked/2012_data/runD_resplit_Oct17/runD_split_19.root"); 
-
+*/
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/2012/TwoMuTwoK_2012";
 
   TProof *p = TProof::Open("workers=5"); // 12 workers for qsub

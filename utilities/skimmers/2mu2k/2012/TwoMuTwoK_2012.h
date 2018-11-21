@@ -421,7 +421,7 @@ public :
    TTreeReaderArray<int> kaon2_saturMeas_byHits = {fReader, "kaon2_saturMeas_byHits"};
    TTreeReaderArray<int> kaon2_Meas_byHits = {fReader, "kaon2_Meas_byHits"};
 
-   Double_t out_mass;
+   Float_t out_mass;
 
    TwoMuTwoK_2012(TTree * /*tree*/ =0) { }
    virtual ~TwoMuTwoK_2012() { }

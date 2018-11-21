@@ -191,11 +191,13 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     //
     // // Muon1_Mass->Fill(mu1.M());
     // // Muon2_Mass->Fill(mu2.M());
-    //
+    //i
+  
        TLorentzVector XCand;
        XCand = JPsi + Phi;
        
        out_mass = XCand.M();
+    	std::cout << out_mass << std::endl;
     //
     // SWMass = (((XCand.M() > 4.0) && (XCand.M() < 5.0)));
     // CWMass = ((XCand.M() > 5.15) && (XCand.M() < 5.55));
