@@ -423,18 +423,18 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_muTwoIsPF =    (Float_t)(muIsPF[iMu2]);
     out_muTwoIsSoft  = (Float_t) muonTwoIsSoft;
 
-    out_MuMuMass =  (Float_t)(MuMuMass);
-    out_MuMuPx =    (Float_t)(MuMuPx);
-    out_MuMuPy =    (Float_t)(MuMuPy);
-    out_MuMuPz =    (Float_t)(MuMuPz);
-    out_MuMuVtx_CL =        (Float_t)(MuMuVtx_CL);
-    out_MuMuVtx_Chi2 =      (Float_t)(MuMuVtx_Chi2);
-    out_MuMuDecayVtx_X =    (Float_t)(MuMuDecayVtx_X);
-    out_MuMuDecayVtx_Y =    (Float_t)(MuMuDecayVtx_Y);
-    out_MuMuDecayVtx_Z =    (Float_t)(MuMuDecayVtx_Z);
-    out_MuMuDecayVtx_XE =   (Float_t)(MuMuDecayVtx_XE);
-    out_MuMuDecayVtx_YE =   (Float_t)(MuMuDecayVtx_YE);
-    out_MuMuDecayVtx_ZE =   (Float_t)(MuMuDecayVtx_ZE);
+    out_MuMuMass =  (Float_t)(MuMuMass[iJPsi]);
+    out_MuMuPx =    (Float_t)(MuMuPx[iJPsi]);
+    out_MuMuPy =    (Float_t)(MuMuPy[iJPsi]);
+    out_MuMuPz =    (Float_t)(MuMuPz[iJPsi]);
+    out_MuMuVtx_CL =        (Float_t)(MuMuVtx_CL[iJPsi]);
+    out_MuMuVtx_Chi2 =      (Float_t)(MuMuVtx_Chi2[iJPsi]);
+    out_MuMuDecayVtx_X =    (Float_t)(MuMuDecayVtx_X[iJPsi]);
+    out_MuMuDecayVtx_Y =    (Float_t)(MuMuDecayVtx_Y[iJPsi]);
+    out_MuMuDecayVtx_Z =    (Float_t)(MuMuDecayVtx_Z[iJPsi]);
+    out_MuMuDecayVtx_XE =   (Float_t)(MuMuDecayVtx_XE[iJPsi]);
+    out_MuMuDecayVtx_YE =   (Float_t)(MuMuDecayVtx_YE[iJPsi]);
+    out_MuMuDecayVtx_ZE =   (Float_t)(MuMuDecayVtx_ZE[iJPsi]);
 
     out_KKPx = Phi.Px();
     out_KKPy = Phi.Py();
