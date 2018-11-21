@@ -260,10 +260,10 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     run = (Float_t) *runNum;
     lumi = (Float_t) *lumiNum;
 
-    priVtx_n = (Float_t)(*out_priVtx_n);
-    priVtx_X (Float_t)(*out_priVtx_X);
-    priVtx_Y = (Float_t)(*out_priVtx_Y);
-    priVtx_Z = (Float_t)(*out_priVtx_Z);
+    out_priVtx_n = (Float_t)(*priVtx_n);
+    out_priVtx_X (Float_t)(*priVtx_X);
+    out_priVtx_Y = (Float_t)(*priVtx_Y);
+    out_priVtx_Z = (Float_t)(*priVtx_Z);
 
     int iMu1 = (mu1Idx)[iJPsi] ; // define for original muon1
     int iMu2 = (mu2Idx)[iJPsi] ; // define for original muon2
