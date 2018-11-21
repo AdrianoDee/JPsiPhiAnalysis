@@ -109,34 +109,34 @@ void TwoMuTwoK_2012::SlaveBegin(TTree * /*tree*/)
    outTree->Branch("muTwoIsPF",       &out_muTwoIsPF,    "muTwoIsPF/F");
    outTree->Branch("muTwoIsSoft",     &out_muTwoIsSoft,    "muTwoIsSoft/F");
 
-   outTree->Branch("kaonOnePx",        &out_kaonOnePx,    "kaonOnePx/F");
-   outTree->Branch("kaonOnePy",        &out_kaonOnePy,    "kaonOnePy/F");
-   outTree->Branch("kaonOnePz",        &out_kaonOnePz,    "kaonOnePz/F");
-   outTree->Branch("kaonOneE",         &out_kaonOneE,     "kaonOneE/F");
-   outTree->Branch("kaonOneChiOne",        &out_kaonOneChiOne,    "kaonOneChiOne/F");
-   outTree->Branch("kaonOneNDF",         &out_kaonOneNDF,     "kaonOneNDF/F");
-   outTree->Branch("kaonOneD0",          &out_kaonOneD0,      "kaonOneChiOne/F");
-   outTree->Branch("kaonOneDzVtx",       &out_kaonOneDzVtx,   "kaonOneDzVtx/F");
-   outTree->Branch("kaonOneDxyVtx",      &out_kaonOneDxyVtx,  "kaonOneDxyVtx/F");
-   outTree->Branch("kaonOnetrackPhits",  &out_kaonOnetrackPhits,         "kaonOnetrackPhits/F");
-   outTree->Branch("kaonOnetrackShits",  &out_kaonOnetrackShits,         "kaonOnetrackShits/F");
-   outTree->Branch("kaonOnetrackCharge", &out_kaonOnetrackCharge,         "kaonOnetrackCharge/F");
-   outTree->Branch("kaonOneHighPurity", &out_kaonOneHighPurity,         "kaonOneHighPurity/F");
+   outTree->Branch("kaonOnePx",          &out_kaonOnePx,           "kaonOnePx/F");
+   outTree->Branch("kaonOnePy",          &out_kaonOnePy,           "kaonOnePy/F");
+   outTree->Branch("kaonOnePz",          &out_kaonOnePz,           "kaonOnePz/F");
+   outTree->Branch("kaonOneE",           &out_kaonOneE,            "kaonOneE/F");
+   outTree->Branch("kaonOneChi2",      &out_kaonOneChi2,           "kaonOneChi2/F");
+   outTree->Branch("kaonOneNDF",         &out_kaonOneNDF,          "kaonOneNDF/F");
+   outTree->Branch("kaonOneD0",          &out_kaonOneD0,           "kaonOneChiOne/F");
+   outTree->Branch("kaonOneDzVtx",       &out_kaonOneDzVtx,        "kaonOneDzVtx/F");
+   outTree->Branch("kaonOneDxyVtx",      &out_kaonOneDxyVtx,       "kaonOneDxyVtx/F");
+   outTree->Branch("kaonOnetrackPhits",  &out_kaonOnetrackPhits,   "kaonOnetrackPhits/F");
+   outTree->Branch("kaonOnetrackShits",  &out_kaonOnetrackShits,   "kaonOnetrackShits/F");
+   outTree->Branch("kaonOnetrackCharge", &out_kaonOnetrackCharge,  "kaonOnetrackCharge/F");
+   outTree->Branch("kaonOneHighPurity",  &out_kaonOneHighPurity,   "kaonOneHighPurity/F");
 
 
-   outTree->Branch("kaonTwoPx",        &out_kaonTwoPx,    "kaonTwoPx/F");
-   outTree->Branch("kaonTwoPy",        &out_kaonTwoPy,    "kaonTwoPy/F");
-   outTree->Branch("kaonTwoPz",        &out_kaonTwoPz,    "kaonTwoPz/F");
-   outTree->Branch("kaonTwoE",         &out_kaonTwoE,     "kaonTwoE/F");
-   outTree->Branch("kaonTwoChiTwo",        &out_kaonTwoChiTwo,    "kaonTwoChiTwo/F");
-   outTree->Branch("kaonTwoNDF",         &out_kaonTwoNDF,     "kaonTwoNDF/F");
-   outTree->Branch("kaonTwoD0",          &out_kaonTwoD0,      "kaonTwoChiTwo/F");
-   outTree->Branch("kaonTwoDzVtx",       &out_kaonTwoDzVtx,   "kaonTwoDzVtx/F");
-   outTree->Branch("kaonTwoDxyVtx",      &out_kaonTwoDxyVtx,  "kaonTwoDxyVtx/F");
-   outTree->Branch("kaonTwotrackPhits",  &out_kaonTwotrackPhits,         "kaonTwotrackPhits/F");
-   outTree->Branch("kaonTwotrackShits",  &out_kaonTwotrackShits,         "kaonTwotrackShits/F");
-   outTree->Branch("kaonTwotrackCharge", &out_kaonTwotrackCharge,         "kaonTwotrackCharge/F");
-   outTree->Branch("kaonTwoHighPurity", &out_kaonTwoHighPurity,         "kaonTwoHighPurity/F");
+   outTree->Branch("kaonTwoPx",          &out_kaonTwoPx,          "kaonTwoPx/F");
+   outTree->Branch("kaonTwoPy",          &out_kaonTwoPy,          "kaonTwoPy/F");
+   outTree->Branch("kaonTwoPz",          &out_kaonTwoPz,          "kaonTwoPz/F");
+   outTree->Branch("kaonTwoE",           &out_kaonTwoE,           "kaonTwoE/F");
+   outTree->Branch("kaonTwoChi2",      &out_kaonTwoChi2,          "kaonTwoChi2/F");
+   outTree->Branch("kaonTwoNDF",         &out_kaonTwoNDF,         "kaonTwoNDF/F");
+   outTree->Branch("kaonTwoD0",          &out_kaonTwoD0,          "kaonTwoChiTwo/F");
+   outTree->Branch("kaonTwoDzVtx",       &out_kaonTwoDzVtx,       "kaonTwoDzVtx/F");
+   outTree->Branch("kaonTwoDxyVtx",      &out_kaonTwoDxyVtx,      "kaonTwoDxyVtx/F");
+   outTree->Branch("kaonTwotrackPhits",  &out_kaonTwotrackPhits,  "kaonTwotrackPhits/F");
+   outTree->Branch("kaonTwotrackShits",  &out_kaonTwotrackShits,  "kaonTwotrackShits/F");
+   outTree->Branch("kaonTwotrackCharge", &out_kaonTwotrackCharge,        "kaonTwotrackCharge/F");
+   outTree->Branch("kaonTwoHighPurity",  &out_kaonTwoHighPurity,  "kaonTwoHighPurity/F");
 
    outTree->Branch("MuMuMass",     &out_MuMuMass,  "MuMuMass/F");
    outTree->Branch("MuMuMass_original",     &out_MuMuMas_original,  "MuMuMass/F");
@@ -343,7 +343,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     //
     bool muonOneIsSoft = true;
     muonOneIsSoft = muonOneIsSoft && ( ((muQual)[iMu1]) & (1 << muonQual[3]) );
-    muonOneIsSoft = muonOneIsSoft && ( ( (muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 );
+    muonOneIsSoft = muonOneIsSoft && ( ( (muChi2)[iMu1] / (muNDF)[iMu1] ) < 3 );
     muonOneIsSoft = muonOneIsSoft && ((muPhits)[iMu1] > 0);
     muonOneIsSoft = muonOneIsSoft && ((muShits)[iMu1] > 5);
     muonOneIsSoft = muonOneIsSoft && (fabs((muDzVtx)[iMu1]) < 20.0);
@@ -351,7 +351,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
 
     bool muonTwoIsSoft = true;
     muonTwoIsSoft = muonTwoIsSoft && ( ((muQual)[iMu2]) & (1 << muonQual[3]) );
-    muonTwoIsSoft = muonTwoIsSoft && ( ( (muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 );
+    muonTwoIsSoft = muonTwoIsSoft && ( ( (muChi2)[iMu2] / (muNDF)[iMu2] ) < 3 );
     muonTwoIsSoft = muonTwoIsSoft && ((muPhits)[iMu2] > 0);
     muonTwoIsSoft = muonTwoIsSoft && ((muShits)[iMu2] > 5);
     muonTwoIsSoft = muonTwoIsSoft && (fabs((muDzVtx)[iMu2]) < 20.0);
@@ -373,8 +373,8 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_muOneLayersPix =       (Float_t)(muLayersPix[iMu1]);
     out_muOneD0E =     (Float_t)(muD0E[iMu1]);
     out_muOneDzVtxErr =        (Float_t)(muDzVtxErr[iMu1]);
-    out_muOneIsGlobal =        (Float_t)(muIsGlobal[iMu1]);
-    out_muOneIsPF =    (Float_t)(muIsPF[iMu1]);
+    out_muOneIsGlobal =        (Float_t)((*muIsGlobal)[iMu1]);
+    out_muOneIsPF =    (Float_t)((*muIsPF)[iMu1]);
     out_muOneIsSoft  = muonOneIsSoft;
 
    out_kaonOnePx  = ( trackPx[iK1]);
@@ -419,8 +419,8 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_muTwoLayersPix =       (Float_t)(muLayersPix[iMu2]);
     out_muTwoD0E =     (Float_t)(muD0E[iMu2]);
     out_muTwoDzVtxErr =        (Float_t)(muDzVtxErr[iMu2]);
-    out_muTwoIsGlobal =        (Float_t)(muIsGlobal[iMu2]);
-    out_muTwoIsPF =    (Float_t)(muIsPF[iMu2]);
+    out_muTwoIsGlobal =        (Float_t)((*muIsGlobal)[iMu2]);
+    out_muTwoIsPF =    (Float_t)((*muIsPF)[iMu2]);
     out_muTwoIsSoft  = (Float_t) muonTwoIsSoft;
 
     out_MuMuMass =  (Float_t)(MuMuMass[iJPsi]);
@@ -488,8 +488,8 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
   out_kaon2_dz_BS =       (Float_t)(kaon2_dz_BS[iX]);
 
 
-  out_Kaon1FromPV =       (Float_t)(Kaon1FromPV[iX]);
-  out_Kaon2FromPV =       (Float_t)(Kaon2FromPV[iX]);
+  out_Kaon1FromPV =       (Float_t)((*Kaon1FromPV)[iX]);
+  out_Kaon2FromPV =       (Float_t)((*Kaon2FromPV)[iX]);
 
   out_Muon1Px_MuMuKK =    (Float_t)(Muon1Px_MuMuKK[iX]);
   out_Muon1Py_MuMuKK =    (Float_t)(Muon1Py_MuMuKK[iX]);
