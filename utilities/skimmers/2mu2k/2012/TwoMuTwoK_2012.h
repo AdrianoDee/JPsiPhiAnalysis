@@ -423,11 +423,16 @@ public :
 
    Float_t out_MuMuMas_original,out_XMass_original;
    Float_t out_TrigRes, out_TrigNames, out_MatchTriggerNames, out_L1TrigRes, out_evtNum;
-   Float_t out_kaonOnePx,out_kaonOnePy,out_kaonOnePz,out_kaonOneE,out_kaonOneChiOne,out_kaonOneNDF;
-   Float_t out_kaonOneD0,out_kaonOneDzVtx,out_kaonOneDxyVtx,out_kaonOnetrackPhits,out_kaonOnetrackShits;
-   Float_t out_kaonOnetrackCharge,out_kaonOneHighPurity,out_KKPt;
    Float_t hlt8, hlt4;
    Float_t event,run,lumi;
+
+   Float_t out_kaonOnePx,out_kaonOnePy,out_kaonOnePz,out_kaonOneE,out_kaonOneChi2,out_kaonOneNDF;
+   Float_t out_kaonOneD0,out_kaonOneDzVtx,out_kaonOneDxyVtx,out_kaonOnetrackPhits,out_kaonOnetrackShits;
+   Float_t out_kaonOnetrackCharge,out_kaonOneHighPurity,out_KKPt;
+
+   Float_t out_kaonTwoPx,out_kaonTwoPy,out_kaonTwoPz,out_kaonTwoE,out_kaonTwoChi2,out_kaonTwoNDF;
+   Float_t out_kaonTwoD0,out_kaonTwoDzVtx,out_kaonTwoDxyVtx,out_kaonTwotrackPhits,out_kaonTwotrackShits;
+   Float_t out_kaonTwotrackCharge,out_kaonTwoHighPurity;
 
    Float_t out_muOnePx, out_muOnePy, out_muOnePz, out_muOneCharge, out_muOneD0, out_muOneDz, out_muOneChi2;
    Float_t out_muOneNDF, out_muOnePhits, out_muOneShits, out_muOneLayersTr;
@@ -436,11 +441,6 @@ public :
    Float_t out_muTwoPx, out_muTwoPy, out_muTwoPz, out_muTwoCharge, out_muTwoD0, out_muTwoDz, out_muTwoChi2;
    Float_t out_muTwoNDF, out_muTwoPhits, out_muTwoShits, out_muTwoLayersTr;
    Float_t out_muTwoLayersPix, out_muTwoD0E, out_muTwoDzVtxErr, out_muTwoIsGlobal, out_muTwoIsPF, out_muTwoIsSoft;
-
-
-   Float_t out_kaonTwoPx,out_kaonTwoPy,out_kaonTwoPz,out_kaonTwoE,out_kaonTwoChiTwo,out_kaonTwoNDF;
-   Float_t out_kaonTwoD0,out_kaonTwoDzVtx,out_kaonTwoDxyVtx,out_kaonTwotrackPhits,out_kaonTwotrackShits;
-   Float_t out_kaonTwotrackCharge,out_kaonTwoHighPurity;
 
     Float_t out_runNum, out_lumiNum, out_priVtx_n, out_priVtx_X, out_priVtx_Y;
     Float_t out_priVtx_Z, out_priVtx_XE, out_priVtx_YE, out_priVtx_ZE, out_priVtx_NormChi2;

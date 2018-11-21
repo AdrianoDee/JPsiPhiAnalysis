@@ -341,23 +341,23 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     // nonPromptRegion = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) > 3.0);
     // promptRegion    = (((*XLxyPV)[iX] / (*XLxyPVE)[iX]) < 2.);
     //
-    bool muonOneIsSoft = true
+    bool muonOneIsSoft = true;
     muonOneIsSoft = muonOneIsSoft && ( ((muQual)[iMu1]) & (1 << muonQual[3]) );
     muonOneIsSoft = muonOneIsSoft && ( ( (muChi2)[iMu1] / (*muNDF)[iMu1] ) < 3 );
     muonOneIsSoft = muonOneIsSoft && ((muPhits)[iMu1] > 0);
     muonOneIsSoft = muonOneIsSoft && ((muShits)[iMu1] > 5);
-    muonOneIsSoft = muonOneIsSoft && (fabs((muDzVtx)[iMu1]) < 20.0;
-    muonOneIsSoft = muonOneIsSoft && (fabs((muDxyVtx)[iMu1]) < 0.3;
+    muonOneIsSoft = muonOneIsSoft && (fabs((muDzVtx)[iMu1]) < 20.0);
+    muonOneIsSoft = muonOneIsSoft && (fabs((muDxyVtx)[iMu1]) < 0.3);
 
-    bool muonTwoIsSoft = true
+    bool muonTwoIsSoft = true;
     muonTwoIsSoft = muonTwoIsSoft && ( ((muQual)[iMu2]) & (1 << muonQual[3]) );
     muonTwoIsSoft = muonTwoIsSoft && ( ( (muChi2)[iMu2] / (*muNDF)[iMu2] ) < 3 );
     muonTwoIsSoft = muonTwoIsSoft && ((muPhits)[iMu2] > 0);
     muonTwoIsSoft = muonTwoIsSoft && ((muShits)[iMu2] > 5);
-    muonTwoIsSoft = muonTwoIsSoft && (fabs((muDzVtx)[iMu2]) < 20.0;
-    muonTwoIsSoft = muonTwoIsSoft && (fabs((muDxyVtx)[iMu2]) < 0.3;
+    muonTwoIsSoft = muonTwoIsSoft && (fabs((muDzVtx)[iMu2]) < 20.0);
+    muonTwoIsSoft = muonTwoIsSoft && (fabs((muDxyVtx)[iMu2]) < 0.3);
 
-    MuMuMass_original = (Float_t)  JPsi.M();
+    out_MuMuMas_original = (Float_t)  JPsi.M();
 
     out_muOnePx =      (Float_t)(muPx[iMu1]);
     out_muOnePy =      (Float_t)(muPy[iMu1]);
