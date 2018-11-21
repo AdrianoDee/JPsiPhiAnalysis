@@ -307,7 +307,7 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     XCand = JPsi + Phi;
 
     out_XMass_original = XCand.M();
-    std::cout << out_XMass_original << std::endl;
+    // std::cout << out_XMass_original << std::endl;
     //
     // SWMass = (((XCand.M() > 4.0) && (XCand.M() < 5.0)));
     // CWMass = ((XCand.M() > 5.15) && (XCand.M() < 5.55));
