@@ -11,6 +11,7 @@ import sys
 
 import numpy as np
 
+# In[3]:
 
 
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,TLine
@@ -20,11 +21,10 @@ from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList
 
 
-phimean = 1.020
-phimin = 1.020-0.015
-phimax = 1.020+0.015
+# In[4]:
 
-rootfile = "./sPlot_psi_2016.root"
+
+rootfile = "./sPlot_2018_bu.root"
 inputfile = TFile(rootfile,"READ") 
 xTuple = (inputfile.Get("tree")) 
 
@@ -38,18 +38,22 @@ print nentries
 
 # In[8]:
 binning = 400
-massbins = (phimax - phimean)/0.005
+bumean = 5.27
+bumin = 5.27 - 0.2
+bumax = 5.27 + 0.2
+massbins = (6.0 - 4.0)/0.005
 dimuonditrk_m_rf_c = RooRealVar("dimuonditrk_m_rf_c","M(#mu#muKK)[GeV]",4.0,6.0)
 dimuonditrk_m_rf_c.setBins(binning)
-masskk = RooRealVar("ditrak_m","M(KK)",0.99,1.05);
+masskk = RooRealVar("ditrak_m_x","M(KK)",0.99,1.05);
 masskk.setBins(int(200))
 
 dimuonditrk_ctauPV    = RooRealVar("dimuonditrk_ctauPV","dimuonditrk_ctauPV",-1000.0,1000.0)
 dimuon_pt             = RooRealVar("dimuon_pt_x","dimuon_pt_x",0.0,1000.0)
 dimuonditrk_ctauErrPV = RooRealVar("dimuonditrk_ctauErrPV","dimuonditrk_ctauErrPV",-1000.0,1000.0)
 ditrak_pt             = RooRealVar("ditrak_pt","ditrak_pt",0.0,1000.0)
+mass_ref_c_kkk        = RooRealVar("mass_ref_c_kkk","mass_ref_c_kkk",bumin,bumax)
 
-theSet = RooArgSet(masskk,dimuonditrk_m_rf_c,dimuonditrk_ctauPV,dimuonditrk_ctauErrPV,dimuon_pt,ditrak_pt,psiPrimeMass)
+theSet = RooArgSet(masskk,dimuonditrk_m_rf_c,dimuonditrk_ctauPV,dimuonditrk_ctauErrPV,dimuon_pt,ditrak_pt,mass_ref_c_kkk)
 splotData = RooDataSet("alldata","alldata",xTuple,theSet)
 #
 print "Tree entries %d"%(splotData.numEntries())
@@ -68,13 +72,13 @@ aset = RooArgList(a0,a1,a2,a3,a4,a5)
 
 sigma = RooRealVar("sigma","width of gaussian",0.01,0.005,0.05)
 gamma = RooRealVar("#Gamma","gamma of bw",0.0042,0.001,0.01)
-mean = RooRealVar("mean","mean of gaussian",phimean,phimean-0.1,phimean+0.1);
+mean = RooRealVar("mean","mean of gaussian",bumean,bumean-0.1,bumean+0.1);
 
-nSig = RooRealVar("nSig","nSig",float(nentries)*0.1,0.,float(nentries))
-nBkg = RooRealVar("nBkg","nBkg",float(nentries)*0.9,0.,float(nentries))
-cheb = RooChebychev("cheb","Background",masskk,aset)
-gauss = RooGaussian("gauss","gaussian PDF ",masskk,mean,sigma)
-#signal = RooVoigtian("signal","signal",psiPrimeMass,mean,gamma,sigma)
+nSig = RooRealVar("nSig","nSig",2E4,0.,5.0E6)
+nBkg = RooRealVar("nBkg","nBkg",1E5,0.,5.0E6)
+cheb = RooChebychev("cheb","Background",mass_ref_c_kkk,aset)
+gauss = RooGaussian("gauss","gaussian PDF ",mass_ref_c_kkk,mean,sigma)
+#signal = RooVoigtian("signal","signal",mass_ref_c_kkk,mean,gamma,sigma)
 signal = gauss
 
 B_1     = RooRealVar ( "B_{1}"    , "B_1 "   , 0.3  , -20   , 100   )
@@ -82,7 +86,7 @@ B_2     = RooRealVar ( "B_{2}"    , "B_2"    , 0.3  , -20   , 100   )
 B_3     = RooRealVar ( "B_{3}"    , "B_3"    , 0.3  , -20   , 100   )
 B_4     = RooRealVar ( "B_{4}"    , "B_4"    , 0.3  , -20   , 100   )
 
-bkg    = RooChebychev("pdfB" , "pdfB"    , masskk   , RooArgList(aset))
+bkg    = RooChebychev("pdfB" , "pdfB"    , mass_ref_c_kkk   , RooArgList(aset))
 
 tot = RooAddPdf("tot","g+cheb",RooArgList(signal,bkg),RooArgList(nSig,nBkg))
 
@@ -90,21 +94,21 @@ nfits = 0
 
 mean.setConstant(True)
 gamma.setConstant(True)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(bumin,bumax),RooFit.NumCPU(8),RooFit.Verbose(False))
 nfits = nfits + 1
 
 mean.setConstant(True)
 gamma.setConstant(False)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(bumin,bumax),RooFit.NumCPU(8),RooFit.Verbose(False))
 nfits = nfits + 1
 
 mean.setConstant(False)
 gamma.setConstant(False)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(bumin,bumax),RooFit.NumCPU(8),RooFit.Verbose(False))
 nfits = nfits + 1
 
 c = TCanvas("canvas","canvas",1200,800) 
-phiFrame = masskk.frame(Range(phimin,phimax),Normalization((nSig.getValV() + nBkg.getValV())))
+phiFrame = mass_ref_c_kkk.frame(Range(bumin,bumax),Normalization((nSig.getValV() + nBkg.getValV())))
 splotData.plotOn(phiFrame)
 ratio = 1.0/float(nfits)
 
@@ -135,8 +139,8 @@ lineup.Draw()
 #tot.paramOn(phiFrame,RooFit.Layout(0.57,0.99,0.65))
 
 
-c.SaveAs("phimassSPlot.png")
-c.SaveAs("phimassSPlot.root")
+c.SaveAs("bumassSPlot.png")
+c.SaveAs("bumassSPlot.root")
 c.Clear()
 
 
@@ -154,8 +158,8 @@ shistSig.SetMarkerColor(2); shistSig.SetMinimum(0.)
 dstree.Project('shistSig','dimuonditrk_m_rf_c','nSig_sw');  
 
 shistSig.Draw('e0');
-cD.SaveAs('SigSPlotPhi.gif')
-cD.SaveAs('SigSPlotPhi.root')
+cD.SaveAs('SigSPlotBu.gif')
+cD.SaveAs('SigSPlotBu.root')
 
 
 sweightSig   = TH1F('sweightSig','sweightSig', 50, 4.0, 6.0)
@@ -165,8 +169,8 @@ sweightSig.SetMarkerColor(2); sweightSig.SetMinimum(0.)
 dstree.Project('sweightSig','nSig_sw');  
 
 sweightSig.Draw('e0');
-cD.SaveAs('SigWeightPlotPhi.gif')
-cD.SaveAs('SigWeightPlotPhi.root')
+cD.SaveAs('SigWeightPlotBu.gif')
+cD.SaveAs('SigWeightPlotBu.root')
 
 
 #S plot hist for bkg
@@ -177,8 +181,8 @@ shistBkg.SetMarkerColor(2); shistBkg.SetMinimum(0.)
 dstree.Project('shistBkg','dimuonditrk_m_rf_c','nBkg_sw');  
 
 shistBkg.Draw('e0');
-cD.SaveAs('BkgSPlotPhi.gif')
-cD.SaveAs('BkgSPlotPhi.root')
+cD.SaveAs('BkgSPlotBu.gif')
+cD.SaveAs('BkgSPlotBu.root')
 
 
 sweightBkg   = TH1F('sweightBkg','sweightBkg', 50, 4.0, 6.0)
@@ -188,16 +192,13 @@ sweightBkg.SetMarkerColor(2); sweightBkg.SetMinimum(0.)
 dstree.Project('sweightBkg','nBkg_sw');  
 
 sweightBkg.Draw('e0');
-cD.SaveAs('BkgWeightPlotPhi.gif')
-cD.SaveAs('BkgWeightPlotPhi.root')
+cD.SaveAs('BkgWeightPlotBu.gif')
+cD.SaveAs('BkgWeightPlotBu.root')
 
 
-outputFile = TFile("sPlot2018_outtree_psi.root","RECREATE")
+outputFile = TFile("sPlot2018_outtree.root","RECREATE")
 outputFile.cd()
 
 dstree.Write()
 outputFile.Close()
-
-
-
 
