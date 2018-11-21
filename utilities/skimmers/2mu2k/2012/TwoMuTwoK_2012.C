@@ -31,190 +31,190 @@
 
 void TwoMuTwoK_2012::Begin(TTree * /*tree*/)
 {
-   // The Begin() function is called at the start of the query.
-   // When running with PROOF Begin() is only called on the client.
-   // The tree argument is deprecated (on PROOF 0 is passed).
+  // The Begin() function is called at the start of the query.
+  // When running with PROOF Begin() is only called on the client.
+  // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString option = GetOption();
+  TString option = GetOption();
 }
 
 void TwoMuTwoK_2012::SlaveBegin(TTree * /*tree*/)
 {
-   // The SlaveBegin() function is called after the Begin() function.
-   // When running with PROOF SlaveBegin() is called on each slave server.
-   // The tree argument is deprecated (on PROOF 0 is passed).
-   TString option = GetOption();
+  // The SlaveBegin() function is called after the Begin() function.
+  // When running with PROOF SlaveBegin() is called on each slave server.
+  // The tree argument is deprecated (on PROOF 0 is passed).
+  TString option = GetOption();
 
-   std::string outputString = "TwoMuTwoK_five_tree.root";
-   OutFile = new TProofOutputFile( outputString.data() );
-   fOut = OutFile->OpenFile("RECREATE");
-   if (!(fOut=OutFile->OpenFile("RECREATE")))
-   {
-     Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
-   }
+  std::string outputString = "TwoMuTwoK_five_tree.root";
+  OutFile = new TProofOutputFile( outputString.data() );
+  fOut = OutFile->OpenFile("RECREATE");
+  if (!(fOut=OutFile->OpenFile("RECREATE")))
+  {
+    Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
+  }
 
-   ////////////////// Histograms //////////////////
-   JPsi_mass = 3.096916; /// pdg mass
-   Phi_mass = 1.019455; /// pdg mass
-   Phi_mean = 1.019723;
-   Phi_sigma = 2.35607e-03;//2.28400e-03;
+  ////////////////// Histograms //////////////////
+  JPsi_mass = 3.096916; /// pdg mass
+  Phi_mass = 1.019455; /// pdg mass
+  Phi_mean = 1.019723;
+  Phi_sigma = 2.35607e-03;//2.28400e-03;
 
-   outTree = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
+  outTree = new TTree("2mu2kSkimmedTree","2mu2kSkimmedTree");
 
-   outTree->Branch("event",      &event,   "event/F");
-   outTree->Branch("run",      &run,   "run/F");
-   outTree->Branch("lumi",      &lumi,   "lumi/F");
+  outTree->Branch("event",      &event,   "event/F");
+  outTree->Branch("run",      &run,   "run/F");
+  outTree->Branch("lumi",      &lumi,   "lumi/F");
 
-   outTree->Branch("hlt8", &hlt8, "hlt8/F");
-   outTree->Branch("hlt4", &hlt4, "hlt4/F");
+  outTree->Branch("HLT_Dimuon8_Jpsi", &hlt8, "HLT_Dimuon8_Jpsi/F");
+  outTree->Branch("HLT_DoubleMu4_Jpsi_Displaced", &hlt4, "HLT_DoubleMu4_Jpsi_Displaced/F");
 
-   outTree->Branch("priVtx_n",     &out_priVtx_n,  "priVtx_n/F");
-   outTree->Branch("priVtx_X",     &out_priVtx_X,  "priVtx_X/F");
-   outTree->Branch("priVtx_Y",     &out_priVtx_Y,  "priVtx_Y/F");
-   outTree->Branch("priVtx_Z",     &out_priVtx_Z,  "priVtx_Z/F");
+  outTree->Branch("priVtx_n",     &out_priVtx_n,  "priVtx_n/F");
+  outTree->Branch("priVtx_X",     &out_priVtx_X,  "priVtx_X/F");
+  outTree->Branch("priVtx_Y",     &out_priVtx_Y,  "priVtx_Y/F");
+  outTree->Branch("priVtx_Z",     &out_priVtx_Z,  "priVtx_Z/F");
 
-   outTree->Branch("muOnePx",         &out_muOnePx,      "muOnePx/F");
-   outTree->Branch("muOnePy",         &out_muOnePy,      "muOnePy/F");
-   outTree->Branch("muOnePz",         &out_muOnePz,      "muOnePz/F");
-   outTree->Branch("muOneCharge",     &out_muOneCharge,  "muOneCharge/F");
-   outTree->Branch("muOneD0",         &out_muOneD0,      "muOneD0/F");
-   outTree->Branch("muOneDz",         &out_muOneDz,      "muOneDz/F");
-   outTree->Branch("muOneChi2",       &out_muOneChi2,    "muOneChi2/F");
-   outTree->Branch("muOneNDF",        &out_muOneNDF,     "muOneNDF/F");
-   outTree->Branch("muOnePhits",      &out_muOnePhits,   "muOnePhits/F");
-   outTree->Branch("muOneShits",      &out_muOneShits,   "muOneShits/F");
-   outTree->Branch("muOneLayersTr",   &out_muOneLayersTr,        "muOneLayersTr/F");
-   outTree->Branch("muOneLayersPix",  &out_muOneLayersPix,       "muOneLayersPix/F");
-   outTree->Branch("muOneD0E",        &out_muOneD0E,     "muOneD0E/F");
-   outTree->Branch("muOneDzVtxErr",   &out_muOneDzVtxErr,        "muOneDzVtxErr/F");
-   outTree->Branch("muOneIsGlobal",   &out_muOneIsGlobal,        "muOneIsGlobal/F");
-   outTree->Branch("muOneIsPF",       &out_muOneIsPF,    "muOneIsPF/F");
-   outTree->Branch("muOneIsSoft",     &out_muOneIsSoft,    "muOneIsSoft/F");
+  outTree->Branch("muOnePx",         &out_muOnePx,      "muOnePx/F");
+  outTree->Branch("muOnePy",         &out_muOnePy,      "muOnePy/F");
+  outTree->Branch("muOnePz",         &out_muOnePz,      "muOnePz/F");
+  outTree->Branch("muOneCharge",     &out_muOneCharge,  "muOneCharge/F");
+  outTree->Branch("muOneD0",         &out_muOneD0,      "muOneD0/F");
+  outTree->Branch("muOneDz",         &out_muOneDz,      "muOneDz/F");
+  outTree->Branch("muOneChi2",       &out_muOneChi2,    "muOneChi2/F");
+  outTree->Branch("muOneNDF",        &out_muOneNDF,     "muOneNDF/F");
+  outTree->Branch("muOnePhits",      &out_muOnePhits,   "muOnePhits/F");
+  outTree->Branch("muOneShits",      &out_muOneShits,   "muOneShits/F");
+  outTree->Branch("muOneLayersTr",   &out_muOneLayersTr,        "muOneLayersTr/F");
+  outTree->Branch("muOneLayersPix",  &out_muOneLayersPix,       "muOneLayersPix/F");
+  outTree->Branch("muOneD0E",        &out_muOneD0E,     "muOneD0E/F");
+  outTree->Branch("muOneDzVtxErr",   &out_muOneDzVtxErr,        "muOneDzVtxErr/F");
+  outTree->Branch("muOneIsGlobal",   &out_muOneIsGlobal,        "muOneIsGlobal/F");
+  outTree->Branch("muOneIsPF",       &out_muOneIsPF,    "muOneIsPF/F");
+  outTree->Branch("muOneIsSoft",     &out_muOneIsSoft,    "muOneIsSoft/F");
 
-   outTree->Branch("muTwoPx",         &out_muTwoPx,      "muTwoPx/F");
-   outTree->Branch("muTwoPy",         &out_muTwoPy,      "muTwoPy/F");
-   outTree->Branch("muTwoPz",         &out_muTwoPz,      "muTwoPz/F");
-   outTree->Branch("muTwoCharge",     &out_muTwoCharge,  "muTwoCharge/F");
-   outTree->Branch("muTwoD0",         &out_muTwoD0,      "muTwoD0/F");
-   outTree->Branch("muTwoDz",         &out_muTwoDz,      "muTwoDz/F");
-   outTree->Branch("muTwoChi2",       &out_muTwoChi2,    "muTwoChi2/F");
-   outTree->Branch("muTwoNDF",        &out_muTwoNDF,     "muTwoNDF/F");
-   outTree->Branch("muTwoPhits",      &out_muTwoPhits,   "muTwoPhits/F");
-   outTree->Branch("muTwoShits",      &out_muTwoShits,   "muTwoShits/F");
-   outTree->Branch("muTwoLayersTr",   &out_muTwoLayersTr,        "muTwoLayersTr/F");
-   outTree->Branch("muTwoLayersPix",  &out_muTwoLayersPix,       "muTwoLayersPix/F");
-   outTree->Branch("muTwoD0E",        &out_muTwoD0E,     "muTwoD0E/F");
-   outTree->Branch("muTwoDzVtxErr",   &out_muTwoDzVtxErr,        "muTwoDzVtxErr/F");
-   outTree->Branch("muTwoIsGlobal",   &out_muTwoIsGlobal,        "muTwoIsGlobal/F");
-   outTree->Branch("muTwoIsPF",       &out_muTwoIsPF,    "muTwoIsPF/F");
-   outTree->Branch("muTwoIsSoft",     &out_muTwoIsSoft,    "muTwoIsSoft/F");
+  outTree->Branch("muTwoPx",         &out_muTwoPx,      "muTwoPx/F");
+  outTree->Branch("muTwoPy",         &out_muTwoPy,      "muTwoPy/F");
+  outTree->Branch("muTwoPz",         &out_muTwoPz,      "muTwoPz/F");
+  outTree->Branch("muTwoCharge",     &out_muTwoCharge,  "muTwoCharge/F");
+  outTree->Branch("muTwoD0",         &out_muTwoD0,      "muTwoD0/F");
+  outTree->Branch("muTwoDz",         &out_muTwoDz,      "muTwoDz/F");
+  outTree->Branch("muTwoChi2",       &out_muTwoChi2,    "muTwoChi2/F");
+  outTree->Branch("muTwoNDF",        &out_muTwoNDF,     "muTwoNDF/F");
+  outTree->Branch("muTwoPhits",      &out_muTwoPhits,   "muTwoPhits/F");
+  outTree->Branch("muTwoShits",      &out_muTwoShits,   "muTwoShits/F");
+  outTree->Branch("muTwoLayersTr",   &out_muTwoLayersTr,        "muTwoLayersTr/F");
+  outTree->Branch("muTwoLayersPix",  &out_muTwoLayersPix,       "muTwoLayersPix/F");
+  outTree->Branch("muTwoD0E",        &out_muTwoD0E,     "muTwoD0E/F");
+  outTree->Branch("muTwoDzVtxErr",   &out_muTwoDzVtxErr,        "muTwoDzVtxErr/F");
+  outTree->Branch("muTwoIsGlobal",   &out_muTwoIsGlobal,        "muTwoIsGlobal/F");
+  outTree->Branch("muTwoIsPF",       &out_muTwoIsPF,    "muTwoIsPF/F");
+  outTree->Branch("muTwoIsSoft",     &out_muTwoIsSoft,    "muTwoIsSoft/F");
 
-   outTree->Branch("kaonOnePx",          &out_kaonOnePx,           "kaonOnePx/F");
-   outTree->Branch("kaonOnePy",          &out_kaonOnePy,           "kaonOnePy/F");
-   outTree->Branch("kaonOnePz",          &out_kaonOnePz,           "kaonOnePz/F");
-   outTree->Branch("kaonOneE",           &out_kaonOneE,            "kaonOneE/F");
-   outTree->Branch("kaonOneChi2",      &out_kaonOneChi2,           "kaonOneChi2/F");
-   outTree->Branch("kaonOneNDF",         &out_kaonOneNDF,          "kaonOneNDF/F");
-   outTree->Branch("kaonOneD0",          &out_kaonOneD0,           "kaonOneChiOne/F");
-   outTree->Branch("kaonOneDzVtx",       &out_kaonOneDzVtx,        "kaonOneDzVtx/F");
-   outTree->Branch("kaonOneDxyVtx",      &out_kaonOneDxyVtx,       "kaonOneDxyVtx/F");
-   outTree->Branch("kaonOnetrackPhits",  &out_kaonOnetrackPhits,   "kaonOnetrackPhits/F");
-   outTree->Branch("kaonOnetrackShits",  &out_kaonOnetrackShits,   "kaonOnetrackShits/F");
-   outTree->Branch("kaonOnetrackCharge", &out_kaonOnetrackCharge,  "kaonOnetrackCharge/F");
-   outTree->Branch("kaonOneHighPurity",  &out_kaonOneHighPurity,   "kaonOneHighPurity/F");
+  outTree->Branch("kaonOnePx",          &out_kaonOnePx,           "kaonOnePx/F");
+  outTree->Branch("kaonOnePy",          &out_kaonOnePy,           "kaonOnePy/F");
+  outTree->Branch("kaonOnePz",          &out_kaonOnePz,           "kaonOnePz/F");
+  outTree->Branch("kaonOneE",           &out_kaonOneE,            "kaonOneE/F");
+  outTree->Branch("kaonOneChi2",      &out_kaonOneChi2,           "kaonOneChi2/F");
+  outTree->Branch("kaonOneNDF",         &out_kaonOneNDF,          "kaonOneNDF/F");
+  outTree->Branch("kaonOneD0",          &out_kaonOneD0,           "kaonOneChiOne/F");
+  outTree->Branch("kaonOneDzVtx",       &out_kaonOneDzVtx,        "kaonOneDzVtx/F");
+  outTree->Branch("kaonOneDxyVtx",      &out_kaonOneDxyVtx,       "kaonOneDxyVtx/F");
+  outTree->Branch("kaonOnetrackPhits",  &out_kaonOnetrackPhits,   "kaonOnetrackPhits/F");
+  outTree->Branch("kaonOnetrackShits",  &out_kaonOnetrackShits,   "kaonOnetrackShits/F");
+  outTree->Branch("kaonOnetrackCharge", &out_kaonOnetrackCharge,  "kaonOnetrackCharge/F");
+  outTree->Branch("kaonOneHighPurity",  &out_kaonOneHighPurity,   "kaonOneHighPurity/F");
 
 
-   outTree->Branch("kaonTwoPx",          &out_kaonTwoPx,          "kaonTwoPx/F");
-   outTree->Branch("kaonTwoPy",          &out_kaonTwoPy,          "kaonTwoPy/F");
-   outTree->Branch("kaonTwoPz",          &out_kaonTwoPz,          "kaonTwoPz/F");
-   outTree->Branch("kaonTwoE",           &out_kaonTwoE,           "kaonTwoE/F");
-   outTree->Branch("kaonTwoChi2",      &out_kaonTwoChi2,          "kaonTwoChi2/F");
-   outTree->Branch("kaonTwoNDF",         &out_kaonTwoNDF,         "kaonTwoNDF/F");
-   outTree->Branch("kaonTwoD0",          &out_kaonTwoD0,          "kaonTwoChiTwo/F");
-   outTree->Branch("kaonTwoDzVtx",       &out_kaonTwoDzVtx,       "kaonTwoDzVtx/F");
-   outTree->Branch("kaonTwoDxyVtx",      &out_kaonTwoDxyVtx,      "kaonTwoDxyVtx/F");
-   outTree->Branch("kaonTwotrackPhits",  &out_kaonTwotrackPhits,  "kaonTwotrackPhits/F");
-   outTree->Branch("kaonTwotrackShits",  &out_kaonTwotrackShits,  "kaonTwotrackShits/F");
-   outTree->Branch("kaonTwotrackCharge", &out_kaonTwotrackCharge,        "kaonTwotrackCharge/F");
-   outTree->Branch("kaonTwoHighPurity",  &out_kaonTwoHighPurity,  "kaonTwoHighPurity/F");
+  outTree->Branch("kaonTwoPx",          &out_kaonTwoPx,          "kaonTwoPx/F");
+  outTree->Branch("kaonTwoPy",          &out_kaonTwoPy,          "kaonTwoPy/F");
+  outTree->Branch("kaonTwoPz",          &out_kaonTwoPz,          "kaonTwoPz/F");
+  outTree->Branch("kaonTwoE",           &out_kaonTwoE,           "kaonTwoE/F");
+  outTree->Branch("kaonTwoChi2",      &out_kaonTwoChi2,          "kaonTwoChi2/F");
+  outTree->Branch("kaonTwoNDF",         &out_kaonTwoNDF,         "kaonTwoNDF/F");
+  outTree->Branch("kaonTwoD0",          &out_kaonTwoD0,          "kaonTwoChiTwo/F");
+  outTree->Branch("kaonTwoDzVtx",       &out_kaonTwoDzVtx,       "kaonTwoDzVtx/F");
+  outTree->Branch("kaonTwoDxyVtx",      &out_kaonTwoDxyVtx,      "kaonTwoDxyVtx/F");
+  outTree->Branch("kaonTwotrackPhits",  &out_kaonTwotrackPhits,  "kaonTwotrackPhits/F");
+  outTree->Branch("kaonTwotrackShits",  &out_kaonTwotrackShits,  "kaonTwotrackShits/F");
+  outTree->Branch("kaonTwotrackCharge", &out_kaonTwotrackCharge,        "kaonTwotrackCharge/F");
+  outTree->Branch("kaonTwoHighPurity",  &out_kaonTwoHighPurity,  "kaonTwoHighPurity/F");
 
-   outTree->Branch("MuMuMass",     &out_MuMuMass,  "MuMuMass/F");
-   outTree->Branch("MuMuMass_original",     &out_MuMuMas_original,  "MuMuMass/F");
-   outTree->Branch("MuMuPx",       &out_MuMuPx,    "MuMuPx/F");
-   outTree->Branch("MuMuPy",       &out_MuMuPy,    "MuMuPy/F");
-   outTree->Branch("MuMuPz",       &out_MuMuPz,    "MuMuPz/F");
-   outTree->Branch("MuMuVtx_CL",   &out_MuMuVtx_CL,        "MuMuVtx_CL/F");
-   outTree->Branch("MuMuVtx_Chi2",         &out_MuMuVtx_Chi2,      "MuMuVtx_Chi2/F");
-   outTree->Branch("MuMuDecayVtx_X",       &out_MuMuDecayVtx_X,    "MuMuDecayVtx_X/F");
-   outTree->Branch("MuMuDecayVtx_Y",       &out_MuMuDecayVtx_Y,    "MuMuDecayVtx_Y/F");
-   outTree->Branch("MuMuDecayVtx_Z",       &out_MuMuDecayVtx_Z,    "MuMuDecayVtx_Z/F");
+  outTree->Branch("MuMuMass",     &out_MuMuMass,  "MuMuMass/F");
+  outTree->Branch("MuMuMass_original",     &out_MuMuMas_original,  "MuMuMass/F");
+  outTree->Branch("MuMuPx",       &out_MuMuPx,    "MuMuPx/F");
+  outTree->Branch("MuMuPy",       &out_MuMuPy,    "MuMuPy/F");
+  outTree->Branch("MuMuPz",       &out_MuMuPz,    "MuMuPz/F");
+  outTree->Branch("MuMuVtx_CL",   &out_MuMuVtx_CL,        "MuMuVtx_CL/F");
+  outTree->Branch("MuMuVtx_Chi2",         &out_MuMuVtx_Chi2,      "MuMuVtx_Chi2/F");
+  outTree->Branch("MuMuDecayVtx_X",       &out_MuMuDecayVtx_X,    "MuMuDecayVtx_X/F");
+  outTree->Branch("MuMuDecayVtx_Y",       &out_MuMuDecayVtx_Y,    "MuMuDecayVtx_Y/F");
+  outTree->Branch("MuMuDecayVtx_Z",       &out_MuMuDecayVtx_Z,    "MuMuDecayVtx_Z/F");
 
-   outTree->Branch("KKMass",       &out_KKMass,    "KKMass/F");
-   outTree->Branch("KKPx",         &out_KKPx,      "KKPx/F");
-   outTree->Branch("KKPy",         &out_KKPy,      "KKPy/F");
-   outTree->Branch("KKPz",         &out_KKPz,      "KKPz/F");
-   outTree->Branch("KKPt",         &out_KKPt,      "KKPz/F");
+  outTree->Branch("KKMass",       &out_KKMass,    "KKMass/F");
+  outTree->Branch("KKPx",         &out_KKPx,      "KKPx/F");
+  outTree->Branch("KKPy",         &out_KKPy,      "KKPy/F");
+  outTree->Branch("KKPz",         &out_KKPz,      "KKPz/F");
+  outTree->Branch("KKPt",         &out_KKPt,      "KKPz/F");
 
-   outTree->Branch("nX",   &out_nX,        "nX/F");
+  outTree->Branch("nX",   &out_nX,        "nX/F");
 
-   outTree->Branch("XMass_original",        &out_XMass_original,     "XMass/F");
+  outTree->Branch("XMass_original",        &out_XMass_original,     "XMass/F");
 
-   outTree->Branch("XMass",        &out_XMass,     "XMass/F");
-   outTree->Branch("XPx",  &out_XPx,       "XPx/F");
-   outTree->Branch("XPy",  &out_XPy,       "XPy/F");
-   outTree->Branch("XPz",  &out_XPz,       "XPz/F");
+  outTree->Branch("XMass",        &out_XMass,     "XMass/F");
+  outTree->Branch("XPx",  &out_XPx,       "XPx/F");
+  outTree->Branch("XPy",  &out_XPy,       "XPy/F");
+  outTree->Branch("XPz",  &out_XPz,       "XPz/F");
 
-   outTree->Branch("XVtx_CL",      &out_XVtx_CL,   "XVtx_CL/F");
-   outTree->Branch("XVtx_Chi2",    &out_XVtx_Chi2,         "XVtx_Chi2/F");
-   outTree->Branch("XDecayVtx_X",  &out_XDecayVtx_X,       "XDecayVtx_X/F");
-   outTree->Branch("XDecayVtx_Y",  &out_XDecayVtx_Y,       "XDecayVtx_Y/F");
-   outTree->Branch("XDecayVtx_Z",  &out_XDecayVtx_Z,       "XDecayVtx_Z/F");
-   outTree->Branch("XDecayVtx_XE",         &out_XDecayVtx_XE,      "XDecayVtx_XE/F");
-   outTree->Branch("XDecayVtx_YE",         &out_XDecayVtx_YE,      "XDecayVtx_YE/F");
-   outTree->Branch("XDecayVtx_ZE",         &out_XDecayVtx_ZE,      "XDecayVtx_ZE/F");
-   outTree->Branch("XCosAlphaBS",  &out_XCosAlphaBS,       "XCosAlphaBS/F");
-   outTree->Branch("XCosAlpha3DBS",        &out_XCosAlpha3DBS,     "XCosAlpha3DBS/F");
-   outTree->Branch("XCTauBS",      &out_XCTauBS,   "XCTauBS/F");
-   outTree->Branch("XCTauBSE",     &out_XCTauBSE,  "XCTauBSE/F");
-   outTree->Branch("XLxyBS",       &out_XLxyBS,    "XLxyBS/F");
-   outTree->Branch("XLxyBSE",      &out_XLxyBSE,   "XLxyBSE/F");
-   outTree->Branch("XLxyzBS",      &out_XLxyzBS,   "XLxyzBS/F");
-   outTree->Branch("XLxyzBSE",     &out_XLxyzBSE,  "XLxyzBSE/F");
-   outTree->Branch("XCosAlphaPV",  &out_XCosAlphaPV,       "XCosAlphaPV/F");
-   outTree->Branch("XCosAlpha3DPV",        &out_XCosAlpha3DPV,     "XCosAlpha3DPV/F");
-   outTree->Branch("XCTauPV",      &out_XCTauPV,   "XCTauPV/F");
-   outTree->Branch("XCTauPVE",     &out_XCTauPVE,  "XCTauPVE/F");
-   outTree->Branch("XLxyPV",       &out_XLxyPV,    "XLxyPV/F");
-   outTree->Branch("XLxyPVE",      &out_XLxyPVE,   "XLxyPVE/F");
-   outTree->Branch("XLxyzPV",      &out_XLxyzPV,   "XLxyzPV/F");
-   outTree->Branch("XLxyzPVE",     &out_XLxyzPVE,  "XLxyzPVE/F");
+  outTree->Branch("XVtx_CL",      &out_XVtx_CL,   "XVtx_CL/F");
+  outTree->Branch("XVtx_Chi2",    &out_XVtx_Chi2,         "XVtx_Chi2/F");
+  outTree->Branch("XDecayVtx_X",  &out_XDecayVtx_X,       "XDecayVtx_X/F");
+  outTree->Branch("XDecayVtx_Y",  &out_XDecayVtx_Y,       "XDecayVtx_Y/F");
+  outTree->Branch("XDecayVtx_Z",  &out_XDecayVtx_Z,       "XDecayVtx_Z/F");
+  outTree->Branch("XDecayVtx_XE",         &out_XDecayVtx_XE,      "XDecayVtx_XE/F");
+  outTree->Branch("XDecayVtx_YE",         &out_XDecayVtx_YE,      "XDecayVtx_YE/F");
+  outTree->Branch("XDecayVtx_ZE",         &out_XDecayVtx_ZE,      "XDecayVtx_ZE/F");
+  outTree->Branch("XCosAlphaBS",  &out_XCosAlphaBS,       "XCosAlphaBS/F");
+  outTree->Branch("XCosAlpha3DBS",        &out_XCosAlpha3DBS,     "XCosAlpha3DBS/F");
+  outTree->Branch("XCTauBS",      &out_XCTauBS,   "XCTauBS/F");
+  outTree->Branch("XCTauBSE",     &out_XCTauBSE,  "XCTauBSE/F");
+  outTree->Branch("XLxyBS",       &out_XLxyBS,    "XLxyBS/F");
+  outTree->Branch("XLxyBSE",      &out_XLxyBSE,   "XLxyBSE/F");
+  outTree->Branch("XLxyzBS",      &out_XLxyzBS,   "XLxyzBS/F");
+  outTree->Branch("XLxyzBSE",     &out_XLxyzBSE,  "XLxyzBSE/F");
+  outTree->Branch("XCosAlphaPV",  &out_XCosAlphaPV,       "XCosAlphaPV/F");
+  outTree->Branch("XCosAlpha3DPV",        &out_XCosAlpha3DPV,     "XCosAlpha3DPV/F");
+  outTree->Branch("XCTauPV",      &out_XCTauPV,   "XCTauPV/F");
+  outTree->Branch("XCTauPVE",     &out_XCTauPVE,  "XCTauPVE/F");
+  outTree->Branch("XLxyPV",       &out_XLxyPV,    "XLxyPV/F");
+  outTree->Branch("XLxyPVE",      &out_XLxyPVE,   "XLxyPVE/F");
+  outTree->Branch("XLxyzPV",      &out_XLxyzPV,   "XLxyzPV/F");
+  outTree->Branch("XLxyzPVE",     &out_XLxyzPVE,  "XLxyzPVE/F");
 
 
 }
 
 Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
 {
-   // The Process() function is called for each entry in the tree (or possibly
-   // keyed object in the case of PROOF) to be processed. The entry argument
-   // specifies which entry in the currently loaded tree is to be processed.
-   // When processing keyed objects with PROOF, the object is already loaded
-   // and is available via the fObject pointer.
-   //
-   // This function should contain the \"body\" of the analysis. It can contain
-   // simple or elaborate selection criteria, run algorithms on the data
-   // of the event and typically fill histograms.
-   //
-   // The processing can be stopped by calling Abort().
-   //
-   // Use fStatus to set the return value of TTree::Process().
-   //
-   // The return value is currently not used.
+  // The Process() function is called for each entry in the tree (or possibly
+  // keyed object in the case of PROOF) to be processed. The entry argument
+  // specifies which entry in the currently loaded tree is to be processed.
+  // When processing keyed objects with PROOF, the object is already loaded
+  // and is available via the fObject pointer.
+  //
+  // This function should contain the \"body\" of the analysis. It can contain
+  // simple or elaborate selection criteria, run algorithms on the data
+  // of the event and typically fill histograms.
+  //
+  // The processing can be stopped by calling Abort().
+  //
+  // Use fStatus to set the return value of TTree::Process().
+  //
+  // The return value is currently not used.
 
-   fReader.SetEntry(entry);
+  fReader.SetEntry(entry);
 
   float muon_mass = 0.1056583745;
   float kaon_mass = 0.493677;
-   ////////////////// Bs0 & X(4140) Loop //////////////////
+  ////////////////// Bs0 & X(4140) Loop //////////////////
   bool HLT_4_v9 = false, HLT_4_v10 = false, HLT_4_v11 = false, HLT_4_v12 = false ;
   bool HLT_8_v3 = false, HLT_8_v4 = false, HLT_8_v5 = false, HLT_8_v6 = false, HLT_8_v7 = false ;
   bool HLT_4_vAny = false;
@@ -252,75 +252,51 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
 
     hlt8 = (Float_t) HLT_8_vAny;
     hlt4 = (Float_t) HLT_4_vAny;
-    std::map<std::string,bool> allCuts;
-    std::map<std::string,bool> hltCuts;
-    std::map<std::string,bool> lxyCuts;
 
-    std::vector<bool> cutsFlags, winsFlags, regsFlags;
-    //
-    bool muonQualityCut = false, muonChiCut = false, muonPhitsCut = false, muonShitsCut = false;
-    bool muonDZPVCut= false, muonDXYPVCut = false, muonSoftCuts = false, muonsCuts = false;
-    //
-    bool jPsiPtCut = false,jPsiMassCut = false, jPsiVtxCut = false, jPsiMuEtaPtCut = false, jPsiMusPtCut = false, jPsiCuts = false;
-    //
-    bool kaonOneChiCut = false, kaonOnePhitsCut = false, kaonOneShitsCut = false, kaonTwoChiCut = false;
-    bool kaonTwoPhitsCut = false, kaonTwoShitsCut = false, kaonsPt = false;
-    //
-    bool kaonOneCuts = false, kaonTwoCuts = false, kaonsCuts = false;
-    bool cosAlphaCut = false, vtxCLCut = false;
-    //
-    // bool CWMass = false, SWMass = false;
-    // bool promptRegion = false, mixedRegion = false, nonPromptRegion = false;
-    //
-    // bool extraCuts = false;
-    //
-    // bool b0_side = false, b0_signal = false, b0_side_l = false, b0_side_r = false;
-    // bool y_side = false, y_signal = false, y_side_l = false, y_side_r = false;
-    // bool y_NP_side = false, y_NP_signal = false, y_NP_side_l = false, y_NP_side_r = false;
-    //
+
     int iJPsi = XMuMuIdx[iX];
-    //
-    // //doneJPsiIt = doneJPsi.find(iJPsi);
-    //
-    // //if(doneJPsiIt!=doneJPsi.end())
-    // //continue;
-    // //else
-    // //doneJPsi[iJPsi] = 1.0;
-    //
-    // ++jPsis;
-    //
+
+    event = (Float_t) *evtNum;
+    run = (Float_t) *runNum;
+    lumi = (Float_t) *lumiNum;
+
+    priVtx_n = (Float_t)(*out_priVtx_n);
+    priVtx_X (Float_t)(*out_priVtx_X);
+    priVtx_Y = (Float_t)(*out_priVtx_Y);
+    priVtx_Z = (Float_t)(*out_priVtx_Z);
+
     int iMu1 = (mu1Idx)[iJPsi] ; // define for original muon1
     int iMu2 = (mu2Idx)[iJPsi] ; // define for original muon2
     int iK1 = (ka1Idx)[iX] ; // define for original kaon1
     int iK2 = (ka2Idx)[iX] ;
     //
-       double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
+    double mu1_E = 0., mu2_E = 0., K1_E = 0., K2_E = 0.;
     //
-       TLorentzVector mu1, mu2, oMu1, oMu2;
+    TLorentzVector mu1, mu2, oMu1, oMu2;
     //
-       mu1.SetPxPyPzE((Muon1Px_MuMuKK)[iX],(Muon1Py_MuMuKK)[iX],(Muon1Pz_MuMuKK)[iX],(Muon1E_MuMuKK)[iX]);
-       mu2.SetPxPyPzE((Muon2Px_MuMuKK)[iX],(Muon2Py_MuMuKK)[iX],(Muon2Pz_MuMuKK)[iX],(Muon2E_MuMuKK)[iX]);
+    mu1.SetPxPyPzE((Muon1Px_MuMuKK)[iX],(Muon1Py_MuMuKK)[iX],(Muon1Pz_MuMuKK)[iX],(Muon1E_MuMuKK)[iX]);
+    mu2.SetPxPyPzE((Muon2Px_MuMuKK)[iX],(Muon2Py_MuMuKK)[iX],(Muon2Pz_MuMuKK)[iX],(Muon2E_MuMuKK)[iX]);
     //
-       mu1_E = sqrt( pow((muPx)[iMu1], 2) + pow((muPy)[iMu1], 2) + pow((muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
-       mu2_E = sqrt( pow((muPx)[iMu2], 2) + pow((muPy)[iMu2], 2) + pow((muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
-       oMu1.SetPxPyPzE( (muPx)[iMu1], (muPy)[iMu1], (muPz)[iMu1], mu1_E) ;
-       oMu2.SetPxPyPzE( (muPx)[iMu2], (muPy)[iMu2], (muPz)[iMu2], mu2_E) ;
+    mu1_E = sqrt( pow((muPx)[iMu1], 2) + pow((muPy)[iMu1], 2) + pow((muPz)[iMu1], 2) + pow(muon_mass, 2) ) ;
+    mu2_E = sqrt( pow((muPx)[iMu2], 2) + pow((muPy)[iMu2], 2) + pow((muPz)[iMu2], 2) + pow(muon_mass, 2) ) ;
+    oMu1.SetPxPyPzE( (muPx)[iMu1], (muPy)[iMu1], (muPz)[iMu1], mu1_E) ;
+    oMu2.SetPxPyPzE( (muPx)[iMu2], (muPy)[iMu2], (muPz)[iMu2], mu2_E) ;
     //
-       TLorentzVector JPsi;
-       JPsi = mu1 + mu2;
+    TLorentzVector JPsi;
+    JPsi = mu1 + mu2;
     //
-       TLorentzVector JPsiOriginal;
-       JPsiOriginal = oMu1 + oMu2;
+    TLorentzVector JPsiOriginal;
+    JPsiOriginal = oMu1 + oMu2;
     //
-       TLorentzVector kaon1,kaon2;
+    TLorentzVector kaon1,kaon2;
     //
-       K1_E=sqrt(pow((Kaon1Px_MuMuKK)[iX],2)+pow((Kaon1Py_MuMuKK)[iX],2)+pow((Kaon1Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
-       kaon1.SetPxPyPzE((Kaon1Px_MuMuKK)[iX],(Kaon1Py_MuMuKK)[iX],(Kaon1Pz_MuMuKK)[iX],K1_E);
-       K2_E=sqrt(pow((Kaon2Px_MuMuKK)[iX],2)+pow((Kaon2Py_MuMuKK)[iX],2)+pow((Kaon2Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
-       kaon2.SetPxPyPzE((Kaon2Px_MuMuKK)[iX],(Kaon2Py_MuMuKK)[iX],(Kaon2Pz_MuMuKK)[iX],K2_E);
+    K1_E=sqrt(pow((Kaon1Px_MuMuKK)[iX],2)+pow((Kaon1Py_MuMuKK)[iX],2)+pow((Kaon1Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
+    kaon1.SetPxPyPzE((Kaon1Px_MuMuKK)[iX],(Kaon1Py_MuMuKK)[iX],(Kaon1Pz_MuMuKK)[iX],K1_E);
+    K2_E=sqrt(pow((Kaon2Px_MuMuKK)[iX],2)+pow((Kaon2Py_MuMuKK)[iX],2)+pow((Kaon2Pz_MuMuKK)[iX],2)+pow(kaon_mass,2));
+    kaon2.SetPxPyPzE((Kaon2Px_MuMuKK)[iX],(Kaon2Py_MuMuKK)[iX],(Kaon2Pz_MuMuKK)[iX],K2_E);
     //
-       TLorentzVector Phi;
-       Phi = kaon1 + kaon2;
+    TLorentzVector Phi;
+    Phi = kaon1 + kaon2;
 
     //
     // // Muon1_Mass->Fill(mu1.M());
@@ -377,33 +353,33 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_muOneIsPF =    (Float_t)((*muIsPF)[iMu1]);
     out_muOneIsSoft  = muonOneIsSoft;
 
-   out_kaonOnePx  = ( trackPx[iK1]);
-   out_kaonOnePy  = ( trackPy[iK1]);
-   out_kaonOnePz  = ( trackPz[iK1]);
-   out_kaonOneE  = ( trackEnergy[iK1]);
-   out_kaonOneChi2  = ( trackChi2[iK1]);
-   out_kaonOneNDF  = ( trackNDF[iK1]);
-   out_kaonOneD0  = ( trackD0[iK1]);
-   out_kaonOneDzVtx  = ( trackDzVtx[iK1]);
-   out_kaonOneDxyVtx  = ( trackDxyVtx[iK1]);
-   out_kaonOnetrackPhits  = ( trackPhits[iK1]);
-   out_kaonOnetrackShits  = ( trackShits[iK1]);
-   out_kaonOneHighPurity = (TrackHighPurity[iK1]);
-   out_kaonOnetrackCharge  = ( trackCharge[iK1]);
+    out_kaonOnePx  = ( trackPx[iK1]);
+    out_kaonOnePy  = ( trackPy[iK1]);
+    out_kaonOnePz  = ( trackPz[iK1]);
+    out_kaonOneE  = ( trackEnergy[iK1]);
+    out_kaonOneChi2  = ( trackChi2[iK1]);
+    out_kaonOneNDF  = ( trackNDF[iK1]);
+    out_kaonOneD0  = ( trackD0[iK1]);
+    out_kaonOneDzVtx  = ( trackDzVtx[iK1]);
+    out_kaonOneDxyVtx  = ( trackDxyVtx[iK1]);
+    out_kaonOnetrackPhits  = ( trackPhits[iK1]);
+    out_kaonOnetrackShits  = ( trackShits[iK1]);
+    out_kaonOneHighPurity = (TrackHighPurity[iK1]);
+    out_kaonOnetrackCharge  = ( trackCharge[iK1]);
 
-   out_kaonTwoPx  = ( trackPx[iK2]);
-   out_kaonTwoPy  = ( trackPy[iK2]);
-   out_kaonTwoPz  = ( trackPz[iK2]);
-   out_kaonTwoE  = ( trackEnergy[iK2]);
-   out_kaonTwoChi2  = ( trackChi2[iK2]);
-   out_kaonTwoNDF  = ( trackNDF[iK2]);
-   out_kaonTwoD0  = ( trackD0[iK2]);
-   out_kaonTwoDzVtx  = ( trackDzVtx[iK2]);
-   out_kaonTwoDxyVtx  = ( trackDxyVtx[iK2]);
-   out_kaonTwotrackPhits  = ( trackPhits[iK2]);
-   out_kaonTwotrackShits  = ( trackShits[iK2]);
-   out_kaonTwoHighPurity = (TrackHighPurity[iK2]);
-   out_kaonTwotrackCharge  = (Float_t)  ( trackCharge[iK2]);
+    out_kaonTwoPx  = ( trackPx[iK2]);
+    out_kaonTwoPy  = ( trackPy[iK2]);
+    out_kaonTwoPz  = ( trackPz[iK2]);
+    out_kaonTwoE  = ( trackEnergy[iK2]);
+    out_kaonTwoChi2  = ( trackChi2[iK2]);
+    out_kaonTwoNDF  = ( trackNDF[iK2]);
+    out_kaonTwoD0  = ( trackD0[iK2]);
+    out_kaonTwoDzVtx  = ( trackDzVtx[iK2]);
+    out_kaonTwoDxyVtx  = ( trackDxyVtx[iK2]);
+    out_kaonTwotrackPhits  = ( trackPhits[iK2]);
+    out_kaonTwotrackShits  = ( trackShits[iK2]);
+    out_kaonTwoHighPurity = (TrackHighPurity[iK2]);
+    out_kaonTwotrackCharge  = (Float_t)  ( trackCharge[iK2]);
 
     out_muTwoPx =      (Float_t)(muPx[iMu2]);
     out_muTwoPy =      (Float_t)(muPy[iMu2]);
@@ -478,32 +454,33 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     out_XLxyzPVE =  (Float_t)(XLxyzPVE[iX]);
 
 
-  out_kaon1_dxy_PV =      (Float_t)(kaon1_dxy_PV[iX]);
-  out_kaon1_dz_PV =       (Float_t)(kaon1_dz_PV[iX]);
-  out_kaon2_dxy_PV =      (Float_t)(kaon2_dxy_PV[iX]);
-  out_kaon2_dz_PV =       (Float_t)(kaon2_dz_PV[iX]);
-  out_kaon1_dxy_BS =      (Float_t)(kaon1_dxy_BS[iX]);
-  out_kaon1_dz_BS =       (Float_t)(kaon1_dz_BS[iX]);
-  out_kaon2_dxy_BS =      (Float_t)(kaon2_dxy_BS[iX]);
-  out_kaon2_dz_BS =       (Float_t)(kaon2_dz_BS[iX]);
+    out_kaon1_dxy_PV =      (Float_t)(kaon1_dxy_PV[iX]);
+    out_kaon1_dz_PV =       (Float_t)(kaon1_dz_PV[iX]);
+    out_kaon2_dxy_PV =      (Float_t)(kaon2_dxy_PV[iX]);
+    out_kaon2_dz_PV =       (Float_t)(kaon2_dz_PV[iX]);
+    out_kaon1_dxy_BS =      (Float_t)(kaon1_dxy_BS[iX]);
+    out_kaon1_dz_BS =       (Float_t)(kaon1_dz_BS[iX]);
+    out_kaon2_dxy_BS =      (Float_t)(kaon2_dxy_BS[iX]);
+    out_kaon2_dz_BS =       (Float_t)(kaon2_dz_BS[iX]);
 
 
-  out_Kaon1FromPV =       (Float_t)((*Kaon1FromPV)[iX]);
-  out_Kaon2FromPV =       (Float_t)((*Kaon2FromPV)[iX]);
+    out_Kaon1FromPV =       (Float_t)((*Kaon1FromPV)[iX]);
+    out_Kaon2FromPV =       (Float_t)((*Kaon2FromPV)[iX]);
 
-  out_Muon1Px_MuMuKK =    (Float_t)(Muon1Px_MuMuKK[iX]);
-  out_Muon1Py_MuMuKK =    (Float_t)(Muon1Py_MuMuKK[iX]);
-  out_Muon1Pz_MuMuKK =    (Float_t)(Muon1Pz_MuMuKK[iX]);
-  out_Muon1E_MuMuKK =     (Float_t)(Muon1E_MuMuKK[iX]);
-  out_Muon2Px_MuMuKK =    (Float_t)(Muon2Px_MuMuKK[iX]);
-  out_Muon2Py_MuMuKK =    (Float_t)(Muon2Py_MuMuKK[iX]);
-  out_Muon2Pz_MuMuKK =    (Float_t)(Muon2Pz_MuMuKK[iX]);
-  out_Muon2E_MuMuKK =     (Float_t)(Muon2E_MuMuKK[iX]);
-  out_Kaon1Px_MuMuKK =    (Float_t)(Kaon1Px_MuMuKK[iX]);
-  out_Kaon1Py_MuMuKK =    (Float_t)(Kaon1Py_MuMuKK[iX]);
-  out_Kaon1Pz_MuMuKK =    (Float_t)(Kaon1Pz_MuMuKK[iX]);
-  out_Kaon1E_MuMuKK =     (Float_t)(Kaon1E_MuMuKK[iX]);
+    out_Muon1Px_MuMuKK =    (Float_t)(Muon1Px_MuMuKK[iX]);
+    out_Muon1Py_MuMuKK =    (Float_t)(Muon1Py_MuMuKK[iX]);
+    out_Muon1Pz_MuMuKK =    (Float_t)(Muon1Pz_MuMuKK[iX]);
+    out_Muon1E_MuMuKK =     (Float_t)(Muon1E_MuMuKK[iX]);
+    out_Muon2Px_MuMuKK =    (Float_t)(Muon2Px_MuMuKK[iX]);
+    out_Muon2Py_MuMuKK =    (Float_t)(Muon2Py_MuMuKK[iX]);
+    out_Muon2Pz_MuMuKK =    (Float_t)(Muon2Pz_MuMuKK[iX]);
+    out_Muon2E_MuMuKK =     (Float_t)(Muon2E_MuMuKK[iX]);
+    out_Kaon1Px_MuMuKK =    (Float_t)(Kaon1Px_MuMuKK[iX]);
+    out_Kaon1Py_MuMuKK =    (Float_t)(Kaon1Py_MuMuKK[iX]);
+    out_Kaon1Pz_MuMuKK =    (Float_t)(Kaon1Pz_MuMuKK[iX]);
+    out_Kaon1E_MuMuKK =     (Float_t)(Kaon1E_MuMuKK[iX]);
 
+    outTree->Fill();
 
     //
     // muonsCuts = muonQualityCut && muonChiCut && muonShitsCut && muonPhitsCut && muonDZPVCut && muonDXYPVCut;
@@ -535,43 +512,38 @@ Bool_t TwoMuTwoK_2012::Process(Long64_t entry)
     //
     // extraCuts = vtxCLCut && cosAlphaCut;
 
-    if(true)
-    //if(muonsCuts && kaonsCuts && jPsiCuts && extraCuts && HLT_Any)
-    {
-      outTree->Fill();
-    }
   }
 
-   return kTRUE;
+  return kTRUE;
 }
 
 void TwoMuTwoK_2012::SlaveTerminate()
 {
-   // The SlaveTerminate() function is called after all entries or objects
-   // have been processed. When running with PROOF SlaveTerminate() is called
-   // on each slave server.
+  // The SlaveTerminate() function is called after all entries or objects
+  // have been processed. When running with PROOF SlaveTerminate() is called
+  // on each slave server.
 
-   TDirectory *savedir = gDirectory;
-   if (fOut)
-   {
-     fOut->cd();
-     gStyle->SetOptStat(111111) ;
+  TDirectory *savedir = gDirectory;
+  if (fOut)
+  {
+    fOut->cd();
+    gStyle->SetOptStat(111111) ;
 
 
-     outTree->Write();
-     OutFile->Print();
-     fOutput->Add(OutFile);
-     gDirectory = savedir;
-     fOut->Close();
+    outTree->Write();
+    OutFile->Print();
+    fOutput->Add(OutFile);
+    gDirectory = savedir;
+    fOut->Close();
 
-   }
+  }
 
 }
 
 void TwoMuTwoK_2012::Terminate()
 {
-   // The Terminate() function is the last function to be called during
-   // a query. It always runs on the client, it can be used to present
-   // the results graphically or save the results to file.
+  // The Terminate() function is the last function to be called during
+  // a query. It always runs on the client, it can be used to present
+  // the results graphically or save the results to file.
 
 }
