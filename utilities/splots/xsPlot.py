@@ -11,7 +11,7 @@ import sys
 import argparse
 import numpy as np
 
-
+from string import split
 
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,TLine
 from ROOT import RooBernstein,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
@@ -31,8 +31,8 @@ rootfile = args.path
 inputfile = TFile(rootfile,"READ")
 xTuple = (inputfile.Get("tree"))
 
+outname = split(split(rootfile,"/")[-1],".")[0]
 
-print rootfile[:5]
 # In[6]:
 
 
@@ -139,8 +139,8 @@ lineup.Draw()
 #tot.paramOn(phiFrame,RooFit.Layout(0.57,0.99,0.65))
 
 
-c.SaveAs('phimassSPlot_'+ rootfile[:5] + '.png')
-c.SaveAs('phimassSPlot_' + rootfile[:5] + '.root")
+c.SaveAs('phimassSPlot_'+ outname + '.png')
+c.SaveAs('phimassSPlot_' + outname + '.root")
 c.Clear()
 
 
@@ -158,8 +158,8 @@ shistSig.SetMarkerColor(2); shistSig.SetMinimum(0.)
 dstree.Project('shistSig','dimuonditrk_m_rf_c','nSig_sw');
 
 shistSig.Draw('e0');
-cD.SaveAs('SigSPlotPhi_' + rootfile[:5] + '_' + rootfile[:5] + '.gif  ')
-cD.SaveAs('SigSPlotPhi_' + rootfile[:5] + '.root')
+cD.SaveAs('SigSPlotPhi_' + outname + '_' + outname + '.gif  ')
+cD.SaveAs('SigSPlotPhi_' + outname + '.root')
 
 
 sweightSig   = TH1F('sweightSig','sweightSig', 50, 4.0, 6.0)
@@ -169,8 +169,8 @@ sweightSig.SetMarkerColor(2); sweightSig.SetMinimum(0.)
 dstree.Project('sweightSig','nSig_sw');
 
 sweightSig.Draw('e0');
-cD.SaveAs('SigWeightPlotPhi_' + rootfile[:5] + '.gif ')
-cD.SaveAs('SigWeightPlotPhi_' + rootfile[:5] + '.root')
+cD.SaveAs('SigWeightPlotPhi_' + outname + '.gif ')
+cD.SaveAs('SigWeightPlotPhi_' + outname + '.root')
 
 
 #S plot hist for bkg
@@ -181,8 +181,8 @@ shistBkg.SetMarkerColor(2); shistBkg.SetMinimum(0.)
 dstree.Project('shistBkg','dimuonditrk_m_rf_c','nBkg_sw');
 
 shistBkg.Draw('e0');
-cD.SaveAs('BkgSPlotPhi_' + rootfile[:5] + '.gif ')
-cD.SaveAs('BkgSPlotPhi_' + rootfile[:5] + '.root')
+cD.SaveAs('BkgSPlotPhi_' + outname + '.gif ')
+cD.SaveAs('BkgSPlotPhi_' + outname + '.root')
 
 
 sweightBkg   = TH1F('sweightBkg','sweightBkg', 50, 4.0, 6.0)
@@ -192,11 +192,11 @@ sweightBkg.SetMarkerColor(2); sweightBkg.SetMinimum(0.)
 dstree.Project('sweightBkg','nBkg_sw');
 
 sweightBkg.Draw('e0');
-cD.SaveAs('BkgWeightPlotPhi_' + rootfile[:5] + '.gif ')
-cD.SaveAs('BkgWeightPlotPhi_' + rootfile[:5] + '.root')
+cD.SaveAs('BkgWeightPlotPhi_' + outname + '.gif ')
+cD.SaveAs('BkgWeightPlotPhi_' + outname + '.root')
 
 
-outputFile = TFile("sPlot2018_outtree_psi_' + rootfile[:5] + '.root","RECREATE")
+outputFile = TFile("sPlot2018_outtree_psi_' + outname + '.root","RECREATE")
 outputFile.cd()
 
 dstree.Write()
