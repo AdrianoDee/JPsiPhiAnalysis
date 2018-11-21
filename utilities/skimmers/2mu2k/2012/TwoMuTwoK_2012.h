@@ -513,7 +513,7 @@ public :
     Float_t out_kaon1_dedx_byHits, out_kaon1_dedxErr_byHits, out_kaon1_saturMeas_byHits, out_kaon1_Meas_byHits, out_Kaon2Px_MuMuKK;
     Float_t out_Kaon2Py_MuMuKK, out_Kaon2Pz_MuMuKK, out_Kaon2E_MuMuKK, out_kaon2_nsigdedx, out_kaon2_dedx;
     Float_t out_kaon2_dedxMass, out_kaon2_theo, out_kaon2_sigma, out_kaon2_dedx_byHits, out_kaon2_dedxErr_byHits;
-    Float_t out_kaon2_saturMeas_byHits, out_kaon2_Meas_byHits,
+    Float_t out_kaon2_saturMeas_byHits, out_kaon2_Meas_byHits;
 
 
    TwoMuTwoK_2012(TTree * /*tree*/ =0) { }
