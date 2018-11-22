@@ -37,4 +37,3 @@ for ff in data_files:
             a = 0
     else:
             print "Already Exists"
-~
