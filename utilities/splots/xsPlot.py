@@ -21,6 +21,7 @@ from ROOT import RooDataSet,RooFormulaVar,RooLinkedList
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--path', type=str, default="./sPlot_psi_2016.root")
+parser.add_argument('--ncpu',type=int,default=20)
 args = parser.parse_args()
 
 phimean = 1.020
@@ -94,17 +95,17 @@ nfits = 0
 
 mean.setConstant(True)
 gamma.setConstant(True)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(args.ncpu),RooFit.Verbose(False))
 nfits = nfits + 1
 
 mean.setConstant(True)
 gamma.setConstant(False)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(args.ncpu),RooFit.Verbose(False))
 nfits = nfits + 1
 
 mean.setConstant(False)
 gamma.setConstant(False)
-rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+rPhifit = tot.fitTo(splotData,Range(phimin,phimax),RooFit.NumCPU(args.ncpu),RooFit.Verbose(False))
 nfits = nfits + 1
 
 c = TCanvas("canvas","canvas",1200,800)
@@ -196,7 +197,7 @@ cD.SaveAs('BkgWeightPlotPhi_' + outname + '.gif ')
 cD.SaveAs('BkgWeightPlotPhi_' + outname + '.root')
 
 
-outputFile = TFile("sPlot2018_outtree_psi_' + outname + '.root","RECREATE")
+outputFile = TFile('sPlot2016_outtree_psi_' + outname + '.root',"RECREATE")
 outputFile.cd()
 
 dstree.Write()
