@@ -4,7 +4,7 @@ import os
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile2016="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
 jsonFile2017="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-324209_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
