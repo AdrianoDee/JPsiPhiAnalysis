@@ -172,7 +172,7 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 5
+config.Data.unitsPerJob         = 10
 config.Data.splitting           = 'LumiBased'
 config.Data.runRange            = runNum
 config.Data.lumiMask            = lumi
