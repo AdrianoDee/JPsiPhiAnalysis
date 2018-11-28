@@ -304,6 +304,8 @@ class TwoMuTwoK : public TSelector {
 
   Float_t out_dimuon_triggerMatch, out_dimuonditrk_vChi2, out_dimuonditrk_charge;
 
+  Float_t out_dimuon_eta, out_dimuon_phi, out_dimuonditrk_eta,out_dimuonditrk_phi, out_ditrak_eta, out_ditrak_phi;
+
   Float_t out_dimuonditrk_cosAlpha, out_dimuonditrk_ctauPV, out_dimuonditrk_ctauErrPV, out_dimuonditrk_countTksOfPV, out_dimuonditrk_vertexWeight;
   Float_t out_dimuonditrk_sumPTPV, out_dimuonditrk_mu1FromPV, out_dimuonditrk_mu2FromPV, out_dimuonditrk_tPFromPV, out_dimuonditrk_tMFromPV;
   Float_t out_dimuonditrk_mu1W, out_dimuonditrk_mu2W, out_dimuonditrk_tPW, out_dimuonditrk_tMW;
