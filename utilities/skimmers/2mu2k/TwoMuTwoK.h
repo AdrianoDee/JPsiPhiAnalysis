@@ -298,7 +298,7 @@ class TwoMuTwoK : public TSelector {
   Float_t out_dimuonditrk_vProb, out_out_dimuonditrk_vChi2;
   Float_t out_dimuonditrk_rf_vProb, out_dimuonditrk_rf_vChi2, out_dimuonditrk_rf_nDof, out_dimuonditrk_rf_cosAlpha, out_dimuonditrk_rf_ctauPV, out_dimuonditrk_rf_ctauErrPV;
   Float_t out_dimuonditrk_rf_c_vProb, out_dimuonditrk_rf_c_vChi2, out_dimuonditrk_rf_c_nDof, out_dimuonditrk_rf_c_cosAlpha, out_dimuonditrk_rf_c_ctauPV, out_dimuonditrk_rf_c_ctauErrPV;
-  Float_t out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi, out_dimuonditrk_y, out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz;
+  Float_t out_dimuonditrk_pt, out_dimuonditrk_y, out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz;
 
   Float_t out_pv_x, out_pv_y, out_pv_z;
 

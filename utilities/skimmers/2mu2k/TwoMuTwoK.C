@@ -324,8 +324,6 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
     out_dimuon_phi = (*dimuon_p4).Phi();
     out_ditrak_eta = (*ditrak_p4).Eta();
     out_ditrak_phi = (*ditrak_p4).Phi();
-    out_dimuonditrk_eta = (*dimuonditrk_p4).Phi();
-    out_dimuonditrkk_phi = (*dimuonditrk_p4).Eta();
 
     out_dimuonditrk_m        = (Float_t)(*dimuonditrk_m);
     out_dimuonditrk_m_rf     = (Float_t)(*dimuonditrk_m_rf);
