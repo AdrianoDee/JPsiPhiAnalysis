@@ -61,7 +61,7 @@ config.JobType.maxJobRuntimeMin = 720
 config.JobType.maxMemoryMB = 5000
 config.JobType.scriptExe = 'mcproduction.sh'#'GEN-MiniAOD-Xb2chib1pipi_10p5.sh'
 #config.JobType.scriptArgs = ['=Xb2chib1pipi','=10p5','=100000']
-config.JobType.outputFiles = [step3Mini]
+config.JobType.outputFiles = [step3Mini]#,step1File]
 
 config.Data.outputPrimaryDataset = myname
 config.Data.splitting = 'EventBased'
@@ -74,6 +74,8 @@ config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
 config.Data.publication = False
 config.Data.inputDBS = 'phys03'
 config.Data.publishDBS = 'phys03'
+
+config.Debug.scheddName = 'crab3-5@vocms059.cern.ch'
 
 config.Site.storageSite = 'T2_IT_Bari'
 config.Site.blacklist = ["T2_BR_*","T2_IN_*","T3_IN_*"]
