@@ -26,7 +26,7 @@ echo "================= PB: Input Paramateres ==================================
 
 echo "================= PB: CMSRUN starting Step 1 ====================" >> job.log
 
-cmsRun -j ${CHANNEL_DECAY}_step1.log -p BBbar_JpsiFilter_HardQCD_10_ptHook_ptCuts.py #PSet.py 
+cmsRun -j ${CHANNEL_DECAY}_step1.log -p PSet.py 
 
 
 echo "================= PB: CMSRUN starting Step 2 ====================" >> job.log
