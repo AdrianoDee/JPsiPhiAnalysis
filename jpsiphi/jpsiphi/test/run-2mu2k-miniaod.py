@@ -191,13 +191,14 @@ charmoniumHLT = [
 #Phi
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi', #2017
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05', #2018
+'HLT_Dimuon25_Jpsi'
 #JPsi
 #'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
 #'HLT_DoubleMu4_JpsiTrk_Displaced',
 #'HLT_DoubleMu4_Jpsi_Displaced',
 #'HLT_DoubleMu4_3_Jpsi_Displaced',
 #'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
-#'HLT_Dimuon25_Jpsi',
+
 ]
 
 year = "2018"
@@ -211,8 +212,10 @@ hlts = {}
 
 hlts["2018"] = charmoniumHLT
 
-hlts["2017"] =["HLT_Dimuon25_Jpsi",             #0
+hlts["2017"] =["HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi",
+    "HLT_Dimuon25_Jpsi",
     "HLT_Dimuon20_Jpsi_Barrel_Seagulls",
+    "HLT_DoubleMu4_JpsiTrk_Displaced",
     "HLT_DoubleMu4_JpsiTrkTrk_Displaced"]
 
 hlts["2016"]=["HLT_Dimuon20_Jpsi",
@@ -236,7 +239,10 @@ filts["2018"] = ['hltDoubleMu2JpsiDoubleTrkL3Filtered',
 'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v3',
 'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v4',
 'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v5',
-'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',]
+'hltJpsiTrkTrkVertexProducerPhiDoubleTrk1v6',
+
+'hltDimuon25JpsiL3fL3Filtered'
+]
 
 filts["2017"] =["hltDimuon25JpsiL3fL3Filtered",
 "hltDimuon20JpsiBarrelnoCowL3Filtered",

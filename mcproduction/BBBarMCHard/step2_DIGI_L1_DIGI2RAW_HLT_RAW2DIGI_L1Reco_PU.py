@@ -1,6 +1,7 @@
-# using:
-# Revision: 1.19
-# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v
+# Auto generated configuration file
+# using: 
+# Revision: 1.19 
+# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: step2 --pileup_input das:/RelValMinBias_13/CMSSW_10_2_1-102X_upgrade2018_realistic_v9_gcc7-v1/GEN-SIM-DIGI-RAW -n -1 --era Run2_2018 --pileup AVE_45_BX_25ns --geometry DB:Extended --datatier GEN-SIM-DIGI-RAW --filein file:BBbar_Jpsi_Phi_Filter_HardQCD_10_cfg_py_GEN_SIM.root --eventcontent FEVTDEBUGHLT -s DIGI:pdigi_valid,L1,DIGI2RAW,HLT:@relval2018,RAW2DIGI,L1Reco --conditions auto:phase1_2018_realistic
 import FWCore.ParameterSet.Config as cms
 
@@ -26,30 +27,30 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(2)
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
     dropDescendantsOfDroppedBranches = cms.untracked.bool(False),
-    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_8_GEN_SIM.root'),
+    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_GEN_SIM.root'),
     inputCommands = cms.untracked.vstring(
-        'keep *',
-        'drop *_genParticles_*_*',
-        'drop *_genParticlesForJets_*_*',
-        'drop *_kt4GenJets_*_*',
-        'drop *_kt6GenJets_*_*',
-        'drop *_iterativeCone5GenJets_*_*',
-        'drop *_ak4GenJets_*_*',
-        'drop *_ak7GenJets_*_*',
-        'drop *_ak8GenJets_*_*',
-        'drop *_ak4GenJetsNoNu_*_*',
-        'drop *_ak8GenJetsNoNu_*_*',
-        'drop *_genCandidatesForMET_*_*',
-        'drop *_genParticlesForMETAllVisible_*_*',
-        'drop *_genMetCalo_*_*',
-        'drop *_genMetCaloAndNonPrompt_*_*',
-        'drop *_genMetTrue_*_*',
+        'keep *', 
+        'drop *_genParticles_*_*', 
+        'drop *_genParticlesForJets_*_*', 
+        'drop *_kt4GenJets_*_*', 
+        'drop *_kt6GenJets_*_*', 
+        'drop *_iterativeCone5GenJets_*_*', 
+        'drop *_ak4GenJets_*_*', 
+        'drop *_ak7GenJets_*_*', 
+        'drop *_ak8GenJets_*_*', 
+        'drop *_ak4GenJetsNoNu_*_*', 
+        'drop *_ak8GenJetsNoNu_*_*', 
+        'drop *_genCandidatesForMET_*_*', 
+        'drop *_genParticlesForMETAllVisible_*_*', 
+        'drop *_genMetCalo_*_*', 
+        'drop *_genMetCaloAndNonPrompt_*_*', 
+        'drop *_genMetTrue_*_*', 
         'drop *_genMetIC5GenJs_*_*'
     ),
     secondaryFileNames = cms.untracked.vstring()
@@ -73,7 +74,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-DIGI-RAW'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:BBbar_JpsiFilter_HardQCD_25_DIGI_HLT_RAW_L1_PU45.root'),
+    fileName = cms.untracked.string('file:BBbar_JpsiFilter_HardQCD_DIGI_HLT_RAW_L1_PU40.root'),
     outputCommands = process.FEVTDEBUGHLTEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -81,7 +82,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
 # Additional output definition
 
 # Other statements
-process.mix.input.nbPileupEvents.averageNumber = cms.double(45.000000)
+process.mix.input.nbPileupEvents.averageNumber = cms.double(40.000000)
 process.mix.bunchspace = cms.int32(25)
 process.mix.minBunch = cms.int32(-12)
 process.mix.maxBunch = cms.int32(3)
@@ -109,7 +110,7 @@ associatePatAlgosToolsTask(process)
 # customisation of the process.
 
 # Automatic addition of the customisation function from HLTrigger.Configuration.customizeHLTforMC
-from HLTrigger.Configuration.customizeHLTforMC import customizeHLTforMC
+from HLTrigger.Configuration.customizeHLTforMC import customizeHLTforMC 
 
 #call to customisation function customizeHLTforMC imported from HLTrigger.Configuration.customizeHLTforMC
 process = customizeHLTforMC(process)
@@ -121,4 +122,3 @@ process = customizeHLTforMC(process)
 # Add early deletion of temporary data products to reduce peak memory need
 from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEarlyDelete
 process = customiseEarlyDelete(process)
-# End adding early deletion

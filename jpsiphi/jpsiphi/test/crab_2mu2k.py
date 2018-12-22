@@ -4,7 +4,7 @@ import os
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile2016="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
 jsonFile2017="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-324209_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -60,7 +60,7 @@ datasetnames = {
 "C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD", #CMSSW_10_1_7
 "C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD", #CMSSW_10_1_8
 "C2018_3": datasetbase + "/Run2018C-PromptReco-v3/MINIAOD", #CMSSW_10_1_9
-"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_1
+"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_5_patch1
 
 "B2017" : datasetbase + "/Run2017B-31Mar2018-v1/MINIAOD", #CMSSW_9_4_5_cand1
 "C2017" : datasetbase + "/Run2017C-31Mar2018-v1/MINIAOD",
@@ -105,7 +105,7 @@ GlobalTags = {
     "C2018_1": "101X_dataRun2_Prompt_v11",
     "C2018_2": "101X_dataRun2_Prompt_v11",
     "C2018_3": "101X_dataRun2_Prompt_v11",
-    "D2018_2": "102X_dataRun2_Prompt_v5",
+    "D2018_2": "102X_dataRun2_Prompt_v11",
 
     "bsJpsiPhiSoftQCD_PU" : "94X_mc2017_realistic_v14",
     "bsJpsiPhiSoftQCD"    : "94X_mc2017_realistic_v10",
@@ -172,7 +172,7 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 5
+config.Data.unitsPerJob         = 10
 config.Data.splitting           = 'LumiBased'
 config.Data.runRange            = runNum
 config.Data.lumiMask            = lumi

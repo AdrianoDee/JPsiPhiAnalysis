@@ -1,7 +1,7 @@
 # Auto generated configuration file
-# using:
-# Revision: 1.19
-# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v
+# using: 
+# Revision: 1.19 
+# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: step3 --conditions auto:phase1_2018_realistic --pileup_input das:/RelValMinBias_13/CMSSW_10_2_1-102X_upgrade2018_realistic_v9_gcc7-v1/GEN-SIM-DIGI-RAW -n -1 --era Run2_2018 --pileup AVE_45_BX_25ns --geometry DB:Extended --datatier GEN-SIM-DIGI-RAW --filein file:step2_DIGI_L1_DIGI2RAW_HLT_RAW2DIGI_L1Reco_PU.root --datatier GEN-SIM-RECO,MINIAODSIM --eventcontent RECOSIM,MINIAODSIM -s RAW2DIGI,L1Reco,RECO,RECOSIM,EI,PAT --runUnscheduled
 import FWCore.ParameterSet.Config as cms
 
@@ -33,7 +33,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_8_DIGI_HLT_RAW_L1_PU45.root'),
+    fileNames = cms.untracked.vstring('file:BBbar_JpsiFilter_HardQCD_DIGI_HLT_RAW_L1_PU40.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -55,7 +55,7 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-RECO'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_8_RECOSIM_PU45.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_RECOSIM_PU40.root'),
     outputCommands = process.RECOSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -70,53 +70,53 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     dropMetaData = cms.untracked.string('ALL'),
     eventAutoFlushCompressedSize = cms.untracked.int32(-900),
     fastCloning = cms.untracked.bool(False),
-    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_8_MINIAODSIM_PU45.root'),
+    fileName = cms.untracked.string('BBbar_JpsiFilter_HardQCD_MINIAODSIM_PU40.root'),
     outputCommands = process.MINIAODSIMEventContent.outputCommands,
     overrideBranchesSplitLevel = cms.untracked.VPSet(
         cms.untracked.PSet(
             branch = cms.untracked.string('patPackedCandidates_packedPFCandidates__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('recoGenParticles_prunedGenParticles__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('patTriggerObjectStandAlones_slimmedPatTrigger__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('patPackedGenParticles_packedGenParticles__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('patJets_slimmedJets__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('recoVertexs_offlineSlimmedPrimaryVertices__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('recoCaloClusters_reducedEgamma_reducedESClusters_*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('EcalRecHitsSorted_reducedEgamma_reducedEBRecHits_*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('EcalRecHitsSorted_reducedEgamma_reducedEERecHits_*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('recoGenJets_slimmedGenJets__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('patJets_slimmedJetsPuppi__*'),
             splitLevel = cms.untracked.int32(99)
-        ),
+        ), 
         cms.untracked.PSet(
             branch = cms.untracked.string('EcalRecHitsSorted_reducedEgamma_reducedESRecHits_*'),
             splitLevel = cms.untracked.int32(99)
@@ -129,7 +129,7 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
 # Additional output definition
 
 # Other statements
-process.mix.input.nbPileupEvents.averageNumber = cms.double(45.000000)
+process.mix.input.nbPileupEvents.averageNumber = cms.double(40.000000)
 process.mix.bunchspace = cms.int32(25)
 process.mix.minBunch = cms.int32(-12)
 process.mix.maxBunch = cms.int32(3)
@@ -175,19 +175,7 @@ process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.MINIAODSIMoutput_step = cms.EndPath(process.MINIAODSIMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.recosim_step,
-                                process.eventinterpretaion_step,process.Flag_HBHENoiseFilter,process.Flag_HBHENoiseIsoFilter,
-                                process.Flag_CSCTightHaloFilter,process.Flag_CSCTightHaloTrkMuUnvetoFilter,
-                                process.Flag_CSCTightHalo2015Filter,process.Flag_globalTightHalo2016Filter,
-                                process.Flag_globalSuperTightHalo2016Filter,process.Flag_HcalStripHaloFilter,
-                                process.Flag_hcalLaserEventFilter,process.Flag_EcalDeadCellTriggerPrimitiveFilter,
-                                process.Flag_EcalDeadCellBoundaryEnergyFilter,process.Flag_ecalBadCalibFilter,
-                                process.Flag_goodVertices,process.Flag_eeBadScFilter,process.Flag_ecalLaserCorrFilter,
-                                process.Flag_trkPOGFilters,process.Flag_chargedHadronTrackResolutionFilter,process.Flag_muonBadTrackFilter,
-                                process.Flag_BadChargedCandidateFilter,process.Flag_BadPFMuonFilter,process.Flag_BadChargedCandidateSummer16Filter,
-                                process.Flag_BadPFMuonSummer16Filter,process.Flag_trkPOG_manystripclus53X,
-                                process.Flag_trkPOG_toomanystripclus53X,process.Flag_trkPOG_logErrorTooManyClusters,
-                                process.Flag_METFilters,process.endjob_step,process.RECOSIMoutput_step,process.MINIAODSIMoutput_step)
+process.schedule = cms.Schedule(process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.recosim_step,process.eventinterpretaion_step,process.Flag_HBHENoiseFilter,process.Flag_HBHENoiseIsoFilter,process.Flag_CSCTightHaloFilter,process.Flag_CSCTightHaloTrkMuUnvetoFilter,process.Flag_CSCTightHalo2015Filter,process.Flag_globalTightHalo2016Filter,process.Flag_globalSuperTightHalo2016Filter,process.Flag_HcalStripHaloFilter,process.Flag_hcalLaserEventFilter,process.Flag_EcalDeadCellTriggerPrimitiveFilter,process.Flag_EcalDeadCellBoundaryEnergyFilter,process.Flag_ecalBadCalibFilter,process.Flag_goodVertices,process.Flag_eeBadScFilter,process.Flag_ecalLaserCorrFilter,process.Flag_trkPOGFilters,process.Flag_chargedHadronTrackResolutionFilter,process.Flag_muonBadTrackFilter,process.Flag_BadChargedCandidateFilter,process.Flag_BadPFMuonFilter,process.Flag_BadChargedCandidateSummer16Filter,process.Flag_BadPFMuonSummer16Filter,process.Flag_trkPOG_manystripclus53X,process.Flag_trkPOG_toomanystripclus53X,process.Flag_trkPOG_logErrorTooManyClusters,process.Flag_METFilters,process.endjob_step,process.RECOSIMoutput_step,process.MINIAODSIMoutput_step)
 process.schedule.associate(process.patTask)
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
@@ -199,7 +187,7 @@ process=convertToUnscheduled(process)
 # customisation of the process.
 
 # Automatic addition of the customisation function from PhysicsTools.PatAlgos.slimming.miniAOD_tools
-from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllMC
+from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllMC 
 
 #call to customisation function miniAOD_customizeAllMC imported from PhysicsTools.PatAlgos.slimming.miniAOD_tools
 process = miniAOD_customizeAllMC(process)
@@ -216,3 +204,4 @@ process = customiseLogErrorHarvesterUsingOutputCommands(process)
 from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEarlyDelete
 process = customiseEarlyDelete(process)
 # End adding early deletion
+~                                
