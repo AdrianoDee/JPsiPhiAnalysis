@@ -526,9 +526,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
              DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
              DiMuonTTCand.addUserFloat("lowKaonMuonDE",minDE_pos);
 
-             DiMuonTTCand.addUserFloat("hihghKaonMuonDR",minDR_neg);
-             DiMuonTTCand.addUserFloat("hihghKaonMuonDP",minDP_neg);
-             DiMuonTTCand.addUserFloat("hihghKaonMuonDE",minDE_neg);
+             DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_neg);
+             DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
+             DiMuonTTCand.addUserFloat("highKaonMuonDE",minDE_neg);
            }
 
 
