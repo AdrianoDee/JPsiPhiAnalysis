@@ -90,7 +90,7 @@ bool DiMuonDiTrakProducer::isSameTrack(reco::Track t1, reco::Track t2)
   float deltaR = sqrt((e1-e2)*(e1-e2) + dp*dp);
   float deltaPt = ((t1.pt() - t2.pt())/t1.pt());
 
-  return (deltaR <= 0.001) &&( deltaPt <= 0.01);
+  return (deltaR <= 0.01) &&( deltaPt <= 0.01);
 
 }
 
@@ -219,6 +219,8 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   maxDPtRel = 2.0;
 
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
+  allMuons_ = consumes<pat::MuonCollection>((edm::InputTag)"slimmedMuons");
+
   //TrackGenMap_ = consumes<edm::Association<reco::GenParticleCollection>>((edm::InputTag)"trackMatch");
 
 }
@@ -281,6 +283,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   std::vector < UInt_t > filterResults;
   std::map<int,UInt_t> filters;
 
+
+  //Trigger Collections
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
 
     pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
@@ -304,7 +308,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
       filterResults.push_back(thisFilter);
     }
   }
-  // std::cout << "debug    3 "<< std::endl;
+
+  //Tracks Collections Trigger Matching
   for (size_t i = 0; i < trak->size(); i++) {
 
     auto t = trak->at(i);
@@ -402,6 +407,41 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            if (DiMuonTTCand.mass() > DiMuonDiTrakMassMax_ || DiMuonTTCand.mass() < DiMuonDiTrakMassMin_) continue;
 
+           float minDR_pos = 10000.0, minDR_neg = 10000.0;
+           float minDP_pos = 10000.0, minDP_neg = 10000.0;
+           float minDE_pos = 10000.0, minDE_neg = 10000.0;
+
+           for (size_t ii = 0; ii < allMuons_->size(); ii++)
+           {
+             auto thisMuon = allMuons_->at(ii);
+
+             if((IsTheSame(posTrack,thisMuon)))
+             {
+                float DeltaEta = fabs(thisMuon.eta()-posTrack.eta());
+                float DeltaP   = fabs(thisMuon.p()-tk.p());
+                float DeltaPt = ((posTrack.pt() - thisMuon.pt())/posTrack.pt());
+
+                minDR_pos = -std::max(minDR_pos,DeltaEta);
+                minDP_pos = -std::max(minDP_pos,DeltaP);
+                minDE_pos = -std::max(minDE_pos,DeltaPt);
+
+                continue;
+             }
+
+             if((IsTheSame(negTrack,thisMuon)))
+             {
+                float DeltaEta = fabs(thisMuon.eta()-negTrack.eta());
+                float DeltaP   = fabs(thisMuon.p()-negTrack.p());
+                float DeltaPt = ((negTrack.pt() - thisMuon.pt())/negTrack.pt());
+
+                minDR_pos = -std::max(minDR_pos,DeltaEta);
+                minDP_pos = -std::max(minDP_pos,DeltaP);
+                minDE_pos = -std::max(minDE_pos,DeltaPt);
+             }
+
+
+           }
+
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
@@ -465,6 +505,29 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
            DiMuonTTCand.addUserInt("pId",i);
            DiMuonTTCand.addUserInt("mId",j);
+
+           if(posTrack.pt()>=negTrack.pt())
+           {
+             DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_pos);
+             DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_pos);
+             DiMuonTTCand.addUserFloat("highKaonMuonDE",minDE_pos);
+
+             DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_neg);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_neg);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDE",minDE_neg);
+
+           }else
+           {
+             DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_pos);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDE",minDE_pos);
+
+             DiMuonTTCand.addUserFloat("hihghKaonMuonDR",minDR_neg);
+             DiMuonTTCand.addUserFloat("hihghKaonMuonDP",minDP_neg);
+             DiMuonTTCand.addUserFloat("hihghKaonMuonDE",minDE_neg);
+           }
+
+
 
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
@@ -1266,9 +1329,11 @@ void DiMuonDiTrakProducer::endJob(){
 }
 
 bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
-  double DeltaEta = fabs(mu.eta()-tk.eta());
-  double DeltaP   = fabs(mu.p()-tk.p());
-  if (DeltaEta < 0.02 && DeltaP < 0.02) return true;
+  float DeltaEta = fabs(mu.eta()-tk.eta());
+  float DeltaP   = fabs(mu.p()-tk.p());
+  float DeltaPt = ((tk.pt() - mu.pt())/tk.pt());
+
+  if (DeltaEta < 0.02 && DeltaP < 0.02 && DeltaPt < 0.1) return true;
   return false;
 }
 

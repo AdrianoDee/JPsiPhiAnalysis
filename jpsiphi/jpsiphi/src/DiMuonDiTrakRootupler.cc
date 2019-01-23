@@ -147,6 +147,7 @@ private:
   UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
   UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
+  Double_t highKaonMuonDR, highKaonMuonDP, highKaonMuonDE, lowKaonMuonDR, lowKaonMuonDP, lowKaonMuonDE;
   // Double_t highKaon_m, lowKaon_m, highMuon_y, lowMuon_y;
 
   Double_t dimuonditrk_refPK_mass, dimuonditrk_refKP_mass, dimuonditrk_refPP_mass, dimuonditrk_refPK_vChi2;
@@ -315,6 +316,14 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("lowKaon_dz",        &lowKaon_dz,        "lowKaon_dz/D");
     dimuonditrk_tree->Branch("highMuon_dz",        &highMuon_dz,        "highMuon_dz/D");
     dimuonditrk_tree->Branch("lowMuon_dz",        &lowMuon_dz,        "lowMuon_dz/D");
+
+    dimuonditrk_tree->Branch("highKaonMuonDR",        &highKaonMuonDR,        "highKaonMuonDR/D");
+    dimuonditrk_tree->Branch("highKaonMuonDP",        &highKaonMuonDP,        "highKaonMuonDP/D");
+    dimuonditrk_tree->Branch("highKaonMuonDE",        &highKaonMuonDE,        "highKaonMuonDE/D");
+    dimuonditrk_tree->Branch("lowKaonMuonDR",        &lowKaonMuonDR,        "lowKaonMuonDR/D");
+    dimuonditrk_tree->Branch("lowKaonMuonDP",        &lowKaonMuonDP,        "lowKaonMuonDP/D");
+    dimuonditrk_tree->Branch("lowKaonMuonDE",        &lowKaonMuonDE,        "lowKaonMuonDE/D");
+
 
 
     //Pion refits
@@ -871,6 +880,13 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         lowKaon_phi   = lowKaon->bestTrack()->phi();
         lowKaon_dz    = lowKaon->bestTrack()->dz();
         lowKaon_dxy   = lowKaon->bestTrack()->dxy();
+
+        highKaonMuonDR = dimuonditrk_cand.userFloat("highKaonMuonDR");
+        highKaonMuonDP = dimuonditrk_cand.userFloat("highKaonMuonDP");
+        highKaonMuonDE = dimuonditrk_cand.userFloat("highKaonMuonDE");
+        lowKaonMuonDR  = dimuonditrk_cand.userFloat("lowKaonMuonDR");
+        lowKaonMuonDP  = dimuonditrk_cand.userFloat("lowKaonMuonDP");
+        lowKaonMuonDE  = dimuonditrk_cand.userFloat("lowKaonMuonDE");
 
         //double kmass = 0.4936770;
         dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());

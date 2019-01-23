@@ -104,6 +104,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   bool doPionRefit_;
 
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
+  edm::EDGetTokenT<pat::MuonCollection> allMuons_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> genMap_;
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
