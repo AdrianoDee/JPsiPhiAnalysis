@@ -232,6 +232,10 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   // std::cout << "debug    2 "<< std::endl;
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
 
+
+  edm::Handle<pat::MuonCollection> muons;
+  iEvent.getByToken(allMuons_,muons);
+
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
@@ -411,9 +415,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            float minDP_pos = 10000.0, minDP_neg = 10000.0;
            float minDE_pos = 10000.0, minDE_neg = 10000.0;
 
-           for (size_t ii = 0; ii < allMuons_.size(); ii++)
+           for (size_t ii = 0; ii < muons->size(); ii++)
            {
-             auto thisMuon = allMuons_.at(ii);
+             auto thisMuon = muons->at(ii);
 
              if((IsTheSame(posTrack,thisMuon)))
              {
