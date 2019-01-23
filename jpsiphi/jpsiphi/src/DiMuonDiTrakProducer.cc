@@ -411,14 +411,14 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            float minDP_pos = 10000.0, minDP_neg = 10000.0;
            float minDE_pos = 10000.0, minDE_neg = 10000.0;
 
-           for (size_t ii = 0; ii < allMuons_->size(); ii++)
+           for (size_t ii = 0; ii < allMuons_.size(); ii++)
            {
-             auto thisMuon = allMuons_->at(ii);
+             auto thisMuon = allMuons_.at(ii);
 
              if((IsTheSame(posTrack,thisMuon)))
              {
                 float DeltaEta = fabs(thisMuon.eta()-posTrack.eta());
-                float DeltaP   = fabs(thisMuon.p()-tk.p());
+                float DeltaP   = fabs(thisMuon.p()-posTrack.p());
                 float DeltaPt = ((posTrack.pt() - thisMuon.pt())/posTrack.pt());
 
                 minDR_pos = -std::max(minDR_pos,DeltaEta);
@@ -1329,8 +1329,8 @@ void DiMuonDiTrakProducer::endJob(){
 }
 
 bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
-  float DeltaEta = fabs(mu.eta()-tk.eta());
-  float DeltaP   = fabs(mu.p()-tk.p());
+  float DeltaEta = fabs(mu.eta()- tk.eta());
+  float DeltaP   = fabs(mu.p()- tk.p());
   float DeltaPt = ((tk.pt() - mu.pt())/tk.pt());
 
   if (DeltaEta < 0.02 && DeltaP < 0.02 && DeltaPt < 0.1) return true;
