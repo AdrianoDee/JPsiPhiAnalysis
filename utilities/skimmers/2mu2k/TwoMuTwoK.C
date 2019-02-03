@@ -128,8 +128,12 @@ void TwoMuTwoK::SlaveBegin(TTree * /*tree*/)
 
   outTree->Branch("dimuon_m",       &out_dimuon_m,       "dimuon_m/F");
   outTree->Branch("dimuon_pt",    &out_dimuon_pt,    "dimuon_pt/F");
+  outTree->Branch("dimuon_eta",    &out_dimuon_eta,    "dimuon_eta/F");
+  outTree->Branch("dimuon_phi",    &out_dimuon_phi,    "dimuon_phi/F");
   outTree->Branch("ditrak_m",     &out_ditrak_m,     "ditrak_m/F");
   outTree->Branch("ditrak_pt",       &out_ditrak_pt,        "ditrak_pt/F");
+  outTree->Branch("ditrak_eta",       &out_ditrak_eta,        "ditrak_eta/F");
+  outTree->Branch("ditrak_phi",       &out_ditrak_phi,        "ditrak_phi/F");
 
   outTree->Branch("highKaon_pt",    &out_highKaon_pt,          "highKaon_pt/F");
   outTree->Branch("lowKaon_pt",     &out_lowKaon_pt,       "lowKaon_pt/F");
@@ -337,7 +341,6 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
 
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
-  //
 
   if(test)
   {
@@ -347,6 +350,11 @@ Bool_t TwoMuTwoK::Process(Long64_t entry)
     out_numPrimaryVertices   = (Float_t)(*numPrimaryVertices);
     out_trigger      = (Float_t)(*trigger);
     out_noXCandidates        = (Float_t)(*noXCandidates);
+
+    out_dimuon_eta = (*dimuon_p4).Eta();
+    out_dimuon_phi = (*dimuon_p4).Phi();
+    out_ditrak_eta = (*ditrak_p4).Eta();
+    out_ditrak_phi = (*ditrak_p4).Phi();
 
     out_dimuonditrk_m        = (Float_t)(*dimuonditrk_m);
     out_dimuonditrk_m_rf     = (Float_t)(*dimuonditrk_m_rf);
