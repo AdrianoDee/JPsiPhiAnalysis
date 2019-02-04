@@ -426,6 +426,11 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
               minDR_pos = -std::max(minDR_pos,DeltaEta);
               minDP_pos = -std::max(minDP_pos,DeltaP);
               minDE_pos = -std::max(minDE_pos,DeltaPt);
+           }
+
+           for (size_t ii = 0; ii < muons->size(); ii++)
+           {
+              auto thisMuon = muons->at(ii);
 
               float DeltaEta = fabs(thisMuon.eta()-negTrack.eta());
               float DeltaP   = fabs(thisMuon.p()-negTrack.p());
