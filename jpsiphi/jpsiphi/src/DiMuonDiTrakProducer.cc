@@ -417,32 +417,23 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            for (size_t ii = 0; ii < muons->size(); ii++)
            {
-             auto thisMuon = muons->at(ii);
+              auto thisMuon = muons->at(ii);
 
-             if((IsTheSame(posTrack,thisMuon)))
-             {
-                float DeltaEta = fabs(thisMuon.eta()-posTrack.eta());
-                float DeltaP   = fabs(thisMuon.p()-posTrack.p());
-                float DeltaPt = ((posTrack.pt() - thisMuon.pt())/posTrack.pt());
+              float DeltaEta = fabs(thisMuon.eta()-posTrack.eta());
+              float DeltaP   = fabs(thisMuon.p()-posTrack.p());
+              float DeltaPt = ((posTrack.pt() - thisMuon.pt())/posTrack.pt());
 
-                minDR_pos = -std::max(minDR_pos,DeltaEta);
-                minDP_pos = -std::max(minDP_pos,DeltaP);
-                minDE_pos = -std::max(minDE_pos,DeltaPt);
+              minDR_pos = -std::max(minDR_pos,DeltaEta);
+              minDP_pos = -std::max(minDP_pos,DeltaP);
+              minDE_pos = -std::max(minDE_pos,DeltaPt);
 
-                continue;
-             }
+              float DeltaEta = fabs(thisMuon.eta()-negTrack.eta());
+              float DeltaP   = fabs(thisMuon.p()-negTrack.p());
+              float DeltaPt = ((negTrack.pt() - thisMuon.pt())/negTrack.pt());
 
-             if((IsTheSame(negTrack,thisMuon)))
-             {
-                float DeltaEta = fabs(thisMuon.eta()-negTrack.eta());
-                float DeltaP   = fabs(thisMuon.p()-negTrack.p());
-                float DeltaPt = ((negTrack.pt() - thisMuon.pt())/negTrack.pt());
-
-                minDR_pos = -std::max(minDR_pos,DeltaEta);
-                minDP_pos = -std::max(minDP_pos,DeltaP);
-                minDE_pos = -std::max(minDE_pos,DeltaPt);
-             }
-
+              minDR_pos = -std::max(minDR_pos,DeltaEta);
+              minDP_pos = -std::max(minDP_pos,DeltaP);
+              minDE_pos = -std::max(minDE_pos,DeltaPt);
 
            }
 
@@ -530,7 +521,6 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
              DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
              DiMuonTTCand.addUserFloat("highKaonMuonDE",minDE_neg);
            }
-
 
 
            //////////////////////////////////////////////////////////////////////////////

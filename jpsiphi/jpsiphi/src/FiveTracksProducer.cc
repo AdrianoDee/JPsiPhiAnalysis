@@ -193,11 +193,13 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        int tmId = dimuonditrakCand.userInt("mId");
 
        std::vector<double> oneMasses,twoMasses,threeMasses, hasRefit;
-       oneMasses.push_back(kaonmass); oneMasses.push_back(pionmass);oneMasses.push_back(kaonmass);oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
-       twoMasses.push_back(kaonmass); twoMasses.push_back(pionmass);twoMasses.push_back(pionmass);twoMasses.push_back(kaonmass);twoMasses.push_back(pionmass);
-       threeMasses.push_back(kaonmass); threeMasses.push_back(kaonmass);threeMasses.push_back(pionmass);threeMasses.push_back(pionmass);threeMasses.push_back(pionmass);
+       oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); // k k k
+       oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); // p p k
+       oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); // k p p
+       oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); // p k p
+       oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); // p p p
 
-
+       
        //Adding the fifth track
        //Possibilities:
        // B+  -> Psi' K+ -> JPsi π+ π- K+
