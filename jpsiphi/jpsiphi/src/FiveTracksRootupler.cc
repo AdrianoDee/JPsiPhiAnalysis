@@ -87,6 +87,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
+  bool OnlyGen_;
 
   std::vector < Double_t > fiveTracksMass, fiveTracksMassRef, triTrakMass;
   std::vector < Double_t > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
@@ -110,7 +111,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   TLorentzVector muonp_p4;
   TLorentzVector muonn_p4;
   TLorentzVector kaonp_p4;
-  TLorentzVector kaonn_p4;
+  TLorentzVector kaonn_p4, lowMuon_p4, highMuon_p4, lowKaon_p4, fifthKaon_p4, highKaon_p4;
 
   TLorentzVector dimuonditrk_not_rf_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
@@ -127,7 +128,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
-  Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz;
+  Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
 
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
@@ -152,29 +153,16 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_dca_m1m2, dimuonditrk_dca_m1t1, dimuonditrk_dca_m1t2, dimuonditrk_dca_m2t1, dimuonditrk_dca_m2t2, dimuonditrk_dca_t1t2;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
-  Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
-
   Double_t highTrack_pt, highTrack_eta, highTrack_phi, highTrack_charge;
   Double_t lowTrack_pt, lowTrack_eta, lowTrack_phi, lowTrack_charge;
   Double_t thirdTrack_pt, thirdTrack_eta, thirdTrack_phi, thirdTrack_charge;
-  Double_t thirdTrack_dz, thirdTrack_dxy;
+  Double_t thirdTrack_dz, thirdTrack_dxy, lowTrack_dz, lowTrack_dxy, highTrack_dz, highTrack_dxy;
 
   Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge;
   Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
   Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge;
 
-  Double_t psiPrimeSame_pt, psiPrimeSame_eta, psiPrimeSame_phi, psiPrimeSame_n;
-  Double_t psiPrimeSame_p_pt, psiPrimeSame_p_eta, psiPrimeSame_p_phi, psiPrimeSame_p_n;
-  Double_t psiPrimeSame_m_pt, psiPrimeSame_m_eta, psiPrimeSame_m_phi, psiPrimeSame_m_n;
 
-  Double_t psiPrimeMixed_pt, psiPrimeMixed_eta, psiPrimeMixed_phi, psiPrimeMixed_n;
-  Double_t psiPrimeMixed_p_pt, psiPrimeMixed_p_eta, psiPrimeMixed_p_phi, psiPrimeMixed_p_n;
-  Double_t psiPrimeMixed_m_pt, psiPrimeMixed_m_eta, psiPrimeMixed_m_phi, psiPrimeMixed_m_n;
-  Double_t psiPrimeSame_ditrak_pt, psiPrimeSame_ditrak_eta, psiPrimeSame_ditrak_phi, psiPrimeSame_ditrak_n;
-  Double_t psiPrimeMixed_ditrak_pt, psiPrimeMixed_ditrak_eta, psiPrimeMixed_ditrak_phi, psiPrimeMixed_ditrak_n;
-
-
-  Double_t dimuonditrk_m, dimuonditrk_eta, dimuonditrk_pt , dimuonditrk_phi, dimuonditrk_p;
   Double_t dimuon_m, dimuon_pt, dimuon_eta, dimuon_phi, dimuon_p;
   Double_t ditrak_m, ditrakOne_pt, ditrakOne_eta, ditrakOne_phi, ditrakOne_p;
   Double_t ditrakTwo_pt, ditrakTwo_eta, ditrakTwo_phi, ditrakTwo_p;
@@ -278,7 +266,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         treeName_(iConfig.getParameter<std::string>("TreeName")),
-        OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
+        OnlyGen_(iConfig.getParameter<bool>("OnlyGen"))
 {
 	      edm::Service<TFileService> fs;
         fivetracks_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
@@ -619,7 +607,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
           fivetracks_tree->Branch(name.c_str(),&triTrakMass[i],var.c_str());
 
         }
-
+      }
         genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
         packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 
