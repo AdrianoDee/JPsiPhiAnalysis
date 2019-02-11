@@ -1,0 +1,4 @@
+*.pyc
+crab_projects/
+*~
+submit_num.txt
