@@ -121,6 +121,15 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
+  TLorentzVector dimuonditrk_rf_p4;
+  TLorentzVector dimuonditrk_rf_const_p4;
+  TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
+  TLorentzVector ditrak_rf_p4, ditrak_not_rf_p4;
+  TLorentzVector lowMuon_rf_p4;
+  TLorentzVector highMuon_rf_p4;
+  TLorentzVector kaonp_rf_p4;
+  TLorentzVector kaonn_rf_p4;
+
   Int_t dimuonditrk_charge;
 
   Double_t highTrackMatch, lowTrackMatch, highMuonMatch, lowMuonMatch;
@@ -130,14 +139,16 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
 
-  Double_t highKaon_eta, lowKaon_eta, highMuon_eta, lowMuon_eta, highKaon_phi, lowKaon_phi, highMuon_phi, lowMuon_phi;
-  Double_t highKaon_dz, lowKaon_dz, highMuon_dz, lowMuon_dz, highKaon_dxy, lowKaon_dxy, highMuon_dxy, lowMuon_dxy;
-  
+  Double_t highTrack_eta, lowTrack_eta, highMuon_eta, lowMuon_eta, highTrack_phi, lowTrack_phi, highMuon_phi, lowMuon_phi;
+  Double_t highTrack_dz, lowTrack_dz, highMuon_dz, lowMuon_dz, highTrack_dxy, lowTrack_dxy, highMuon_dxy, lowMuon_dxy;
+
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
 
   Bool_t lowMuon_isTracker, lowMuon_isGlobal, highMuon_isTracker, highMuon_isGlobal;
   UInt_t lowMuon_type, highMuon_type;
+
+  Double_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDE, lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDE;
 
   Double_t pv_x, pv_y, pv_z;
 
@@ -165,6 +176,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
   Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge;
 
+  Double_t dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
   Int_t highTrack_NPixelHits, highTrack_NStripHits, highTrack_NTrackhits, highTrack_NBPixHits, highTrack_NPixLayers;
   Int_t highTrack_NTraLayers, highTrack_NStrLayers, highTrack_NBPixLayers, lowTrack_NPixelHits, lowTrack_NStripHits;
   Int_t lowTrack_NTrackhits, lowTrack_NBPixHits, lowTrack_NPixLayers, lowTrack_NTraLayers, lowTrack_NStrLayers, lowTrack_NBPixLayers;
@@ -779,12 +791,6 @@ if(!OnlyGen_)
 
         lowMuon_rf_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
         highMuon_rf_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
-
-        kP = ditrak_cand_rf->daughter("highTrak")->p4();
-        kM = ditrak_cand_rf->daughter("lowTrak")->p4();
-
-        kaonp_rf_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
-        kaonn_rf_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
 
         dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
 
