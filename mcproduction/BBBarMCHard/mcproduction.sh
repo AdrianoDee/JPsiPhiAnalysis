@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 96a4aea4a173a2120099d5b0ad1e446a5b84e43d
 CHANNEL_DECAY='jpsiphi'    # "${2#*=}"
 
 ConfigReleaseReco=CMSSW_10_2_1
@@ -29,11 +25,7 @@ echo "================= PB: Input Paramateres ==================================
 
 echo "================= PB: CMSRUN starting Step 1 ====================" >> job.log
 
-<<<<<<< HEAD
-cmsRun -j ${CHANNEL_DECAY}_step1.log -p BBbar_JpsiFilter_HardQCD_10_ptHook_ptCuts.py #PSet.py 
-=======
-cmsRun -j ${CHANNEL_DECAY}_step1.log -p PSet.py
->>>>>>> 96a4aea4a173a2120099d5b0ad1e446a5b84e43d
+cmsRun -j ${CHANNEL_DECAY}_step1.log -p BBbar_JpsiFilter_HardQCD_10_ptHook_ptCuts.py #PSet.py
 
 
 echo "================= PB: CMSRUN starting Step 2 ====================" >> job.log

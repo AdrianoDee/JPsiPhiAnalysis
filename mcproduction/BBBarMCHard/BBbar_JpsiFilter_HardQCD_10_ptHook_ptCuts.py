@@ -93,48 +93,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
     ),
     PythiaParameters = cms.PSet(
         parameterSets = cms.vstring(
-<<<<<<< HEAD
-            'pythia8CommonSettings', 
-            'pythia8CP5Settings', 
-            'processParameters'
-        ),
-        processParameters = cms.vstring(
-            'HardQCD:all = on', 
-            'PhaseSpace:pTHatMin = 10.', 
-            'PTFilter:filter = on', 
-            'PTFilter:quarkToFilter = 5', 
-            'PTFilter:scaleToFilter = 1.0'
-        ),
-        pythia8CP5Settings = cms.vstring(
-            'Tune:pp 14', 
-            'Tune:ee 7', 
-            'MultipartonInteractions:ecmPow=0.03344', 
-            'PDF:pSet=20', 
-            'MultipartonInteractions:bProfile=2', 
-            'MultipartonInteractions:pT0Ref=1.41', 
-            'MultipartonInteractions:coreRadius=0.7634', 
-            'MultipartonInteractions:coreFraction=0.63', 
-            'ColourReconnection:range=5.176', 
-            'SigmaTotal:zeroAXB=off', 
-            'SpaceShower:alphaSorder=2', 
-            'SpaceShower:alphaSvalue=0.118', 
-            'SigmaProcess:alphaSvalue=0.118', 
-            'SigmaProcess:alphaSorder=2', 
-            'MultipartonInteractions:alphaSvalue=0.118', 
-            'MultipartonInteractions:alphaSorder=2', 
-            'TimeShower:alphaSorder=2', 
-            'TimeShower:alphaSvalue=0.118'
-        ),
-        pythia8CommonSettings = cms.vstring(
-            'Tune:preferLHAPDF = 2', 
-            'Main:timesAllowErrors = 10000', 
-            'Check:epTolErr = 0.01', 
-            'Beams:setProductionScalesFromLHEF = off', 
-            'SLHA:keepSM = on', 
-            'SLHA:minMassSM = 1000.', 
-            'ParticleDecays:limitTau0 = on', 
-            'ParticleDecays:tau0Max = 10', 
-=======
             'pythia8CommonSettings',
             'pythia8CP5Settings',
             'processParameters'
@@ -175,7 +133,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
             'SLHA:minMassSM = 1000.',
             'ParticleDecays:limitTau0 = on',
             'ParticleDecays:tau0Max = 10',
->>>>>>> 96a4aea4a173a2120099d5b0ad1e446a5b84e43d
             'ParticleDecays:allowPhotonRadiation = on'
         )
     ),
@@ -215,12 +172,7 @@ from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 # filter all path with the production filter sequence
 for path in process.paths:
-<<<<<<< HEAD
-	getattr(process,path)._seq = process.ProductionFilterSequence * getattr(process,path)._seq 
-=======
-        getattr(process,path)._seq = process.ProductionFilterSequence * getattr(process,path)._seq
->>>>>>> 96a4aea4a173a2120099d5b0ad1e446a5b84e43d
-
+	getattr(process,path)._seq = process.ProductionFilterSequence * getattr(process,path)._seq
 
 # Customisation from command line
 
