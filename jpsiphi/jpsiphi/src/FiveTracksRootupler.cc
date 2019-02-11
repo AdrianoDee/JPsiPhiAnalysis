@@ -111,7 +111,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   TLorentzVector muonp_p4;
   TLorentzVector muonn_p4;
   TLorentzVector kaonp_p4;
-  TLorentzVector kaonn_p4, lowMuon_p4, highMuon_p4, lowKaon_p4, fifthKaon_p4, highKaon_p4;
+  TLorentzVector kaonn_p4, lowMuon_p4, highMuon_p4, lowTrack_p4, fifthKaon_p4, highTrack_p4;
 
   TLorentzVector dimuonditrk_not_rf_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
@@ -123,13 +123,16 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Int_t dimuonditrk_charge;
 
-  Double_t highKaonMatch, lowKaonMatch, highMuonMatch, lowMuonMatch;
+  Double_t highTrackMatch, lowTrackMatch, highMuonMatch, lowMuonMatch;
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2;
 
   Double_t dimuonditrk_rf_vProb, dimuonditrk_rf_vChi2, dimuonditrk_rf_nDof, dimuonditrk_rf_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
 
+  Double_t highKaon_eta, lowKaon_eta, highMuon_eta, lowMuon_eta, highKaon_phi, lowKaon_phi, highMuon_phi, lowMuon_phi;
+  Double_t highKaon_dz, lowKaon_dz, highMuon_dz, lowMuon_dz, highKaon_dxy, lowKaon_dxy, highMuon_dxy, lowMuon_dxy;
+  
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
 
@@ -162,6 +165,9 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
   Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge;
 
+  Int_t highTrack_NPixelHits, highTrack_NStripHits, highTrack_NTrackhits, highTrack_NBPixHits, highTrack_NPixLayers;
+  Int_t highTrack_NTraLayers, highTrack_NStrLayers, highTrack_NBPixLayers, lowTrack_NPixelHits, lowTrack_NStripHits;
+  Int_t lowTrack_NTrackhits, lowTrack_NBPixHits, lowTrack_NPixLayers, lowTrack_NTraLayers, lowTrack_NStrLayers, lowTrack_NBPixLayers;
 
   Double_t dimuon_m, dimuon_pt, dimuon_eta, dimuon_phi, dimuon_p;
   Double_t ditrak_m, ditrakOne_pt, ditrakOne_eta, ditrakOne_phi, ditrakOne_p;
@@ -288,8 +294,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuon_p4",      "TLorentzVector", &dimuon_p4);
         fivetracks_tree->Branch("lowMuon_p4",    "TLorentzVector", &lowMuon_p4);
         fivetracks_tree->Branch("highMuon_p4",   "TLorentzVector", &highMuon_p4);
-        fivetracks_tree->Branch("highKaon_p4",   "TLorentzVector", &highKaon_p4);
-        fivetracks_tree->Branch("lowKaon_p4",    "TLorentzVector", &lowKaon_p4);
+        fivetracks_tree->Branch("highTrack_p4",   "TLorentzVector", &highTrack_p4);
+        fivetracks_tree->Branch("lowTrack_p4",    "TLorentzVector", &lowTrack_p4);
         fivetracks_tree->Branch("fifthKaon_p4",  "TLorentzVector", &fifthKaon_p4);
 
         fivetracks_tree->Branch("dimuonditrk_m",       &dimuonditrk_m,        "dimuonditrk_m/D"); // Original DiMuonDiTrak (J/Psi Phi)
@@ -306,8 +312,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuon_p",      &dimuon_p,     "dimuon_p/D");
         fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
 
-        fivetracks_tree->Branch("highKaonMatch",    &highKaonMatch,   "highKaonMatch/D");
-        fivetracks_tree->Branch("lowKaonMatch",    &lowKaonMatch,   "lowKaonMatch/D");
+        fivetracks_tree->Branch("highTrackMatch",    &highTrackMatch,   "highTrackMatch/D");
+        fivetracks_tree->Branch("lowTrackMatch",    &lowTrackMatch,   "lowTrackMatch/D");
         fivetracks_tree->Branch("lowMuonMatch",    &lowMuonMatch,   "lowMuonMatch/D");
         fivetracks_tree->Branch("highMuonMatch",    &highMuonMatch,   "highMuonMatch/D");
 
@@ -753,12 +759,12 @@ if(!OnlyGen_)
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
       ditrakOne_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrak"));
 
-      const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
+      const reco::Vertex thePrimaryV = *(dimuonditrk_cand->userData<reco::Vertex>("bestPV"));
 
 
-      if (dimuonditrk_cand.userFloat("has_ref") >= 0)
+      if (dimuonditrk_cand->userFloat("has_ref") >= 0)
       {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ref_cand"));
+        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_cand"));
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
         dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
         dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
@@ -782,29 +788,29 @@ if(!OnlyGen_)
 
         dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
 
-        dimuonditrk_rf_vProb = dimuonditrk_cand.userFloat("vProb_ref");
-        dimuonditrk_rf_vChi2 = dimuonditrk_cand.userFloat("vChi2_ref");
-        dimuonditrk_rf_nDof = dimuonditrk_cand.userFloat("nDof_ref");
-        dimuonditrk_rf_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_ref");
-        dimuonditrk_rf_ctauPV = dimuonditrk_cand.userFloat("ctauPV_ref");
-        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_ref");
+        dimuonditrk_rf_vProb = dimuonditrk_cand->userFloat("vProb_ref");
+        dimuonditrk_rf_vChi2 = dimuonditrk_cand->userFloat("vChi2_ref");
+        dimuonditrk_rf_nDof = dimuonditrk_cand->userFloat("nDof_ref");
+        dimuonditrk_rf_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_ref");
+        dimuonditrk_rf_ctauPV = dimuonditrk_cand->userFloat("ctauPV_ref");
+        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_ref");
 
 
       }
 
-      if (dimuonditrk_cand.userFloat("has_const_ref") >= 0)
+      if (dimuonditrk_cand->userFloat("has_const_ref") >= 0)
       {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ref_const_cand"));
+        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_const_cand"));
         dimuonditrk_rf_const_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
 
         dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
 
-        dimuonditrk_rf_c_vProb = dimuonditrk_cand.userFloat("vProb_const_ref");
-        dimuonditrk_rf_c_vChi2 = dimuonditrk_cand.userFloat("vChi2_const_ref");
-        dimuonditrk_rf_c_nDof = dimuonditrk_cand.userFloat("nDof_const_ref");
-        dimuonditrk_rf_c_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha_const_ref");
-        dimuonditrk_rf_c_ctauPV = dimuonditrk_cand.userFloat("ctauPV_const_ref");
-        dimuonditrk_rf_c_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV_const_ref");
+        dimuonditrk_rf_c_vProb = dimuonditrk_cand->userFloat("vProb_const_ref");
+        dimuonditrk_rf_c_vChi2 = dimuonditrk_cand->userFloat("vChi2_const_ref");
+        dimuonditrk_rf_c_nDof = dimuonditrk_cand->userFloat("nDof_const_ref");
+        dimuonditrk_rf_c_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_const_ref");
+        dimuonditrk_rf_c_ctauPV = dimuonditrk_cand->userFloat("ctauPV_const_ref");
+        dimuonditrk_rf_c_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_const_ref");
 
       }
 
@@ -812,62 +818,62 @@ if(!OnlyGen_)
       pv_y = thePrimaryV.position().y();
       pv_z = thePrimaryV.position().z();
 
-      dimuonditrk_vProb     = dimuonditrk_cand.userFloat("vProb");
-      dimuonditrk_vChi2     = dimuonditrk_cand.userFloat("vChi2");
-      dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
-      dimuonditrk_charge    = dimuonditrk_cand.charge();
+      dimuonditrk_vProb     = dimuonditrk_cand->userFloat("vProb");
+      dimuonditrk_vChi2     = dimuonditrk_cand->userFloat("vChi2");
+      dimuonditrk_nDof      = dimuonditrk_cand->userFloat("nDof");
+      dimuonditrk_charge    = dimuonditrk_cand->charge();
 
-      dimuonditrk_cosAlphaBS = dimuonditrk_cand.userFloat("cosAlphaBS");
-      dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
-      dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");
-      // dimuonditrk_countTksOfPVBS = dimuonditrk_cand.userFloat("countTksOfPVBS");
-      // dimuonditrk_vertexWeightBS = dimuonditrk_cand.userFloat("vertexWeightBS");
-      // dimuonditrk_sumPTPVBS = dimuonditrk_cand.userFloat("sumPTPVBS");
-      // dimuonditrk_mu1FromPVBS = dimuonditrk_cand.userFloat("mu1FromPVBS");
-      // dimuonditrk_mu2FromPVBS = dimuonditrk_cand.userFloat("mu2FromPVBS");
-      dimuonditrk_tPFromPVBS = dimuonditrk_cand.userFloat("tPFromPVBS");
-      dimuonditrk_tMFromPVBS = dimuonditrk_cand.userFloat("tMFromPVBS");
-      // dimuonditrk_mu1BSW = dimuonditrk_cand.userFloat("mu1BSW");
-      // dimuonditrk_mu2BSW = dimuonditrk_cand.userFloat("mu2BSW");
-      // dimuonditrk_tPBSW = dimuonditrk_cand.userFloat("tPBSW");
-      // dimuonditrk_tMBSW = dimuonditrk_cand.userFloat("tMBSW");
+      dimuonditrk_cosAlphaBS = dimuonditrk_cand->userFloat("cosAlphaBS");
+      dimuonditrk_ctauPVBS = dimuonditrk_cand->userFloat("ctauPVBS");
+      dimuonditrk_ctauErrPVBS = dimuonditrk_cand->userFloat("ctauErrPVBS");
+      // dimuonditrk_countTksOfPVBS = dimuonditrk_cand->userFloat("countTksOfPVBS");
+      // dimuonditrk_vertexWeightBS = dimuonditrk_cand->userFloat("vertexWeightBS");
+      // dimuonditrk_sumPTPVBS = dimuonditrk_cand->userFloat("sumPTPVBS");
+      // dimuonditrk_mu1FromPVBS = dimuonditrk_cand->userFloat("mu1FromPVBS");
+      // dimuonditrk_mu2FromPVBS = dimuonditrk_cand->userFloat("mu2FromPVBS");
+      dimuonditrk_tPFromPVBS = dimuonditrk_cand->userFloat("tPFromPVBS");
+      dimuonditrk_tMFromPVBS = dimuonditrk_cand->userFloat("tMFromPVBS");
+      // dimuonditrk_mu1BSW = dimuonditrk_cand->userFloat("mu1BSW");
+      // dimuonditrk_mu2BSW = dimuonditrk_cand->userFloat("mu2BSW");
+      // dimuonditrk_tPBSW = dimuonditrk_cand->userFloat("tPBSW");
+      // dimuonditrk_tMBSW = dimuonditrk_cand->userFloat("tMBSW");
 
-      dimuonditrk_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha");
-      dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV");
-      dimuonditrk_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV");
-      // dimuonditrk_countTksOfPV = dimuonditrk_cand.userFloat("countTksOfPV");
-      // dimuonditrk_vertexWeight = dimuonditrk_cand.userFloat("vertexWeight");
-      // dimuonditrk_sumPTPV = dimuonditrk_cand.userFloat("sumPTPV");
-      // dimuonditrk_mu1FromPV = dimuonditrk_cand.userFloat("mu1FromPV");
-      // dimuonditrk_mu2FromPV = dimuonditrk_cand.userFloat("mu2FromPV");
-      dimuonditrk_tPFromPV = dimuonditrk_cand.userFloat("tPFromPV");
-      dimuonditrk_tMFromPV = dimuonditrk_cand.userFloat("tMFromPV");
-      // dimuonditrk_mu1W = dimuonditrk_cand.userFloat("mu1W");
-      // dimuonditrk_mu2W = dimuonditrk_cand.userFloat("mu2W");
-      // dimuonditrk_tPW = dimuonditrk_cand.userFloat("tPW");
-      // dimuonditrk_tMW = dimuonditrk_cand.userFloat("tMW");
+      dimuonditrk_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha");
+      dimuonditrk_ctauPV = dimuonditrk_cand->userFloat("ctauPV");
+      dimuonditrk_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV");
+      // dimuonditrk_countTksOfPV = dimuonditrk_cand->userFloat("countTksOfPV");
+      // dimuonditrk_vertexWeight = dimuonditrk_cand->userFloat("vertexWeight");
+      // dimuonditrk_sumPTPV = dimuonditrk_cand->userFloat("sumPTPV");
+      // dimuonditrk_mu1FromPV = dimuonditrk_cand->userFloat("mu1FromPV");
+      // dimuonditrk_mu2FromPV = dimuonditrk_cand->userFloat("mu2FromPV");
+      dimuonditrk_tPFromPV = dimuonditrk_cand->userFloat("tPFromPV");
+      dimuonditrk_tMFromPV = dimuonditrk_cand->userFloat("tMFromPV");
+      // dimuonditrk_mu1W = dimuonditrk_cand->userFloat("mu1W");
+      // dimuonditrk_mu2W = dimuonditrk_cand->userFloat("mu2W");
+      // dimuonditrk_tPW = dimuonditrk_cand->userFloat("tPW");
+      // dimuonditrk_tMW = dimuonditrk_cand->userFloat("tMW");
 
-      dimuonditrk_cosAlphaDZ = dimuonditrk_cand.userFloat("cosAlphaDZ");
-      dimuonditrk_ctauPVDZ = dimuonditrk_cand.userFloat("ctauPVDZ");
-      dimuonditrk_ctauErrPVDZ = dimuonditrk_cand.userFloat("ctauErrPVDZ");
-      // dimuonditrk_countTksOfPVDZ = dimuonditrk_cand.userFloat("countTksOfPVDZ");
-      // dimuonditrk_vertexWeightDZ = dimuonditrk_cand.userFloat("vertexWeightDZ");
-      // dimuonditrk_sumPTPVDZ = dimuonditrk_cand.userFloat("sumPTPVDZ");
-      // dimuonditrk_mu1FromPVDZ = dimuonditrk_cand.userFloat("mu1FromPVDZ");
-      // dimuonditrk_mu2FromPVDZ = dimuonditrk_cand.userFloat("mu2FromPVDZ");
-      dimuonditrk_tPFromPVDZ = dimuonditrk_cand.userFloat("tPFromPVDZ");
-      dimuonditrk_tMFromPVDZ = dimuonditrk_cand.userFloat("tMFromPVDZ");
-      // dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu1DZW");
-      // dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu2DZW");
-      // dimuonditrk_tPDZW = dimuonditrk_cand.userFloat("tPDZW");
-      // dimuonditrk_tMDZW = dimuonditrk_cand.userFloat("tMDZW");
+      dimuonditrk_cosAlphaDZ = dimuonditrk_cand->userFloat("cosAlphaDZ");
+      dimuonditrk_ctauPVDZ = dimuonditrk_cand->userFloat("ctauPVDZ");
+      dimuonditrk_ctauErrPVDZ = dimuonditrk_cand->userFloat("ctauErrPVDZ");
+      // dimuonditrk_countTksOfPVDZ = dimuonditrk_cand->userFloat("countTksOfPVDZ");
+      // dimuonditrk_vertexWeightDZ = dimuonditrk_cand->userFloat("vertexWeightDZ");
+      // dimuonditrk_sumPTPVDZ = dimuonditrk_cand->userFloat("sumPTPVDZ");
+      // dimuonditrk_mu1FromPVDZ = dimuonditrk_cand->userFloat("mu1FromPVDZ");
+      // dimuonditrk_mu2FromPVDZ = dimuonditrk_cand->userFloat("mu2FromPVDZ");
+      dimuonditrk_tPFromPVDZ = dimuonditrk_cand->userFloat("tPFromPVDZ");
+      dimuonditrk_tMFromPVDZ = dimuonditrk_cand->userFloat("tMFromPVDZ");
+      // dimuonditrk_mu1DZW = dimuonditrk_cand->userFloat("mu1DZW");
+      // dimuonditrk_mu1DZW = dimuonditrk_cand->userFloat("mu2DZW");
+      // dimuonditrk_tPDZW = dimuonditrk_cand->userFloat("tPDZW");
+      // dimuonditrk_tMDZW = dimuonditrk_cand->userFloat("tMDZW");
 
-      dimuonditrk_dca_m1m2 = dimuonditrk_cand.userFloat("dca_m1m2");
-      dimuonditrk_dca_m1t1 = dimuonditrk_cand.userFloat("dca_m1t1");
-      dimuonditrk_dca_m1t2 = dimuonditrk_cand.userFloat("dca_m1t2");
-      dimuonditrk_dca_m2t1 = dimuonditrk_cand.userFloat("dca_m2t1");
-      dimuonditrk_dca_m2t2 = dimuonditrk_cand.userFloat("dca_m2t2");
-      dimuonditrk_dca_t1t2 = dimuonditrk_cand.userFloat("dca_t1t2");
+      dimuonditrk_dca_m1m2 = dimuonditrk_cand->userFloat("dca_m1m2");
+      dimuonditrk_dca_m1t1 = dimuonditrk_cand->userFloat("dca_m1t1");
+      dimuonditrk_dca_m1t2 = dimuonditrk_cand->userFloat("dca_m1t2");
+      dimuonditrk_dca_m2t1 = dimuonditrk_cand->userFloat("dca_m2t1");
+      dimuonditrk_dca_m2t2 = dimuonditrk_cand->userFloat("dca_m2t2");
+      dimuonditrk_dca_t1t2 = dimuonditrk_cand->userFloat("dca_t1t2");
 
       dimuon_vProb        = dimuon_cand->userFloat("vProb");
       dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
@@ -909,8 +915,8 @@ if(!OnlyGen_)
       lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
       highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
-      highKaonMatch  = (Double_t)dimuonditrk_cand->userInt("highKaonMatch");
-      lowKaonMatch   = (Double_t)dimuonditrk_cand->userInt("lowKaonMatch");
+      highTrackMatch  = (Double_t)dimuonditrk_cand->userInt("highKaonMatch");
+      lowTrackMatch   = (Double_t)dimuonditrk_cand->userInt("lowKaonMatch");
       lowMuonMatch   = (Double_t)dimuon_cand->userInt("highMuonTMatch");
       highMuonMatch  = (Double_t)dimuon_cand->userInt("lowMuonTMatch");
 
@@ -960,13 +966,13 @@ if(!OnlyGen_)
 
       //trakOne_cand.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
 
-      highKaonMuonDR = dimuonditrk_cand.userFloat("highKaonMuonDR");
-      highKaonMuonDP = dimuonditrk_cand.userFloat("highKaonMuonDP");
-      highKaonMuonDE = dimuonditrk_cand.userFloat("highKaonMuonDE");
+      highTrackMuonDR = dimuonditrk_cand->userFloat("highKaonMuonDR");
+      highTrackMuonDP = dimuonditrk_cand->userFloat("highKaonMuonDP");
+      highTrackMuonDE = dimuonditrk_cand->userFloat("highKaonMuonDE");
 
-      lowKaonMuonDR  = dimuonditrk_cand.userFloat("lowKaonMuonDR");
-      lowKaonMuonDP  = dimuonditrk_cand.userFloat("lowKaonMuonDP");
-      lowKaonMuonDE  = dimuonditrk_cand.userFloat("lowKaonMuonDE");
+      lowTrackMuonDR  = dimuonditrk_cand->userFloat("lowKaonMuonDR");
+      lowTrackMuonDP  = dimuonditrk_cand->userFloat("lowKaonMuonDP");
+      lowTrackMuonDE  = dimuonditrk_cand->userFloat("lowKaonMuonDE");
 
       highTrack_pt = trakOne_cand->pt();
       highTrack_eta = trakOne_cand->eta();
@@ -975,14 +981,14 @@ if(!OnlyGen_)
       thirdTrack_dz     = trakOne_cand->bestTrack()->dz();
       thirdTrack_dxy    = trakOne_cand->bestTrack()->dxy();
 
-      highKaon_NPixelHits = trakOne_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
-      highKaon_NStripHits = trakOne_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      highKaon_NTrackhits = trakOne_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
-      highKaon_NBPixHits  = trakOne_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      highKaon_NPixLayers = trakOne_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-      highKaon_NTraLayers = trakOne_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-      highKaon_NStrLayers = trakOne_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
-      highKaon_NBPixLayers = trakOne_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      highTrack_NPixelHits = trakOne_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
+      highTrack_NStripHits = trakOne_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      highTrack_NTrackhits = trakOne_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
+      highTrack_NBPixHits  = trakOne_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      highTrack_NPixLayers = trakOne_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+      highTrack_NTraLayers = trakOne_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+      highTrack_NStrLayers = trakOne_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
+      highTrack_NBPixLayers = trakOne_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
       lowTrack_pt = trakTwo_cand->pt();
       lowTrack_eta = trakTwo_cand->eta();
@@ -991,14 +997,14 @@ if(!OnlyGen_)
       lowTrack_dz     = trakTwo_cand->bestTrack()->dz();
       lowTrack_dxy    = trakTwo_cand->bestTrack()->dxy();
 
-      lowKaon_NPixelHits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
-      lowKaon_NStripHits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      lowKaon_NTrackhits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
-      lowKaon_NBPixHits  = trakTwo_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      lowKaon_NPixLayers = trakTwo_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-      lowKaon_NTraLayers = trakTwo_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-      lowKaon_NStrLayers = trakTwo_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
-      lowKaon_NBPixLayers = trakTwo_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      lowTrack_NPixelHits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
+      lowTrack_NStripHits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      lowTrack_NTrackhits = trakTwo_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
+      lowTrack_NBPixHits  = trakTwo_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      lowTrack_NPixLayers = trakTwo_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+      lowTrack_NTraLayers = trakTwo_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+      lowTrack_NStrLayers = trakTwo_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
+      lowTrack_NBPixLayers = trakTwo_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
 
       thirdTrack_pt     = trakThree_cand->pt();
@@ -1008,14 +1014,14 @@ if(!OnlyGen_)
       thirdTrack_dz     = trakThree_cand->bestTrack()->dz();
       thirdTrack_dxy    = trakThree_cand->bestTrack()->dxy();
 
-      lowKaon_NPixelHits = trakThree_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
-      lowKaon_NStripHits = trakThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      lowKaon_NTrackhits = trakThree_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
-      lowKaon_NBPixHits  = trakThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      lowKaon_NPixLayers = trakThree_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-      lowKaon_NTraLayers = trakThree_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-      lowKaon_NStrLayers = trakThree_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
-      lowKaon_NBPixLayers = trakThree_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      lowTrack_NPixelHits = trakThree_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
+      lowTrack_NStripHits = trakThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      lowTrack_NTrackhits = trakThree_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
+      lowTrack_NBPixHits  = trakThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      lowTrack_NPixLayers = trakThree_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+      lowTrack_NTraLayers = trakThree_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+      lowTrack_NStrLayers = trakThree_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
+      lowTrack_NBPixLayers = trakThree_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
       dimuonDiTrkOne_pt     = dimuonDiTrkOne_cand->pt();
       dimuonDiTrkOne_eta    = dimuonDiTrkOne_cand->eta();
