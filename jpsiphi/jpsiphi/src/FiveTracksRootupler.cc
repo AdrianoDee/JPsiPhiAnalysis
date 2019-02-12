@@ -754,7 +754,7 @@ if(!OnlyGen_)
       const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand;
       const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand, *first_five_ref;
       const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand, *dimuonditrk_rf_cand;
-      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand, *dimuon_cand_rf, *ditrak_cand_rf;
+      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand, *dimuon_cand_rf;
 
       five_cand  = fivetracks_cand_handle->at(i);
       dimuonditrk_id = five_cand.userInt("dimuontt_index");
@@ -865,7 +865,7 @@ if(!OnlyGen_)
         dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
 
         dimuon_cand_rf = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
-        ditrak_cand_rf = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
+      
 
         vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
         vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
@@ -1054,7 +1054,7 @@ if(!OnlyGen_)
         const pat::CompositeCandidate *trakOne_cand_ref, *trakTwo_cand_ref, *trakThree_cand_ref;
 
         const pat::CompositeCandidate *dimuonDiTrkOne_cand_ref, *dimuonDiTrkTwo_cand_ref, *dimuonDiTrkThree_cand_ref;
-        const pat::CompositeCandidate *psiPrimeMixed_cand, *ditrak_cand_rf;
+        const pat::CompositeCandidate *psiPrimeMixed_cand;
 
         const pat::CompositeCandidate *ditrakOne_cand_ref, *ditrakTwo_cand_ref, *ditrakThree_cand_ref;
         // const pat::CompositeCandidate *psiPrimeMixed_ditrak_cand;
