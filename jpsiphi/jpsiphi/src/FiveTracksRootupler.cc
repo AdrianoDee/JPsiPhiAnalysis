@@ -87,7 +87,6 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
-  bool OnlyGen_;
 
   std::vector < Double_t > fiveTracksMass, fiveTracksMassRef, triTrakMass;
   std::vector < Double_t > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
@@ -114,12 +113,9 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   TLorentzVector kaonn_p4, lowMuon_p4, highMuon_p4, lowTrack_p4, fifthKaon_p4, highTrack_p4;
 
   TLorentzVector dimuonditrk_not_rf_p4;
-  TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
   TLorentzVector ditrakOne_rf_p4, ditrakOne_not_rf_p4;
   TLorentzVector muonp_rf_p4;
   TLorentzVector muonn_rf_p4;
-  TLorentzVector kaonp_rf_p4;
-  TLorentzVector kaonn_rf_p4;
 
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_rf_const_p4;
@@ -139,8 +135,8 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
 
-  Double_t highTrack_eta, lowTrack_eta, highMuon_eta, lowMuon_eta, highTrack_phi, lowTrack_phi, highMuon_phi, lowMuon_phi;
-  Double_t highTrack_dz, lowTrack_dz, highMuon_dz, lowMuon_dz, highTrack_dxy, lowTrack_dxy, highMuon_dxy, lowMuon_dxy;
+  //Double_t highTrack_eta, lowTrack_eta, highMuon_eta, lowMuon_eta, highTrack_phi, lowTrack_phi, highMuon_phi, lowMuon_phi;
+  //Double_t highTrack_dz, lowTrack_dz, highMuon_dz, lowMuon_dz, highTrack_dxy, lowTrack_dxy, highMuon_dxy, lowMuon_dxy;
 
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
@@ -151,6 +147,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDE, lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDE;
 
   Double_t pv_x, pv_y, pv_z;
+
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
   Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
@@ -172,9 +169,9 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t thirdTrack_pt, thirdTrack_eta, thirdTrack_phi, thirdTrack_charge;
   Double_t thirdTrack_dz, thirdTrack_dxy, lowTrack_dz, lowTrack_dxy, highTrack_dz, highTrack_dxy;
 
-  Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge;
-  Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge;
-  Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge;
+  Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge, dimuonDiTrkOne_p;
+  Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge, dimuonDiTrkTwo_p;
+  Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge, dimuonDiTrkThree_p;
 
   Double_t dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
   Int_t highTrack_NPixelHits, highTrack_NStripHits, highTrack_NTrackhits, highTrack_NBPixHits, highTrack_NPixLayers;
@@ -284,7 +281,6 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         treeName_(iConfig.getParameter<std::string>("TreeName")),
-        OnlyGen_(iConfig.getParameter<bool>("OnlyGen"))
 {
 	      edm::Service<TFileService> fs;
         fivetracks_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
@@ -395,7 +391,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuon_ctauPV",       &dimuon_ctauPV,       "dimuon_ctauPV/D");
         fivetracks_tree->Branch("dimuon_ctauErrPV",    &dimuon_ctauErrPV,    "dimuon_ctauErrPV/D");
         fivetracks_tree->Branch("dimuon_cosAlpha",     &dimuon_cosAlpha,     "dimuon_cosAlpha/D");
-        fivetracks_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
+        // fivetracks_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
 
         //TriTrak system
         fivetracks_tree->Branch("triTrak_pt",         &triTrak_pt,         "triTrak_pt/D");
@@ -757,8 +753,8 @@ if(!OnlyGen_)
       pat::CompositeCandidate five_cand;
       const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand;
       const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand, *first_five_ref;
-      const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand;
-      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand;
+      const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand, *dimuonditrk_rf_cand;
+      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand, *dimuon_cand_rf;
 
       five_cand  = fivetracks_cand_handle->at(i);
       dimuonditrk_id = five_cand.userInt("dimuontt_index");
@@ -773,52 +769,6 @@ if(!OnlyGen_)
 
       const reco::Vertex thePrimaryV = *(dimuonditrk_cand->userData<reco::Vertex>("bestPV"));
 
-
-      if (dimuonditrk_cand->userFloat("has_ref") >= 0)
-      {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_cand"));
-        dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
-        dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
-        dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
-        ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
-        dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
-
-        dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
-        ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
-
-        vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
-        vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
-
-        lowMuon_rf_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
-        highMuon_rf_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
-
-        dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
-
-        dimuonditrk_rf_vProb = dimuonditrk_cand->userFloat("vProb_ref");
-        dimuonditrk_rf_vChi2 = dimuonditrk_cand->userFloat("vChi2_ref");
-        dimuonditrk_rf_nDof = dimuonditrk_cand->userFloat("nDof_ref");
-        dimuonditrk_rf_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_ref");
-        dimuonditrk_rf_ctauPV = dimuonditrk_cand->userFloat("ctauPV_ref");
-        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_ref");
-
-
-      }
-
-      if (dimuonditrk_cand->userFloat("has_const_ref") >= 0)
-      {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_const_cand"));
-        dimuonditrk_rf_const_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
-
-        dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
-
-        dimuonditrk_rf_c_vProb = dimuonditrk_cand->userFloat("vProb_const_ref");
-        dimuonditrk_rf_c_vChi2 = dimuonditrk_cand->userFloat("vChi2_const_ref");
-        dimuonditrk_rf_c_nDof = dimuonditrk_cand->userFloat("nDof_const_ref");
-        dimuonditrk_rf_c_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_const_ref");
-        dimuonditrk_rf_c_ctauPV = dimuonditrk_cand->userFloat("ctauPV_const_ref");
-        dimuonditrk_rf_c_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_const_ref");
-
-      }
 
       pv_x = thePrimaryV.position().x();
       pv_y = thePrimaryV.position().y();
@@ -903,6 +853,52 @@ if(!OnlyGen_)
       {
         lowMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("highMuon"));
         highMuon = dynamic_cast<const pat::Muon*>(dimuon_cand->daughter("lowMuon"));
+      }
+
+      if (dimuonditrk_cand->userFloat("has_ref") >= 0)
+      {
+        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_cand"));
+        dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
+        dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
+        dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
+        ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
+        dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
+
+        dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
+        ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
+
+        vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
+        vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
+
+        lowMuon_rf_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
+        highMuon_rf_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
+
+        dimuonditrk_m_rf_c= dimuonditrk_rf_cand->mass();
+
+        dimuonditrk_rf_vProb = dimuonditrk_cand->userFloat("vProb_ref");
+        dimuonditrk_rf_vChi2 = dimuonditrk_cand->userFloat("vChi2_ref");
+        dimuonditrk_rf_nDof = dimuonditrk_cand->userFloat("nDof_ref");
+        dimuonditrk_rf_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_ref");
+        dimuonditrk_rf_ctauPV = dimuonditrk_cand->userFloat("ctauPV_ref");
+        dimuonditrk_rf_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_ref");
+
+
+      }
+
+      if (dimuonditrk_cand->userFloat("has_const_ref") >= 0)
+      {
+        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_const_cand"));
+        dimuonditrk_rf_const_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
+
+        dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
+
+        dimuonditrk_rf_c_vProb = dimuonditrk_cand->userFloat("vProb_const_ref");
+        dimuonditrk_rf_c_vChi2 = dimuonditrk_cand->userFloat("vChi2_const_ref");
+        dimuonditrk_rf_c_nDof = dimuonditrk_cand->userFloat("nDof_const_ref");
+        dimuonditrk_rf_c_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha_const_ref");
+        dimuonditrk_rf_c_ctauPV = dimuonditrk_cand->userFloat("ctauPV_const_ref");
+        dimuonditrk_rf_c_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV_const_ref");
+
       }
 
       highMuon_eta  = highMuon->innerTrack()->eta();
