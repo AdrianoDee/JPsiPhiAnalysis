@@ -87,7 +87,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string treeName_;
-
+  UInt_t numMasses_;
   std::vector < Double_t > fiveTracksMass, fiveTracksMassRef, triTrakMass;
   std::vector < Double_t > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
   std::vector < Double_t > fiveTracksCosAlpha, fiveTracksCTau, fiveTracksCTauErr;
@@ -210,7 +210,6 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Bool_t isBestCandidate;
 
-  size_t numMasses;
 
   Int_t          gen_dimuonditrk_pdgId;
   TLorentzVector gen_dimuonditrk_p4;
@@ -280,7 +279,8 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-        treeName_(iConfig.getParameter<std::string>("TreeName"))
+        treeName_(iConfig.getParameter<std::string>("TreeName")),
+        numMasses_(iConfig.getParameter<uint32_t>("NumMasses"))
 {
 	      edm::Service<TFileService> fs;
         fivetracks_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
@@ -471,12 +471,12 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuonditrk_rf_c_ctauErrPV",  &dimuonditrk_rf_c_ctauErrPV,    "dimuonditrk_rf_c_ctauErrPV/D");
 
 
-        numMasses = 5;
+        //numMasses = 5;
 
         TLorentzVector zero;
         zero.SetPtEtaPhiM(-10.0,-10.0,-10.0,-10.0);
 
-        for(size_t i = 0; i<numMasses;i++)
+        for(size_t i = 0; i<numMasses_;i++)
         {
           fiveTracksMass.push_back(-1.0);
           fiveTracksMassRef.push_back(-1.0);
@@ -536,7 +536,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         refNames.push_back("pkp"); refNames.push_back("ppp");
 
 
-        for(size_t i = 0; i<numMasses;i++)
+        for(size_t i = 0; i<numMasses_;i++)
         {
 
           std::string name = "mass_" + refNames[i];
@@ -865,7 +865,7 @@ if(!OnlyGen_)
         dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
 
         dimuon_cand_rf = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
-      
+
 
         vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
         vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
@@ -1047,7 +1047,7 @@ if(!OnlyGen_)
 
 
 
-      for(size_t j = 0; j<numMasses;j++)
+      for(size_t j = 0; j<numMasses_;j++)
       {
 
         const pat::CompositeCandidate* five_cand_ref, *five_cand_ref_ref, *triTrak_cand_ref;

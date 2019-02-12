@@ -79,6 +79,7 @@ class FiveTracksProducer : public edm::EDProducer {
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> FiveTrakMassCuts_;
+  UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
   bool isMC_;
