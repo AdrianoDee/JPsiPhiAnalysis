@@ -135,8 +135,8 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
 
-  //Double_t highTrack_eta, lowTrack_eta, highMuon_eta, lowMuon_eta, highTrack_phi, lowTrack_phi, highMuon_phi, lowMuon_phi;
-  //Double_t highTrack_dz, lowTrack_dz, highMuon_dz, lowMuon_dz, highTrack_dxy, lowTrack_dxy, highMuon_dxy, lowMuon_dxy;
+  Double_t highMuon_eta, lowMuon_eta, highMuon_phi, lowMuon_phi, dimuonditrk_m;
+  Double_t highMuon_dz, lowMuon_dz, highMuon_dxy, lowMuon_dxy;
 
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
@@ -1054,7 +1054,7 @@ if(!OnlyGen_)
         const pat::CompositeCandidate *trakOne_cand_ref, *trakTwo_cand_ref, *trakThree_cand_ref;
 
         const pat::CompositeCandidate *dimuonDiTrkOne_cand_ref, *dimuonDiTrkTwo_cand_ref, *dimuonDiTrkThree_cand_ref;
-        const pat::CompositeCandidate *psiPrimeMixed_cand;
+        const pat::CompositeCandidate *psiPrimeMixed_cand, *ditrak_cand_rf;
 
         const pat::CompositeCandidate *ditrakOne_cand_ref, *ditrakTwo_cand_ref, *ditrakThree_cand_ref;
         // const pat::CompositeCandidate *psiPrimeMixed_ditrak_cand;
