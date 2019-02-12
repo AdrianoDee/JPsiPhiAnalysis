@@ -864,8 +864,8 @@ if(!OnlyGen_)
         ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
         dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
 
-        dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
-        ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
+        dimuon_cand_rf = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
+        ditrak_cand_rf = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
 
         vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
         vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
