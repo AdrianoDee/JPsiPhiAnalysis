@@ -5,6 +5,27 @@ import datetime, time
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M%S')
 
+import os, ast
+submitNumFile = 'submit_num.txt'
+if not os.path.isfile(submitNumFile):
+    with open(submitNumFile, 'w+') as f:
+        f.write('')
+    f.close()
+with open(submitNumFile, 'r+') as f:
+    try:
+        submitNum=f.read()
+        submitNum = ast.literal_eval(str(submitNum))
+        submitNum += 1
+    except Exception as e:
+        # print("Exception: %s" %  e)
+        submitNum = 0
+f.close()
+submitNum=str(submitNum)
+with open('submit_num.txt', 'w+') as f:
+    f.write(str(submitNum))
+f.close()
+print('submitNum: %s' % submitNum)
+
 sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ',
 
  'T2_DE_DESY', 'T2_DE_RWTH',
@@ -12,7 +33,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T2_FR_GRIF_IRFU', 'T2_FR_GRIF_LLR', 'T2_FR_IPHC', 'T2_GR_Ioannina', 'T2_HU_Budapest',
  'T2_IN_TIFR', 'T2_IT_Bari', 'T2_IT_Legnaro', 'T2_IT_Pisa', 'T2_IT_Rome', 'T2_KR_KISTI',
   'T2_PK_NCP', 'T2_PL_Swierk', 'T2_PL_Warsaw',
- 'T2_PT_NCG_Lisbon', 'T2_RU_IHEP', 'T2_RU_INR', 'T2_RU_ITEP', 
+ 'T2_PT_NCG_Lisbon', 'T2_RU_IHEP', 'T2_RU_INR', 'T2_RU_ITEP',
  'T2_RU_SINP','T2_TR_METU', 'T2_TW_NCHC', 'T2_UA_KIPT', 'T2_UK_London_Brunel',
  'T2_UK_London_IC', 'T2_UK_SGrid_Bristol','T2_UK_SGrid_RALPP', #'T2_US_Caltech', 'T2_US_Florida',
  'T2_US_MIT', 'T2_US_Nebraska', 'T2_US_Purdue', 'T2_US_UCSD', 'T2_US_Vanderbilt',
@@ -32,7 +53,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
 ]
 
 NJOBS = 2500
-EVTPERJOB = 25000
+EVTPERJOB = 100000
 step = 'GEN-MINIAODSIM'
 nEvents = NJOBS*EVTPERJOB
 ptHat = 10
@@ -45,8 +66,8 @@ myname=step+job_label
 step1File = genname + '_GEN_SIM.root'
 step2File = genname + '_DIGI_HLT_RAW_L1_PU40.root'
 step3Mini = genname + '_MINIAODSIM_PU40.root'
-step3File = genname + '_RECOSIM_PU40.root' 
-config.General.requestName = step+'_'+job_label+'_v5_' +st
+step3File = genname + '_RECOSIM_PU40.root'
+config.General.requestName = step+'_'+job_label+'_v5_' +submitNum
 config.General.transferOutputs = True
 config.General.transferLogs = False
 config.General.workArea = 'crab_projects'
@@ -57,7 +78,7 @@ config.JobType.inputFiles = [myrun,'step2_DIGI_L1_DIGI2RAW_HLT_RAW2DIGI_L1Reco_P
 config.JobType.disableAutomaticOutputCollection = True
 config.JobType.eventsPerLumi=10000
 #config.JobType.numCores = 1
-config.JobType.maxJobRuntimeMin = 720
+config.JobType.maxJobRuntimeMin = 960 # increasing to 16 hours just to be on the safe side
 config.JobType.maxMemoryMB = 5000
 config.JobType.scriptExe = 'mcproduction.sh'#'GEN-MiniAOD-Xb2chib1pipi_10p5.sh'
 #config.JobType.scriptArgs = ['=Xb2chib1pipi','=10p5','=100000']
@@ -75,7 +96,7 @@ config.Data.publication = False
 config.Data.inputDBS = 'phys03'
 config.Data.publishDBS = 'phys03'
 
-config.Debug.scheddName = 'crab3-5@vocms059.cern.ch'
+# config.Debug.scheddName = 'crab3-5@vocms059.cern.ch'
 
 config.Site.storageSite = 'T2_IT_Bari'
 config.Site.blacklist = ["T2_BR_*","T2_IN_*","T3_IN_*"]
