@@ -98,7 +98,8 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-  FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts"))
+  FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
+  numMasses_(iConfig.getParameter<uint32_t>("NumMasses"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
 
@@ -199,7 +200,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); // p k p
        oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); // p p p
 
-       
+
        //Adding the fifth track
        //Possibilities:
        // B+  -> Psi' K+ -> JPsi π+ π- K+
@@ -253,7 +254,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          bool atLeastOne = false;
          std::vector< bool > insideMass;
-         for(size_t j = 0; j<oneMasses.size();j++)
+         for(size_t j = 0; j<numMasses_;j++)
          {
 
              fiveTracksMass.push_back(FiveTrakMassMin-0.2);
