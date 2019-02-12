@@ -280,7 +280,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         jpspdgid_(iConfig.getParameter<uint32_t>("Phi_pdg")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-        treeName_(iConfig.getParameter<std::string>("TreeName")),
+        treeName_(iConfig.getParameter<std::string>("TreeName"))
 {
 	      edm::Service<TFileService> fs;
         fivetracks_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
@@ -754,7 +754,7 @@ if(!OnlyGen_)
       const pat::PackedCandidate *trakOne_cand, *trakTwo_cand, *trakThree_cand;
       const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand, *first_five_ref;
       const pat::CompositeCandidate *dimuonditrk_cand, *dimuon_cand, *ditrakOne_cand, *dimuonditrk_rf_cand;
-      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand, *dimuon_cand_rf;
+      const pat::CompositeCandidate *triTrak_cand, *ditrakTwo_cand, *ditrakThree_cand, *dimuon_cand_rf, *ditrak_cand_rf;
 
       five_cand  = fivetracks_cand_handle->at(i);
       dimuonditrk_id = five_cand.userInt("dimuontt_index");
@@ -857,7 +857,7 @@ if(!OnlyGen_)
 
       if (dimuonditrk_cand->userFloat("has_ref") >= 0)
       {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_cand"));
+        dimuonditrk_rf_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_cand"));
         dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
         dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
         dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
