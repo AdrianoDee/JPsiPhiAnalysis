@@ -887,7 +887,7 @@ if(!OnlyGen_)
 
       if (dimuonditrk_cand->userFloat("has_const_ref") >= 0)
       {
-        dimuonditrk_rf_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_const_cand"));
+        dimuonditrk_rf_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrk_cand->daughter("ref_const_cand"));
         dimuonditrk_rf_const_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
 
         dimuonditrk_m_rf_d_c= dimuonditrk_rf_cand->mass();
