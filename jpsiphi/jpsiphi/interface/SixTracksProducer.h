@@ -1,5 +1,5 @@
-#ifndef _FiveTracksProducerFit_h_
-#define _FiveTracksProducerFit_h_
+#ifndef __SixTrakProducerFit_h_
+#define __SixTrakProducerFit_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -53,10 +53,10 @@
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class FiveTracksProducer : public edm::EDProducer {
+class SixTracksProducer : public edm::EDProducer {
 
  public:
-  explicit FiveTracksProducer(const edm::ParameterSet& ps);
+  explicit SixTracksProducer(const edm::ParameterSet& ps);
 
  private:
 
@@ -70,7 +70,7 @@ class FiveTracksProducer : public edm::EDProducer {
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  std::vector<double> FiveTrakMassCuts_;
+  std::vector<double> SixTrakMassCuts_;
   UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
@@ -83,30 +83,32 @@ class FiveTracksProducer : public edm::EDProducer {
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
-  pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& trak1,
+  pat::CompositeCandidate makeSixCandidate(const pat::PackedCandidate& trak1,
                                                 const pat::PackedCandidate& trak2);
   pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2
                                            );
-pat::CompositeCandidate makeFiveCandidateMixed(
+pat::CompositeCandidate makeSixCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
                                             const pat::PackedCandidate& trakP,
                                             const pat::PackedCandidate& trakN,
                                             const pat::PackedCandidate& trak3,
+                                            const pat::PackedCandidate& trak4,
                                             double massOne,
                                             double massTwo,
-                                            double massThree
+                                            double massThree,
+                                            double massFour
                                           );
-pat::CompositeCandidate makeFiveCandidateMixed(
+pat::CompositeCandidate makeSixCandidateMixed(
                                               const pat::CompositeCandidate& dimuon,
                                               const pat::CompositeCandidate& trakP,
                                               const pat::CompositeCandidate& trakN,
                                               const pat::CompositeCandidate& trak3
                                             );
-  pat::CompositeCandidate makeFiveCandidate(
-                                            const pat::CompositeCandidate& dimuonditrak,
-                                            const pat::PackedCandidate& trakN
+  pat::CompositeCandidate makeSixCandidate(
+                                            const pat::CompositeCandidate& fiveTrack,
+                                            const pat::PackedCandidate& trak4
                                           );
 
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
