@@ -130,6 +130,9 @@ pat::CompositeCandidate makeFiveCandidateMixed(
   float maxDeltaR;
   float maxDPtRel;
   double kaonmass, pionmass, trackmass, psi2smass;
+  double protonmass;
+
+  std::map<uint32_t,float> pdgToMass;
 
   int nevents;
   uint ncombo,ncomboneg,ncomboneu;

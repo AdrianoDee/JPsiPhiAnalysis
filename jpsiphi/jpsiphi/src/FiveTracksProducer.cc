@@ -107,6 +107,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
 
   kaonmass = 0.493677;
   pionmass = 0.13957061;
+  protonmass = 0.93827208;
   psi2smass = 3.686093;
 
   maxDeltaR = 0.01;
@@ -116,6 +117,11 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   ncomboneg = 0;
   ncombo = 0;
   ncomboneu = 0;
+
+  pdgToMass[211] = pionmass;
+  pdgToMass[2212] = protonmass;
+  pdgToMass[321] = kaonmass;
+
 }
 
 void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
@@ -153,6 +159,25 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   float FiveTrakMassMax = FiveTrakMassCuts_[1];
   float FiveTrakMassMin = FiveTrakMassCuts_[0];
 
+  //Sorting new masses - Kaon is the baseline
+  // std::sort( ExtraMasses_.begin(), ExtraMasses_.end() );
+  // ExtraMasses_.erase( std::unique( ExtraMasses_.begin(), vec.end() ), ExtraMasses_.end());
+
+  // std::vector<float> extraMasses;
+  //
+  // for (size_t i = 0; i < ExtraMasses_.size(); i++)
+  //   if(pdgToMass.find(ExtraMasses_[i])!=pdgToMass.end())
+  //     extraMasses.push_back(pdgToMass[ExtraMasses_[i]]);
+  //
+  // float deltaMassMin = 0.0, deltaMassMax = 0.0;
+  // for(const auto& m : extraMasses)
+  // {
+  //   deltaMassMin = std::max(deltaMassMin,kaonmass - m);
+  //   deltaMassMax = std::max(deltaMassMin,m - kaonmass);
+  // }
+
+  FiveTrakMassMax = FiveTrakMassMax + 3*pionmass;
+  FiveTrakMassMin = FiveTrakMassMax - 3*pionmass;
 
   // reco::TrackCollection allTheTracks;
   // for (size_t i = 0; i < trak->size(); i++)
@@ -177,7 +202,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        if(dimuonditrakCand.userFloat("vProb")<0.01)
          continue;
 
-       const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
+       // const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
        // const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("PVwithmuons");
        const pat::CompositeCandidate * dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrakCand.daughter("dimuon"));
 
@@ -193,8 +218,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        int tpId = dimuonditrakCand.userInt("pId");
        int tmId = dimuonditrakCand.userInt("mId");
 
-       std::vector<double> oneMasses,twoMasses,threeMasses, hasRefit;
-       oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); // k k k
+       std::vector<double> oneMasses,twoMasses,threeMasses;
        oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); // p p k
        oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); // k p p
        oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); // p k p
@@ -212,18 +236,22 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        // [ 6 tracks: B0s -> Psi' Phi -> J/Psi π π K K
        // B0 -> J/Psi Phi K0 -> J/Psi K K K0
        //
+
+       int numMasses = (int)
+
        for (size_t i = 0; i < trak->size(); i++) {
 
-         std::vector<float> fiveTracksMass, fiveTracksVProb, fiveTracksVChi2, fiveTracksVNDof;
-         std::vector<float> psi2sOne, psi2sTwo;
-         std::vector<float> fiveTracksCTau, fiveTracksCTauErr, fiveTracksCosAlpha;
+         std::array<float,numMasses_> fiveTracksMass;
 
+         float minDR_third = 10000.0;
+         float minDP_third = 10000.0;
+         float minDE_third = 10000.0;
 
          auto fifthTrack = trak->at(i);
 
 
          if(fifthTrack.pt()<trakPtCut_) continue;
-         //if(fifthTrack.charge() == 0) continue;
+         if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;
          if(!(fifthTrack.hasTrackDetails())) continue;
@@ -239,11 +267,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
           continue;
          else
             doneFlag[std::tuple<int,int,int>(ids[0],ids[1],ids[2])] = 1.0;
-         trackmass = kaonmass;
-         pat::CompositeCandidate fiveCandKaon = makeFiveCandidate(dimuonditrakCand, fifthTrack);
-         trackmass = pionmass;
-         pat::CompositeCandidate fiveCandPion = makeFiveCandidate(dimuonditrakCand, fifthTrack);
 
+         pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrakCand, fifthTrack);
 
          double five_ma_fit = 14000.;
          double five_vp_fit = -9999.;
@@ -254,227 +279,296 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          bool atLeastOne = false;
          std::vector< bool > insideMass;
-         for(size_t j = 0; j<numMasses_;j++)
+
+         // int numMasses = (int) extraMasses.size();
+
+         std::vector<reco::TransientTrack> fiveTracks;
+         std::vector<RefCountedKinematicParticle> kaonParticles, pionParticles;
+
+         float kinChi = 0.;
+         float kinNdf = 0.;
+
+         fiveTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // µ
+         fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ
+         fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K/π
+         fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
+         fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K/π
+
+         kaonParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[4],fifthMass,kinChi,kinNdf,fifthSigma));
+
+         KinematicConstrainedVertexFitter fiveFitter;
+         MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(jpsiMass);
+         RefCountedKinematicTree fiveVertexFitTree;
+         fiveVertexFitTree = fiveFitter.fit(kaonParticles,jpsi_mtc);
+
+         if (fiveVertexFitTree->isEmpty()) continue;
+
+         fiveVertexFitTree->movePointerToTheTop();
+         RefCountedKinematicParticle fitF = fiveVertexFitTree->currentParticle();
+         RefCountedKinematicVertex fitFVertex = fiveVertexFitTree->currentDecayVertex();
+
+         if (!(fitF->currentState().isValid())) continue;
+
+         hasRefit[j] = 1.0;
+
+         five_ma_fit = fitF->currentState().mass();
+         five_x2_fit = fitFVertex->chiSquared();
+         five_nd_fit = (double)(fitFVertex->degreesOfFreedom());
+         five_vp_fit = ChiSquaredProbability(five_x2_fit,five_nd_fit);
+
+
+         if(five_vp_fit < 0.001) continue;
+
+         float minDR_pos = 10000.0, minDR_neg = 10000.0;
+         float minDP_pos = 10000.0, minDP_neg = 10000.0;
+         float minDE_pos = 10000.0, minDE_neg = 10000.0;
+
+         for (size_t ii = 0; ii < muons->size(); ii++)
+         {
+            auto thisMuon = muons->at(ii);
+
+            float DeltaEta = fabs(thisMuon.eta()-fifthTrack.eta());
+            float DeltaP   = fabs(thisMuon.p()-fifthTrack.p());
+            float DeltaPt = ((fifthTrack.pt() - thisMuon.pt())/fifthTrack.pt());
+
+            minDR_pos = -std::max(minDR_pos,DeltaEta);
+            minDP_pos = -std::max(minDP_pos,DeltaP);
+            minDE_pos = -std::max(minDE_pos,DeltaPt);
+         }
+
+
+         int    five_ch_fit = fiveCand.charge();
+         double five_px_fit = fitF->currentState().kinematicParameters().momentum().x();
+         double five_py_fit = fitF->currentState().kinematicParameters().momentum().y();
+         double five_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+         double five_en_fit = sqrt(five_ma_fit*five_ma_fit+five_px_fit*five_px_fit+five_py_fit*five_py_fit+five_pz_fit*five_pz_fit);
+         double five_vx_fit = fitFVertex->position().x();
+         double five_vy_fit = fitFVertex->position().y();
+         double five_vz_fit = fitFVertex->position().z();
+
+         reco::CompositeCandidate recoFive_rf(five_ch_fit,math::XYZTLorentzVector(five_px_fit,five_py_fit,five_pz_fit,five_en_fit),
+                                           math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),0);
+
+         pat::CompositeCandidate fiveCand_rf(recoFive_rf);
+
+         //////////////////////////////////////////////////////////////////////////////
+         //PV Selection(s)
+         int numVertex = 4;
+         std::array <float,numVertex> sumPTPV, cosAlpha, ctauPV, ctauErrPV, fromPV;
+         // std::cout << "debug    9 "<< std::endl;
+         TVector3 vtx, vdiff, pvtx;
+         VertexDistanceXY vdistXY;
+         reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
+         TwoTrackMinimumDistance ttmd;
+
+         double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
+         double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
+         double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
+         // double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+x_py_fit*x_py_fit+x_pz_fit*x_pz_fit);
+         double x_vx_fit = fitXVertex->position().x();
+         double x_vy_fit = fitXVertex->position().y();
+         double x_vz_fit = fitXVertex->position().z();
+         vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
+
+         bool status = ttmd.calculate( GlobalTrajectoryParameters(
+           GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
+           GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
+           GlobalTrajectoryParameters(
+             GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
+             GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+         float extrapZ=-9E20;
+
+         if (status) extrapZ=ttmd.points().first.z();
+
+         TVector3 pperp(x_px_fit, x_py_fit, 0);
+         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+
+         reco::VertexCollection verteces;
+         std::vector<int> vKeys;
+         verteces.push_back(theBeamSpotV);
+
+         thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
+         verteces.push_back(thePrimaryV);
+         vKeys.push_back(0);
+
+         float minDz = 999999.;
+         double maxCosAlpha = -1.0;
+         if ( (priVtxs->begin() == priVtxs->end()) )
+         {
+           // std::cout << "debug    10 "<< std::endl;
+           thePrimaryVCA = reco::Vertex(*(priVtxs->begin()));
+           thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
+           verteces.push_back(thePrimaryV);
+           verteces.push_back(thePrimaryVDZ);
+           vKeys.push_back(0);
+           vKeys.push_back(0);
+         }else
          {
 
-             fiveTracksMass.push_back(FiveTrakMassMin-0.2);
-             fiveTracksVNDof.push_back(-1.0);
-             fiveTracksVChi2.push_back(-1.0);
-             fiveTracksVProb.push_back(-0.1);
-             fiveTracksCTau.push_back(-1000.0);
-             fiveTracksCTauErr.push_back(-1000.0);
-             fiveTracksCosAlpha.push_back(-1.1);
-             insideMass.push_back(false);
-             hasRefit.push_back(0.0);
+           reco::Vertex p,pz;
+           int thisp,thispz;
+           for(size_t pV = 0; pV<priVtxs->size();++pV)
+           {
+             auto thisPV = priVtxs->at(pV);
 
-             //if(i!=5 && fifthTrack.charge() == 0) continue;
-             pat::CompositeCandidate thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]);
-             fiveCands.push_back(thisFive);
+             pvtx.SetXYZ(thePrimaryVCA.position().x(),thePrimaryVCA.position().y(),0);
+             vdiff = vtx - pvtx;
+             double thisCosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
+             if(thisCosAlpha>maxCosAlpha)
+             {
+               thePrimaryVCA = reco::Vertex(thisPV);
+               maxCosAlpha = thisCosAlpha;
+               p = reco::Vertex(thisPV);
+               thisp = pV;
+             }
 
-             //Kinematic Fit
-             const ParticleMass muonMass(0.1056583);
-             float muonSigma = muonMass*1E-6;
-             const ParticleMass trakMassP(oneMasses[j]);
-             float trakSigmaP = trakMassP*1E-6;
-             const ParticleMass trakMassM(twoMasses[j]);
-             float trakSigmaM = trakMassM*1E-6;
-             const ParticleMass fifthMass(threeMasses[j]);
-             float fifthSigma = fifthMass*1E-6;
+             float deltaZ = fabs(extrapZ - thisPV.position().z()) ;
+             if ( deltaZ < minDz ) {
+               minDz = deltaZ;
+               pz = reco::Vertex(thisPV);
+               thispz =pV;
+             }
+           }
+           verteces.push_back(p);
+           vKeys.push_back(thisp);
+           verteces.push_back(pz);
+           vKeys.push_back(thispz);
+         }
 
 
-             if (thisFive.mass() < FiveTrakMassMax && thisFive.mass() > FiveTrakMassMin)
-             atLeastOne = true;
+         vtx.SetXYZ(five_vx_fit,five_vy_fit,0);
+         TVector3 pperp(five_px_fit, five_py_fit, 0);
+         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
-             if (thisFive.mass() < FiveTrakMassMax && thisFive.mass() > FiveTrakMassMin)
-             insideMass[j] = true;
+         //////////////////////////////////////////////////
+         //Refit PVs (not BS)
 
-             std::vector<reco::TransientTrack> fiveTracks;
-             std::vector<RefCountedKinematicParticle> kaonParticles, pionParticles;
+         for(size_t i = 0; i < numVertex; i++)
+         {
 
-             float kinChi = 0.;
-             float kinNdf = 0.;
+           ctauPV[i] = (-1000.0);
+           ctauErrPV[i] = (-1000.0);
+           cosAlpha[i] = (-1000.0);
+           fromPV[i] = (-1000.0);
+         }
 
-             fiveTracks.push_back((*theB).build(*(pmu1->innerTrack()))); // µ
-             fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ
-             fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K/π
-             fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
-             fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K/π
+         // std::cout << "debug    13 "<< std::endl;
+         for(size_t i = 0; i < verteces.size(); i++)
+         {
+           pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
+           vdiff = vtx - pvtx;
+           cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
+           ctauPV.push_back(distXY.value()*cosAlpha[i] * x_ma_fit/pperp.Perp());
+           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+           GlobalError v2e = verteces[i].error();
+           AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
+         }
 
-             kaonParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
-             kaonParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-             kaonParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
-             kaonParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
-             kaonParticles.push_back(pFactory.particle(fiveTracks[4],fifthMass,kinChi,kinNdf,fifthSigma));
 
-             KinematicParticleVertexFitter fiveFitter;
-             RefCountedKinematicTree fiveVertexFitTree;
-             fiveVertexFitTree = fiveFitter.fit(kaonParticles);
+         fiveCand.addUserFloat("mass_ref_0",five_ma_fit);
+         fiveCand.addDaughter(fiveCand_rf,"ref_cand");
 
-             if (fiveVertexFitTree->isEmpty()) continue;
+         fiveCand.addUserFloat("thirdTrackMuonDR",minDR_pos);
+         fiveCand.addUserFloat("thirdTrackMuonDP",minDP_pos);
+         fiveCand.addUserFloat("thirdTrackMuonDE",minDE_pos);
 
-             fiveVertexFitTree->movePointerToTheTop();
-             RefCountedKinematicParticle fitF = fiveVertexFitTree->currentParticle();
-             RefCountedKinematicVertex fitFVertex = fiveVertexFitTree->currentDecayVertex();
+         pat::CompositeCandidate thisFive;
 
-             if (!(fitF->currentState().isValid())) continue;
+         for(size_t j = 0; j<numMasses_;j++)
+          fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
-             hasRefit[j] = 1.0;
+             fiveCand.addUserInt("dimuontt_index",int(d));
+             fiveCand.addUserInt("pId",tpId);
+             fiveCand.addUserInt("mId",tmId);
+             fiveCand.addUserInt("tId",i);
 
-             five_ma_fit = fitF->currentState().mass();
-             five_x2_fit = fitFVertex->chiSquared();
-             five_nd_fit = (double)(fitFVertex->degreesOfFreedom());
-             five_vp_fit = ChiSquaredProbability(five_x2_fit,five_nd_fit);
-
-             //five_ndof_fit = (double)(fitFVertex->degreesOfFreedom());
-
-             int    five_ch_fit = fiveCandKaon.charge();
-             double five_px_fit = fitF->currentState().kinematicParameters().momentum().x();
-             double five_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-             double five_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
-             double five_en_fit = sqrt(five_ma_fit*five_ma_fit+five_px_fit*five_px_fit+five_py_fit*five_py_fit+five_pz_fit*five_pz_fit);
-             double five_vx_fit = fitFVertex->position().x();
-             double five_vy_fit = fitFVertex->position().y();
-             double five_vz_fit = fitFVertex->position().z();
-
-             reco::CompositeCandidate recoFive_rf(five_ch_fit,math::XYZTLorentzVector(five_px_fit,five_py_fit,five_pz_fit,five_en_fit),
-                                               math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),0);
-
-             pat::CompositeCandidate fiveCand_rf(recoFive_rf);
-
-             TVector3 vtx;
-             TVector3 pvtx;
-             VertexDistanceXY vdistXY;
-
-             vtx.SetXYZ(five_vx_fit,five_vy_fit,0);
-             TVector3 pperp(five_px_fit, five_py_fit, 0);
-             AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-             pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-             TVector3 vdiff = vtx - pvtx;
-             double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-             Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), thePrimaryV);
-
-             double ctauPV = distXY.value()*cosAlpha * five_ma_fit/pperp.Perp();
-             GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
-             GlobalError v2e = thePrimaryV.error();
-             AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-             double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*five_ma_fit/(pperp.Perp2());
-
-             fiveTracksMass[j]      = five_ma_fit;
-             fiveTracksVProb[j]     = five_vp_fit;
-             fiveTracksCTau[j]      = ctauPV;
-             fiveTracksCTauErr[j]   = ctauErrPV;
-             fiveTracksCosAlpha[j]  = cosAlpha;
-             fiveTracksVNDof[j]     = five_nd_fit;
-             fiveTracksVChi2[j]     = five_x2_fit;
-
- // get first muon
-             bool child = fiveVertexFitTree->movePointerToTheFirstChild();
-             RefCountedKinematicParticle fitPart = fiveVertexFitTree->currentParticle();
-             if (!child) break;
-             float m1_ma_fit = fitPart->currentState().mass();
-             int   m1_ch_fit = fitPart->currentState().particleCharge();
-             float m1_px_fit = fitPart->currentState().kinematicParameters().momentum().x();
-             float m1_py_fit = fitPart->currentState().kinematicParameters().momentum().y();
-             float m1_pz_fit = fitPart->currentState().kinematicParameters().momentum().z();
-             float m1_en_fit = sqrt(m1_ma_fit*m1_ma_fit+m1_px_fit*m1_px_fit+m1_py_fit*m1_py_fit+m1_pz_fit*m1_pz_fit);
-             reco::CompositeCandidate recoMu1(m1_ch_fit,math::XYZTLorentzVector(m1_px_fit,m1_py_fit,m1_pz_fit,m1_en_fit),
-                                              math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),13);
-             pat::CompositeCandidate patMu1(recoMu1);
- // get second muon
-             child = fiveVertexFitTree->movePointerToTheNextChild();
-             fitPart = fiveVertexFitTree->currentParticle();
-             if (!child) break;
-             float m2_ma_fit = fitPart->currentState().mass();
-             int   m2_ch_fit = fitPart->currentState().particleCharge();
-             float m2_px_fit = fitPart->currentState().kinematicParameters().momentum().x();
-             float m2_py_fit = fitPart->currentState().kinematicParameters().momentum().y();
-             float m2_pz_fit = fitPart->currentState().kinematicParameters().momentum().z();
-             float m2_en_fit = sqrt(m2_ma_fit*m2_ma_fit+m2_px_fit*m2_px_fit+m2_py_fit*m2_py_fit+m2_pz_fit*m2_pz_fit);
-             reco::CompositeCandidate recoMu2(m2_ch_fit,math::XYZTLorentzVector(m2_px_fit,m2_py_fit,m2_pz_fit,m2_en_fit),
-                                              math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),13);
-             pat::CompositeCandidate patMu2(recoMu2);
-
- // Define psi from two muons
- 	           pat::CompositeCandidate psi;
- 	           psi.addDaughter(patMu1,"highMuon");
-             psi.addDaughter(patMu2,"lowMuon");
-             psi.setP4(patMu1.p4()+patMu2.p4());
- // get tn
-             child = fiveVertexFitTree->movePointerToTheNextChild();
-             fitPart = fiveVertexFitTree->currentParticle();
-             if (!child) break;
-             float tk1_ma_fit = fitPart->currentState().mass();
-             int   tk1_ch_fit = fitPart->currentState().particleCharge();
-             float tk1_px_fit = fitPart->currentState().kinematicParameters().momentum().x();
-             float tk1_py_fit = fitPart->currentState().kinematicParameters().momentum().y();
-             float tk1_pz_fit = fitPart->currentState().kinematicParameters().momentum().z();
-             float tk1_en_fit = sqrt(tk1_ma_fit*tk1_ma_fit+tk1_px_fit*tk1_px_fit+tk1_py_fit*tk1_py_fit+tk1_pz_fit*tk1_pz_fit);
-             reco::CompositeCandidate recoTk1(tk1_ch_fit,math::XYZTLorentzVector(tk1_px_fit,tk1_py_fit,tk1_pz_fit,tk1_en_fit),
-                                              math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
-             pat::CompositeCandidate patTk1(recoTk1);
-
- // get tn
-             child = fiveVertexFitTree->movePointerToTheNextChild();
-             fitPart = fiveVertexFitTree->currentParticle();
-             if (!child) break;
-             float tk2_ma_fit = fitPart->currentState().mass();
-             int   tk2_ch_fit = fitPart->currentState().particleCharge();
-             float tk2_px_fit = fitPart->currentState().kinematicParameters().momentum().x();
-             float tk2_py_fit = fitPart->currentState().kinematicParameters().momentum().y();
-             float tk2_pz_fit = fitPart->currentState().kinematicParameters().momentum().z();
-             float tk2_en_fit = sqrt(tk2_ma_fit*tk2_ma_fit+tk2_px_fit*tk2_px_fit+tk2_py_fit*tk2_py_fit+tk2_pz_fit*tk2_pz_fit);
-             reco::CompositeCandidate recoTk2(tk2_ch_fit,math::XYZTLorentzVector(tk2_px_fit,tk2_py_fit,tk2_pz_fit,tk2_en_fit),
-                                              math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
-             pat::CompositeCandidate patTk2(recoTk2);
- // get tn
-             child = fiveVertexFitTree->movePointerToTheNextChild();
-             fitPart = fiveVertexFitTree->currentParticle();
-             if (!child) break;
-             float tk3_ma_fit = fitPart->currentState().mass();
-             int   tk3_ch_fit = fitPart->currentState().particleCharge();
-             float tk3_px_fit = fitPart->currentState().kinematicParameters().momentum().x();
-             float tk3_py_fit = fitPart->currentState().kinematicParameters().momentum().y();
-             float tk3_pz_fit = fitPart->currentState().kinematicParameters().momentum().z();
-             float tk3_en_fit = sqrt(tk3_ma_fit*tk3_ma_fit+tk3_px_fit*tk3_px_fit+tk3_py_fit*tk3_py_fit+tk3_pz_fit*tk3_pz_fit);
-
-             reco::CompositeCandidate recoTk3(tk3_ch_fit,math::XYZTLorentzVector(tk3_px_fit,tk3_py_fit,tk3_pz_fit,tk3_en_fit),
-                                              math::XYZPoint(five_vx_fit,five_vy_fit,five_vz_fit),321);
-             pat::CompositeCandidate patTk3(recoTk3);
-
-               fiveCands[j].addDaughter(makeFiveCandidateMixed(psi,patTk1,patTk2,patTk3),"fiveRef");
-
-            }
-
-             fiveCandKaon.addUserInt("dimuontt_index",int(d));
-
-             // fiveCandKaon.addDaughter(dimuonditrakCand,"dimuonditrak");
-             fiveCandKaon.addDaughter(*tp,"trakOne");
-             fiveCandKaon.addDaughter(*tm,"trakTwo");
-             fiveCandKaon.addDaughter(fifthTrack,"trakThree");
+             fiveCand.addUserFloat(name,fiveTracksMass[j]);
 
              std::string name;
-             for(size_t j = 0; j<fiveCands.size();j++)
+             for(size_t j = 1; j<numMasses_+1;j++)
              {
-
-               fiveCands[j].addUserFloat("vProb",fiveTracksVProb[j]);
-               fiveCands[j].addUserFloat("ctauPV",fiveTracksCTau[j]);
-               fiveCands[j].addUserFloat("ctauErrPV",fiveTracksCTauErr[j]);
-               fiveCands[j].addUserFloat("cosAlpha",fiveTracksCosAlpha[j]);
-               fiveCands[j].addUserFloat("nDof",fiveTracksVNDof[j]);
-               fiveCands[j].addUserFloat("vChi2",fiveTracksVChi2[j]);
-               fiveCands[j].addUserFloat("mass_ref",fiveTracksMass[j]);
-               fiveCands[j].addUserFloat("has_ref",hasRefit[j]);
-
-               name = "fiveCand_" + std::to_string(j);
-
-               fiveCandKaon.addDaughter(fiveCands[j],name);
-              // std::cout << fiveCands[j].mass() << " - ";
-
+              name = "mass_ref_" + std::to_string(j);
+              fiveCand.addUserFloat(name,fiveTracksMass[j-1]);
              }
+
+             // fiveCand.addDaughter(dimuonditrakCand,"dimuonditrak");
+             fiveCand.addDaughter(*tp,"trakOne");
+             fiveCand.addDaughter(*tm,"trakTwo");
+             fiveCand.addDaughter(fifthTrack,"trakThree");
+
+
+             fiveCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
+             fiveCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
+             fiveCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
+             fiveCand.addUserData("bs",reco::Vertex(thePrimaryV));
+
+             fiveCand.addUserFloat("vtxX",x_vx_fit);
+             fiveCand.addUserFloat("vtxY",x_vy_fit);
+             fiveCand.addUserFloat("vtxZ",x_vz_fit);
+
+
+             fiveCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
+             fiveCand.addUserFloat("ctauPVBS",ctauPV[0]);
+             fiveCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
+
+             fiveCand.addUserFloat("ttFromPVBS",float(fromPV[0]));
+
+
+             fiveCand.addUserFloat("cosAlpha",cosAlpha[1]);
+             fiveCand.addUserFloat("ctauPV",ctauPV[1]);
+             fiveCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
+
+             fiveCand.addUserFloat("ttFromPV",float(fromPV[1]));
+
+             fiveCand.addUserFloat("cosAlpha_alpha",cosAlpha[2]);
+             fiveCand.addUserFloat("ctauPV_alpha",ctauPV[2]);
+             fiveCand.addUserFloat("ctauErrPV_alpha",ctauErrPV[2]);
+
+             fiveCand.addUserFloat("ttFromPV_alpha",float(fromPV[2]));
+
+             fiveCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
+             fiveCand.addUserFloat("ctauPVDZ",ctauPV[3]);
+             fiveCand.addUserFloat("ctauErrPVDZ",ctauErrPV[3]);
+
+             fiveCand.addUserFloat("ttFromPVDZ",float(fromPV[3]));
+             ///DCA
+             std::vector<float> DCAs;
+
+             for(size_t j = 0; j < fiveTracks.size() - 1;++j)
+             {
+               TrajectoryStateClosestToPoint TS1 = fiveTracks[fiveTracks.size()-1].impactPointTSCP();
+               TrajectoryStateClosestToPoint TS2 = fiveTracks[j].impactPointTSCP();
+               float dca = 1E20;
+               if (TS1.isValid() && TS2.isValid()) {
+                 ClosestApproachInRPhi cApp;
+                 cApp.calculate(TS1.theState(), TS2.theState());
+                 if (cApp.status() ) dca = cApp.distance();
+               }
+               DCAs.push_back(dca);
+             }
+
+
+             fiveCand.addUserFloat("vProb",fiveTracksVProb[0]);
+             fiveCand.addUserFloat("ctauPV",fiveTracksCTau[0]);
+             fiveCand.addUserFloat("ctauErrPV",fiveTracksCTauErr[0]);
+             fiveCand.addUserFloat("cosAlpha",fiveTracksCosAlpha[0]);
+             fiveCand.addUserFloat("nDof",fiveTracksVNDof[0]);
+             fiveCand.addUserFloat("vChi2",fiveTracksVChi2[0]);
+
+             fiveCand.addUserFloat("dca_m1t3",DCAs[0]);
+             fiveCand.addUserFloat("dca_m2t3",DCAs[1]);
+             fiveCand.addUserFloat("dca_t1t3",DCAs[2]);
+             fiveCand.addUserFloat("dca_t2t3",DCAs[3]);
 
              // std::cout << std::endl;
              if(atLeastOne)
-              fiveCandColl->push_back(fiveCandKaon);
+              fiveCandColl->push_back(fiveCand);
 
            }
 
@@ -517,10 +611,10 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
                                           const pat::PackedCandidate& trak
                                          ){
 
-  pat::CompositeCandidate fiveCandKaon, dimuontrak;
-  fiveCandKaon.addDaughter(dimuonditrak,"dimuonditrak");
-  fiveCandKaon.addDaughter(trak,"fifth");
-  fiveCandKaon.setCharge(dimuonditrak.charge()+trak.charge());
+  pat::CompositeCandidate fiveCand, dimuontrak;
+  fiveCand.addDaughter(dimuonditrak,"dimuonditrak");
+  fiveCand.addDaughter(trak,"fifth");
+  fiveCand.setCharge(dimuonditrak.charge()+trak.charge());
 
   double m_trak = trackmass;
   math::XYZVector mom_trak = trak.momentum();
@@ -529,9 +623,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
 
   reco::Candidate::LorentzVector v = p4_trak + dimuonditrak.p4();
 
-  fiveCandKaon.setP4(v);
+  fiveCand.setP4(v);
 
-  return fiveCandKaon;
+  return fiveCand;
 }
 
 pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
