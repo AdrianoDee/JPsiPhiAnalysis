@@ -63,6 +63,7 @@ class FiveTracksProducer : public edm::EDProducer {
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
+
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrakCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   double trakPtCut_;
@@ -79,6 +80,8 @@ class FiveTracksProducer : public edm::EDProducer {
   bool doDoubleConstant_;
   bool addSameSig_;
 
+  edm::EDGetTokenT<pat::MuonCollection> allMuons_;
+  
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
@@ -121,7 +124,7 @@ pat::CompositeCandidate makeFiveCandidateMixed(
 
   float maxDeltaR;
   float maxDPtRel;
-  double kaonmass, pionmass, trackmass, psi2smass;
+  double kaonmass, pionmass, trackmass, psi2smass,jpsiMass;
   double protonmass;
 
   std::map<uint32_t,float> pdgToMass;

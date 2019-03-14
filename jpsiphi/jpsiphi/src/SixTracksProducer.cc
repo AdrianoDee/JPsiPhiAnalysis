@@ -116,11 +116,17 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   ncomboneg = 0;
   ncombo = 0;
   ncomboneu = 0;
+
+  allMuons_ = consumes<pat::MuonCollection>((edm::InputTag)"slimmedMuons");
+
 }
 
 void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> sixCandColl(new pat::CompositeCandidateCollection);
+
+  edm::Handle<pat::MuonCollection> muons;
+  iEvent.getByToken(allMuons_,muons);
 
   edm::Handle<pat::CompositeCandidateCollection> fivetrak;
   iEvent.getByToken(FiveTrakCollection_,fivetrak);
@@ -141,9 +147,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
   // const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
-  // edm::ESHandle<MagneticField> magneticField;
-  // iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  // const MagneticField* field = magneticField.product();
+  edm::ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
 
   // Kinematic fit
   edm::ESHandle<TransientTrackBuilder> theB;
@@ -169,9 +175,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::map< std::tuple <int,int,int,int> ,bool> doneFlag;
   std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
   std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
-  
+
   const int numMasses = 6;//numMasses_;
-  
+
   for (size_t d = 0; d < fivetrak->size(); d++) {
 
        auto fivetrakCand = fivetrak->at(d);
@@ -308,7 +314,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          RefCountedKinematicParticle fitF = sixVertexFitTree->currentParticle();
          RefCountedKinematicVertex fitFVertex = sixVertexFitTree->currentDecayVertex();
 
-         if (!(fitF->currentState().isValid())) continue;  
+         if (!(fitF->currentState().isValid())) continue;
 
          six_ma_fit = fitF->currentState().mass();
          six_x2_fit = fitFVertex->chiSquared();
@@ -351,13 +357,26 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          ////////////////
          //Vertexing
-
-         TVector3 pperp(x_px_fit, x_py_fit, 0);
+         TVector3 vtx, vdiff, pvtx;
+         VertexDistanceXY vdistXY;
+         vtx.SetXYZ(six_vx_fit,six_vy_fit,0);
+         TVector3 pperp(six_px_fit, six_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+         reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
 
          reco::VertexCollection verteces;
          std::vector<int> vKeys;
          verteces.push_back(theBeamSpotV);
+
+         bool status = ttmd.calculate( GlobalTrajectoryParameters(
+           GlobalPoint(six_vx_fit,six_vy_fit,six_vz_fit),
+           GlobalVector(six_px_fit,six_py_fit,six_pz_fit),TrackCharge(0),&(*magneticField)),
+           GlobalTrajectoryParameters(
+             GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
+             GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+         float extrapZ=-9E20;
+
+         if (status) extrapZ=ttmd.points().first.z();
 
          thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
          verteces.push_back(thePrimaryV);
@@ -407,13 +426,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            vKeys.push_back(thispz);
          }
 
-         TVector3 vtx, vdiff, pvtx;
-         VertexDistanceXY vdistXY;
+
          std::vector <double> sumPTPV,cosAlpha,ctauPV,ctauErrPV;
 
-         vtx.SetXYZ(six_vx_fit,six_vy_fit,0);
-         TVector3 pperp(six_px_fit, six_py_fit, 0);
-         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+
 
 
          for(size_t i = 0; i < verteces.size(); i++)
@@ -422,11 +438,11 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            vdiff = vtx - pvtx;
            cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
            Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
-           ctauPV.push_back(distXY.value()*cosAlpha[i] * x_ma_fit/pperp.Perp());
+           ctauPV.push_back(distXY.value()*cosAlpha[i] * six_ma_fit/pperp.Perp());
            GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
            GlobalError v2e = verteces[i].error();
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
+           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*six_ma_fit/(pperp.Perp2()));
          }
 
          std::vector<double> oneMasses, twoMasses, threeMasses, fourMasses;

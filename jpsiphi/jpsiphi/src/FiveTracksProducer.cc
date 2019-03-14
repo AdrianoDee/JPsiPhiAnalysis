@@ -109,7 +109,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   pionmass = 0.13957061;
   protonmass = 0.93827208;
   psi2smass = 3.686093;
-
+  jpsiMass = 3.096916;
   maxDeltaR = 0.01;
   maxDPtRel = 2.0;
   trackmass = kaonmass;
@@ -122,11 +122,16 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   pdgToMass[2212] = protonmass;
   pdgToMass[321] = kaonmass;
 
+  allMuons_ = consumes<pat::MuonCollection>((edm::InputTag)"slimmedMuons");
+
 }
 
 void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> fiveCandColl(new pat::CompositeCandidateCollection);
+
+  edm::Handle<pat::MuonCollection> muons;
+  iEvent.getByToken(allMuons_,muons);
 
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrak;
   iEvent.getByToken(DiMuonDiTrakCollection_,dimuonditrak);
@@ -147,9 +152,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   // const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
-  // edm::ESHandle<MagneticField> magneticField;
-  // iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  // const MagneticField* field = magneticField.product();
+  edm::ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
 
   // Kinematic fit
   edm::ESHandle<TransientTrackBuilder> theB;
@@ -224,6 +229,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); // p k p
        oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); // p p p
 
+       const ParticleMass muonMass(0.1056583);
+       float muonSigma = muonMass*1E-6;
+       const ParticleMass kaonMass(kaonmass);
+       float kaonSigma = kaonMass*1E-6;
 
        //Adding the fifth track
        //Possibilities:
@@ -236,7 +245,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        // [ 6 tracks: B0s -> Psi' Phi -> J/Psi π π K K
        // B0 -> J/Psi Phi K0 -> J/Psi K K K0
        //
-       
+
        const unsigned int numMasses = 4; //(int) numMasses_;
 
        for (size_t i = 0; i < trak->size(); i++) {
@@ -296,9 +305,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          kaonParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
          kaonParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-         kaonParticles.push_back(pFactory.particle(fiveTracks[2],trakMassP,kinChi,kinNdf,trakSigmaP));
-         kaonParticles.push_back(pFactory.particle(fiveTracks[3],trakMassM,kinChi,kinNdf,trakSigmaM));
-         kaonParticles.push_back(pFactory.particle(fiveTracks[4],fifthMass,kinChi,kinNdf,fifthSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[2],kaonMass,kinChi,kinNdf,kaonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[3],kaonMass,kinChi,kinNdf,kaonSigma));
+         kaonParticles.push_back(pFactory.particle(fiveTracks[4],kaonMass,kinChi,kinNdf,kaonSigma));
 
          KinematicConstrainedVertexFitter fiveFitter;
          MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(jpsiMass);
@@ -312,8 +321,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          RefCountedKinematicVertex fitFVertex = fiveVertexFitTree->currentDecayVertex();
 
          if (!(fitF->currentState().isValid())) continue;
-
-         hasRefit[j] = 1.0;
 
          five_ma_fit = fitF->currentState().mass();
          five_x2_fit = fitFVertex->chiSquared();
@@ -358,25 +365,16 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          //////////////////////////////////////////////////////////////////////////////
          //PV Selection(s)
          int numVertex = 4;
-         std::array <float,numVertex> sumPTPV, cosAlpha, ctauPV, ctauErrPV, fromPV;
+         std::array <float,4> sumPTPV, cosAlpha, ctauPV, ctauErrPV, fromPV;
          // std::cout << "debug    9 "<< std::endl;
          TVector3 vtx, vdiff, pvtx;
          VertexDistanceXY vdistXY;
          reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
          TwoTrackMinimumDistance ttmd;
 
-         double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
-         double x_py_fit = fitX->currentState().kinematicParameters().momentum().y();
-         double x_pz_fit = fitX->currentState().kinematicParameters().momentum().z();
-         // double x_en_fit = sqrt(x_ma_fit*x_ma_fit+x_px_fit*x_px_fit+x_py_fit*x_py_fit+x_pz_fit*x_pz_fit);
-         double x_vx_fit = fitXVertex->position().x();
-         double x_vy_fit = fitXVertex->position().y();
-         double x_vz_fit = fitXVertex->position().z();
-         vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
-
          bool status = ttmd.calculate( GlobalTrajectoryParameters(
-           GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
-           GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
+           GlobalPoint(five_vx_fit,five_vy_fit,five_vz_fit),
+           GlobalVector(five_px_fit,five_py_fit,five_pz_fit),TrackCharge(0),&(*magneticField)),
            GlobalTrajectoryParameters(
              GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
              GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
@@ -384,7 +382,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          if (status) extrapZ=ttmd.points().first.z();
 
-         TVector3 pperp(x_px_fit, x_py_fit, 0);
+         vtx.SetXYZ(five_vx_fit,five_vy_fit,0);
+         TVector3 pperp(five_px_fit, five_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
 
          reco::VertexCollection verteces;
@@ -440,9 +439,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          }
 
 
-         vtx.SetXYZ(five_vx_fit,five_vy_fit,0);
-         TVector3 pperp(five_px_fit, five_py_fit, 0);
-         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+
 
          //////////////////////////////////////////////////
          //Refit PVs (not BS)
@@ -462,12 +459,12 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
            pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
            vdiff = vtx - pvtx;
            cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
-           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
-           ctauPV.push_back(distXY.value()*cosAlpha[i] * x_ma_fit/pperp.Perp());
-           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), verteces[i]);
+           ctauPV.push_back(distXY.value()*cosAlpha[i] * five_ma_fit/pperp.Perp());
+           GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
            GlobalError v2e = verteces[i].error();
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
+           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*five_ma_fit/(pperp.Perp2()));
          }
 
 
