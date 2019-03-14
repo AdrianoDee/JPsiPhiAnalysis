@@ -89,7 +89,7 @@ class SixTracksProducer : public edm::EDProducer {
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2
                                            );
-pat::CompositeCandidate makeSixCandidateMixed(
+ pat::CompositeCandidate makeSixCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
                                             const pat::PackedCandidate& trakP,
                                             const pat::PackedCandidate& trakN,
