@@ -458,6 +458,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          {
            pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
            vdiff = vtx - pvtx;
+<<<<<<< HEAD
            cosAlpha[i] = (vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
            Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), verteces[i]);
            ctauPV[i] = (distXY.value()*cosAlpha[i] * five_ma_fit/pperp.Perp());
@@ -465,6 +466,15 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
            GlobalError v2e = verteces[i].error();
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
            ctauErrPV[i] = (sqrt(ROOT::Math::Similarity(vpperp,vXYe))*five_ma_fit/(pperp.Perp2()));
+=======
+           cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitFVertex), verteces[i]);
+           ctauPV.push_back(distXY.value()*cosAlpha[i] * five_ma_fit/pperp.Perp());
+           GlobalError v1e = (reco::Vertex(*fitFVertex)).error();
+           GlobalError v2e = verteces[i].error();
+           AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*five_ma_fit/(pperp.Perp2()));
+>>>>>>> 358ed155984c56f8a3a742072fdbe79de4eb7533
          }
 
 

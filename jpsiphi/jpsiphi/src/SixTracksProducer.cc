@@ -314,7 +314,11 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          RefCountedKinematicParticle fitS = sixVertexFitTree->currentParticle();
          RefCountedKinematicVertex fitSVertex = sixVertexFitTree->currentDecayVertex();
 
+<<<<<<< HEAD
          if (!(fitS->currentState().isValid())) continue;
+=======
+         if (!(fitF->currentState().isValid())) continue;
+>>>>>>> 358ed155984c56f8a3a742072fdbe79de4eb7533
 
          six_ma_fit = fitS->currentState().mass();
          six_x2_fit = fitSVertex->chiSquared();
@@ -363,7 +367,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          TVector3 pperp(six_px_fit, six_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
          reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
+<<<<<<< HEAD
          TwoTrackMinimumDistance ttmd;
+=======
+>>>>>>> 358ed155984c56f8a3a742072fdbe79de4eb7533
 
          reco::VertexCollection verteces;
          std::vector<int> vKeys;
@@ -437,6 +444,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          {
            pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
            vdiff = vtx - pvtx;
+<<<<<<< HEAD
            cosAlpha[i] = (vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
            Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitSVertex), verteces[i]);
            ctauPV[i] = (distXY.value()*cosAlpha[i] * six_ma_fit/pperp.Perp());
@@ -444,6 +452,15 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            GlobalError v2e = verteces[i].error();
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
            ctauErrPV[i] = (sqrt(ROOT::Math::Similarity(vpperp,vXYe))*six_ma_fit/(pperp.Perp2()));
+=======
+           cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
+           ctauPV.push_back(distXY.value()*cosAlpha[i] * six_ma_fit/pperp.Perp());
+           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+           GlobalError v2e = verteces[i].error();
+           AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
+           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*six_ma_fit/(pperp.Perp2()));
+>>>>>>> 358ed155984c56f8a3a742072fdbe79de4eb7533
          }
 
          std::vector<double> oneMasses, twoMasses, threeMasses, fourMasses;
