@@ -231,7 +231,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          float minDR_fourth = 10000.0;
          float minDP_fourth = 10000.0;
-         float minDE_fourth = 10000.0;
+         float minDPt_fourth = 10000.0;
 
          auto sixthTrack = trak->at(i);
 
@@ -256,7 +256,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          pat::CompositeCandidate sixCand = makeSixCandidate(fivetrakCand, sixthTrack);
 
-         if (sixCand.mass() < SixTrakMassMax && sixCand.mass() > SixTrakMassMax)
+         if (sixCand.mass() > SixTrakMassMax || sixCand.mass() < SixTrakMassMax)
          continue;
 
          sixCand.addUserFloat("sixCandMass",sixCand.mass());
@@ -323,10 +323,6 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          if(six_vp_fit < 0.0005) continue;
 
-         float minDR_pos = 10000.0, minDR_neg = 10000.0;
-         float minDP_pos = 10000.0, minDP_neg = 10000.0;
-         float minDE_pos = 10000.0, minDE_neg = 10000.0;
-
          for (size_t ii = 0; ii < muons->size(); ii++)
          {
             auto thisMuon = muons->at(ii);
@@ -335,9 +331,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
             float DeltaP   = fabs(thisMuon.p()-sixthTrack.p());
             float DeltaPt = ((sixthTrack.pt() - thisMuon.pt())/sixthTrack.pt());
 
-            minDR_pos = -std::max(minDR_pos,DeltaEta);
-            minDP_pos = -std::max(minDP_pos,DeltaP);
-            minDE_pos = -std::max(minDE_pos,DeltaPt);
+            minDR_fourth = -std::max(-minDR_fourth,-DeltaEta);
+            minDP_fourth = -std::max(-minDP_fourth,-DeltaP);
+            minDPt_fourth = -std::max(-minDPt_fourth,-DeltaPt);
          }
 
 
@@ -479,9 +475,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addUserFloat("mass_ref_0",six_ma_fit);
 
-          sixCand.addUserFloat("fourthTrackMuonDR",minDR_pos);
-          sixCand.addUserFloat("fourthTrackMuonDP",minDP_pos);
-          sixCand.addUserFloat("fourthTrackMuonDE",minDE_pos);
+          sixCand.addUserFloat("fourthTrackMuonDR",minDR_fourth);
+          sixCand.addUserFloat("fourthTrackMuonDP",minDP_fourth);
+          sixCand.addUserFloat("fourthTrackMuonDPt",minDPt_fourth);
 
            if(atLeastOne)
             sixCandColl->push_back(sixCand);

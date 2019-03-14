@@ -474,7 +474,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            float minDR_pos = 10000.0, minDR_neg = 10000.0;
            float minDP_pos = 10000.0, minDP_neg = 10000.0;
-           float minDE_pos = 10000.0, minDE_neg = 10000.0;
+           float minDPt_pos = 10000.0, minDPt_neg = 10000.0;
 
            for (size_t ii = 0; ii < muons->size(); ii++)
            {
@@ -486,7 +486,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
               minDR_pos = -std::max(minDR_pos,DeltaEta);
               minDP_pos = -std::max(minDP_pos,DeltaP);
-              minDE_pos = -std::max(minDE_pos,DeltaPt);
+              minDPt_pos = -std::max(minDPt_pos,DeltaPt);
            }
 
            for (size_t ii = 0; ii < muons->size(); ii++)
@@ -497,9 +497,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
               float DeltaP   = fabs(thisMuon.p()-negTrack.p());
               float DeltaPt = ((negTrack.pt() - thisMuon.pt())/negTrack.pt());
 
-              minDR_pos = -std::max(minDR_pos,DeltaEta);
-              minDP_pos = -std::max(minDP_pos,DeltaP);
-              minDE_pos = -std::max(minDE_pos,DeltaPt);
+              minDR_pos = -std::max(-minDR_pos,-DeltaEta);
+              minDP_pos = -std::max(-minDP_pos,-DeltaP);
+              minDPt_pos = -std::max(-minDPt_pos,-DeltaPt);
 
            }
 
@@ -515,21 +515,21 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            {
              DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_pos);
              DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_pos);
-             DiMuonTTCand.addUserFloat("highKaonMuonDE",minDE_pos);
+             DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_pos);
 
              DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_neg);
              DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_neg);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDE",minDE_neg);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_neg);
 
            }else
            {
              DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_pos);
              DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDE",minDE_pos);
+             DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_pos);
 
              DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_neg);
              DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
-             DiMuonTTCand.addUserFloat("highKaonMuonDE",minDE_neg);
+             DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_neg);
            }
 
 

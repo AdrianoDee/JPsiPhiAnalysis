@@ -182,7 +182,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   // }
 
   FiveTrakMassMax = FiveTrakMassMax + 3*pionmass;
-  FiveTrakMassMin = FiveTrakMassMax - 3*pionmass;
+  FiveTrakMassMin = FiveTrakMassMin - 3*pionmass;
 
   // reco::TrackCollection allTheTracks;
   // for (size_t i = 0; i < trak->size(); i++)
@@ -254,7 +254,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          float minDR_third = 10000.0;
          float minDP_third = 10000.0;
-         float minDE_third = 10000.0;
+         float minDPt_third = 10000.0;
 
          auto fifthTrack = trak->at(i);
 
@@ -278,6 +278,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
             doneFlag[std::tuple<int,int,int>(ids[0],ids[1],ids[2])] = 1.0;
 
          pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrakCand, fifthTrack);
+
+         if (fiveCand.mass() > FiveTrakMassMax || fiveCand.mass() < FiveTrakMassMin) continue;
 
          double five_ma_fit = 14000.;
          double five_vp_fit = -9999.;
@@ -330,9 +332,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          if(five_vp_fit < 0.001) continue;
 
-         float minDR_pos = 10000.0, minDR_neg = 10000.0;
-         float minDP_pos = 10000.0, minDP_neg = 10000.0;
-         float minDE_pos = 10000.0, minDE_neg = 10000.0;
 
          for (size_t ii = 0; ii < muons->size(); ii++)
          {
@@ -342,9 +341,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
             float DeltaP   = fabs(thisMuon.p()-fifthTrack.p());
             float DeltaPt = ((fifthTrack.pt() - thisMuon.pt())/fifthTrack.pt());
 
-            minDR_pos = -std::max(minDR_pos,DeltaEta);
-            minDP_pos = -std::max(minDP_pos,DeltaP);
-            minDE_pos = -std::max(minDE_pos,DeltaPt);
+            minDR_third = -std::max(-minDR_third,-DeltaEta);
+            minDP_third = -std::max(-minDP_third,-DeltaP);
+            minDPt_third = -std::max(-minDPt_third,-DeltaPt);
          }
 
 
@@ -471,9 +470,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          fiveCand.addUserFloat("mass_ref_0",five_ma_fit);
          fiveCand.addDaughter(fiveCand_rf,"ref_cand");
 
-         fiveCand.addUserFloat("thirdTrackMuonDR",minDR_pos);
-         fiveCand.addUserFloat("thirdTrackMuonDP",minDP_pos);
-         fiveCand.addUserFloat("thirdTrackMuonDE",minDE_pos);
+         fiveCand.addUserFloat("thirdTrackMuonDR",minDR_third);
+         fiveCand.addUserFloat("thirdTrackMuonDP",minDP_third);
+         fiveCand.addUserFloat("thirdTrackMuonDt",minDPt_third);
 
          pat::CompositeCandidate thisFive;
 
