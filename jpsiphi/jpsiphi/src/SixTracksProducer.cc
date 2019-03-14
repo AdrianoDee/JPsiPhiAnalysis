@@ -116,11 +116,17 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   ncomboneg = 0;
   ncombo = 0;
   ncomboneu = 0;
+
+  allMuons_ = consumes<pat::MuonCollection>((edm::InputTag)"slimmedMuons");
+
 }
 
 void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<pat::CompositeCandidateCollection> sixCandColl(new pat::CompositeCandidateCollection);
+
+  edm::Handle<pat::MuonCollection> muons;
+  iEvent.getByToken(allMuons_,muons);
 
   edm::Handle<pat::CompositeCandidateCollection> fivetrak;
   iEvent.getByToken(FiveTrakCollection_,fivetrak);
@@ -141,9 +147,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
   // const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
-  // edm::ESHandle<MagneticField> magneticField;
-  // iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  // const MagneticField* field = magneticField.product();
+  edm::ESHandle<MagneticField> magneticField;
+  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+  const MagneticField* field = magneticField.product();
 
   // Kinematic fit
   edm::ESHandle<TransientTrackBuilder> theB;
@@ -169,9 +175,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::map< std::tuple <int,int,int,int> ,bool> doneFlag;
   std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
   std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
-  
+
   const int numMasses = 6;//numMasses_;
-  
+
   for (size_t d = 0; d < fivetrak->size(); d++) {
 
        auto fivetrakCand = fivetrak->at(d);
@@ -253,7 +259,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if (sixCand.mass() < SixTrakMassMax && sixCand.mass() > SixTrakMassMax)
          continue;
 
-         sixCand.addUserFloat(sixCand.mass(),"sixCandMass");
+         sixCand.addUserFloat("sixCandMass",sixCand.mass());
 
          double six_ma_fit = 14000.;
          double six_vp_fit = -9999.;
@@ -305,14 +311,14 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if (sixVertexFitTree->isEmpty()) continue;
 
          sixVertexFitTree->movePointerToTheTop();
-         RefCountedKinematicParticle fitF = sixVertexFitTree->currentParticle();
-         RefCountedKinematicVertex fitFVertex = sixVertexFitTree->currentDecayVertex();
+         RefCountedKinematicParticle fitS = sixVertexFitTree->currentParticle();
+         RefCountedKinematicVertex fitSVertex = sixVertexFitTree->currentDecayVertex();
 
-         if (!(fitF->currentState().isValid())) continue;  
+         if (!(fitS->currentState().isValid())) continue;
 
-         six_ma_fit = fitF->currentState().mass();
-         six_x2_fit = fitFVertex->chiSquared();
-         six_nd_fit = (double)(fitFVertex->degreesOfFreedom());
+         six_ma_fit = fitS->currentState().mass();
+         six_x2_fit = fitSVertex->chiSquared();
+         six_nd_fit = (double)(fitSVertex->degreesOfFreedom());
          six_vp_fit = ChiSquaredProbability(six_x2_fit,six_nd_fit);
 
          if(six_vp_fit < 0.0005) continue;
@@ -335,14 +341,14 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          }
 
 
-         int    six_ch_fit = sixCandKaon.charge();
-         double six_px_fit = fitF->currentState().kinematicParameters().momentum().x();
-         double six_py_fit = fitF->currentState().kinematicParameters().momentum().y();
-         double six_pz_fit = fitF->currentState().kinematicParameters().momentum().z();
+         int    six_ch_fit = sixCand.charge();
+         double six_px_fit = fitS->currentState().kinematicParameters().momentum().x();
+         double six_py_fit = fitS->currentState().kinematicParameters().momentum().y();
+         double six_pz_fit = fitS->currentState().kinematicParameters().momentum().z();
          double six_en_fit = sqrt(six_ma_fit*six_ma_fit+six_px_fit*six_px_fit+six_py_fit*six_py_fit+six_pz_fit*six_pz_fit);
-         double six_vx_fit = fitFVertex->position().x();
-         double six_vy_fit = fitFVertex->position().y();
-         double six_vz_fit = fitFVertex->position().z();
+         double six_vx_fit = fitSVertex->position().x();
+         double six_vy_fit = fitSVertex->position().y();
+         double six_vz_fit = fitSVertex->position().z();
 
          reco::CompositeCandidate recoSIx_rf(six_ch_fit,math::XYZTLorentzVector(six_px_fit,six_py_fit,six_pz_fit,six_en_fit),
                                            math::XYZPoint(six_vx_fit,six_vy_fit,six_vz_fit),0);
@@ -351,13 +357,27 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          ////////////////
          //Vertexing
-
-         TVector3 pperp(x_px_fit, x_py_fit, 0);
+         TVector3 vtx, vdiff, pvtx;
+         VertexDistanceXY vdistXY;
+         vtx.SetXYZ(six_vx_fit,six_vy_fit,0);
+         TVector3 pperp(six_px_fit, six_py_fit, 0);
          AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+         reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
+         TwoTrackMinimumDistance ttmd;
 
          reco::VertexCollection verteces;
          std::vector<int> vKeys;
          verteces.push_back(theBeamSpotV);
+
+         bool status = ttmd.calculate( GlobalTrajectoryParameters(
+           GlobalPoint(six_vx_fit,six_vy_fit,six_vz_fit),
+           GlobalVector(six_px_fit,six_py_fit,six_pz_fit),TrackCharge(0),&(*magneticField)),
+           GlobalTrajectoryParameters(
+             GlobalPoint(bs.position().x(), bs.position().y(), bs.position().z()),
+             GlobalVector(bs.dxdz(), bs.dydz(), 1.),TrackCharge(0),&(*magneticField)));
+         float extrapZ=-9E20;
+
+         if (status) extrapZ=ttmd.points().first.z();
 
          thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
          verteces.push_back(thePrimaryV);
@@ -407,26 +427,23 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            vKeys.push_back(thispz);
          }
 
-         TVector3 vtx, vdiff, pvtx;
-         VertexDistanceXY vdistXY;
+
          std::vector <double> sumPTPV,cosAlpha,ctauPV,ctauErrPV;
 
-         vtx.SetXYZ(six_vx_fit,six_vy_fit,0);
-         TVector3 pperp(six_px_fit, six_py_fit, 0);
-         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
+
 
 
          for(size_t i = 0; i < verteces.size(); i++)
          {
            pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
            vdiff = vtx - pvtx;
-           cosAlpha.push_back(vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
-           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitXVertex), verteces[i]);
-           ctauPV.push_back(distXY.value()*cosAlpha[i] * x_ma_fit/pperp.Perp());
-           GlobalError v1e = (reco::Vertex(*fitXVertex)).error();
+           cosAlpha[i] = (vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp()));
+           Measurement1D distXY = vdistXY.distance(reco::Vertex(*fitSVertex), verteces[i]);
+           ctauPV[i] = (distXY.value()*cosAlpha[i] * six_ma_fit/pperp.Perp());
+           GlobalError v1e = (reco::Vertex(*fitSVertex)).error();
            GlobalError v2e = verteces[i].error();
            AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-           ctauErrPV.push_back(sqrt(ROOT::Math::Similarity(vpperp,vXYe))*x_ma_fit/(pperp.Perp2()));
+           ctauErrPV[i] = (sqrt(ROOT::Math::Similarity(vpperp,vXYe))*six_ma_fit/(pperp.Perp2()));
          }
 
          std::vector<double> oneMasses, twoMasses, threeMasses, fourMasses;
@@ -442,7 +459,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
 
          for(size_t j = 0; j<numMasses_;j++)
-          sixTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
+          sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,sixthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
 
           std::string name;
           for(size_t j = 1; j<numMasses_+1;j++)
@@ -453,7 +470,6 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addUserInt("five_id",int(d));
 
-          // fiveCandKaon.addDaughter(fivetrakCand,"fivetrak");
           sixCand.addDaughter(*tp,"trakOne");
           sixCand.addDaughter(*tm,"trakTwo");
           sixCand.addDaughter(*tm,"trakThree");
@@ -468,7 +484,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("fourthTrackMuonDE",minDE_pos);
 
            if(atLeastOne)
-            sixCandColl->push_back(fiveCandKaon);
+            sixCandColl->push_back(sixCand);
 
            }
 
@@ -511,21 +527,21 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidate(
                                           const pat::PackedCandidate& trak
                                          ){
 
-  pat::CompositeCandidate fiveCandKaon, dimuontrak;
-  fiveCandKaon.addDaughter(fivetrak,"fivetrak");
-  fiveCandKaon.addDaughter(trak,"sixth");
-  fiveCandKaon.setCharge(fivetrak.charge()+trak.charge());
+  pat::CompositeCandidate fiveCand;
+  fiveCand.addDaughter(fivetrak,"fivetrak");
+  fiveCand.addDaughter(trak,"sixth");
+  fiveCand.setCharge(fivetrak.charge()+trak.charge());
 
   double m_trak = trackmass;
   math::XYZVector mom_trak = trak.momentum();
   double e_trak = sqrt(m_trak*m_trak + mom_trak.Mag2());
   math::XYZTLorentzVector p4_trak = math::XYZTLorentzVector(mom_trak.X(),mom_trak.Y(),mom_trak.Z(),e_trak);
 
-  reco::Candidate::LorentzVector v = p4_trak + dimuonditrak.p4();
+  reco::Candidate::LorentzVector v = p4_trak + fiveCand.p4();
 
-  fiveCandKaon.setP4(v);
+  fiveCand.setP4(v);
 
-  return fiveCandKaon;
+  return fiveCand;
 }
 
 pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
@@ -575,71 +591,6 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   return sixCand;
 }
 
-pat::CompositeCandidate SixTracksProducer::makeSixCandidate(
-                                          const pat::CompositeCandidate& dimuon,
-                                          const pat::CompositeCandidate& trakP,
-                                          const pat::CompositeCandidate& trakN,
-                                          const pat::CompositeCandidate& trakT,
-                                          const pat::CompositeCandidate& trakF,
-                                         ){
-
-  pat::CompositeCandidate sixCand, trakOne, trakTwo, trakThree, trakFour;
-  //pat::CompositeCandidate dimuonDiTrakOne, dimuonDiTrakTwo, dimuonDiTrakThree;
-  //pat::CompositeCandidate triTrak;
-
-  sixCand.addDaughter(dimuon,"dimuon");
-
-  sixCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trakP.charge()+trakF.charge());
-  triTrak.setCharge(trakP.charge()+trakN.charge()+trak3.charge());
-
-  fiveCand.addDaughter(trakP,"trakOne");
-  fiveCand.addDaughter(trakN,"trakTwo");
-  fiveCand.addDaughter(trak3,"trakThree");
-
-  dimuonDiTrakOne     = makePsi2SCandidate(dimuon,trakP,trakN);
-  dimuonDiTrakTwo     = makePsi2SCandidate(dimuon,trakP,trak3);
-  dimuonDiTrakThree   = makePsi2SCandidate(dimuon,trakN,trak3);
-
-  fiveCand.addDaughter(dimuonDiTrakOne,"dimuonDiTrakOne");
-  fiveCand.addDaughter(dimuonDiTrakTwo,"dimuonDiTrakTwo");
-  fiveCand.addDaughter(dimuonDiTrakThree,"dimuonDiTrakThree");
-
-  reco::Candidate::LorentzVector v  = trakP.p4() + trakN.p4() + trak3.p4() + dimuon.p4();
-  reco::Candidate::LorentzVector vT = trakP.p4() + trakN.p4() + trak3.p4();
-
-  triTrak.setP4(vT);
-
-  fiveCand.addDaughter(triTrak,"triTrak");
-
-  fiveCand.setP4(v);
-
-  return fiveCand;
-}
-
-pat::CompositeCandidate SixTracksProducer::makePsi2SCandidate(
-                                          const pat::CompositeCandidate& dimuon,
-                                          const pat::CompositeCandidate& t1,
-                                          const pat::CompositeCandidate& t2
-                                         ){
-
-  pat::CompositeCandidate psi2sCand, ditrak;
-  psi2sCand.setCharge(dimuon.charge()+t1.charge()+t2.charge());
-  ditrak.setCharge(t1.charge()+t2.charge());
-  psi2sCand.addDaughter(dimuon,"dimuon");
-  psi2sCand.addDaughter(t1,"trakOne");
-  psi2sCand.addDaughter(t2,"trakTwo");
-
-  reco::Candidate::LorentzVector v  = t1.p4() + t2.p4() + dimuon.p4();
-  reco::Candidate::LorentzVector vT = t1.p4() + t2.p4();
-
-  ditrak.setP4(vT);
-
-  psi2sCand.addDaughter(ditrak,"ditrak");
-
-  psi2sCand.setP4(v);
-
-  return psi2sCand;
-}
 
 reco::Candidate::LorentzVector SixTracksProducer::convertVector(const math::XYZTLorentzVectorF& v){
 

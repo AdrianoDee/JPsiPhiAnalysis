@@ -79,12 +79,12 @@ class SixTracksProducer : public edm::EDProducer {
   bool doDoubleConstant_;
   bool addSameSig_;
 
+  edm::EDGetTokenT<pat::MuonCollection> allMuons_;
+
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
-  pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
-						    const pat::CompositeCandidate& tt);
-  pat::CompositeCandidate makeSixCandidate(const pat::PackedCandidate& trak1,
-                                                const pat::PackedCandidate& trak2);
+
+
   pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2
@@ -100,12 +100,7 @@ pat::CompositeCandidate makeSixCandidateMixed(
                                             double massThree,
                                             double massFour
                                           );
-pat::CompositeCandidate makeSixCandidateMixed(
-                                              const pat::CompositeCandidate& dimuon,
-                                              const pat::CompositeCandidate& trakP,
-                                              const pat::CompositeCandidate& trakN,
-                                              const pat::CompositeCandidate& trak3
-                                            );
+
   pat::CompositeCandidate makeSixCandidate(
                                             const pat::CompositeCandidate& fiveTrack,
                                             const pat::PackedCandidate& trak4
