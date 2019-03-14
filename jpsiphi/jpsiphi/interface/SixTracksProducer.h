@@ -63,7 +63,7 @@ class SixTracksProducer : public edm::EDProducer {
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrakCollection_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTrakCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
   double trakPtCut_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;

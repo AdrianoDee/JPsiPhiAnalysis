@@ -169,7 +169,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::map< std::tuple <int,int,int,int> ,bool> doneFlag;
   std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
   std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
-
+  
+  const int numMasses = 6;//numMasses_;
+  
   for (size_t d = 0; d < fivetrak->size(); d++) {
 
        auto fivetrakCand = fivetrak->at(d);
@@ -178,8 +180,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          continue;
        // const reco::Vertex thePrimaryV = *(fivetrakCand.userData<reco::Vertex>("bestPV"));
        // const reco::Vertex thePrimaryV = *fivetrakCand.userData<reco::Vertex>("PVwithmuons");
-       const pat::CompositeCandidate *dimuonditrak_cand = dynamic_cast <pat::CompositeCandidate *>(fivetrakCand.daughter("dimuonditrak"));
-       const pat::CompositeCandidate *dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrak_cand->daughter("dimuon"));
+       const pat::CompositeCandidate *dimuonditrak_cand = dynamic_cast <const pat::CompositeCandidate *>(fivetrakCand.daughter("dimuonditrak"));
+       const pat::CompositeCandidate *dimuon_cand = dynamic_cast <const pat::CompositeCandidate *>(dimuonditrak_cand->daughter("dimuon"));
 
        const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrak_cand->daughter("dimuon")->daughter("highMuon"));
        const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonditrak_cand->daughter("dimuon")->daughter("lowMuon"));
@@ -188,15 +190,15 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
 
        //I want the positive and negative track to build psi2S with charge == 0
-       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrak_cand->daughter("ditrak")->daughter("highTrak"));
-       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrak_cand->daughter("ditrak")->daughter("lowTrak"));
-       const pat::PackedCandidate *tt = dynamic_cast <pat::PackedCandidate *>(fivetrakCand.daughter("fifth"));
+       const pat::PackedCandidate *tp = dynamic_cast <const pat::PackedCandidate *>(dimuonditrak_cand->daughter("ditrak")->daughter("highTrak"));
+       const pat::PackedCandidate *tm = dynamic_cast <const pat::PackedCandidate *>(dimuonditrak_cand->daughter("ditrak")->daughter("lowTrak"));
+       const pat::PackedCandidate *tt = dynamic_cast <const pat::PackedCandidate *>(fivetrakCand.daughter("fifth"));
 
        int tpId = fivetrakCand.userInt("pId");
        int tmId = fivetrakCand.userInt("mId");
        int ttId = fivetrakCand.userInt("tId");
 
-       std::array< <std::array <float,4>, numMasses_-1> trackMasses;
+       std::array< std::array <float,4>, numMasses-1> trackMasses;
        trackMasses[0][0] = kaonmass; trackMasses[0][1] = pionmass; trackMasses[0][2] = kaonmass; trackMasses[0][3] = pionmass; // k p k p
        trackMasses[1][0] = kaonmass; trackMasses[1][1] = pionmass; trackMasses[1][2] = pionmass; trackMasses[1][3] = kaonmass; // k p k p
        trackMasses[2][0] = pionmass; trackMasses[2][1] = kaonmass; trackMasses[2][2] = kaonmass; trackMasses[2][3] = pionmass; // k p k p
@@ -251,7 +253,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if (sixCand.mass() < SixTrakMassMax && sixCand.mass() > SixTrakMassMax)
          continue;
 
-         sixCand.addFloat(sixCand.mass(),"sixCandMass");
+         sixCand.addUserFloat(sixCand.mass(),"sixCandMass");
 
          double six_ma_fit = 14000.;
          double six_vp_fit = -9999.;
@@ -306,9 +308,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          RefCountedKinematicParticle fitF = sixVertexFitTree->currentParticle();
          RefCountedKinematicVertex fitFVertex = sixVertexFitTree->currentDecayVertex();
 
-         if (!(fitF->currentState().isValid())) continue;
-
-         hasRefit[j] = 1.0;
+         if (!(fitF->currentState().isValid())) continue;  
 
          six_ma_fit = fitF->currentState().mass();
          six_x2_fit = fitFVertex->chiSquared();
@@ -477,7 +477,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
      ncombo += sixCandColl->size();
 
-  iEvent.put(std::move(sixCandColl),"FiveTracks");
+  iEvent.put(std::move(sixCandColl),"SixTracks");
 
   nevents++;
 }

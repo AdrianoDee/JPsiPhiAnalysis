@@ -236,12 +236,12 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        // [ 6 tracks: B0s -> Psi' Phi -> J/Psi π π K K
        // B0 -> J/Psi Phi K0 -> J/Psi K K K0
        //
-
-       int numMasses = (int)
+       
+       const unsigned int numMasses = 4; //(int) numMasses_;
 
        for (size_t i = 0; i < trak->size(); i++) {
 
-         std::array<float,numMasses_> fiveTracksMass;
+         std::array<float,numMasses> fiveTracksMass;
 
          float minDR_third = 10000.0;
          float minDP_third = 10000.0;
