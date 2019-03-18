@@ -106,10 +106,8 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrk_id;
 
   TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4;
-  TLorentzVector muonp_p4;
-  TLorentzVector muonn_p4;
-  TLorentzVector kaonp_p4;
-  TLorentzVector kaonn_p4, lowMuon_p4, highMuon_p4, lowTrack_p4, fifthTrack_p4, highTrack_p4;
+  TLorentzVector lowPion_p4, lowProton_p4, highProton_p4, highPion_p4;
+  TLorentzVector lowMuon_p4, highMuon_p4, lowKaon_p4, fifthKaon_p4, highKaon_p4;
 
   TLorentzVector dimuonditrk_not_rf_p4;
   TLorentzVector ditrackOne_rf_p4, ditrackOne_not_rf_p4;
@@ -133,7 +131,6 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Int_t dimuonditrk_charge, five_charge;
 
   Double_t highTrackMatch, lowTrackMatch, highMuonMatch, lowMuonMatch;
-  Double_t dimuonditrk_vProb,  dimuonditrk_vChi2;
 
   Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_nDof, dimuonditrk_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
@@ -153,7 +150,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t pv_x, pv_y, pv_z, bestPV_Z, bestPV_Y, bestPV_X;
   Double_t bS_Z, bS_X, bS_Y, cosAlphaPV_Z, cosAlphaPV_Y, cosAlphaPV_X;
-  Double_t zPV_Z, zPV_X, zPV_Y, cosAlphaPV_Z, cosAlphaPV_Y, cosAlphaPV_X;
+  Double_t zPV_Z, zPV_X, zPV_Y;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
   Double_t dimuonditrk_cosAlphaDZ, dimuonditrk_ctauPVDZ, dimuonditrk_ctauErrPVDZ;
@@ -305,9 +302,9 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("lowMuon_p4",    "TLorentzVector", &lowMuon_p4);
         fivetracks_tree->Branch("highMuon_p4",   "TLorentzVector", &highMuon_p4);
 
-        fivetracks_tree->Branch("highTrack_p4",   "TLorentzVector", &highTrack_p4);
-        fivetracks_tree->Branch("lowTrack_p4",    "TLorentzVector", &lowTrack_p4);
-        fivetracks_tree->Branch("fifthTrack_p4",  "TLorentzVector", &fifthTrack_p4);
+        fivetracks_tree->Branch("highKaon_p4",   "TLorentzVector", &highKaon_p4);
+        fivetracks_tree->Branch("lowKaon_p4",    "TLorentzVector", &lowKaon_p4);
+        fivetracks_tree->Branch("fifthKaon_p4",  "TLorentzVector", &fifthKaon_p4);
 
         fivetracks_tree->Branch("highPion_p4",   "TLorentzVector", &highPion_p4);
         fivetracks_tree->Branch("lowPion_p4",    "TLorentzVector", &lowPion_p4);
@@ -444,6 +441,10 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuonditrk_cosAlphaBS",      &dimuonditrk_cosAlphaBS,        "dimuonditrk_cosAlphaBS/D");
         fivetracks_tree->Branch("dimuonditrk_ctauPVBS",      &dimuonditrk_ctauPVBS,        "dimuonditrk_ctauPVBS/D");
         fivetracks_tree->Branch("dimuonditrk_ctauErrPVBS",      &dimuonditrk_ctauErrPVBS,        "dimuonditrk_ctauErrPVBS/D");
+
+        fivetracks_tree->Branch("dimuonditrk_vx",     &dimuonditrk_vx,      "dimuonditrk_vx/D");
+        fivetracks_tree->Branch("dimuonditrk_vy",     &dimuonditrk_vy,      "dimuonditrk_vy/D");
+        fivetracks_tree->Branch("dimuonditrk_vz",     &dimuonditrk_vz,      "dimuonditrk_vz/D");
 
         fivetracks_tree->Branch("dca_m1m2",      &dca_m1m2,        "dca_m1m2/D");
         fivetracks_tree->Branch("dca_m1t1",      &dca_m1t1,        "dca_m1t1/D");
@@ -877,6 +878,24 @@ if(!OnlyGen_)
       trackTwo_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackTwo"));
       trackThree_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackThree"));
 
+      float pionmass = 0.13957061, protonmass = 0.93827208;
+
+      highKaon_p4.SetPtEtaPhiM(trackOne_cand.pt(), trackOne_cand.eta(), trackOne_cand.phi(), trackOne_cand.mass());
+      lowKaon_p4.SetPtEtaPhiM(trackTwo_cand.pt(), trackTwo_cand.eta(), trackTwo_cand.phi(), trackTwo_cand.mass());
+      fifthKaon_p4.SetPtEtaPhiM(trackThree_cand.pt(), trackThree_cand.eta(), trackThree_cand.phi(), trackThree_cand.mass());
+
+      highPion_p4.SetPtEtaPhiM(trackOne_cand.pt(), trackOne_cand.eta(), trackOne_cand.phi(), pionmass);
+      lowPion_p4.SetPtEtaPhiM(trackTwo_cand.pt(), trackTwo_cand.eta(), trackTwo_cand.phi(), pionmass);
+      fifthPion_p4.SetPtEtaPhiM(trackThree_cand.pt(), trackThree_cand.eta(), trackThree_cand.phi(), pionmass);
+
+      highProton_p4.SetPtEtaPhiM(trackOne_cand.pt(), trackOne_cand.eta(), trackOne_cand.phi(), protonmass);
+      lowProton_p4.SetPtEtaPhiM(trackTwo_cand.pt(), trackTwo_cand.eta(), trackTwo_cand.phi(),protonmass);
+      fifthProton_p4.SetPtEtaPhiM(trackThree_cand.pt(), trackThree_cand.eta(), trackThree_cand.phi(), protonmass);
+
+
+      lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
+      highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
+
       dimuonDiTrkOne_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrackOne"));
       dimuonDiTrkTwo_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrackTwo"));
       dimuonDiTrkThree_cand = dynamic_cast<const pat::CompositeCandidate*>(first_five_ref->daughter("dimuonDiTrackThree"));
@@ -931,12 +950,14 @@ if(!OnlyGen_)
       lowTrackMuonDP  = five_cand.userFloat("thirdTrackMuonDP");
       lowTrackMuonDPt  = five_cand.userFloat("thirdTrackMuonDPt");
 
-      dimuonditrk_eta   = dimuonditrk_cand.eta();
-      dimuonditrk_phi   = dimuonditrk_cand.phi();
-      dimuonditrk_y     = dimuonditrk_cand.y();
-      five_vx    = dimuonditrk_cand.userFloat("vtxX");
-      five_vy    = dimuonditrk_cand.userFloat("vtxY");
-      five_vz    = dimuonditrk_cand.userFloat("vtxZ");
+
+      dimuonditrk_vx    = dimuonditrk_cand->userFloat("vtxX");
+      dimuonditrk_vy    = dimuonditrk_cand->userFloat("vtxY");
+      dimuonditrk_vz    = dimuonditrk_cand->userFloat("vtxZ");
+
+      five_vx    = five_cand.userFloat("vtxX");
+      five_vy    = five_cand.userFloat("vtxY");
+      five_vz    = five_cand.userFloat("vtxZ");
 
       highTrack_pt      = trackOne_cand->pt();
       highTrack_eta     = trackOne_cand->eta();
