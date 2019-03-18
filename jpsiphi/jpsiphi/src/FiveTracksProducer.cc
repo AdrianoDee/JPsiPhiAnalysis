@@ -91,14 +91,15 @@ bool FiveTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 }
 
 FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
-  DiMuonDiTrakCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
-  TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
-  trakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.8),
+  DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrack"))),
+  TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-  FiveTrakMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrakCuts")),
+  FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
@@ -133,11 +134,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(allMuons_,muons);
 
-  edm::Handle<pat::CompositeCandidateCollection> dimuonditrak;
-  iEvent.getByToken(DiMuonDiTrakCollection_,dimuonditrak);
+  edm::Handle<pat::CompositeCandidateCollection> dimuonditrack;
+  iEvent.getByToken(DiMuonDiTrackCollection_,dimuonditrack);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > trak;
-  iEvent.getByToken(TrakCollection_,trak);
+  edm::Handle<std::vector<pat::PackedCandidate> > track;
+  iEvent.getByToken(TrackCollection_,track);
 
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
@@ -161,8 +162,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
 
 
-  float FiveTrakMassMax = FiveTrakMassCuts_[1];
-  float FiveTrakMassMin = FiveTrakMassCuts_[0];
+  float FiveTrackMassMax = FiveTrackMassCuts_[1];
+  float FiveTrackMassMin = FiveTrackMassCuts_[0];
 
   //Sorting new masses - Kaon is the baseline
   // std::sort( ExtraMasses_.begin(), ExtraMasses_.end() );
@@ -181,18 +182,12 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   //   deltaMassMax = std::max(deltaMassMin,m - kaonmass);
   // }
 
-  FiveTrakMassMax = FiveTrakMassMax + 3*pionmass;
-  FiveTrakMassMin = FiveTrakMassMin - 3*pionmass;
+  FiveTrackMassMax = FiveTrackMassMax + 3*pionmass;
+  FiveTrackMassMin = FiveTrackMassMin - 3*pionmass;
 
-  // reco::TrackCollection allTheTracks;
-  // for (size_t i = 0; i < trak->size(); i++)
-  // {
-  //   auto t = trak->at(i);
-  //   if(t.pt()<0.5) continue;
-  //   if(!(t.hasTrackDetails())) continue;
-  //   allTheTracks.push_back(*(t.bestTrack()));
-  //
-  // }
+
+  edm::Handle<edm::Association<reco::GenParticleCollection>> theGenMap;
+  iEvent.getByToken(TrackGenMap_,theGenMap);
 
   KinematicParticleFactoryFromTransientTrack pFactory;
 
@@ -200,28 +195,28 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
   std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
 
-  for (size_t d = 0; d < dimuonditrak->size(); d++) {
+  for (size_t d = 0; d < dimuonditrack->size(); d++) {
 
-       auto dimuonditrakCand = dimuonditrak->at(d);
+       auto dimuonditrackCand = dimuonditrack->at(d);
 
-       if(dimuonditrakCand.userFloat("vProb")<0.01)
+       if(dimuonditrackCand.userFloat("vProb")<0.01)
          continue;
 
-       // const reco::Vertex thePrimaryV = *(dimuonditrakCand.userData<reco::Vertex>("bestPV"));
-       // const reco::Vertex thePrimaryV = *dimuonditrakCand.userData<reco::Vertex>("PVwithmuons");
-       const pat::CompositeCandidate * dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrakCand.daughter("dimuon"));
+       // const reco::Vertex thePrimaryV = *(dimuonditrackCand.userData<reco::Vertex>("bestPV"));
+       // const reco::Vertex thePrimaryV = *dimuonditrackCand.userData<reco::Vertex>("PVwithmuons");
+       const pat::CompositeCandidate * dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrackCand.daughter("dimuon"));
 
-       const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("highMuon"));
-       const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonditrakCand.daughter("dimuon")->daughter("lowMuon"));
+       const pat::Muon *pmu1 = dynamic_cast<const pat::Muon*>(dimuonditrackCand.daughter("dimuon")->daughter("highMuon"));
+       const pat::Muon *pmu2 = dynamic_cast<const pat::Muon*>(dimuonditrackCand.daughter("dimuon")->daughter("lowMuon"));
        // const reco::Muon *rmu1 = dynamic_cast<const reco::Muon *>(pmu1->originalObject());
        // const reco::Muon *rmu2 = dynamic_cast<const reco::Muon *>(pmu2->originalObject());
 
 
        //I want the positive and negative track to build psi2S with charge == 0
-       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("highTrak"));
-       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrakCand.daughter("ditrak")->daughter("lowTrak"));
-       int tpId = dimuonditrakCand.userInt("pId");
-       int tmId = dimuonditrakCand.userInt("mId");
+       const pat::PackedCandidate *tp = dynamic_cast <pat::PackedCandidate *>(dimuonditrackCand.daughter("ditrack")->daughter("highTrack"));
+       const pat::PackedCandidate *tm = dynamic_cast <pat::PackedCandidate *>(dimuonditrackCand.daughter("ditrack")->daughter("lowTrack"));
+       int tpId = dimuonditrackCand.userInt("pId");
+       int tmId = dimuonditrackCand.userInt("mId");
 
        std::vector<double> oneMasses,twoMasses,threeMasses;
        oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); // p p k
@@ -248,7 +243,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
        const unsigned int numMasses = 4; //(int) numMasses_;
 
-       for (size_t i = 0; i < trak->size(); i++) {
+       for (size_t i = 0; i < track->size(); i++) {
 
          std::array<float,numMasses> fiveTracksMass;
 
@@ -256,10 +251,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          float minDP_third = 10000.0;
          float minDPt_third = 10000.0;
 
-         auto fifthTrack = trak->at(i);
+         auto fifthTrack = track->at(i);
 
 
-         if(fifthTrack.pt()<trakPtCut_) continue;
+         if(fifthTrack.pt()<trackPtCut_) continue;
          if(fifthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
 	       if(!(fifthTrack.trackHighPurity())) continue;
@@ -277,9 +272,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          else
             doneFlag[std::tuple<int,int,int>(ids[0],ids[1],ids[2])] = 1.0;
 
-         pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrakCand, fifthTrack);
+         pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrackCand, fifthTrack);
 
-         if (fiveCand.mass() > FiveTrakMassMax || fiveCand.mass() < FiveTrakMassMin) continue;
+         if (fiveCand.mass() > FiveTrackMassMax || fiveCand.mass() < FiveTrackMassMin) continue;
 
          double five_ma_fit = 14000.;
          double five_vp_fit = -9999.;
@@ -475,7 +470,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          fiveCand.addUserFloat("thirdTrackMuonDt",minDPt_third);
 
          pat::CompositeCandidate thisFive;
-
+         auto five_cand_ref = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
          for(size_t j = 0; j<numMasses_;j++)
           fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
@@ -491,10 +486,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
               fiveCand.addUserFloat(name,fiveTracksMass[j-1]);
              }
 
-             // fiveCand.addDaughter(dimuonditrakCand,"dimuonditrak");
-             fiveCand.addDaughter(*tp,"trakOne");
-             fiveCand.addDaughter(*tm,"trakTwo");
-             fiveCand.addDaughter(fifthTrack,"trakThree");
+             // fiveCand.addDaughter(dimuonditrackCand,"dimuonditrack");
+             fiveCand.addDaughter(*tp,"trackOne");
+             fiveCand.addDaughter(*tm,"trackTwo");
+             fiveCand.addDaughter(fifthTrack,"trackThree");
 
 
              fiveCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
@@ -559,6 +554,38 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("dca_t1t3",DCAs[2]);
              fiveCand.addUserFloat("dca_t2t3",DCAs[3]);
 
+             fiveCand.addDaughter(first_five_ref,"first_five_ref");
+
+
+             if(IsMC_)
+              {
+                float hasFifthGen -1.0;
+
+                if(theGenMap.isValid())
+                {
+                  //posTrack
+                  auto refFifth = trak->refAt(i);
+
+                  if(theGenMap->contains(refFifth.id()))
+                  {
+                   if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]).isNonnull())
+                   {
+                     auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]);
+                     hasFifthGen = 1.0;
+                     fiveCand.addDaughter(*genP,"fifthTrackGen");
+
+                    }
+                  }
+
+                }
+                // if(hasHighGen * hasLowGen >= 0.0)
+                //   std::cout << "Has some gen ref " << std::endl;
+                fiveCand.addUserFloat("hasFifthGen",hasFifthGen);
+
+
+              }
+
+
              // std::cout << std::endl;
              if(atLeastOne)
               fiveCandColl->push_back(fiveCand);
@@ -600,21 +627,21 @@ bool FiveTracksProducer::IsTheSame(const pat::PackedCandidate& t1, const pat::Pa
 
 
 pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
-                                          const pat::CompositeCandidate& dimuonditrak,
-                                          const pat::PackedCandidate& trak
+                                          const pat::CompositeCandidate& dimuonditrack,
+                                          const pat::PackedCandidate& track
                                          ){
 
-  pat::CompositeCandidate fiveCand, dimuontrak;
-  fiveCand.addDaughter(dimuonditrak,"dimuonditrak");
-  fiveCand.addDaughter(trak,"fifth");
-  fiveCand.setCharge(dimuonditrak.charge()+trak.charge());
+  pat::CompositeCandidate fiveCand, dimuontrack;
+  fiveCand.addDaughter(dimuonditrack,"dimuonditrack");
+  fiveCand.addDaughter(track,"fifth");
+  fiveCand.setCharge(dimuonditrack.charge()+track.charge());
 
-  double m_trak = trackmass;
-  math::XYZVector mom_trak = trak.momentum();
-  double e_trak = sqrt(m_trak*m_trak + mom_trak.Mag2());
-  math::XYZTLorentzVector p4_trak = math::XYZTLorentzVector(mom_trak.X(),mom_trak.Y(),mom_trak.Z(),e_trak);
+  double m_track = trackmass;
+  math::XYZVector mom_track = track.momentum();
+  double e_track = sqrt(m_track*m_track + mom_track.Mag2());
+  math::XYZTLorentzVector p4_track = math::XYZTLorentzVector(mom_track.X(),mom_track.Y(),mom_track.Z(),e_track);
 
-  reco::Candidate::LorentzVector v = p4_trak + dimuonditrak.p4();
+  reco::Candidate::LorentzVector v = p4_track + dimuonditrack.p4();
 
   fiveCand.setP4(v);
 
@@ -623,59 +650,59 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
 
 pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& dimuon,
-                                          const pat::PackedCandidate& trakP,
-                                          const pat::PackedCandidate& trakN,
-                                          const pat::PackedCandidate& trak3,
+                                          const pat::PackedCandidate& trackP,
+                                          const pat::PackedCandidate& trackN,
+                                          const pat::PackedCandidate& track3,
                                           double massOne,
                                           double massTwo,
                                           double massThree
                                          ){
 
-  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trakThree;
-  pat::CompositeCandidate dimuonDiTrakOne, dimuonDiTrakTwo, dimuonDiTrakThree;
-  pat::CompositeCandidate triTrak;
+  pat::CompositeCandidate fiveCand, trackOne, trackTwo, trackThree;
+  pat::CompositeCandidate dimuonDiTrackOne, dimuonDiTrackTwo, dimuonDiTrackThree;
+  pat::CompositeCandidate triTrack;
 
   fiveCand.addDaughter(dimuon,"dimuon");
 
-  triTrak.setCharge(trakP.charge()+trakN.charge()+trak3.charge());
-  fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
+  triTrack.setCharge(trackP.charge()+trackN.charge()+track3.charge());
+  fiveCand.setCharge(dimuon.charge()+trackP.charge()+trackN.charge()+track3.charge());
 
-  math::XYZVector mom_trakP = trakP.momentum();
-  double e_trakP = sqrt(massOne*massOne + mom_trakP.Mag2());
-  math::XYZTLorentzVector p4_trakP = math::XYZTLorentzVector(mom_trakP.X(),mom_trakP.Y(),mom_trakP.Z(),e_trakP);
-  trakOne.setCharge(trakP.charge());
-  trakOne.setP4(p4_trakP);
+  math::XYZVector mom_trackP = trackP.momentum();
+  double e_trackP = sqrt(massOne*massOne + mom_trackP.Mag2());
+  math::XYZTLorentzVector p4_trackP = math::XYZTLorentzVector(mom_trackP.X(),mom_trackP.Y(),mom_trackP.Z(),e_trackP);
+  trackOne.setCharge(trackP.charge());
+  trackOne.setP4(p4_trackP);
 
-  math::XYZVector mom_trakN = trakN.momentum();
-  double e_trakN = sqrt(massTwo*massTwo + mom_trakN.Mag2());
-  math::XYZTLorentzVector p4_trakN = math::XYZTLorentzVector(mom_trakN.X(),mom_trakN.Y(),mom_trakN.Z(),e_trakN);
-  trakTwo.setCharge(trakN.charge());
-  trakTwo.setP4(p4_trakN);
+  math::XYZVector mom_trackN = trackN.momentum();
+  double e_trackN = sqrt(massTwo*massTwo + mom_trackN.Mag2());
+  math::XYZTLorentzVector p4_trackN = math::XYZTLorentzVector(mom_trackN.X(),mom_trackN.Y(),mom_trackN.Z(),e_trackN);
+  trackTwo.setCharge(trackN.charge());
+  trackTwo.setP4(p4_trackN);
 
-  math::XYZVector mom_trak3 = trak3.momentum();
-  double e_trak3 = sqrt(massThree*massThree + mom_trak3.Mag2());
-  math::XYZTLorentzVector p4_trak3 = math::XYZTLorentzVector(mom_trak3.X(),mom_trak3.Y(),mom_trak3.Z(),e_trak3);
-  trakThree.setCharge(trak3.charge());
-  trakThree.setP4(p4_trak3);
+  math::XYZVector mom_track3 = track3.momentum();
+  double e_track3 = sqrt(massThree*massThree + mom_track3.Mag2());
+  math::XYZTLorentzVector p4_track3 = math::XYZTLorentzVector(mom_track3.X(),mom_track3.Y(),mom_track3.Z(),e_track3);
+  trackThree.setCharge(track3.charge());
+  trackThree.setP4(p4_track3);
 
-  fiveCand.addDaughter(trakOne,"trakOne");
-  fiveCand.addDaughter(trakTwo,"trakTwo");
-  fiveCand.addDaughter(trakThree,"trakThree");
+  fiveCand.addDaughter(trackOne,"trackOne");
+  fiveCand.addDaughter(trackTwo,"trackTwo");
+  fiveCand.addDaughter(trackThree,"trackThree");
 
-  dimuonDiTrakOne     = makePsi2SCandidate(dimuon,trakOne,trakTwo);
-  dimuonDiTrakTwo     = makePsi2SCandidate(dimuon,trakOne,trakThree);
-  dimuonDiTrakThree   = makePsi2SCandidate(dimuon,trakTwo,trakThree);
+  dimuonDiTrackOne     = makePsi2SCandidate(dimuon,trackOne,trackTwo);
+  dimuonDiTrackTwo     = makePsi2SCandidate(dimuon,trackOne,trackThree);
+  dimuonDiTrackThree   = makePsi2SCandidate(dimuon,trackTwo,trackThree);
 
-  fiveCand.addDaughter(dimuonDiTrakOne,"dimuonDiTrakOne");
-  fiveCand.addDaughter(dimuonDiTrakTwo,"dimuonDiTrakTwo");
-  fiveCand.addDaughter(dimuonDiTrakThree,"dimuonDiTrakThree");
+  fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
+  fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
+  fiveCand.addDaughter(dimuonDiTrackThree,"dimuonDiTrackThree");
 
-  reco::Candidate::LorentzVector v = p4_trakP + p4_trak3 + p4_trak3 + dimuon.p4();
-  reco::Candidate::LorentzVector vT = trakP.p4() + trakN.p4() + trak3.p4();
+  reco::Candidate::LorentzVector v = p4_trackP + p4_trackN + p4_track3 + dimuon.p4();
+  reco::Candidate::LorentzVector vT = trackP.p4() + trackN.p4() + track3.p4();
 
-  triTrak.setP4(vT);
+  triTrack.setP4(vT);
 
-  fiveCand.addDaughter(triTrak,"triTrak");
+  fiveCand.addDaughter(triTrack,"triTrack");
 
   fiveCand.setP4(v);
 
@@ -684,38 +711,38 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
 
 pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& dimuon,
-                                          const pat::CompositeCandidate& trakP,
-                                          const pat::CompositeCandidate& trakN,
-                                          const pat::CompositeCandidate& trak3
+                                          const pat::CompositeCandidate& trackP,
+                                          const pat::CompositeCandidate& trackN,
+                                          const pat::CompositeCandidate& track3
                                          ){
 
-  pat::CompositeCandidate fiveCand, trakOne, trakTwo, trakThree;
-  pat::CompositeCandidate dimuonDiTrakOne, dimuonDiTrakTwo, dimuonDiTrakThree;
-  pat::CompositeCandidate triTrak;
+  pat::CompositeCandidate fiveCand, trackOne, trackTwo, trackThree;
+  pat::CompositeCandidate dimuonDiTrackOne, dimuonDiTrackTwo, dimuonDiTrackThree;
+  pat::CompositeCandidate triTrack;
 
   fiveCand.addDaughter(dimuon,"dimuon");
 
-  fiveCand.setCharge(dimuon.charge()+trakP.charge()+trakN.charge()+trak3.charge());
-  triTrak.setCharge(trakP.charge()+trakN.charge()+trak3.charge());
+  fiveCand.setCharge(dimuon.charge()+trackP.charge()+trackN.charge()+track3.charge());
+  triTrack.setCharge(trackP.charge()+trackN.charge()+track3.charge());
 
-  fiveCand.addDaughter(trakP,"trakOne");
-  fiveCand.addDaughter(trakN,"trakTwo");
-  fiveCand.addDaughter(trak3,"trakThree");
+  fiveCand.addDaughter(trackP,"trackOne");
+  fiveCand.addDaughter(trackN,"trackTwo");
+  fiveCand.addDaughter(track3,"trackThree");
 
-  dimuonDiTrakOne     = makePsi2SCandidate(dimuon,trakP,trakN);
-  dimuonDiTrakTwo     = makePsi2SCandidate(dimuon,trakP,trak3);
-  dimuonDiTrakThree   = makePsi2SCandidate(dimuon,trakN,trak3);
+  dimuonDiTrackOne     = makePsi2SCandidate(dimuon,trackP,trackN);
+  dimuonDiTrackTwo     = makePsi2SCandidate(dimuon,trackP,track3);
+  dimuonDiTrackThree   = makePsi2SCandidate(dimuon,trackN,track3);
 
-  fiveCand.addDaughter(dimuonDiTrakOne,"dimuonDiTrakOne");
-  fiveCand.addDaughter(dimuonDiTrakTwo,"dimuonDiTrakTwo");
-  fiveCand.addDaughter(dimuonDiTrakThree,"dimuonDiTrakThree");
+  fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
+  fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
+  fiveCand.addDaughter(dimuonDiTrackThree,"dimuonDiTrackThree");
 
-  reco::Candidate::LorentzVector v  = trakP.p4() + trakN.p4() + trak3.p4() + dimuon.p4();
-  reco::Candidate::LorentzVector vT = trakP.p4() + trakN.p4() + trak3.p4();
+  reco::Candidate::LorentzVector v  = trackP.p4() + trackN.p4() + track3.p4() + dimuon.p4();
+  reco::Candidate::LorentzVector vT = trackP.p4() + trackN.p4() + track3.p4();
 
-  triTrak.setP4(vT);
+  triTrack.setP4(vT);
 
-  fiveCand.addDaughter(triTrak,"triTrak");
+  fiveCand.addDaughter(triTrack,"triTrack");
 
   fiveCand.setP4(v);
 
@@ -728,19 +755,19 @@ pat::CompositeCandidate FiveTracksProducer::makePsi2SCandidate(
                                           const pat::CompositeCandidate& t2
                                          ){
 
-  pat::CompositeCandidate psi2sCand, ditrak;
+  pat::CompositeCandidate psi2sCand, ditrack;
   psi2sCand.setCharge(dimuon.charge()+t1.charge()+t2.charge());
-  ditrak.setCharge(t1.charge()+t2.charge());
+  ditrack.setCharge(t1.charge()+t2.charge());
   psi2sCand.addDaughter(dimuon,"dimuon");
-  psi2sCand.addDaughter(t1,"trakOne");
-  psi2sCand.addDaughter(t2,"trakTwo");
+  psi2sCand.addDaughter(t1,"trackOne");
+  psi2sCand.addDaughter(t2,"trackTwo");
 
   reco::Candidate::LorentzVector v  = t1.p4() + t2.p4() + dimuon.p4();
   reco::Candidate::LorentzVector vT = t1.p4() + t2.p4();
 
-  ditrak.setP4(vT);
+  ditrack.setP4(vT);
 
-  psi2sCand.addDaughter(ditrak,"ditrak");
+  psi2sCand.addDaughter(ditrack,"ditrack");
 
   psi2sCand.setP4(v);
 

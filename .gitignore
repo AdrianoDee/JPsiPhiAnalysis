@@ -1,4 +1,5 @@
 *.pyc
 crab_projects/
+jpsiphi/jpsiphi/test/mclists/BBbar*.py
 *~
 submit_num.txt

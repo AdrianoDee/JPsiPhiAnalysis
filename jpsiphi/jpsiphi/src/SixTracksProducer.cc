@@ -256,7 +256,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          pat::CompositeCandidate sixCand = makeSixCandidate(fivetrakCand, sixthTrack);
 
-         if (sixCand.mass() > SixTrakMassMax || sixCand.mass() < SixTrakMassMax)
+         if (sixCand.mass() > SixTrakMassMin || sixCand.mass() < SixTrakMassMax)
          continue;
 
          sixCand.addUserFloat("sixCandMass",sixCand.mass());
@@ -300,7 +300,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
 
          //Mass Constrained fit
-         float jpsiMass = 3.096916;
+         double jpsiMass = 3.096916;
 
          KinematicConstrainedVertexFitter sixFitter;
          MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(jpsiMass);

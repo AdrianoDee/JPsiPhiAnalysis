@@ -64,14 +64,15 @@ class FiveTracksProducer : public edm::EDProducer {
 
   void endJob() override;
 
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrakCollection_;
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
-  double trakPtCut_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrackCollection_;
+  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrackCollection_;
+  double trackPtCut_;
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  std::vector<double> FiveTrakMassCuts_;
+  std::vector<double> FiveTrackMassCuts_;
   UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
@@ -81,35 +82,35 @@ class FiveTracksProducer : public edm::EDProducer {
   bool addSameSig_;
 
   edm::EDGetTokenT<pat::MuonCollection> allMuons_;
-  
+
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
-  pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& trak1,
-                                                const pat::PackedCandidate& trak2);
+  pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& track1,
+                                                const pat::PackedCandidate& track2);
   pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2
                                            );
 pat::CompositeCandidate makeFiveCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
-                                            const pat::PackedCandidate& trakP,
-                                            const pat::PackedCandidate& trakN,
-                                            const pat::PackedCandidate& trak3,
+                                            const pat::PackedCandidate& trackP,
+                                            const pat::PackedCandidate& trackN,
+                                            const pat::PackedCandidate& track3,
                                             double massOne,
                                             double massTwo,
                                             double massThree
                                           );
 pat::CompositeCandidate makeFiveCandidateMixed(
                                               const pat::CompositeCandidate& dimuon,
-                                              const pat::CompositeCandidate& trakP,
-                                              const pat::CompositeCandidate& trakN,
-                                              const pat::CompositeCandidate& trak3
+                                              const pat::CompositeCandidate& trackP,
+                                              const pat::CompositeCandidate& trackN,
+                                              const pat::CompositeCandidate& track3
                                             );
   pat::CompositeCandidate makeFiveCandidate(
-                                            const pat::CompositeCandidate& dimuonditrak,
-                                            const pat::PackedCandidate& trakN
+                                            const pat::CompositeCandidate& dimuonditrack,
+                                            const pat::PackedCandidate& trackN
                                           );
 
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
@@ -133,4 +134,4 @@ pat::CompositeCandidate makeFiveCandidateMixed(
   uint ncombo,ncomboneg,ncomboneu;
 };
 
-#endif // __DiMuonDiTrakProducerFit_h_
+#endif // __DiMuonDiTrackProducerFit_h_
