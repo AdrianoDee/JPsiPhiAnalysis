@@ -125,7 +125,12 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   TLorentzVector kaonp_rf_p4;
   TLorentzVector kaonn_rf_p4;
 
-  Int_t dimuonditrk_charge;
+  Double_t five_m, five_m_ref, five_mass_ppk, five_mass_kpp, five_mass_pkp, five_mass_ppp, five_pt, five_eta, five_phi, five_p;
+  Double_t five_cosAlpha, five_ctauPV, five_ctauErrPV, five_cosAlphaCA, five_ctauPVCA, five_ctauErrPVCA, five_cosAlphaDZ;
+  Double_t five_ctauPVDZ, five_ctauErrPVDZ, five_cosAlphaBS, five_ctauPVBS, five_ctauErrPVBS;
+  Double_t five_vProb, five_nDof, five_vChi2, five_vx, five_vy, five_vz;
+
+  Int_t dimuonditrk_charge, five_charge;
 
   Double_t highTrackMatch, lowTrackMatch, highMuonMatch, lowMuonMatch;
   Double_t dimuonditrk_vProb,  dimuonditrk_vChi2;
@@ -133,6 +138,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_nDof, dimuonditrk_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
   Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
+
 
   Double_t highMuon_eta, lowMuon_eta, highMuon_phi, lowMuon_phi, dimuonditrk_m;
   Double_t highMuon_dz, lowMuon_dz, highMuon_dxy, lowMuon_dxy;
@@ -145,20 +151,17 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDE, lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDE;
 
-  Double_t pv_x, pv_y, pv_z;
+  Double_t pv_x, pv_y, pv_z, bestPV_Z, bestPV_Y, bestPV_X;
+  Double_t bS_Z, bS_X, bS_Y, cosAlphaPV_Z, cosAlphaPV_Y, cosAlphaPV_X;
+  Double_t zPV_Z, zPV_X, zPV_Y, cosAlphaPV_Z, cosAlphaPV_Y, cosAlphaPV_X;
 
+  Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV;
+  Double_t dimuonditrk_cosAlphaDZ, dimuonditrk_ctauPVDZ, dimuonditrk_ctauErrPVDZ;
+  Double_t dimuonditrk_cosAlphaBS, dimuonditrk_ctauPVBS, dimuonditrk_ctauErrPVBS;
+  Double_t dimuonditrk_cosAlphaCA, dimuonditrk_ctauPVCA,dimuonditrk_ctauErrPVCA;
 
-  Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
-  Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, tPFromPV, tMFromPV;
-  Double_t dimuonditrk_mu1W, dimuonditrk_mu2W, dimuonditrk_tPW, dimuonditrk_tMW;
-
-  Double_t dimuonditrk_cosAlphaDZ, dimuonditrk_ctauPVDZ, dimuonditrk_ctauErrPVDZ, dimuonditrk_countTksOfPVDZ, dimuonditrk_vertexWeightDZ;
-  Double_t dimuonditrk_sumPTPVDZ, dimuonditrk_mu1FromPVDZ, dimuonditrk_mu2FromPVDZ, tPFromPVDZ, tMFromPVDZ;
-  Double_t dimuonditrk_mu1DZW, dimuonditrk_mu2DZW, dimuonditrk_tPDZW, dimuonditrk_tMDZW;
-
-  Double_t dimuonditrk_cosAlphaBS, dimuonditrk_ctauPVBS, dimuonditrk_ctauErrPVBS, dimuonditrk_countTksOfPVBS, dimuonditrk_vertexWeightBS;
-  Double_t dimuonditrk_sumPTPVBS, dimuonditrk_mu1FromPVBS, dimuonditrk_mu2FromPVBS, tPFromPVBS, tMFromPVBS;
-  Double_t dimuonditrk_mu1BSW, dimuonditrk_mu2BSW, dimuonditrk_tPBSW, dimuonditrk_tMBSW;
+  Double_t tPFromPVBS, tMFromPVBS, tPFromPVCA, tMFromPVCA;
+  Double_t tPFromPVDZ, tMFromPVDZ, tPFromPV, tMFromPV;
 
   Double_t dca_m1m2, dca_m1t1, dca_m1t2, dca_m2t1, dca_m2t2, dca_t1t2;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
@@ -182,7 +185,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t ditrackTwo_pt, ditrackTwo_eta, ditrackTwo_phi, ditrackTwo_p;
   Double_t ditrackThree_pt, ditrackThree_eta, ditrackThree_phi, ditrackThree_p;
 
-  Double_t triTrack_pt, triTrack_eta, triTrack_phi, triTrack_charge;
+  Double_t triTrack_pt, triTrack_eta, triTrack_phi, triTrack_charge, triTrack_m;
 
   Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt;
   Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt;
@@ -212,21 +215,21 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   //MC
   TLorentzVector gen_jpsi_p4, gen_phi_p4, gen_five_p4;
-  TLorentzVector gen_lowMuon_p4, gen_highMuon_p4, gen_highKaon_p4, gen_lowKaon_p4, gen_fifthTrack_p4;
+  TLorentzVector gen_lowMuon_p4, gen_highMuon_p4, gen_highKaon_p4, gen_lowKaon_p4, genFifthTrack_p4;
 
-  Double_t gen_dimuonditrk_pdg, gen_phi_pdg, gen_jpsi_pdg;
-  Double_t gen_lowMuon_pdg, gen_highMuon_pdg, gen_highKaon_pdg, gen_lowKaon_pdg, gen_fifthTrack_pdg;
-  Double_t gen_lowMuon_mompdg, gen_highMuon_mompdg, gen_highKaon_mompdg, gen_lowKaon_mompdg, gen_fifthTrack_mompdg;
-  Double_t gen_lowMuon_status, gen_highMuon_status, gen_highKaon_status, gen_lowKaon_status, gen_fifthTrack_status;
+  Double_t gen_five_pdg, gen_phi_pdg, gen_jpsi_pdg;
+  Double_t gen_lowMuon_pdg, gen_highMuon_pdg, gen_highKaon_pdg, gen_lowKaon_pdg, genFifthTrack_pdg;
+  Double_t gen_lowMuon_mompdg, gen_highMuon_mompdg, gen_highKaon_mompdg, gen_lowKaon_mompdg, genFifthTrack_mompdg;
+  Double_t gen_lowMuon_status, gen_highMuon_status, gen_highKaon_status, gen_lowKaon_status, genFifthTrack_status;
   Double_t gen_dimuonditrk_prompt, gen_phi_prompt, gen_jpsi_prompt;
   Double_t gen_dimuonditrk_pt, gen_dimuonditrk_p, gen_dimuonditrk_eta;
   Double_t gen_phi_pt, gen_phi_p, gen_phi_eta;
   Double_t gen_jpsi_pt, gen_jpsi_p, gen_jpsi_eta;
-  Double_t gen_lowMuon_phi, gen_highMuon_phi, gen_highKaon_phi, gen_lowKaon_phi, gen_fifthTrack_phi;
+  Double_t gen_lowMuon_phi, gen_highMuon_phi, gen_highKaon_phi, gen_lowKaon_phi, genFifthTrack_phi;
   Double_t gen_dimuonditrk_phi, gen_phi_phi, gen_jpsi_phi;
-  Double_t gen_lowMuon_p, gen_highMuon_p, gen_highKaon_p, gen_lowKaon_p, gen_fifthTrack_p;
-  Double_t gen_lowMuon_pt, gen_highMuon_pt, gen_highKaon_pt, gen_lowKaon_pt, gen_fifthTrack_pt;
-  Double_t gen_lowMuon_eta, gen_highMuon_eta, gen_highKaon_eta, gen_lowKaon_eta, gen_fifthTrack_eta;
+  Double_t gen_lowMuon_p, gen_highMuon_p, gen_highKaon_p, gen_lowKaon_p, genFifthTrack_p;
+  Double_t gen_lowMuon_pt, gen_highMuon_pt, gen_highKaon_pt, gen_lowKaon_pt, genFifthTrack_pt;
+  Double_t gen_lowMuon_eta, gen_highMuon_eta, gen_highKaon_eta, gen_lowKaon_eta, genFifthTrack_eta;
 
   TTree* fivetracks_tree;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
@@ -415,6 +418,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         // fivetracks_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
 
         //TriTrack system
+        fivetracks_tree->Branch("triTrack_m",         &triTrack_m,         "triTrack_m/D");
         fivetracks_tree->Branch("triTrack_pt",         &triTrack_pt,         "triTrack_pt/D");
         fivetracks_tree->Branch("triTrack_eta",        &triTrack_eta,        "triTrack_eta/D");
         fivetracks_tree->Branch("triTrack_phi",        &triTrack_phi,        "triTrack_phi/D");
@@ -484,6 +488,11 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("five_mass_pkp",      &five_mass_pkp,        "five_mass_pkp/D");
         fivetracks_tree->Branch("five_mass_ppp",      &five_mass_ppp,        "five_mass_ppp/D");
 
+        fivetracks_tree->Branch("five_pt",      &five_pt,       "five_pt/D");
+        fivetracks_tree->Branch("five_eta",     &five_eta,      "five_eta/D");
+        fivetracks_tree->Branch("five_phi",     &five_phi,      "five_phi/D");
+        fivetracks_tree->Branch("five_p",       &five_p,        "five_p/D");
+
         fivetracks_tree->Branch("five_cosAlpha",     &five_cosAlpha,        "five_cosAlpha/D");
         fivetracks_tree->Branch("five_ctauPV",       &five_ctauPV,        "five_ctauPV/D");
         fivetracks_tree->Branch("five_ctauErrPV",    &five_ctauErrPV,        "five_ctauErrPV/D");
@@ -500,18 +509,13 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("five_ctauPVBS",      &five_ctauPVBS,        "five_ctauPVBS/D");
         fivetracks_tree->Branch("five_ctauErrPVBS",   &five_ctauErrPVBS,        "five_ctauErrPVBS/D");
 
-        fivetracks_tree->Branch("five_pt",      &five_pt,       "five_pt/D");
-        fivetracks_tree->Branch("five_eta",     &five_eta,      "five_eta/D");
-        fivetracks_tree->Branch("five_phi",     &five_phi,      "five_phi/D");
-        fivetracks_tree->Branch("five_p",       &five_p,      "five_p/D");
-
         fivetracks_tree->Branch("five_vProb",       &five_vProb,      "five_vProb/D");
         fivetracks_tree->Branch("five_nDof",        &five_nDof,       "five_nDof/D");
         fivetracks_tree->Branch("five_vChi2",       &five_vChi2,      "five_vChi2/D");
 
-        fivetracks_tree->Branch("five_vtxX",     &five_vtxX,      "five_vtxX/D");
-        fivetracks_tree->Branch("five_vtxY",     &five_vtxY,      "five_vtxY/D");
-        fivetracks_tree->Branch("five_vtxZ",     &five_vtxZ,      "five_vtxZ/D");
+        fivetracks_tree->Branch("five_vx",     &five_vx,      "five_vx/D");
+        fivetracks_tree->Branch("five_vy",     &five_vy,      "five_vy/D");
+        fivetracks_tree->Branch("five_vz",     &five_vz,      "five_vz/D");
 
         fivetracks_tree->Branch("bestPV_X",     &bestPV_X,      "bestPV_X/D");
         fivetracks_tree->Branch("bestPV_Y",     &bestPV_Y,      "bestPV_Y/D");
@@ -529,6 +533,9 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("zPV_Y",     &zPV_Y,      "zPV_Y/D");
         fivetracks_tree->Branch("zPV_Z",     &zPV_Z,      "zPV_Z/D");
 
+        fivetracks_tree->Branch("five_charge",     &five_charge,       "five_charge/I");
+
+
       }
 
       if (isMC_ || OnlyGen_) {
@@ -541,9 +548,9 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("gen_lowMuon_p4",  "TLorentzVector",  &gen_lowMuon_p4);
         dimuonditrk_tree->Branch("gen_highMuon_p4",  "TLorentzVector",  &gen_highMuon_p4);
         dimuonditrk_tree->Branch("gen_lowKaon_p4",  "TLorentzVector",  &gen_lowKaon_p4);
-        dimuonditrk_tree->Branch("gen_fifthTrack_p4",  "TLorentzVector",  &gen_fifthTrack_p4);
+        dimuonditrk_tree->Branch("genFifthTrack_p4",  "TLorentzVector",  &genFifthTrack_p4);
 
-        dimuonditrk_tree->Branch("gen_dimuonditrk_pdg",&gen_dimuonditrk_pdg,"gen_dimuonditrk_pdg/D");
+        dimuonditrk_tree->Branch("gen_five_pdg",&gen_five_pdg,"gen_five_pdg/D");
         dimuonditrk_tree->Branch("gen_phi_pdg",&gen_phi_pdg,"gen_phi_pdg/D");
         dimuonditrk_tree->Branch("gen_jpsi_pdg",&gen_jpsi_pdg,"gen_jpsi_pdg/D");
 
@@ -551,43 +558,43 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         dimuonditrk_tree->Branch("gen_highMuon_pdg",&gen_highMuon_pdg,"gen_highMuon_pdg/D");
         dimuonditrk_tree->Branch("gen_highKaon_pdg",&gen_highKaon_pdg,"gen_highKaon_pdg/D");
         dimuonditrk_tree->Branch("gen_lowKaon_pdg",&gen_lowKaon_pdg,"gen_lowKaon_pdg/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_pdg",&gen_fifthTrack_pdg,"gen_fifthTrack_pdg/D");
+        dimuonditrk_tree->Branch("genFifthTrack_pdg",&genFifthTrack_pdg,"genFifthTrack_pdg/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_mompdg",&gen_lowMuon_mompdg,"gen_lowMuon_mompdg/D");
         dimuonditrk_tree->Branch("gen_highMuon_mompdg",&gen_highMuon_mompdg,"gen_highMuon_mompdg/D");
         dimuonditrk_tree->Branch("gen_highKaon_mompdg",&gen_highKaon_mompdg,"gen_highKaon_mompdg/D");
         dimuonditrk_tree->Branch("gen_lowKaon_mompdg",&gen_lowKaon_mompdg,"gen_lowKaon_mompdg/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_mompdg",&gen_fifthTrack_mompdg,"gen_fifthTrack_mompdg/D");
+        dimuonditrk_tree->Branch("genFifthTrack_mompdg",&genFifthTrack_mompdg,"genFifthTrack_mompdg/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_status",&gen_lowMuon_status,"gen_lowMuon_status/D");
         dimuonditrk_tree->Branch("gen_highMuon_status",&gen_highMuon_status,"gen_highMuon_status/D");
         dimuonditrk_tree->Branch("gen_highKaon_status",&gen_highKaon_status,"gen_highKaon_status/D");
         dimuonditrk_tree->Branch("gen_lowKaon_status",&gen_lowKaon_status,"gen_lowKaon_status/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_status",&genFifthTrack_status,"gen_fifthTrack_status/D");
+        dimuonditrk_tree->Branch("genFifthTrack_status",&genFifthTrack_status,"genFifthTrack_status/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_p",&gen_lowMuon_p,"gen_lowMuon_p/D");
         dimuonditrk_tree->Branch("gen_highMuon_p",&gen_highMuon_p,"gen_highMuon_p/D");
         dimuonditrk_tree->Branch("gen_highKaon_p",&gen_highKaon_p,"gen_highKaon_p/D");
         dimuonditrk_tree->Branch("gen_lowKaon_p",&gen_lowKaon_p,"gen_lowKaon_p/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_p",&genFifthTrack_p,"gen_fifthTrack_p/D");
+        dimuonditrk_tree->Branch("genFifthTrack_p",&genFifthTrack_p,"genFifthTrack_p/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_pt",&gen_lowMuon_pt,"gen_lowMuon_pt/D");
         dimuonditrk_tree->Branch("gen_highMuon_pt",&gen_highMuon_pt,"gen_highMuon_pt/D");
         dimuonditrk_tree->Branch("gen_highKaon_pt",&gen_highKaon_pt,"gen_highKaon_pt/D");
         dimuonditrk_tree->Branch("gen_lowKaon_pt",&gen_lowKaon_pt,"gen_lowKaon_pt/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_pt",&genFifthTrack_pt,"gen_fifthTrack_pt/D");
+        dimuonditrk_tree->Branch("genFifthTrack_pt",&genFifthTrack_pt,"genFifthTrack_pt/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_eta",&gen_lowMuon_eta,"gen_lowMuon_eta/D");
         dimuonditrk_tree->Branch("gen_highMuon_eta",&gen_highMuon_eta,"gen_highMuon_eta/D");
         dimuonditrk_tree->Branch("gen_highKaon_eta",&gen_highKaon_eta,"gen_highKaon_eta/D");
         dimuonditrk_tree->Branch("gen_lowKaon_eta",&gen_lowKaon_eta,"gen_lowKaon_eta/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_eta",&genFifthTrack_eta,"gen_fifthTrack_eta/D");
+        dimuonditrk_tree->Branch("genFifthTrack_eta",&genFifthTrack_eta,"genFifthTrack_eta/D");
 
         dimuonditrk_tree->Branch("gen_lowMuon_phi",&gen_lowMuon_phi,"gen_lowMuon_phi/D");
         dimuonditrk_tree->Branch("gen_highMuon_phi",&gen_highMuon_phi,"gen_highMuon_phi/D");
         dimuonditrk_tree->Branch("gen_highKaon_phi",&gen_highKaon_phi,"gen_highKaon_phi/D");
         dimuonditrk_tree->Branch("gen_lowKaon_phi",&gen_lowKaon_phi,"gen_lowKaon_phi/D");
-        dimuonditrk_tree->Branch("gen_fifthTrack_phi",&genFifthTrack_phi,"gen_fifthTrack_phi/D");
+        dimuonditrk_tree->Branch("genFifthTrack_phi",&genFifthTrack_phi,"genFifthTrack_phi/D");
 
         dimuonditrk_tree->Branch("gen_dimuonditrk_prompt",&gen_dimuonditrk_prompt,"gen_dimuonditrk_prompt/D");
         dimuonditrk_tree->Branch("gen_phi_prompt",&gen_phi_prompt,"gen_phi_prompt/D");
@@ -696,7 +703,7 @@ gen_lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_highKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 gen_lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-gen_fifthTrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+genFifthTrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 gen_dimuonditrk_pdg = 0;
 gen_five_pdg = 0;
@@ -763,13 +770,32 @@ if(!OnlyGen_)
       tPFromPVBS = dimuonditrk_cand->userFloat("tPFromPVBS");
       tMFromPVBS = dimuonditrk_cand->userFloat("tMFromPVBS");
 
-      five_pt
-      five_eta
-      five_phi
-      five_p
-      five_vProb
-      five_nDof
-      five_vChi2
+      five_pt       = five_cand.pt();
+      five_eta      = five_cand.eta();
+      five_phi      = five_cand.phi();
+      five_p        = five_cand.p();
+      five_vProb    = five_cand.userFloat("vProb");
+      five_nDof     = five_cand.userFloat("nDof");
+      five_vChi2    = five_cand.userFloat("vChi2");
+      five_charge   = five_cand.charge();
+
+      five_m           = five_cand.m();
+      five_m_ref       = five_cand.userFloat("mass_ref_0");
+      five_mass_ppk    = five_cand.userFloat("mass_ref_1");
+      five_mass_kpp    = five_cand.userFloat("mass_ref_2");
+      five_mass_pkp    = five_cand.userFloat("mass_ref_3");
+      five_mass_ppp    = five_cand.userFloat("mass_ref_4");
+
+      dca_m1t3 = five_cand.userFloat("dca_m1t3");
+      dca_m2t3 = five_cand.userFloat("dca_m2t3");
+      dca_t1t3 = five_cand.userFloat("dca_t1t3");
+      dca_t2t3 = five_cand.userFloat("dca_t2t3");
+
+      ttFromPV        = five_cand.userFloat("ttFromPV");
+      ttFromPVDZ      = five_cand.userFloat("ttFromPVDZ");
+      ttFromPVBS      = five_cand.userFloat("ttFromPVBS");
+      ttFromPV_alpha  = five_cand.userFloat("ttFromPV_alpha");
+
 
       dimuonditrk_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha");
       dimuonditrk_ctauPV = dimuonditrk_cand->userFloat("ctauPV");
@@ -905,6 +931,13 @@ if(!OnlyGen_)
       lowTrackMuonDP  = five_cand.userFloat("thirdTrackMuonDP");
       lowTrackMuonDPt  = five_cand.userFloat("thirdTrackMuonDPt");
 
+      dimuonditrk_eta   = dimuonditrk_cand.eta();
+      dimuonditrk_phi   = dimuonditrk_cand.phi();
+      dimuonditrk_y     = dimuonditrk_cand.y();
+      five_vx    = dimuonditrk_cand.userFloat("vtxX");
+      five_vy    = dimuonditrk_cand.userFloat("vtxY");
+      five_vz    = dimuonditrk_cand.userFloat("vtxZ");
+
       highTrack_pt      = trackOne_cand->pt();
       highTrack_eta     = trackOne_cand->eta();
       highTrack_phi     = trackOne_cand->phi();
@@ -969,6 +1002,7 @@ if(!OnlyGen_)
       dimuonDiTrkThree_phi    = dimuonDiTrkThree_cand->phi();
       dimuonDiTrkThree_charge = dimuonDiTrkThree_cand->charge();
 
+      triTrack_m     = triTrack_cand->m();
       triTrack_pt     = triTrack_cand->pt();
       triTrack_eta    = triTrack_cand->eta();
       triTrack_phi    = triTrack_cand->phi();
@@ -984,7 +1018,7 @@ if(!OnlyGen_)
         gen_lowMuon_p4.SetPtEtaPhiM(-1.0,0.0,0.0,-0.01);
         gen_highMuon_p4.SetPtEtaPhiM(-1.0,0.0,0.0,-0.01);
         gen_lowKaon_p4.SetPtEtaPhiM(-1.0,0.0,0.0,-0.01);
-        gen_fifthTrack_p4.SetPtEtaPhiM(-1.0,0.0,0.0,-0.01);
+        genFifthTrack_p4.SetPtEtaPhiM(-1.0,0.0,0.0,-0.01);
 
         gen_dimuonditrk_pdg = 0.0;
         gen_phi_pdg         = 0.0;
@@ -995,7 +1029,7 @@ if(!OnlyGen_)
         gen_highMuon_pdg    = 0.0;
         gen_highKaon_pdg    = 0.0;
         gen_lowKaon_pdg     = 0.0;
-        gen_fifthTrack_pdg     = 0.0;
+        genFifthTrack_pdg     = 0.0;
 
         gen_lowMuon_mompdg     = 0.0;
         gen_highMuon_mompdg    = 0.0;
@@ -1031,19 +1065,19 @@ if(!OnlyGen_)
         gen_highMuon_pt    = 0.0;
         gen_highKaon_pt    = 0.0;
         gen_lowKaon_pt     = 0.0;
-        gen_fifthTrack_pt  = 0.0;
+        genFifthTrack_pt  = 0.0;
 
         gen_lowMuon_p     = 0.0;
         gen_highMuon_p    = 0.0;
         gen_highKaon_p    = 0.0;
         gen_lowKaon_p     = 0.0;
-        gen_fifthTrack_p  = 0.0;
+        genFifthTrack_p  = 0.0;
 
         gen_lowMuon_eta     = 0.0;
         gen_highMuon_eta    = 0.0;
         gen_highKaon_eta    = 0.0;
         gen_lowKaon_eta     = 0.0;
-        gen_fifthTrack_eta  = 0.0;
+        genFifthTrack_eta  = 0.0;
 
         gen_lowMuon_phi     = 0.0;
         gen_highMuon_phi    = 0.0;
@@ -1108,21 +1142,21 @@ if(!OnlyGen_)
 
         if(hasFifthGen>0.0)
         {
-          gen_fifthTrack_p4.SetPtEtaPhiM(genFifthTrack->pt(),genFifthTrack->eta(),genFifthTrack->phi(),genFifthTrack->mass());
+          genFifthTrack_p4.SetPtEtaPhiM(genFifthTrack->pt(),genFifthTrack->eta(),genFifthTrack->phi(),genFifthTrack->mass());
 
           if(genfifthTrack->numberOfMothers()>0)
             fifthMom  = genFifthTrack->motherRef();
 
-          gen_fifthTrack_pdg     = (Double_t)genFifthTrack->pdgId();
+          genFifthTrack_pdg     = (Double_t)genFifthTrack->pdgId();
 
           if(phiMomLow.isNonnull() && genFifthTrack->numberOfMothers()>0)
-            gen_fifthTrack_mompdg  = fifthMom->pdgId();
+            genFifthTrack_mompdg  = fifthMom->pdgId();
 
-          gen_fifthTrack_status  = (Double_t)genFifthTrack->status();
-          gen_fifthTrack_pt      = (Double_t)genFifthTrack->pt();
-          gen_fifthTrack_p       = (Double_t)genFifthTrack->p();
-          gen_fifthTrack_eta     = (Double_t)genFifthTrack->eta();
-          gen_fifthTrack_phi     = (Double_t)genFifthTrack->phi();
+          genFifthTrack_status  = (Double_t)genFifthTrack->status();
+          genFifthTrack_pt      = (Double_t)genFifthTrack->pt();
+          genFifthTrack_p       = (Double_t)genFifthTrack->p();
+          genFifthTrack_eta     = (Double_t)genFifthTrack->eta();
+          genFifthTrack_phi     = (Double_t)genFifthTrack->phi();
 
 
         }

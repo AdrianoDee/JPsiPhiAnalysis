@@ -1,5 +1,6 @@
 *.pyc
 crab_projects/
-jpsiphi/jpsiphi/test/mclists/BBbar*.py
+jpsiphi/jpsiphi/test/mclists/*.py
+*.DS_store
 *~
 submit_num.txt

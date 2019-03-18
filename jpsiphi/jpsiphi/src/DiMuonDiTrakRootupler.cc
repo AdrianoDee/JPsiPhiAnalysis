@@ -1255,4 +1255,4 @@ void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& des
 }
 
 //define this as a plug-in
-DPtFINE_FWK_MODULE(DiMuonDiTrakRootupler);
+DEFINE_FWK_MODULE(DiMuonDiTrakRootupler);
