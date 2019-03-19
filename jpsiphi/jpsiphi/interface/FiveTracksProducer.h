@@ -76,7 +76,7 @@ class FiveTracksProducer : public edm::EDProducer {
   UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
-  bool isMC_;
+  bool IsMC_;
 
   edm::EDGetTokenT<pat::MuonCollection> allMuons_;
 

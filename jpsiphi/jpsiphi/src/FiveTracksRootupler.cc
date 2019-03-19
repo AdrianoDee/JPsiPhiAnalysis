@@ -137,12 +137,16 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
   Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt;
 
-  Doublet_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDPt;
-  Doublet_t lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDPt;
-  Doublet_t thirdTrackMuonDR, thirdTrackMuonDP, thirdTrackMuonDPt;
+  Double_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDPt;
+  Double_t lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDPt;
+  Double_t thirdTrackMuonDR, thirdTrackMuonDP, thirdTrackMuonDPt;
 
   Double_t highMuon_eta, lowMuon_eta, highMuon_phi, lowMuon_phi, dimuonditrk_m;
   Double_t highMuon_dz, lowMuon_dz, highMuon_dxy, lowMuon_dxy;
+  Double_t highMuon_charge, lowMuon_charge;
+
+  UInt_t lowMuon_NPixelHits, lowMuon_NStripHits, lowMuon_NTrackhits, lowMuon_NBPixHits, lowMuon_NPixLayers, lowMuon_NTraLayers, lowMuon_NStrLayers, lowMuon_NBPixLayers;
+  UInt_t highMuon_NPixelHits, highMuon_NStripHits, highMuon_NTrackhits, highMuon_NBPixHits, highMuon_NPixLayers, highMuon_NTraLayers, highMuon_NStrLayers, highMuon_NBPixLayers;
 
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
   Bool_t highMuon_isLoose, highMuon_isSoft, highMuon_isMedium, highMuon_isHighPt, highMuon_isTight;
@@ -163,7 +167,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t tPFromPVBS, tMFromPVBS, tPFromPVCA, tMFromPVCA;
   Double_t tPFromPVDZ, tMFromPVDZ, tPFromPV, tMFromPV;
-  Double_t ttFromPV, ttFromPVDZ, ttFromPVBS, tTFromPVCA;
+  Double_t tTFromPV, tTFromPVDZ, tTFromPVBS, tTFromPVCA;
 
   Double_t dca_m1m2, dca_m1t1, dca_m1t2, dca_m2t1, dca_m2t2, dca_t1t2;
   Double_t dca_m1t3, dca_m2t3, dca_t1t3, dca_t2t3;
@@ -849,10 +853,10 @@ if(!OnlyGen_)
       dca_t1t3 = five_cand.userFloat("dca_t1t3");
       dca_t2t3 = five_cand.userFloat("dca_t2t3");
 
-      ttFromPV        = five_cand.userFloat("ttFromPV");
-      ttFromPVDZ      = five_cand.userFloat("ttFromPVDZ");
-      ttFromPVBS      = five_cand.userFloat("ttFromPVBS");
-      ttFromPVCA      = five_cand.userFloat("ttFromPV_alpha");
+      tTFromPV        = five_cand.userFloat("tTFromPV");
+      tTFromPVDZ      = five_cand.userFloat("tTFromPVDZ");
+      tTFromPVBS      = five_cand.userFloat("tTFromPVBS");
+      tTFromPVCA      = five_cand.userFloat("tTFromPV_alpha");
 
 
       dimuonditrk_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha");

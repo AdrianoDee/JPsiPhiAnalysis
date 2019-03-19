@@ -158,8 +158,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   edm::Handle<reco::VertexCollection> priVtxs;
   iEvent.getByToken(thePVs_, priVtxs);
 
-  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
-  iEvent.getByToken(TriggerCollection_,trig);
 
   // const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
@@ -177,6 +175,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   float FiveTrackMassMax = FiveTrackMassCuts_[1];
   float FiveTrackMassMin = FiveTrackMassCuts_[0];
 
+  pat::TriggerObjectStandAloneCollection filteredColl;
+  std::map<int,pat::TriggerObjectStandAlone> matchedColl;
+  std::map<size_t,double> trackDeltaR,trackDeltaPt;
+  std::vector < UInt_t > filterResults;
+  std::map<int,UInt_t> filters;
 
   //Trigger Collections
   for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
@@ -204,9 +207,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   }
 
   //Tracks Collections Trigger Matching
-  for (size_t i = 0; i < trak->size(); i++) {
+  for (size_t i = 0; i < track->size(); i++) {
 
-    auto t = trak->at(i);
+    auto t = track->at(i);
 
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
@@ -583,26 +586,26 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("ctauPVBS",ctauPV[0]);
              fiveCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
 
-             fiveCand.addUserFloat("ttFromPVBS",float(fromPV[0]));
+             fiveCand.addUserFloat("tTFromPVBS",float(fromPV[0]));
 
 
              fiveCand.addUserFloat("cosAlpha",cosAlpha[1]);
              fiveCand.addUserFloat("ctauPV",ctauPV[1]);
              fiveCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
 
-             fiveCand.addUserFloat("ttFromPV",float(fromPV[1]));
+             fiveCand.addUserFloat("tTFromPV",float(fromPV[1]));
 
              fiveCand.addUserFloat("cosAlpha_alpha",cosAlpha[2]);
              fiveCand.addUserFloat("ctauPV_alpha",ctauPV[2]);
              fiveCand.addUserFloat("ctauErrPV_alpha",ctauErrPV[2]);
 
-             fiveCand.addUserFloat("ttFromPV_alpha",float(fromPV[2]));
+             fiveCand.addUserFloat("tTFromPV_alpha",float(fromPV[2]));
 
              fiveCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
              fiveCand.addUserFloat("ctauPVDZ",ctauPV[3]);
              fiveCand.addUserFloat("ctauErrPVDZ",ctauErrPV[3]);
 
-             fiveCand.addUserFloat("ttFromPVDZ",float(fromPV[3]));
+             fiveCand.addUserFloat("tTFromPVDZ",float(fromPV[3]));
              ///DCA
              std::vector<float> DCAs;
 
@@ -643,13 +646,13 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                 if(theGenMap.isValid())
                 {
                   //posTrack
-                  auto refFifth = trak->refAt(i);
+                  auto refFifth = track->refAt(i);
 
                   if(theGenMap->contains(refFifth.id()))
                   {
-                   if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]).isNonnull())
+                   if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
                    {
-                     auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]);
+                     auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
                      hasFifthGen = 1.0;
                      fiveCand.addDaughter(*genP,"fifthTrackGen");
 
