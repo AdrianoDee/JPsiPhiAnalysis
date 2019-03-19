@@ -154,8 +154,6 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Bool_t lowMuon_isTracker, lowMuon_isGlobal, highMuon_isTracker, highMuon_isGlobal;
   UInt_t lowMuon_type, highMuon_type;
 
-  Double_t highTrackMuonDR, highTrackMuonDP, highTrackMuonDE, lowTrackMuonDR, lowTrackMuonDP, lowTrackMuonDE;
-
   Double_t pv_x, pv_y, pv_z, bestPV_Z, bestPV_Y, bestPV_X;
   Double_t bS_Z, bS_X, bS_Y, cosAlphaPV_Z, cosAlphaPV_Y, cosAlphaPV_X;
   Double_t zPV_Z, zPV_X, zPV_Y;
@@ -924,11 +922,11 @@ if(!OnlyGen_)
       lowMuon_dz  = lowMuon->innerTrack()->dz();
       lowMuon_dxy  = lowMuon->innerTrack()->dxy();
 
-      lowMuon_isTight    = lowMuon->isTightMuon(thePrimaryV);
+      lowMuon_isTight    = lowMuon->isTightMuon(bestPV);
       lowMuon_isLoose    = lowMuon->isLooseMuon();
-      lowMuon_isSoft     = lowMuon->isSoftMuon(thePrimaryV);
+      lowMuon_isSoft     = lowMuon->isSoftMuon(bestPV);
       lowMuon_isMedium   = lowMuon->isMediumMuon();
-      lowMuon_isHighPt   = lowMuon->isHighPtMuon(thePrimaryV);
+      lowMuon_isHighPt   = lowMuon->isHighPtMuon(bestPV);
       lowMuon_isTracker  = lowMuon->isTrackerMuon();
       lowMuon_isGlobal   = lowMuon->isGlobalMuon();
       lowMuon_NPixelHits = lowMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
@@ -940,11 +938,11 @@ if(!OnlyGen_)
       lowMuon_NStrLayers = lowMuon->innerTrack()->hitPattern().stripLayersWithMeasurement();
       lowMuon_NBPixLayers = lowMuon->innerTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-      highMuon_isTight    = highMuon->isTightMuon(thePrimaryV);
+      highMuon_isTight    = highMuon->isTightMuon(bestPV);
       highMuon_isLoose    = highMuon->isLooseMuon();
-      highMuon_isSoft     = highMuon->isSoftMuon(thePrimaryV);
+      highMuon_isSoft     = highMuon->isSoftMuon(bestPV);
       highMuon_isMedium   = highMuon->isMediumMuon();
-      highMuon_isHighPt   = highMuon->isHighPtMuon(thePrimaryV);
+      highMuon_isHighPt   = highMuon->isHighPtMuon(bestPV);
       highMuon_isTracker  = highMuon->isTrackerMuon();
       highMuon_isGlobal   = highMuon->isGlobalMuon();
       highMuon_NPixelHits = highMuon->innerTrack()->hitPattern().numberOfValidPixelHits();
@@ -1262,7 +1260,7 @@ if(!OnlyGen_)
         {
           genFifthTrack_p4.SetPtEtaPhiM(genFifthTrack->pt(),genFifthTrack->eta(),genFifthTrack->phi(),genFifthTrack->mass());
 
-          if(genfifthTrack->numberOfMothers()>0)
+          if(genFifthTrack->numberOfMothers()>0)
             fifthMom  = genFifthTrack->motherRef();
 
           genFifthTrack_pdg     = (Double_t)genFifthTrack->pdgId();

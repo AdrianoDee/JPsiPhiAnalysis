@@ -205,7 +205,6 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   IsMC_(iConfig.getParameter<bool>("IsMC")),
-  doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
   AddSameSig_(iConfig.getParameter<bool>("AddSS")),
   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
 {

@@ -13,6 +13,11 @@ float FiveTracksProducer::DeltaR(const pat::PackedCandidate t1, const pat::Trigg
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
+float FiveTracksProducer::DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   return (fabs(t1.pt()-t2.pt())/t2.pt());
+}
+
 bool FiveTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
@@ -99,7 +104,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+  TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -624,7 +629,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
 
 
-
              fiveCand.addUserFloat("vProb",five_vp_fit);
              fiveCand.addUserFloat("nDof",five_nd_fit);
              fiveCand.addUserFloat("vChi2",five_x2_fit);
@@ -634,14 +638,14 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("dca_t1t3",DCAs[2]);
              fiveCand.addUserFloat("dca_t2t3",DCAs[3]);
 
-             fiveCand.addDaughter(first_five_ref,"first_five_ref");
+             fiveCand.addDaughter(fiveCand_rf,"first_five_ref");
 
              fiveCand.addUserInt("fifthKaonMatch",filters[i]);
 
 
              if(IsMC_)
               {
-                float hasFifthGen -1.0;
+                float hasFifthGen = -1.0;
 
                 if(theGenMap.isValid())
                 {
