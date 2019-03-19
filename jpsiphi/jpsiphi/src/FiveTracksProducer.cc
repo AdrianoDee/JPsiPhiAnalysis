@@ -93,6 +93,7 @@ bool FiveTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrack"))),
   TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
@@ -100,7 +101,10 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
-  numMasses_(iConfig.getParameter<uint32_t>("NumMasses"))
+  numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
+  HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+  IsMC_(iConfig.getParameter<bool>("IsMC")),
+
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
 
@@ -140,6 +144,12 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   edm::Handle<std::vector<pat::PackedCandidate> > track;
   iEvent.getByToken(TrackCollection_,track);
 
+  edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
+  iEvent.getByToken(TriggerCollection_,trig);
+
+  edm::Handle< edm::TriggerResults > triggerResults_handle;
+  iEvent.getByToken( TriggerResults_ , triggerResults_handle);
+
   edm::Handle<reco::BeamSpot> theBeamSpot;
   iEvent.getByToken(thebeamspot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
@@ -157,6 +167,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
   const MagneticField* field = magneticField.product();
 
+  const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
+
   // Kinematic fit
   edm::ESHandle<TransientTrackBuilder> theB;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
@@ -164,6 +176,73 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   float FiveTrackMassMax = FiveTrackMassCuts_[1];
   float FiveTrackMassMin = FiveTrackMassCuts_[0];
+
+
+  //Trigger Collections
+  for ( size_t iTrigObj = 0; iTrigObj < trig->size(); ++iTrigObj ) {
+
+    pat::TriggerObjectStandAlone unPackedTrigger( trig->at( iTrigObj ) );
+
+    unPackedTrigger.unpackPathNames( names );
+    unPackedTrigger.unpackFilterLabels(iEvent,*triggerResults_handle);
+
+    bool filtered = false;
+    UInt_t thisFilter = 0;
+
+    for (size_t i = 0; i < HLTFilters_.size(); i++)
+      if(unPackedTrigger.hasFilterLabel(HLTFilters_[i]))
+        {
+          thisFilter += (1<<i);
+          filtered = true;
+        }
+
+    if(filtered)
+    {
+      filteredColl.push_back(unPackedTrigger);
+      filterResults.push_back(thisFilter);
+    }
+  }
+
+  //Tracks Collections Trigger Matching
+  for (size_t i = 0; i < trak->size(); i++) {
+
+    auto t = trak->at(i);
+
+    bool matched = false;
+    for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
+  for ( size_t iTrigObj = 0; iTrigObj < filteredColl.size(); ++iTrigObj )
+    {
+      auto thisTrig = filteredColl.at(iTrigObj);
+      if(MatchByDRDPt(t,filteredColl[iTrigObj]))
+      {
+        if(matched)
+        {
+          if(trackDeltaR[i] > DeltaR(t,thisTrig))
+          {
+            filters[i] = filterResults[iTrigObj];
+            matchedColl[i] = thisTrig;
+            trackDeltaR[i] = fabs(DeltaR(t,thisTrig));
+            trackDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
+          }
+        }else
+        {
+          filters[i] = filterResults[iTrigObj];
+          matchedColl[i] = thisTrig;
+          trackDeltaR[i] = fabs(DeltaR(t,thisTrig));
+          trackDeltaPt[i] = fabs(DeltaPt(t,thisTrig));
+        }
+
+        matched = true;
+      }
+    }
+    if(!matched)
+    {
+      filters[i] = 0;
+      trackDeltaR[i] = -1.0;
+      trackDeltaPt[i] = -1.0;
+    }
+
+  }
 
   //Sorting new masses - Kaon is the baseline
   // std::sort( ExtraMasses_.begin(), ExtraMasses_.end() );
@@ -469,8 +548,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          fiveCand.addUserFloat("thirdTrackMuonDP",minDP_third);
          fiveCand.addUserFloat("thirdTrackMuonDt",minDPt_third);
 
-         pat::CompositeCandidate thisFive;
-         auto five_cand_ref = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
          for(size_t j = 0; j<numMasses_;j++)
           fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
@@ -555,6 +632,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("dca_t2t3",DCAs[3]);
 
              fiveCand.addDaughter(first_five_ref,"first_five_ref");
+
+             fiveCand.addUserInt("fifthKaonMatch",filters[i]);
 
 
              if(IsMC_)

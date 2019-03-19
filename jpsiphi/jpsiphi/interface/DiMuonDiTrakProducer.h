@@ -84,12 +84,12 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
   edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrakCollection_;
-  double trakPtCut_;
+  double TrakPtCut_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   std::vector<double> DiMuonMassCuts_;
   std::vector<double> TrakTrakMassCuts_;
   std::vector<double> DiMuonDiTrakMassCuts_;
@@ -99,8 +99,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
   bool IsMC_;
-  bool doDoubleConstant_;
-  bool addSameSig_;
+  bool AddSameSig_;
   bool doPionRefit_;
 
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;

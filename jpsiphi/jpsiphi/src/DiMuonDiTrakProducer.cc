@@ -188,13 +188,13 @@ const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTTriggerMixedCandidate(
 DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<edm::View<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
-  trakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.7),
+  TrakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.7),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   //DiMuonGenMap_(iConfig.existsAs<edm::InputTag>("DiMuonMatcher") ? consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("DiMuonMatcher"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+  TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
   TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
   DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
@@ -206,7 +206,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   IsMC_(iConfig.getParameter<bool>("IsMC")),
   doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
-  addSameSig_(iConfig.getParameter<bool>("AddSS")),
+  AddSameSig_(iConfig.getParameter<bool>("AddSS")),
   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
@@ -246,7 +246,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   iEvent.getByToken(TriggerCollection_,trig);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+  iEvent.getByToken( TriggerResults_ , triggerResults_handle);
 
   edm::Handle<pat::PackedGenParticleCollection> packed;
   iEvent.getByToken(packCands_,  packed);
@@ -376,8 +376,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
        for (size_t i = 0; i < trak->size(); i++) {
          auto posTrack = trak->at(i);
 
-         if(!addSameSig_ && posTrack.charge()<=0) continue;
-         if(posTrack.pt()<trakPtCut_) continue;
+         if(!AddSameSig_ && posTrack.charge()<=0) continue;
+         if(posTrack.pt()<TrakPtCut_) continue;
 	       //if(!IsMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
@@ -389,12 +389,12 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 // loop over second track candidate, negative charge
          // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
          int jstart = 0;
-         if(addSameSig_) jstart = i+1;
+         if(AddSameSig_) jstart = i+1;
          for (size_t j = jstart; j < trak->size(); j++) {
            auto negTrack = trak->at(j);
 
-           if(!addSameSig_ && negTrack.charge()>=0) continue;
-           if(negTrack.pt()<trakPtCut_) continue;
+           if(!AddSameSig_ && negTrack.charge()>=0) continue;
+           if(negTrack.pt()<TrakPtCut_) continue;
 
   	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
@@ -865,122 +865,6 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                  }
               }
 
-
-           //Mass Doubly Constrained fit
-           //JPsi
-           // std::cout << "debug    18 "<< std::endl;
-           if(doDoubleConstant_)
-           {
-             std::vector<RefCountedKinematicParticle> JPsiParticles;
-             std::vector<reco::TransientTrack> JPsiTrTk;
-             JPsiTrTk.push_back(xTracks[0]);
-             JPsiTrTk.push_back(xTracks[1]);
-
-             JPsiParticles.push_back(pFactory.particle(JPsiTrTk[0],muonMass,float(0),float(0),muonSigma));
-             JPsiParticles.push_back(pFactory.particle(JPsiTrTk[1],muonMass,float(0),float(0),muonSigma));
-
-             KinematicParticleVertexFitter fitter;
-             KinematicParticleFitter csFitterJPsi;
-             RefCountedKinematicTree jpsiVertexFitTree;
-             jpsiVertexFitTree = fitter.fit(JPsiParticles);
-
-
-             if (jpsiVertexFitTree->isValid())
-             {
-
-               const ParticleMass jpsi_mass(JPsiMass_);
-               float jpsi_sigma = 1E-6;
-
-               KinematicConstraint * jpsi_c = new MassKinematicConstraint(jpsi_mass,jpsi_sigma);
-
-               jpsiVertexFitTree->movePointerToTheTop();
-               jpsiVertexFitTree = csFitterJPsi.fit(jpsi_c,jpsiVertexFitTree);
-
-               if (jpsiVertexFitTree->isValid())
-               {
-
-                 jpsiVertexFitTree->movePointerToTheTop();
-               	 RefCountedKinematicParticle fitJPsi = jpsiVertexFitTree->currentParticle();
-
-                 //Phi
-                 std::vector<RefCountedKinematicParticle> allPsiTDaughters;
-
-                 allPsiTDaughters.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
-                 allPsiTDaughters.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
-                 allPsiTDaughters.push_back(fitJPsi);
-
-                 KinematicConstrainedVertexFitter vertexFitter;
-                 MultiTrackKinematicConstraint *phi_mtc = new  TwoTrackMassKinematicConstraint(PhiMass_);
-                 RefCountedKinematicTree PsiPhiTree = vertexFitter.fit(allPsiTDaughters,phi_mtc);
-
-                 if (!PsiPhiTree->isEmpty()) {
-                    PsiPhiTree->movePointerToTheTop();
-                    RefCountedKinematicParticle fitPsiTrTr = PsiPhiTree->currentParticle();
-                    RefCountedKinematicVertex PsiTDecayVertex = PsiPhiTree->currentDecayVertex();
-             // Get PsiT reffited
-                    double dimuontt_ma_fit = 14000.;
-                    double dimuontt_vp_fit = -9999.;
-                    double dimuontt_x2_fit = 10000.;
-                    double dimuontt_ndof_fit = 10000.;
-
-                    if (fitPsiTrTr->currentState().isValid()) {
-                      dimuontt_ma_fit = fitPsiTrTr->currentState().mass();
-                      dimuontt_x2_fit = PsiTDecayVertex->chiSquared();
-                      dimuontt_vp_fit = ChiSquaredProbability(dimuontt_x2_fit,
-                                                           (double)(PsiTDecayVertex->degreesOfFreedom()));
-                      dimuontt_ndof_fit = (double)(PsiTDecayVertex->degreesOfFreedom());
-                    }
-
-                    if ( dimuontt_vp_fit > 0.0 ) {
-                         TVector3 vtx;
-                         TVector3 pvtx;
-                         VertexDistanceXY vdistXY;
-                         int   dimuontt_ch_fit = DiMuonTTCand.charge();
-                         double dimuontt_px_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().x();
-                         double dimuontt_py_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().y();
-                         double dimuontt_pz_fit = fitPsiTrTr->currentState().kinematicParameters().momentum().z();
-                         double dimuontt_en_fit = sqrt(dimuontt_ma_fit*dimuontt_ma_fit+dimuontt_px_fit*dimuontt_px_fit+
-                                                   dimuontt_py_fit*dimuontt_py_fit+dimuontt_pz_fit*dimuontt_pz_fit);
-                         double dimuontt_vx_fit = PsiTDecayVertex->position().x();
-             	           double dimuontt_vy_fit = PsiTDecayVertex->position().y();
-                         double dimuontt_vz_fit = PsiTDecayVertex->position().z();
-
-                         vtx.SetXYZ(dimuontt_vx_fit,dimuontt_vy_fit,0);
-                         TVector3 pperp(dimuontt_px_fit, dimuontt_py_fit, 0);
-                         AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-                         pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
-                         TVector3 vdiff = vtx - pvtx;
-                         double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-                         Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
-                         double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
-                         GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
-                         GlobalError v2e = thePrimaryV.error();
-                         AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
-                         double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt_ma_fit/(pperp.Perp2());
-
-             	           reco::CompositeCandidate recoPsiTT_rf(dimuontt_ch_fit,math::XYZTLorentzVector(dimuontt_px_fit,dimuontt_py_fit,dimuontt_pz_fit,dimuontt_en_fit),
-                                                            math::XYZPoint(dimuontt_vx_fit,dimuontt_vy_fit,dimuontt_vz_fit),531);
-
-                         pat::CompositeCandidate DiMuonTTCand_rf(recoPsiTT_rf);
-
-                         DiMuonTTCand.addUserFloat("vProb_const_ref",dimuontt_vp_fit);
-                         DiMuonTTCand.addUserFloat("vChi2_const_ref",dimuontt_x2_fit);
-                         DiMuonTTCand.addUserFloat("nDof_const_ref",dimuontt_ndof_fit);
-                         DiMuonTTCand.addUserFloat("cosAlpha_const_ref",cosAlpha);
-                         DiMuonTTCand.addUserFloat("ctauPV_const_ref",ctauPV);
-                         DiMuonTTCand.addUserFloat("ctauErrPV_const_ref",ctauErrPV);
-
-                         cand_const_ref = 1.0;
-                         // DiMuonTTCand_rf.addDaughter(patJPsi_rf,"dimuon");
-             	           // DiMuonTTCand_rf.addDaughter(phi,"ditrak");
-                         DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_const_cand");
-                       }
-             	      }
-
-               }
-             }
-           }
-           // std::cout << "debug    19 "<< std::endl;
            std::vector<float> massPionRefits,massPionRefits_ref,vProbPionRefits,chi2PionRefits,nDofPionRefits;
 
            for(int i = 0; i < 3; ++i)
