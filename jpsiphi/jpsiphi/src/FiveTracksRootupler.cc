@@ -79,7 +79,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_rf_cand_Label;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, track_pdgid_, pdgid_;
   bool isMC_,OnlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
@@ -132,8 +132,7 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t highTrackMatch, lowTrackMatch, highMuonMatch, lowMuonMatch;
 
-  Double_t dimuonditrk_vProb, dimuonditrk_vChi2, dimuonditrk_nDof, dimuonditrk_cosAlpha, dimuonditrk_rf_ctauPV, dimuonditrk_rf_ctauErrPV;
-  Double_t dimuonditrk_rf_c_vProb, dimuonditrk_rf_c_vChi2, dimuonditrk_rf_c_nDof, dimuonditrk_rf_c_cosAlpha, dimuonditrk_rf_c_ctauPV, dimuonditrk_rf_c_ctauErrPV;
+  Double_t dimuonditrk_vProb, dimuonditrk_vChi2;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
   Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt;
 
@@ -276,7 +275,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_cand_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
-        triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+        TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      isMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
@@ -708,7 +707,7 @@ void FiveTracksRootupler::analyze(const edm::Event& iEvent, const edm::EventSetu
   iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggerResults_Label , triggerResults_handle);
+  iEvent.getByToken( TriggerResults_ , triggerResults_handle);
 
   numPrimaryVertices = primaryVertices_handle->size();
   run   = iEvent.id().run();

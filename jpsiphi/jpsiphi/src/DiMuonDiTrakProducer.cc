@@ -264,7 +264,6 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
   edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  const MagneticField* field = magneticField.product();
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 

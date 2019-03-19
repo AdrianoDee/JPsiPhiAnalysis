@@ -103,7 +103,6 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
-  TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
@@ -146,7 +145,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   edm::Handle<pat::CompositeCandidateCollection> dimuonditrack;
   iEvent.getByToken(DiMuonDiTrackCollection_,dimuonditrack);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > track;
+  edm::Handle<edm::View<pat::PackedCandidate> > track;
   iEvent.getByToken(TrackCollection_,track);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
@@ -168,7 +167,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
   edm::ESHandle<MagneticField> magneticField;
   iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-  const MagneticField* field = magneticField.product();
 
   const edm::TriggerNames & names = iEvent.triggerNames( *triggerResults_handle );
 
@@ -446,7 +444,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          //////////////////////////////////////////////////////////////////////////////
          //PV Selection(s)
          int numVertex = 4;
-         std::array <float,4> sumPTPV, cosAlpha, ctauPV, ctauErrPV, fromPV;
+         std::array <float,4> cosAlpha, ctauPV, ctauErrPV, fromPV;
          // std::cout << "debug    9 "<< std::endl;
          TVector3 vtx, vdiff, pvtx;
          VertexDistanceXY vdistXY;
