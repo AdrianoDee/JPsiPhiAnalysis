@@ -71,7 +71,7 @@ class FiveTracksProducer : public edm::EDProducer {
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   std::vector<double> FiveTrackMassCuts_;
   UInt_t numMasses_;
   bool OnlyBest_;
