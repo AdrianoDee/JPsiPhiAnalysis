@@ -49,6 +49,13 @@
 #include "TVector3.h"
 #include "../interface/DiMuonVtxReProducer.h"
 
+template<typename T>
+struct GreaterByVProb {
+  bool operator()( const T & t1, const T & t2 ) const {
+    return t1.userFloat("vProb") > t2.userFloat("vProb");
+  }
+};
+
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
@@ -86,7 +93,7 @@ class FiveTracksProducer : public edm::EDProducer {
 						    const pat::CompositeCandidate& tt);
   pat::CompositeCandidate makeFiveCandidate(const pat::PackedCandidate& track1,
                                                 const pat::PackedCandidate& track2);
-  pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
+  pat::CompositeCandidate makeDimuonDiTrackCandidate(const pat::CompositeCandidate& dimuon,
                                              const pat::CompositeCandidate& t1,
                                              const pat::CompositeCandidate& t2
                                            );

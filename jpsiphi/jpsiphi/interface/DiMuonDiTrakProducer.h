@@ -68,6 +68,13 @@
 
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 
+template<typename T>
+struct GreaterByVProb {
+  bool operator()( const T & t1, const T & t2 ) const {
+    return t1.userFloat("vProb") > t2.userFloat("vProb");
+  }
+};
+
 /**
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */

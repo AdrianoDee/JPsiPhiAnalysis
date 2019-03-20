@@ -201,7 +201,6 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
-  OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   IsMC_(iConfig.getParameter<bool>("IsMC")),
@@ -355,7 +354,11 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
   // std::cout << "debug    4 "<< std::endl;
 // Note: Dimuon cand are sorted by decreasing vertex probability then first is associated with "best" dimuon
+
+  int dimuonCounter = -1;
+
   for (pat::CompositeCandidateCollection::const_iterator dimuonCand = dimuon->begin(); dimuonCand != dimuon->end(); ++dimuonCand){
+     dimuonCounter++;
      if ( dimuonCand->mass() < DiMuonMassMax_  && dimuonCand->mass() > DiMuonMassMin_ ) {
        // std::cout << "debug    5 "<< std::endl;
        if(dimuonCand->userFloat("vProb")<0.001)
@@ -658,6 +661,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
             DiMuonTTCand.addUserInt("highKaonMatch",filters[j]);
           }
 
+           DiMuonTTCand.addUserInt("dimuon_id",int(dimuonCounter));
 
            DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
            DiMuonTTCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
@@ -1027,12 +1031,12 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
          }
          } // loop over second track
        }   // loop on track candidates
-       if (OnlyBest_) break;
      }
 
   if ( ncombo != DiMuonTTCandColl->size() ) std::cout <<"ncombo ("<<ncombo<< ") != DiMuonTTCand ("<<DiMuonTTCandColl->size()<<")"<< std::endl;
   if ( !dimuon->empty() )  ndimuon++;
   if ( ncombo > 0 ) nreco++;
+
   iEvent.put(std::move(DiMuonTTCandColl),product_name_);
   nevents++;
 }

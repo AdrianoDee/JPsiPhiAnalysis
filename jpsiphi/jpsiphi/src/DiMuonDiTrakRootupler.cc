@@ -76,13 +76,12 @@ private:
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_;
-  edm::EDGetTokenT<reco::VertexCollection> pVertices_;
-  edm::EDGetTokenT<edm::TriggerResults> triggers_;
-  bool isMC_,onlyBest_,OnlyGen_ ;
-  std::vector<std::string>  hlts_;
-  std::vector<std::string>  hltFilters_;
-  std::string treeName_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrackCollection;
+  edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
+  bool IsMC_,OnlyGen_ ;
+  std::vector<std::string>  HLTs_;
+  std::vector<std::string>  HLTFilters_;
+  std::string TreeName_;
 
   UInt_t run, event, lumi, numPrimaryVertices, trigger;
 
@@ -165,9 +164,9 @@ private:
 
   Int_t dimuonditrk_rf_bindx;
 
-  Int_t noXCandidates;
+  UInt_t noXCandidates;
 
-  Bool_t isBestCandidate;
+  UInt_t dimuon_id,p_id,m_id;
 
   char *hltword;
   //MC
@@ -199,12 +198,12 @@ UInt_t DiMuonDiTrakRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_c
   UInt_t matched = 0;  // if no list is given, is not matched
 
   // if matched a given trigger, set the bit, in the same order as listed
-  for (unsigned int iTr = 0; iTr<hltFilters_.size(); iTr++ ) {
-    // std::cout << hltFilters_[iTr] << std::endl;
-    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
-    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(hltFilters_[iTr]);
+  for (unsigned int iTr = 0; iTr<HLTFilters_.size(); iTr++ ) {
+    // std::cout << HLTFilters_[iTr] << std::endl;
+    const pat::TriggerObjectStandAloneCollection mu1HLTMatches = highMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
+    const pat::TriggerObjectStandAloneCollection mu2HLTMatches = lowMuon->triggerObjectMatchesByFilter(HLTFilters_[iTr]);
     if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) matched += (1<<iTr);
-    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << hltFilters_[iTr] << std::endl;
+    // if (!mu1HLTMatches.empty() && !mu2HLTMatches.empty()) std::cout << std::endl << HLTFilters_[iTr] << std::endl;
   }
 
   return matched;
@@ -224,18 +223,16 @@ static const Double_t psi1SMass =  3.09691;
 // constructors and destructor
 //
 DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
-dimuonditrk_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
-pVertices_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
-triggers_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-isMC_(iConfig.getParameter<bool>("isMC")),
-onlyBest_(iConfig.getParameter<bool>("OnlyBest")),
+DiMuonDiTrackCollection(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
+TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+IsMC_(iConfig.getParameter<bool>("isMC")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
-hlts_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
-hltFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-treeName_(iConfig.getParameter<std::string>("TreeName"))
+HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
+HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+TreeName_(iConfig.getParameter<std::string>("TreeName"))
 {
   edm::Service<TFileService> fs;
-  dimuonditrk_tree = fs->make<TTree>(treeName_.data(),"Tree of DiMuon and DiTrak");
+  dimuonditrk_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrak");
 
 
   dimuonditrk_tree->Branch("run",                &run,                "run/I");
@@ -249,6 +246,9 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
   if(!OnlyGen_)
   {
     dimuonditrk_tree->Branch("noXCandidates",      &noXCandidates,      "noXCandidates/I");
+    dimuonditrk_tree->Branch("dimuon_id",      &dimuon_id,      "dimuon_id/I");
+    dimuonditrk_tree->Branch("p_id",      &p_id,      "p_id/I");
+    dimuonditrk_tree->Branch("m_id",      &m_id,      "m_id/I");
 
     //p4s
     dimuonditrk_tree->Branch("dimuonditrk_p4",   "TLorentzVector", &dimuonditrk_p4);
@@ -496,7 +496,7 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
 
   }
 
-  if (isMC_ || OnlyGen_) {
+  if (IsMC_ || OnlyGen_) {
 
     dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
     dimuonditrk_tree->Branch("gen_jpsi_p4", "TLorentzVector",  &gen_jpsi_p4);
@@ -567,11 +567,6 @@ treeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("gen_jpsi_phi",&gen_jpsi_phi,"gen_jpsi_phi/D");
   }
 
-  //Track flags
-
-
-  dimuonditrk_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/O");
-
   genCands_ = consumes< std::vector <reco::GenParticle> >((edm::InputTag)"prunedGenParticles");
   packCands_ = consumes<pat::PackedGenParticleCollection>((edm::InputTag)"packedGenParticles");
 
@@ -598,13 +593,10 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
-  iEvent.getByToken(dimuonditrk_, dimuonditrk_cand_handle);
-
-  edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
-  iEvent.getByToken(pVertices_, primaryVertices_handle);
+  iEvent.getByToken(DiMuonDiTrackCollection, dimuonditrk_cand_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
-  iEvent.getByToken( triggers_ , triggerResults_handle);
+  iEvent.getByToken( TriggerResults_ , triggerResults_handle);
 
   numPrimaryVertices = primaryVertices_handle->size();
   run = iEvent.id().run();
@@ -622,12 +614,12 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
   if (triggerResults_handle.isValid()) {
     const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*triggerResults_handle);
-    unsigned int NTRIGGERS = hlts_.size();
+    unsigned int NTRIGGERS = HLTs_.size();
 
     for (unsigned int i = 0; i < NTRIGGERS; i++) {
       for (int version = 1; version < 20; version++) {
         std::stringstream ss;
-        ss << hlts_[i] << "_v" << version;
+        ss << HLTs_[i] << "_v" << version;
         unsigned int bit = TheTriggerNames.triggerIndex(edm::InputTag(ss.str()).label());
         if (bit < triggerResults_handle->size() && triggerResults_handle->accept(bit) && !triggerResults_handle->error(bit)) {
           trigger += (1<<i);
@@ -640,13 +632,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     //
     // for (unsigned int i = 0; i < NTRIGGERS; i++)
     // {
-    //   hltstring = hltstring + hlts_[i];
+    //   hltstring = hltstring + HLTs_[i];
     // }
     // strcpy(hltword, hltstring.c_str());
 
   } else std::cout << "*** NO triggerResults found " << iEvent.id().run() << "," << iEvent.id().event() << std::endl;
-
-  isBestCandidate = true;
 
 
   // grabbing dimuontt information
@@ -705,6 +695,10 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       for (unsigned int i=0; i< dimuonditrk_cand_handle->size(); i++){
 
         dimuonditrk_cand   = dimuonditrk_cand_handle->at(i);
+
+        dimuon_id = dimuonditrk_cand.userInt("dimuon_id");
+        p_id = dimuonditrk_cand.userInt("pId");
+        m_id = dimuonditrk_cand.userInt("mId");
 
         const reco::Vertex thePrimaryV = *(dimuonditrk_cand.userData<reco::Vertex>("bestPV"));
 
@@ -1000,7 +994,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         dimuonditrk_refKP_vProb = dimuonditrk_cand.userFloat("vProbKPRefit");
         dimuonditrk_refPP_vProb = dimuonditrk_cand.userFloat("vProbPPRefit");
 
-        if(isMC_ || OnlyGen_)
+        if(IsMC_ || OnlyGen_)
         {
 
           gen_dimuonditrk_p4.SetPtEtaPhiM(-1.0,0.0,0.0,3.9);
@@ -1215,10 +1209,6 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         } //isMC || onlyGen
 
         dimuonditrk_tree->Fill();
-
-        if (onlyBest_) break;
-        else
-        isBestCandidate = false;
 
         // dimuontt candidates are sorted by vProb
       }

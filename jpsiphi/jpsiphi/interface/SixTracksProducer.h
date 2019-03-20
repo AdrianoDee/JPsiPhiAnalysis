@@ -1,5 +1,5 @@
-#ifndef __SixTrakProducerFit_h_
-#define __SixTrakProducerFit_h_
+#ifndef __SixTrackProducerFit_h_
+#define __SixTrackProducerFit_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -63,14 +63,14 @@ class SixTracksProducer : public edm::EDProducer {
   void produce(edm::Event& event, const edm::EventSetup& esetup) override;
 
   void endJob() override;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTrakCollection_;
-  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrakCollection_;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTrackCollection_;
+  edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrackCollection_;
   double trakPtCut_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  std::vector<double> SixTrakMassCuts_;
+  std::vector<double> SixTrackMassCuts_;
   UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
@@ -101,6 +101,18 @@ class SixTracksProducer : public edm::EDProducer {
                                             double massFour
                                           );
 
+  pat::CompositeCandidate makeFiveCandidateMixed(
+                                            const pat::CompositeCandidate& dimuon,
+                                            const pat::CompositeCandidate& trackP,
+                                            const pat::CompositeCandidate& trackN,
+                                            const pat::CompositeCandidate& track3
+                                          );
+
+  pat::CompositeCandidate makeDimuonDiTrackCandidate(
+                                            const pat::CompositeCandidate& dimuon,
+                                            const pat::CompositeCandidate& t1,
+                                            const pat::CompositeCandidate& t2
+                                          );
   pat::CompositeCandidate makeSixCandidate(
                                             const pat::CompositeCandidate& fiveTrack,
                                             const pat::PackedCandidate& trak4
@@ -127,4 +139,4 @@ class SixTracksProducer : public edm::EDProducer {
   uint ncombo,ncomboneg,ncomboneu;
 };
 
-#endif // __DiMuonDiTrakProducerFit_h_
+#endif // __DiMuonDiTrackProducerFit_h_

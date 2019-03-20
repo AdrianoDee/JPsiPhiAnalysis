@@ -107,8 +107,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("IsMC")),
-
+  IsMC_(iConfig.getParameter<bool>("IsMC"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
 
@@ -314,7 +313,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        const ParticleMass kaonMass(kaonmass);
        float kaonSigma = kaonMass*1E-6;
 
-       //Adding the fifth track
+       //Adding the third track
        //Possibilities:
        // B+  -> Psi' K+ -> JPsi π+ π- K+
        // B-  -> Psi' K- -> JPsi π+ π- K-
@@ -336,18 +335,18 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          float minDP_third = 10000.0;
          float minDPt_third = 10000.0;
 
-         auto fifthTrack = track->at(i);
+         auto thirdTrack = track->at(i);
 
 
-         if(fifthTrack.pt()<trackPtCut_) continue;
-         if(fifthTrack.charge() == 0) continue;
-	       //if(!isMC_ and fabs(fifthTrack.pdgId())!=211) continue;
-	       if(!(fifthTrack.trackHighPurity())) continue;
-         if(!(fifthTrack.hasTrackDetails())) continue;
+         if(thirdTrack.pt()<trackPtCut_) continue;
+         if(thirdTrack.charge() == 0) continue;
+	       //if(!isMC_ and fabs(thirdTrack.pdgId())!=211) continue;
+	       if(!(thirdTrack.trackHighPurity())) continue;
+         if(!(thirdTrack.hasTrackDetails())) continue;
 
-         if (IsTheSame(fifthTrack,*tp) || int(i) == tpId) continue;
-         if (IsTheSame(fifthTrack,*tm) || int(i) == tmId) continue;
-         if (IsTheSame(fifthTrack,*pmu1) || IsTheSame(fifthTrack,*pmu2) ) continue;
+         if (IsTheSame(thirdTrack,*tp) || int(i) == tpId) continue;
+         if (IsTheSame(thirdTrack,*tm) || int(i) == tmId) continue;
+         if (IsTheSame(thirdTrack,*pmu1) || IsTheSame(thirdTrack,*pmu2) ) continue;
 
          std::vector<int> ids;
          ids.push_back(i);ids.push_back(tpId);ids.push_back(tmId);
@@ -357,7 +356,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          else
             doneFlag[std::tuple<int,int,int>(ids[0],ids[1],ids[2])] = 1.0;
 
-         pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrackCand, fifthTrack);
+         pat::CompositeCandidate fiveCand = makeFiveCandidate(dimuonditrackCand, thirdTrack);
 
          if (fiveCand.mass() > FiveTrackMassMax || fiveCand.mass() < FiveTrackMassMin) continue;
 
@@ -365,11 +364,6 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          double five_vp_fit = -9999.;
          double five_x2_fit = 10000.;
          double five_nd_fit = 10000.;
-
-         std::vector<pat::CompositeCandidate> fiveCands, ref_fiveCands;
-
-         bool atLeastOne = false;
-         std::vector< bool > insideMass;
 
          // int numMasses = (int) extraMasses.size();
 
@@ -383,7 +377,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          fiveTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ
          fiveTracks.push_back((*theB).build(*(tp->bestTrack()))); // K/π
          fiveTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
-         fiveTracks.push_back((*theB).build(*(fifthTrack.bestTrack()))); // K/π
+         fiveTracks.push_back((*theB).build(*(thirdTrack.bestTrack()))); // K/π
 
          kaonParticles.push_back(pFactory.particle(fiveTracks[0],muonMass,kinChi,kinNdf,muonSigma));
          kaonParticles.push_back(pFactory.particle(fiveTracks[1],muonMass,kinChi,kinNdf,muonSigma));
@@ -417,9 +411,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          {
             auto thisMuon = muons->at(ii);
 
-            float DeltaEta = fabs(thisMuon.eta()-fifthTrack.eta());
-            float DeltaP   = fabs(thisMuon.p()-fifthTrack.p());
-            float DeltaPt = ((fifthTrack.pt() - thisMuon.pt())/fifthTrack.pt());
+            float DeltaEta = fabs(thisMuon.eta()-thirdTrack.eta());
+            float DeltaP   = fabs(thisMuon.p()-thirdTrack.p());
+            float DeltaPt = ((thirdTrack.pt() - thisMuon.pt())/thirdTrack.pt());
 
             minDR_third = -std::max(-minDR_third,-DeltaEta);
             minDP_third = -std::max(-minDP_third,-DeltaP);
@@ -532,6 +526,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
            fromPV[i] = (-1000.0);
          }
 
+         for(size_t i = 1; i < verteces.size(); i++)
+         {
+           fromPV[i] = thirdTrack.fromPV(vKeys[i]);
+         }
+
          // std::cout << "debug    13 "<< std::endl;
          for(size_t i = 0; i < verteces.size(); i++)
          {
@@ -554,8 +553,10 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          fiveCand.addUserFloat("thirdTrackMuonDP",minDP_third);
          fiveCand.addUserFloat("thirdTrackMuonDt",minDPt_third);
 
+         auto thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,kaonmass,kaonmass,kaonmass);
+
          for(size_t j = 0; j<numMasses_;j++)
-          fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, fifthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
+          fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
              fiveCand.addUserInt("dimuontt_index",int(d));
              fiveCand.addUserInt("pId",tpId);
@@ -572,7 +573,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              // fiveCand.addDaughter(dimuonditrackCand,"dimuonditrack");
              fiveCand.addDaughter(*tp,"trackOne");
              fiveCand.addDaughter(*tm,"trackTwo");
-             fiveCand.addDaughter(fifthTrack,"trackThree");
+             fiveCand.addDaughter(thirdTrack,"trackThree");
 
 
              fiveCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
@@ -611,18 +612,21 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("tTFromPVDZ",float(fromPV[3]));
              ///DCA
              std::vector<float> DCAs;
+             TrajectoryStateClosestToPoint TS1 = fiveTracks[fiveTracks.size()-1].impactPointTSCP();
 
-             for(size_t j = 0; j < fiveTracks.size() - 1;++j)
+             if (TS1.isValid())
              {
-               TrajectoryStateClosestToPoint TS1 = fiveTracks[fiveTracks.size()-1].impactPointTSCP();
-               TrajectoryStateClosestToPoint TS2 = fiveTracks[j].impactPointTSCP();
-               float dca = 1E20;
-               if (TS1.isValid() && TS2.isValid()) {
-                 ClosestApproachInRPhi cApp;
-                 cApp.calculate(TS1.theState(), TS2.theState());
-                 if (cApp.status() ) dca = cApp.distance();
-               }
-               DCAs.push_back(dca);
+                 for(size_t j = 0; j < fiveTracks.size() - 1;++j)
+                 {
+                   TrajectoryStateClosestToPoint TS2 = fiveTracks[j].impactPointTSCP();
+                   float dca = 1E20;
+                   if (TS1.isValid() && TS2.isValid()) {
+                     ClosestApproachInRPhi cApp;
+                     cApp.calculate(TS1.theState(), TS2.theState());
+                     if (cApp.status() ) dca = cApp.distance();
+                   }
+                   DCAs.push_back(dca);
+                 }
              }
 
 
@@ -636,27 +640,27 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("dca_t1t3",DCAs[2]);
              fiveCand.addUserFloat("dca_t2t3",DCAs[3]);
 
-             fiveCand.addDaughter(fiveCand_rf,"first_five_ref");
+             fiveCand.addDaughter(thisFive,"first_five_ref");
 
-             fiveCand.addUserInt("fifthKaonMatch",filters[i]);
+             fiveCand.addUserInt("thirdKaonMatch",filters[i]);
 
 
              if(IsMC_)
               {
-                float hasFifthGen = -1.0;
+                float hasGen = -1.0;
 
                 if(theGenMap.isValid())
                 {
                   //posTrack
-                  auto refFifth = track->refAt(i);
+                  auto ref = track->refAt(i);
 
-                  if(theGenMap->contains(refFifth.id()))
+                  if(theGenMap->contains(ref.id()))
                   {
                    if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
                    {
                      auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
-                     hasFifthGen = 1.0;
-                     fiveCand.addDaughter(*genP,"fifthTrackGen");
+                     hasGen = 1.0;
+                     fiveCand.addDaughter(*genP,"thirdTrackGen");
 
                     }
                   }
@@ -664,14 +668,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                 }
                 // if(hasHighGen * hasLowGen >= 0.0)
                 //   std::cout << "Has some gen ref " << std::endl;
-                fiveCand.addUserFloat("hasFifthGen",hasFifthGen);
+                fiveCand.addUserFloat("hasThirdGen",hasGen);
 
 
               }
 
-
-             // std::cout << std::endl;
-             if(atLeastOne)
               fiveCandColl->push_back(fiveCand);
 
            }
@@ -715,9 +716,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
                                           const pat::PackedCandidate& track
                                          ){
 
-  pat::CompositeCandidate fiveCand, dimuontrack;
+  pat::CompositeCandidate fiveCand;
   fiveCand.addDaughter(dimuonditrack,"dimuonditrack");
-  fiveCand.addDaughter(track,"fifth");
+  fiveCand.addDaughter(track,"third");
   fiveCand.setCharge(dimuonditrack.charge()+track.charge());
 
   double m_track = trackmass;
@@ -773,9 +774,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   fiveCand.addDaughter(trackTwo,"trackTwo");
   fiveCand.addDaughter(trackThree,"trackThree");
 
-  dimuonDiTrackOne     = makePsi2SCandidate(dimuon,trackOne,trackTwo);
-  dimuonDiTrackTwo     = makePsi2SCandidate(dimuon,trackOne,trackThree);
-  dimuonDiTrackThree   = makePsi2SCandidate(dimuon,trackTwo,trackThree);
+  dimuonDiTrackOne     = makeDimuonDiTrackCandidate(dimuon,trackOne,trackTwo);
+  dimuonDiTrackTwo     = makeDimuonDiTrackCandidate(dimuon,trackOne,trackThree);
+  dimuonDiTrackThree   = makeDimuonDiTrackCandidate(dimuon,trackTwo,trackThree);
 
   fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
   fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
@@ -813,9 +814,9 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   fiveCand.addDaughter(trackN,"trackTwo");
   fiveCand.addDaughter(track3,"trackThree");
 
-  dimuonDiTrackOne     = makePsi2SCandidate(dimuon,trackP,trackN);
-  dimuonDiTrackTwo     = makePsi2SCandidate(dimuon,trackP,track3);
-  dimuonDiTrackThree   = makePsi2SCandidate(dimuon,trackN,track3);
+  dimuonDiTrackOne     = makeDimuonDiTrackCandidate(dimuon,trackP,trackN);
+  dimuonDiTrackTwo     = makeDimuonDiTrackCandidate(dimuon,trackP,track3);
+  dimuonDiTrackThree   = makeDimuonDiTrackCandidate(dimuon,trackN,track3);
 
   fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
   fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
@@ -833,7 +834,7 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   return fiveCand;
 }
 
-pat::CompositeCandidate FiveTracksProducer::makePsi2SCandidate(
+pat::CompositeCandidate FiveTracksProducer::makeDimuonDiTrackCandidate(
                                           const pat::CompositeCandidate& dimuon,
                                           const pat::CompositeCandidate& t1,
                                           const pat::CompositeCandidate& t2
