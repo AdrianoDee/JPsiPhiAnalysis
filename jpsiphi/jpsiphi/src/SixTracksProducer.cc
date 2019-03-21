@@ -312,8 +312,6 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
        for (size_t i = 0; i < track->size(); i++) {
 
-         int ;
-
          std::vector<float> sixTracksMass;
          std::vector<float> psi2sOne, psi2sTwo;
          std::vector<float> fiveTracksCTau, fiveTracksCTauErr, fiveTracksCosAlpha;
