@@ -781,7 +781,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                    pvtx.SetXYZ(thePrimaryZero.position().x(),thePrimaryZero.position().y(),0);
                    TVector3 vdiff = vtx - pvtx;
                    double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
-                   Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
+                   Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryZero);
                    double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
                    GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
                    GlobalError v2e = thePrimaryZero.error();
