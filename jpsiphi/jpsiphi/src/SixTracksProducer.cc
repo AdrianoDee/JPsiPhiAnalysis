@@ -285,7 +285,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
        //I want the positive and negative track to build psi2S with charge == 0
        const pat::PackedCandidate *tp = dynamic_cast <const pat::PackedCandidate *>(dimuonditrack_cand->daughter("ditrack")->daughter("highTrack"));
        const pat::PackedCandidate *tm = dynamic_cast <const pat::PackedCandidate *>(dimuonditrack_cand->daughter("ditrack")->daughter("lowTrack"));
-       const pat::PackedCandidate *tt = dynamic_cast <const pat::PackedCandidate *>(fivetrackCand.daughter("fifth"));
+       const pat::PackedCandidate *tt = dynamic_cast <const pat::PackedCandidate *>(fivetrackCand.daughter("trackThree"));
 
        int tpId = fivetrackCand.userInt("pId");
        int tmId = fivetrackCand.userInt("mId");

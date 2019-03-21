@@ -806,6 +806,8 @@ if(!OnlyGen_)
 
     for (unsigned int i=0; i< fivetracks_cand_handle->size(); i++)
     {
+      int debug = 0;
+      std::cout << "Start"<< std::endl;
 
       pat::CompositeCandidate five_cand;
       const pat::PackedCandidate *trackOne_cand, *trackTwo_cand, *trackThree_cand;
@@ -886,6 +888,7 @@ if(!OnlyGen_)
       tTFromPVBS      = five_cand.userFloat("tTFromPVBS");
       tTFromPVCA      = five_cand.userFloat("tTFromPV_alpha");
 
+      std::cout << debug++<< std::endl;
 
       dimuonditrk_cosAlpha = dimuonditrk_cand->userFloat("cosAlpha");
       dimuonditrk_ctauPV = dimuonditrk_cand->userFloat("ctauPV");
@@ -924,7 +927,7 @@ if(!OnlyGen_)
       dimuon_cosAlpha     = dimuon_cand->userFloat("cosAlpha");
 
       const pat::Muon *lowMuon, *highMuon;
-
+      std::cout << debug++<< std::endl;
       reco::Candidate::LorentzVector vhighMuon = dimuon_cand->daughter("highMuon")->p4();
       reco::Candidate::LorentzVector vlowMuon = dimuon_cand->daughter("lowMuon")->p4();
 
@@ -951,7 +954,7 @@ if(!OnlyGen_)
       lowMuon_phi  = lowMuon->innerTrack()->phi();
       lowMuon_dz  = lowMuon->innerTrack()->dz();
       lowMuon_dxy  = lowMuon->innerTrack()->dxy();
-
+      std::cout << debug++<< std::endl;
       lowMuon_isTight    = lowMuon->isTightMuon(bestPV);
       lowMuon_isLoose    = lowMuon->isLooseMuon();
       lowMuon_isSoft     = lowMuon->isSoftMuon(bestPV);
@@ -996,8 +999,8 @@ if(!OnlyGen_)
       highMuonMatch    = (Double_t)dimuon_cand->userInt("lowMuonTMatch");
       thirdTrackMatch  = (Double_t)five_cand.userInt("thirdKaonMatch");
 
-      trackOne_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackOne"));
-      trackTwo_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackTwo"));
+      trackOne_cand   = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackOne"));
+      trackTwo_cand   = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackTwo"));
       trackThree_cand = dynamic_cast<const pat::PackedCandidate*>(five_cand.daughter("trackThree"));
 
       float pionmass = 0.13957061, protonmass = 0.93827208;
@@ -1013,8 +1016,7 @@ if(!OnlyGen_)
       highProton_p4.SetPtEtaPhiM(trackOne_cand->pt(), trackOne_cand->eta(), trackOne_cand->phi(), protonmass);
       lowProton_p4.SetPtEtaPhiM(trackTwo_cand->pt(), trackTwo_cand->eta(), trackTwo_cand->phi(),protonmass);
       thirdProton_p4.SetPtEtaPhiM(trackThree_cand->pt(), trackThree_cand->eta(), trackThree_cand->phi(), protonmass);
-
-
+      std::cout << debug++<< std::endl;
       lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
       highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
@@ -1096,7 +1098,7 @@ if(!OnlyGen_)
       highTrack_NTraLayers = trackOne_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
       highTrack_NStrLayers = trackOne_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
       highTrack_NBPixLayers = trackOne_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
-
+      std::cout << debug++<< std::endl;
       lowTrack_pt = trackTwo_cand->pt();
       lowTrack_eta = trackTwo_cand->eta();
       lowTrack_phi = trackTwo_cand->phi();
@@ -1150,7 +1152,7 @@ if(!OnlyGen_)
       triTrack_eta    = triTrack_cand->eta();
       triTrack_phi    = triTrack_cand->phi();
       triTrack_charge = triTrack_cand->charge();
-
+      std::cout << debug++<< std::endl;
       if(IsMC_ || OnlyGen_)
       {
 
@@ -1225,7 +1227,7 @@ if(!OnlyGen_)
         gen_highKaon_eta    = 0.0;
         gen_lowKaon_eta     = 0.0;
         genThirdTrack_eta  = 0.0;
-
+        std::cout << debug++<< std::endl;
         gen_lowMuon_phi     = 0.0;
         gen_highMuon_phi    = 0.0;
         gen_highKaon_phi    = 0.0;
@@ -1267,7 +1269,7 @@ if(!OnlyGen_)
           gen_highKaon_phi     = (Double_t)genhighKaon->phi();
 
         }
-
+        std::cout << debug++<< std::endl;
         if(hasLowGen>0.0)
         {
           gen_lowKaon_p4.SetPtEtaPhiM(genlowKaon->pt(),genlowKaon->eta(),genlowKaon->phi(),genlowKaon->mass());
@@ -1307,6 +1309,7 @@ if(!OnlyGen_)
 
 
         }
+        std::cout << debug++<< std::endl;
 
         if(genhighMuon.isNonnull())
         {
@@ -1325,7 +1328,7 @@ if(!OnlyGen_)
           gen_highMuon_eta     = (Double_t)genhighMuon->eta();
           gen_highMuon_phi     = (Double_t)genhighMuon->phi();
         }
-
+        std::cout << debug++<< std::endl;
         if(genlowMuon.isNonnull())
         {
           gen_lowMuon_p4.SetPtEtaPhiM(genlowMuon->pt(),genlowMuon->eta(),genlowMuon->phi(),genlowMuon->mass());
@@ -1345,7 +1348,7 @@ if(!OnlyGen_)
         }
 
         bool samePhiMom = false, samejpsiMom = false;
-
+        std::cout << debug++<< std::endl;
         if(phiMomLow.isNonnull() && phiMomHigh.isNonnull())
         {
           samePhiMom = (phiMomHigh == phiMomLow);
@@ -1361,7 +1364,7 @@ if(!OnlyGen_)
             gen_phi_phi     = phiMomHigh->phi();
           }
         }
-
+        std::cout << debug++<< std::endl;
         if(jpsiMomLow.isNonnull() && jpsiMomHigh.isNonnull())
         {
           samejpsiMom = (jpsiMomHigh == jpsiMomLow);
@@ -1377,7 +1380,7 @@ if(!OnlyGen_)
             gen_jpsi_phi     = jpsiMomHigh->phi();
           }
         }
-
+        std::cout << debug++<< std::endl;
         if(samejpsiMom && samePhiMom  && jpsiMomHigh->numberOfMothers()>0 && phiMomHigh->numberOfMothers()>0)
         {
 
@@ -1411,8 +1414,9 @@ if(!OnlyGen_)
 
       } //IsMC || onlyGen
 
-
+      std::cout << debug++<< std::endl;
       fivetracks_tree->Fill();
+      std::cout << "Filled" << std::endl;
 
 
         // dimuontt candidates are sorted by vProb
