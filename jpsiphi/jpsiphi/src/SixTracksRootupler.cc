@@ -114,6 +114,7 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t fiveTwo_pt, fiveTwo_eta, fiveTwo_phi, fiveTwo_p;
   Double_t fiveThree_pt, fiveThree_eta, fiveThree_phi, fiveThree_p;
   Double_t fiveFour_pt, fiveFour_eta, fiveFour_phi, fiveFour_p;
+  Double_t fiveFive_pt, fiveFive_eta, fiveFive_phi, fiveFive_p;
 
   Int_t dimuonditrk_charge, five_charge;
 
@@ -153,7 +154,7 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t tPFromPVBS, tMFromPVBS, tPFromPVCA, tMFromPVCA;
   Double_t tPFromPVDZ, tMFromPVDZ, tPFromPV, tMFromPV;
   Double_t tTFromPV, tTFromPVDZ, tTFromPVBS, tTFromPVCA;
-  Dooble_t tFFromPV, tFFromPVCA, tFFromPVDZ, tFFromPVBS;
+  Double_t tFFromPV, tFFromPVCA, tFFromPVDZ, tFFromPVBS;
 
   Double_t dca_m1m2, dca_m1t1, dca_m1t2, dca_m2t1, dca_m2t2, dca_t1t2;
   Double_t dca_m1t3, dca_m2t3, dca_t1t3, dca_t2t3;

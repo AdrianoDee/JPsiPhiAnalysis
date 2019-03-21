@@ -269,8 +269,8 @@ static const Double_t psi1SMass =  3.09691;
 //
 FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         FiveTracksCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
-        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
 	      IsMC_(iConfig.getParameter<bool>("isMC")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
@@ -1233,10 +1233,10 @@ if(!OnlyGen_)
         gen_highKaon_phi    = 0.0;
         gen_lowKaon_phi     = 0.0;
 
-        reco::GenParticleRef genhighMuon  = highMuon->genParticleRef();
-        reco::GenParticleRef genlowMuon   = lowMuon->genParticleRef();
+        reco::GenParticleRef genHighKaon  = highMuon->genParticleRef();
+        reco::GenParticleRef genLowMuon   = lowMuon->genParticleRef();
 
-        const reco::GenParticle *genhighKaon,*genlowKaon,*genThirdTrack;
+        const reco::GenParticle *genHighKaon,*genLowKaon,*genThirdTrack;
         reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHigh, jpsiMomLow;
         reco::GenParticleRef jpsiMom, phiMom, thirdMom;
 
@@ -1245,48 +1245,48 @@ if(!OnlyGen_)
         Double_t hasThirdGen = five_cand.userFloat("hasThirdGen");
 
         if(hasHighGen>0.0)
-          genhighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("highKaonGen"));
+          genHighKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("highKaonGen"));
         if(hasLowGen>0.0)
-          genlowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("lowKaonGen"));
+          genLowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("lowKaonGen"));
         if(hasThirdGen>0.0)
           genThirdTrack = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("thirdTrackGen"));
 
         if(hasHighGen>0.0)
         {
-          gen_highKaon_p4.SetPtEtaPhiM(genhighKaon->pt(),genhighKaon->eta(),genhighKaon->phi(),genhighKaon->mass());
-          if(genhighKaon->numberOfMothers()>0)
-            phiMomHigh  = genhighKaon->motherRef();
+          gen_highKaon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+          if(genHighKaon->numberOfMothers()>0)
+            phiMomHigh  = genHighKaon->motherRef();
 
-          gen_highKaon_pdg     = (Double_t)genhighKaon->pdgId();
+          gen_highKaon_pdg     = (Double_t)genHighKaon->pdgId();
 
-          if(phiMomHigh.isNonnull() && genhighKaon->numberOfMothers()>0)
+          if(phiMomHigh.isNonnull() && genHighKaon->numberOfMothers()>0)
             gen_highKaon_mompdg  = phiMomHigh->pdgId();
 
-          gen_highKaon_status  = (Double_t)genhighKaon->status();
-          gen_highKaon_pt      = (Double_t)genhighKaon->pt();
-          gen_highKaon_p       = (Double_t)genhighKaon->p();
-          gen_highKaon_eta     = (Double_t)genhighKaon->eta();
-          gen_highKaon_phi     = (Double_t)genhighKaon->phi();
+          gen_highKaon_status  = (Double_t)genHighKaon->status();
+          gen_highKaon_pt      = (Double_t)genHighKaon->pt();
+          gen_highKaon_p       = (Double_t)genHighKaon->p();
+          gen_highKaon_eta     = (Double_t)genHighKaon->eta();
+          gen_highKaon_phi     = (Double_t)genHighKaon->phi();
 
         }
 
         if(hasLowGen>0.0)
         {
-          gen_lowKaon_p4.SetPtEtaPhiM(genlowKaon->pt(),genlowKaon->eta(),genlowKaon->phi(),genlowKaon->mass());
+          gen_lowKaon_p4.SetPtEtaPhiM(genLowKaon->pt(),genLowKaon->eta(),genLowKaon->phi(),genLowKaon->mass());
 
-          if(genlowKaon->numberOfMothers()>0)
-            phiMomLow  = genlowKaon->motherRef();
+          if(genLowKaon->numberOfMothers()>0)
+            phiMomLow  = genLowKaon->motherRef();
 
-          gen_lowKaon_pdg     = (Double_t)genlowKaon->pdgId();
+          gen_lowKaon_pdg     = (Double_t)genLowKaon->pdgId();
 
-          if(phiMomLow.isNonnull() && genlowKaon->numberOfMothers()>0)
+          if(phiMomLow.isNonnull() && genLowKaon->numberOfMothers()>0)
             gen_lowKaon_mompdg  = phiMomLow->pdgId();
 
-          gen_lowKaon_status  = (Double_t)genlowKaon->status();
-          gen_lowKaon_pt      = (Double_t)genlowKaon->pt();
-          gen_lowKaon_p       = (Double_t)genlowKaon->p();
-          gen_lowKaon_eta     = (Double_t)genlowKaon->eta();
-          gen_lowKaon_phi     = (Double_t)genlowKaon->phi();
+          gen_lowKaon_status  = (Double_t)genLowKaon->status();
+          gen_lowKaon_pt      = (Double_t)genLowKaon->pt();
+          gen_lowKaon_p       = (Double_t)genLowKaon->p();
+          gen_lowKaon_eta     = (Double_t)genLowKaon->eta();
+          gen_lowKaon_phi     = (Double_t)genLowKaon->phi();
         }
 
         if(hasThirdGen>0.0)
@@ -1310,40 +1310,40 @@ if(!OnlyGen_)
 
         }
 
-        if(genhighMuon.isNonnull())
+        if(genHighKaon.isNonnull())
         {
-          gen_highMuon_p4.SetPtEtaPhiM(genhighMuon->pt(),genhighMuon->eta(),genhighMuon->phi(),genhighMuon->mass());
-          if(genhighMuon->numberOfMothers()>0)
-          jpsiMomHigh  = genhighMuon->motherRef();
+          gen_highMuon_p4.SetPtEtaPhiM(genHighKaon->pt(),genHighKaon->eta(),genHighKaon->phi(),genHighKaon->mass());
+          if(genHighKaon->numberOfMothers()>0)
+          jpsiMomHigh  = genHighKaon->motherRef();
 
-          gen_highMuon_pdg     = (Double_t)genhighMuon->pdgId();
+          gen_highMuon_pdg     = (Double_t)genHighKaon->pdgId();
 
-          if(jpsiMomHigh.isNonnull() && genhighMuon->numberOfMothers()>0)
+          if(jpsiMomHigh.isNonnull() && genHighKaon->numberOfMothers()>0)
             gen_highMuon_mompdg  = jpsiMomHigh->pdgId();
 
-          gen_highMuon_status  = (Double_t)genhighMuon->status();
-          gen_highMuon_pt      = (Double_t)genhighMuon->pt();
-          gen_highMuon_p       = (Double_t)genhighMuon->p();
-          gen_highMuon_eta     = (Double_t)genhighMuon->eta();
-          gen_highMuon_phi     = (Double_t)genhighMuon->phi();
+          gen_highMuon_status  = (Double_t)genHighKaon->status();
+          gen_highMuon_pt      = (Double_t)genHighKaon->pt();
+          gen_highMuon_p       = (Double_t)genHighKaon->p();
+          gen_highMuon_eta     = (Double_t)genHighKaon->eta();
+          gen_highMuon_phi     = (Double_t)genHighKaon->phi();
         }
 
-        if(genlowMuon.isNonnull())
+        if(genLowMuon.isNonnull())
         {
-          gen_lowMuon_p4.SetPtEtaPhiM(genlowMuon->pt(),genlowMuon->eta(),genlowMuon->phi(),genlowMuon->mass());
-          if(genlowMuon->numberOfMothers()>0)
-            jpsiMomLow  = genlowMuon->motherRef();
+          gen_lowMuon_p4.SetPtEtaPhiM(genLowMuon->pt(),genLowMuon->eta(),genLowMuon->phi(),genLowMuon->mass());
+          if(genLowMuon->numberOfMothers()>0)
+            jpsiMomLow  = genLowMuon->motherRef();
 
-          gen_lowMuon_pdg     = (Double_t)genlowMuon->pdgId();
+          gen_lowMuon_pdg     = (Double_t)genLowMuon->pdgId();
 
-          if(jpsiMomLow.isNonnull() && genlowMuon->numberOfMothers()>0)
+          if(jpsiMomLow.isNonnull() && genLowMuon->numberOfMothers()>0)
             gen_lowMuon_mompdg  = jpsiMomLow->pdgId();
 
-          gen_lowMuon_status  = (Double_t)genlowMuon->status();
-          gen_lowMuon_pt      = (Double_t)genlowMuon->pt();
-          gen_lowMuon_p       = (Double_t)genlowMuon->p();
-          gen_lowMuon_eta     = (Double_t)genlowMuon->eta();
-          gen_lowMuon_phi     = (Double_t)genlowMuon->phi();
+          gen_lowMuon_status  = (Double_t)genLowMuon->status();
+          gen_lowMuon_pt      = (Double_t)genLowMuon->pt();
+          gen_lowMuon_p       = (Double_t)genLowMuon->p();
+          gen_lowMuon_eta     = (Double_t)genLowMuon->eta();
+          gen_lowMuon_phi     = (Double_t)genLowMuon->phi();
         }
 
         bool samePhiMom = false, samejpsiMom = false;
