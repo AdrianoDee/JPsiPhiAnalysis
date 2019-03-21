@@ -1,13 +1,13 @@
 /**
    \file
-   Declaration of DiMuonDiTrakProducer
+   Declaration of DiMuonDiTrackProducer
 
    \author Alberto Sanchez-Hernandez
    \date 2 Mar 2014
 */
 
-#ifndef __DiMuonDiTrakProducer_h_
-#define __DiMuonDiTrakProducer_h_
+#ifndef __DiMuonDiTrackProducer_h_
+#define __DiMuonDiTrackProducer_h_
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDProducer.h"
@@ -79,10 +79,10 @@ struct GreaterByVProb {
    Create a HF candidate by mathing DiMuon(chi,psi,etc.) and a track (K, pi, etc.)
  */
 
-class DiMuonDiTrakProducer : public edm::EDProducer {
+class DiMuonDiTrackProducer : public edm::EDProducer {
 
  public:
-  explicit DiMuonDiTrakProducer(const edm::ParameterSet& ps);
+  explicit DiMuonDiTrackProducer(const edm::ParameterSet& ps);
 
  private:
 
@@ -90,17 +90,17 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
 
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
-  edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrakCollection_;
-  double TrakPtCut_,MaxDeltaR_, MaxDPtRel_;
+  edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrackCollection_;
+  double TrackPtCut_,MaxDeltaR_, MaxDPtRel_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   std::vector<double> DiMuonMassCuts_;
-  std::vector<double> TrakTrakMassCuts_;
-  std::vector<double> DiMuonDiTrakMassCuts_;
-  std::vector<double> MassTraks_;
+  std::vector<double> TrackTrackMassCuts_;
+  std::vector<double> DiMuonDiTrackMassCuts_;
+  std::vector<double> MassTracks_;
   double JPsiMass_,PhiMass_;
   bool OnlyBest_;
   std::string product_name_;
@@ -145,4 +145,4 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   int nreco;
 };
 
-#endif // __DiMuonDiTrakProducer_h_
+#endif // __DiMuonDiTrackProducer_h_

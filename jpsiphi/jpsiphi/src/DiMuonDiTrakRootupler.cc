@@ -1,6 +1,6 @@
 /*
-Package:    DiMuonDiTrakRootupler
-Class:      DiMuonDiTrakRootupler
+Package:    DiMuonDiTrackRootupler
+Class:      DiMuonDiTrackRootupler
 
 Description: make rootuple of DiMuon-DiTrack combination
 
@@ -55,10 +55,10 @@ Created:  based on Alberto Sanchez Hernandez PsiTrkTrk Code
 // class declaration
 //
 
-class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
+class DiMuonDiTrackRootupler : public edm::EDAnalyzer {
 public:
-  explicit DiMuonDiTrakRootupler(const edm::ParameterSet&);
-  ~DiMuonDiTrakRootupler() override;
+  explicit DiMuonDiTrackRootupler(const edm::ParameterSet&);
+  ~DiMuonDiTrackRootupler() override;
 
   bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
@@ -88,7 +88,7 @@ private:
 
   TLorentzVector dimuonditrk_p4;
   TLorentzVector dimuon_p4;
-  TLorentzVector ditrak_p4;
+  TLorentzVector ditrack_p4;
   TLorentzVector lowMuon_p4;
   TLorentzVector highMuon_p4;
   TLorentzVector highKaon_p4;
@@ -97,7 +97,7 @@ private:
   TLorentzVector dimuonditrk_rf_p4;
   TLorentzVector dimuonditrk_rf_const_p4;
   TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
-  TLorentzVector ditrak_rf_p4, ditrak_not_rf_p4;
+  TLorentzVector ditrack_rf_p4, ditrack_not_rf_p4;
   TLorentzVector lowMuon_rf_p4;
   TLorentzVector highMuon_rf_p4;
   TLorentzVector kaonp_rf_p4;
@@ -129,7 +129,7 @@ private:
   Double_t dimuonditrk_dca_m1m2, dimuonditrk_dca_m1t1, dimuonditrk_dca_m1t2, dimuonditrk_dca_m2t1, dimuonditrk_dca_m2t2, dimuonditrk_dca_t1t2;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
 
-  Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrak_m,ditrak_pt;
+  Double_t gen_dimuonditrk_m,dimuonditrk_m,dimuon_m,dimuon_pt,ditrack_m,ditrack_pt;
   Double_t highKaon_pt,lowKaon_pt,highMuon_pt,lowMuon_pt,dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
 
   Bool_t lowMuon_isLoose, lowMuon_isSoft, lowMuon_isMedium, lowMuon_isHighPt, lowMuon_isTight;
@@ -193,7 +193,7 @@ private:
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
 };
 
-UInt_t DiMuonDiTrakRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
+UInt_t DiMuonDiTrackRootupler::isTriggerMatched(pat::CompositeCandidate *diMuon_cand) {
   const pat::Muon* highMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("highMuon"));
   const pat::Muon* lowMuon = dynamic_cast<const pat::Muon*>(diMuon_cand->daughter("lowMuon"));
   UInt_t matched = 0;  // if no list is given, is not matched
@@ -223,8 +223,8 @@ static const Double_t psi1SMass =  3.09691;
 //
 // constructors and destructor
 //
-DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
-DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
+DiMuonDiTrackRootupler::DiMuonDiTrackRootupler(const edm::ParameterSet& iConfig):
+DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrack"))),
 TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 IsMC_(iConfig.getParameter<bool>("IsMC")),
@@ -234,7 +234,7 @@ HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
 TreeName_(iConfig.getParameter<std::string>("TreeName"))
 {
   edm::Service<TFileService> fs;
-  dimuonditrk_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrak");
+  dimuonditrk_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrack");
 
 
   dimuonditrk_tree->Branch("run",                &run,                "run/I");
@@ -254,7 +254,7 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
 
     //p4s
     dimuonditrk_tree->Branch("dimuonditrk_p4",   "TLorentzVector", &dimuonditrk_p4);
-    dimuonditrk_tree->Branch("ditrak_p4",     "TLorentzVector", &ditrak_p4);
+    dimuonditrk_tree->Branch("ditrack_p4",     "TLorentzVector", &ditrack_p4);
     dimuonditrk_tree->Branch("dimuon_p4",     "TLorentzVector", &dimuon_p4);
     dimuonditrk_tree->Branch("lowMuon_p4",   "TLorentzVector", &lowMuon_p4);
     dimuonditrk_tree->Branch("highMuon_p4",   "TLorentzVector", &highMuon_p4);
@@ -264,7 +264,7 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
 
     //refitted p4s
     dimuonditrk_tree->Branch("dimuonditrk_rf_p4",   "TLorentzVector", &dimuonditrk_rf_p4);
-    dimuonditrk_tree->Branch("ditrak_rf_p4",     "TLorentzVector", &ditrak_rf_p4);
+    dimuonditrk_tree->Branch("ditrack_rf_p4",     "TLorentzVector", &ditrack_rf_p4);
     dimuonditrk_tree->Branch("dimuon_rf_p4",     "TLorentzVector", &dimuon_rf_p4);
     dimuonditrk_tree->Branch("lowMuon_rf_p4",   "TLorentzVector", &lowMuon_rf_p4);
     dimuonditrk_tree->Branch("highMuon_rf_p4",   "TLorentzVector", &highMuon_rf_p4);
@@ -291,8 +291,8 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
 
     dimuonditrk_tree->Branch("dimuon_m",       &dimuon_m,       "dimuon_m/D");
     dimuonditrk_tree->Branch("dimuon_pt",    &dimuon_pt,    "dimuon_pt/D");
-    dimuonditrk_tree->Branch("ditrak_m",     &ditrak_m,     "ditrak_m/D");
-    dimuonditrk_tree->Branch("ditrak_pt",       &ditrak_pt,        "ditrak_pt/D");
+    dimuonditrk_tree->Branch("ditrack_m",     &ditrack_m,     "ditrack_m/D");
+    dimuonditrk_tree->Branch("ditrack_pt",       &ditrack_pt,        "ditrack_pt/D");
 
     dimuonditrk_tree->Branch("highKaon_pt",          &highKaon_pt,          "highKaon_pt/D");
     dimuonditrk_tree->Branch("lowKaon_pt",       &lowKaon_pt,       "lowKaon_pt/D");
@@ -574,13 +574,13 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
 
 }
 
-DiMuonDiTrakRootupler::~DiMuonDiTrakRootupler() {}
+DiMuonDiTrackRootupler::~DiMuonDiTrackRootupler() {}
 
 //
 // member functions
 //
 
-bool DiMuonDiTrakRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
+bool DiMuonDiTrackRootupler::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle) {
   if (ancestor == particle ) return true;
   for (size_t i=0; i< particle->numberOfMothers(); i++) {
     if (isAncestor(ancestor, particle->mother(i))) return true;
@@ -590,7 +590,7 @@ bool DiMuonDiTrakRootupler::isAncestor(const reco::Candidate* ancestor, const re
 
 
 // ------------ method called for each event  ------------
-void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void DiMuonDiTrackRootupler::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   //  using namespace edm;
   using namespace std;
 
@@ -677,7 +677,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
     if (!dimuonditrk_cand_handle.isValid()) std::cout<< "No dimuontt information " << run << "," << event <<std::endl;
 
       dimuonditrk_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      ditrak_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      ditrack_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       dimuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       lowMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       highMuon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -685,7 +685,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       lowKaon_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
       dimuonditrk_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
-      ditrak_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
+      ditrack_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       dimuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       lowMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
       highMuon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -693,7 +693,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
       // lowKaon_rf_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
       pat::CompositeCandidate *dimuonditrk_rf_cand, dimuonditrk_cand, *dimuon_cand;
-      pat::CompositeCandidate *ditrak_cand, *dimuon_cand_rf, *ditrak_cand_rf;
+      pat::CompositeCandidate *ditrack_cand, *dimuon_cand_rf, *ditrack_cand_rf;
 
       noXCandidates = (Int_t)(dimuonditrk_cand_handle->size());
 
@@ -774,7 +774,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         //unref corresponding
 
         dimuon_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("dimuon"));
-        ditrak_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrak"));
+        ditrack_cand = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_cand.daughter("ditrack"));
 
         const pat::Muon *lowMuon, *highMuon;
 
@@ -840,11 +840,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
         highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
-        reco::Candidate::LorentzVector kP = ditrak_cand->daughter("highTrak")->p4();
-        reco::Candidate::LorentzVector kM = ditrak_cand->daughter("lowTrak")->p4();
+        reco::Candidate::LorentzVector kP = ditrack_cand->daughter("highTrack")->p4();
+        reco::Candidate::LorentzVector kM = ditrack_cand->daughter("lowTrack")->p4();
 
-        pat::PackedCandidate *highKaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("highTrak"));
-        pat::PackedCandidate *lowKaon  = dynamic_cast <pat::PackedCandidate *>(ditrak_cand->daughter("lowTrak"));
+        pat::PackedCandidate *highKaon  = dynamic_cast <pat::PackedCandidate *>(ditrack_cand->daughter("highTrack"));
+        pat::PackedCandidate *lowKaon  = dynamic_cast <pat::PackedCandidate *>(ditrack_cand->daughter("lowTrack"));
 
         highKaon_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
         lowKaon_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
@@ -890,7 +890,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         //double kmass = 0.4936770;
         dimuonditrk_p4.SetPtEtaPhiM(dimuonditrk_cand.pt(),dimuonditrk_cand.eta(),dimuonditrk_cand.phi(),dimuonditrk_cand.mass());
         dimuon_p4.SetPtEtaPhiM(dimuon_cand->pt(),dimuon_cand->eta(),dimuon_cand->phi(),dimuon_cand->mass());
-        ditrak_p4.SetPtEtaPhiM(ditrak_cand->pt(), ditrak_cand->eta(), ditrak_cand->phi(), ditrak_cand->mass());
+        ditrack_p4.SetPtEtaPhiM(ditrack_cand->pt(), ditrack_cand->eta(), ditrack_cand->phi(), ditrack_cand->mass());
 
         dimuon_vProb        = dimuon_cand->userFloat("vProb");
         dimuon_vChi2        = dimuon_cand->userFloat("vNChi2");
@@ -906,7 +906,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
         dimuonditrk_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
         dimuonditrk_rf_const_p4.SetPtEtaPhiM(0.0,0.0,0.0,3.9);
         dimuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,2.4);
-        ditrak_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.5);
+        ditrack_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.5);
 
         lowMuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
         highMuon_rf_p4.SetPtEtaPhiM(0.0,0.0,0.0,0.0);
@@ -921,11 +921,11 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
           dimuonditrk_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->pt(),dimuonditrk_rf_cand->eta(),dimuonditrk_rf_cand->phi(),dimuonditrk_rf_cand->mass());
           dimuon_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("dimuon")->pt(),dimuonditrk_rf_cand->daughter("dimuon")->eta(),
           dimuonditrk_rf_cand->daughter("dimuon")->phi(),dimuonditrk_rf_cand->daughter("dimuon")->mass());
-          ditrak_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrak")->pt(),dimuonditrk_rf_cand->daughter("ditrak")->eta(),
-          dimuonditrk_rf_cand->daughter("ditrak")->phi(),dimuonditrk_rf_cand->daughter("ditrak")->mass());
+          ditrack_rf_p4.SetPtEtaPhiM(dimuonditrk_rf_cand->daughter("ditrack")->pt(),dimuonditrk_rf_cand->daughter("ditrack")->eta(),
+          dimuonditrk_rf_cand->daughter("ditrack")->phi(),dimuonditrk_rf_cand->daughter("ditrack")->mass());
 
           dimuon_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("dimuon"));
-          ditrak_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrak"));
+          ditrack_cand_rf = dynamic_cast <pat::CompositeCandidate *>(dimuonditrk_rf_cand->daughter("ditrack"));
 
           vhighMuon = dimuon_cand_rf->daughter("highMuon")->p4();
           vlowMuon = dimuon_cand_rf->daughter("lowMuon")->p4();
@@ -933,8 +933,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
           lowMuon_rf_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
           highMuon_rf_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
-          kP = ditrak_cand_rf->daughter("highTrak")->p4();
-          kM = ditrak_cand_rf->daughter("lowTrak")->p4();
+          kP = ditrack_cand_rf->daughter("highTrack")->p4();
+          kM = ditrack_cand_rf->daughter("lowTrack")->p4();
 
           kaonp_rf_p4.SetPtEtaPhiM(kP.pt(), kP.eta(), kP.phi(), kP.mass());
           kaonn_rf_p4.SetPtEtaPhiM(kM.pt(), kM.eta(), kM.phi(), kM.mass());
@@ -980,8 +980,8 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
         dimuon_m         = dimuon_cand->mass();
         dimuon_pt        = dimuon_cand->pt();
-        ditrak_m         = ditrak_cand->mass();
-        ditrak_pt        = ditrak_cand->pt();
+        ditrack_m         = ditrack_cand->mass();
+        ditrack_pt        = ditrack_cand->pt();
 
         dimuonditrk_refPK_mass  = dimuonditrk_cand.userFloat("massPKRefit");
         dimuonditrk_refKP_mass  = dimuonditrk_cand.userFloat("massKPRefit");
@@ -1223,25 +1223,25 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
 
 // ------------ method called once each job just before starting event loop  ------------
-void DiMuonDiTrakRootupler::beginJob() {}
+void DiMuonDiTrackRootupler::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void DiMuonDiTrakRootupler::endJob() {}
+void DiMuonDiTrackRootupler::endJob() {}
 
 // ------------ method called when starting to processes a run  ------------
-void DiMuonDiTrakRootupler::beginRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrackRootupler::beginRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a run  ------------
-void DiMuonDiTrakRootupler::endRun(edm::Run const&, edm::EventSetup const&) {}
+void DiMuonDiTrackRootupler::endRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void DiMuonDiTrakRootupler::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrackRootupler::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void DiMuonDiTrakRootupler::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
+void DiMuonDiTrackRootupler::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void DiMuonDiTrackRootupler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1250,4 +1250,4 @@ void DiMuonDiTrakRootupler::fillDescriptions(edm::ConfigurationDescriptions& des
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakRootupler);
+DEFINE_FWK_MODULE(DiMuonDiTrackRootupler);

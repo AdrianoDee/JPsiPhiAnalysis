@@ -1,7 +1,7 @@
-#include "../interface/DiMuonDiTrakProducer.h"
+#include "../interface/DiMuonDiTrackProducer.h"
 
 
-float DiMuonDiTrakProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float DiMuonDiTrackProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    float p1 = t1.phi();
    float p2 = t2.phi();
@@ -12,19 +12,19 @@ float DiMuonDiTrakProducer::DeltaR(const pat::PackedCandidate t1, const pat::Tri
    return sqrt((e1-e2)*(e1-e2) + dp*dp);
 }
 
-float DiMuonDiTrakProducer::DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+float DiMuonDiTrackProducer::DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
    return (fabs(t1.pt()-t2.pt())/t2.pt());
 }
 
-bool DiMuonDiTrakProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+bool DiMuonDiTrackProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<MaxDPtRel_ &&
 	DeltaR(t1,t2) < MaxDeltaR_);
 }
 
 bool
-DiMuonDiTrakProducer::isAbHadron(int pdgID) {
+DiMuonDiTrackProducer::isAbHadron(int pdgID) {
 
   if (abs(pdgID) == 511 || abs(pdgID) == 521 || abs(pdgID) == 531 || abs(pdgID) == 5122) return true;
   return false;
@@ -32,7 +32,7 @@ DiMuonDiTrakProducer::isAbHadron(int pdgID) {
 }
 
 bool
-DiMuonDiTrakProducer::isAMixedbHadron(int pdgID, int momPdgID) {
+DiMuonDiTrackProducer::isAMixedbHadron(int pdgID, int momPdgID) {
 
   if ((abs(pdgID) == 511 && abs(momPdgID) == 511 && pdgID*momPdgID < 0) ||
   (abs(pdgID) == 531 && abs(momPdgID) == 531 && pdgID*momPdgID < 0))
@@ -42,7 +42,7 @@ DiMuonDiTrakProducer::isAMixedbHadron(int pdgID, int momPdgID) {
 }
 
 bool
-DiMuonDiTrakProducer::isTheCandidate(reco::GenParticleRef genY) {
+DiMuonDiTrackProducer::isTheCandidate(reco::GenParticleRef genY) {
 
   bool goToJPsi = false;
   bool goToPhi = false;
@@ -78,7 +78,7 @@ DiMuonDiTrakProducer::isTheCandidate(reco::GenParticleRef genY) {
 
 }
 
-bool DiMuonDiTrakProducer::isSameTrack(reco::Track t1, reco::Track t2)
+bool DiMuonDiTrackProducer::isSameTrack(reco::Track t1, reco::Track t2)
 {
 
   float p1 = t1.phi();
@@ -96,7 +96,7 @@ bool DiMuonDiTrakProducer::isSameTrack(reco::Track t1, reco::Track t2)
 
 
 std::tuple<int, float, float>
-DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
+DiMuonDiTrackProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
   // std::cout << "findJpsiMCInfo 1 " << std::endl;
   int momJpsiID = 0;
@@ -137,22 +137,22 @@ DiMuonDiTrakProducer::findJpsiMCInfo(reco::GenParticleRef genJpsi) {
 
 }
 
-const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTTriggerCandidate(
-                                          const pat::TriggerObjectStandAlone& highTrak,
-                                          const pat::TriggerObjectStandAlone& lowTrak
+const pat::CompositeCandidate DiMuonDiTrackProducer::makeTTTriggerCandidate(
+                                          const pat::TriggerObjectStandAlone& highTrack,
+                                          const pat::TriggerObjectStandAlone& lowTrack
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(highTrak,"highTrak");
-  TTCand.addDaughter(lowTrak,"lowTrak");
-  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
+  TTCand.addDaughter(highTrack,"highTrack");
+  TTCand.addDaughter(lowTrack,"lowTrack");
+  TTCand.setCharge(highTrack.charge()+lowTrack.charge());
 
-  double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = highTrak.momentum();
+  double m_kaon1 = MassTracks_[0];
+  math::XYZVector mom_kaon1 = highTrack.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
-  double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = lowTrak.momentum();
+  double m_kaon2 = MassTracks_[1];
+  math::XYZVector mom_kaon2 = lowTrack.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
@@ -161,22 +161,22 @@ const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTTriggerCandidate(
   return TTCand;
 }
 
-const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTTriggerMixedCandidate(
-                                          const pat::PackedCandidate& highTrak,
-                                          const pat::TriggerObjectStandAlone& lowTrak
+const pat::CompositeCandidate DiMuonDiTrackProducer::makeTTTriggerMixedCandidate(
+                                          const pat::PackedCandidate& highTrack,
+                                          const pat::TriggerObjectStandAlone& lowTrack
                                          ){
 
   pat::CompositeCandidate TTCand;
-  TTCand.addDaughter(highTrak,"highTrak");
-  TTCand.addDaughter(lowTrak,"lowTrak");
-  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
+  TTCand.addDaughter(highTrack,"highTrack");
+  TTCand.addDaughter(lowTrack,"lowTrack");
+  TTCand.setCharge(highTrack.charge()+lowTrack.charge());
 
-  double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = highTrak.momentum();
+  double m_kaon1 = MassTracks_[0];
+  math::XYZVector mom_kaon1 = highTrack.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
-  double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = lowTrak.momentum();
+  double m_kaon2 = MassTracks_[1];
+  math::XYZVector mom_kaon2 = lowTrack.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
@@ -185,10 +185,10 @@ const pat::CompositeCandidate DiMuonDiTrakProducer::makeTTTriggerMixedCandidate(
   return TTCand;
 }
 
-DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
+DiMuonDiTrackProducer::DiMuonDiTrackProducer(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
-  TrakCollection_(consumes<edm::View<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
-  TrakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.7),
+  TrackCollection_(consumes<edm::View<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
+  TrackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.7),
   MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
   MaxDPtRel_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
@@ -198,9 +198,9 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
-  TrakTrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
-  DiMuonDiTrakMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrakMassCuts")),
-  MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
+  TrackTrackMassCuts_(iConfig.getParameter<std::vector<double>>("TrackTrackMassCuts")),
+  DiMuonDiTrackMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonDiTrackMassCuts")),
+  MassTracks_(iConfig.getParameter<std::vector<double>>("MassTracks")),
   JPsiMass_(iConfig.getParameter<double>("JPsiMass")),
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
   product_name_(iConfig.getParameter<std::string>("Product")),
@@ -225,7 +225,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
 
 }
 
-void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
+void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   // int debug = 1;
 
@@ -240,7 +240,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
   edm::Handle<edm::View<pat::PackedCandidate> > track;
-  iEvent.getByToken(TrakCollection_,track);
+  iEvent.getByToken(TrackCollection_,track);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
   iEvent.getByToken(TriggerCollection_,trig);
@@ -275,10 +275,10 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   uint ncombo = 0;
   float DiMuonMassMax_ = DiMuonMassCuts_[1];
   float DiMuonMassMin_ = DiMuonMassCuts_[0];
-  float TrakTrakMassMax_ = TrakTrakMassCuts_[1];
-  float TrakTrakMassMin_ = TrakTrakMassCuts_[0];
-  float DiMuonDiTrakMassMax_ = DiMuonDiTrakMassCuts_[1];
-  float DiMuonDiTrakMassMin_ = DiMuonDiTrakMassCuts_[0];
+  float TrackTrackMassMax_ = TrackTrackMassCuts_[1];
+  float TrackTrackMassMin_ = TrackTrackMassCuts_[0];
+  float DiMuonDiTrackMassMax_ = DiMuonDiTrackMassCuts_[1];
+  float DiMuonDiTrackMassMin_ = DiMuonDiTrackMassCuts_[0];
 
   pat::TriggerObjectStandAloneCollection filteredColl;
   std::map<int,pat::TriggerObjectStandAlone> matchedColl;
@@ -380,7 +380,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
          auto posTrack = track->at(i);
 
          if(!AddSameSig_ && posTrack.charge()<=0) continue;
-         if(posTrack.pt()<TrakPtCut_) continue;
+         if(posTrack.pt()<TrackPtCut_) continue;
 	       //if(!IsMC_ and fabs(posTrack.pdgId())!=211) continue;
 	       if(!(posTrack.trackHighPurity())) continue;
          if(!(posTrack.hasTrackDetails())) continue;
@@ -397,7 +397,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            auto negTrack = track->at(j);
 
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
-           if(negTrack.pt()<TrakPtCut_) continue;
+           if(negTrack.pt()<TrackPtCut_) continue;
 
   	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
@@ -408,19 +408,19 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
 
-           if ( !(TTCand.mass() < TrakTrakMassMax_ && TTCand.mass() > TrakTrakMassMin_) ) continue;
+           if ( !(TTCand.mass() < TrackTrackMassMax_ && TTCand.mass() > TrackTrackMassMin_) ) continue;
 
            pat::CompositeCandidate DiMuonTTCand = makeDiMuonTTCandidate(*dimuonCand, *&TTCand);
 
-           if (DiMuonTTCand.mass() > DiMuonDiTrakMassMax_ || DiMuonTTCand.mass() < DiMuonDiTrakMassMin_) continue;
+           if (DiMuonTTCand.mass() > DiMuonDiTrackMassMax_ || DiMuonTTCand.mass() < DiMuonDiTrackMassMin_) continue;
 
 
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
-           const ParticleMass trackMass1(MassTraks_[0]);
+           const ParticleMass trackMass1(MassTracks_[0]);
            float trackSigma1 = trackMass1*1E-6;
-           const ParticleMass trackMass2(MassTraks_[1]);
+           const ParticleMass trackMass2(MassTracks_[1]);
            float trackSigma2 = trackMass2*1E-6;
 
            std::vector<reco::TransientTrack> xTracks;
@@ -853,12 +853,12 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                    pat::CompositeCandidate phi;
                    if(patTk.pt()>=patTk2.pt())
                    {
-                     phi.addDaughter(patTk,"highTrak");
-                     phi.addDaughter(patTk2,"lowTrak");
+                     phi.addDaughter(patTk,"highTrack");
+                     phi.addDaughter(patTk2,"lowTrack");
                    }else
                    {
-                     phi.addDaughter(patTk2,"highTrak");
-                     phi.addDaughter(patTk,"lowTrak");
+                     phi.addDaughter(patTk2,"highTrack");
+                     phi.addDaughter(patTk,"lowTrack");
                    }
 
                    phi.setP4(patTk.p4()+patTk2.p4());
@@ -889,8 +889,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
 
              std::vector<float> oneMasses,twoMasses;
-             oneMasses.push_back(MassTraks_[0]); oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
-             twoMasses.push_back(pionmass); twoMasses.push_back(MassTraks_[0]);twoMasses.push_back(pionmass);
+             oneMasses.push_back(MassTracks_[0]); oneMasses.push_back(pionmass);oneMasses.push_back(pionmass);
+             twoMasses.push_back(pionmass); twoMasses.push_back(MassTracks_[0]);twoMasses.push_back(pionmass);
 
 
              for(int iP = 0; iP < 3; ++iP)
@@ -1043,19 +1043,19 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   nevents++;
 }
 
-void DiMuonDiTrakProducer::endJob(){
+void DiMuonDiTrackProducer::endJob(){
   std::cout << "#########################################" << std::endl;
-  std::cout << "DiMuonDiTrakFit Candidate producer report:" << std::endl;
+  std::cout << "DiMuonDiTrackFit Candidate producer report:" << std::endl;
   std::cout << "#########################################" << std::endl;
   std::cout << "Found " << nevents << " Events" << std::endl;
   std::cout << "Events with DiMuon candidates " << ndimuon << std::endl;
-  std::cout << "Events with DiMuonDiTrak candidates " << nreco << std::endl;
+  std::cout << "Events with DiMuonDiTrack candidates " << nreco << std::endl;
   std::cout << "#########################################" << std::endl;
-  std::cout << "Found " << candidates << " DiMuonDiTrak candidates." << std::endl;
+  std::cout << "Found " << candidates << " DiMuonDiTrack candidates." << std::endl;
   std::cout << "#########################################" << std::endl;
 }
 
-bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
+bool DiMuonDiTrackProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu){
   float DeltaEta = fabs(mu.eta()- tk.eta());
   float DeltaP   = fabs(mu.p()- tk.p());
   float DeltaPt = ((tk.pt() - mu.pt())/tk.pt());
@@ -1064,7 +1064,7 @@ bool DiMuonDiTrakProducer::IsTheSame(const pat::PackedCandidate& tk, const pat::
   return false;
 }
 
-pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
+pat::CompositeCandidate DiMuonDiTrackProducer::makeDiMuonTTCandidate(
                                           const pat::CompositeCandidate& dimuon,
 				          const pat::CompositeCandidate& tt
                                          ){
@@ -1082,31 +1082,31 @@ pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
 
 }
 
-pat::CompositeCandidate DiMuonDiTrakProducer::makeTTCandidate(
-                                          const pat::PackedCandidate& highTrak,
-                                          const pat::PackedCandidate& lowTrak
+pat::CompositeCandidate DiMuonDiTrackProducer::makeTTCandidate(
+                                          const pat::PackedCandidate& highTrack,
+                                          const pat::PackedCandidate& lowTrack
                                          ){
 
   pat::CompositeCandidate TTCand;
-  if(highTrak.pt()<lowTrak.pt())
+  if(highTrack.pt()<lowTrack.pt())
   {
-    TTCand.addDaughter(lowTrak,"highTrak");
-    TTCand.addDaughter(highTrak,"lowTrak");
+    TTCand.addDaughter(lowTrack,"highTrack");
+    TTCand.addDaughter(highTrack,"lowTrack");
   }
   else
   {
-    TTCand.addDaughter(highTrak,"highTrak");
-    TTCand.addDaughter(lowTrak,"lowTrak");
+    TTCand.addDaughter(highTrack,"highTrack");
+    TTCand.addDaughter(lowTrack,"lowTrack");
   }
 
-  TTCand.setCharge(highTrak.charge()+lowTrak.charge());
+  TTCand.setCharge(highTrack.charge()+lowTrack.charge());
 
-  double m_kaon1 = MassTraks_[0];
-  math::XYZVector mom_kaon1 = highTrak.momentum();
+  double m_kaon1 = MassTracks_[0];
+  math::XYZVector mom_kaon1 = highTrack.momentum();
   double e_kaon1 = sqrt(m_kaon1*m_kaon1 + mom_kaon1.Mag2());
   math::XYZTLorentzVector p4_kaon1 = math::XYZTLorentzVector(mom_kaon1.X(),mom_kaon1.Y(),mom_kaon1.Z(),e_kaon1);
-  double m_kaon2 = MassTraks_[1];
-  math::XYZVector mom_kaon2 = lowTrak.momentum();
+  double m_kaon2 = MassTracks_[1];
+  math::XYZVector mom_kaon2 = lowTrack.momentum();
   double e_kaon2 = sqrt(m_kaon2*m_kaon2 + mom_kaon2.Mag2());
   math::XYZTLorentzVector p4_kaon2 = math::XYZTLorentzVector(mom_kaon2.X(),mom_kaon2.Y(),mom_kaon2.Z(),e_kaon2);
   reco::Candidate::LorentzVector vTT = p4_kaon1 + p4_kaon2;
@@ -1116,9 +1116,9 @@ pat::CompositeCandidate DiMuonDiTrakProducer::makeTTCandidate(
 }
 
 
-reco::Candidate::LorentzVector DiMuonDiTrakProducer::convertVector(const math::XYZTLorentzVectorF& v){
+reco::Candidate::LorentzVector DiMuonDiTrackProducer::convertVector(const math::XYZTLorentzVectorF& v){
 
   return reco::Candidate::LorentzVector(v.x(),v.y(), v.z(), v.t());
 }
 //define this as a plug-in
-DEFINE_FWK_MODULE(DiMuonDiTrakProducer);
+DEFINE_FWK_MODULE(DiMuonDiTrackProducer);
