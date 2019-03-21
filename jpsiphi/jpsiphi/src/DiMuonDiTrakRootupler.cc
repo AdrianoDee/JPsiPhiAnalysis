@@ -703,7 +703,7 @@ void DiMuonDiTrackRootupler::analyze(const edm::Event& iEvent, const edm::EventS
 
         dimuonditrk_cosAlphaCA = dimuonditrk_cand.userFloat("cosAlphaCA");
         dimuonditrk_ctauPVCA = dimuonditrk_cand.userFloat("ctauPVCA");
-        dimuonditrk_ctauErrPVCA = dimuonditrk_cand.userFloat("ctauErrPCAV");
+        dimuonditrk_ctauErrPVCA = dimuonditrk_cand.userFloat("ctauErrPVCA");
 
         dimuonditrk_tPFromPVCA = dimuonditrk_cand.userFloat("tPFromPVCA");
         dimuonditrk_tMFromPVCA = dimuonditrk_cand.userFloat("tMFromPVCA");
