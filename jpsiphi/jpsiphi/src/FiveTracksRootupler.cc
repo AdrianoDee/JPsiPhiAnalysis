@@ -75,11 +75,9 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTracksCollection;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_rf_cand_Label;
-  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTracksCollection_;
   edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, track_pdgid_, pdgid_;
   bool IsMC_,OnlyGen_ ;
   std::vector<std::string>  HLTs_;
@@ -98,13 +96,10 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
 
   Double_t testMass;
 
-  std::vector < TLorentzVector > five_p4, five_ref_p4;
-  std::vector < TLorentzVector > psiPrimeSame_p4, psiPrimeMixed_p4, psiPrimeSame_ditrack_p4, psiPrimeMixed_ditrack_p4;
-  std::vector < TLorentzVector >  dimuonDiTrkOne_p4, dimuonDiTrkTwo_p4, dimuonDiTrkThree_p4;
-  std::vector < TLorentzVector > ditrackOne_p4, ditrackTwo_p4, ditrackThree_p4;
-  UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrk_id;
+  UInt_t run, event, lumi, numPrimaryVertices, trigger;
+  UInt_t dimuon_id, dimuonditrk_id, p_id, m_id, t_id;
 
-  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4;
+  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4, five_p4;
   TLorentzVector lowPion_p4, lowProton_p4, highProton_p4, highPion_p4, thirdProton_p4, thirdPion_p4;
   TLorentzVector lowMuon_p4, highMuon_p4, lowKaon_p4, thirdKaon_p4, highKaon_p4;
 
@@ -273,9 +268,8 @@ static const Double_t psi1SMass =  3.09691;
 // constructors and destructor
 //
 FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
-        FiveTracksCollection(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
-        thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-        primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
+        FiveTracksCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
+        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
         TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 	      IsMC_(iConfig.getParameter<bool>("isMC")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
@@ -298,6 +292,10 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("noFiveCandidates",      &noFiveCandidates,      "noFiveCandidates/I");
 
         fivetracks_tree->Branch("dimuonditrk_id",      &dimuonditrk_id,      "dimuonditrk_id/I");
+        fivetracks_tree->Branch("dimuon_id",      &dimuon_id,      "dimuon_id/I");
+        fivetracks_tree->Branch("p_id",      &p_id,      "p_id/I");
+        fivetracks_tree->Branch("m_id",      &m_id,      "m_id/I");
+        fivetracks_tree->Branch("t_id",      &t_id,      "m_id/I");
 
         fivetracks_tree->Branch("five_p4",     "TLorentzVector", &five_p4);
         fivetracks_tree->Branch("dimuonditrk_p4",     "TLorentzVector", &dimuonditrk_p4);
@@ -732,10 +730,10 @@ void FiveTracksRootupler::analyze(const edm::Event& iEvent, const edm::EventSetu
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> fivetracks_cand_handle;
-  iEvent.getByToken(FiveTracksCollection, fivetracks_cand_handle);
+  iEvent.getByToken(FiveTracksCollection_, fivetracks_cand_handle);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+  iEvent.getByToken(thePVs_, primaryVertices_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( TriggerResults_ , triggerResults_handle);
@@ -822,6 +820,10 @@ if(!OnlyGen_)
 
       first_five_ref = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter("first_five_ref"));
       dimuonditrk_cand = dynamic_cast<const pat::CompositeCandidate*>(five_cand.daughter("dimuonditrack"));
+
+      dimuon_id = dimuonditrk_cand->userInt("dimuon_id");
+      p_id = dimuonditrk_cand->userInt("pId");
+      m_id = dimuonditrk_cand->userInt("mId");
 
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
       ditrackOne_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrack"));

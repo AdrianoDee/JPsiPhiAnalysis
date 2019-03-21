@@ -116,15 +116,15 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
   pat::CompositeCandidate makeDiMuonTTCandidate(const pat::CompositeCandidate& DiMuon,
 						    const pat::CompositeCandidate& tt);
-  pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& trak1,
-                                                const pat::PackedCandidate& trak2);
+  pat::CompositeCandidate makeTTCandidate(const pat::PackedCandidate& track1,
+                                                const pat::PackedCandidate& track2);
   const pat::CompositeCandidate makeTTTriggerCandidate(
-                                            const pat::TriggerObjectStandAlone& trakP,
-                                            const pat::TriggerObjectStandAlone& trakN
+                                            const pat::TriggerObjectStandAlone& trackP,
+                                            const pat::TriggerObjectStandAlone& trackN
                                           );
   const pat::CompositeCandidate makeTTTriggerMixedCandidate(
-                                            const pat::PackedCandidate& trakP,
-                                            const pat::TriggerObjectStandAlone& trakN
+                                            const pat::PackedCandidate& trackP,
+                                            const pat::TriggerObjectStandAlone& trackN
                                           );
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
   bool isSameTrack(reco::Track t1, reco::Track t2);

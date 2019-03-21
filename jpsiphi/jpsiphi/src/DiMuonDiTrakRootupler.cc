@@ -76,8 +76,9 @@ private:
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrackCollection;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrackCollection_;
   edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   bool IsMC_,OnlyGen_ ;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -223,8 +224,9 @@ static const Double_t psi1SMass =  3.09691;
 // constructors and destructor
 //
 DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
-DiMuonDiTrackCollection(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
+DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
 TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
 IsMC_(iConfig.getParameter<bool>("isMC")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
@@ -593,10 +595,13 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> dimuonditrk_cand_handle;
-  iEvent.getByToken(DiMuonDiTrackCollection, dimuonditrk_cand_handle);
+  iEvent.getByToken(DiMuonDiTrackCollection_, dimuonditrk_cand_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( TriggerResults_ , triggerResults_handle);
+
+  edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
+  iEvent.getByToken(thePVs_, primaryVertices_handle);
 
   numPrimaryVertices = primaryVertices_handle->size();
   run = iEvent.id().run();

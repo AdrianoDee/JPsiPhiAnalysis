@@ -65,16 +65,17 @@ class SixTracksProducer : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTrackCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrackCollection_;
-  double trakPtCut_;
-  edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
-  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
-  edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
+  double trackPtCut_;
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
+  edm::EDGetTokenT<reco::BeamSpot> BeamSpot_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
+  edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   std::vector<double> SixTrackMassCuts_;
   UInt_t numMasses_;
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
-  bool isMC_;
+  bool IsMC_;
   bool addMCTruth_;
   bool doDoubleConstant_;
   bool addSameSig_;
@@ -91,10 +92,10 @@ class SixTracksProducer : public edm::EDProducer {
                                            );
  pat::CompositeCandidate makeSixCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
-                                            const pat::PackedCandidate& trakP,
-                                            const pat::PackedCandidate& trakN,
-                                            const pat::PackedCandidate& trak3,
-                                            const pat::PackedCandidate& trak4,
+                                            const pat::PackedCandidate& trackP,
+                                            const pat::PackedCandidate& trackN,
+                                            const pat::PackedCandidate& track3,
+                                            const pat::PackedCandidate& track4,
                                             double massOne,
                                             double massTwo,
                                             double massThree,
@@ -115,7 +116,7 @@ class SixTracksProducer : public edm::EDProducer {
                                           );
   pat::CompositeCandidate makeSixCandidate(
                                             const pat::CompositeCandidate& fiveTrack,
-                                            const pat::PackedCandidate& trak4
+                                            const pat::PackedCandidate& track4
                                           );
 
   std::tuple<int, float, float> findJpsiMCInfo(reco::GenParticleRef genParticle);
@@ -127,6 +128,7 @@ class SixTracksProducer : public edm::EDProducer {
 
   bool MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
+  float DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
   float maxDeltaR;
   float maxDPtRel;

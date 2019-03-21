@@ -75,10 +75,9 @@ class SixTracksRootupler : public edm::EDAnalyzer {
 
   // ----------member data ---------------------------
   std::string file_name;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> FiveTracksCollection;
-  edm::EDGetTokenT<pat::CompositeCandidateCollection> dimuonditrk_rf_cand_Label;
+  edm::EDGetTokenT<pat::CompositeCandidateCollection> SixTracksCollection_;
   edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
-  int  dimuonditrk_pdgid_, dimuon_pdgid_, track_pdgid_, pdgid_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   bool IsMC_,OnlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  HLTs_;
@@ -97,40 +96,28 @@ class SixTracksRootupler : public edm::EDAnalyzer {
 
   Double_t testMass;
 
-  std::vector < TLorentzVector > five_p4, five_ref_p4;
-  std::vector < TLorentzVector > psiPrimeSame_p4, psiPrimeMixed_p4, psiPrimeSame_ditrack_p4, psiPrimeMixed_ditrack_p4;
-  std::vector < TLorentzVector >  dimuonDiTrkOne_p4, dimuonDiTrkTwo_p4, dimuonDiTrkThree_p4;
-  std::vector < TLorentzVector > diTrackOne_p4, diTrackTwo_p4, diTrackThree_p4;
-  UInt_t run, event, lumi, numPrimaryVertices, trigger, dimuonditrk_id, five_id;
 
-  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4;
+  UInt_t run, event, lumi, numPrimaryVertices, trigger;
+  UInt_t dimuonditrk_id, five_id, dimuon_id, p_id, t_id, f_id, m_id;
+  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4,
   TLorentzVector lowPion_p4, lowProton_p4, highProton_p4, highPion_p4, thirdProton_p4, thirdPion_p4;
   TLorentzVector lowMuon_p4, highMuon_p4, lowKaon_p4, thirdKaon_p4, highKaon_p4;
   TLorentzVector fourthProton_p4, fourthPion_p4, fourthKaon_p4;
 
-
-  TLorentzVector dimuonditrk_not_rf_p4;
-  TLorentzVector diTrackOne_rf_p4, diTrackOne_not_rf_p4;
-  TLorentzVector muonp_rf_p4;
-  TLorentzVector muonn_rf_p4;
-
-  TLorentzVector dimuonditrk_rf_p4;
-  TLorentzVector dimuonditrk_rf_const_p4;
-  TLorentzVector dimuon_rf_p4, dimuon_not_rf_p4;
-  TLorentzVector ditrack_rf_p4, ditrack_not_rf_p4;
-  TLorentzVector lowMuon_rf_p4;
-  TLorentzVector highMuon_rf_p4;
-  TLorentzVector kaonp_rf_p4;
-  TLorentzVector kaonn_rf_p4;
 
   Double_t five_m, five_m_ref, five_mass_ppk, five_mass_kpp, five_mass_pkp, five_mass_ppp, five_pt, five_eta, five_phi, five_p;
   Double_t five_cosAlpha, five_ctauPV, five_ctauErrPV, five_cosAlphaCA, five_ctauPVCA, five_ctauErrPVCA, five_cosAlphaDZ;
   Double_t five_ctauPVDZ, five_ctauErrPVDZ, five_cosAlphaBS, five_ctauPVBS, five_ctauErrPVBS;
   Double_t five_vProb, five_nDof, five_vChi2, five_vx, five_vy, five_vz;
 
+  Double_t fiveOne_pt, fiveOne_eta, fiveOne_phi, fiveOne_p;
+  Double_t fiveTwo_pt, fiveTwo_eta, fiveTwo_phi, fiveTwo_p;
+  Double_t fiveThree_pt, fiveThree_eta, fiveThree_phi, fiveThree_p;
+  Double_t fiveFour_pt, fiveFour_eta, fiveFour_phi, fiveFour_p;
+
   Int_t dimuonditrk_charge, five_charge;
 
-  Double_t highTrackMatch, lowTrackMatch, thirdTrackMatch, fourthTrackMatch, ighMuonMatch, lowMuonMatch;
+  Double_t highTrackMatch, lowTrackMatch, thirdTrackMatch, fourthTrackMatch, highMuonMatch, lowMuonMatch;
 
   Double_t dimuonditrk_vProb, dimuonditrk_vChi2;
   Double_t dimuonditrk_pt, dimuonditrk_eta, dimuonditrk_phi, dimuonditrk_y, dimuonditrk_vx, dimuonditrk_vy, dimuonditrk_vz, dimuonditrk_p;
@@ -185,6 +172,9 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonDiTrkOne_pt, dimuonDiTrkOne_eta, dimuonDiTrkOne_phi, dimuonDiTrkOne_charge, dimuonDiTrkOne_p;
   Double_t dimuonDiTrkTwo_pt, dimuonDiTrkTwo_eta, dimuonDiTrkTwo_phi, dimuonDiTrkTwo_charge, dimuonDiTrkTwo_p;
   Double_t dimuonDiTrkThree_pt, dimuonDiTrkThree_eta, dimuonDiTrkThree_phi, dimuonDiTrkThree_charge, dimuonDiTrkThree_p;
+  Double_t dimuonDiTrkFour_pt, dimuonDiTrkFour_eta, dimuonDiTrkFour_phi, dimuonDiTrkFour_charge, dimuonDiTrkFour_p;
+  Double_t dimuonDiTrkFive_pt, dimuonDiTrkFive_eta, dimuonDiTrkFive_phi, dimuonDiTrkFive_charge, dimuonDiTrkFive_p;
+  Double_t dimuonDiTrkSix_pt, dimuonDiTrkSix_eta, dimuonDiTrkSix_phi, dimuonDiTrkSix_charge, dimuonDiTrkSix_p;
 
   Double_t dimuonditrk_nDof,dimuonditrk_m_rf,dimuonditrk_m_rf_c,dimuonditrk_m_rf_d_c;
   Int_t highTrack_NPixelHits, highTrack_NStripHits, highTrack_NTrackhits, highTrack_NBPixHits, highTrack_NPixLayers;
@@ -251,9 +241,9 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t genFourthTrack_pdg, genFourthTrack_mompdg, genFourthTrack_status, genFourthTrack_phi;
   Double_t genFourthTrack_p, genFourthTrack_pt, genFourthTrack_eta;
 
-  Double_t six_m, six_m_ref, six_mass_ppkk, six_mass_pkpk
-  Double_t six_mass_pkkk, six_mass_kpkp, six_mass_kppk, six_mass_kkpp
-  six_pt, six_eta, six_phi, six_p;
+  Double_t six_m, six_m_ref, six_mass_ppkk, six_mass_pkpk;
+  Double_t six_mass_pkkk, six_mass_kpkp, six_mass_kppk, six_mass_kkpp;
+  Double_t six_pt, six_eta, six_phi, six_p;
   Double_t six_cosAlpha, six_ctauPV, six_ctauErrPV;
   Double_t six_cosAlphaCA, six_ctauPVCA, six_ctauErrPVCA;
   Double_t six_cosAlphaDZ, six_ctauPVDZ, six_ctauErrPVDZ;
@@ -297,9 +287,10 @@ static const Double_t psi1SMass =  3.09691;
 // constructors and destructor
 //
 SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
-        FiveTracksCollection(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("SixTracksCand"))),
+        SixTracksCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("SixTracksCand"))),
         TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      IsMC_(iConfig.getParameter<bool>("isMC")),
+        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+        IsMC_(iConfig.getParameter<bool>("isMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
@@ -531,7 +522,7 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("dca_m1t3",      &dca_m1t3,        "dca_m1t3/D");
         sixtracks_tree->Branch("dca_m2t3",      &dca_m2t3,        "dca_m2t3/D");
         sixtracks_tree->Branch("dca_t1t3",      &dca_t1t3,        "dca_t1t3/D");
-        sixtracks_tree->Branch("dca_t2t3",      &dca_t2t2,        "dca_t2t3/D");
+        sixtracks_tree->Branch("dca_t2t3",      &dca_t2t3,        "dca_t2t3/D");
         sixtracks_tree->Branch("dca_m1t4",      &dca_m1t4,        "dca_m1t4/D");
         sixtracks_tree->Branch("dca_m2t4",      &dca_m2t4,        "dca_m2t4/D");
         sixtracks_tree->Branch("dca_t1t4",      &dca_t1t4,        "dca_t1t4/D");
@@ -906,10 +897,10 @@ void SixTracksRootupler::analyze(const edm::Event& iEvent, const edm::EventSetup
   using namespace std;
 
   edm::Handle<std::vector<pat::CompositeCandidate>> sixtracks_cand_handle;
-  iEvent.getByToken(FiveTracksCollection, sixtracks_cand_handle);
+  iEvent.getByToken(SixTracksCollection_, sixtracks_cand_handle);
 
   edm::Handle<std::vector<reco::Vertex >> primaryVertices_handle;
-  iEvent.getByToken(primaryVertices_Label, primaryVertices_handle);
+  iEvent.getByToken(thePVs_, primaryVertices_handle);
 
   edm::Handle< edm::TriggerResults > triggerResults_handle;
   iEvent.getByToken( TriggerResults_ , triggerResults_handle);
@@ -987,7 +978,9 @@ if(!OnlyGen_)
 
       pat::CompositeCandidate six_cand;
 
-      const pat::PackedCandidate *trackOne_cand, *trackTwo_cand, *trackThree_cand,*trackFour_cand, *first_six_ref;
+      const pat::CompositeCandidate *first_six_ref;
+
+      const pat::PackedCandidate *trackOne_cand, *trackTwo_cand, *trackThree_cand,*trackFour_cand;
 
       const pat::CompositeCandidate *dimuonDiTrkOne_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
       const pat::CompositeCandidate *dimuonDiTrkFour_cand, *dimuonDiTrkFive_cand, *dimuonDiTrkSix_cand;
@@ -999,7 +992,7 @@ if(!OnlyGen_)
 
       const pat::CompositeCandidate *triTrack_cand;
 
-      const pat::CompositeCandidate *fiveOne_cand, *fiveTwo_cand, *fiveThree_cand, *fiveFour_cand,;
+      const pat::CompositeCandidate *fiveOne_cand, *fiveTwo_cand, *fiveThree_cand, *fiveFour_cand;
 
       six_cand  = sixtracks_cand_handle->at(i);
 
@@ -1012,12 +1005,12 @@ if(!OnlyGen_)
       fiveFour_cand  = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackFour")); // N 3 4
 
 
-      dimuonDiTrkOne_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveOne_cand->daughter("dimuonditrack")); // P N
-      dimuonDiTrkTwo_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveThree_cand->daughter("dimuonDiTrackOne")); // P 3
+      dimuonDiTrkOne_cand   = dynamic_cast<const pat::CompositeCandidate*>(fiveOne_cand->daughter("dimuonditrack")); // P N
+      dimuonDiTrkTwo_cand   = dynamic_cast<const pat::CompositeCandidate*>(fiveThree_cand->daughter("dimuonDiTrackOne")); // P 3
       dimuonDiTrkThree_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveThree_cand->daughter("dimuonDiTrackTwo")); // P 4
-      dimuonDiTrkFour_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackOne"));  // N 3
-      dimuonDiTrkFive_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackTwo")); // N 4
-      dimuonDiTrkSix_cand = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackThree")); // 3 4
+      dimuonDiTrkFour_cand  = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackOne"));  // N 3
+      dimuonDiTrkFive_cand  = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackTwo")); // N 4
+      dimuonDiTrkSix_cand   = dynamic_cast<const pat::CompositeCandidate*>(fiveFour_cand->daughter("dimuonDiTrackThree")); // 3 4
 
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonDiTrkOne_cand->daughter("dimuon"));
 
@@ -1043,17 +1036,21 @@ if(!OnlyGen_)
       const reco::Vertex bs     = *(six_cand.userData<reco::Vertex>("bS"));
 
 
-      six_m           = six_cand.mass();
-      six_m_ref       = six_cand.userFloat("mass_ref_0");
-      six_mass_ppk    = six_cand.userFloat("mass_ref_1");
-      six_mass_kpp    = six_cand.userFloat("mass_ref_2");
-      six_mass_pkp    = six_cand.userFloat("mass_ref_3");
-      six_mass_ppp    = six_cand.userFloat("mass_ref_4");
+      six_m            = six_cand.mass();
+      six_m_ref        = six_cand.userFloat("mass_ref_0");
+      six_mass_ppkk    = six_cand.userFloat("mass_ref_1");
+      six_mass_pkpk    = six_cand.userFloat("mass_ref_2");
+      six_mass_pkkk    = six_cand.userFloat("mass_ref_3");
+      six_mass_kpkp    = six_cand.userFloat("mass_ref_4");
+      six_mass_kppk    = six_cand.userFloat("mass_ref_5");
+      six_mass_kkpp    = six_cand.userFloat("mass_ref_6");
+
 
       six_pt    = six_cand.pt();
       six_eta   = six_cand.eta();
       six_phi   = six_cand.phi();
       six_p     = six_cand.p();
+
       six_cosAlpha    = six_cand.userFloat("cosAlpha");
       six_ctauPV      = six_cand.userFloat("ctauPV");
       six_ctauErrPV   = six_cand.userFloat("ctauErrPV");
@@ -1451,6 +1448,21 @@ if(!OnlyGen_)
       dimuonDiTrkThree_eta    = dimuonDiTrkThree_cand->eta();
       dimuonDiTrkThree_phi    = dimuonDiTrkThree_cand->phi();
       dimuonDiTrkThree_charge = dimuonDiTrkThree_cand->charge();
+
+      dimuonDiTrkFour_pt     = dimuonDiTrkFour_cand->pt();
+      dimuonDiTrkFour_eta    = dimuonDiTrkFour_cand->eta();
+      dimuonDiTrkFour_phi    = dimuonDiTrkFour_cand->phi();
+      dimuonDiTrkFour_charge = dimuonDiTrkFour_cand->charge();
+
+      dimuonDiTrkFive_pt     = dimuonDiTrkFive_cand->pt();
+      dimuonDiTrkFive_eta    = dimuonDiTrkFive_cand->eta();
+      dimuonDiTrkFive_phi    = dimuonDiTrkFive_cand->phi();
+      dimuonDiTrkFive_charge = dimuonDiTrkFive_cand->charge();
+
+      dimuonDiTrkSix_pt     = dimuonDiTrkSix_cand->pt();
+      dimuonDiTrkSix_eta    = dimuonDiTrkSix_cand->eta();
+      dimuonDiTrkSix_phi    = dimuonDiTrkSix_cand->phi();
+      dimuonDiTrkSix_charge = dimuonDiTrkSix_cand->charge();
 
       triTrack_m      = triTrack_cand->mass();
       triTrack_pt     = triTrack_cand->pt();

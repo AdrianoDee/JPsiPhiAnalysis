@@ -237,8 +237,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<pat::CompositeCandidateCollection> dimuon;
   iEvent.getByToken(DiMuonCollection_,dimuon);
 
-  edm::Handle<edm::View<pat::PackedCandidate> > trak;
-  iEvent.getByToken(TrakCollection_,trak);
+  edm::Handle<edm::View<pat::PackedCandidate> > track;
+  iEvent.getByToken(TrakCollection_,track);
 
   edm::Handle<std::vector<pat::TriggerObjectStandAlone>> trig;
   iEvent.getByToken(TriggerCollection_,trig);
@@ -311,9 +311,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
   }
 
   //Tracks Collections Trigger Matching
-  for (size_t i = 0; i < trak->size(); i++) {
+  for (size_t i = 0; i < track->size(); i++) {
 
-    auto t = trak->at(i);
+    auto t = track->at(i);
 
     bool matched = false;
     for (std::vector<pat::TriggerObjectStandAlone>::const_iterator trigger = filteredColl.begin(), triggerEnd=filteredColl.end(); trigger!= triggerEnd; ++trigger)
@@ -373,9 +373,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
 
 // loop on track candidates, make DiMuonT candidate, positive charge
-       // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = trak->begin(), trakend=trak->end(); posTrack!= trakend; ++posTrack){
-       for (size_t i = 0; i < trak->size(); i++) {
-         auto posTrack = trak->at(i);
+       // for (std::vector<pat::PackedCandidate>::const_iterator posTrack = track->begin(), trackend=track->end(); posTrack!= trackend; ++posTrack){
+       for (size_t i = 0; i < track->size(); i++) {
+         auto posTrack = track->at(i);
 
          if(!AddSameSig_ && posTrack.charge()<=0) continue;
          if(posTrack.pt()<TrakPtCut_) continue;
@@ -388,11 +388,11 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
          if ( IsTheSame(posTrack,*pmu1) || IsTheSame(posTrack,*pmu2)) continue;
          // std::cout << "debug    6 "<< std::endl;
 // loop over second track candidate, negative charge
-         // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = trak->begin(); negTrack!= trakend; ++negTrack){
+         // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = track->begin(); negTrack!= trackend; ++negTrack){
          int jstart = 0;
          if(AddSameSig_) jstart = i+1;
-         for (size_t j = jstart; j < trak->size(); j++) {
-           auto negTrack = trak->at(j);
+         for (size_t j = jstart; j < track->size(); j++) {
+           auto negTrack = track->at(j);
 
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
            if(negTrack.pt()<TrakPtCut_) continue;
@@ -416,10 +416,10 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
            // float refittedMass = -1.0, mumuVtxCL = -1.0;
            const ParticleMass muonMass(0.1056583);
            float muonSigma = muonMass*1E-6;
-           const ParticleMass trakMass1(MassTraks_[0]);
-           float trakSigma1 = trakMass1*1E-6;
-           const ParticleMass trakMass2(MassTraks_[1]);
-           float trakSigma2 = trakMass2*1E-6;
+           const ParticleMass trackMass1(MassTraks_[0]);
+           float trackSigma1 = trackMass1*1E-6;
+           const ParticleMass trackMass2(MassTraks_[1]);
+           float trackSigma2 = trackMass2*1E-6;
 
            std::vector<reco::TransientTrack> xTracks;
            KinematicParticleFactoryFromTransientTrack pFactory;
@@ -443,8 +443,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
            xParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
            xParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-           xParticles.push_back(pFactory.particle(xTracks[2],trakMass1,kinChi,kinNdf,trakSigma1));
-           xParticles.push_back(pFactory.particle(xTracks[3],trakMass2,kinChi,kinNdf,trakSigma2));
+           xParticles.push_back(pFactory.particle(xTracks[2],trackMass1,kinChi,kinNdf,trackSigma1));
+           xParticles.push_back(pFactory.particle(xTracks[3],trackMass2,kinChi,kinNdf,trackSigma2));
 
            KinematicParticleVertexFitter kFitter;
            RefCountedKinematicTree xVertexFitTree;
@@ -861,7 +861,7 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
                    phi.setP4(patTk.p4()+patTk2.p4());
                    candRef = 1.0;
-                   DiMuonTTCand_rf.addDaughter(phi,"ditrak");
+                   DiMuonTTCand_rf.addDaughter(phi,"ditrack");
                    DiMuonTTCand_rf.addDaughter(psi,"dimuon");
                    DiMuonTTCand.addDaughter(DiMuonTTCand_rf,"ref_cand");
                  }
@@ -896,8 +896,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                  const ParticleMass oneMass(oneMasses[iP]);
                  const ParticleMass twoMass(twoMasses[iP]);
 
-                 float trakSigma1 = oneMass*1E-6;
-                 float trakSigma2 = twoMass*1E-6;
+                 float trackSigma1 = oneMass*1E-6;
+                 float trackSigma2 = twoMass*1E-6;
 
                  kinChi = 0.;
                  kinNdf = 0.;
@@ -921,8 +921,8 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                  pkParticles.clear();
                  pkParticles.push_back(pFactory.particle(xTracks[0],muonMass,kinChi,kinNdf,muonSigma));
                  pkParticles.push_back(pFactory.particle(xTracks[1],muonMass,kinChi,kinNdf,muonSigma));
-                 pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trakSigma1));
-                 pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trakSigma2));
+                 pkParticles.push_back(pFactory.particle(xTracks[2],oneMass,kinChi,kinNdf,trackSigma1));
+                 pkParticles.push_back(pFactory.particle(xTracks[3],twoMass,kinChi,kinNdf,trackSigma2));
 
                  //RefCountedKinematicTree pkTree = pFitter.fit(pkParticles,jpsi_mtc);
                  KinematicConstrainedVertexFitter pFitter;
@@ -955,14 +955,14 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
               if(theGenMap.isValid())
               {
                 //posTrack
-                auto refPosTrack = trak->refAt(i);
-                auto refNegTrack = trak->refAt(j);
+                auto refPosTrack = track->refAt(i);
+                auto refNegTrack = track->refAt(j);
 
                 if(theGenMap->contains(refPosTrack.id()))
                 {
-                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]).isNonnull())
+                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
                  {
-                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, i)]);
+                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
                    if(posTrack.pt()>=negTrack.pt())
                    {
                      DiMuonTTCand.addDaughter(*genP,"highKaonGen");
@@ -977,9 +977,9 @@ void DiMuonDiTrakProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
                 }
                 if(theGenMap->contains(refNegTrack.id()))
                 {
-                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, j)]).isNonnull())
+                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]).isNonnull())
                   {
-                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(trak, j)]);
+                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]);
                     if(posTrack.pt()<negTrack.pt())
                     {
                       DiMuonTTCand.addDaughter(*genP,"highKaonGen");
@@ -1069,7 +1069,7 @@ pat::CompositeCandidate DiMuonDiTrakProducer::makeDiMuonTTCandidate(
 
   pat::CompositeCandidate DiMuonTCand;
   DiMuonTCand.addDaughter(dimuon,"dimuon");
-  DiMuonTCand.addDaughter(tt,"ditrak");
+  DiMuonTCand.addDaughter(tt,"ditrack");
   DiMuonTCand.setVertex(dimuon.vertex());
   DiMuonTCand.setCharge(tt.charge());
 

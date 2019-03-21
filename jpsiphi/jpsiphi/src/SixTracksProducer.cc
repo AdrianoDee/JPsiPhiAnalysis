@@ -74,6 +74,28 @@ SixTracksProducer::isTheCandidate(reco::GenParticleRef genY) {
 
 }
 
+float SixTracksProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   float p1 = t1.phi();
+   float p2 = t2.phi();
+   float e1 = t1.eta();
+   float e2 = t2.eta();
+   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
+
+   return sqrt((e1-e2)*(e1-e2) + dp*dp);
+}
+
+float SixTracksProducer::DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+   return (fabs(t1.pt()-t2.pt())/t2.pt());
+}
+
+bool SixTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
+{
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+	DeltaR(t1,t2) < maxDeltaR);
+}
+
 bool SixTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
 {
 
@@ -96,10 +118,10 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
-  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
+  BeamSpot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
+  TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -139,7 +161,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   iEvent.getByToken(TrackCollection_,track);
 
   edm::Handle<reco::BeamSpot> theBeamSpot;
-  iEvent.getByToken(thebeamspot_,theBeamSpot);
+  iEvent.getByToken(BeamSpot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
@@ -249,6 +271,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     }
 
   }
+
+  edm::Handle<edm::Association<reco::GenParticleCollection>> theGenMap;
+  iEvent.getByToken(TrackGenMap_,theGenMap);
 
   KinematicParticleFactoryFromTransientTrack pFactory;
 
@@ -756,10 +781,10 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   trackFour.setCharge(track4.charge());
   trackFour.setP4(p4_track4);
 
-  fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,trak3);
-  fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,trak4);
-  fiveTrackThree     = makeFiveCandidateMixed(dimuon,trackP,track3,trak4);
-  fiveTrackFour     = makeFiveCandidateMixed(dimuon,trackN,track3,trak4);
+  fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
+  fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
+  fiveTrackThree     = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
+  fiveTrackFour     = makeFiveCandidateMixed(dimuon,trackN,track3,track4);
 
   // P N 3
   // P N 4
@@ -823,7 +848,7 @@ pat::CompositeCandidate SixTracksProducer::makeFiveCandidateMixed(
   return fiveCand;
 }
 
-pat::CompositeCandidate FiveTracksProducer::makeDimuonDiTrackCandidate(
+pat::CompositeCandidate SixTracksProducer::makeDimuonDiTrackCandidate(
                                           const pat::CompositeCandidate& dimuon,
                                           const pat::CompositeCandidate& t1,
                                           const pat::CompositeCandidate& t2
