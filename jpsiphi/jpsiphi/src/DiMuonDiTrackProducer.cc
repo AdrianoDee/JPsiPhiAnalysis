@@ -575,6 +575,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            reco::VertexCollection verteces;
            std::vector<int> vKeys;
            verteces.push_back(theBeamSpotV);
+           vKeys.push_back(0);
 
            thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
            verteces.push_back(thePrimaryZero);
@@ -683,8 +684,8 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
            DiMuonTTCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
 
-           DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
-           DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
+           // DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
+           // DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
 
            std::cout << debug++<< std::endl;
            DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);

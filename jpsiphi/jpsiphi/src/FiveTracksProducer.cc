@@ -462,6 +462,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          reco::VertexCollection verteces;
          std::vector<int> vKeys;
          verteces.push_back(theBeamSpotV);
+         vKeys.push_back(0);
 
          thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
          verteces.push_back(thePrimaryZero);
@@ -590,7 +591,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserFloat("ctauPVBS",ctauPV[0]);
              fiveCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
 
-             fiveCand.addUserFloat("tTFromPVBS",float(fromPV[0]));
+             // fiveCand.addUserFloat("tTFromPVBS",float(fromPV[0]));
 
 
              fiveCand.addUserFloat("cosAlpha",cosAlpha[1]);

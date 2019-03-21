@@ -320,18 +320,18 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          float minDP_fourth = 10000.0;
          float minDPt_fourth = 10000.0;
 
-         auto sixthTrack = track->at(i);
+         auto fourthTrack = track->at(i);
 
-         if(sixthTrack.pt()<trackPtCut_) continue;
-         //if(sixthTrack.charge() == 0) continue;
-	       //if(!IsMC_ and fabs(sixthTrack.pdgId())!=211) continue;
-	       if(!(sixthTrack.trackHighPurity())) continue;
-         if(!(sixthTrack.hasTrackDetails())) continue;
+         if(fourthTrack.pt()<trackPtCut_) continue;
+         //if(fourthTrack.charge() == 0) continue;
+	       //if(!IsMC_ and fabs(fourthTrack.pdgId())!=211) continue;
+	       if(!(fourthTrack.trackHighPurity())) continue;
+         if(!(fourthTrack.hasTrackDetails())) continue;
 
-         if (IsTheSame(sixthTrack,*tp) || int(i) == tpId) continue;
-         if (IsTheSame(sixthTrack,*tm) || int(i) == tmId) continue;
-         if (IsTheSame(sixthTrack,*tm) || int(i) == ttId) continue;
-         if (IsTheSame(sixthTrack,*pmu1) || IsTheSame(sixthTrack,*pmu2) ) continue;
+         if (IsTheSame(fourthTrack,*tp) || int(i) == tpId) continue;
+         if (IsTheSame(fourthTrack,*tm) || int(i) == tmId) continue;
+         if (IsTheSame(fourthTrack,*tm) || int(i) == ttId) continue;
+         if (IsTheSame(fourthTrack,*pmu1) || IsTheSame(fourthTrack,*pmu2) ) continue;
 
          std::vector<int> ids;
          ids.push_back(i);ids.push_back(tpId);ids.push_back(tmId);ids.push_back(ttId);
@@ -341,7 +341,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          else
             doneFlag[std::tuple<int,int,int,int>(ids[0],ids[1],ids[2],ids[3])] = true;
 
-         pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, sixthTrack);
+         pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
 
          if (sixCand.mass() > SixTrackMassMin || sixCand.mass() < SixTrackMassMax)
          continue;
@@ -371,7 +371,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          sixTracks.push_back((*theB).build(*(tp->bestTrack()))); // K/π
          sixTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
          sixTracks.push_back((*theB).build(*(tt->bestTrack()))); // K/π
-         sixTracks.push_back((*theB).build(*(sixthTrack.bestTrack()))); // K/π
+         sixTracks.push_back((*theB).build(*(fourthTrack.bestTrack()))); // K/π
 
          dParticles.push_back(pFactory.particle(sixTracks[0],muonMass,kinChi,kinNdf,muonSigma));
          dParticles.push_back(pFactory.particle(sixTracks[1],muonMass,kinChi,kinNdf,muonSigma));
@@ -409,9 +409,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          {
             auto thisMuon = muons->at(ii);
 
-            float DeltaEta = fabs(thisMuon.eta()-sixthTrack.eta());
-            float DeltaP   = fabs(thisMuon.p()-sixthTrack.p());
-            float DeltaPt = ((sixthTrack.pt() - thisMuon.pt())/sixthTrack.pt());
+            float DeltaEta = fabs(thisMuon.eta()-fourthTrack.eta());
+            float DeltaP   = fabs(thisMuon.p()-fourthTrack.p());
+            float DeltaPt = ((fourthTrack.pt() - thisMuon.pt())/fourthTrack.pt());
 
             minDR_fourth = -std::max(-minDR_fourth,-DeltaEta);
             minDP_fourth = -std::max(-minDP_fourth,-DeltaP);
@@ -446,7 +446,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          reco::VertexCollection verteces;
          std::vector<int> vKeys;
          verteces.push_back(theBeamSpotV);
-
+         vKeys.push_back(0.0);
          bool status = ttmd.calculate( GlobalTrajectoryParameters(
            GlobalPoint(six_vx_fit,six_vy_fit,six_vz_fit),
            GlobalVector(six_px_fit,six_py_fit,six_pz_fit),TrackCharge(0),&(*magneticField)),
@@ -531,6 +531,11 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            ctauErrPV[i] = (sqrt(ROOT::Math::Similarity(vpperp,vXYe))*six_ma_fit/(pperp.Perp2()));
          }
 
+         for(size_t i = 1; i < verteces.size(); i++)
+         {
+           fromPV[i] = fourthTrack.fromPV(vKeys[i]);
+         }
+
          ///DCA
          std::vector<float> DCAs;
 
@@ -562,10 +567,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); fourMasses.push_back(pionmass); // k k p p
 
-         auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,sixthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
+         auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
 
          for(size_t j = 0; j<numMasses;j++)
-          sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,sixthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
+          sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
 
           sixCand.addUserInt("five_index",int(d));
           sixCand.addUserInt("pId",tpId);
@@ -585,7 +590,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addDaughter(*tp,"trackOne");
           sixCand.addDaughter(*tm,"trackTwo");
           sixCand.addDaughter(*tm,"trackThree");
-          sixCand.addDaughter(sixthTrack,"trackFour");
+          sixCand.addDaughter(fourthTrack,"trackFour");
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
           sixCand.addDaughter(thisSix,"first_six_ref");
@@ -608,7 +613,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("cosAlphaBS",cosAlpha[0]);
           sixCand.addUserFloat("ctauPVBS",ctauPV[0]);
           sixCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
-          sixCand.addUserFloat("tFFromPVBS",float(fromPV[0]));
+          // sixCand.addUserFloat("tFFromPVBS",float(fromPV[0]));
 
           sixCand.addUserFloat("cosAlpha",cosAlpha[1]);
           sixCand.addUserFloat("ctauPV",ctauPV[1]);

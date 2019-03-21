@@ -478,9 +478,9 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("tPFromPVDZ",      &tPFromPVDZ,        "tPFromPVDZ/D");
         fivetracks_tree->Branch("tMFromPVDZ",      &tMFromPVDZ,        "tMFromPVDZ/D");
         fivetracks_tree->Branch("tTFromPVDZ",      &tTFromPVDZ,        "tTFromPVDZ/D");
-        fivetracks_tree->Branch("tPFromPVBS",      &tPFromPVBS,        "tPFromPVBS/D");
-        fivetracks_tree->Branch("tMFromPVBS",      &tMFromPVBS,        "tMFromPVBS/D");
-        fivetracks_tree->Branch("tTFromPVBS",      &tTFromPVBS,        "tTFromPVBS/D");
+        // fivetracks_tree->Branch("tPFromPVBS",      &tPFromPVBS,        "tPFromPVBS/D");
+        // fivetracks_tree->Branch("tMFromPVBS",      &tMFromPVBS,        "tMFromPVBS/D");
+        // fivetracks_tree->Branch("tTFromPVBS",      &tTFromPVBS,        "tTFromPVBS/D");
 
         fivetracks_tree->Branch("five_m",             &five_m,               "five_m/D");
         fivetracks_tree->Branch("five_m_ref",         &five_m_ref,           "five_m_ref/D");
@@ -857,8 +857,8 @@ if(!OnlyGen_)
       dimuonditrk_ctauPVBS = dimuonditrk_cand->userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonditrk_cand->userFloat("ctauErrPVBS");
 
-      tPFromPVBS = dimuonditrk_cand->userFloat("tPFromPVBS");
-      tMFromPVBS = dimuonditrk_cand->userFloat("tMFromPVBS");
+      // tPFromPVBS = dimuonditrk_cand->userFloat("tPFromPVBS");
+      // tMFromPVBS = dimuonditrk_cand->userFloat("tMFromPVBS");
 
       five_pt       = five_cand.pt();
       five_eta      = five_cand.eta();

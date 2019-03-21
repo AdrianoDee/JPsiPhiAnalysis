@@ -559,10 +559,10 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("tTFromPVDZ",      &tTFromPVDZ,        "tTFromPVDZ/D");
         sixtracks_tree->Branch("tFFromPVDZ",      &tFFromPVDZ,        "tFFromPVDZ/D");
 
-        sixtracks_tree->Branch("tPFromPVBS",      &tPFromPVBS,        "tPFromPVBS/D");
-        sixtracks_tree->Branch("tMFromPVBS",      &tMFromPVBS,        "tMFromPVBS/D");
-        sixtracks_tree->Branch("tTFromPVBS",      &tTFromPVBS,        "tTFromPVBS/D");
-        sixtracks_tree->Branch("tFFromPVBS",      &tFFromPVBS,        "tFFromPVBS/D");
+        // sixtracks_tree->Branch("tPFromPVBS",      &tPFromPVBS,        "tPFromPVBS/D");
+        // sixtracks_tree->Branch("tMFromPVBS",      &tMFromPVBS,        "tMFromPVBS/D");
+        // sixtracks_tree->Branch("tTFromPVBS",      &tTFromPVBS,        "tTFromPVBS/D");
+        // sixtracks_tree->Branch("tFFromPVBS",      &tFFromPVBS,        "tFFromPVBS/D");
 
 
         //Five Tracks System

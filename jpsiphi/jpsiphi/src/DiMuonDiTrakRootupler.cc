@@ -387,8 +387,8 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVBS",      &dimuonditrk_ctauPVBS,        "dimuonditrk_ctauPVBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVBS",      &dimuonditrk_ctauErrPVBS,        "dimuonditrk_ctauErrPVBS/D");
 
-    dimuonditrk_tree->Branch("dimuonditrk_tPFromPVBS",      &dimuonditrk_tPFromPVBS,        "dimuonditrk_tPFromPVBS/D");
-    dimuonditrk_tree->Branch("dimuonditrk_tMFromPVBS",      &dimuonditrk_tMFromPVBS,        "dimuonditrk_tMFromPVBS/D");
+    // dimuonditrk_tree->Branch("dimuonditrk_tPFromPVBS",      &dimuonditrk_tPFromPVBS,        "dimuonditrk_tPFromPVBS/D");
+    // dimuonditrk_tree->Branch("dimuonditrk_tMFromPVBS",      &dimuonditrk_tMFromPVBS,        "dimuonditrk_tMFromPVBS/D");
 
 
     dimuonditrk_tree->Branch("dimuonditrk_dca_m1m2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1m2/D");
@@ -712,8 +712,8 @@ void DiMuonDiTrackRootupler::analyze(const edm::Event& iEvent, const edm::EventS
         dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
         dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");
 
-        dimuonditrk_tPFromPVBS = dimuonditrk_cand.userFloat("tPFromPVBS");
-        dimuonditrk_tMFromPVBS = dimuonditrk_cand.userFloat("tMFromPVBS");
+        // dimuonditrk_tPFromPVBS = dimuonditrk_cand.userFloat("tPFromPVBS");
+        // dimuonditrk_tMFromPVBS = dimuonditrk_cand.userFloat("tMFromPVBS");
 
         dimuonditrk_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha");
         dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV");
