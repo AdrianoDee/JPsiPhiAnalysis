@@ -1295,7 +1295,7 @@ if(!OnlyGen_)
       diTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(dimuonDiTrkTwo_cand->daughter("ditrack"));
       diTrackThree_cand  = dynamic_cast<const pat::CompositeCandidate*>(dimuonDiTrkThree_cand->daughter("ditrack"));
 
-      triTrack_cand = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("triTrack"));
+      // triTrack_cand = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("triTrack"));
 
       dimuonditrk_p4.SetPtEtaPhiM(dimuonDiTrkOne_cand->pt(),dimuonDiTrkOne_cand->eta(),dimuonDiTrkOne_cand->phi(),dimuonDiTrkOne_cand->mass());
       dimuonditrk_m = dimuonDiTrkOne_cand->mass();
@@ -1463,11 +1463,11 @@ if(!OnlyGen_)
       dimuonDiTrkSix_phi    = dimuonDiTrkSix_cand->phi();
       dimuonDiTrkSix_charge = dimuonDiTrkSix_cand->charge();
 
-      triTrack_m      = triTrack_cand->mass();
-      triTrack_pt     = triTrack_cand->pt();
-      triTrack_eta    = triTrack_cand->eta();
-      triTrack_phi    = triTrack_cand->phi();
-      triTrack_charge = triTrack_cand->charge();
+      // triTrack_m      = triTrack_cand->mass();
+      // triTrack_pt     = triTrack_cand->pt();
+      // triTrack_eta    = triTrack_cand->eta();
+      // triTrack_phi    = triTrack_cand->phi();
+      // triTrack_charge = triTrack_cand->charge();
 
       if(IsMC_ || OnlyGen_)
       {
