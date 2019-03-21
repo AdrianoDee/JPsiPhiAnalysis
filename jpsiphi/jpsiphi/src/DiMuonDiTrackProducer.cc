@@ -395,9 +395,6 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
          if(AddSameSig_) jstart = i+1;
          for (size_t j = jstart; j < track->size(); j++) {
 
-           int debug = 0;
-           std::cout << "Start"<< std::endl;
-
            auto negTrack = track->at(j);
 
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
@@ -409,7 +406,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            if (i == j) continue;
            if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) ) continue;
-           std::cout << debug++<< std::endl;
+
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
 
            if ( !(TTCand.mass() < TrackTrackMassMax_ && TTCand.mass() > TrackTrackMassMin_) ) continue;
@@ -430,7 +427,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            std::vector<reco::TransientTrack> xTracks;
            KinematicParticleFactoryFromTransientTrack pFactory;
            std::vector<RefCountedKinematicParticle> xParticles;
-           std::cout << debug++<< std::endl;
+
            float kinChi = 0.;
            float kinNdf = 0.;
            // std::cout << "debug    7 "<< std::endl;
@@ -476,7 +473,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                                                 (double)(fitXVertex->degreesOfFreedom()));
            x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
 
-           std::cout << debug++<< std::endl;
+
            if(x_vp_fit < 0.001) continue;
 
            float minDR_pos = 10000.0, minDR_neg = 10000.0;
@@ -510,7 +507,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            }
 
-           std::cout << debug++<< std::endl;
+
            DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
@@ -542,7 +539,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
-           std::cout << debug++<< std::endl;
+
            std::vector <double> sumPTPV,cosAlpha,ctauPV,ctauErrPV;
            // std::cout << "debug    9 "<< std::endl;
            TVector3 vtx, vdiff, pvtx;
@@ -558,7 +555,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 	         double x_vy_fit = fitXVertex->position().y();
            double x_vz_fit = fitXVertex->position().z();
            vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
-           std::cout << debug++<< std::endl;
+
            bool status = ttmd.calculate( GlobalTrajectoryParameters(
              GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
              GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
@@ -630,7 +627,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            std::vector<TransientVertex> pvs;
            std::vector<float> tPFromPV,tMFromPV;
-           std::cout << debug++<< std::endl;
+
            for(size_t i = 0; i < verteces.size(); i++)
            {
              tPFromPV.push_back(0.0);
@@ -667,7 +664,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
             DiMuonTTCand.addUserInt("lowKaonMatch",filters[i]);
             DiMuonTTCand.addUserInt("highKaonMatch",filters[j]);
           }
-          std::cout << debug++<< std::endl;
+
            DiMuonTTCand.addUserInt("dimuon_id",int(dimuonCounter));
 
            DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
@@ -687,7 +684,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            // DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
            // DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
 
-           std::cout << debug++<< std::endl;
+
            DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);
            DiMuonTTCand.addUserFloat("ctauPV",ctauPV[1]);
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
@@ -703,7 +700,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("tPFromPVCA",float(tPFromPV[2]));
            DiMuonTTCand.addUserFloat("tMFromPVCA",float(tMFromPV[2]));
 
-           std::cout << debug++<< std::endl;
+
            DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
            DiMuonTTCand.addUserFloat("ctauPVDZ",ctauPV[3]);
            DiMuonTTCand.addUserFloat("ctauErrPVDZ",ctauErrPV[3]);
@@ -736,7 +733,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("dca_m2t1",DCAs[3]);
            DiMuonTTCand.addUserFloat("dca_m2t2",DCAs[4]);
            DiMuonTTCand.addUserFloat("dca_t1t2",DCAs[5]);
-           std::cout << debug++<< std::endl;
+
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
@@ -891,7 +888,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
              nDofPionRefits.push_back(-1.0);
              vProbPionRefits.push_back(-1.0);
            }
-           std::cout << debug++<< std::endl;
+
            if(doPionRefit_)
            {
              KinematicParticleFactoryFromTransientTrack pFactory;

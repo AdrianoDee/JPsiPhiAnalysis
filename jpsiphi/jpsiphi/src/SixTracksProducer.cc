@@ -343,7 +343,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
 
-         if (sixCand.mass() > SixTrackMassMin || sixCand.mass() < SixTrackMassMax)
+         if (sixCand.mass() < SixTrackMassMin || sixCand.mass() > SixTrackMassMax)
          continue;
 
          sixCand.addUserFloat("sixCandMass",sixCand.mass());
