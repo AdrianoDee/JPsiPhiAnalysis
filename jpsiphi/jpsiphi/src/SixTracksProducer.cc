@@ -2,22 +2,6 @@
 #include <tuple>
 #include <map>
 
-float SixTracksProducer::DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
-{
-   float p1 = t1.phi();
-   float p2 = t2.phi();
-   float e1 = t1.eta();
-   float e2 = t2.eta();
-   auto dp=std::abs(p1-p2); if (dp>float(M_PI)) dp-=float(2*M_PI);
-
-   return sqrt((e1-e2)*(e1-e2) + dp*dp);
-}
-
-bool SixTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
-{
-  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
-	DeltaR(t1,t2) < maxDeltaR);
-}
 
 bool
 SixTracksProducer::isAbHadron(int pdgID) {
@@ -120,7 +104,6 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   BeamSpot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
-  TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
   numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
@@ -157,7 +140,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   edm::Handle<pat::CompositeCandidateCollection> fivetrack;
   iEvent.getByToken(FiveTrackCollection_,fivetrack);
 
-  edm::Handle<std::vector<pat::PackedCandidate> > track;
+  edm::Handle<edm::View<pat::PackedCandidate> > track;
   iEvent.getByToken(TrackCollection_,track);
 
   edm::Handle<reco::BeamSpot> theBeamSpot;
@@ -810,9 +793,9 @@ reco::Candidate::LorentzVector SixTracksProducer::convertVector(const math::XYZT
 
 pat::CompositeCandidate SixTracksProducer::makeFiveCandidateMixed(
                                           const pat::CompositeCandidate& dimuon,
-                                          const pat::CompositeCandidate& trackP,
-                                          const pat::CompositeCandidate& trackN,
-                                          const pat::CompositeCandidate& track3
+                                          const pat::PackedCandidate& trackP,
+                                          const pat::PackedCandidate& trackN,
+                                          const pat::PackedCandidate& track3
                                          ){
 
   pat::CompositeCandidate fiveCand, trackOne, trackTwo, trackThree;
@@ -850,8 +833,8 @@ pat::CompositeCandidate SixTracksProducer::makeFiveCandidateMixed(
 
 pat::CompositeCandidate SixTracksProducer::makeDimuonDiTrackCandidate(
                                           const pat::CompositeCandidate& dimuon,
-                                          const pat::CompositeCandidate& t1,
-                                          const pat::CompositeCandidate& t2
+                                          const pat::PackedCandidate& t1,
+                                          const pat::PackedCandidate& t2
                                          ){
 
   pat::CompositeCandidate psi2sCand, ditrack;

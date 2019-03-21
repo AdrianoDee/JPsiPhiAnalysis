@@ -99,7 +99,7 @@ class SixTracksRootupler : public edm::EDAnalyzer {
 
   UInt_t run, event, lumi, numPrimaryVertices, trigger;
   UInt_t dimuonditrk_id, five_id, dimuon_id, p_id, t_id, f_id, m_id;
-  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4,
+  TLorentzVector dimuonditrk_p4, dimuon_p4, ditrack_p4;
   TLorentzVector lowPion_p4, lowProton_p4, highProton_p4, highPion_p4, thirdProton_p4, thirdPion_p4;
   TLorentzVector lowMuon_p4, highMuon_p4, lowKaon_p4, thirdKaon_p4, highKaon_p4;
   TLorentzVector fourthProton_p4, fourthPion_p4, fourthKaon_p4;
@@ -1288,10 +1288,10 @@ if(!OnlyGen_)
       lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
       highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
-      fiveTrackOne_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackOne"));
-      fiveTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackTwo"));
-      fiveTrackThree_cand  = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackThree"));
-      fiveTrackFour_cand   = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackFour"));
+      // fiveTrackOne_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackOne"));
+      // fiveTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackTwo"));
+      // fiveTrackThree_cand  = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackThree"));
+      // fiveTrackFour_cand   = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackFour"));
 
       diTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(dimuonDiTrkTwo_cand->daughter("ditrack"));
       diTrackThree_cand  = dynamic_cast<const pat::CompositeCandidate*>(dimuonDiTrkThree_cand->daughter("ditrack"));

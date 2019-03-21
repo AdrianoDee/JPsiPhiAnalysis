@@ -86,10 +86,6 @@ class SixTracksProducer : public edm::EDProducer {
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);
 
 
-  pat::CompositeCandidate makePsi2SCandidate(const pat::CompositeCandidate& dimuon,
-                                             const pat::CompositeCandidate& t1,
-                                             const pat::CompositeCandidate& t2
-                                           );
  pat::CompositeCandidate makeSixCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
                                             const pat::PackedCandidate& trackP,
@@ -104,15 +100,15 @@ class SixTracksProducer : public edm::EDProducer {
 
   pat::CompositeCandidate makeFiveCandidateMixed(
                                             const pat::CompositeCandidate& dimuon,
-                                            const pat::CompositeCandidate& trackP,
-                                            const pat::CompositeCandidate& trackN,
-                                            const pat::CompositeCandidate& track3
+                                            const pat::PackedCandidate& trackP,
+                                            const pat::PackedCandidate& trackN,
+                                            const pat::PackedCandidate& track3
                                           );
 
   pat::CompositeCandidate makeDimuonDiTrackCandidate(
                                             const pat::CompositeCandidate& dimuon,
-                                            const pat::CompositeCandidate& t1,
-                                            const pat::CompositeCandidate& t2
+                                            const pat::PackedCandidate& t1,
+                                            const pat::PackedCandidate& t2
                                           );
   pat::CompositeCandidate makeSixCandidate(
                                             const pat::CompositeCandidate& fiveTrack,
