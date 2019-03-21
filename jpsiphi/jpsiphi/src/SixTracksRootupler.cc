@@ -295,7 +295,7 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-        TreeName_(iConfig.getParameter<std::string>("TreeName")),
+        TreeName_(iConfig.getParameter<std::string>("TreeName"))
 {
 	      edm::Service<TFileService> fs;
         sixtracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrack");

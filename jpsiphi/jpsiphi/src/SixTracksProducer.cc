@@ -104,6 +104,7 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
   MaxDPtRel_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
@@ -141,6 +142,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   edm::Handle<edm::View<pat::PackedCandidate> > track;
   iEvent.getByToken(TrackCollection_,track);
 
+  edm::Handle<reco::BeamSpot> theBeamSpot;
+  iEvent.getByToken(thebeamspot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
