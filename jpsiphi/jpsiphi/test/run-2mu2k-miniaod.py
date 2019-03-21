@@ -446,7 +446,7 @@ process.SixTracksProducer  = cms.EDProducer('SixTracksProducer',
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrackRootupler',
     DiMuoDiTrack = cms.InputTag('PsiPhiProducer','DiMuonDiTrackCandidates'),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     IsMC = cms.bool(IsMC),
     OnlyGen = cms.bool(False),
     HLTs = hltpaths,
@@ -455,7 +455,7 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrackRootupler',
 )
 
 process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
-    SixTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
+    FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
     BeamSpot = cms.InputTag("offlineBeamSpot"),
     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
@@ -466,7 +466,7 @@ process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
     TreeName = cms.string('FiveTracksTree')
 )
 
-process.rootupleSix = cms.EDAnalyzer('FiveTracksRootupler',
+process.rootupleSix = cms.EDAnalyzer('SixTracksRootupler',
     SixTracksCand = cms.InputTag('SixTracksProducer','SixTracks'),
     BeamSpot = cms.InputTag("offlineBeamSpot"),
     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
