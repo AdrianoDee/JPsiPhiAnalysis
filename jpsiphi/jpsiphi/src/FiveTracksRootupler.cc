@@ -827,7 +827,7 @@ if(!OnlyGen_)
 
       dimuon_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("dimuon"));
       ditrackOne_cand = dynamic_cast<const pat::CompositeCandidate*>(dimuonditrk_cand->daughter("ditrack"));
-
+      std::cout << debug++<< std::endl;
       const reco::Vertex bestPV = *(five_cand.userData<reco::Vertex>("bestPV"));
       const reco::Vertex cosPV  = *(five_cand.userData<reco::Vertex>("cosPV"));
       const reco::Vertex zPV    = *(five_cand.userData<reco::Vertex>("zPV"));
@@ -845,7 +845,7 @@ if(!OnlyGen_)
       zPV_X = cosPV.position().x();
       zPV_Y = cosPV.position().y();
       zPV_Z = cosPV.position().z();
-
+      std::cout << debug++<< std::endl;
       bS_X = cosPV.position().x();
       bS_Y = cosPV.position().y();
       bS_Z = cosPV.position().z();
@@ -854,7 +854,7 @@ if(!OnlyGen_)
       dimuonditrk_vChi2     = dimuonditrk_cand->userFloat("vChi2");
       dimuonditrk_nDof      = dimuonditrk_cand->userFloat("nDof");
       dimuonditrk_charge    = dimuonditrk_cand->charge();
-
+      std::cout << debug++<< std::endl;
       dimuonditrk_cosAlphaBS = dimuonditrk_cand->userFloat("cosAlphaBS");
       dimuonditrk_ctauPVBS = dimuonditrk_cand->userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonditrk_cand->userFloat("ctauErrPVBS");
@@ -870,7 +870,7 @@ if(!OnlyGen_)
       five_nDof     = five_cand.userFloat("nDof");
       five_vChi2    = five_cand.userFloat("vChi2");
       five_charge   = five_cand.charge();
-
+      std::cout << debug++<< std::endl;
       five_m           = five_cand.mass();
       five_m_ref       = five_cand.userFloat("mass_ref_0");
       five_mass_ppk    = five_cand.userFloat("mass_ref_1");
