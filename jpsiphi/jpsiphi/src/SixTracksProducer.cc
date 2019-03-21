@@ -572,7 +572,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
          std::cout << debug++<< std::endl;
          for(size_t j = 0; j<numMasses;j++)
-          sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
+          sixTracksMass.push_back(makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass());
 
           sixCand.addUserInt("five_index",int(d));
           sixCand.addUserInt("pId",tpId);
@@ -588,7 +588,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           }
 
           sixCand.addUserInt("five_id",int(d));
-
+          std::cout << debug++<< std::endl;
           sixCand.addDaughter(*tp,"trackOne");
           sixCand.addDaughter(*tm,"trackTwo");
           sixCand.addDaughter(*tm,"trackThree");
@@ -596,7 +596,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
           sixCand.addDaughter(thisSix,"first_six_ref");
-
+          std::cout << debug++<< std::endl;
           sixCand.addUserFloat("mass_ref_0",six_ma_fit);
 
           sixCand.addUserFloat("fourthTrackMuonDR",minDR_fourth);
@@ -616,7 +616,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("ctauPVBS",ctauPV[0]);
           sixCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
           // sixCand.addUserFloat("tFFromPVBS",float(fromPV[0]));
-
+          std::cout << debug++<< std::endl;
           sixCand.addUserFloat("cosAlpha",cosAlpha[1]);
           sixCand.addUserFloat("ctauPV",ctauPV[1]);
           sixCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
@@ -633,7 +633,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("tFFromPVDZ",float(fromPV[3]));
 
           sixCand.addUserInt("fourthKaonMatch",filters[i]);
-
+          std::cout << debug++<< std::endl;
           sixCand.addUserFloat("dca_m1t4",DCAs[0]);
           sixCand.addUserFloat("dca_m2t4",DCAs[1]);
           sixCand.addUserFloat("dca_t1t4",DCAs[2]);
