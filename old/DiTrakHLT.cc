@@ -199,7 +199,7 @@ const pat::CompositeCandidate DiTrakHLT::makeTTTriggerCandidate(
 DiTrakHLT::DiTrakHLT(const edm::ParameterSet & iConfig):
 TrakCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
 TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
+primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("PrimaryVertex"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
 MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),

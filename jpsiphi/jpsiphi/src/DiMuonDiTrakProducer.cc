@@ -189,10 +189,12 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   DiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuon"))),
   TrakCollection_(consumes<edm::View<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TrakPtCut_(iConfig.existsAs<double>("TrakPtCut") ? iConfig.getParameter<double>("TrakPtCut") : 0.7),
+  MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
+  MaxDeltaR_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   //DiMuonGenMap_(iConfig.existsAs<edm::InputTag>("DiMuonMatcher") ? consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("DiMuonMatcher"))),
-  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   DiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DiMuonMassCuts")),
@@ -203,7 +205,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   PhiMass_(iConfig.getParameter<double>("PhiMass")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("IsMC")),
+  IsMC_(iConfig.getParameter<bool>("isMC")),
   AddSameSig_(iConfig.getParameter<bool>("AddSS")),
   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
 {

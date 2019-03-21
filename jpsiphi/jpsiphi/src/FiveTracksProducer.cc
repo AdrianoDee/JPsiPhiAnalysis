@@ -20,7 +20,7 @@ float FiveTracksProducer::DeltaPt(const pat::PackedCandidate t1, const pat::Trig
 
 bool FiveTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
-  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<MaxDeltaR_ &&
 	DeltaR(t1,t2) < maxDeltaR);
 }
 
@@ -99,15 +99,16 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrack"))),
   TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  TrackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
+  MaxDeltaR_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
-  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
-  numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("IsMC"))
+  IsMC_(iConfig.getParameter<bool>("isMC"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
 
@@ -118,8 +119,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   protonmass = 0.93827208;
   psi2smass = 3.686093;
   jpsiMass = 3.096916;
-  maxDeltaR = 0.01;
-  maxDPtRel = 2.0;
+
   trackmass = kaonmass;
 
   ncomboneg = 0;
@@ -325,7 +325,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        // B0 -> J/Psi Phi K0 -> J/Psi K K K0
        //
 
-       const unsigned int numMasses = 4; //(int) numMasses_;
+       const unsigned int numMasses = 4; //(int) numMasses;
 
        for (size_t i = 0; i < track->size(); i++) {
 
@@ -338,7 +338,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          auto thirdTrack = track->at(i);
 
 
-         if(thirdTrack.pt()<trackPtCut_) continue;
+         if(thirdTrack.pt()<TrackPtCut_) continue;
          if(thirdTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(thirdTrack.pdgId())!=211) continue;
 	       if(!(thirdTrack.trackHighPurity())) continue;
@@ -555,7 +555,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          auto thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,kaonmass,kaonmass,kaonmass);
 
-         for(size_t j = 0; j<numMasses_;j++)
+         for(size_t j = 0; j<numMasses;j++)
           fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
              fiveCand.addUserInt("dimuontt_index",int(d));
@@ -564,7 +564,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserInt("tId",i);
 
              std::string name;
-             for(size_t j = 1; j<numMasses_+1;j++)
+             for(size_t j = 1; j<numMasses+1;j++)
              {
               name = "mass_ref_" + std::to_string(j);
               fiveCand.addUserFloat(name,fiveTracksMass[j-1]);

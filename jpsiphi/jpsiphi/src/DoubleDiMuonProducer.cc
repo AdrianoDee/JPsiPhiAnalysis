@@ -4,8 +4,8 @@
 DoubleDiMuonProducer::DoubleDiMuonProducer(const edm::ParameterSet& iConfig):
   HighDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("HighDiMuonCollection"))),
   LowDiMuonCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("LowDiMuonCollection"))),
-  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+  thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   HighDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("HighDiMuonMassCuts")),
   LowDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("LowDiMuonMassCuts")),
   DoubleDiMuonMassCuts_(iConfig.getParameter<std::vector<double>>("DoubleDiMuonMassCuts")),

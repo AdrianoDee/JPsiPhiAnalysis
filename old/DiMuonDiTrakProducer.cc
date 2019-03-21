@@ -127,7 +127,7 @@ DiMuonDiTrakProducer::DiMuonDiTrakProducer(const edm::ParameterSet& iConfig):
   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  isMC_(iConfig.getParameter<bool>("IsMC")),
+  isMC_(iConfig.getParameter<bool>("isMC")),
   addMCTruth_(iConfig.getParameter<bool>("AddMCTruth"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);

@@ -226,7 +226,7 @@ static const Double_t psi1SMass =  3.09691;
 DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
 TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 IsMC_(iConfig.getParameter<bool>("isMC")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),

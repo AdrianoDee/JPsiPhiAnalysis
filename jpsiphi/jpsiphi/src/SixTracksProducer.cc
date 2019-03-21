@@ -100,15 +100,15 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   FiveTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveCollection"))),
   TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  TrackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
+  MaxDeltaR_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
-  BeamSpot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+  thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
-  numMasses_(iConfig.getParameter<uint32_t>("NumMasses")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("IsMC"))
+  IsMC_(iConfig.getParameter<bool>("isMC"))
 {
   produces<pat::CompositeCandidateCollection>("SixTracks");
 
@@ -118,8 +118,6 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   pionmass = 0.13957061;
   psi2smass = 3.686093;
 
-  maxDeltaR = 0.01;
-  maxDPtRel = 2.0;
   trackmass = kaonmass;
 
   ncomboneg = 0;
@@ -143,8 +141,6 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   edm::Handle<edm::View<pat::PackedCandidate> > track;
   iEvent.getByToken(TrackCollection_,track);
 
-  edm::Handle<reco::BeamSpot> theBeamSpot;
-  iEvent.getByToken(BeamSpot_,theBeamSpot);
   reco::BeamSpot bs = *theBeamSpot;
   reco::Vertex theBeamSpotV = reco::Vertex(bs.position(), bs.covariance3D());
 
@@ -264,7 +260,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::map<size_t,float> bestVertexPos, bestVertexNeg, bestVertexNeu;
   std::map<size_t,pat::CompositeCandidate> posCollection,negCollection,neuCollection;
 
-  const int numMasses = 6;//numMasses_;
+  const int numMasses = 6;//numMasses;
 
   for (size_t d = 0; d < fivetrack->size(); d++) {
 
@@ -323,7 +319,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          auto sixthTrack = track->at(i);
 
-         if(sixthTrack.pt()<trackPtCut_) continue;
+         if(sixthTrack.pt()<TrackPtCut_) continue;
          //if(sixthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(sixthTrack.pdgId())!=211) continue;
 	       if(!(sixthTrack.trackHighPurity())) continue;
@@ -565,7 +561,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,sixthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
 
-         for(size_t j = 0; j<numMasses_;j++)
+         for(size_t j = 0; j<numMasses;j++)
           sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,sixthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
 
           sixCand.addUserInt("five_index",int(d));
@@ -575,7 +571,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserInt("fId",mmtt_id);
 
           std::string name;
-          for(size_t j = 1; j<numMasses_+1;j++)
+          for(size_t j = 1; j<numMasses+1;j++)
           {
            name = "mass_ref_" + std::to_string(j);
            sixCand.addUserFloat(name,sixTracksMass[j-1]);

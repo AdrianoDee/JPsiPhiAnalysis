@@ -44,8 +44,8 @@
 //
 // DiTrakProducerHLTPAT::DiTrakProducerHLTPAT(const edm::ParameterSet& iConfig):
 // muons_(consumes<edm::View<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
-// thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpotTag"))),
-// thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertexTag"))),
+// thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
+// thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 // higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
 // lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
 // dimuonSelection_(iConfig.existsAs<std::string>("dimuonSelection") ? iConfig.getParameter<std::string>("dimuonSelection") : ""),

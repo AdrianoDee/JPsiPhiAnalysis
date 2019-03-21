@@ -30,7 +30,7 @@
 //   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 //   product_name_(iConfig.getParameter<std::string>("Product")),
 //   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-//   isMC_(iConfig.getParameter<bool>("IsMC"))
+//   isMC_(iConfig.getParameter<bool>("isMC"))
 // {
 //   produces<pat::CompositeCandidateCollection>(product_name_);
 //   candidates = 0;

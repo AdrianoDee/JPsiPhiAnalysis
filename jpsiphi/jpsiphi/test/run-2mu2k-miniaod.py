@@ -55,12 +55,6 @@ par.register ('isDebug',
                                   VarParsing.varType.bool,
                                   "Debug for you,sir?")
 
-par.register ('isY',
-                                  False,
-                                  VarParsing.multiplicity.singleton,
-                                  VarParsing.varType.bool,
-                                  "Y for you,sir?")
-
 par.register ('kMass',
                                   0.493677,
                                   VarParsing.multiplicity.singleton,
@@ -84,6 +78,19 @@ par.register ('n',
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.int,
                                   "n")
+
+par.register ('withSix',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Also Five Tracks for you, sir?")
+
+par.register ('withFive',
+                                  False,
+                                  VarParsing.multiplicity.singleton,
+                                  VarParsing.varType.bool,
+                                  "Also Six Tracks for you, sir?")
+
 
 par.parseArguments()
 
@@ -290,8 +297,8 @@ process.unpackPatTriggers = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         muons                       = cms.InputTag('slimmedMuonsWithTrigger'),
         MuonPtCut                   = cms.double(0.9),
-        primaryVertexTag            = cms.InputTag('offlineSlimmedPrimaryVertices'),
-        beamSpotTag                 = cms.InputTag('offlineBeamSpot'),
+        PrimaryVertex            = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        BeamSpot                 = cms.InputTag('offlineBeamSpot'),
         higherPuritySelection       = cms.string(""),
         lowerPuritySelection        = cms.string(""),
         dimuonSelection             = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
@@ -342,8 +349,8 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     TrackMatcher        = cms.InputTag("trackMatch"),
     PFCandidates        = cms.InputTag('packedPFCandidates'),
     TrakPtCut           = cms.double(0.85),
-    beamSpotTag         = cms.InputTag('offlineBeamSpot'),
-    primaryVertexTag    = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    BeamSpot         = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex    = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput        = cms.InputTag("unpackPatTriggers"),
     TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
     DiMuonMassCuts      = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
@@ -366,8 +373,8 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
     DiMuoDiTrak             = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     PFCandidates            = cms.InputTag('packedPFCandidates'),
     TrakPtCut               = cms.double(0.85),
-    beamSpotTag             = cms.InputTag('offlineBeamSpot'),
-    primaryVertexTag        = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    BeamSpot             = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex        = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
     FiveTrakCuts            = cms.vdouble(2.5,7.5),         # traks masses
@@ -394,8 +401,8 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
 
 # process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootuplerFit',
 #     dimuonditrk_cand = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-#     beamSpotTag = cms.InputTag("offlineBeamSpot"),
-#     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+#     BeamSpot = cms.InputTag("offlineBeamSpot"),
+#     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
 #     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
 #     isMC = cms.bool(False),
 #     OnlyBest = cms.bool(False),
@@ -425,8 +432,8 @@ process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
 
 process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
     FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
-    beamSpotTag = cms.InputTag("offlineBeamSpot"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    BeamSpot = cms.InputTag("offlineBeamSpot"),
+    PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
     isMC = cms.bool(ismc),
     OnlyBest = cms.bool(False),
@@ -442,7 +449,7 @@ process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
       dimuons = cms.InputTag("JPsi2MuMuFilter"),
       muons = cms.InputTag("replaceme"),
-      primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+      PrimaryVertex = cms.InputTag("offlinePrimaryVertices"),
       TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
       dimuon_pdgid = cms.uint32(443),
       dimuon_mass_cuts = cms.vdouble(2.5,3.5),
@@ -460,7 +467,7 @@ process.genstep = cms.EDAnalyzer('GenMCRootupler',
                       GoodGDaughters  = cms.vint32(13,-13,321,-321),
                       MaxDaughters    = cms.uint32(4),
                       TriggerResults  = cms.InputTag("TriggerResults", "", "HLT"),
-                      primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+                      PrimaryVertex = cms.InputTag("offlinePrimaryVertices"),
                       HLTs = hltpaths
                        )
 
@@ -468,13 +475,16 @@ genparting = process.genstep
 triggering = process.triggerSelection * process.slimmedMuonsWithTriggerSequence * process.unpackPatTriggers
 mcmatching = process.trackMatch * process.muonMatch
 jpsiing    = process.JPsi2MuMuPAT * process.JPsi2MuMuFilter
-tracking   = process.PsiPhiProducer * process.FiveTracksProducer
-if par.isY:
-    tracking   = process.PsiPhiProducer
-    rootupling = process.rootuple * process.rootupleMuMu
-else:
+tracking   = process.PsiPhiProducer
+rootupling = process.rootuple * process.rootupleMuMu
+
+if par.isFive:
     tracking   = process.PsiPhiProducer * process.FiveTracksProducer
     rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu
+if par.isSix:
+    tracking   = process.PsiPhiProducer * process.FiveTracksProducer * process.SixTracksProducer
+    rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu * process.rootupleSix
+
 if ismc:
     allsteps = genparting * triggering * mcmatching * jpsiing * tracking * rootupling
 else:

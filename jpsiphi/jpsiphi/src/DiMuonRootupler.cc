@@ -119,7 +119,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
 
 DiMuonRootupler::DiMuonRootupler(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
-primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
+primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("PrimaryVertex"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),

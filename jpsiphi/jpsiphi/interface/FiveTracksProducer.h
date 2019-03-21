@@ -74,7 +74,7 @@ class FiveTracksProducer : public edm::EDProducer {
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonDiTrackCollection_;
   edm::EDGetTokenT<std::vector<pat::PackedCandidate>> TrackCollection_;
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
-  double trackPtCut_;
+  double TrackPtCut_,MaxDeltaR_, MaxDeltaR_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;
@@ -128,8 +128,7 @@ pat::CompositeCandidate makeFiveCandidateMixed(
   float DeltaR(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
   float DeltaPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2);
 
-  float maxDeltaR;
-  float maxDPtRel;
+
   double kaonmass, pionmass, trackmass, psi2smass,jpsiMass;
   double protonmass;
 

@@ -118,7 +118,7 @@ class DiMuonRootuplerGEN:public edm::EDAnalyzer {
 
 DiMuonRootuplerGEN::DiMuonRootuplerGEN(const edm::ParameterSet & iConfig):
 dimuon_Label(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter< edm::InputTag>("dimuons"))),
-primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("primaryVertices"))),
+primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm::InputTag>("PrimaryVertex"))),
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 pdgid_mother(iConfig.getParameter<uint32_t>("mother_pdgid")),

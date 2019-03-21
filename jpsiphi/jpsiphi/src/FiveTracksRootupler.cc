@@ -83,7 +83,6 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
   std::string TreeName_;
-  UInt_t NumMasses_;
   std::vector < Double_t > fiveTracksMass, fiveTracksMassRef, triTrackMass;
   std::vector < Double_t > fiveTracksVProb, fiveTracksVNDof, fiveTracksVChi2;
   std::vector < Double_t > fiveTracksCosAlpha, fiveTracksCTau, fiveTracksCTauErr;
@@ -270,13 +269,12 @@ static const Double_t psi1SMass =  3.09691;
 FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         FiveTracksCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
         TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
+        thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
 	      IsMC_(iConfig.getParameter<bool>("isMC")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
         TreeName_(iConfig.getParameter<std::string>("TreeName")),
-        NumMasses_(iConfig.getParameter<uint32_t>("NumMasses"))
 {
 	      edm::Service<TFileService> fs;
         fivetracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrack");
