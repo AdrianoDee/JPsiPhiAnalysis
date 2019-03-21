@@ -68,8 +68,8 @@ class SixTracksProducer : public edm::EDProducer {
   edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone>> TriggerCollection_;
   double trackPtCut_,MaxDeltaR_, MaxDPtRel_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
-  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
+  edm::EDGetTokenT<reco::VertexCollection> thePVs_;
   edm::EDGetTokenT<edm::TriggerResults> TriggerResults_;
   std::vector<double> SixTrackMassCuts_;
   UInt_t numMasses_;

@@ -21,7 +21,7 @@ float FiveTracksProducer::DeltaPt(const pat::PackedCandidate t1, const pat::Trig
 bool FiveTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
   return (fabs(t1.pt()-t2.pt())/t2.pt()<MaxDPtRel_ &&
-	DeltaR(t1,t2) < maxDeltaR);
+	DeltaR(t1,t2) < MaxDeltaR_);
 }
 
 bool
@@ -99,7 +99,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrack"))),
   TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  TrackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
   MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
   MaxDPtRel_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
@@ -338,7 +338,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          auto thirdTrack = track->at(i);
 
 
-         if(thirdTrack.pt()<trackPtCut_) continue;
+         if(thirdTrack.pt()<TrackPtCut_) continue;
          if(thirdTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(thirdTrack.pdgId())!=211) continue;
 	       if(!(thirdTrack.trackHighPurity())) continue;
