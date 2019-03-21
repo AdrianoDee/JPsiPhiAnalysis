@@ -458,7 +458,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if (status) extrapZ=ttmd.points().first.z();
 
          thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
-         verteces.push_back(thePrimaryV);
+         verteces.push_back(thePrimaryZero);
          vKeys.push_back(0);
 
          float minDz = 999999.;
@@ -468,7 +468,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            // std::cout << "debug    10 "<< std::endl;
            thePrimaryVCA = reco::Vertex(*(priVtxs->begin()));
            thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
-           verteces.push_back(thePrimaryV);
+           verteces.push_back(thePrimaryVCA);
            verteces.push_back(thePrimaryVDZ);
            vKeys.push_back(0);
            vKeys.push_back(0);
@@ -599,7 +599,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
           sixCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
           sixCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
-          sixCand.addUserData("bs",reco::Vertex(thePrimaryV));
+          sixCand.addUserData("bs",reco::Vertex(theBeamSpotV));
 
           sixCand.addUserFloat("vtxX",six_vx_fit);
           sixCand.addUserFloat("vtxY",six_vy_fit);

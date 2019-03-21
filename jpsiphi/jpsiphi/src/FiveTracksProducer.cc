@@ -442,7 +442,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          // std::cout << "debug    9 "<< std::endl;
          TVector3 vtx, vdiff, pvtx;
          VertexDistanceXY vdistXY;
-         reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
+         reco::Vertex thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
          TwoTrackMinimumDistance ttmd;
 
          bool status = ttmd.calculate( GlobalTrajectoryParameters(
@@ -464,7 +464,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
          verteces.push_back(theBeamSpotV);
 
          thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
-         verteces.push_back(thePrimaryV);
+         verteces.push_back(thePrimaryZero);
          vKeys.push_back(0);
 
          float minDz = 999999.;
@@ -474,7 +474,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
            // std::cout << "debug    10 "<< std::endl;
            thePrimaryVCA = reco::Vertex(*(priVtxs->begin()));
            thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
-           verteces.push_back(thePrimaryV);
+           verteces.push_back(thePrimaryVCA);
            verteces.push_back(thePrimaryVDZ);
            vKeys.push_back(0);
            vKeys.push_back(0);
@@ -579,7 +579,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
              fiveCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
              fiveCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
-             fiveCand.addUserData("bs",reco::Vertex(thePrimaryV));
+             fiveCand.addUserData("bs",reco::Vertex(theBeamSpotV));
 
              fiveCand.addUserFloat("vtxX",five_vx_fit);
              fiveCand.addUserFloat("vtxY",five_vy_fit);
