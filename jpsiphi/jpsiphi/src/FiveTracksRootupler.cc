@@ -270,7 +270,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         FiveTracksCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveTracksCand"))),
         TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
         thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-	      IsMC_(iConfig.getParameter<bool>("isMC")),
+	      IsMC_(iConfig.getParameter<bool>("IsMC")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
         HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -1409,7 +1409,7 @@ if(!OnlyGen_)
 
         }
 
-      } //isMC || onlyGen
+      } //IsMC || onlyGen
 
 
       fivetracks_tree->Fill();

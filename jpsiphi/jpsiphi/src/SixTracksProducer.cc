@@ -109,7 +109,7 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("isMC"))
+  IsMC_(iConfig.getParameter<bool>("IsMC"))
 {
   produces<pat::CompositeCandidateCollection>("SixTracks");
 
@@ -324,7 +324,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          if(sixthTrack.pt()<trackPtCut_) continue;
          //if(sixthTrack.charge() == 0) continue;
-	       //if(!isMC_ and fabs(sixthTrack.pdgId())!=211) continue;
+	       //if(!IsMC_ and fabs(sixthTrack.pdgId())!=211) continue;
 	       if(!(sixthTrack.trackHighPurity())) continue;
          if(!(sixthTrack.hasTrackDetails())) continue;
 

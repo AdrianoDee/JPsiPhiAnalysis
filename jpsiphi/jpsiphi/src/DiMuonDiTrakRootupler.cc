@@ -227,7 +227,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 DiMuonDiTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("DiMuoDiTrak"))),
 TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
-IsMC_(iConfig.getParameter<bool>("isMC")),
+IsMC_(iConfig.getParameter<bool>("IsMC")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
@@ -1211,7 +1211,7 @@ void DiMuonDiTrakRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
 
           }
 
-        } //isMC || onlyGen
+        } //IsMC || onlyGen
 
         dimuonditrk_tree->Fill();
 

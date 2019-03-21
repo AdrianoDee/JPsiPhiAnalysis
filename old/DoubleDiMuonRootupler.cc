@@ -73,7 +73,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  doubledimuon_pdgid_, higdim_pdgid_, lowdim_pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_;
+  bool IsMC_,OnlyBest_,OnlyGen_;
   UInt_t motherpdgid_;
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
@@ -184,7 +184,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      isMC_(iConfig.getParameter<bool>("isMC")),
+	      IsMC_(iConfig.getParameter<bool>("IsMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
@@ -299,7 +299,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
 
         doubledimuon_tree->Branch("isBestCandidate",        &isBestCandidate,        "isBestCandidate/O");
 
-	if(isMC_)
+	if(IsMC_)
 	  {
             doubledimuon_tree->Branch("gen_doubledimuon_pdgId", &gen_doubledimuon_pdgId, "gen_doubledimuon_pdgId/I");
       	    doubledimuon_tree->Branch("gen_doubledimuon_p4",    "TLorentzVector", &gen_doubledimuon_p4);
@@ -424,7 +424,7 @@ void DoubleDiMuonRootupler::analyze(const edm::Event& iEvent, const edm::EventSe
    edm::Handle<pat::PackedGenParticleCollection> packed;
    iEvent.getByToken(packCands_,  packed);
 
-   if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+   if ( (IsMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
      for (size_t i=0; i<pruned->size(); i++) {
        // std::cout << "Valid"<<std::endl;
        const reco::Candidate *afourmuon = &(*pruned)[i];

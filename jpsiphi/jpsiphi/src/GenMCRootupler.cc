@@ -67,7 +67,7 @@ private:
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
 
   std::vector<double> DimuonMassCuts_;
-  bool isMC_;
+  bool IsMC_;
   bool OnlyBest_;
   bool OnlyGen_;
   std::vector<std::string>  HLTs_;

@@ -60,7 +60,7 @@ class DiTrakHLT:public edm::EDAnalyzer {
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   std::vector<double> ditrakMassCuts_;
   std::vector<double> MassTraks_;
-	bool isMC_;
+	bool IsMC_;
   bool OnlyBest_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -203,7 +203,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 ditrakMassCuts_(iConfig.getParameter<std::vector<double>>("TrakTrakMassCuts")),
 MassTraks_(iConfig.getParameter<std::vector<double>>("MassTraks")),
-isMC_(iConfig.getParameter<bool>("isMC")),
+IsMC_(iConfig.getParameter<bool>("IsMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs")),
 HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters"))

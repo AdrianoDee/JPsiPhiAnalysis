@@ -80,7 +80,7 @@ class DiMuonDiTrakRootuplerFit : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
-  bool isMC_,OnlyBest_,OnlyGen_ ;
+  bool IsMC_,OnlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -222,7 +222,7 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      isMC_(iConfig.getParameter<bool>("isMC")),
+	      IsMC_(iConfig.getParameter<bool>("IsMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
@@ -414,7 +414,7 @@ DiMuonDiTrakRootuplerFit::DiMuonDiTrakRootuplerFit(const edm::ParameterSet& iCon
         }
         int pdgid_ = 0;
 
-        if (isMC_ || OnlyGen_) {
+        if (IsMC_ || OnlyGen_) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
 
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
@@ -570,7 +570,7 @@ dimuonditrk_jpsippdl   = -99.0;
 
 gen_dimuonditrk_pdgId = 0;
 
-if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+if ( (IsMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
     // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
@@ -687,7 +687,7 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     }
   } // for (size
 }
-}  // end if isMC
+}  // end if IsMC
 
 if(OnlyGen_) dimuonditrk_tree->Fill();
 
@@ -762,7 +762,7 @@ if(OnlyGen_) dimuonditrk_tree->Fill();
       dimuonditrk_dca_t1t2 = dimuonditrk_cand.userFloat("dca_t1t2");
 
 
-      if(isMC_ || OnlyGen_)
+      if(IsMC_ || OnlyGen_)
       {
         reco::GenParticleRef genPhiMuHigh  = phiMuHigh->genParticleRef();
         reco::GenParticleRef genPhiMuLow   = phiMuLow->genParticleRef();

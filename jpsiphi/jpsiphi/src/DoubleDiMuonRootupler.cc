@@ -73,7 +73,7 @@ class DoubleDiMuonRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  doubledimuon_pdgid_, jpsi_pdgid_, phi_pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_,AddMC_;
+  bool IsMC_,OnlyBest_,OnlyGen_,AddMC_;
   UInt_t MomPdgId_, JPsiPdgId_, PhiPdgId_;
   std::vector<std::string>                            HLTs_;
   std::vector<std::string>                            HLTFilters_;
@@ -249,7 +249,7 @@ DoubleDiMuonRootupler::DoubleDiMuonRootupler(const edm::ParameterSet& iConfig):
         // thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertices"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      //isMC_(iConfig.getParameter<bool>("isMC")),
+	      //IsMC_(iConfig.getParameter<bool>("IsMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         AddMC_(iConfig.getParameter<bool>("AddMC")),

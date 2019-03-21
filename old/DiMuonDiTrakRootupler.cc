@@ -81,7 +81,7 @@ class DiMuonDiTrakRootupler : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::VertexCollection> primaryVertices_Label;
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  dimuonditrk_pdgid_, dimuon_pdgid_, trak_pdgid_, pdgid_;
-  bool isMC_,OnlyBest_,OnlyGen_ ;
+  bool IsMC_,OnlyBest_,OnlyGen_ ;
   UInt_t motherpdgid_,phipdgid_,jpspdgid_;
   std::vector<std::string>  HLTs_;
   std::vector<std::string>  HLTFilters_;
@@ -203,7 +203,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
         thebeamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("BeamSpot"))),
         primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
         triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
-	      isMC_(iConfig.getParameter<bool>("isMC")),
+	      IsMC_(iConfig.getParameter<bool>("IsMC")),
         OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
         OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
         motherpdgid_(iConfig.getParameter<uint32_t>("Mother_pdg")),
@@ -296,7 +296,7 @@ DiMuonDiTrakRootupler::DiMuonDiTrakRootupler(const edm::ParameterSet& iConfig):
 
         int pdgid_ = 0;
 
-        if (isMC_ ) {
+        if (IsMC_ ) {
            std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
            dimuonditrk_tree->Branch("gen_dimuonditrk_pdgId",  &gen_dimuonditrk_pdgId,     "gen_dimuonditrk_pdgId/I");
            dimuonditrk_tree->Branch("gen_dimuonditrk_p4", "TLorentzVector",  &gen_dimuonditrk_p4);
@@ -444,7 +444,7 @@ gen_gd6_p4.SetPtEtaPhiM(0.,0.,0.,0.);
 
 gen_dimuonditrk_pdgId = 0;
 
-if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+if ( (IsMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
   for (size_t i=0; i<pruned->size(); i++) {
     // std::cout << "Valid"<<std::endl;
     const reco::Candidate *aditrkdimu = &(*pruned)[i];
@@ -560,10 +560,10 @@ if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     }
   } // for (size
 }
-}  // end if isMC
+}  // end if IsMC
 
 //
-// if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+// if ( (IsMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
 //   for (size_t i=0; i<pruned->size(); i++) {
 //     // std::cout << "Valid"<<std::endl;
 //     const reco::Candidate *aditrkdimu = &(*pruned)[i];

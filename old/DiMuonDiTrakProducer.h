@@ -70,7 +70,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
-  bool isMC_;
+  bool IsMC_;
   bool addMCTruth_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);

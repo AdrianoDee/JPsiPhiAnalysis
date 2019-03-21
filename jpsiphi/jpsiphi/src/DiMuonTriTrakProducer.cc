@@ -204,7 +204,7 @@
 //   OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 //   product_name_(iConfig.getParameter<std::string>("Product")),
 //   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-//   IsMC_(iConfig.getParameter<bool>("isMC")),
+//   IsMC_(iConfig.getParameter<bool>("IsMC")),
 //   doDoubleConstant_(iConfig.getParameter<bool>("DoDouble")),
 //   addSameSig_(iConfig.getParameter<bool>("AddSS")),
 //   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))

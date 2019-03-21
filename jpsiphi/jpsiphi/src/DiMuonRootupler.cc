@@ -66,7 +66,7 @@ class DiMuonRootupler:public edm::EDAnalyzer {
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  pdgid_;
   std::vector<double> DimuonMassCuts_;
-	bool isMC_;
+	bool IsMC_;
   bool OnlyBest_;
   bool OnlyGen_;
   std::vector<std::string>  HLTs_;
@@ -123,7 +123,7 @@ primaryVertices_Label(consumes<reco::VertexCollection>(iConfig.getParameter< edm
 triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
-isMC_(iConfig.getParameter<bool>("isMC")),
+IsMC_(iConfig.getParameter<bool>("IsMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
@@ -167,7 +167,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
   }
 
-  if (isMC_ || OnlyGen_) {
+  if (IsMC_ || OnlyGen_) {
      // std::cout << "DiMuonRootupler::DiMuonRootupler: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
@@ -276,7 +276,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   edm::Handle<pat::PackedGenParticleCollection> packed;
   iEvent.getByToken(packCands_,  packed);
 
-  if ( (isMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
+  if ( (IsMC_ || OnlyGen_) && packed.isValid() && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
       const reco::Candidate *adimuon = &(*pruned)[i];
       if ( (abs(adimuon->pdgId()) == pdgid_) && (adimuon->status() == 2) ) {
@@ -305,7 +305,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
       }  // if ( p_id
     } // for (size
     // if ( dimuon_pdgId ) std::cout << "DiMuonRootupler: found the given decay " << run << "," << event << std::endl; // sanity check
-  }  // end if isMC
+  }  // end if IsMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
   float DimuonMassMin_ = DimuonMassCuts_[0];
@@ -360,7 +360,7 @@ void DiMuonRootupler::analyze(const edm::Event & iEvent, const edm::EventSetup &
   }  // !OnlyGen_
 
   if ( !already_stored ) {  // we have to make sure, we are not double storing an combination
-    if ( !isMC_ ) {
+    if ( !IsMC_ ) {
       if ( ndimuon > 0 ) dimuon_tree->Fill();   // if not MC filter out
     } else dimuon_tree->Fill();
   }

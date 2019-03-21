@@ -38,7 +38,7 @@ par.register ('ss',
                                   VarParsing.varType.bool,
                                   "Do Same Sign")
 
-par.register ('isMC',
+par.register ('IsMC',
                                   False,
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.bool,
@@ -79,7 +79,7 @@ par.register ('n',
 par.parseArguments()
 
 i = par.i
-ismc = par.isMC
+IsMC = par.IsMC
 doss = par.ss
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
@@ -245,7 +245,7 @@ process.Phi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("0.6 < mass && mass < 1.2 && charge==0 "),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(ismc),
+        addMCTruth                  = cms.bool(IsMC),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
@@ -262,7 +262,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("2.9 < mass && mass < 3.3 && charge==0 "),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(ismc),
+        addMCTruth                  = cms.bool(IsMC),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters
 )
@@ -325,7 +325,7 @@ process.DiMuonCounterPhi = cms.EDFilter('CandViewCountFilter',
 #     BeamSpot = cms.InputTag("offlineBeamSpot"),
 #     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
 #     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#     isMC = cms.bool(True),
+#     IsMC = cms.bool(True),
 #     OnlyBest = cms.bool(False),
 #     OnlyGen = cms.bool(False),
 #     Mother_pdg = cms.uint32(10441), #20443 #10441
@@ -352,8 +352,8 @@ process.PsiPhiProducer = cms.EDProducer('DoubleDiMuonProducer',
     OnlyBest  = cms.bool(False),
     Product = cms.string("FourMuonCandidates"),
     Filters = filters,
-    IsMC = cms.bool(ismc),
-    AddMCTruth = cms.bool(ismc),
+    IsMC = cms.bool(IsMC),
+    AddMCTruth = cms.bool(IsMC),
 	DoDouble = cms.bool(False),
 	AddSS    = cms.bool(doss),
 )
@@ -365,8 +365,8 @@ process.rootuple = cms.EDAnalyzer('DoubleDiMuonRootupler',
 	FiveTrakNeu = cms.InputTag('FiveTracksProducer','FiveTracksNeu'),
     PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-	AddMC = cms.bool(ismc),
-    isMC = cms.bool(ismc),
+	AddMC = cms.bool(IsMC),
+    IsMC = cms.bool(IsMC),
     OnlyBest = cms.bool(False),
     OnlyGen = cms.bool(False),
     Mother_pdg = cms.uint32(20443), #20443 #20443
@@ -388,7 +388,7 @@ process.rootupleJPsi = cms.EDAnalyzer('DiMuonRootupler',
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(443),
                           dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-                          isMC = cms.bool(False),
+                          IsMC = cms.bool(False),
                           OnlyBest = cms.bool(False),
                           OnlyGen = cms.bool(False),
                           HLTs = hltpaths
@@ -401,7 +401,7 @@ process.rootuplePhi = cms.EDAnalyzer('DiMuonRootupler',
                           TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
                           dimuon_pdgid = cms.uint32(333),
                           dimuon_mass_cuts = cms.vdouble(0.6,1.2),
-                          isMC = cms.bool(False),
+                          IsMC = cms.bool(False),
                           OnlyBest = cms.bool(False),
                           OnlyGen = cms.bool(False),
                           HLTs = hltpaths
@@ -427,7 +427,7 @@ tracking   = process.PsiPhiProducer
 rootupling = process.rootuple * process.rootuplePhi * process.rootupleJPsi
 debugging  = process.dump
 
-if ismc:
+if IsMC:
     allsteps = genparting * triggering * dimunoing * tracking * rootupling
 else:
     allsteps = triggering * dimunoing * tracking * rootupling

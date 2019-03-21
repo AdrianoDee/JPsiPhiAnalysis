@@ -56,7 +56,7 @@ class DiMuonDiTrakProducerAOD : public edm::EDProducer {
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
-  bool isMC_;
+  bool IsMC_;
 
   reco::Candidate::LorentzVector convertVector(const math::XYZTLorentzVectorF& v);
   bool IsTheSame(const pat::PackedCandidate& tk, const pat::Muon& mu);

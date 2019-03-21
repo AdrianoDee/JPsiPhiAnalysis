@@ -66,7 +66,7 @@ class DiMuonRootuplerGEN:public edm::EDAnalyzer {
   edm::EDGetTokenT<edm::TriggerResults> triggerResults_Label;
   int  pdgid_, pdgid_mother;
   std::vector<double> DimuonMassCuts_;
-	bool isMC_;
+	bool IsMC_;
   bool OnlyBest_;
   bool OnlyGen_;
   std::vector<std::string>  HLTs_;
@@ -123,7 +123,7 @@ triggerResults_Label(consumes<edm::TriggerResults>(iConfig.getParameter<edm::Inp
 pdgid_(iConfig.getParameter<uint32_t>("dimuon_pdgid")),
 pdgid_mother(iConfig.getParameter<uint32_t>("mother_pdgid")),
 DimuonMassCuts_(iConfig.getParameter<std::vector<double>>("dimuon_mass_cuts")),
-isMC_(iConfig.getParameter<bool>("isMC")),
+IsMC_(iConfig.getParameter<bool>("IsMC")),
 OnlyBest_(iConfig.getParameter<bool>("OnlyBest")),
 OnlyGen_(iConfig.getParameter<bool>("OnlyGen")),
 HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
@@ -161,7 +161,7 @@ HLTs_(iConfig.getParameter<std::vector<std::string>>("HLTs"))
     dimuon_tree->Branch("numPrimaryVertices", &numPrimaryVertices, "numPrimaryVertices/i");
   }
 
-  if (isMC_ || OnlyGen_) {
+  if (IsMC_ || OnlyGen_) {
      std::cout << "DiMuonRootuplerGEN::DiMuonRootuplerGEN: Dimuon id " << pdgid_ << std::endl;
      dimuon_tree->Branch("mother_pdgId",  &mother_pdgId,     "mother_pdgId/I");
      dimuon_tree->Branch("dimuon_pdgId",  &dimuon_pdgId,     "dimuon_pdgId/I");
@@ -273,7 +273,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
   iEvent.getByToken(packCands_,  packed);
 
 
-  if ( (isMC_ || OnlyGen_) && pruned.isValid() ) {
+  if ( (IsMC_ || OnlyGen_) && pruned.isValid() ) {
     for (size_t i=0; i<pruned->size(); i++) {
       // std::cout<< i;
       const reco::Candidate *adimuon = &(*pruned)[i];
@@ -314,7 +314,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
     }
 
 
-  }  // end if isMC
+  }  // end if IsMC
 
   float DimuonMassMax_ = DimuonMassCuts_[1];
   float DimuonMassMin_ = DimuonMassCuts_[0];
@@ -362,7 +362,7 @@ void DiMuonRootuplerGEN::analyze(const edm::Event & iEvent, const edm::EventSetu
   }  // !OnlyGen_
 
   if ( !already_stored ) {  // we have to make sure, we are not double storing an combination
-    if ( !isMC_ ) {
+    if ( !IsMC_ ) {
       if ( ndimuon > 0 ) dimuon_tree->Fill();   // if not MC filter out
     } else dimuon_tree->Fill();
   }

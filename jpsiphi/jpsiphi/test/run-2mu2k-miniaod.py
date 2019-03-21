@@ -95,7 +95,7 @@ par.register ('withFive',
 par.parseArguments()
 
 i = par.i
-ismc = par.isMC
+IsMC = par.isMC
 doss = par.ss
 
 gen_file = "file:32B83273-030F-E811-9105-E0071B7AF7C0.root"
@@ -304,7 +304,7 @@ process.JPsi2MuMuPAT = cms.EDProducer('DiMuonProducerPAT',
         dimuonSelection             = cms.string("2.95 < mass && mass < 3.25 && charge==0"),
         addCommonVertex             = cms.bool(True),
         addMuonlessPrimaryVertex    = cms.bool(False),
-        addMCTruth                  = cms.bool(ismc),
+        addMCTruth                  = cms.bool(IsMC),
         resolvePileUpAmbiguity      = cms.bool(True),
         HLTFilters                  = filters,
         TriggerResults              = cms.InputTag("TriggerResults", "", "HLT"),
@@ -348,13 +348,13 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     DiMuon              = cms.InputTag('JPsi2MuMuPAT'),
     TrackMatcher        = cms.InputTag("trackMatch"),
     PFCandidates        = cms.InputTag('packedPFCandidates'),
-    TrakPtCut           = cms.double(0.85),
-    BeamSpot         = cms.InputTag('offlineBeamSpot'),
-    PrimaryVertex    = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    TriggerInput        = cms.InputTag("unpackPatTriggers"),
-    TriggerResults      = cms.InputTag("TriggerResults", "", "HLT"),
-    DiMuonMassCuts      = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
-    TrakTrakMassCuts    = cms.vdouble(0.95,1.05),  # phi mass window 1.019461 +/- .015
+    TrakPtCut            = cms.double(0.85),
+    BeamSpot             = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex        = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerInput         = cms.InputTag("unpackPatTriggers"),
+    TriggerResults       = cms.InputTag("TriggerResults", "", "HLT"),
+    DiMuonMassCuts       = cms.vdouble(2.95,3.25),      # J/psi mass window 3.096916 +/- 0.150
+    TrakTrakMassCuts     = cms.vdouble(0.95,1.05),  # phi mass window 1.019461 +/- .015
     DiMuonDiTrakMassCuts = cms.vdouble(4.0,6.0),            # b-hadron mass window
     MassTraks = cms.vdouble(kaonmass,kaonmass),         # traks masses
     JPsiMass = cms.double(3.096916),
@@ -362,22 +362,50 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrakProducer',
     OnlyBest  = cms.bool(False),
     Product = cms.string("DiMuonDiTrakCandidates"),
     Filters = filters,
-    IsMC = cms.bool(ismc),
-    AddMCTruth = cms.bool(ismc),
-    DoDouble = cms.bool(False),
+    IsMC = cms.bool(IsMC),
+    AddMCTruth = cms.bool(IsMC),
     AddSS    = cms.bool(doss),
     PionRefit = cms.bool(True)
 )
 
 process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
+
     DiMuoDiTrak             = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
     PFCandidates            = cms.InputTag('packedPFCandidates'),
-    TrakPtCut               = cms.double(0.85),
-    BeamSpot             = cms.InputTag('offlineBeamSpot'),
-    PrimaryVertex        = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    TrakPtCut               = cms.double(0.85),
+
+    TrackMatcher            = cms.InputTag("trackMatch"),
+
+    BeamSpot                = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex           = cms.InputTag("offlineSlimmedPrimaryVertices"),
+
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrakCuts            = cms.vdouble(2.5,7.5),         # traks masses
+    FiveTrakCuts            = cms.vdouble(3.0,6.5),
+
+    Filters                 = filters,
+
+    IsMC                    = cms.bool(IsMC),
+)
+
+process.SixTracksProducer  = cms.EDProducer('SixTracksProducer',
+
+    FiveCollection          = cms.InputTag('FiveTracksProducer','FiveTracks'),
+    PFCandidates            = cms.InputTag('packedPFCandidates'),
+    TriggerInput            = cms.InputTag("unpackPatTriggers"),
+    TrakPtCut               = cms.double(0.85),
+
+    TrackMatcher            = cms.InputTag("trackMatch"),
+
+    BeamSpot                = cms.InputTag('offlineBeamSpot'),
+    PrimaryVertex           = cms.InputTag("offlineSlimmedPrimaryVertices"),
+
+    TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
+    SixTrackCuts            = cms.vdouble(3.0,6.5),
+
+    Filters                 = filters,
+
+    IsMC                    = cms.bool(IsMC),
 )
 
 
@@ -404,7 +432,7 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
 #     BeamSpot = cms.InputTag("offlineBeamSpot"),
 #     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
 #     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-#     isMC = cms.bool(False),
+#     IsMC = cms.bool(False),
 #     OnlyBest = cms.bool(False),
 #     OnlyGen = cms.bool(False),
 #     Mother_pdg = cms.uint32(20443), #20443 #10441
@@ -417,34 +445,39 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
 
 process.rootuple = cms.EDAnalyzer('DiMuonDiTrakRootupler',
     DiMuoDiTrak = cms.InputTag('PsiPhiProducer','DiMuonDiTrakCandidates'),
-    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(ismc),
-    OnlyBest = cms.bool(False),
+    PrimaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    IsMC = cms.bool(IsMC),
     OnlyGen = cms.bool(False),
-    Mother_pdg = cms.uint32(20443), #20443 #10441
-    JPsi_pdg = cms.uint32(443),
-    Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
     TreeName = cms.string('JPsiPhiTree')
 )
 
 process.rootupleFive = cms.EDAnalyzer('FiveTracksRootupler',
-    FiveTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
+    SixTracksCand = cms.InputTag('FiveTracksProducer','FiveTracks'),
     BeamSpot = cms.InputTag("offlineBeamSpot"),
     PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
-    isMC = cms.bool(ismc),
-    OnlyBest = cms.bool(False),
+    IsMC = cms.bool(IsMC),
     OnlyGen = cms.bool(False),
-    Mother_pdg = cms.uint32(20443), #20443 #10441
-    JPsi_pdg = cms.uint32(443),
-    Phi_pdg = cms.uint32(333),
     HLTs = hltpaths,
     Filters = filters,
     TreeName = cms.string('FiveTracksTree')
 )
+
+process.rootupleSix = cms.EDAnalyzer('FiveTracksRootupler',
+    SixTracksCand = cms.InputTag('SixTracksProducer','SixTracks'),
+    BeamSpot = cms.InputTag("offlineBeamSpot"),
+    PrimaryVertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
+    IsMC = cms.bool(IsMC),
+    OnlyGen = cms.bool(False),
+    HLTs = hltpaths,
+    Filters = filters,
+    TreeName = cms.string('SixTracksTree')
+)
+
 
 process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
       dimuons = cms.InputTag("JPsi2MuMuFilter"),
@@ -453,7 +486,7 @@ process.rootupleMuMu = cms.EDAnalyzer('DiMuonRootupler',
       TriggerResults = cms.InputTag("TriggerResults", "", "HLT"),
       dimuon_pdgid = cms.uint32(443),
       dimuon_mass_cuts = cms.vdouble(2.5,3.5),
-      isMC = cms.bool(ismc),
+      IsMC = cms.bool(IsMC),
       OnlyBest = cms.bool(False),
       OnlyGen = cms.bool(False),
       HLTs = hltpaths
@@ -485,7 +518,7 @@ if par.isSix:
     tracking   = process.PsiPhiProducer * process.FiveTracksProducer * process.SixTracksProducer
     rootupling = process.rootupleFive * process.rootuple * process.rootupleMuMu * process.rootupleSix
 
-if ismc:
+if IsMC:
     allsteps = genparting * triggering * mcmatching * jpsiing * tracking * rootupling
 else:
     allsteps = triggering * jpsiing * tracking * rootupling

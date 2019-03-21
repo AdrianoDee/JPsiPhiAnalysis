@@ -108,7 +108,7 @@ FiveTracksProducer::FiveTracksProducer(const edm::ParameterSet& iConfig):
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   FiveTrackMassCuts_(iConfig.getParameter<std::vector<double>>("FiveTrackCuts")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  IsMC_(iConfig.getParameter<bool>("isMC"))
+  IsMC_(iConfig.getParameter<bool>("IsMC"))
 {
   produces<pat::CompositeCandidateCollection>("FiveTracks");
 
@@ -340,7 +340,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          if(thirdTrack.pt()<TrackPtCut_) continue;
          if(thirdTrack.charge() == 0) continue;
-	       //if(!isMC_ and fabs(thirdTrack.pdgId())!=211) continue;
+	       //if(!IsMC_ and fabs(thirdTrack.pdgId())!=211) continue;
 	       if(!(thirdTrack.trackHighPurity())) continue;
          if(!(thirdTrack.hasTrackDetails())) continue;
 
