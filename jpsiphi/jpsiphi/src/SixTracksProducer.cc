@@ -312,6 +312,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
        for (size_t i = 0; i < track->size(); i++) {
 
+         int debug=0;
+
          std::vector<float> sixTracksMass;
          std::vector<float> psi2sOne, psi2sTwo;
          std::vector<float> fiveTracksCTau, fiveTracksCTauErr, fiveTracksCosAlpha;
@@ -327,7 +329,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 	       //if(!IsMC_ and fabs(fourthTrack.pdgId())!=211) continue;
 	       if(!(fourthTrack.trackHighPurity())) continue;
          if(!(fourthTrack.hasTrackDetails())) continue;
-
+         std::cout << debug++<< std::endl;
          if (IsTheSame(fourthTrack,*tp) || int(i) == tpId) continue;
          if (IsTheSame(fourthTrack,*tm) || int(i) == tmId) continue;
          if (IsTheSame(fourthTrack,*tm) || int(i) == ttId) continue;
@@ -362,7 +364,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          std::vector<reco::TransientTrack> sixTracks;
          std::vector<RefCountedKinematicParticle> dParticles;
-
+         std::cout << debug++<< std::endl;
          float kinChi = 0.;
          float kinNdf = 0.;
 
@@ -372,7 +374,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          sixTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
          sixTracks.push_back((*theB).build(*(tt->bestTrack()))); // K/π
          sixTracks.push_back((*theB).build(*(fourthTrack.bestTrack()))); // K/π
-
+         std::cout << debug++<< std::endl;
          dParticles.push_back(pFactory.particle(sixTracks[0],muonMass,kinChi,kinNdf,muonSigma));
          dParticles.push_back(pFactory.particle(sixTracks[1],muonMass,kinChi,kinNdf,muonSigma));
          dParticles.push_back(pFactory.particle(sixTracks[2],kaonmass,kinChi,kinNdf,kaonSigma));
@@ -404,7 +406,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          six_vp_fit = ChiSquaredProbability(six_x2_fit,six_nd_fit);
 
          if(six_vp_fit < 0.0005) continue;
-
+         std::cout << debug++<< std::endl;
          for (size_t ii = 0; ii < muons->size(); ii++)
          {
             auto thisMuon = muons->at(ii);
@@ -432,7 +434,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                                            math::XYZPoint(six_vx_fit,six_vy_fit,six_vz_fit),0);
 
          pat::CompositeCandidate sixCand_rf(recoSIx_rf);
-
+         std::cout << debug++<< std::endl;
          ////////////////
          //Vertexing
          TVector3 vtx, vdiff, pvtx;
@@ -504,7 +506,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            verteces.push_back(pz);
            vKeys.push_back(thispz);
          }
-
+         std::cout << debug++<< std::endl;
 
          int numVertex = 6;
          std::array <float,6> cosAlpha, ctauPV, ctauErrPV, fromPV;
@@ -517,7 +519,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
            cosAlpha[i] = (-1000.0);
            fromPV[i] = (-1000.0);
          }
-
+         std::cout << debug++<< std::endl;
          for(size_t i = 0; i < verteces.size(); i++)
          {
            pvtx.SetXYZ(verteces[i].position().x(),verteces[i].position().y(),0);
@@ -568,7 +570,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); fourMasses.push_back(pionmass); // k k p p
 
          auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
-
+         std::cout << debug++<< std::endl;
          for(size_t j = 0; j<numMasses;j++)
           sixTracksMass[j] = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass();
 
@@ -641,7 +643,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("vProb",six_vp_fit);
           sixCand.addUserFloat("nDof",six_nd_fit);
           sixCand.addUserFloat("vChi2",six_x2_fit);
-
+          std::cout << debug++<< std::endl;
           if(IsMC_)
            {
              float hasGen = -1.0;
