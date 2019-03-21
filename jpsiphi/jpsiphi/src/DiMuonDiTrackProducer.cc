@@ -558,7 +558,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 	         double x_vy_fit = fitXVertex->position().y();
            double x_vz_fit = fitXVertex->position().z();
            vtx.SetXYZ(x_vx_fit,x_vy_fit,0);
-
+           std::cout << debug++<< std::endl;
            bool status = ttmd.calculate( GlobalTrajectoryParameters(
              GlobalPoint(x_vx_fit,x_vy_fit,x_vz_fit),
              GlobalVector(x_px_fit,x_py_fit,x_pz_fit),TrackCharge(0),&(*magneticField)),
@@ -629,7 +629,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            std::vector<TransientVertex> pvs;
            std::vector<float> tPFromPV,tMFromPV;
-
+           std::cout << debug++<< std::endl;
            for(size_t i = 0; i < verteces.size(); i++)
            {
              tPFromPV.push_back(0.0);
@@ -666,7 +666,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
             DiMuonTTCand.addUserInt("lowKaonMatch",filters[i]);
             DiMuonTTCand.addUserInt("highKaonMatch",filters[j]);
           }
-
+          std::cout << debug++<< std::endl;
            DiMuonTTCand.addUserInt("dimuon_id",int(dimuonCounter));
 
            DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
@@ -686,7 +686,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
            DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
 
-
+           std::cout << debug++<< std::endl;
            DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);
            DiMuonTTCand.addUserFloat("ctauPV",ctauPV[1]);
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
@@ -702,7 +702,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("tPFromPVCA",float(tPFromPV[2]));
            DiMuonTTCand.addUserFloat("tMFromPVCA",float(tMFromPV[2]));
 
-
+           std::cout << debug++<< std::endl;
            DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
            DiMuonTTCand.addUserFloat("ctauPVDZ",ctauPV[3]);
            DiMuonTTCand.addUserFloat("ctauErrPVDZ",ctauErrPV[3]);
@@ -735,7 +735,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("dca_m2t1",DCAs[3]);
            DiMuonTTCand.addUserFloat("dca_m2t2",DCAs[4]);
            DiMuonTTCand.addUserFloat("dca_t1t2",DCAs[5]);
-
+           std::cout << debug++<< std::endl;
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
@@ -778,13 +778,13 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                    vtx.SetXYZ(dimuontt_vx_fit,dimuontt_vy_fit,0);
                    TVector3 pperp(dimuontt_px_fit, dimuontt_py_fit, 0);
                    AlgebraicVector3 vpperp(pperp.x(),pperp.y(),0);
-                   pvtx.SetXYZ(thePrimaryV.position().x(),thePrimaryV.position().y(),0);
+                   pvtx.SetXYZ(thePrimaryZero.position().x(),thePrimaryZero.position().y(),0);
                    TVector3 vdiff = vtx - pvtx;
                    double cosAlpha = vdiff.Dot(pperp)/(vdiff.Perp()*pperp.Perp());
                    Measurement1D distXY = vdistXY.distance(reco::Vertex(*PsiTDecayVertex), thePrimaryV);
                    double ctauPV = distXY.value()*cosAlpha * dimuontt_ma_fit/pperp.Perp();
                    GlobalError v1e = (reco::Vertex(*PsiTDecayVertex)).error();
-                   GlobalError v2e = thePrimaryV.error();
+                   GlobalError v2e = thePrimaryZero.error();
                    AlgebraicSymMatrix33 vXYe = v1e.matrix()+ v2e.matrix();
                    double ctauErrPV = sqrt(ROOT::Math::Similarity(vpperp,vXYe))*dimuontt_ma_fit/(pperp.Perp2());
 
@@ -890,7 +890,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
              nDofPionRefits.push_back(-1.0);
              vProbPionRefits.push_back(-1.0);
            }
-
+           std::cout << debug++<< std::endl;
            if(doPionRefit_)
            {
              KinematicParticleFactoryFromTransientTrack pFactory;
