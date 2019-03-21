@@ -1098,8 +1098,8 @@ if(!OnlyGen_)
       dimuonditrk_ctauPVBS = dimuonDiTrkOne_cand->userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonDiTrkOne_cand->userFloat("ctauErrPVBS");
 
-      tPFromPVBS = dimuonDiTrkOne_cand->userFloat("tPFromPVBS");
-      tMFromPVBS = dimuonDiTrkOne_cand->userFloat("tMFromPVBS");
+      // tPFromPVBS = dimuonDiTrkOne_cand->userFloat("tPFromPVBS");
+      // tMFromPVBS = dimuonDiTrkOne_cand->userFloat("tMFromPVBS");
 
       fiveOne_pt       = fiveOne_cand->pt();
       fiveOne_eta      = fiveOne_cand->eta();
@@ -1147,7 +1147,7 @@ if(!OnlyGen_)
 
       tTFromPV        = fiveOne_cand->userFloat("tTFromPV");
       tTFromPVDZ      = fiveOne_cand->userFloat("tTFromPVDZ");
-      tTFromPVBS      = fiveOne_cand->userFloat("tTFromPVBS");
+      // tTFromPVBS      = fiveOne_cand->userFloat("tTFromPVBS");
       tTFromPVCA      = fiveOne_cand->userFloat("tTFromPVCA");
 
 
