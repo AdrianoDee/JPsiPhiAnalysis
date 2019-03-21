@@ -833,15 +833,15 @@ if(!OnlyGen_)
       const reco::Vertex zPV    = *(five_cand.userData<reco::Vertex>("zPV"));
       const reco::Vertex bs     = *(five_cand.userData<reco::Vertex>("bS"));
 
-
+      std::cout << debug++<< std::endl;
       bestPV_X = bestPV.position().x();
       bestPV_Y = bestPV.position().y();
       bestPV_Z = bestPV.position().z();
-
+      std::cout << debug++<< std::endl;
       cosAlphaPV_X = cosPV.position().x();
       cosAlphaPV_Y = cosPV.position().y();
       cosAlphaPV_Z = cosPV.position().z();
-
+      std::cout << debug++<< std::endl;
       zPV_X = cosPV.position().x();
       zPV_Y = cosPV.position().y();
       zPV_Z = cosPV.position().z();
@@ -886,7 +886,7 @@ if(!OnlyGen_)
       tTFromPV        = five_cand.userFloat("tTFromPV");
       tTFromPVDZ      = five_cand.userFloat("tTFromPVDZ");
       tTFromPVBS      = five_cand.userFloat("tTFromPVBS");
-      tTFromPVCA      = five_cand.userFloat("tTFromPV_alpha");
+      tTFromPVCA      = five_cand.userFloat("tTFromPVCA");
 
       std::cout << debug++<< std::endl;
 
@@ -908,8 +908,8 @@ if(!OnlyGen_)
       dimuonditrk_ctauPVCA = dimuonditrk_cand->userFloat("ctauPVCA");
       dimuonditrk_ctauErrPVCA = dimuonditrk_cand->userFloat("ctauErrPVCA");
 
-      tPFromPVCA = dimuonditrk_cand->userFloat("tPFromPV_alpha");
-      tMFromPVCA = dimuonditrk_cand->userFloat("tMFromPV_alpha");
+      tPFromPVCA = dimuonditrk_cand->userFloat("tPFromPVCA");
+      tMFromPVCA = dimuonditrk_cand->userFloat("tMFromPVCA");
 
 
       dca_m1m2 = dimuonditrk_cand->userFloat("dca_m1m2");

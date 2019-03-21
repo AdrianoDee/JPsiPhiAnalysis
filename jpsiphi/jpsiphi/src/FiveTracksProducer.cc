@@ -579,7 +579,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
              fiveCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
              fiveCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
              fiveCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
-             fiveCand.addUserData("bs",reco::Vertex(theBeamSpotV));
+             fiveCand.addUserData("bS",reco::Vertex(theBeamSpotV));
 
              fiveCand.addUserFloat("vtxX",five_vx_fit);
              fiveCand.addUserFloat("vtxY",five_vy_fit);
@@ -599,11 +599,11 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
              fiveCand.addUserFloat("tTFromPV",float(fromPV[1]));
 
-             fiveCand.addUserFloat("cosAlpha_alpha",cosAlpha[2]);
-             fiveCand.addUserFloat("ctauPV_alpha",ctauPV[2]);
-             fiveCand.addUserFloat("ctauErrPV_alpha",ctauErrPV[2]);
+             fiveCand.addUserFloat("cosAlphaCA",cosAlpha[2]);
+             fiveCand.addUserFloat("ctauPVCA",ctauPV[2]);
+             fiveCand.addUserFloat("ctauErrPVCA",ctauErrPV[2]);
 
-             fiveCand.addUserFloat("tTFromPV_alpha",float(fromPV[2]));
+             fiveCand.addUserFloat("tTFromPVCA",float(fromPV[2]));
 
              fiveCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
              fiveCand.addUserFloat("ctauPVDZ",ctauPV[3]);

@@ -691,12 +691,12 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("tMFromPV",float(tMFromPV[1]));
 
 
-           DiMuonTTCand.addUserFloat("cosAlpha_alpha",cosAlpha[2]);
-           DiMuonTTCand.addUserFloat("ctauPV_alpha",ctauPV[2]);
-           DiMuonTTCand.addUserFloat("ctauErrPV_alpha",ctauErrPV[2]);
+           DiMuonTTCand.addUserFloat("cosAlphaCA",cosAlpha[2]);
+           DiMuonTTCand.addUserFloat("ctauPVCA",ctauPV[2]);
+           DiMuonTTCand.addUserFloat("ctauErrPVCA",ctauErrPV[2]);
 
-           DiMuonTTCand.addUserFloat("tPFromPV_alpha",float(tPFromPV[2]));
-           DiMuonTTCand.addUserFloat("tMFromPV_alpha",float(tMFromPV[2]));
+           DiMuonTTCand.addUserFloat("tPFromPVCA",float(tPFromPV[2]));
+           DiMuonTTCand.addUserFloat("tMFromPVCA",float(tMFromPV[2]));
 
 
            DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);

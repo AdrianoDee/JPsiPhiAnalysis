@@ -125,6 +125,7 @@ private:
   Double_t dimuonditrk_cosAlphaBS, dimuonditrk_ctauPVBS, dimuonditrk_ctauErrPVBS, dimuonditrk_countTksOfPVBS, dimuonditrk_vertexWeightBS;
   Double_t dimuonditrk_sumPTPVBS, dimuonditrk_mu1FromPVBS, dimuonditrk_mu2FromPVBS, dimuonditrk_tPFromPVBS, dimuonditrk_tMFromPVBS;
   Double_t dimuonditrk_mu1BSW, dimuonditrk_mu2BSW, dimuonditrk_tPBSW, dimuonditrk_tMBSW;
+  Double_t dimuonditrk_cosAlphaCA, dimuonditrk_ctauPVCA, dimuonditrk_ctauErrPVCA, dimuonditrk_tPFromPVCA, dimuonditrk_tMFromPVCA;
 
   Double_t dimuonditrk_dca_m1m2, dimuonditrk_dca_m1t1, dimuonditrk_dca_m1t2, dimuonditrk_dca_m2t1, dimuonditrk_dca_m2t2, dimuonditrk_dca_t1t2;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
@@ -364,47 +365,31 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_cosAlpha",      &dimuonditrk_cosAlpha,        "dimuonditrk_cosAlpha/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPV",      &dimuonditrk_ctauPV,        "dimuonditrk_ctauPV/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",      &dimuonditrk_ctauErrPV,        "dimuonditrk_ctauErrPV/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_countTksOfPV",      &dimuonditrk_countTksOfPV,        "dimuonditrk_countTksOfPV/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_vertexWeight",      &dimuonditrk_vertexWeight,        "dimuonditrk_vertexWeight/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_sumPTPV",      &dimuonditrk_sumPTPV,        "dimuonditrk_sumPTPV/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1FromPV",      &dimuonditrk_mu1FromPV,        "dimuonditrk_mu1FromPV/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2FromPV",      &dimuonditrk_mu2FromPV,        "dimuonditrk_mu2FromPV/D");
+
     dimuonditrk_tree->Branch("dimuonditrk_tPFromPV",      &dimuonditrk_tPFromPV,        "dimuonditrk_tPFromPV/D");
     dimuonditrk_tree->Branch("dimuonditrk_tMFromPV",      &dimuonditrk_tMFromPV,        "dimuonditrk_tMFromPV/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1W",      &dimuonditrk_mu1W,        "dimuonditrk_mu1W/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2W",      &dimuonditrk_mu2W,        "dimuonditrk_mu2W/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tPW",      &dimuonditrk_tPW,        "dimuonditrk_tPW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tMW",      &dimuonditrk_tMW,        "dimuonditrk_tMW/D");
+
+    dimuonditrk_tree->Branch("dimuonditrk_cosAlphaCA",      &dimuonditrk_cosAlphaCA,        "dimuonditrk_cosAlphaCA/D");
+    dimuonditrk_tree->Branch("dimuonditrk_ctauPVCA",      &dimuonditrk_ctauPVCA,        "dimuonditrk_ctauPVCA/D");
+    dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVCA",      &dimuonditrk_ctauErrPVCA,        "dimuonditrk_ctauErrPVCA/D");
+
+    dimuonditrk_tree->Branch("dimuonditrk_tPFromPVCA",      &dimuonditrk_tPFromPVCA,        "dimuonditrk_tPFromPVCA/D");
+    dimuonditrk_tree->Branch("dimuonditrk_tMFromPVCA",      &dimuonditrk_tMFromPVCA,        "dimuonditrk_tMFromPVCA/D");
 
     dimuonditrk_tree->Branch("dimuonditrk_cosAlphaDZ",      &dimuonditrk_cosAlphaDZ,        "dimuonditrk_cosAlphaDZ/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVDZ",      &dimuonditrk_ctauPVDZ,        "dimuonditrk_ctauPVDZ/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVDZ",      &dimuonditrk_ctauErrPVDZ,        "dimuonditrk_ctauErrPVDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_countTksOfPVDZ",      &dimuonditrk_countTksOfPVDZ,        "dimuonditrk_countTksOfPVDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_vertexWeightDZ",      &dimuonditrk_vertexWeightDZ,        "dimuonditrk_vertexWeightDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_sumPTPVDZ",      &dimuonditrk_sumPTPVDZ,        "dimuonditrk_sumPTPVDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1FromPVDZ",      &dimuonditrk_mu1FromPVDZ,        "dimuonditrk_mu1FromPVDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2FromPVDZ",      &dimuonditrk_mu2FromPVDZ,        "dimuonditrk_mu2FromPVDZ/D");
+
     dimuonditrk_tree->Branch("dimuonditrk_tPFromPVDZ",      &dimuonditrk_tPFromPVDZ,        "dimuonditrk_tPFromPVDZ/D");
     dimuonditrk_tree->Branch("dimuonditrk_tMFromPVDZ",      &dimuonditrk_tMFromPVDZ,        "dimuonditrk_tMFromPVDZ/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1DZW",      &dimuonditrk_mu1DZW,        "dimuonditrk_mu1DZW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2DZW",      &dimuonditrk_mu2DZW,        "dimuonditrk_mu2DZW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tPDZW",      &dimuonditrk_tPDZW,        "dimuonditrk_tPDZW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tMDZW",      &dimuonditrk_tMDZW,        "dimuonditrk_tMDZW/D");
 
     dimuonditrk_tree->Branch("dimuonditrk_cosAlphaBS",      &dimuonditrk_cosAlphaBS,        "dimuonditrk_cosAlphaBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVBS",      &dimuonditrk_ctauPVBS,        "dimuonditrk_ctauPVBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVBS",      &dimuonditrk_ctauErrPVBS,        "dimuonditrk_ctauErrPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_countTksOfPVBS",      &dimuonditrk_countTksOfPVBS,        "dimuonditrk_countTksOfPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_vertexWeightBS",      &dimuonditrk_vertexWeightBS,        "dimuonditrk_vertexWeightBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_sumPTPVBS",      &dimuonditrk_sumPTPVBS,        "dimuonditrk_sumPTPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1FromPVBS",      &dimuonditrk_mu1FromPVBS,        "dimuonditrk_mu1FromPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2FromPVBS",      &dimuonditrk_mu2FromPVBS,        "dimuonditrk_mu2FromPVBS/D");
+
     dimuonditrk_tree->Branch("dimuonditrk_tPFromPVBS",      &dimuonditrk_tPFromPVBS,        "dimuonditrk_tPFromPVBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_tMFromPVBS",      &dimuonditrk_tMFromPVBS,        "dimuonditrk_tMFromPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu1BSW",      &dimuonditrk_mu1BSW,        "dimuonditrk_mu1BSW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_mu2BSW",      &dimuonditrk_mu2BSW,        "dimuonditrk_mu2BSW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tPBSW",      &dimuonditrk_tPBSW,        "dimuonditrk_tPBSW/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tMBSW",      &dimuonditrk_tMBSW,        "dimuonditrk_tMBSW/D");
+
 
     dimuonditrk_tree->Branch("dimuonditrk_dca_m1m2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1m2/D");
     dimuonditrk_tree->Branch("dimuonditrk_dca_m1t1",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1t1/D");
@@ -716,50 +701,33 @@ void DiMuonDiTrackRootupler::analyze(const edm::Event& iEvent, const edm::EventS
         dimuonditrk_nDof      = dimuonditrk_cand.userFloat("nDof");
         dimuonditrk_charge    = dimuonditrk_cand.charge();
 
+        dimuonditrk_cosAlphaCA = dimuonditrk_cand.userFloat("cosAlphaCA");
+        dimuonditrk_ctauPVCA = dimuonditrk_cand.userFloat("ctauPVCA");
+        dimuonditrk_ctauErrPVCA = dimuonditrk_cand.userFloat("ctauErrPCAV");
+
+        dimuonditrk_tPFromPVCA = dimuonditrk_cand.userFloat("tPFromPVCA");
+        dimuonditrk_tMFromPVCA = dimuonditrk_cand.userFloat("tMFromPVCA");
+
         dimuonditrk_cosAlphaBS = dimuonditrk_cand.userFloat("cosAlphaBS");
         dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
         dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");
-        // dimuonditrk_countTksOfPVBS = dimuonditrk_cand.userFloat("countTksOfPVBS");
-        // dimuonditrk_vertexWeightBS = dimuonditrk_cand.userFloat("vertexWeightBS");
-        // dimuonditrk_sumPTPVBS = dimuonditrk_cand.userFloat("sumPTPVBS");
-        // dimuonditrk_mu1FromPVBS = dimuonditrk_cand.userFloat("mu1FromPVBS");
-        // dimuonditrk_mu2FromPVBS = dimuonditrk_cand.userFloat("mu2FromPVBS");
+
         dimuonditrk_tPFromPVBS = dimuonditrk_cand.userFloat("tPFromPVBS");
         dimuonditrk_tMFromPVBS = dimuonditrk_cand.userFloat("tMFromPVBS");
-        // dimuonditrk_mu1BSW = dimuonditrk_cand.userFloat("mu1BSW");
-        // dimuonditrk_mu2BSW = dimuonditrk_cand.userFloat("mu2BSW");
-        // dimuonditrk_tPBSW = dimuonditrk_cand.userFloat("tPBSW");
-        // dimuonditrk_tMBSW = dimuonditrk_cand.userFloat("tMBSW");
 
         dimuonditrk_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha");
         dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV");
         dimuonditrk_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV");
-        // dimuonditrk_countTksOfPV = dimuonditrk_cand.userFloat("countTksOfPV");
-        // dimuonditrk_vertexWeight = dimuonditrk_cand.userFloat("vertexWeight");
-        // dimuonditrk_sumPTPV = dimuonditrk_cand.userFloat("sumPTPV");
-        // dimuonditrk_mu1FromPV = dimuonditrk_cand.userFloat("mu1FromPV");
-        // dimuonditrk_mu2FromPV = dimuonditrk_cand.userFloat("mu2FromPV");
+
         dimuonditrk_tPFromPV = dimuonditrk_cand.userFloat("tPFromPV");
         dimuonditrk_tMFromPV = dimuonditrk_cand.userFloat("tMFromPV");
-        // dimuonditrk_mu1W = dimuonditrk_cand.userFloat("mu1W");
-        // dimuonditrk_mu2W = dimuonditrk_cand.userFloat("mu2W");
-        // dimuonditrk_tPW = dimuonditrk_cand.userFloat("tPW");
-        // dimuonditrk_tMW = dimuonditrk_cand.userFloat("tMW");
 
         dimuonditrk_cosAlphaDZ = dimuonditrk_cand.userFloat("cosAlphaDZ");
         dimuonditrk_ctauPVDZ = dimuonditrk_cand.userFloat("ctauPVDZ");
         dimuonditrk_ctauErrPVDZ = dimuonditrk_cand.userFloat("ctauErrPVDZ");
-        // dimuonditrk_countTksOfPVDZ = dimuonditrk_cand.userFloat("countTksOfPVDZ");
-        // dimuonditrk_vertexWeightDZ = dimuonditrk_cand.userFloat("vertexWeightDZ");
-        // dimuonditrk_sumPTPVDZ = dimuonditrk_cand.userFloat("sumPTPVDZ");
-        // dimuonditrk_mu1FromPVDZ = dimuonditrk_cand.userFloat("mu1FromPVDZ");
-        // dimuonditrk_mu2FromPVDZ = dimuonditrk_cand.userFloat("mu2FromPVDZ");
+
         dimuonditrk_tPFromPVDZ = dimuonditrk_cand.userFloat("tPFromPVDZ");
         dimuonditrk_tMFromPVDZ = dimuonditrk_cand.userFloat("tMFromPVDZ");
-        // dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu1DZW");
-        // dimuonditrk_mu1DZW = dimuonditrk_cand.userFloat("mu2DZW");
-        // dimuonditrk_tPDZW = dimuonditrk_cand.userFloat("tPDZW");
-        // dimuonditrk_tMDZW = dimuonditrk_cand.userFloat("tMDZW");
 
         dimuonditrk_dca_m1m2 = dimuonditrk_cand.userFloat("dca_m1m2");
         dimuonditrk_dca_m1t1 = dimuonditrk_cand.userFloat("dca_m1t1");

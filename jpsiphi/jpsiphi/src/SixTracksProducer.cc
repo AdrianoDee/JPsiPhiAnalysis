@@ -599,7 +599,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
           sixCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
           sixCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
-          sixCand.addUserData("bs",reco::Vertex(theBeamSpotV));
+          sixCand.addUserData("bS",reco::Vertex(theBeamSpotV));
 
           sixCand.addUserFloat("vtxX",six_vx_fit);
           sixCand.addUserFloat("vtxY",six_vy_fit);
@@ -615,10 +615,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
           sixCand.addUserFloat("tFFromPV",float(fromPV[1]));
 
-          sixCand.addUserFloat("cosAlpha_alpha",cosAlpha[2]);
-          sixCand.addUserFloat("ctauPV_alpha",ctauPV[2]);
-          sixCand.addUserFloat("ctauErrPV_alpha",ctauErrPV[2]);
-          sixCand.addUserFloat("tFFromPV_alpha",float(fromPV[2]));
+          sixCand.addUserFloat("cosAlphaCA",cosAlpha[2]);
+          sixCand.addUserFloat("ctauPVCA",ctauPV[2]);
+          sixCand.addUserFloat("ctauErrPVCA",ctauErrPV[2]);
+          sixCand.addUserFloat("tFFromPVCA",float(fromPV[2]));
 
           sixCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
           sixCand.addUserFloat("ctauPVDZ",ctauPV[3]);

@@ -1053,9 +1053,9 @@ if(!OnlyGen_)
       six_cosAlpha    = six_cand.userFloat("cosAlpha");
       six_ctauPV      = six_cand.userFloat("ctauPV");
       six_ctauErrPV   = six_cand.userFloat("ctauErrPV");
-      six_cosAlphaCA  = six_cand.userFloat("cosAlpha_alpha");
-      six_ctauPVCA    = six_cand.userFloat("ctauPV_alpha");
-      six_ctauErrPVCA = six_cand.userFloat("ctauErrPV_alpha");
+      six_cosAlphaCA  = six_cand.userFloat("cosAlphaCA");
+      six_ctauPVCA    = six_cand.userFloat("ctauPVCA");
+      six_ctauErrPVCA = six_cand.userFloat("ctauErrPVCA");
       six_cosAlphaDZ  = six_cand.userFloat("cosAlphaDZ");
       six_ctauPVDZ    = six_cand.userFloat("ctauPVDZ");
       six_ctauErrPVDZ = six_cand.userFloat("ctauErrPVDZ");
@@ -1148,7 +1148,7 @@ if(!OnlyGen_)
       tTFromPV        = fiveOne_cand->userFloat("tTFromPV");
       tTFromPVDZ      = fiveOne_cand->userFloat("tTFromPVDZ");
       tTFromPVBS      = fiveOne_cand->userFloat("tTFromPVBS");
-      tTFromPVCA      = fiveOne_cand->userFloat("tTFromPV_alpha");
+      tTFromPVCA      = fiveOne_cand->userFloat("tTFromPVCA");
 
 
       dimuonditrk_cosAlpha = dimuonDiTrkOne_cand->userFloat("cosAlpha");
@@ -1169,8 +1169,8 @@ if(!OnlyGen_)
       dimuonditrk_ctauPVCA = dimuonDiTrkOne_cand->userFloat("ctauPVCA");
       dimuonditrk_ctauErrPVCA = dimuonDiTrkOne_cand->userFloat("ctauErrPVCA");
 
-      tPFromPVCA = dimuonDiTrkOne_cand->userFloat("tPFromPV_alpha");
-      tMFromPVCA = dimuonDiTrkOne_cand->userFloat("tMFromPV_alpha");
+      tPFromPVCA = dimuonDiTrkOne_cand->userFloat("tPFromPVCA");
+      tMFromPVCA = dimuonDiTrkOne_cand->userFloat("tMFromPVCA");
 
       dca_m1m2 = dimuonDiTrkOne_cand->userFloat("dca_m1m2");
       dca_m1t1 = dimuonDiTrkOne_cand->userFloat("dca_m1t1");
