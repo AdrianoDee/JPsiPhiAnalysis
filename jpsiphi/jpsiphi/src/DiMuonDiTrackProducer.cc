@@ -394,6 +394,10 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
          int jstart = 0;
          if(AddSameSig_) jstart = i+1;
          for (size_t j = jstart; j < track->size(); j++) {
+
+           int debug = 0;
+           std::cout << "Start"<< std::endl;
+
            auto negTrack = track->at(j);
 
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
@@ -405,7 +409,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            if (i == j) continue;
            if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) ) continue;
-
+           std::cout << debug++<< std::endl;
            pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
 
            if ( !(TTCand.mass() < TrackTrackMassMax_ && TTCand.mass() > TrackTrackMassMin_) ) continue;
@@ -426,7 +430,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            std::vector<reco::TransientTrack> xTracks;
            KinematicParticleFactoryFromTransientTrack pFactory;
            std::vector<RefCountedKinematicParticle> xParticles;
-
+           std::cout << debug++<< std::endl;
            float kinChi = 0.;
            float kinNdf = 0.;
            // std::cout << "debug    7 "<< std::endl;
@@ -472,7 +476,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                                                 (double)(fitXVertex->degreesOfFreedom()));
            x_ndof_fit = (double)(fitXVertex->degreesOfFreedom());
 
-
+           std::cout << debug++<< std::endl;
            if(x_vp_fit < 0.001) continue;
 
            float minDR_pos = 10000.0, minDR_neg = 10000.0;
@@ -506,7 +510,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            }
 
-
+           std::cout << debug++<< std::endl;
            DiMuonTTCand.addUserFloat("mass_rf",x_ma_fit);
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
@@ -538,12 +542,12 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
-
+           std::cout << debug++<< std::endl;
            std::vector <double> sumPTPV,cosAlpha,ctauPV,ctauErrPV;
            // std::cout << "debug    9 "<< std::endl;
            TVector3 vtx, vdiff, pvtx;
            VertexDistanceXY vdistXY;
-           reco::Vertex thePrimaryV,thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
+           reco::Vertex thePrimaryVDZ, thePrimaryZero, thePrimaryVCA;
            TwoTrackMinimumDistance ttmd;
 
            double x_px_fit = fitX->currentState().kinematicParameters().momentum().x();
@@ -573,7 +577,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            verteces.push_back(theBeamSpotV);
 
            thePrimaryZero = reco::Vertex(*(priVtxs->begin()));
-           verteces.push_back(thePrimaryV);
+           verteces.push_back(thePrimaryZero);
            vKeys.push_back(0);
 
            float minDz = 999999.;
@@ -583,7 +587,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
              // std::cout << "debug    10 "<< std::endl;
              thePrimaryVCA = reco::Vertex(*(priVtxs->begin()));
              thePrimaryVDZ = reco::Vertex(*(priVtxs->begin()));
-             verteces.push_back(thePrimaryV);
+             verteces.push_back(thePrimaryVCA);
              verteces.push_back(thePrimaryVDZ);
              vKeys.push_back(0);
              vKeys.push_back(0);
@@ -668,7 +672,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
            DiMuonTTCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
            DiMuonTTCand.addUserData("zPV",reco::Vertex(thePrimaryVDZ));
-           DiMuonTTCand.addUserData("bs",reco::Vertex(thePrimaryV));
+           DiMuonTTCand.addUserData("bs",reco::Vertex(theBeamSpotV));
 
            DiMuonTTCand.addUserFloat("vtxX",x_vx_fit);
            DiMuonTTCand.addUserFloat("vtxY",x_vy_fit);
