@@ -710,9 +710,10 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            std::vector<float> DCAs;
            for(size_t i = 0; i < xTracks.size();++i)
            {
+             TrajectoryStateClosestToPoint TS1 = xTracks[i].impactPointTSCP();
              for(size_t j = i+1; j < xTracks.size();++j)
              {
-               TrajectoryStateClosestToPoint TS1 = xTracks[i].impactPointTSCP();
+
                TrajectoryStateClosestToPoint TS2 = xTracks[j].impactPointTSCP();
                float dca = 1E20;
                if (TS1.isValid() && TS2.isValid()) {
@@ -724,6 +725,12 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
              }
            }
 
+           DiMuonTTCand.addUserFloat("dca_m1m2",DCAs[0]);
+           DiMuonTTCand.addUserFloat("dca_m1t1",DCAs[1]);
+           DiMuonTTCand.addUserFloat("dca_m1t2",DCAs[2]);
+           DiMuonTTCand.addUserFloat("dca_m2t1",DCAs[3]);
+           DiMuonTTCand.addUserFloat("dca_m2t2",DCAs[4]);
+           DiMuonTTCand.addUserFloat("dca_t1t2",DCAs[5]);
 
            //Mass Constrained fit
            KinematicConstrainedVertexFitter vertexFitter;
