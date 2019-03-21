@@ -128,27 +128,36 @@ if par.isLocal:
     from bbbar_ml_filelist import *
     from bstojpsiphi_softqcd_filelist import *
     from bbhook_filelist import *
+    from bbhook_filelist_v3 import *
+    from BBbar_Hook_Samet import *
+    from BBbar_Hook_v5 import *
+    from bu_jpsiphi_k import *
+    from bu_jpsiphi_k_2 import *
+    from bu_jpsiphi_k_3 import *
+    from bu_jpsiphi_k_4 import *
+    from bs_psiphi import *
+    from bs_psiphi_2 import *
 
     filename = par.mc
 
-    fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "bbbar_soft" : bbbar_soft_filelist,
-                 "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
-                 "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
-                 "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
-                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
-                 "y4273_spin" : y4273_spin_filelist, "y4506_spin" : y4506_spin_filelist,
-                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist,
-                 "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist}
+        fileLists = {"bbhook_samet": BBbar_Hook_Samet , "qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "bbbar_soft" : bbbar_soft_filelist,
+                 "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist , "BBbar_Hook_v5" :  BBbar_Hook_v5, "bs_psiphi_2" : bs_psiphi_2,
+                 "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist, "bu_jpsiphi_k" : bu_jpsiphi_k,
+                 "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist, "bu_jpsiphi_k_2" : bu_jpsiphi_k_2,
+                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist, "bu_jpsiphi_k_3" : bu_jpsiphi_k_3,
+                 "y4273_spin" : y4273_spin_filelist, "y4506_spin" : y4506_spin_filelist, "bu_jpsiphi_k_4" : bu_jpsiphi_k_4,
+                 "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist, "bs_psiphi" : bs_psiphi,
+                 "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist,"bbhook_filelist_v3" : bbhook_filelist_v3}
 
-    gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
-                 "bbbar_soft" : "100X_upgrade2018_realistic_v10", "bbbar_hook" : "100X_upgrade2018_realistic_v10",
-                 "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  ,
-                 "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10",
-                 "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10",
-                 "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10",
-                 "y4273_spin" : "100X_upgrade2018_realistic_v10",  "y4506_spin" : "100X_upgrade2018_realistic_v10",
-                 "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10",
-                 "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10" }
+    gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbhook_samet" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
+                 "bbbar_soft" : "100X_upgrade2018_realistic_v10", "bbbar_hook" : "100X_upgrade2018_realistic_v10", "BBbar_Hook_v5" : "100X_upgrade2018_realistic_v10",
+                 "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  , "bu_jpsiphi_k" : "100X_upgrade2018_realistic_v10",
+                 "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_2" : "100X_upgrade2018_realistic_v10",
+                 "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_3" : "100X_upgrade2018_realistic_v10",
+                 "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_4" : "100X_upgrade2018_realistic_v10",
+                 "y4273_spin" : "100X_upgrade2018_realistic_v10",  "y4506_spin" : "100X_upgrade2018_realistic_v10", "bs_psiphi" : "100X_upgrade2018_realistic_v10",
+                 "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10", "bs_psiphi_2" : "100X_upgrade2018_realistic_v10",
+                 "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10", "bbhook_filelist_v3" : "100X_upgrade2018_realistic_v10"}
 
     par.gtag = gtags[filename]
     n= par.n
