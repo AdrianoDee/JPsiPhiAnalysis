@@ -1552,20 +1552,23 @@ if(!OnlyGen_)
         reco::GenParticleRef genhighMuon  = highMuon->genParticleRef();
         reco::GenParticleRef genlowMuon   = lowMuon->genParticleRef();
 
-        const reco::GenParticle *genhighKaon,*genlowKaon,*genThirdTrack;
+        const reco::GenParticle *genhighKaon,*genlowKaon,*genThirdTrack,*genFourthTrack;
         reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHigh, jpsiMomLow;
         reco::GenParticleRef jpsiMom, phiMom, thirdMom;
 
-        Double_t hasHighGen  = dimuonDiTrkOne_cand->userFloat("hasHighGen");
-        Double_t hasLowGen   = dimuonDiTrkOne_cand->userFloat("hasLowGen");
-        Double_t hasThirdGen = fiveOne_cand->userFloat("hasThirdGen");
+        Double_t hasHighGen   = dimuonDiTrkOne_cand->userFloat("hasHighGen");
+        Double_t hasLowGen    = dimuonDiTrkOne_cand->userFloat("hasLowGen");
+        Double_t hasThirdGen  = fiveOne_cand->userFloat("hasThirdGen");
+        Double_t hasFourthGen = six_cand.userFloat("hasFourthGen");
 
         if(hasHighGen>0.0)
-          genhighKaon = dynamic_cast <const reco::GenParticle *>(dimuonDiTrkOne_cand->daughter("highKaonGen"));
+          genhighKaon    = dynamic_cast <const reco::GenParticle *>(dimuonDiTrkOne_cand->daughter("highKaonGen"));
         if(hasLowGen>0.0)
-          genlowKaon = dynamic_cast <const reco::GenParticle *>(dimuonDiTrkOne_cand->daughter("lowKaonGen"));
+          genlowKaon     = dynamic_cast <const reco::GenParticle *>(dimuonDiTrkOne_cand->daughter("lowKaonGen"));
         if(hasThirdGen>0.0)
-          genThirdTrack = dynamic_cast <const reco::GenParticle *>(dimuonDiTrkOne_cand->daughter("thirdTrackGen"));
+          genThirdTrack  = dynamic_cast <const reco::GenParticle *>(five_cand->daughter("thirdTrackGen"));
+        if(hasFourthGen>0.0)
+          genFourthTrack = dynamic_cast <const reco::GenParticle *>(six_cand.daughter("fourthTrackGen"));
 
         if(hasHighGen>0.0)
         {
@@ -1622,6 +1625,27 @@ if(!OnlyGen_)
           genThirdTrack_p       = (Double_t)genThirdTrack->p();
           genThirdTrack_eta     = (Double_t)genThirdTrack->eta();
           genThirdTrack_phi     = (Double_t)genThirdTrack->phi();
+
+
+        }
+
+        if(hasFourthGen>0.0)
+        {
+          genFourthTrack_p4.SetPtEtaPhiM(genFourthTrack->pt(),genFourthTrack->eta(),genFourthTrack->phi(),genFourthTrack->mass());
+
+          if(genFourthTrack->numberOfMothers()>0)
+            thirdMom  = genFourthTrack->motherRef();
+
+          genFourthTrack_pdg     = (Double_t)genFourthTrack->pdgId();
+
+          if(phiMomLow.isNonnull() && genFourthTrack->numberOfMothers()>0)
+            genFourthTrack_mompdg  = thirdMom->pdgId();
+
+          genFourthTrack_status  = (Double_t)genFourthTrack->status();
+          genFourthTrack_pt      = (Double_t)genFourthTrack->pt();
+          genFourthTrack_p       = (Double_t)genFourthTrack->p();
+          genFourthTrack_eta     = (Double_t)genFourthTrack->eta();
+          genFourthTrack_phi     = (Double_t)genFourthTrack->phi();
 
 
         }

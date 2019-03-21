@@ -1249,7 +1249,7 @@ if(!OnlyGen_)
         if(hasLowGen>0.0)
           genlowKaon = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("lowKaonGen"));
         if(hasThirdGen>0.0)
-          genThirdTrack = dynamic_cast <const reco::GenParticle *>(dimuonditrk_cand->daughter("thirdTrackGen"));
+          genThirdTrack = dynamic_cast <const reco::GenParticle *>(five_cand.daughter("thirdTrackGen"));
 
         if(hasHighGen>0.0)
         {
