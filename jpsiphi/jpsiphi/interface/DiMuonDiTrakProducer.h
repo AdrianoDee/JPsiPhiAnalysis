@@ -91,7 +91,7 @@ class DiMuonDiTrakProducer : public edm::EDProducer {
   void endJob() override;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> DiMuonCollection_;
   edm::EDGetTokenT<edm::View<pat::PackedCandidate>> TrakCollection_;
-  double TrackPtCut_,MaxDeltaR_, MaxDeltaR_;
+  double TrakPtCut_,MaxDeltaR_, MaxDPtRel_;
   edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> TrackGenMap_;
   edm::EDGetTokenT<reco::BeamSpot> thebeamspot_;
   edm::EDGetTokenT<reco::VertexCollection> thePVs_;

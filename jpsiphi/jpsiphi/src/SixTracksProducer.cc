@@ -76,8 +76,8 @@ float SixTracksProducer::DeltaPt(const pat::PackedCandidate t1, const pat::Trigg
 
 bool SixTracksProducer::MatchByDRDPt(const pat::PackedCandidate t1, const pat::TriggerObjectStandAlone t2)
 {
-  return (fabs(t1.pt()-t2.pt())/t2.pt()<maxDPtRel &&
-	DeltaR(t1,t2) < maxDeltaR);
+  return (fabs(t1.pt()-t2.pt())/t2.pt()<MaxDPtRel_ &&
+	DeltaR(t1,t2) < MaxDeltaR_);
 }
 
 bool SixTracksProducer::isSameTrack(reco::Track t1, reco::Track t2)
@@ -100,9 +100,9 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   FiveTrackCollection_(consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("FiveCollection"))),
   TrackCollection_(consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("PFCandidates"))),
   TriggerCollection_(consumes<std::vector<pat::TriggerObjectStandAlone>>(iConfig.getParameter<edm::InputTag>("TriggerInput"))),
-  TrackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
+  trackPtCut_(iConfig.existsAs<double>("TrackPtCut") ? iConfig.getParameter<double>("TrackPtCut") : 0.8),
   MaxDeltaR_(iConfig.existsAs<double>("DRCut") ? iConfig.getParameter<double>("DRCut") : 0.01),
-  MaxDeltaR_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
+  MaxDPtRel_(iConfig.existsAs<double>("DPtCut") ? iConfig.getParameter<double>("DPtCut") : 2.0),
   TrackGenMap_(consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("TrackMatcher"))),
   thePVs_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("PrimaryVertex"))),
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
@@ -319,7 +319,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          auto sixthTrack = track->at(i);
 
-         if(sixthTrack.pt()<TrackPtCut_) continue;
+         if(sixthTrack.pt()<trackPtCut_) continue;
          //if(sixthTrack.charge() == 0) continue;
 	       //if(!isMC_ and fabs(sixthTrack.pdgId())!=211) continue;
 	       if(!(sixthTrack.trackHighPurity())) continue;
