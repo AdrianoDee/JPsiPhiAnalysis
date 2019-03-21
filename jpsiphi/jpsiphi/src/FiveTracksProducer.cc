@@ -551,7 +551,7 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          fiveCand.addUserFloat("thirdTrackMuonDR",minDR_third);
          fiveCand.addUserFloat("thirdTrackMuonDP",minDP_third);
-         fiveCand.addUserFloat("thirdTrackMuonDt",minDPt_third);
+         fiveCand.addUserFloat("thirdTrackMuonDPt",minDPt_third);
 
          auto thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,kaonmass,kaonmass,kaonmass);
 
