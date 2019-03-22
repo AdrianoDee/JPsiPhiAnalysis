@@ -1299,15 +1299,15 @@ if(!OnlyGen_)
       lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
       highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
 
-      dimuonDiTrkOne_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + lowPion_p4).m();
-      dimuonDiTrkTwo_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + thirdPion_p4).m();
-      dimuonDiTrkThree_mmpp = (highMuon_p4 + lowMuon_p4 + lowPion_p4  + thirdPion_p4).m();
-      dimuonDiTrkFour_mmpp  = (highMuon_p4 + lowMuon_p4 + fourthPion_p4 + thirdPion_p4).m();
+      dimuonDiTrkOne_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + lowPion_p4).M();
+      dimuonDiTrkTwo_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + thirdPion_p4).M();
+      dimuonDiTrkThree_mmpp = (highMuon_p4 + lowMuon_p4 + lowPion_p4  + thirdPion_p4).M();
+      dimuonDiTrkFour_mmpp  = (highMuon_p4 + lowMuon_p4 + fourthPion_p4 + thirdPion_p4).M();
 
-      dimuonDiTrkOne_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + lowKaon_p4).m();
-      dimuonDiTrkTwo_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + thirdKaon_p4).m();
-      dimuonDiTrkThree_mmkk = (highMuon_p4 + lowMuon_p4 + lowKaon_p4  + thirdKaon_p4).m();
-      dimuonDiTrkFour_mmkk  = (highMuon_p4 + lowMuon_p4 + fourthKaon_p4 + thirdKaon_p4).m();
+      dimuonDiTrkOne_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + lowKaon_p4).M();
+      dimuonDiTrkTwo_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + thirdKaon_p4).M();
+      dimuonDiTrkThree_mmkk = (highMuon_p4 + lowMuon_p4 + lowKaon_p4  + thirdKaon_p4).M();
+      dimuonDiTrkFour_mmkk  = (highMuon_p4 + lowMuon_p4 + fourthKaon_p4 + thirdKaon_p4).M();
 
       // fiveTrackOne_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackOne"));
       // fiveTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackTwo"));
