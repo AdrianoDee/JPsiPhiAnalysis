@@ -565,9 +565,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(pionmass); // k p k p
          oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); fourMasses.push_back(kaonmass); // k p p k
 
-         oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); fourMasses.push_back(pionmass); // k k p p
+         oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(kaonmass); // k k k k
 
-         auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,kaonmass,kaonmass);
+         auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,pionmass,pionmass);
 
          for(size_t j = 0; j<numMasses;j++)
           sixTracksMass.push_back(makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass());

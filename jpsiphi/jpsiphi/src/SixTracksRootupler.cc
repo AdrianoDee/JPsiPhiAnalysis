@@ -243,7 +243,7 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t genFourthTrack_p, genFourthTrack_pt, genFourthTrack_eta;
 
   Double_t six_m, six_m_ref, six_mass_ppkk, six_mass_pkpk;
-  Double_t six_mass_pkkk, six_mass_kpkp, six_mass_kppk, six_mass_kkpp;
+  Double_t six_mass_pkkk, six_mass_kpkp, six_mass_kppk, six_mass_kkkk;
   Double_t six_pt, six_eta, six_phi, six_p;
   Double_t six_cosAlpha, six_ctauPV, six_ctauErrPV;
   Double_t six_cosAlphaCA, six_ctauPVCA, six_ctauErrPVCA;
@@ -736,7 +736,7 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("six_mass_pkkk",      &six_mass_pkkk,        "six_mass_pkkk/D");
         sixtracks_tree->Branch("six_mass_kpkp",      &six_mass_kpkp,        "six_mass_kpkp/D");
         sixtracks_tree->Branch("six_mass_kppk",      &six_mass_kppk,        "six_mass_kppk/D");
-        sixtracks_tree->Branch("six_mass_kkpp",      &six_mass_kkpp,        "six_mass_kkpp/D");
+        sixtracks_tree->Branch("six_mass_kkkk",      &six_mass_kkkk,        "six_mass_kkkk/D");
 
         sixtracks_tree->Branch("six_pt",      &six_pt,       "six_pt/D");
         sixtracks_tree->Branch("six_eta",     &six_eta,      "six_eta/D");
@@ -1042,7 +1042,7 @@ if(!OnlyGen_)
       six_mass_pkkk    = six_cand.userFloat("mass_ref_3");
       six_mass_kpkp    = six_cand.userFloat("mass_ref_4");
       six_mass_kppk    = six_cand.userFloat("mass_ref_5");
-      six_mass_kkpp    = six_cand.userFloat("mass_ref_6");
+      six_mass_kkkk    = six_cand.userFloat("mass_ref_6");
 
 
       six_pt    = six_cand.pt();
