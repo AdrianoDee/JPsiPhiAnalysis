@@ -193,6 +193,8 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t diTrackFour_pt, diTrackFour_eta, diTrackFour_phi, diTrackFour_p;
   Double_t diTrackFive_pt, diTrackFive_eta, diTrackFive_phi, diTrackFive_p;
   Double_t diTrackSix_pt, diTrackSix_eta, diTrackSix_phi, diTrackSix_p;
+  Double_t dimuonDiTrkOne_mmpp, dimuonDiTrkTwo_mmpp, dimuonDiTrkThree_mmpp, dimuonDiTrkFour_mmpp;
+  Double_t dimuonDiTrkOne_mmkk, dimuonDiTrkTwo_mmkk, dimuonDiTrkThree_mmkk, dimuonDiTrkFour_mmkk;
 
   Double_t triTrack_pt, triTrack_eta, triTrack_phi, triTrack_charge, triTrack_m;
 
@@ -394,6 +396,17 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("diTrackSix_eta",    &diTrackSix_eta,    "diTrackSix_eta/D");
         sixtracks_tree->Branch("diTrackSix_phi",    &diTrackSix_phi,   "diTrackSix_phi/D");
         sixtracks_tree->Branch("diTrackSix_p",      &diTrackSix_p,   "diTrackSix_p/D");
+
+        sixtracks_tree->Branch("dimuonDiTrkOne_mmpp",      &dimuonDiTrkOne_mmpp,     "dimuonDiTrkOne_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkTwo_mmpp",      &dimuonDiTrkTwo_mmpp,     "dimuonDiTrkTwo_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkThree_mmpp",    &dimuonDiTrkThree_mmpp,   "dimuonDiTrkThree_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkFour_mmpp",     &dimuonDiTrkFour_mmpp,    "dimuonDiTrkFour_mmpp/D");
+
+        sixtracks_tree->Branch("dimuonDiTrkOne_mmpp",      &dimuonDiTrkOne_mmpp,    "dimuonDiTrkOne_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkTwo_mmpp",      &dimuonDiTrkTwo_mmpp,    "dimuonDiTrkTwo_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkThree_mmpp",    &dimuonDiTrkThree_mmpp,  "dimuonDiTrkThree_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkFour_mmpp",     &dimuonDiTrkFour_mmpp,   "dimuonDiTrkFour_mmpp/D");
+
 
 
         //The kinematic doesn't change, only mass
@@ -1283,9 +1296,18 @@ if(!OnlyGen_)
       fourthPion_p4.SetPtEtaPhiM(trackFour_cand->pt(), trackFour_cand->eta(), trackFour_cand->phi(), pionmass);
       fourthProton_p4.SetPtEtaPhiM(trackFour_cand->pt(), trackFour_cand->eta(), trackFour_cand->phi(), protonmass);
 
-
       lowMuon_p4.SetPtEtaPhiM(vhighMuon.pt(), vhighMuon.eta(), vhighMuon.phi(), vhighMuon.mass());
       highMuon_p4.SetPtEtaPhiM(vlowMuon.pt(), vlowMuon.eta(), vlowMuon.phi(), vlowMuon.mass());
+
+      dimuonDiTrkOne_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + lowPion_p4).m();
+      dimuonDiTrkTwo_mmpp   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + thirdPion_p4).m();
+      dimuonDiTrkThree_mmpp = (highMuon_p4 + lowMuon_p4 + lowPion_p4  + thirdPion_p4).m();
+      dimuonDiTrkFour_mmpp  = (highMuon_p4 + lowMuon_p4 + fourthPion_p4 + thirdPion_p4).m();
+
+      dimuonDiTrkOne_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + lowKaon_p4).m();
+      dimuonDiTrkTwo_mmkk   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + thirdKaon_p4).m();
+      dimuonDiTrkThree_mmkk = (highMuon_p4 + lowMuon_p4 + lowKaon_p4  + thirdKaon_p4).m();
+      dimuonDiTrkFour_mmkk  = (highMuon_p4 + lowMuon_p4 + fourthKaon_p4 + thirdKaon_p4).m();
 
       // fiveTrackOne_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackOne"));
       // fiveTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(first_six_ref->daughter("fiveTrackTwo"));
