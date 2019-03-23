@@ -70,4 +70,4 @@ Float_t out_six_phi, out_six_p, out_six_cosAlpha, out_six_ctauPV, out_six_ctauEr
 Float_t out_six_cosAlphaCA, out_six_ctauPVCA, out_six_ctauErrPVCA, out_six_cosAlphaDZ, out_six_ctauPVDZ;
 Float_t out_six_ctauErrPVDZ, out_six_cosAlphaBS, out_six_ctauPVBS, out_six_ctauErrPVBS, out_six_vProb;
 Float_t out_six_nDof, out_six_vChi2, out_six_vx, out_six_vy, out_six_vz;
-Float_t out_six_charge,    
+Float_t out_six_charge;

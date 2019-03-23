@@ -16,6 +16,35 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+//
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <map>
+
+
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
@@ -25,6 +54,9 @@ class SixTracks : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   Float_t JPsi_mass, Phi_mass, Phi_mean, Phi_sigma;
+   TTree *outTree;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -391,6 +423,82 @@ public :
    TTreeReaderValue<Double_t> six_vz = {fReader, "six_vz"};
    TTreeReaderValue<Int_t> six_charge = {fReader, "six_charge"};
 
+   Float_t out_run, out_event, out_lumi, out_numPrimaryVertices, out_trigger;
+   Float_t out_noSixCandidates, out_five_id, out_dimuon_id, out_p_id, out_m_id;
+   Float_t out_t_id, out_f_id, out_six_p4, out_five_p4, out_dimuonditrk_p4;
+   Float_t out_ditrack_p4, out_dimuon_p4, out_lowMuon_p4, out_highMuon_p4, out_highKaon_p4;
+   Float_t out_lowKaon_p4, out_thirdKaon_p4, out_fourthKaon_p4, out_highPion_p4, out_lowPion_p4;
+   Float_t out_thirdPion_p4, out_fourthPion_p4, out_highProton_p4, out_lowProton_p4, out_thirdProton_p4;
+   Float_t out_fourthProton_p4, out_dimuonditrk_m, out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi;
+   Float_t out_dimuonditrk_p, out_dimuon_m, out_dimuon_pt, out_dimuon_eta, out_dimuon_phi;
+   Float_t out_dimuon_p, out_highTrackMatch, out_lowTrackMatch, out_lowMuonMatch, out_highMuonMatch;
+   Float_t out_thirdTrackMatch, out_fourthTrackMatch, out_ditrack_m, out_diTrackOne_pt, out_diTrackOne_eta;
+   Float_t out_diTrackOne_phi, out_diTrackOne_p, out_diTrackTwo_pt, out_diTrackTwo_eta, out_diTrackTwo_phi;
+   Float_t out_diTrackTwo_p, out_diTrackThree_pt, out_diTrackThree_eta, out_diTrackThree_phi, out_diTrackThree_p;
+   Float_t out_diTrackFour_pt, out_diTrackFour_eta, out_diTrackFour_phi, out_diTrackFour_p, out_diTrackFive_pt;
+   Float_t out_diTrackFive_eta, out_diTrackFive_phi, out_diTrackFive_p, out_diTrackSix_pt, out_diTrackSix_eta;
+   Float_t out_diTrackSix_phi, out_diTrackSix_p, out_dimuonDiTrkOne_mmpp, out_dimuonDiTrkTwo_mmpp, out_dimuonDiTrkThree_mmpp;
+   Float_t out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mm, out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkThree_mmkk, out_dimuonDiTrkFour_mmkk;
+   Float_t out_highMuon_pt, out_highMuon_eta, out_highMuon_phi, out_highMuon_charge, out_highMuon_dz;
+   Float_t out_highMuon_dxy, out_lowMuon_pt, out_lowMuon_eta, out_lowMuon_phi, out_lowMuon_charge;
+   Float_t out_lowMuon_dz, out_lowMuon_dxy, out_highTrack_pt, out_highTrack_eta, out_highTrack_phi;
+   Float_t out_highTrack_charge, out_highTrack_dz, out_highTrack_dxy, out_lowTrack_pt, out_lowTrack_eta;
+   Float_t out_lowTrack_phi, out_lowTrack_charge, out_lowTrack_dz, out_lowTrack_dxy, out_thirdTrack_pt;
+   Float_t out_thirdTrack_eta, out_thirdTrack_phi, out_thirdTrack_charge, out_thirdTrack_dz, out_thirdTrack_dxy;
+   Float_t out_dimuonDiTrkOne_pt, out_dimuonDiTrkOne_eta, out_dimuonDiTrkOne_phi, out_dimuonDiTrkOne_charge, out_dimuonDiTrkOne_p;
+   Float_t out_dimuonDiTrkTwo_pt, out_dimuonDiTrkTwo_eta, out_dimuonDiTrkTwo_phi, out_dimuonDiTrkTwo_charge, out_dimuonDiTrkTwo_p;
+   Float_t out_dimuonDiTrkThree_pt, out_dimuonDiTrkThree_eta, out_dimuonDiTrkThree_phi, out_dimuonDiTrkThree_charge, out_dimuonDiTrkThree_p;
+   Float_t out_dimuonDiTrkFour_pt, out_dimuonDiTrkFour_eta, out_dimuonDiTrkFour_phi, out_dimuonDiTrkFour_charge, out_dimuonDiTrkFour_p;
+   Float_t out_dimuonDiTrkFive_pt, out_dimuonDiTrkFive_eta, out_dimuonDiTrkFive_phi, out_dimuonDiTrkFive_charge, out_dimuonDiTrkFive_p;
+   Float_t out_dimuonDiTrkSix_pt, out_dimuonDiTrkSix_eta, out_dimuonDiTrkSix_phi, out_dimuonDiTrkSix_charge, out_dimuonDiTrkSix_p;
+   Float_t out_dimuon_vProb, out_dimuon_vChi2, out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV;
+   Float_t out_dimuon_cosAlpha, out_triTrack_m, out_triTrack_pt, out_triTrack_eta, out_triTrack_phi;
+   Float_t out_triTrack_charge, out_dimuonditrk_vProb, out_dimuonditrk_vChi2, out_dimuonditrk_nDof, out_dimuonditrk_charge;
+   Float_t out_dimuonditrk_cosAlpha, out_dimuonditrk_ctauPV, out_dimuonditrk_ctauErrPV, out_dimuonditrk_cosAlphaCA, out_dimuonditrk_ctauPVCA;
+   Float_t out_dimuonditrk_ctauErrPVCA, out_dimuonditrk_cosAlphaDZ, out_dimuonditrk_ctauPVDZ, out_dimuonditrk_ctauErrPVDZ, out_dimuonditrk_cosAlphaBS;
+   Float_t out_dimuonditrk_ctauPVBS, out_dimuonditrk_ctauErrPVBS, out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz;
+   Float_t out_dca_m1m2, out_dca_m1t1, out_dca_m1t2, out_dca_m2t1, out_dca_m2t2;
+   Float_t out_dca_t1t2, out_dca_m1t3, out_dca_m2t3, out_dca_t1t3, out_dca_t2t3;
+   Float_t out_dca_m1t4, out_dca_m2t4, out_dca_t1t4, out_dca_t2t4, out_dca_t3t4;
+   Float_t out_highTrackMuonDR, out_highTrackMuonDP, out_highTrackMuonDPt, out_lowTrackMuonDR, out_lowTrackMuonDP;
+   Float_t out_lowTrackMuonDPt, out_thirdTrackMuonDR, out_thirdTrackMuonDP, out_thirdTrackMuonDPt, out_fourthTrackMuonDR;
+   Float_t out_fourthTrackMuonDP, out_fourthTrackMuonDPt, out_tPFromPV, out_tMFromPV, out_tTFromPV;
+   Float_t out_tFFromPV, out_tPFromPVCA, out_tMFromPVCA, out_tTFromPVCA, out_tFFromPVCA;
+   Float_t out_tPFromPVDZ, out_tMFromPVDZ, out_tTFromPVDZ, out_tFFromPVDZ, out_five_m;
+   Float_t out_five_m_ref, out_five_mass_ppk, out_five_mass_kpp, out_five_mass_pkp, out_five_mass_ppp;
+   Float_t out_fiveOne_pt, out_fiveOne_eta, out_fiveOne_phi, out_fiveOne_p, out_fiveTwo_pt;
+   Float_t out_fiveTwo_eta, out_fiveTwo_phi, out_fiveTwo_p, out_fiveThree_pt, out_fiveThree_eta;
+   Float_t out_fiveThree_phi, out_fiveThree_p, out_fiveFour_pt, out_fiveFour_eta, out_fiveFour_phi;
+   Float_t out_fiveFour_p, out_fiveFive_pt, out_fiveFive_eta, out_fiveFive_phi, out_fiveFive_p;
+   Float_t out_five_cosAlpha, out_five_ctauPV, out_five_ctauErrPV, out_five_cosAlphaCA, out_five_ctauPVCA;
+   Float_t out_five_ctauErrPVCA, out_five_cosAlphaDZ, out_five_ctauPVDZ, out_five_ctauErrPVDZ, out_five_cosAlphaBS;
+   Float_t out_five_ctauPVBS, out_five_ctauErrPVBS, out_five_vProb, out_five_nDof, out_five_vChi2;
+   Float_t out_five_vx, out_five_vy, out_five_vz, out_five_charge, out_bestPV_X;
+   Float_t out_bestPV_Y, out_bestPV_Z, out_cosAlphaPV_X, out_cosAlphaPV_Y, out_cosAlphaPV_Z;
+   Float_t out_bS_X, out_bS_Y, out_bS_Z, out_zPV_X, out_zPV_Y;
+   Float_t out_zPV_Z, out_lowMuon_isTight, out_lowMuon_isLoose, out_lowMuon_isSoft, out_lowMuon_isMedium;
+   Float_t out_lowMuon_isHighPt, out_lowMuon_isTracker, out_lowMuon_isGlobal, out_lowMuon_NPixelHits, out_lowMuon_NStripHits;
+   Float_t out_lowMuon_NTrackhits, out_lowMuon_NBPixHits, out_lowMuon_NPixLayers, out_lowMuon_NTraLayers, out_lowMuon_NStrLayers;
+   Float_t out_lowMuon_NBPixLayers, out_highMuon_isTight, out_highMuon_isLoose, out_highMuon_isSoft, out_highMuon_isMedium;
+   Float_t out_highMuon_isHighPt, out_highMuon_isTracker, out_highMuon_isGlobal, out_highMuon_NPixelHits, out_highMuon_NStripHits;
+   Float_t out_highMuon_NTrackhits, out_highMuon_NBPixHits, out_highMuon_NPixLayers, out_highMuon_NTraLayers, out_highMuon_NStrLayers;
+   Float_t out_highMuon_NBPixLayers, out_lowMuon_type, out_highMuon_type, out_highTrack_NPixelHits, out_highTrack_NStripHits;
+   Float_t out_highTrack_NTrackhits, out_highTrack_NBPixHits, out_highTrack_NPixLayers, out_highTrack_NTraLayers, out_highTrack_NStrLayers;
+   Float_t out_highTrack_NBPixLayers, out_lowTrack_NPixelHits, out_lowTrack_NStripHits, out_lowTrack_NTrackhits, out_lowTrack_NBPixHits;
+   Float_t out_lowTrack_NPixLayers, out_lowTrack_NTraLayers, out_lowTrack_NStrLayers, out_lowTrack_NBPixLayers, out_thirdTrack_NPixelHits;
+   Float_t out_thirdTrack_NStripHits, out_thirdTrack_NTrackhits, out_thirdTrack_NBPixHits, out_thirdTrack_NPixLayers, out_thirdTrack_NTraLayers;
+   Float_t out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers, out_fourthTrack_NPixLayers, out_fourthTrack_NTraLayers, out_fourthTrack_NStrLayers;
+   Float_t out_fourthTrack_NBPixLayers, out_fourthTrack_NPixelHits, out_fourthTrack_NStripHits, out_fourthTrack_NTrackhits, out_fourthTrack_NBPixHits;
+   Float_t out_six_m, out_six_m_ref, out_six_mass_ppkk, out_six_mass_pkpk, out_six_mass_pkkk;
+   Float_t out_six_mass_kpkp, out_six_mass_kppk, out_six_mass_kkkk, out_six_pt, out_six_eta;
+   Float_t out_six_phi, out_six_p, out_six_cosAlpha, out_six_ctauPV, out_six_ctauErrPV;
+   Float_t out_six_cosAlphaCA, out_six_ctauPVCA, out_six_ctauErrPVCA, out_six_cosAlphaDZ, out_six_ctauPVDZ;
+   Float_t out_six_ctauErrPVDZ, out_six_cosAlphaBS, out_six_ctauPVBS, out_six_ctauErrPVBS, out_six_vProb;
+   Float_t out_six_nDof, out_six_vChi2, out_six_vx, out_six_vy, out_six_vz;
+   Float_t out_six_charge;
+
+   Float out_thirdTrack_NPixLayers, out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers;
+
 
    SixTracks(TTree * /*tree*/ =0) { }
    virtual ~SixTracks() { }
@@ -407,6 +515,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(SixTracks,0);
 
