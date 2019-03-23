@@ -22,3 +22,6 @@ jpsphi/utilities/;
 utilities/combinetool/CMSSW_8_1_0/tmp/slc6_amd64_gcc530/cache/prod/libhistfactory
 
 utilities/combinetool/CMSSW_8_1_0/config/toolbox/slc6_amd64_gcc530/tools/selected/py2-PyYAML.xml
+jpsiphi/jpsiphi/test/mclists/*.py
+
+*.DS_Store
