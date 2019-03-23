@@ -32,7 +32,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_UK_*', 'T3_US_Baylor','T3_US_Colorado', 'T3_US_Cornell',
  'T3_US_FIT', 'T3_US_FIU', 'T3_US_FNALLPC', 'T3_US_FSU', 'T3_US_J*',
  'T3_US_Kansas', 'T3_US_MIT', 'T3_US_N*', 'T3_US_O*', 'T3_US_P*',
- 'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR', 'T3_US_UCSB',
+ 'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR',
  'T3_US_UMD']
 
 datasetnames = {
@@ -134,6 +134,8 @@ gtag = GlobalTags[run]
 #lumi = jsonfile[jNum]
 lumi = jsonFile
 #HLT = HLTPath[0]
+six="True"
+five="True"
 
 import datetime
 timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
@@ -160,7 +162,7 @@ config.General.transferLogs     = False
 
 config.section_('JobType')
 config.JobType.psetName         = 'run-2mu2k-miniaod.py'
-config.JobType.pyCfgParams      = ['gtag=' + str(gtag), 'dataset=' + str(run)]
+config.JobType.pyCfgParams      = ['gtag=' + str(gtag), 'dataset=' + str(run), 'isSix='+six,'isFive='+five]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
