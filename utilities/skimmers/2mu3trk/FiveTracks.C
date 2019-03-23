@@ -318,7 +318,8 @@ Bool_t FiveTracks::Process(Long64_t entry)
 
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
 
-  test = test && (*vProb_ppk> 0.001 || *vProb_kkk > 0.001 || *vProb_ppp > 0.001 || *vProb_kpp > 0.001 || *vProb_pkp > 0.001);
+  test = test && (*vProb_ppk> 0.01 || *vProb_kkk > 0.01 || *vProb_ppp > 0.01 || *vProb_kpp > 0.01 || *vProb_pkp > 0.01);
+  test = test && (*dimuon_pt> 3.0); //&& (*dimuonDiTrkOne_pt>5.0) ; 
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
   //

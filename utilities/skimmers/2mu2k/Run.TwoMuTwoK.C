@@ -9,7 +9,12 @@
   // INPUT DATA SAMPLE ON LOCAL DISK
 
   TDSet* dataset = new TDSet("TTree", "JPsiPhiTree", "rootuple");
-
+  //
+  //Y MCs
+  //dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/Y4700/y4700_official_mc_2018.root");
+  //
+  //B MCs
+  dataset->Add("/lustre/cms/store/user/adiflori/OfficialEfficiency/Bs/BsToJpsiPhi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/bs_official_bmm.root");
   /// 2018
 
   /*
@@ -20,7 +25,8 @@
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018A-PromptReco-v2_MINIAOD___20181124_150752/181124_140759/0000/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018A-PromptReco-v3_MINIAOD___20181124_151626/181124_141633/0000/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018A-PromptReco-v3_MINIAOD___20181124_151626/181124_141633/0001/sum.root");
-  /*
+*/
+   /*
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018B-PromptReco-v1_MINIAOD___20181126_111547/181126_101555/0000/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018B-PromptReco-v1_MINIAOD___20181126_111547/181126_101555/0001/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018B-PromptReco-v1_MINIAOD___20181126_111547/181126_101555/0002/sum.root");
@@ -159,6 +165,10 @@
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20181106_172137/181106_162145/0000/sum.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20181106_172137/181106_162145/0001/sum.root");
   */
+  //dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/bujpsiphik/bu_jpsiphik_4.root");
+  //dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/bujpsiphik/bu_jpsiphik_2.root");
+  //dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/bujpsiphik/bu_jpsiphik.root");
+  dataset->Add("/lustre/home/adrianodif/jpsiphi/2018/CMSSW_10_2_1/src/jpsiphi/jpsiphi/test/bspsiphi/bs_psiphi.root");
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/2mu2k/TwoMuTwoK";
   TProof *p = TProof::Open("workers=5"); // 12 workers for qsub

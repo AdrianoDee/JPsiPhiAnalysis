@@ -17,7 +17,7 @@ import numpy as np
 from ROOT import RooRealVar,RooAbsPdf,RooChebychev,RooExponential,RooGaussian,TLine
 from ROOT import RooBernstein,RooAbsPdf,RooPlot,RooAddPdf,RooDataHist,RooArgSet,RooArgList
 from ROOT import kGreen,kRed,kBlack,kBlue,kDashed,kDotted,kMagenta,RooVoigtian
-from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,SelectVars
+from ROOT.RooFit import Components,LineColor,LineStyle,Name,Normalization,Range,SelectVars,Title
 from ROOT import RooDataSet,RooFormulaVar,RooLinkedList
 
 
@@ -60,22 +60,22 @@ print "Tree entries %d"%(splotData.numEntries())
 
 
 
-a0 = RooRealVar("a0","a0",0.001,-10.,10.)
-a1 = RooRealVar("a1","a1",0.001,-5.0,5.0)
-a2 = RooRealVar("a2","a2",-0.00001,-2.,2.)
-a3 = RooRealVar("a3","a3",0.0,-0.5,0.5)
-a4 = RooRealVar("a4","a4",0.0,-0.2,0.2)
+a0 = RooRealVar("a0","a0",7.72274e-02,-10.,10.)
+a1 = RooRealVar("a1","a1",-3.16317e-01,-5.0,5.0)
+a2 = RooRealVar("a2","a2",1.08150e-01,-2.,2.)
+a3 = RooRealVar("a3","a3",-1.21839e-02,-0.5,0.5)
+a4 = RooRealVar("a4","a4",1.17246e-03,-0.2,0.2)
 a5 = RooRealVar("a5","a5",0.0,-0.025,0.05)
 a6 = RooRealVar("a6","a6",0.0,-0.001,0.001)
 
-aset = RooArgList(a0,a1,a2,a3,a4,a5)
+aset = RooArgList(a0,a1,a2,a3,a4)#,a5)
 
-sigma = RooRealVar("sigma","width of gaussian",0.01,0.005,0.05)
+sigma = RooRealVar("#sigma","width of gaussian",0.00572,0.00372,0.00772)
 gamma = RooRealVar("#Gamma","gamma of bw",0.0042,0.001,0.01)
-mean = RooRealVar("mean","mean of gaussian",psimean,psimean-0.1,psimean+0.1);
+mean = RooRealVar("m","mean of gaussian",psimean,psimean-0.1,psimean+0.1);
 
-nSig = RooRealVar("nSig","nSig",float(nentries)*0.1,0.,float(nentries))
-nBkg = RooRealVar("nBkg","nBkg",float(nentries)*0.9,0.,float(nentries))
+nSig = RooRealVar("n_{Sig}","nSig",3.5e4,3.4e4,3.6e4)
+nBkg = RooRealVar("nBkg","nBkg",3.96901e+06,3.76901e+06,4.16901e+06)
 cheb = RooChebychev("cheb","Background",psiPrimeMass,aset)
 gauss = RooGaussian("gauss","gaussian PDF ",psiPrimeMass,mean,sigma)
 #signal = RooVoigtian("signal","signal",psiPrimeMass,mean,gamma,sigma)
@@ -92,42 +92,50 @@ tot = RooAddPdf("tot","g+cheb",RooArgList(signal,bkg),RooArgList(nSig,nBkg))
 
 nfits = 0
 
-mean.setConstant(True)
-gamma.setConstant(True)
-rPhifit = tot.fitTo(splotData,Range(psimin,psimax),RooFit.NumCPU(20),RooFit.Verbose(False))
-nfits = nfits + 1
+#mean.setConstant(True)
+#sigma.setConstant(True)
+#rPhifit = tot.fitTo(splotData,Range(psimin,psimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+#nfits = nfits + 1
 
-mean.setConstant(True)
-gamma.setConstant(False)
-rPhifit = tot.fitTo(splotData,Range(psimin,psimax),RooFit.NumCPU(20),RooFit.Verbose(False))
-nfits = nfits + 1
+#mean.setConstant(True)
+#gamma.setConstant(False)
+#rPhifit = tot.fitTo(splotData,Range(psimin,psimax),RooFit.NumCPU(20),RooFit.Verbose(False))
+#nfits = nfits + 1
 
 mean.setConstant(False)
-gamma.setConstant(False)
+sigma.setConstant(False)
 rPhifit = tot.fitTo(splotData,Range(psimin,psimax),RooFit.NumCPU(20),RooFit.Verbose(False))
 nfits = nfits + 1
 
 c = TCanvas("canvas","canvas",1200,800) 
-phiFrame = psiPrimeMass.frame(Range(psimin,psimax),Normalization((nSig.getValV() + nBkg.getValV())))
+phiFrame = psiPrimeMass.frame(Range(psimin,psimax),Normalization((nSig.getValV() + nBkg.getValV())),Title("#mu#mu#pi#pi candidates - #psi(2S) fit "))
 splotData.plotOn(phiFrame)
 ratio = 1.0/float(nfits)
+
 
 tot.plotOn(phiFrame,Normalization(ratio))
 bFrac = (nBkg.getValV())/(nSig.getValV() + nBkg.getValV())
 bkg.plotOn(phiFrame,LineColor(kRed),Normalization(bFrac),LineStyle(kDashed))
 signal.plotOn(phiFrame,LineColor(kGreen),Normalization(1.0-bFrac))
-tot.paramOn(phiFrame,RooFit.Layout(0.57,0.99,0.65))
+
+a0.setConstant(True)
+a1.setConstant(True)
+a2.setConstant(True)
+a3.setConstant(True)
+a4.setConstant(True)
+nBkg.setConstant(True)
+
+tot.paramOn(phiFrame,RooFit.Layout(0.65,0.99,0.4))
 
 phiFrame.Draw()
 
-sidesigma = np.sqrt(gamma.getValV()**2 + sigma.getValV()**2)
 
 plotmax = 1.5 * float(nentries/binning)
-lowside = -3.*sidesigma + mean.getValV()
-upside = +3.*sidesigma + mean.getValV()
+lowside = -3.*sigma.getValV() + mean.getValV()
+upside = +3.*sigma.getValV() + mean.getValV()
 
-linelow = TLine(lowside,0.0,lowside,plotmax)
-lineup = TLine(upside,0.0,upside,plotmax)
+linelow = TLine(lowside,0.0,lowside,plotmax*1.2)
+lineup = TLine(upside,0.0,upside,plotmax*1.2)
 linelow.SetLineColor(kGreen)
 lineup.SetLineColor(kGreen)
 linelow.SetLineWidth(2)
