@@ -1437,21 +1437,21 @@ if(!OnlyGen_)
       thirdTrack_NStrLayers = trackThree_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
       thirdTrack_NBPixLayers = trackThree_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
-      fourthTrack_pt     = trackThree_cand->pt();
-      fourthTrack_eta    = trackThree_cand->eta();
-      fourthTrack_phi    = trackThree_cand->phi();
-      fourthTrack_charge = trackThree_cand->charge();
-      fourthTrack_dz     = trackThree_cand->bestTrack()->dz();
-      fourthTrack_dxy    = trackThree_cand->bestTrack()->dxy();
+      fourthTrack_pt     = trackFour_cand->pt();
+      fourthTrack_eta    = trackFour_cand->eta();
+      fourthTrack_phi    = trackFour_cand->phi();
+      fourthTrack_charge = trackFour_cand->charge();
+      fourthTrack_dz     = trackFour_cand->bestTrack()->dz();
+      fourthTrack_dxy    = trackFour_cand->bestTrack()->dxy();
 
-      fourthTrack_NPixelHits = trackThree_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
-      fourthTrack_NStripHits = trackThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      fourthTrack_NTrackhits = trackThree_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
-      fourthTrack_NBPixHits  = trackThree_cand->bestTrack()->hitPattern().numberOfValidStripHits();
-      fourthTrack_NPixLayers = trackThree_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
-      fourthTrack_NTraLayers = trackThree_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
-      fourthTrack_NStrLayers = trackThree_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
-      fourthTrack_NBPixLayers = trackThree_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
+      fourthTrack_NPixelHits = trackFour_cand->bestTrack()->hitPattern().numberOfValidPixelHits();
+      fourthTrack_NStripHits = trackFour_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      fourthTrack_NTrackhits = trackFour_cand->bestTrack()->hitPattern().numberOfValidTrackerHits();
+      fourthTrack_NBPixHits  = trackFour_cand->bestTrack()->hitPattern().numberOfValidStripHits();
+      fourthTrack_NPixLayers = trackFour_cand->bestTrack()->hitPattern().pixelLayersWithMeasurement();
+      fourthTrack_NTraLayers = trackFour_cand->bestTrack()->hitPattern().trackerLayersWithMeasurement();
+      fourthTrack_NStrLayers = trackFour_cand->bestTrack()->hitPattern().stripLayersWithMeasurement();
+      fourthTrack_NBPixLayers = trackFour_cand->bestTrack()->hitPattern().pixelBarrelLayersWithMeasurement();
 
 
       dimuonDiTrkOne_pt     = dimuonDiTrkOne_cand->pt();
