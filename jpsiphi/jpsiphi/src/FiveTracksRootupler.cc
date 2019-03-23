@@ -277,7 +277,7 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         TreeName_(iConfig.getParameter<std::string>("TreeName"))
 {
 	      edm::Service<TFileService> fs;
-        fivetracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrack");
+        fivetracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and Three Tracks");
 
         fivetracks_tree->Branch("run",                &run,                "run/I");
         fivetracks_tree->Branch("event",              &event,              "event/I");
@@ -324,7 +324,6 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("dimuon_m",      &dimuon_m,     "dimuon_m/D");
         fivetracks_tree->Branch("dimuon_pt",     &dimuon_pt,    "dimuon_pt/D");
         fivetracks_tree->Branch("dimuon_eta",    &dimuon_pt,    "dimuon_eta/D");
-        fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
         fivetracks_tree->Branch("dimuon_p",      &dimuon_p,     "dimuon_p/D");
         fivetracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
 

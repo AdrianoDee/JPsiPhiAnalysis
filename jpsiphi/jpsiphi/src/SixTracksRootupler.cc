@@ -300,7 +300,7 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         TreeName_(iConfig.getParameter<std::string>("TreeName"))
 {
 	      edm::Service<TFileService> fs;
-        sixtracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and DiTrack");
+        sixtracks_tree = fs->make<TTree>(TreeName_.data(),"Tree of DiMuon and Four Tracks");
 
         sixtracks_tree->Branch("run",                &run,                "run/I");
         sixtracks_tree->Branch("event",              &event,              "event/I");
@@ -355,7 +355,6 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("dimuon_eta",    &dimuon_pt,    "dimuon_eta/D");
         sixtracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
         sixtracks_tree->Branch("dimuon_p",      &dimuon_p,     "dimuon_p/D");
-        sixtracks_tree->Branch("dimuon_phi",    &dimuon_phi,   "dimuon_phi/D");
 
         sixtracks_tree->Branch("highTrackMatch",      &highTrackMatch,    "highTrackMatch/D");
         sixtracks_tree->Branch("lowTrackMatch",       &lowTrackMatch,     "lowTrackMatch/D");
@@ -402,10 +401,10 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("dimuonDiTrkThree_mmpp",    &dimuonDiTrkThree_mmpp,   "dimuonDiTrkThree_mmpp/D");
         sixtracks_tree->Branch("dimuonDiTrkFour_mmpp",     &dimuonDiTrkFour_mmpp,    "dimuonDiTrkFour_mmpp/D");
 
-        sixtracks_tree->Branch("dimuonDiTrkOne_mmpp",      &dimuonDiTrkOne_mmpp,    "dimuonDiTrkOne_mmpp/D");
-        sixtracks_tree->Branch("dimuonDiTrkTwo_mmpp",      &dimuonDiTrkTwo_mmpp,    "dimuonDiTrkTwo_mmpp/D");
-        sixtracks_tree->Branch("dimuonDiTrkThree_mmpp",    &dimuonDiTrkThree_mmpp,  "dimuonDiTrkThree_mmpp/D");
-        sixtracks_tree->Branch("dimuonDiTrkFour_mmpp",     &dimuonDiTrkFour_mmpp,   "dimuonDiTrkFour_mmpp/D");
+        sixtracks_tree->Branch("dimuonDiTrkOne_mmkk",      &dimuonDiTrkOne_mmkk,    "dimuonDiTrkOne_mmkk/D");
+        sixtracks_tree->Branch("dimuonDiTrkTwo_mmkk",      &dimuonDiTrkTwo_mmkk,    "dimuonDiTrkTwo_mmkk/D");
+        sixtracks_tree->Branch("dimuonDiTrkThree_mmkk",    &dimuonDiTrkThree_mmkk,  "dimuonDiTrkThree_mmkk/D");
+        sixtracks_tree->Branch("dimuonDiTrkFour_mmkk",     &dimuonDiTrkFour_mmkk,   "dimuonDiTrkFour_mmkk/D");
 
 
 
@@ -725,10 +724,10 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("thirdTrack_NTrackhits",        &thirdTrack_NTrackhits,        "thirdTrack_NTrackhits/I");
         sixtracks_tree->Branch("thirdTrack_NBPixHits",         &thirdTrack_NBPixHits,        "thirdTrack_NBPixHits/I");
 
-        sixtracks_tree->Branch("fourthTrack_NPixLayers",        &fourthTrack_NPixLayers,        "fourthTrack_NPixLayers/I");
-        sixtracks_tree->Branch("fourthTrack_NTraLayers",        &fourthTrack_NTraLayers,        "fourthTrack_NTraLayers/I");
-        sixtracks_tree->Branch("fourthTrack_NStrLayers",        &fourthTrack_NStrLayers,        "fourthTrack_NStrLayers/I");
-        sixtracks_tree->Branch("fourthTrack_NBPixLayers",       &fourthTrack_NBPixLayers,        "fourthTrack_NBPixLayers/I");
+        sixtracks_tree->Branch("thirdTrack_NPixLayers",        &thirdTrack_NPixLayers,        "thirdTrack_NPixLayers/I");
+        sixtracks_tree->Branch("thirdTrack_NTraLayers",        &thirdTrack_NTraLayers,        "thirdTrack_NTraLayers/I");
+        sixtracks_tree->Branch("thirdTrack_NStrLayers",        &thirdTrack_NStrLayers,        "thirdTrack_NStrLayers/I");
+        sixtracks_tree->Branch("thirdTrack_NBPixLayers",       &thirdTrack_NBPixLayers,        "thirdTrack_NBPixLayers/I");
 
         sixtracks_tree->Branch("fourthTrack_NPixelHits",        &fourthTrack_NPixelHits,        "fourthTrack_NPixelHits/I");
         sixtracks_tree->Branch("fourthTrack_NStripHits",        &fourthTrack_NStripHits,        "fourthTrack_NStripHits/I");
