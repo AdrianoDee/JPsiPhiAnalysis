@@ -425,11 +425,13 @@ public :
 
    Float_t out_run, out_event, out_lumi, out_numPrimaryVertices, out_trigger;
    Float_t out_noSixCandidates, out_five_id, out_dimuon_id, out_p_id, out_m_id;
-   Float_t out_t_id, out_f_id, out_six_p4, out_five_p4, out_dimuonditrk_p4;
-   Float_t out_ditrack_p4, out_dimuon_p4, out_lowMuon_p4, out_highMuon_p4, out_highKaon_p4;
-   Float_t out_lowKaon_p4, out_thirdKaon_p4, out_fourthKaon_p4, out_highPion_p4, out_lowPion_p4;
-   Float_t out_thirdPion_p4, out_fourthPion_p4, out_highProton_p4, out_lowProton_p4, out_thirdProton_p4;
-   Float_t out_fourthProton_p4, out_dimuonditrk_m, out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi;
+   Float_t out_t_id, out_f_id;
+   TLorentzVector out_six_p4, out_five_p4, out_dimuonditrk_p4;
+   TLorentzVector out_ditrack_p4, out_dimuon_p4, out_lowMuon_p4, out_highMuon_p4, out_highKaon_p4;
+   TLorentzVector out_lowKaon_p4, out_thirdKaon_p4, out_fourthKaon_p4, out_highPion_p4, out_lowPion_p4;
+   TLorentzVector out_thirdPion_p4, out_fourthPion_p4, out_highProton_p4, out_lowProton_p4, out_thirdProton_p4;
+   TLorentzVector out_fourthProton_p4;
+   Float_t out_dimuonditrk_m, out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi;
    Float_t out_dimuonditrk_p, out_dimuon_m, out_dimuon_pt, out_dimuon_eta, out_dimuon_phi;
    Float_t out_dimuon_p, out_highTrackMatch, out_lowTrackMatch, out_lowMuonMatch, out_highMuonMatch;
    Float_t out_thirdTrackMatch, out_fourthTrackMatch, out_ditrack_m, out_diTrackOne_pt, out_diTrackOne_eta;
