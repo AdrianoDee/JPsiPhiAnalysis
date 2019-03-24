@@ -138,7 +138,7 @@ void SixTracks::SlaveBegin(TTree * /*tree*/)
   outTree->Branch("dimuonDiTrkTwo_mmpp", 	&out_dimuonDiTrkTwo_mmpp, 	"dimuonDiTrkTwo_mmpp/F");
   outTree->Branch("dimuonDiTrkThree_mmpp", 	&out_dimuonDiTrkThree_mmpp, 	"dimuonDiTrkThree_mmpp/F");
   outTree->Branch("dimuonDiTrkFour_mmpp", 	&out_dimuonDiTrkFour_mmpp, 	"dimuonDiTrkFour_mmpp/F");
-  outTree->Branch("dimuonDiTrkOne_mm", 	&out_dimuonDiTrkOne_mm, 	"dimuonDiTrkOne_mm/F");
+  outTree->Branch("dimuonDiTrkOne_mm", 	&out_dimuonDiTrkOne_mmkk, 	"dimuonDiTrkOne_mmkk/F");
   outTree->Branch("dimuonDiTrkTwo_mmkk", 	&out_dimuonDiTrkTwo_mmkk, 	"dimuonDiTrkTwo_mmkk/F");
   outTree->Branch("dimuonDiTrkThree_mmkk", 	&out_dimuonDiTrkThree_mmkk, 	"dimuonDiTrkThree_mmkk/F");
   outTree->Branch("dimuonDiTrkFour_mmkk", 	&out_dimuonDiTrkFour_mmkk, 	"dimuonDiTrkFour_mmkk/F");
@@ -536,7 +536,7 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_dimuonDiTrkTwo_mmpp = 	(Float_t)(*dimuonDiTrkTwo_mmpp);
     out_dimuonDiTrkThree_mmpp = 	(Float_t)(*dimuonDiTrkThree_mmpp);
     out_dimuonDiTrkFour_mmpp = 	(Float_t)(*dimuonDiTrkFour_mmpp);
-    out_dimuonDiTrkOne_mm = 	(Float_t)(*dimuonDiTrkOne_mm);
+    out_dimuonDiTrkOne_mmkk = 	(Float_t)(*dimuonDiTrkOne_mmkk);
     out_dimuonDiTrkTwo_mmkk = 	(Float_t)(*dimuonDiTrkTwo_mmkk);
     out_dimuonDiTrkThree_mmkk = 	(Float_t)(*dimuonDiTrkThree_mmkk);
     out_dimuonDiTrkFour_mmkk = 	(Float_t)(*dimuonDiTrkFour_mmkk);

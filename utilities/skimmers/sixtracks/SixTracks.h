@@ -499,8 +499,6 @@ public :
    Float_t out_six_nDof, out_six_vChi2, out_six_vx, out_six_vy, out_six_vz;
    Float_t out_six_charge;
 
-   Float out_thirdTrack_NPixLayers, out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers;
-
 
    SixTracks(TTree * /*tree*/ =0) { }
    virtual ~SixTracks() { }
