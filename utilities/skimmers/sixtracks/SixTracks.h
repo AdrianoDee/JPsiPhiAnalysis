@@ -135,7 +135,7 @@ public :
    TTreeReaderValue<Double_t> dimuonDiTrkTwo_mmpp = {fReader, "dimuonDiTrkTwo_mmpp"};
    TTreeReaderValue<Double_t> dimuonDiTrkThree_mmpp = {fReader, "dimuonDiTrkThree_mmpp"};
    TTreeReaderValue<Double_t> dimuonDiTrkFour_mmpp = {fReader, "dimuonDiTrkFour_mmpp"};
-   TTreeReaderValue<Double_t> dimuonDiTrkOne_mmkk = {fReader, "dimuonDiTrkOne_mm"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_mmkk = {fReader, "dimuonDiTrkOne_mmkk"};
    TTreeReaderValue<Double_t> dimuonDiTrkTwo_mmkk = {fReader, "dimuonDiTrkTwo_mmkk"};
    TTreeReaderValue<Double_t> dimuonDiTrkThree_mmkk = {fReader, "dimuonDiTrkThree_mmkk"};
    TTreeReaderValue<Double_t> dimuonDiTrkFour_mmkk = {fReader, "dimuonDiTrkFour_mmkk"};
@@ -258,12 +258,12 @@ public :
    TTreeReaderValue<Double_t> fourthTrackMuonDPt = {fReader, "fourthTrackMuonDPt"};
    TTreeReaderValue<Double_t> tPFromPV = {fReader, "tPFromPV"};
    TTreeReaderValue<Double_t> tMFromPV = {fReader, "tMFromPV"};
-   TTreeReaderValue<Double_t> tMFTomPV = {fReader, "tTFromPV"};
-   TTreeReaderValue<Double_t> tFFTomPV = {fReader, "tFFromPV"};
+   TTreeReaderValue<Double_t> tTFromPV = {fReader, "tTFromPV"};
+   TTreeReaderValue<Double_t> tFFromPV = {fReader, "tFFromPV"};
    TTreeReaderValue<Double_t> tPFromPVCA = {fReader, "tPFromPVCA"};
    TTreeReaderValue<Double_t> tMFromPVCA = {fReader, "tMFromPVCA"};
-   TTreeReaderValue<Double_t> tTFTomPVCA = {fReader, "tTFromPVCA"};
-   TTreeReaderValue<Double_t> tFFTomPVCA = {fReader, "tFFromPVCA"};
+   TTreeReaderValue<Double_t> tTFromPVCA = {fReader, "tTFromPVCA"};
+   TTreeReaderValue<Double_t> tFFromPVCA = {fReader, "tFFromPVCA"};
    TTreeReaderValue<Double_t> tPFromPVDZ = {fReader, "tPFromPVDZ"};
    TTreeReaderValue<Double_t> tMFromPVDZ = {fReader, "tMFromPVDZ"};
    TTreeReaderValue<Double_t> tTFromPVDZ = {fReader, "tTFromPVDZ"};
@@ -440,7 +440,7 @@ public :
    Float_t out_diTrackFour_pt, out_diTrackFour_eta, out_diTrackFour_phi, out_diTrackFour_p, out_diTrackFive_pt;
    Float_t out_diTrackFive_eta, out_diTrackFive_phi, out_diTrackFive_p, out_diTrackSix_pt, out_diTrackSix_eta;
    Float_t out_diTrackSix_phi, out_diTrackSix_p, out_dimuonDiTrkOne_mmpp, out_dimuonDiTrkTwo_mmpp, out_dimuonDiTrkThree_mmpp;
-   Float_t out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mm, out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkThree_mmkk, out_dimuonDiTrkFour_mmkk;
+   Float_t out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mmkk, out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkThree_mmkk, out_dimuonDiTrkFour_mmkk;
    Float_t out_highMuon_pt, out_highMuon_eta, out_highMuon_phi, out_highMuon_charge, out_highMuon_dz;
    Float_t out_highMuon_dxy, out_lowMuon_pt, out_lowMuon_eta, out_lowMuon_phi, out_lowMuon_charge;
    Float_t out_lowMuon_dz, out_lowMuon_dxy, out_highTrack_pt, out_highTrack_eta, out_highTrack_phi;

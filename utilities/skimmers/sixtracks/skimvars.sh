@@ -42,7 +42,7 @@ sed -i -e 's/^/\"/g' last.txt && sed -i -e 's/$/\/F\");/g' last.txt
 
 #dimuon_tree->Branch("lowMuon_p4",  "TLorentzVector", &lowMuon_p4);
 sed -i -e 's/^/outTree->Branch("/g' firstp4.txt && sed -i -e 's/$/", "TLorentzVector", /g' firstp4.txt
-sed -i -e 's/^/\&/g' lastp4.txt && sed -i -e 's/$/\");/g' lastp4.txt
+sed -i -e 's/^/\&/g' lastp4.txt && sed -i -e 's/$/);/g' lastp4.txt
 
 paste firstp4.txt lastp4.txt > branchesp4.txt
 
