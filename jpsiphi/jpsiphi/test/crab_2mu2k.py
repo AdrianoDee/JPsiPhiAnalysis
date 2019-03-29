@@ -136,14 +136,18 @@ runNumber = [
 ]
 
 
-run = 'A2018_1'
+run = 'Bs_OfficialMC_2018'
 
 if "2018" in run:
     jsonFile = jsonFile2018
+
 if "2017" in run:
     jsonFile = jsonFile2017
+
 if "2016" in run:
     jsonFile = jsonFile2016
+if "MC" in run:
+    jsonFile = ''
 
 datasetName = datasetnames[run]
 runNum = runNumber[0]
@@ -151,8 +155,8 @@ gtag = GlobalTags[run]
 #lumi = jsonfile[jNum]
 lumi = jsonFile
 #HLT = HLTPath[0]
-six=True
-five=True
+six=False#True
+five=False#True
 
 import datetime
 timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
@@ -166,11 +170,11 @@ if "MC" in run:
     reqname = 'miniaod_2mu2k_' + run + timestamp
 
 if six:
-    jobdir = jobdir + "_six_"
-    reqname =  reqname + "_six_"
+    jobdir = jobdir + "six_"
+    reqname =  reqname + "_six"
 if five:
-    jobdir = jobdir + "_five_"
-    reqname =  reqname + "_five_"
+    jobdir = jobdir + "five_"
+    reqname =  reqname + "_five"
 
 jobdir = jobdir + run
 
@@ -207,7 +211,8 @@ config.Data.totalUnits          = -1
 config.Data.unitsPerJob         = 10
 config.Data.splitting           = 'LumiBased'
 config.Data.runRange            = runNum
-config.Data.lumiMask            = lumi
+if "MC" not in run:
+	config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'
 config.Data.publication         = False
 config.Data.ignoreLocality      = True

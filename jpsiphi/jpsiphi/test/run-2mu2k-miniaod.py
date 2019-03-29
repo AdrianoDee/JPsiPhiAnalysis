@@ -140,7 +140,7 @@ if par.isLocal:
 
     filename = par.mc
 
-        fileLists = {"bbhook_samet": BBbar_Hook_Samet , "qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "bbbar_soft" : bbbar_soft_filelist,
+    fileLists = {"bbhook_samet": BBbar_Hook_Samet , "qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "bbbar_soft" : bbbar_soft_filelist,
                  "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist , "BBbar_Hook_v5" :  BBbar_Hook_v5, "bs_psiphi_2" : bs_psiphi_2,
                  "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist, "bu_jpsiphi_k" : bu_jpsiphi_k,
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist, "bu_jpsiphi_k_2" : bu_jpsiphi_k_2,
