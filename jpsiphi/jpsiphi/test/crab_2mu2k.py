@@ -151,8 +151,8 @@ gtag = GlobalTags[run]
 #lumi = jsonfile[jNum]
 lumi = jsonFile
 #HLT = HLTPath[0]
-six="True"
-five="True"
+six=True
+five=True
 
 import datetime
 timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
@@ -165,10 +165,10 @@ reqname = 'miniaod_2mu2k_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum
 if "MC" in run:
     reqname = 'miniaod_2mu2k_' + run + timestamp
 
-if six=="True":
+if six:
     jobdir = jobdir + "_six_"
     reqname =  reqname + "_six_"
-if five=="True":
+if five:
     jobdir = jobdir + "_five_"
     reqname =  reqname + "_five_"
 
@@ -192,7 +192,7 @@ config.General.transferLogs     = False
 
 config.section_('JobType')
 config.JobType.psetName         = 'run-2mu2k-miniaod.py'
-config.JobType.pyCfgParams      = ['gtag=' + str(gtag), 'dataset=' + str(run), 'isSix='+six,'isFive='+five]
+config.JobType.pyCfgParams      = ['gtag=' + str(gtag), 'dataset=' + str(run), 'isSix=' + str(six),'isFive=' + str(five)]
 config.JobType.pluginName       = 'Analysis'
 config.JobType.maxMemoryMB      = 2500
 config.JobType.maxJobRuntimeMin = 2750
