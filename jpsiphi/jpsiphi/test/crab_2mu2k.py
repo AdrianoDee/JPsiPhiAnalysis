@@ -77,6 +77,15 @@ datasetnames = {
 "G2016"   :  datasetbase + "/Run2016G-17Jul2018-v1/MINIAOD",
 "H2016"   :  datasetbase + "/Run2016H-17Jul2018-v1/MINIAOD",
 
+#OFFICIAL MCs
+
+"Bs_OfficialMC_2018" : "/BsToJpsiPhi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+"BsBMuon_OfficialMC_2018" : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-N1_102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+"Y4100_OfficialMC_2018" : "/Y4100ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4300_OfficialMC_2018" : "/Y4300ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4500_OfficialMC_2018" : "/Y4500ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4700_OfficialMC_2018" : "/Y4700ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM"
+
 }
 
 
@@ -110,7 +119,15 @@ GlobalTags = {
     "bsJpsiPhiSoftQCD_PU" : "94X_mc2017_realistic_v14",
     "bsJpsiPhiSoftQCD"    : "94X_mc2017_realistic_v10",
     "bsJpsiPhiBMuon_PU"   : "94X_mc2017_realistic_v14",
-    "bsJpsiPhiBMuon"      : "94X_mc2017_realistic_v10"
+    "bsJpsiPhiBMuon"      : "94X_mc2017_realistic_v10",
+
+    "Bs_OfficialMC_2018"      : "102X_upgrade2018_realistic_v15",
+    "BsBMuon_OfficialMC_2018" : "102X_upgrade2018_realistic_v15",
+    "Y4100_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4300_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4500_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4700_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15"
+
 
 }
 
@@ -142,15 +159,28 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 
 dataset = filter(None, datasetName.split('/'))
 
-jobdir = 'miniaod_2mu2k_five' + run
+jobdir = 'miniaod_2mu2k_'
+reqname = 'miniaod_2mu2k_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp
+
+if "MC" in run:
+    reqname = 'miniaod_2mu2k_' + run + timestamp
+
+if six=="True":
+    jobdir = jobdir + "_six_"
+    reqname =  reqname + "_six_"
+if five=="True":
+    jobdir = jobdir + "_five_"
+    reqname =  reqname + "_five_"
+
+jobdir = jobdir + run
+
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
 
-reqname = 'miniaod_2mu2k_five_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp
 
-if "bsJpsiPhi" in run:
-        reqname = 'miniaod_2mu2k_five_' + run + timestamp
+
+
 
 config.section_('General')
 config.General.transferOutputs  = True
