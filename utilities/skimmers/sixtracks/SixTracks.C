@@ -468,10 +468,10 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_noSixCandidates = 	(Float_t)(*noSixCandidates);
     out_five_id = 	(Float_t)(*five_id);
     out_dimuon_id = 	(Float_t)(*dimuon_id);
-    out_p_id = 	(Float_t)(*p_id);
-    out_m_id = 	(Float_t)(*m_id);
-    out_t_id = 	(Float_t)(*t_id);
-    out_f_id = 	(Float_t)(*f_id);
+    // out_p_id = 	(Float_t)(*p_id);
+    // out_m_id = 	(Float_t)(*m_id);
+    // out_t_id = 	(Float_t)(*t_id);
+    // out_f_id = 	(Float_t)(*f_id);
     // out_six_p4 =    (*six_p4);
     // out_five_p4 =   (*five_p4);
     // out_dimuonditrk_p4 =    (*dimuonditrk_p4);
