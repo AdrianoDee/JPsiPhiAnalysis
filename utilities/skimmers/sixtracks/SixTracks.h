@@ -137,10 +137,11 @@ public :
    TTreeReaderValue<Double_t> dimuonDiTrkTwo_mmpp = {fReader, "dimuonDiTrkTwo_mmpp"};
    TTreeReaderValue<Double_t> dimuonDiTrkThree_mmpp = {fReader, "dimuonDiTrkThree_mmpp"};
    TTreeReaderValue<Double_t> dimuonDiTrkFour_mmpp = {fReader, "dimuonDiTrkFour_mmpp"};
-   TTreeReaderValue<Double_t> dimuonDiTrkOne_mmkk = {fReader, "dimuonDiTrkOne_mmkk"};
-   TTreeReaderValue<Double_t> dimuonDiTrkTwo_mmkk = {fReader, "dimuonDiTrkTwo_mmkk"};
-   TTreeReaderValue<Double_t> dimuonDiTrkThree_mmkk = {fReader, "dimuonDiTrkThree_mmkk"};
-   TTreeReaderValue<Double_t> dimuonDiTrkFour_mmkk = {fReader, "dimuonDiTrkFour_mmkk"};
+   //
+   // TTreeReaderValue<Double_t> dimuonDiTrkOne_mmkk = {fReader, "dimuonDiTrkOne_mmkk"};
+   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_mmkk = {fReader, "dimuonDiTrkTwo_mmkk"};
+   // TTreeReaderValue<Double_t> dimuonDiTrkThree_mmkk = {fReader, "dimuonDiTrkThree_mmkk"};
+   // TTreeReaderValue<Double_t> dimuonDiTrkFour_mmkk = {fReader, "dimuonDiTrkFour_mmkk"};
 
    // TTreeReaderValue<Double_t> highMuon_pt = {fReader, "highMuon_pt"};
    // TTreeReaderValue<Double_t> highMuon_eta = {fReader, "highMuon_eta"};
