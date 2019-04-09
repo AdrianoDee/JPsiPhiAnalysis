@@ -537,8 +537,9 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_dimuonDiTrkTwo_mmpp = 	(Float_t)(*dimuonDiTrkTwo_mmpp);
     out_dimuonDiTrkThree_mmpp = 	(Float_t)(*dimuonDiTrkThree_mmpp);
     out_dimuonDiTrkFour_mmpp = 	(Float_t)(*dimuonDiTrkFour_mmpp);
-    // out_dimuonDiTrkOne_mmkk = 	(Float_t)(*dimuonDiTrkOne_mmkk);
-    // out_dimuonDiTrkTwo_mmkk = 	(Float_t)(*dimuonDiTrkTwo_mmkk);
+
+    out_dimuonDiTrkOne_mmkk = 	(Float_t)(*dimuonDiTrkOne_mmkk);
+    out_dimuonDiTrkTwo_mmkk = 	(Float_t)(*dimuonDiTrkTwo_mmkk);
     // out_dimuonDiTrkThree_mmkk = 	(Float_t)(*dimuonDiTrkThree_mmkk);
     // out_dimuonDiTrkFour_mmkk = 	(Float_t)(*dimuonDiTrkFour_mmkk);
 
