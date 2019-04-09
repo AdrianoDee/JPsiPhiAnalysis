@@ -585,23 +585,23 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_dimuonDiTrkTwo_phi = 	(Float_t)(*dimuonDiTrkTwo_phi);
     out_dimuonDiTrkTwo_charge = 	(Float_t)(*dimuonDiTrkTwo_charge);
     out_dimuonDiTrkTwo_p = 	(Float_t)(*dimuonDiTrkTwo_p);
-    
+
     out_dimuonDiTrkThree_pt = 	(Float_t)(*dimuonDiTrkThree_pt);
     out_dimuonDiTrkThree_eta = 	(Float_t)(*dimuonDiTrkThree_eta);
     out_dimuonDiTrkThree_phi = 	(Float_t)(*dimuonDiTrkThree_phi);
     out_dimuonDiTrkThree_charge = 	(Float_t)(*dimuonDiTrkThree_charge);
     out_dimuonDiTrkThree_p = 	(Float_t)(*dimuonDiTrkThree_p);
 
-    // out_dimuonDiTrkFour_pt = 	(Float_t)(*dimuonDiTrkFour_pt);
-    // out_dimuonDiTrkFour_eta = 	(Float_t)(*dimuonDiTrkFour_eta);
-    // out_dimuonDiTrkFour_phi = 	(Float_t)(*dimuonDiTrkFour_phi);
-    // out_dimuonDiTrkFour_charge = 	(Float_t)(*dimuonDiTrkFour_charge);
-    // out_dimuonDiTrkFour_p = 	(Float_t)(*dimuonDiTrkFour_p);
-    // out_dimuonDiTrkFive_pt = 	(Float_t)(*dimuonDiTrkFive_pt);
-    // out_dimuonDiTrkFive_eta = 	(Float_t)(*dimuonDiTrkFive_eta);
-    // out_dimuonDiTrkFive_phi = 	(Float_t)(*dimuonDiTrkFive_phi);
-    // out_dimuonDiTrkFive_charge = 	(Float_t)(*dimuonDiTrkFive_charge);
-    // out_dimuonDiTrkFive_p = 	(Float_t)(*dimuonDiTrkFive_p);
+    out_dimuonDiTrkFour_pt = 	(Float_t)(*dimuonDiTrkFour_pt);
+    out_dimuonDiTrkFour_eta = 	(Float_t)(*dimuonDiTrkFour_eta);
+    out_dimuonDiTrkFour_phi = 	(Float_t)(*dimuonDiTrkFour_phi);
+    out_dimuonDiTrkFour_charge = 	(Float_t)(*dimuonDiTrkFour_charge);
+    out_dimuonDiTrkFour_p = 	(Float_t)(*dimuonDiTrkFour_p);
+    out_dimuonDiTrkFive_pt = 	(Float_t)(*dimuonDiTrkFive_pt);
+    out_dimuonDiTrkFive_eta = 	(Float_t)(*dimuonDiTrkFive_eta);
+    out_dimuonDiTrkFive_phi = 	(Float_t)(*dimuonDiTrkFive_phi);
+    out_dimuonDiTrkFive_charge = 	(Float_t)(*dimuonDiTrkFive_charge);
+    out_dimuonDiTrkFive_p = 	(Float_t)(*dimuonDiTrkFive_p);
     // out_dimuonDiTrkSix_pt = 	(Float_t)(*dimuonDiTrkSix_pt);
     // out_dimuonDiTrkSix_eta = 	(Float_t)(*dimuonDiTrkSix_eta);
     // out_dimuonDiTrkSix_phi = 	(Float_t)(*dimuonDiTrkSix_phi);
