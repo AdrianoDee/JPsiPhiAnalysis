@@ -172,21 +172,22 @@ public :
    TTreeReaderValue<Double_t> thirdTrack_dz = {fReader, "thirdTrack_dz"};
    TTreeReaderValue<Double_t> thirdTrack_dxy = {fReader, "thirdTrack_dxy"};
 
-   // TTreeReaderValue<Double_t> dimuonDiTrkOne_pt = {fReader, "dimuonDiTrkOne_pt"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkOne_eta = {fReader, "dimuonDiTrkOne_eta"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkOne_phi = {fReader, "dimuonDiTrkOne_phi"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkOne_charge = {fReader, "dimuonDiTrkOne_charge"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkOne_p = {fReader, "dimuonDiTrkOne_p"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_pt = {fReader, "dimuonDiTrkTwo_pt"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_eta = {fReader, "dimuonDiTrkTwo_eta"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_phi = {fReader, "dimuonDiTrkTwo_phi"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_charge = {fReader, "dimuonDiTrkTwo_charge"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkTwo_p = {fReader, "dimuonDiTrkTwo_p"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkThree_pt = {fReader, "dimuonDiTrkThree_pt"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkThree_eta = {fReader, "dimuonDiTrkThree_eta"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkThree_phi = {fReader, "dimuonDiTrkThree_phi"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkThree_charge = {fReader, "dimuonDiTrkThree_charge"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkThree_p = {fReader, "dimuonDiTrkThree_p"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_pt = {fReader, "dimuonDiTrkOne_pt"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_eta = {fReader, "dimuonDiTrkOne_eta"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_phi = {fReader, "dimuonDiTrkOne_phi"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_charge = {fReader, "dimuonDiTrkOne_charge"};
+   TTreeReaderValue<Double_t> dimuonDiTrkOne_p = {fReader, "dimuonDiTrkOne_p"};
+   TTreeReaderValue<Double_t> dimuonDiTrkTwo_pt = {fReader, "dimuonDiTrkTwo_pt"};
+   TTreeReaderValue<Double_t> dimuonDiTrkTwo_eta = {fReader, "dimuonDiTrkTwo_eta"};
+   TTreeReaderValue<Double_t> dimuonDiTrkTwo_phi = {fReader, "dimuonDiTrkTwo_phi"};
+   TTreeReaderValue<Double_t> dimuonDiTrkTwo_charge = {fReader, "dimuonDiTrkTwo_charge"};
+   TTreeReaderValue<Double_t> dimuonDiTrkTwo_p = {fReader, "dimuonDiTrkTwo_p"};
+   TTreeReaderValue<Double_t> dimuonDiTrkThree_pt = {fReader, "dimuonDiTrkThree_pt"};
+   TTreeReaderValue<Double_t> dimuonDiTrkThree_eta = {fReader, "dimuonDiTrkThree_eta"};
+   TTreeReaderValue<Double_t> dimuonDiTrkThree_phi = {fReader, "dimuonDiTrkThree_phi"};
+   TTreeReaderValue<Double_t> dimuonDiTrkThree_charge = {fReader, "dimuonDiTrkThree_charge"};
+   TTreeReaderValue<Double_t> dimuonDiTrkThree_p = {fReader, "dimuonDiTrkThree_p"};
+   
    // TTreeReaderValue<Double_t> dimuonDiTrkFour_pt = {fReader, "dimuonDiTrkFour_pt"};
    // TTreeReaderValue<Double_t> dimuonDiTrkFour_eta = {fReader, "dimuonDiTrkFour_eta"};
    // TTreeReaderValue<Double_t> dimuonDiTrkFour_phi = {fReader, "dimuonDiTrkFour_phi"};

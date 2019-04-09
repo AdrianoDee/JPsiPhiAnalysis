@@ -574,21 +574,24 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_thirdTrack_dz = 	(Float_t)(*thirdTrack_dz);
     out_thirdTrack_dxy = 	(Float_t)(*thirdTrack_dxy);
 
-    // out_dimuonDiTrkOne_pt = 	(Float_t)(*dimuonDiTrkOne_pt);
-    // out_dimuonDiTrkOne_eta = 	(Float_t)(*dimuonDiTrkOne_eta);
-    // out_dimuonDiTrkOne_phi = 	(Float_t)(*dimuonDiTrkOne_phi);
-    // out_dimuonDiTrkOne_charge = 	(Float_t)(*dimuonDiTrkOne_charge);
-    // out_dimuonDiTrkOne_p = 	(Float_t)(*dimuonDiTrkOne_p);
-    // out_dimuonDiTrkTwo_pt = 	(Float_t)(*dimuonDiTrkTwo_pt);
-    // out_dimuonDiTrkTwo_eta = 	(Float_t)(*dimuonDiTrkTwo_eta);
-    // out_dimuonDiTrkTwo_phi = 	(Float_t)(*dimuonDiTrkTwo_phi);
-    // out_dimuonDiTrkTwo_charge = 	(Float_t)(*dimuonDiTrkTwo_charge);
-    // out_dimuonDiTrkTwo_p = 	(Float_t)(*dimuonDiTrkTwo_p);
-    // out_dimuonDiTrkThree_pt = 	(Float_t)(*dimuonDiTrkThree_pt);
-    // out_dimuonDiTrkThree_eta = 	(Float_t)(*dimuonDiTrkThree_eta);
-    // out_dimuonDiTrkThree_phi = 	(Float_t)(*dimuonDiTrkThree_phi);
-    // out_dimuonDiTrkThree_charge = 	(Float_t)(*dimuonDiTrkThree_charge);
-    // out_dimuonDiTrkThree_p = 	(Float_t)(*dimuonDiTrkThree_p);
+    out_dimuonDiTrkOne_pt = 	(Float_t)(*dimuonDiTrkOne_pt);
+    out_dimuonDiTrkOne_eta = 	(Float_t)(*dimuonDiTrkOne_eta);
+    out_dimuonDiTrkOne_phi = 	(Float_t)(*dimuonDiTrkOne_phi);
+    out_dimuonDiTrkOne_charge = 	(Float_t)(*dimuonDiTrkOne_charge);
+    out_dimuonDiTrkOne_p = 	(Float_t)(*dimuonDiTrkOne_p);
+
+    out_dimuonDiTrkTwo_pt = 	(Float_t)(*dimuonDiTrkTwo_pt);
+    out_dimuonDiTrkTwo_eta = 	(Float_t)(*dimuonDiTrkTwo_eta);
+    out_dimuonDiTrkTwo_phi = 	(Float_t)(*dimuonDiTrkTwo_phi);
+    out_dimuonDiTrkTwo_charge = 	(Float_t)(*dimuonDiTrkTwo_charge);
+    out_dimuonDiTrkTwo_p = 	(Float_t)(*dimuonDiTrkTwo_p);
+    
+    out_dimuonDiTrkThree_pt = 	(Float_t)(*dimuonDiTrkThree_pt);
+    out_dimuonDiTrkThree_eta = 	(Float_t)(*dimuonDiTrkThree_eta);
+    out_dimuonDiTrkThree_phi = 	(Float_t)(*dimuonDiTrkThree_phi);
+    out_dimuonDiTrkThree_charge = 	(Float_t)(*dimuonDiTrkThree_charge);
+    out_dimuonDiTrkThree_p = 	(Float_t)(*dimuonDiTrkThree_p);
+
     // out_dimuonDiTrkFour_pt = 	(Float_t)(*dimuonDiTrkFour_pt);
     // out_dimuonDiTrkFour_eta = 	(Float_t)(*dimuonDiTrkFour_eta);
     // out_dimuonDiTrkFour_phi = 	(Float_t)(*dimuonDiTrkFour_phi);
