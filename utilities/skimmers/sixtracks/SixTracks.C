@@ -670,18 +670,18 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_fourthTrackMuonDP = 	(Float_t)(*fourthTrackMuonDP);
     out_fourthTrackMuonDPt = 	(Float_t)(*fourthTrackMuonDPt);
     //
-    out_tPFromPV = 	(Float_t)(*tPFromPV);
-    out_tMFromPV = 	(Float_t)(*tMFromPV);
-    out_tTFromPV = 	(Float_t)(*tTFromPV);
-    out_tFFromPV = 	(Float_t)(*tFFromPV);
-    out_tPFromPVCA = 	(Float_t)(*tPFromPVCA);
-    out_tMFromPVCA = 	(Float_t)(*tMFromPVCA);
-    out_tTFromPVCA = 	(Float_t)(*tTFromPVCA);
-    out_tFFromPVCA = 	(Float_t)(*tFFromPVCA);
-    out_tPFromPVDZ = 	(Float_t)(*tPFromPVDZ);
-    out_tMFromPVDZ = 	(Float_t)(*tMFromPVDZ);
-    out_tTFromPVDZ = 	(Float_t)(*tTFromPVDZ);
-    out_tFFromPVDZ = 	(Float_t)(*tFFromPVDZ);
+    // out_tPFromPV = 	(Float_t)(*tPFromPV);
+    // out_tMFromPV = 	(Float_t)(*tMFromPV);
+    // out_tTFromPV = 	(Float_t)(*tTFromPV);
+    // out_tFFromPV = 	(Float_t)(*tFFromPV);
+    // out_tPFromPVCA = 	(Float_t)(*tPFromPVCA);
+    // out_tMFromPVCA = 	(Float_t)(*tMFromPVCA);
+    // out_tTFromPVCA = 	(Float_t)(*tTFromPVCA);
+    // out_tFFromPVCA = 	(Float_t)(*tFFromPVCA);
+    // out_tPFromPVDZ = 	(Float_t)(*tPFromPVDZ);
+    // out_tMFromPVDZ = 	(Float_t)(*tMFromPVDZ);
+    // out_tTFromPVDZ = 	(Float_t)(*tTFromPVDZ);
+    // out_tFFromPVDZ = 	(Float_t)(*tFFromPVDZ);
     //
     // out_five_m = 	(Float_t)(*five_m);
     // out_five_m_ref = 	(Float_t)(*five_m_ref);
