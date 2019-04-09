@@ -602,11 +602,12 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_dimuonDiTrkFive_phi = 	(Float_t)(*dimuonDiTrkFive_phi);
     out_dimuonDiTrkFive_charge = 	(Float_t)(*dimuonDiTrkFive_charge);
     out_dimuonDiTrkFive_p = 	(Float_t)(*dimuonDiTrkFive_p);
-    // out_dimuonDiTrkSix_pt = 	(Float_t)(*dimuonDiTrkSix_pt);
-    // out_dimuonDiTrkSix_eta = 	(Float_t)(*dimuonDiTrkSix_eta);
-    // out_dimuonDiTrkSix_phi = 	(Float_t)(*dimuonDiTrkSix_phi);
-    // out_dimuonDiTrkSix_charge = 	(Float_t)(*dimuonDiTrkSix_charge);
-    // out_dimuonDiTrkSix_p = 	(Float_t)(*dimuonDiTrkSix_p);
+
+    out_dimuonDiTrkSix_pt = 	(Float_t)(*dimuonDiTrkSix_pt);
+    out_dimuonDiTrkSix_eta = 	(Float_t)(*dimuonDiTrkSix_eta);
+    out_dimuonDiTrkSix_phi = 	(Float_t)(*dimuonDiTrkSix_phi);
+    out_dimuonDiTrkSix_charge = 	(Float_t)(*dimuonDiTrkSix_charge);
+    out_dimuonDiTrkSix_p = 	(Float_t)(*dimuonDiTrkSix_p);
 
 
     // out_dimuon_vProb = 	(Float_t)(*dimuon_vProb);

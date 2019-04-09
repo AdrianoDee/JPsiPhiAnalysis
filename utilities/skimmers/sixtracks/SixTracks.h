@@ -198,11 +198,12 @@ public :
    TTreeReaderValue<Double_t> dimuonDiTrkFive_phi = {fReader, "dimuonDiTrkFive_phi"};
    TTreeReaderValue<Double_t> dimuonDiTrkFive_charge = {fReader, "dimuonDiTrkFive_charge"};
    TTreeReaderValue<Double_t> dimuonDiTrkFive_p = {fReader, "dimuonDiTrkFive_p"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkSix_pt = {fReader, "dimuonDiTrkSix_pt"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkSix_eta = {fReader, "dimuonDiTrkSix_eta"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkSix_phi = {fReader, "dimuonDiTrkSix_phi"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkSix_charge = {fReader, "dimuonDiTrkSix_charge"};
-   // TTreeReaderValue<Double_t> dimuonDiTrkSix_p = {fReader, "dimuonDiTrkSix_p"};
+
+   TTreeReaderValue<Double_t> dimuonDiTrkSix_pt = {fReader, "dimuonDiTrkSix_pt"};
+   TTreeReaderValue<Double_t> dimuonDiTrkSix_eta = {fReader, "dimuonDiTrkSix_eta"};
+   TTreeReaderValue<Double_t> dimuonDiTrkSix_phi = {fReader, "dimuonDiTrkSix_phi"};
+   TTreeReaderValue<Double_t> dimuonDiTrkSix_charge = {fReader, "dimuonDiTrkSix_charge"};
+   TTreeReaderValue<Double_t> dimuonDiTrkSix_p = {fReader, "dimuonDiTrkSix_p"};
 
    //
    // TTreeReaderValue<Double_t> dimuon_vProb = {fReader, "dimuon_vProb"};
