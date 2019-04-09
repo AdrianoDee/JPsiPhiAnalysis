@@ -684,7 +684,7 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_tFFromPVDZ = 	(Float_t)(*tFFromPVDZ);
     //
     out_five_m = 	(Float_t)(*five_m);
-    out_five_m_ref = 	(Float_t)(*five_m_ref);
+    // out_five_m_ref = 	(Float_t)(*five_m_ref);
     // out_five_mass_ppk = 	(Float_t)(*five_mass_ppk);
     // out_five_mass_kpp = 	(Float_t)(*five_mass_kpp);
     // out_five_mass_pkp = 	(Float_t)(*five_mass_pkp);
