@@ -683,12 +683,12 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_tTFromPVDZ = 	(Float_t)(*tTFromPVDZ);
     out_tFFromPVDZ = 	(Float_t)(*tFFromPVDZ);
     //
-    // out_five_m = 	(Float_t)(*five_m);
-    // out_five_m_ref = 	(Float_t)(*five_m_ref);
-    // out_five_mass_ppk = 	(Float_t)(*five_mass_ppk);
-    // out_five_mass_kpp = 	(Float_t)(*five_mass_kpp);
-    // out_five_mass_pkp = 	(Float_t)(*five_mass_pkp);
-    // out_five_mass_ppp = 	(Float_t)(*five_mass_ppp);
+    out_five_m = 	(Float_t)(*five_m);
+    out_five_m_ref = 	(Float_t)(*five_m_ref);
+    out_five_mass_ppk = 	(Float_t)(*five_mass_ppk);
+    out_five_mass_kpp = 	(Float_t)(*five_mass_kpp);
+    out_five_mass_pkp = 	(Float_t)(*five_mass_pkp);
+    out_five_mass_ppp = 	(Float_t)(*five_mass_ppp);
     // out_fiveOne_pt = 	(Float_t)(*fiveOne_pt);
     // out_fiveOne_eta = 	(Float_t)(*fiveOne_eta);
     // out_fiveOne_phi = 	(Float_t)(*fiveOne_phi);
