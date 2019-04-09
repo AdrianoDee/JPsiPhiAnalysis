@@ -698,18 +698,18 @@ Bool_t SixTracks::Process(Long64_t entry)
     // out_fiveTwo_phi = 	(Float_t)(*fiveTwo_phi);
     // out_fiveTwo_p = 	(Float_t)(*fiveTwo_p);
 
-    out_fiveThree_pt = 	(Float_t)(*fiveThree_pt);
-    out_fiveThree_eta = 	(Float_t)(*fiveThree_eta);
-    out_fiveThree_phi = 	(Float_t)(*fiveThree_phi);
-    out_fiveThree_p = 	(Float_t)(*fiveThree_p);
-    out_fiveFour_pt = 	(Float_t)(*fiveFour_pt);
-    out_fiveFour_eta = 	(Float_t)(*fiveFour_eta);
-    out_fiveFour_phi = 	(Float_t)(*fiveFour_phi);
-    out_fiveFour_p = 	(Float_t)(*fiveFour_p);
-    out_fiveFive_pt = 	(Float_t)(*fiveFive_pt);
-    out_fiveFive_eta = 	(Float_t)(*fiveFive_eta);
-    out_fiveFive_phi = 	(Float_t)(*fiveFive_phi);
-    out_fiveFive_p = 	(Float_t)(*fiveFive_p);
+    // out_fiveThree_pt = 	(Float_t)(*fiveThree_pt);
+    // out_fiveThree_eta = 	(Float_t)(*fiveThree_eta);
+    // out_fiveThree_phi = 	(Float_t)(*fiveThree_phi);
+    // out_fiveThree_p = 	(Float_t)(*fiveThree_p);
+    // out_fiveFour_pt = 	(Float_t)(*fiveFour_pt);
+    // out_fiveFour_eta = 	(Float_t)(*fiveFour_eta);
+    // out_fiveFour_phi = 	(Float_t)(*fiveFour_phi);
+    // out_fiveFour_p = 	(Float_t)(*fiveFour_p);
+    // out_fiveFive_pt = 	(Float_t)(*fiveFive_pt);
+    // out_fiveFive_eta = 	(Float_t)(*fiveFive_eta);
+    // out_fiveFive_phi = 	(Float_t)(*fiveFive_phi);
+    // out_fiveFive_p = 	(Float_t)(*fiveFive_p);
 
     out_five_cosAlpha = 	(Float_t)(*five_cosAlpha);
     out_five_ctauPV = 	(Float_t)(*five_ctauPV);
