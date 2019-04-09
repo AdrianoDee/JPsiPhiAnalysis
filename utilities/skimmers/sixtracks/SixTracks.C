@@ -70,10 +70,10 @@ void SixTracks::SlaveBegin(TTree * /*tree*/)
   outTree->Branch("noSixCandidates", 	&out_noSixCandidates, 	"noSixCandidates/F");
   outTree->Branch("five_id", 	&out_five_id, 	"five_id/F");
   outTree->Branch("dimuon_id", 	&out_dimuon_id, 	"dimuon_id/F");
-  outTree->Branch("p_id", 	&out_p_id, 	"p_id/F");
-  outTree->Branch("m_id", 	&out_m_id, 	"m_id/F");
-  outTree->Branch("t_id", 	&out_t_id, 	"t_id/F");
-  outTree->Branch("f_id", 	&out_f_id, 	"f_id/F");
+  // outTree->Branch("p_id", 	&out_p_id, 	"p_id/F");
+  // outTree->Branch("m_id", 	&out_m_id, 	"m_id/F");
+  // outTree->Branch("t_id", 	&out_t_id, 	"t_id/F");
+  // outTree->Branch("f_id", 	&out_f_id, 	"f_id/F");
   // outTree->Branch("six_p4", "TLorentzVector",     &six_p4);
   // outTree->Branch("five_p4", "TLorentzVector",    &five_p4);
   // outTree->Branch("dimuonditrk_p4", "TLorentzVector",     &dimuonditrk_p4);
