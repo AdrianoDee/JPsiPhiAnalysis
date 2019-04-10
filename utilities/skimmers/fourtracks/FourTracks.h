@@ -291,6 +291,9 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
+
    ClassDef(FourTracks,0);
 
 };
