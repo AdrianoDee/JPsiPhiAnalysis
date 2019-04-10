@@ -486,9 +486,9 @@ Bool_t FiveTracks::Process(Long64_t entry)
      out_thirdTrackMuonDR = 	(Float_t)(*thirdTrackMuonDR);
      out_thirdTrackMuonDP = 	(Float_t)(*thirdTrackMuonDP);
      out_thirdTrackMuonDPt = 	(Float_t)(*thirdTrackMuonDPt);
-     out_tPFromPV = 	(Float_t)(*tPFromPV);
-     out_tMFromPV = 	(Float_t)(*tMFromPV);
-     out_tTFromPV = 	(Float_t)(*tTFromPV);
+     // out_tPFromPV = 	(Float_t)(*tPFromPV);
+     // out_tMFromPV = 	(Float_t)(*tMFromPV);
+     // out_tTFromPV = 	(Float_t)(*tTFromPV);
      // out_tPFromPVCA = 	(Float_t)(*tPFromPVCA);
      // out_tMFromPVCA = 	(Float_t)(*tMFromPVCA);
      // out_tTFromPVCA = 	(Float_t)(*tTFromPVCA);
