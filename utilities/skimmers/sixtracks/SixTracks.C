@@ -448,9 +448,9 @@ Bool_t SixTracks::Process(Long64_t entry)
 
   bool test = true;
 
-  test = test && ((*lowMuon_pt) >= 2.0)
+  test = test && ((*lowMuon_pt) >= 2.0);
 
-  test = test && (*lowTrack_pt >= 1.0)
+  test = test && (*lowTrack_pt >= 1.0);
 
   //
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
