@@ -448,11 +448,16 @@ Bool_t SixTracks::Process(Long64_t entry)
 
   bool test = true;
 
-  // test = test && ((*highMuon_pt) >= 1.0) && ((*highMuon_pt) >= 1.0);
+  test = test && ((*lowMuon_pt) >= 2.0)
+
+  test = test && (*lowTrack_pt >= 1.0)
+
   //
-  // test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
+  test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
   //
-  // test = test && (*dimuonditrk_vProb> 0.01);
+  test = test && (*dimuonditrk_vProb> 0.01);
+
+  test = test && (*dimuonditrk_cosAlpha> 0.90);
 
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
