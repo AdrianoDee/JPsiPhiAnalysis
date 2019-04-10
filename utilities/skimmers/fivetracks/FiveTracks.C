@@ -336,9 +336,9 @@ Bool_t FiveTracks::Process(Long64_t entry)
 
    if(true)
    {
-     out_run = 	(Float_t)(*run);
-     out_event = 	(Float_t)(*event);
-     out_lumi = 	(Float_t)(*lumi);
+     // out_run = 	(Float_t)(*run);
+     // out_event = 	(Float_t)(*event);
+     // out_lumi = 	(Float_t)(*lumi);
      // out_numPrimaryVertices = 	(Float_t)(*numPrimaryVertices);
      // out_trigger = 	(Float_t)(*trigger);
      // out_noFiveCandidates = 	(Float_t)(*noFiveCandidates);
