@@ -32,7 +32,7 @@ for ff in data_files:
             name = ff[:-5]
             print(name)
             tree = uproot.open(ff)
-            
+
             if args.dir is not None:
                 tree = tree[args.dir][args.tree]
                 name = name + "_" + args.dir + "_" + args.tree
@@ -45,7 +45,7 @@ for ff in data_files:
             #s = a.columns.to_series()
             #a.columns = s + s.groupby(s).cumcount().astype(str).replace({'0':''})
 
-            tree.to_hdf(name,"data",append=False)
+            tree.to_hdf(name,"data",append=False,complevel=9,complib="blosc:lz4")
             tree = 0
     else:
             print ("Already Exists")
