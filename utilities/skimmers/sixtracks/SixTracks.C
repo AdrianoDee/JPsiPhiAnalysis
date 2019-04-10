@@ -669,6 +669,7 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_fourthTrackMuonDR = 	(Float_t)(*fourthTrackMuonDR);
     out_fourthTrackMuonDP = 	(Float_t)(*fourthTrackMuonDP);
     out_fourthTrackMuonDPt = 	(Float_t)(*fourthTrackMuonDPt);
+
     //
     // out_tPFromPV = 	(Float_t)(*tPFromPV);
     // out_tMFromPV = 	(Float_t)(*tMFromPV);
@@ -791,14 +792,14 @@ Bool_t SixTracks::Process(Long64_t entry)
     // out_lowTrack_NTraLayers = 	(Float_t)(*lowTrack_NTraLayers);
     // out_lowTrack_NStrLayers = 	(Float_t)(*lowTrack_NStrLayers);
     // out_lowTrack_NBPixLayers = 	(Float_t)(*lowTrack_NBPixLayers);
-    out_thirdTrack_NPixelHits = 	(Float_t)(*thirdTrack_NPixelHits);
-    out_thirdTrack_NStripHits = 	(Float_t)(*thirdTrack_NStripHits);
-    out_thirdTrack_NTrackhits = 	(Float_t)(*thirdTrack_NTrackhits);
-    out_thirdTrack_NBPixHits = 	(Float_t)(*thirdTrack_NBPixHits);
-    out_thirdTrack_NPixLayers = 	(Float_t)(*thirdTrack_NPixLayers);
-    out_thirdTrack_NTraLayers = 	(Float_t)(*thirdTrack_NTraLayers);
-    out_thirdTrack_NStrLayers = 	(Float_t)(*thirdTrack_NStrLayers);
-    out_thirdTrack_NBPixLayers = 	(Float_t)(*thirdTrack_NBPixLayers);
+    // out_thirdTrack_NPixelHits = 	(Float_t)(*thirdTrack_NPixelHits);
+    // out_thirdTrack_NStripHits = 	(Float_t)(*thirdTrack_NStripHits);
+    // out_thirdTrack_NTrackhits = 	(Float_t)(*thirdTrack_NTrackhits);
+    // out_thirdTrack_NBPixHits = 	(Float_t)(*thirdTrack_NBPixHits);
+    // out_thirdTrack_NPixLayers = 	(Float_t)(*thirdTrack_NPixLayers);
+    // out_thirdTrack_NTraLayers = 	(Float_t)(*thirdTrack_NTraLayers);
+    // out_thirdTrack_NStrLayers = 	(Float_t)(*thirdTrack_NStrLayers);
+    // out_thirdTrack_NBPixLayers = 	(Float_t)(*thirdTrack_NBPixLayers);
     out_fourthTrack_NPixLayers = 	(Float_t)(*fourthTrack_NPixLayers);
     out_fourthTrack_NTraLayers = 	(Float_t)(*fourthTrack_NTraLayers);
     out_fourthTrack_NStrLayers = 	(Float_t)(*fourthTrack_NStrLayers);
@@ -807,6 +808,7 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_fourthTrack_NStripHits = 	(Float_t)(*fourthTrack_NStripHits);
     out_fourthTrack_NTrackhits = 	(Float_t)(*fourthTrack_NTrackhits);
     out_fourthTrack_NBPixHits = 	(Float_t)(*fourthTrack_NBPixHits);
+
     // out_six_m = 	(Float_t)(*six_m);
     // out_six_m_ref = 	(Float_t)(*six_m_ref);
     // out_six_mass_ppkk = 	(Float_t)(*six_mass_ppkk);
