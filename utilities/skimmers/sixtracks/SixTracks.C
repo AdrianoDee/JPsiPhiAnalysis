@@ -461,7 +461,7 @@ Bool_t SixTracks::Process(Long64_t entry)
 
   test = test && ((*dimuon_pt)> 4.0);
 
-  test = test && (*lowKaon_NBPixHits>1) && (*highKaon_NBPixHits>1);
+  test = test && (*highTrack_NBPixHits>1) && (*lowTrack_NPixelHits>1);
 
   // test = test && ((*dimuonditrk_pt)> 6.0);
 
