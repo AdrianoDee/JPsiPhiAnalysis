@@ -54,7 +54,7 @@ void FourTracks::SlaveBegin(TTree * /*tree*/)
      Warning("SlaveBegin","Problems opening file: %s%s", OutFile->GetDir(), OutFile->GetFileName() );
    }
 
-   outTree = new TTree("SixTrackSkimmedTree","SixTrackSkimmedTree");
+   outTree = new TTree("FourTrackSkimmedTree","FourTrackSkimmedTree");
 
    outTree->Branch("run", 	&out_run, 	"run/F");
    outTree->Branch("event", 	&out_event, 	"event/F");
