@@ -24,7 +24,7 @@
   // dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190323_105234/190323_095241/0007_sum.root");
   // dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190323_105234/190323_095241/0008_sum.root");
 
-  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/sixtracks/SixTracks";
+  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/fourtracks/FourTracks";
   TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
   //gProofDebugMask = TProofDebug::kAll;
   //gProofDebugLevel = 5;
