@@ -67,7 +67,7 @@ void FiveTracks::SlaveBegin(TTree * /*tree*/)
       outTree->Branch("dimuon_id", 	&out_dimuon_id, 	"dimuon_id/F");
       outTree->Branch("p_id", 	&out_p_id, 	"p_id/F");
       outTree->Branch("m_id", 	&out_m_id, 	"m_id/F");
-      // outTree->Branch("t_id", 	&out_t_id, 	"t_id/F");
+      outTree->Branch("t_id", 	&out_t_id, 	"t_id/F");
       // outTree->Branch("five_p4", 	&out_five_p4, 	"five_p4/F");
       // outTree->Branch("dimuonditrk_p4", 	&out_dimuonditrk_p4, 	"dimuonditrk_p4/F");
       // outTree->Branch("ditrack_p4", 	&out_ditrack_p4, 	"ditrack_p4/F");
@@ -370,24 +370,28 @@ Bool_t FiveTracks::Process(Long64_t entry)
      out_dimuonditrk_eta = 	(Float_t)(*dimuonditrk_eta);
      out_dimuonditrk_phi = 	(Float_t)(*dimuonditrk_phi);
      out_dimuonditrk_p = 	(Float_t)(*dimuonditrk_p);
+
      out_dimuon_m = 	(Float_t)(*dimuon_m);
      out_dimuon_pt = 	(Float_t)(*dimuon_pt);
      out_dimuon_eta = 	(Float_t)(*dimuon_eta);
      out_dimuon_phi = 	(Float_t)(*dimuon_phi);
      out_dimuon_p = 	(Float_t)(*dimuon_p);
+
      out_highTrackMatch = 	(Float_t)(*highTrackMatch);
      out_lowTrackMatch = 	(Float_t)(*lowTrackMatch);
      out_lowMuonMatch = 	(Float_t)(*lowMuonMatch);
      out_thirdTrackMatch = 	(Float_t)(*thirdTrackMatch);
+
      out_ditrack_m = 	(Float_t)(*ditrack_m);
+
      out_ditrackOne_pt = 	(Float_t)(*ditrackOne_pt);
      out_ditrackOne_eta = 	(Float_t)(*ditrackOne_eta);
      out_ditrackOne_phi = 	(Float_t)(*ditrackOne_phi);
-     out_ditrackOne_p = 	(Float_t)(*ditrackOne_p);
+     // out_ditrackOne_p = 	(Float_t)(*ditrackOne_p);
      out_ditrackTwo_pt = 	(Float_t)(*ditrackTwo_pt);
      out_ditrackTwo_eta = 	(Float_t)(*ditrackTwo_eta);
      out_ditrackTwo_phi = 	(Float_t)(*ditrackTwo_phi);
-     out_ditrackTwo_p = 	(Float_t)(*ditrackTwo_p);
+     // out_ditrackTwo_p = 	(Float_t)(*ditrackTwo_p);
      out_ditrackThree_pt = 	(Float_t)(*ditrackThree_pt);
      out_ditrackThree_eta = 	(Float_t)(*ditrackThree_eta);
      out_ditrackThree_phi = 	(Float_t)(*ditrackThree_phi);
