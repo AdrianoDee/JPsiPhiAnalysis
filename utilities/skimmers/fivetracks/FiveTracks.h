@@ -68,7 +68,7 @@ public :
    TTreeReaderValue<Int_t> dimuon_id = {fReader, "dimuon_id"};
    TTreeReaderValue<Int_t> p_id = {fReader, "p_id"};
    TTreeReaderValue<Int_t> m_id = {fReader, "m_id"};
-   TTreeReaderValue<Int_t> m_id = {fReader, "t_id"};
+   TTreeReaderValue<Int_t> t_id = {fReader, "t_id"};
    // TTreeReaderValue<TLorentzVector> five_p4 = {fReader, "five_p4"};
    // TTreeReaderValue<TLorentzVector> dimuonditrk_p4 = {fReader, "dimuonditrk_p4"};
    // TTreeReaderValue<TLorentzVector> ditrack_p4 = {fReader, "ditrack_p4"};
@@ -207,10 +207,10 @@ public :
    TTreeReaderValue<Double_t> thirdTrackMuonDPt = {fReader, "thirdTrackMuonDPt"};
    TTreeReaderValue<Double_t> tPFromPV = {fReader, "tPFromPV"};
    TTreeReaderValue<Double_t> tMFromPV = {fReader, "tMFromPV"};
-   TTreeReaderValue<Double_t> tMFTomPV = {fReader, "tTFromPV"};
+   TTreeReaderValue<Double_t> tTFromPV = {fReader, "tTFromPV"};
    TTreeReaderValue<Double_t> tPFromPVCA = {fReader, "tPFromPVCA"};
    TTreeReaderValue<Double_t> tMFromPVCA = {fReader, "tMFromPVCA"};
-   TTreeReaderValue<Double_t> tMFTomPVCA = {fReader, "tTFromPVCA"};
+   TTreeReaderValue<Double_t> tTFromPVCA = {fReader, "tTFromPVCA"};
    TTreeReaderValue<Double_t> tPFromPVDZ = {fReader, "tPFromPVDZ"};
    TTreeReaderValue<Double_t> tMFromPVDZ = {fReader, "tMFromPVDZ"};
    TTreeReaderValue<Double_t> tTFromPVDZ = {fReader, "tTFromPVDZ"};
@@ -362,7 +362,7 @@ public :
    Float_t out_highTrack_NStrLayers, out_highTrack_NBPixLayers, out_lowTrack_NPixelHits, out_lowTrack_NStripHits, out_lowTrack_NTrackhits;
    Float_t out_lowTrack_NBPixHits, out_lowTrack_NPixLayers, out_lowTrack_NTraLayers, out_lowTrack_NStrLayers, out_lowTrack_NBPixLayers;
    Float_t out_thirdTrack_NPixelHits, out_thirdTrack_NStripHits, out_thirdTrack_NTrackhits, out_thirdTrack_NBPixHits, out_thirdTrack_NPixLayers;
-   Float_t out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers,
+   Float_t out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers;
 
 
    FiveTracks(TTree * /*tree*/ =0) { }
@@ -380,6 +380,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+
+   TProofOutputFile *OutFile;
+   TFile            *fOut;
 
    ClassDef(FiveTracks,0);
 
