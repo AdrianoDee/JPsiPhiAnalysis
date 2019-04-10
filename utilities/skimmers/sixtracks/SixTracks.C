@@ -860,6 +860,21 @@ void SixTracks::SlaveTerminate()
   // have been processed. When running with PROOF SlaveTerminate() is called
   // on each slave server.
 
+  TDirectory *savedir = gDirectory;
+  if (fOut)
+  {
+    fOut->cd();
+    gStyle->SetOptStat(111111) ;
+
+
+    outTree->Write();
+    OutFile->Print();
+    fOutput->Add(OutFile);
+    gDirectory = savedir;
+    fOut->Close();
+
+  }
+
 }
 
 void SixTracks::Terminate()
