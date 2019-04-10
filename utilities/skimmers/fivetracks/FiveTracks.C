@@ -362,8 +362,8 @@ Bool_t FiveTracks::Process(Long64_t entry)
    test = (*five_m_ref) > 4.5 && (*five_m_ref) < 6.0;
    test = (*lowMuonMatch) > 0.0 && (*lowTrack_pt) > 1.0 && (*thirdTrack_pt) >1.0;
 
-   test = (*lowMuon_NPixelHits) > 0  && (*highMuon_NPixelHits§) > 0 ;
-   test = (*highTrack_NPixelHits§) > 0 && (*lowTrack_NPixelHits§) > 0 && (*thirdTrack_NPixelHits) > 0;
+   test = (*lowMuon_NPixelHits) > 0  && (*highMuon_NPixelHits) > 0 ;
+   test = (*highTrack_NPixelHits) > 0 && (*lowTrack_NPixelHits) > 0 && (*thirdTrack_NPixelHits) > 0;
 
    if(test)
    {
