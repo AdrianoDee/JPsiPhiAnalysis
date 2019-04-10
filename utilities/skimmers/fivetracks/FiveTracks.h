@@ -16,6 +16,35 @@
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
 
+#include <TSystem.h>
+#include <TTree.h>
+#include <TNtuple.h>
+#include <TBranch.h>
+//#include <TCint.h>
+#include <TRandom.h>
+#include <TMath.h>
+#include <TDirectory.h>
+#include "TEnv.h"
+#include <TString.h>
+#include <TSelector.h>
+#include <TProof.h>
+#include <TProofOutputFile.h>
+
+#include "TPoint.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TH2F.h>
+#include <TF1.h>
+//
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <map>
+
+
 // Headers needed by this particular selector
 #include "TLorentzVector.h"
 
@@ -25,6 +54,8 @@ class FiveTracks : public TSelector {
 public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+  TTree *outTree;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> run = {fReader, "run"};
@@ -38,21 +69,21 @@ public :
    TTreeReaderValue<Int_t> p_id = {fReader, "p_id"};
    TTreeReaderValue<Int_t> m_id = {fReader, "m_id"};
    TTreeReaderValue<Int_t> m_id = {fReader, "t_id"};
-   TTreeReaderValue<TLorentzVector> five_p4 = {fReader, "five_p4"};
-   TTreeReaderValue<TLorentzVector> dimuonditrk_p4 = {fReader, "dimuonditrk_p4"};
-   TTreeReaderValue<TLorentzVector> ditrack_p4 = {fReader, "ditrack_p4"};
-   TTreeReaderValue<TLorentzVector> dimuon_p4 = {fReader, "dimuon_p4"};
-   TTreeReaderValue<TLorentzVector> lowMuon_p4 = {fReader, "lowMuon_p4"};
-   TTreeReaderValue<TLorentzVector> highMuon_p4 = {fReader, "highMuon_p4"};
-   TTreeReaderValue<TLorentzVector> highKaon_p4 = {fReader, "highKaon_p4"};
-   TTreeReaderValue<TLorentzVector> lowKaon_p4 = {fReader, "lowKaon_p4"};
-   TTreeReaderValue<TLorentzVector> thirdKaon_p4 = {fReader, "thirdKaon_p4"};
-   TTreeReaderValue<TLorentzVector> highPion_p4 = {fReader, "highPion_p4"};
-   TTreeReaderValue<TLorentzVector> lowPion_p4 = {fReader, "lowPion_p4"};
-   TTreeReaderValue<TLorentzVector> thirdPion_p4 = {fReader, "thirdPion_p4"};
-   TTreeReaderValue<TLorentzVector> highProton_p4 = {fReader, "highProton_p4"};
-   TTreeReaderValue<TLorentzVector> lowProton_p4 = {fReader, "lowProton_p4"};
-   TTreeReaderValue<TLorentzVector> thirdProton_p4 = {fReader, "thirdProton_p4"};
+   // TTreeReaderValue<TLorentzVector> five_p4 = {fReader, "five_p4"};
+   // TTreeReaderValue<TLorentzVector> dimuonditrk_p4 = {fReader, "dimuonditrk_p4"};
+   // TTreeReaderValue<TLorentzVector> ditrack_p4 = {fReader, "ditrack_p4"};
+   // TTreeReaderValue<TLorentzVector> dimuon_p4 = {fReader, "dimuon_p4"};
+   // TTreeReaderValue<TLorentzVector> lowMuon_p4 = {fReader, "lowMuon_p4"};
+   // TTreeReaderValue<TLorentzVector> highMuon_p4 = {fReader, "highMuon_p4"};
+   // TTreeReaderValue<TLorentzVector> highKaon_p4 = {fReader, "highKaon_p4"};
+   // TTreeReaderValue<TLorentzVector> lowKaon_p4 = {fReader, "lowKaon_p4"};
+   // TTreeReaderValue<TLorentzVector> thirdKaon_p4 = {fReader, "thirdKaon_p4"};
+   // TTreeReaderValue<TLorentzVector> highPion_p4 = {fReader, "highPion_p4"};
+   // TTreeReaderValue<TLorentzVector> lowPion_p4 = {fReader, "lowPion_p4"};
+   // TTreeReaderValue<TLorentzVector> thirdPion_p4 = {fReader, "thirdPion_p4"};
+   // TTreeReaderValue<TLorentzVector> highProton_p4 = {fReader, "highProton_p4"};
+   // TTreeReaderValue<TLorentzVector> lowProton_p4 = {fReader, "lowProton_p4"};
+   // TTreeReaderValue<TLorentzVector> thirdProton_p4 = {fReader, "thirdProton_p4"};
    TTreeReaderValue<Double_t> dimuonditrk_m = {fReader, "dimuonditrk_m"};
    TTreeReaderValue<Double_t> dimuonditrk_pt = {fReader, "dimuonditrk_pt"};
    TTreeReaderValue<Double_t> dimuonditrk_eta = {fReader, "dimuonditrk_eta"};
@@ -280,6 +311,58 @@ public :
    TTreeReaderValue<Int_t> thirdTrack_NTraLayers = {fReader, "thirdTrack_NTraLayers"};
    TTreeReaderValue<Int_t> thirdTrack_NStrLayers = {fReader, "thirdTrack_NStrLayers"};
    TTreeReaderValue<Int_t> thirdTrack_NBPixLayers = {fReader, "thirdTrack_NBPixLayers"};
+
+   Float_t out_run, out_event, out_lumi, out_numPrimaryVertices, out_trigger;
+   Float_t out_noFiveCandidates, out_dimuonditrk_id, out_dimuon_id, out_p_id, out_m_id;
+   Float_t out_t_id, out_five_p4, out_dimuonditrk_p4, out_ditrack_p4, out_dimuon_p4;
+   Float_t out_lowMuon_p4, out_highMuon_p4, out_highKaon_p4, out_lowKaon_p4, out_thirdKaon_p4;
+   Float_t out_highPion_p4, out_lowPion_p4, out_thirdPion_p4, out_highProton_p4, out_lowProton_p4;
+   Float_t out_thirdProton_p4, out_dimuonditrk_m, out_dimuonditrk_pt, out_dimuonditrk_eta, out_dimuonditrk_phi;
+   Float_t out_dimuonditrk_p, out_dimuon_m, out_dimuon_pt, out_dimuon_eta, out_dimuon_phi;
+   Float_t out_dimuon_p, out_highTrackMatch, out_lowTrackMatch, out_lowMuonMatch, out_thirdTrackMatch;
+   Float_t out_ditrack_m, out_ditrackOne_pt, out_ditrackOne_eta, out_ditrackOne_phi, out_ditrackOne_p;
+   Float_t out_ditrackTwo_pt, out_ditrackTwo_eta, out_ditrackTwo_phi, out_ditrackTwo_p, out_ditrackThree_pt;
+   Float_t out_ditrackThree_eta, out_ditrackThree_phi, out_ditrackThree_p, out_highMuon_pt, out_highMuon_eta;
+   Float_t out_highMuon_phi, out_highMuon_charge, out_highMuon_dz, out_highMuon_dxy, out_lowMuon_pt;
+   Float_t out_lowMuon_eta, out_lowMuon_phi, out_lowMuon_charge, out_lowMuon_dz, out_lowMuon_dxy;
+   Float_t out_highTrack_pt, out_highTrack_eta, out_highTrack_phi, out_highTrack_charge, out_highTrack_dz;
+   Float_t out_highTrack_dxy, out_lowTrack_pt, out_lowTrack_eta, out_lowTrack_phi, out_lowTrack_charge;
+   Float_t out_lowTrack_dz, out_lowTrack_dxy, out_thirdTrack_pt, out_thirdTrack_eta, out_thirdTrack_phi;
+   Float_t out_thirdTrack_charge, out_thirdTrack_dz, out_thirdTrack_dxy, out_dimuonDiTrkOne_pt, out_dimuonDiTrkOne_eta;
+   Float_t out_dimuonDiTrkOne_phi, out_dimuonDiTrkOne_charge, out_dimuonDiTrkOne_p, out_dimuonDiTrkTwo_pt, out_dimuonDiTrkTwo_eta;
+   Float_t out_dimuonDiTrkTwo_phi, out_dimuonDiTrkTwo_charge, out_dimuonDiTrkTwo_p, out_dimuonDiTrkThree_pt, out_dimuonDiTrkThree_eta;
+   Float_t out_dimuonDiTrkThree_phi, out_dimuonDiTrkThree_charge, out_dimuonDiTrkThree_p, out_dimuon_vProb, out_dimuon_vChi2;
+   Float_t out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV, out_dimuon_cosAlpha, out_triTrack_m;
+   Float_t out_triTrack_pt, out_triTrack_eta, out_triTrack_phi, out_triTrack_charge, out_dimuonditrk_vProb;
+   Float_t out_dimuonditrk_vChi2, out_dimuonditrk_nDof, out_dimuonditrk_charge, out_dimuonditrk_cosAlpha, out_dimuonditrk_ctauPV;
+   Float_t out_dimuonditrk_ctauErrPV, out_dimuonditrk_cosAlphaCA, out_dimuonditrk_ctauPVCA, out_dimuonditrk_ctauErrPVCA, out_dimuonditrk_cosAlphaDZ;
+   Float_t out_dimuonditrk_ctauPVDZ, out_dimuonditrk_ctauErrPVDZ, out_dimuonditrk_cosAlphaBS, out_dimuonditrk_ctauPVBS, out_dimuonditrk_ctauErrPVBS;
+   Float_t out_dimuonditrk_vx, out_dimuonditrk_vy, out_dimuonditrk_vz, out_dca_m1m2, out_dca_m1t1;
+   Float_t out_dca_m1t2, out_dca_m2t1, out_dca_m2t2, out_dca_t1t2, out_dca_m1t3;
+   Float_t out_dca_m2t3, out_dca_t1t3, out_dca_t2t3, out_highTrackMuonDR, out_highTrackMuonDP;
+   Float_t out_highTrackMuonDPt, out_lowTrackMuonDR, out_lowTrackMuonDP, out_lowTrackMuonDPt, out_thirdTrackMuonDR;
+   Float_t out_thirdTrackMuonDP, out_thirdTrackMuonDPt, out_tPFromPV, out_tMFromPV, out_tTFromPV;
+   Float_t out_tPFromPVCA, out_tMFromPVCA, out_tTFromPVCA, out_tPFromPVDZ, out_tMFromPVDZ;
+   Float_t out_tTFromPVDZ, out_five_m, out_five_m_ref, out_five_mass_ppk, out_five_mass_kpp;
+   Float_t out_five_mass_pkp, out_five_mass_ppp, out_five_pt, out_five_eta, out_five_phi;
+   Float_t out_five_p, out_five_cosAlpha, out_five_ctauPV, out_five_ctauErrPV, out_five_cosAlphaCA;
+   Float_t out_five_ctauPVCA, out_five_ctauErrPVCA, out_five_cosAlphaDZ, out_five_ctauPVDZ, out_five_ctauErrPVDZ;
+   Float_t out_five_cosAlphaBS, out_five_ctauPVBS, out_five_ctauErrPVBS, out_five_vProb, out_five_nDof;
+   Float_t out_five_vChi2, out_five_vx, out_five_vy, out_five_vz, out_bestPV_X;
+   Float_t out_bestPV_Y, out_bestPV_Z, out_cosAlphaPV_X, out_cosAlphaPV_Y, out_cosAlphaPV_Z;
+   Float_t out_bS_X, out_bS_Y, out_bS_Z, out_zPV_X, out_zPV_Y;
+   Float_t out_zPV_Z, out_five_charge, out_lowMuon_isTight, out_lowMuon_isLoose, out_lowMuon_isSoft;
+   Float_t out_lowMuon_isMedium, out_lowMuon_isHighPt, out_lowMuon_isTracker, out_lowMuon_isGlobal, out_lowMuon_NPixelHits;
+   Float_t out_lowMuon_NStripHits, out_lowMuon_NTrackhits, out_lowMuon_NBPixHits, out_lowMuon_NPixLayers, out_lowMuon_NTraLayers;
+   Float_t out_lowMuon_NStrLayers, out_lowMuon_NBPixLayers, out_highMuon_isTight, out_highMuon_isLoose, out_highMuon_isSoft;
+   Float_t out_highMuon_isMedium, out_highMuon_isHighPt, out_highMuon_isTracker, out_highMuon_isGlobal, out_highMuon_NPixelHits;
+   Float_t out_highMuon_NStripHits, out_highMuon_NTrackhits, out_highMuon_NBPixHits, out_highMuon_NPixLayers, out_highMuon_NTraLayers;
+   Float_t out_highMuon_NStrLayers, out_highMuon_NBPixLayers, out_lowMuon_type, out_highMuon_type, out_highTrack_NPixelHits;
+   Float_t out_highTrack_NStripHits, out_highTrack_NTrackhits, out_highTrack_NBPixHits, out_highTrack_NPixLayers, out_highTrack_NTraLayers;
+   Float_t out_highTrack_NStrLayers, out_highTrack_NBPixLayers, out_lowTrack_NPixelHits, out_lowTrack_NStripHits, out_lowTrack_NTrackhits;
+   Float_t out_lowTrack_NBPixHits, out_lowTrack_NPixLayers, out_lowTrack_NTraLayers, out_lowTrack_NStrLayers, out_lowTrack_NBPixLayers;
+   Float_t out_thirdTrack_NPixelHits, out_thirdTrack_NStripHits, out_thirdTrack_NTrackhits, out_thirdTrack_NBPixHits, out_thirdTrack_NPixLayers;
+   Float_t out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers,
 
 
    FiveTracks(TTree * /*tree*/ =0) { }
