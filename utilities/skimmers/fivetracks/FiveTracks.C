@@ -37,8 +37,6 @@ void FiveTracks::Begin(TTree * /*tree*/)
 
    TString option = GetOption();
 
-   TString option = GetOption();
-
    std::string outputString = "2mu4k_five_tree.root";
    OutFile = new TProofOutputFile( outputString.data() );
    fOut = OutFile->OpenFile("RECREATE");
