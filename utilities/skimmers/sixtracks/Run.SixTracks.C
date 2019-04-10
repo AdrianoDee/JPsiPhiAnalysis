@@ -26,7 +26,7 @@
 */
 
   TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/sixtracks/SixTracks";
-  TProof *p = TProof::Open("workers=10"); // 12 workers for qsub
+  TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
   //gProofDebugMask = TProofDebug::kAll;
   //gProofDebugLevel = 5;
 
