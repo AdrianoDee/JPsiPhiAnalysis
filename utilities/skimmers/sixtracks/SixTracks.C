@@ -455,9 +455,15 @@ Bool_t SixTracks::Process(Long64_t entry)
   //
   test = test && (*lowMuonMatch>0.0) && (*highMuonMatch>0.0);
   //
-  test = test && (*dimuonditrk_vProb> 0.01);
+  test = test && (*dimuonditrk_vProb> 0.02);
 
-  test = test && (*dimuonditrk_cosAlpha> 0.90);
+  test = test && (fabs(*dimuonditrk_cosAlpha)> 0.90);
+
+  test = test && ((*dimuon_pt)> 4.0);
+
+  test = test && (*lowKaon_NBPixHits>1) && (*highKaon_NBPixHits>1);
+
+  // test = test && ((*dimuonditrk_pt)> 6.0);
 
   //int a = (int) (*trigger);
   //std::cout << (*trigger);
