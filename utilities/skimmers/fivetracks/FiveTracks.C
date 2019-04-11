@@ -412,7 +412,7 @@ Bool_t FiveTracks::Process(Long64_t entry)
 
      out_dimuonDiTrkOne_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*lowPion_p4)).M();
      out_dimuonDiTrkTwo_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*thirdPion_p4)).M();
-     out_dimuonDiTrkFour_mmpp = 	((*dimuon_p4) + (*lowPion_p4) + (*thirdPion_p4)).M();/
+     out_dimuonDiTrkFour_mmpp = 	((*dimuon_p4) + (*lowPion_p4) + (*thirdPion_p4)).M();
      out_dimuonDiTrkOne_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();
      out_dimuonDiTrkTwo_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();
      out_dimuonDiTrkFour_mmkk = 	((*dimuon_p4) + (*lowKaon_p4) + (*lowKaon_p4)).M();
