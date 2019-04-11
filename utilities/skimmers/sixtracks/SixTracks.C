@@ -186,6 +186,7 @@ void SixTracks::SlaveBegin(TTree * /*tree*/)
   outTree->Branch("fourthTrack_pt", 	&out_fourthTrack_pt, 	"fourthTrack_pt/F");
   outTree->Branch("fourthTrack_eta", 	&out_fourthTrack_eta, 	"fourthTrack_eta/F");
   outTree->Branch("fourthTrack_phi", 	&out_fourthTrack_phi, 	"fourthTrack_phi/F");
+  outTree->Branch("fourthTrack_charge", 	&out_fourthTrack_charge, 	"fourthTrack_charge/F");
 
   outTree->Branch("dimuonDiTrkOne_pt", 	&out_dimuonDiTrkOne_pt, 	"dimuonDiTrkOne_pt/F");
   outTree->Branch("dimuonDiTrkOne_eta", 	&out_dimuonDiTrkOne_eta, 	"dimuonDiTrkOne_eta/F");
