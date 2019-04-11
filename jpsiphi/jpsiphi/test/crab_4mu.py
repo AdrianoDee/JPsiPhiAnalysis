@@ -153,10 +153,13 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 
 dataset = filter(None, datasetName.split('/'))
 
-jobdir = 'miniaod_2mu2mu_' + run
+jobdir = 'miniaod_4mu_'
+reqname = 'miniaod_4mu_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp
 
 if "MC" in run:
     reqname = 'miniaod_4mu_' + run + timestamp
+
+jobdir = jobdir + run
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
@@ -166,7 +169,7 @@ config.General.transferOutputs  = True
 config.General.workArea         = jobdir
 #config.General.requestName     = 'JetHT_Run2015D_PromptReco_v4_RECO'+timestamp
 #config.General.requestName             = dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+HLT+timestamp
-config.General.requestName      = 'miniaod_2mu2mu_' + dataset[0]+'_'+dataset[1]+'_'+dataset[2]+'_'+runNum+'_'+timestamp #+'_split_'+ jsonFile.split('_')[-1].split('.')[0]
+config.General.requestName      = reqname
 config.General.transferLogs     = False
 
 config.section_('JobType')
