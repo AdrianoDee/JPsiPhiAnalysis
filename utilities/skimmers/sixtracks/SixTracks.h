@@ -454,9 +454,11 @@ public :
    Float_t out_diTrackFive_eta, out_diTrackFive_phi, out_diTrackFive_p, out_diTrackSix_pt, out_diTrackSix_eta;
    Float_t out_diTrackSix_phi, out_diTrackSix_p, out_dimuonDiTrkOne_mmpp, out_dimuonDiTrkTwo_mmpp, out_dimuonDiTrkThree_mmpp;
    Float_t out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mmkk, out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkThree_mmkk, out_dimuonDiTrkFour_mmkk;
+   Float_t out_dimuonDiTrkFive_mmkk, out_dimuonDiTrkFive_mmpp, out_dimuonDiTrkSix_mmkk, out_dimuonDiTrkSix_mmpp;
    Float_t out_highMuon_pt, out_highMuon_eta, out_highMuon_phi, out_highMuon_charge, out_highMuon_dz;
    Float_t out_highMuon_dxy, out_lowMuon_pt, out_lowMuon_eta, out_lowMuon_phi, out_lowMuon_charge;
    Float_t out_lowMuon_dz, out_lowMuon_dxy, out_highTrack_pt, out_highTrack_eta, out_highTrack_phi;
+   Float_t out_fourthTrack_pt, out_fourthTrack_eta, out_fourthTrack_phi;
    Float_t out_highTrack_charge, out_highTrack_dz, out_highTrack_dxy, out_lowTrack_pt, out_lowTrack_eta;
    Float_t out_lowTrack_phi, out_lowTrack_charge, out_lowTrack_dz, out_lowTrack_dxy, out_thirdTrack_pt;
    Float_t out_thirdTrack_eta, out_thirdTrack_phi, out_thirdTrack_charge, out_thirdTrack_dz, out_thirdTrack_dxy;
