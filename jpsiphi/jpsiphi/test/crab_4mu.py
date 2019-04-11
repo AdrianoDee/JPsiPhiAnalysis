@@ -31,7 +31,7 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_UK_*', 'T3_US_Baylor','T3_US_Colorado', 'T3_US_Cornell',
  'T3_US_FIT', 'T3_US_FIU', 'T3_US_FNALLPC', 'T3_US_FSU', 'T3_US_J*',
  'T3_US_Kansas', 'T3_US_MIT', 'T3_US_N*', 'T3_US_O*', 'T3_US_P*',
- 'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR', 'T3_US_UCSB',
+ 'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR',
  'T3_US_UMD']
 
 datasetnames = {
@@ -76,6 +76,13 @@ datasetnames = {
 "G2016"   :  datasetbase + "/Run2016G-17Jul2018-v1/MINIAOD",
 "H2016"   :  datasetbase + "/Run2016H-17Jul2018-v1/MINIAOD",
 
+"Bs_OfficialMC_2018" : "/BsToJpsiPhi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+"BsBMuon_OfficialMC_2018" : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-N1_102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+"Y4100_OfficialMC_2018" : "/Y4100ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4300_OfficialMC_2018" : "/Y4300ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4500_OfficialMC_2018" : "/Y4500ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"Y4700_OfficialMC_2018" : "/Y4700ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM"
+
 }
 
 
@@ -109,7 +116,14 @@ GlobalTags = {
     "bsJpsiPhiSoftQCD_PU" : "94X_mc2017_realistic_v14",
     "bsJpsiPhiSoftQCD"    : "94X_mc2017_realistic_v10",
     "bsJpsiPhiBMuon_PU"   : "94X_mc2017_realistic_v14",
-    "bsJpsiPhiBMuon"      : "94X_mc2017_realistic_v10"
+    "bsJpsiPhiBMuon"      : "94X_mc2017_realistic_v10",
+
+    "Bs_OfficialMC_2018"      : "102X_upgrade2018_realistic_v15",
+    "BsBMuon_OfficialMC_2018" : "102X_upgrade2018_realistic_v15",
+    "Y4100_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4300_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4500_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "Y4700_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15"
 
 }
 
@@ -118,7 +132,7 @@ runNumber = [
 ]
 
 
-run = 'A2018_1'
+run = 'Y4100_OfficialMC_2018'
 
 if "2018" in run:
     jsonFile = jsonFile2018
@@ -140,6 +154,9 @@ timestamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
 dataset = filter(None, datasetName.split('/'))
 
 jobdir = 'miniaod_2mu2mu_' + run
+
+if "MC" in run:
+    reqname = 'miniaod_4mu_' + run + timestamp
 
 if not os.path.exists(jobdir):
     os.makedirs(jobdir)
@@ -166,8 +183,8 @@ config.section_('Data')
 config.Data.inputDataset        = datasetName
 config.Data.inputDBS            = 'global'
 config.Data.totalUnits          = -1
-config.Data.unitsPerJob         = 5
-config.Data.splitting           = 'LumiBased'
+config.Data.unitsPerJob         = 1
+config.Data.splitting           = 'FileBased'
 config.Data.runRange            = runNum
 config.Data.lumiMask            = lumi
 config.Data.outLFNDirBase       = '/store/user/adiflori/'

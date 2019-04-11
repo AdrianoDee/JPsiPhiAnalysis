@@ -137,6 +137,7 @@ if par.isLocal:
     from bu_jpsiphi_k_4 import *
     from bs_psiphi import *
     from bs_psiphi_2 import *
+    from y4140_official import *
 
     filename = par.mc
 
@@ -147,7 +148,8 @@ if par.isLocal:
                  "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist, "bu_jpsiphi_k_3" : bu_jpsiphi_k_3,
                  "y4273_spin" : y4273_spin_filelist, "y4506_spin" : y4506_spin_filelist, "bu_jpsiphi_k_4" : bu_jpsiphi_k_4,
                  "bstojpsiphi_softqcd" : bstojpsiphi_softqcd_file_list, "bsjpsiphi" : bsjpsiphi_filelist, "bs_psiphi" : bs_psiphi,
-                 "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist,"bbhook_filelist_v3" : bbhook_filelist_v3}
+                 "bujpsiphi" : bujpsiphi_filelist, "bbbar_hook": bbhook_filelist,"bbhook_filelist_v3" : bbhook_filelist_v3,
+                 "y4140_official" : y4140_official}
 
     gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbhook_samet" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
                  "bbbar_soft" : "100X_upgrade2018_realistic_v10", "bbbar_hook" : "100X_upgrade2018_realistic_v10", "BBbar_Hook_v5" : "100X_upgrade2018_realistic_v10",
@@ -157,7 +159,8 @@ if par.isLocal:
                  "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_4" : "100X_upgrade2018_realistic_v10",
                  "y4273_spin" : "100X_upgrade2018_realistic_v10",  "y4506_spin" : "100X_upgrade2018_realistic_v10", "bs_psiphi" : "100X_upgrade2018_realistic_v10",
                  "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10", "bs_psiphi_2" : "100X_upgrade2018_realistic_v10",
-                 "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10", "bbhook_filelist_v3" : "100X_upgrade2018_realistic_v10"}
+                 "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10", "bbhook_filelist_v3" : "100X_upgrade2018_realistic_v10",
+                 "y4140_official" : "102X_upgrade2018_realistic_v15"}
 
     par.gtag = gtags[filename]
     n= par.n

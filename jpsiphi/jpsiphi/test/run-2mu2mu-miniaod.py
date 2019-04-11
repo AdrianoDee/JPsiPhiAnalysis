@@ -106,16 +106,29 @@ if par.isLocal:
     from y4506_zero_filelist import *
     from qcd_ml_filelist import *
     from bbbar_ml_filelist import *
-
+    from y4140_official import *
     filename = par.mc
 
     fileLists = {"qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list,
                  "y4273_zero" : y4273_zero_filelist, "y4273_lhcb" : y4273_lhcb_filelist ,
                  "y4140_lhcb" : y4140_lhcb_filelist, "y4140_zero" : y4140_zero_filelist,
                  "y4506_lhcb" : y4506_lhcb_filelist, "y4506_zero" : y4506_zero_filelist,
-                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist }
+                 "y4704_lhcb" : y4704_lhcb_filelist, "y4704_zero" : y4704_zero_filelist,
+                 "y4140_official" : y4140_official}
+
+    gtags = {"qcd_ml" : "100X_upgrade2018_realistic_v10", "bbhook_samet" : "100X_upgrade2018_realistic_v10", "bbbar_hard" : "100X_upgrade2018_realistic_v10",
+                 "bbbar_soft" : "100X_upgrade2018_realistic_v10", "bbbar_hook" : "100X_upgrade2018_realistic_v10", "BBbar_Hook_v5" : "100X_upgrade2018_realistic_v10",
+                 "y4273_zero" : "100X_upgrade2018_realistic_v10",  "y4273_lhcb" : "100X_upgrade2018_realistic_v10"  , "bu_jpsiphi_k" : "100X_upgrade2018_realistic_v10",
+                 "y4140_lhcb" : "100X_upgrade2018_realistic_v10",  "y4140_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_2" : "100X_upgrade2018_realistic_v10",
+                 "y4506_lhcb" : "100X_upgrade2018_realistic_v10",  "y4506_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_3" : "100X_upgrade2018_realistic_v10",
+                 "y4704_lhcb" : "100X_upgrade2018_realistic_v10",  "y4704_zero" : "100X_upgrade2018_realistic_v10", "bu_jpsiphi_k_4" : "100X_upgrade2018_realistic_v10",
+                 "y4273_spin" : "100X_upgrade2018_realistic_v10",  "y4506_spin" : "100X_upgrade2018_realistic_v10", "bs_psiphi" : "100X_upgrade2018_realistic_v10",
+                 "bujpsiphi" : "100X_upgrade2018_realistic_v10", "bsjpsiphi" : "100X_upgrade2018_realistic_v10", "bs_psiphi_2" : "100X_upgrade2018_realistic_v10",
+                 "bstojpsiphi_softqcd" : "94X_mc2017_realistic_v10", "bbhook_filelist_v3" : "100X_upgrade2018_realistic_v10",
+                 "y4140_official" : "102X_upgrade2018_realistic_v15"}
 
     n= par.n
+    par.gtag = gtags[filename]
 
     filelist = fileLists[filename] #bbbar_soft_list#bbbar_file_list
     size = (len(filelist) + n) / n
@@ -169,7 +182,7 @@ charmoniumHLT = ['HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi',
 #'HLT_DoubleMu4_3_Jpsi_Displaced',
 #'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
 #'HLT_Dimuon25_Jpsi',
-'HLT_Dimuon0_Jpsi3p5_Muon2'
+#'HLT_Dimuon0_Jpsi3p5_Muon2'
 ]
 
 hlts = {}
