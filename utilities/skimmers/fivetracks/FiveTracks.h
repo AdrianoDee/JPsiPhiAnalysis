@@ -69,22 +69,22 @@ TTreeReaderValue<Int_t> dimuonditrk_id = {fReader, "dimuonditrk_id"};
 TTreeReaderValue<Int_t> dimuon_id = {fReader, "dimuon_id"};
 TTreeReaderValue<Int_t> p_id = {fReader, "p_id"};
 TTreeReaderValue<Int_t> m_id = {fReader, "m_id"};
-// TTreeReaderValue<Int_t> t_id = {fReader, "t_id"};
-// TTreeReaderValue<TLorentzVector> five_p4 = {fReader, "five_p4"};
-// TTreeReaderValue<TLorentzVector> dimuonditrk_p4 = {fReader, "dimuonditrk_p4"};
-// TTreeReaderValue<TLorentzVector> ditrack_p4 = {fReader, "ditrack_p4"};
-// TTreeReaderValue<TLorentzVector> dimuon_p4 = {fReader, "dimuon_p4"};
-// TTreeReaderValue<TLorentzVector> lowMuon_p4 = {fReader, "lowMuon_p4"};
-// TTreeReaderValue<TLorentzVector> highMuon_p4 = {fReader, "highMuon_p4"};
-// TTreeReaderValue<TLorentzVector> highKaon_p4 = {fReader, "highKaon_p4"};
-// TTreeReaderValue<TLorentzVector> lowKaon_p4 = {fReader, "lowKaon_p4"};
-// TTreeReaderValue<TLorentzVector> thirdKaon_p4 = {fReader, "thirdKaon_p4"};
-// TTreeReaderValue<TLorentzVector> highPion_p4 = {fReader, "highPion_p4"};
-// TTreeReaderValue<TLorentzVector> lowPion_p4 = {fReader, "lowPion_p4"};
-// TTreeReaderValue<TLorentzVector> thirdPion_p4 = {fReader, "thirdPion_p4"};
-// TTreeReaderValue<TLorentzVector> highProton_p4 = {fReader, "highProton_p4"};
-// TTreeReaderValue<TLorentzVector> lowProton_p4 = {fReader, "lowProton_p4"};
-// TTreeReaderValue<TLorentzVector> thirdProton_p4 = {fReader, "thirdProton_p4"};
+TTreeReaderValue<Int_t> t_id = {fReader, "t_id"};
+TTreeReaderValue<TLorentzVector> five_p4 = {fReader, "five_p4"};
+TTreeReaderValue<TLorentzVector> dimuonditrk_p4 = {fReader, "dimuonditrk_p4"};
+TTreeReaderValue<TLorentzVector> ditrack_p4 = {fReader, "ditrack_p4"};
+TTreeReaderValue<TLorentzVector> dimuon_p4 = {fReader, "dimuon_p4"};
+TTreeReaderValue<TLorentzVector> lowMuon_p4 = {fReader, "lowMuon_p4"};
+TTreeReaderValue<TLorentzVector> highMuon_p4 = {fReader, "highMuon_p4"};
+TTreeReaderValue<TLorentzVector> highKaon_p4 = {fReader, "highKaon_p4"};
+TTreeReaderValue<TLorentzVector> lowKaon_p4 = {fReader, "lowKaon_p4"};
+TTreeReaderValue<TLorentzVector> thirdKaon_p4 = {fReader, "thirdKaon_p4"};
+TTreeReaderValue<TLorentzVector> highPion_p4 = {fReader, "highPion_p4"};
+TTreeReaderValue<TLorentzVector> lowPion_p4 = {fReader, "lowPion_p4"};
+TTreeReaderValue<TLorentzVector> thirdPion_p4 = {fReader, "thirdPion_p4"};
+TTreeReaderValue<TLorentzVector> highProton_p4 = {fReader, "highProton_p4"};
+TTreeReaderValue<TLorentzVector> lowProton_p4 = {fReader, "lowProton_p4"};
+TTreeReaderValue<TLorentzVector> thirdProton_p4 = {fReader, "thirdProton_p4"};
 TTreeReaderValue<Double_t> dimuonditrk_m = {fReader, "dimuonditrk_m"};
 TTreeReaderValue<Double_t> dimuonditrk_pt = {fReader, "dimuonditrk_pt"};
 TTreeReaderValue<Double_t> dimuonditrk_eta = {fReader, "dimuonditrk_eta"};
@@ -367,6 +367,7 @@ Float_t out_highTrack_NStrLayers, out_highTrack_NBPixLayers, out_lowTrack_NPixel
 Float_t out_lowTrack_NBPixHits, out_lowTrack_NPixLayers, out_lowTrack_NTraLayers, out_lowTrack_NStrLayers, out_lowTrack_NBPixLayers;
 Float_t out_thirdTrack_NPixelHits, out_thirdTrack_NStripHits, out_thirdTrack_NTrackhits, out_thirdTrack_NBPixHits, out_thirdTrack_NPixLayers;
 Float_t out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers, out_thirdTrack_NBPixLayers;
+Float_t out_dimuonDiTrkOne_mmpp, out_dimuonDiTrkTwo_mmpp, out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mmkk, out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkFour_mmkk;
 
    FiveTracks(TTree * /*tree*/ =0) { }
    virtual ~FiveTracks() { }

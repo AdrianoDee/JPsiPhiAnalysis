@@ -285,6 +285,8 @@ Bool_t FourTracks::Process(Long64_t entry)
      // out_highMuon_rf_p4 = 	(Float_t)(*highMuon_rf_p4);
      // out_kaonp_rf_p4 = 	(Float_t)(*kaonp_rf_p4);
      // out_kaonn_rf_p4 = 	(Float_t)(*kaonn_rf_p4);
+
+     
      out_dimuonditrk_m = 	(Float_t)(*dimuonditrk_m);
      out_dimuonditrk_m_rf = 	(Float_t)(*dimuonditrk_m_rf);
      out_dimuonditrk_m_rf_d_c = 	(Float_t)(*dimuonditrk_m_rf_d_c);

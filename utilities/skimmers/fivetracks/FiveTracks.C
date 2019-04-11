@@ -158,11 +158,20 @@ void FiveTracks::SlaveBegin(TTree * /*tree*/)
       outTree->Branch("dimuonDiTrkTwo_phi", 	&out_dimuonDiTrkTwo_phi, 	"dimuonDiTrkTwo_phi/F");
       outTree->Branch("dimuonDiTrkTwo_charge", 	&out_dimuonDiTrkTwo_charge, 	"dimuonDiTrkTwo_charge/F");
       // outTree->Branch("dimuonDiTrkTwo_p", 	&out_dimuonDiTrkTwo_p, 	"dimuonDiTrkTwo_p/F");
-      outTree->Branch("dimuonDiTrkThree_pt", 	&out_dimuonDiTrkThree_pt, 	"dimuonDiTrkThree_pt/F");
-      outTree->Branch("dimuonDiTrkThree_eta", 	&out_dimuonDiTrkThree_eta, 	"dimuonDiTrkThree_eta/F");
-      outTree->Branch("dimuonDiTrkThree_phi", 	&out_dimuonDiTrkThree_phi, 	"dimuonDiTrkThree_phi/F");
-      outTree->Branch("dimuonDiTrkThree_charge", 	&out_dimuonDiTrkThree_charge, 	"dimuonDiTrkThree_charge/F");
+      outTree->Branch("dimuonDiTrkFour_pt", 	&out_dimuonDiTrkThree_pt, 	"dimuonDiTrkFour_pt/F");
+      outTree->Branch("dimuonDiTrkFour_eta", 	&out_dimuonDiTrkThree_eta, 	"dimuonDiTrkFour_eta/F");
+      outTree->Branch("dimuonDiTrkFour_phi", 	&out_dimuonDiTrkThree_phi, 	"dimuonDiTrkFour_phi/F");
+      outTree->Branch("dimuonDiTrkFour_charge", 	&out_dimuonDiTrkThree_charge, 	"dimuonDiTrkFour_charge/F");
       // outTree->Branch("dimuonDiTrkThree_p", 	&out_dimuonDiTrkThree_p, 	"dimuonDiTrkThree_p/F");
+
+      outTree->Branch("dimuonDiTrkOne_mmpp", 	&out_dimuonDiTrkOne_mmpp, 	"dimuonDiTrkOne_mmpp/F");
+      outTree->Branch("dimuonDiTrkTwo_mmpp", 	&out_dimuonDiTrkTwo_mmpp, 	"dimuonDiTrkTwo_mmpp/F");
+      outTree->Branch("dimuonDiTrkFour_mmpp", 	&out_dimuonDiTrkFour_mmpp, 	"dimuonDiTrkFour_mmpp/F");
+
+      outTree->Branch("dimuonDiTrkOne_mmkk", 	&out_dimuonDiTrkOne_mmkk, 	"dimuonDiTrkOne_mmkk/F");
+      outTree->Branch("dimuonDiTrkTwo_mmkk", 	&out_dimuonDiTrkTwo_mmkk, 	"dimuonDiTrkTwo_mmkk/F");
+      outTree->Branch("dimuonDiTrkFour_mmkk", 	&out_dimuonDiTrkFour_mmkk, 	"dimuonDiTrkFour_mmkk/F");
+
 
       outTree->Branch("dimuon_vProb", 	&out_dimuon_vProb, 	"dimuon_vProb/F");
       // outTree->Branch("dimuon_vChi2", 	&out_dimuon_vChi2, 	"dimuon_vChi2/F");
@@ -400,6 +409,13 @@ Bool_t FiveTracks::Process(Long64_t entry)
      out_dimuonditrk_eta = 	(Float_t)(*dimuonditrk_eta);
      out_dimuonditrk_phi = 	(Float_t)(*dimuonditrk_phi);
      out_dimuonditrk_p = 	(Float_t)(*dimuonditrk_p);
+
+     out_dimuonDiTrkOne_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*lowPion_p4)).M();
+     out_dimuonDiTrkTwo_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*thirdPion_p4)).M();
+     out_dimuonDiTrkFour_mmpp = 	((*dimuon_p4) + (*lowPion_p4) + (*thirdPion_p4)).M();/
+     out_dimuonDiTrkOne_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();
+     out_dimuonDiTrkTwo_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();
+     out_dimuonDiTrkFour_mmkk = 	((*dimuon_p4) + (*lowKaon_p4) + (*lowKaon_p4)).M();
 
      out_dimuon_m = 	(Float_t)(*dimuon_m);
      out_dimuon_pt = 	(Float_t)(*dimuon_pt);
