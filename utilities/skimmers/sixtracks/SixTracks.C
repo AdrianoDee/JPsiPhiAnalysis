@@ -614,9 +614,9 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_highTrack_eta = 	(Float_t)(*highTrack_eta);
     out_highTrack_phi = 	(Float_t)(*highTrack_phi);
 
-    out_fourthTrack_pt = (Float_t) (*fourthKaon_p4.pt());
-    out_fourthTrack_eta = (Float_t) (*fourthKaon_p4.eta());
-    out_fourthTrack_phi = (Float_t) (*fourthKaon_p4.phi());
+    out_fourthTrack_pt = (Float_t) (*fourthKaon_p4.Pt());
+    out_fourthTrack_eta = (Float_t) (*fourthKaon_p4.Eta());
+    out_fourthTrack_phi = (Float_t) (*fourthKaon_p4.Phi());
 
     out_dimuonDiTrkOne_pt = 	(Float_t)(*dimuonDiTrkOne_pt);
     out_dimuonDiTrkOne_eta = 	(Float_t)(*dimuonDiTrkOne_eta);
