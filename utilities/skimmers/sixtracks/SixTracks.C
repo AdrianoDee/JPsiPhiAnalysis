@@ -561,19 +561,19 @@ Bool_t SixTracks::Process(Long64_t entry)
     out_diTrackSix_phi = 	(Float_t)(*diTrackSix_phi);
     out_diTrackSix_p = 	(Float_t)(*diTrackSix_p);
 
-    out_dimuonDiTrkOne_mmpp = 	3.096916 + out_highPion_p4.M() + out_lowPion_p4.M();//(Float_t)(*dimuonDiTrkOne_mmpp);
-    out_dimuonDiTrkTwo_mmpp = 	3.096916 + out_highPion_p4.M() + thirdPion_p4.M();//(Float_t)(*dimuonDiTrkTwo_mmpp);
-    out_dimuonDiTrkThree_mmpp = 	3.096916 + out_highPion_p4.M() + fourthPion_p4.M();//(Float_t)(*dimuonDiTrkThree_mmpp);
-    out_dimuonDiTrkFour_mmpp = 	3.096916 + out_lowPion_p4.M() + thirdPion_p4.M();//(Float_t)(*dimuonDiTrkFour_mmpp);
-    out_dimuonDiTrkFive_mmpp = 3.096916 + out_lowPion_p4.M() + fourthPion_p4.M();
-    out_dimuonDiTrkSix_mmpp = 3.096916 + thirdPion_p4.M() + fourthPion_p4.M();
+    out_dimuonDiTrkOne_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*lowPion_p4)).M();//(Float_t)(*dimuonDiTrkOne_mmpp);
+    out_dimuonDiTrkTwo_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*thirdPion_p4)).M();//(Float_t)(*dimuonDiTrkTwo_mmpp);
+    out_dimuonDiTrkThree_mmpp = 	((*dimuon_p4) + (*highPion_p4) + (*fourthPion_p4)).M();//(Float_t)(*dimuonDiTrkThree_mmpp);
+    out_dimuonDiTrkFour_mmpp = 	((*dimuon_p4) + (*lowPion_p4) + (*thirdPion_p4)).M();//(Float_t)(*dimuonDiTrkFour_mmpp);
+    out_dimuonDiTrkFive_mmpp = ((*dimuon_p4) + (*lowPion_p4) + (*fourthPion_p4)).M();
+    out_dimuonDiTrkSix_mmpp = ((*dimuon_p4) + (*thirdPion_p4) + (*fourthPion_p4)).M();
 
-    out_dimuonDiTrkOne_mmkk = 	3.096916 + out_highKaon_p4.M() + out_lowKaon_p4.M();//(Float_t)(*dimuonDiTrkOne_mmkk);
-    out_dimuonDiTrkTwo_mmkk = 	3.096916 + out_highKaon_p4.M() + thirdKaon_p4.M();//(Float_t)(*dimuonDiTrkTwo_mmkk);
-    out_dimuonDiTrkThree_mmkk = 	3.096916 + out_highKaon_p4.M() + fourthKaon_p4.M();//(Float_t)(*dimuonDiTrkThree_mmkk);
-    out_dimuonDiTrkFour_mmkk = 	3.096916 + out_lowKaon_p4.M() + thirdKaon_p4.M();//(Float_t)(*dimuonDiTrkFour_mmkk);
-    out_dimuonDiTrkFive_mmkk = 3.096916 + out_lowKaon_p4.M() + fourthKaon_p4.M();
-    out_dimuonDiTrkSix_mmkk = 3.096916 + thirdKaon_p4.M() + fourthKaon_p4.M();
+    out_dimuonDiTrkOne_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();//(Float_t)(*dimuonDiTrkOne_mmkk);
+    out_dimuonDiTrkTwo_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();//(Float_t)(*dimuonDiTrkTwo_mmkk);
+    out_dimuonDiTrkThree_mmkk = 	((*dimuon_p4) + (*highKaon_p4) + (*lowKaon_p4)).M();//(Float_t)(*dimuonDiTrkThree_mmkk);
+    out_dimuonDiTrkFour_mmkk = 	((*dimuon_p4) + (*lowKaon_p4) + (*lowKaon_p4)).M();//(Float_t)(*dimuonDiTrkFour_mmkk);
+    out_dimuonDiTrkFive_mmkk = ((*dimuon_p4) + (*lowKaon_p4) + (*lowKaon_p4)).M();
+    out_dimuonDiTrkSix_mmkk = ((*dimuon_p4) + (*lowKaon_p4) + (*lowKaon_p4)).M();
     // out_dimuonDiTrkOne_mmkk = 	(Float_t)(*dimuonDiTrkOne_mmkk);
     // out_dimuonDiTrkTwo_mmkk = 	(Float_t)(*dimuonDiTrkTwo_mmkk);
     // out_dimuonDiTrkThree_mmkk = 	(Float_t)(*dimuonDiTrkThree_mmkk);
