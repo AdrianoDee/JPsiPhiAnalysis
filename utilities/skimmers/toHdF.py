@@ -45,7 +45,7 @@ for ff in data_files:
             #s = a.columns.to_series()
             #a.columns = s + s.groupby(s).cumcount().astype(str).replace({'0':''})
 
-            tree.to_hdf(name,"data",append=False,complevel=0)
+            tree.to_hdf(name + ".h5","data",append=False,complevel=0)
             tree = 0
     else:
             print ("Already Exists")
