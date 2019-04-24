@@ -109,6 +109,7 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
+  AddSameSig_(iConfig.getParameter<bool>("AddSS")),
   IsMC_(iConfig.getParameter<bool>("IsMC"))
 {
   produces<pat::CompositeCandidateCollection>("SixTracks");
@@ -287,6 +288,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
        const pat::PackedCandidate *tm = dynamic_cast <const pat::PackedCandidate *>(dimuonditrack_cand->daughter("ditrack")->daughter("lowTrack"));
        const pat::PackedCandidate *tt = dynamic_cast <const pat::PackedCandidate *>(fivetrackCand.daughter("trackThree"));
 
+       int tCharge = tt->charge();
        int tpId = fivetrackCand.userInt("pId");
        int tmId = fivetrackCand.userInt("mId");
        int ttId = fivetrackCand.userInt("tId");
@@ -322,8 +324,11 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          auto fourthTrack = track->at(i);
 
+         int fCharge = fourthTrack.charge();
+
          if(fourthTrack.pt()<trackPtCut_) continue;
-         //if(fourthTrack.charge() == 0) continue;
+         // if(fourthTrack.charge() == 0) continue;
+         if(float(tCharge + fCharge) != 0.0 && !AddSameSig_) continue;
 	       //if(!IsMC_ and fabs(fourthTrack.pdgId())!=211) continue;
 	       if(!(fourthTrack.trackHighPurity())) continue;
          if(!(fourthTrack.hasTrackDetails())) continue;
@@ -575,8 +580,18 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserInt("five_index",int(d));
           sixCand.addUserInt("pId",tpId);
           sixCand.addUserInt("mId",tmId);
-          sixCand.addUserInt("tId",ttId);
-          sixCand.addUserInt("fId",mmtt_id);
+          if(tCharge < 0)
+          {
+            sixCand.addUserInt("tId",ttId);
+            sixCand.addUserInt("fId",i);
+          }
+          else
+          {
+            sixCand.addUserInt("tId",i);
+            sixCand.addUserInt("fId",ttId);
+          }
+
+          sixCand.addUserInt("dimuonditrk_id",mmtt_id);
 
           std::string name;
           for(size_t j = 1; j<numMasses+1;j++)
@@ -589,8 +604,16 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addDaughter(*tp,"trackOne");
           sixCand.addDaughter(*tm,"trackTwo");
-          sixCand.addDaughter(*tm,"trackThree");
-          sixCand.addDaughter(fourthTrack,"trackFour");
+          if(tCharge < 0)
+          {
+            sixCand.addDaughter(*tm,"trackThree");
+            sixCand.addDaughter(fourthTrack,"trackFour");
+          }
+          else
+          {
+            sixCand.addDaughter(fourthTrack,"trackThree");
+            sixCand.addDaughter(*tm,"trackFour");
+          }
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
           sixCand.addDaughter(thisSix,"first_six_ref");
