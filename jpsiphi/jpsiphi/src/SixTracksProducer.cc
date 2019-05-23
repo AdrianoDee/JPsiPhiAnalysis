@@ -295,10 +295,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
        std::array< std::array <float,4>, numMasses-1> trackMasses;
        trackMasses[0][0] = kaonmass; trackMasses[0][1] = pionmass; trackMasses[0][2] = kaonmass; trackMasses[0][3] = pionmass; // k p k p
-       trackMasses[1][0] = kaonmass; trackMasses[1][1] = pionmass; trackMasses[1][2] = pionmass; trackMasses[1][3] = kaonmass; // k p k p
-       trackMasses[2][0] = pionmass; trackMasses[2][1] = kaonmass; trackMasses[2][2] = kaonmass; trackMasses[2][3] = pionmass; // k p k p
-       trackMasses[3][0] = pionmass; trackMasses[3][1] = kaonmass; trackMasses[3][2] = pionmass; trackMasses[3][3] = kaonmass; // k p k p
-       trackMasses[4][0] = pionmass; trackMasses[4][1] = pionmass; trackMasses[4][2] = kaonmass; trackMasses[4][3] = kaonmass; // k p k p
+       trackMasses[1][0] = kaonmass; trackMasses[1][1] = pionmass; trackMasses[1][2] = pionmass; trackMasses[1][3] = kaonmass; // k p p k
+       trackMasses[2][0] = pionmass; trackMasses[2][1] = kaonmass; trackMasses[2][2] = kaonmass; trackMasses[2][3] = pionmass; // p k k p
+       trackMasses[3][0] = pionmass; trackMasses[3][1] = kaonmass; trackMasses[3][2] = pionmass; trackMasses[3][3] = kaonmass; // p k p k
+       trackMasses[4][0] = pionmass; trackMasses[4][1] = pionmass; trackMasses[4][2] = kaonmass; trackMasses[4][3] = kaonmass; // p p k k
 
        int mmtt_id = fivetrackCand.userInt("dimuontt_index");
        //Adding the fifth track
@@ -580,7 +580,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserInt("five_index",int(d));
           sixCand.addUserInt("pId",tpId);
           sixCand.addUserInt("mId",tmId);
-          if(tCharge < 0)
+
+          if(tCharge > 0)
           {
             sixCand.addUserInt("tId",ttId);
             sixCand.addUserInt("fId",i);
@@ -604,15 +605,15 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addDaughter(*tp,"trackOne");
           sixCand.addDaughter(*tm,"trackTwo");
-          if(tCharge < 0)
+          if(tCharge > 0)
           {
-            sixCand.addDaughter(*tm,"trackThree");
+            sixCand.addDaughter(*tt,"trackThree");
             sixCand.addDaughter(fourthTrack,"trackFour");
           }
           else
           {
             sixCand.addDaughter(fourthTrack,"trackThree");
-            sixCand.addDaughter(*tm,"trackFour");
+            sixCand.addDaughter(*tt,"trackFour");
           }
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
@@ -786,15 +787,15 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   trackThree.setP4(p4_track3);
 
   math::XYZVector mom_track4 = track4.momentum();
-  double e_track4 = sqrt(massThree*massThree + mom_track4.Mag2());
+  double e_track4 = sqrt(massFour*massFour + mom_track4.Mag2());
   math::XYZTLorentzVector p4_track4 = math::XYZTLorentzVector(mom_track4.X(),mom_track4.Y(),mom_track4.Z(),e_track4);
   trackFour.setCharge(track4.charge());
   trackFour.setP4(p4_track4);
 
   fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
   fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
-  fiveTrackThree     = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
-  fiveTrackFour     = makeFiveCandidateMixed(dimuon,trackN,track3,track4);
+  fiveTrackThree   = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
+  fiveTrackFour    = makeFiveCandidateMixed(dimuon,trackN,track3,track4);
 
   // P N 3
   // P N 4
