@@ -996,14 +996,13 @@ if(!OnlyGen_)
       const pat::CompositeCandidate *mumukk_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
       const pat::CompositeCandidate *dimuonDiTrkFour_cand, *dimuonDiTrkFive_cand, *dimuonDiTrkSix_cand;
 
-      const pat::CompositeCandidate *kk_cand, *diTrackTwo_cand, *kk_three.;
-      const pat::CompositeCandidate *kk_four, *kk_five, *kk_six;
+      const pat::CompositeCandidate *kk_cand;
 
       const pat::CompositeCandidate *mumu_cand;
 
       const pat::CompositeCandidate *triTrack_cand;
 
-      const pat::CompositeCandidate *five_cand, *fiveTwo_cand, *fiveThree_cand, *fiveFour_cand;
+      const pat::CompositeCandidate *five_cand;
 
       six_cand  = sixtracks_cand_handle->at(i);
 
@@ -1130,7 +1129,7 @@ if(!OnlyGen_)
       //
       //
       // diTrackTwo_cand     = dynamic_cast<const pat::CompositeCandidate*>(four_two.daughter("ditrack"));
-      // kk_three.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
+      // kk_thr.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
       // kk_four.    = dynamic_cast<const pat::CompositeCandidate*>(four_fou.daughter("ditrack"));
       // kk_five.    = dynamic_cast<const pat::CompositeCandidate*>(four_fiv.daughter("ditrack"));
       // kk_six.     = dynamic_cast<const pat::CompositeCandidate*>(four_six.daughter("ditrack"));
@@ -1349,30 +1348,30 @@ if(!OnlyGen_)
       auto kk_fiv = lowKaon_p4 + fourthKaon_p4; //4 6 - -
       auto kk_six = fourthKaon_p4 + thirdKaon_p4; //5 6 + -
 
-      diTrackTwo_pt = kk_two.Pt();
-      diTrackTwo_eta = kk_two.Eta();
-      diTrackTwo_phi = kk_two.Phi();
-      diTrackTwo_p = kk_two.P();
+      diTrackTwo_pt = kk_two->Pt();
+      diTrackTwo_eta = kk_two->Eta();
+      diTrackTwo_phi = kk_two->Phi();
+      diTrackTwo_p = kk_two->P();
 
-      diTrackThree_pt = kk_three.Pt();
-      diTrackThree_eta = kk_three.Eta();
-      diTrackThree_phi = kk_three.Phi();
-      diTrackThree_p = kk_three.P();
+      diTrackThree_pt = kk_thr->Pt();
+      diTrackThree_eta = kk_thr->Eta();
+      diTrackThree_phi = kk_thr->Phi();
+      diTrackThree_p = kk_thr->P();
 
-      diTrackFour_pt = kk_four.Pt();
-      diTrackFour_eta = kk_four.Eta();
-      diTrackFour_phi = kk_four.Phi();
-      diTrackFour_p = kk_four.P();
+      diTrackFour_pt = kk_four->Pt();
+      diTrackFour_eta = kk_four->Eta();
+      diTrackFour_phi = kk_four->Phi();
+      diTrackFour_p = kk_four->P();
 
-      diTrackFive_pt = kk_five.Pt();
-      diTrackFive_eta = kk_five.Eta();
-      diTrackFive_phi = kk_five.Phi();
-      diTrackFive_p = kk_five.P();
+      diTrackFive_pt = kk_five->Pt();
+      diTrackFive_eta = kk_five->Eta();
+      diTrackFive_phi = kk_five->Phi();
+      diTrackFive_p = kk_five->P();
 
-      diTrackSix_pt = kk_six.Pt();
-      diTrackSix_eta = kk_six.Eta();
-      diTrackSix_phi = kk_six.Phi();
-      diTrackSix_p = kk_six.P();
+      diTrackSix_pt = kk_six->Pt();
+      diTrackSix_eta = kk_six->Eta();
+      diTrackSix_phi = kk_six->Phi();
+      diTrackSix_p = kk_six->P();
 
       //trackOne_cand->SetPtEtaPhiM(mumu_cand->pt(),mumu_cand->eta(),mumu_cand->phi(),mumu_cand->mass());
 
