@@ -293,12 +293,12 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
        int tmId = fivetrackCand.userInt("mId");
        int ttId = fivetrackCand.userInt("tId");
 
-       std::array< std::array <float,4>, numMasses-1> trackMasses;
-       trackMasses[0][0] = kaonmass; trackMasses[0][1] = pionmass; trackMasses[0][2] = kaonmass; trackMasses[0][3] = pionmass; // k p k p
-       trackMasses[1][0] = kaonmass; trackMasses[1][1] = pionmass; trackMasses[1][2] = pionmass; trackMasses[1][3] = kaonmass; // k p p k
-       trackMasses[2][0] = pionmass; trackMasses[2][1] = kaonmass; trackMasses[2][2] = kaonmass; trackMasses[2][3] = pionmass; // p k k p
-       trackMasses[3][0] = pionmass; trackMasses[3][1] = kaonmass; trackMasses[3][2] = pionmass; trackMasses[3][3] = kaonmass; // p k p k
-       trackMasses[4][0] = pionmass; trackMasses[4][1] = pionmass; trackMasses[4][2] = kaonmass; trackMasses[4][3] = kaonmass; // p p k k
+       // std::array< std::array <float,4>, numMasses-1> trackMasses;
+       // trackMasses[0][0] = kaonmass; trackMasses[0][1] = pionmass; trackMasses[0][2] = kaonmass; trackMasses[0][3] = pionmass; // k p k p
+       // trackMasses[1][0] = kaonmass; trackMasses[1][1] = pionmass; trackMasses[1][2] = pionmass; trackMasses[1][3] = kaonmass; // k p p k
+       // trackMasses[2][0] = pionmass; trackMasses[2][1] = kaonmass; trackMasses[2][2] = kaonmass; trackMasses[2][3] = pionmass; // p k k p
+       // trackMasses[3][0] = pionmass; trackMasses[3][1] = kaonmass; trackMasses[3][2] = pionmass; trackMasses[3][3] = kaonmass; // p k p k
+       // trackMasses[4][0] = pionmass; trackMasses[4][1] = pionmass; trackMasses[4][2] = kaonmass; trackMasses[4][3] = kaonmass; // p p k k
 
        int mmtt_id = fivetrackCand.userInt("dimuontt_index");
        //Adding the fifth track
@@ -346,7 +346,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          else
             doneFlag[std::tuple<int,int,int,int>(ids[0],ids[1],ids[2],ids[3])] = true;
 
-         pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
+         // pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
+
+         pat::CompositeCandidate sixCand = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,pionmass,pionmass);
 
          if (sixCand.mass() < SixTrackMassMin || sixCand.mass() > SixTrackMassMax)
          continue;
@@ -561,21 +563,21 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
              }
          }
 
-         std::vector<double> oneMasses, twoMasses, threeMasses, fourMasses;
-         oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(kaonmass); // p p k k
+         // std::vector<double> oneMasses, twoMasses, threeMasses, fourMasses;
+         // oneMasses.push_back(pionmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(kaonmass); // p p k k
+         //
+         // oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); fourMasses.push_back(kaonmass); // p k p k
+         // oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(pionmass); // p k k p
+         //
+         // oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(pionmass); // k p k p
+         // oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); fourMasses.push_back(kaonmass); // k p p k
+         //
+         // oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(kaonmass); // k k k k
 
-         oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(pionmass); fourMasses.push_back(kaonmass); // p k p k
-         oneMasses.push_back(pionmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(pionmass); // p k k p
+         // auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,pionmass,pionmass);
 
-         oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(pionmass); // k p k p
-         oneMasses.push_back(kaonmass);  twoMasses.push_back(pionmass);  threeMasses.push_back(pionmass); fourMasses.push_back(kaonmass); // k p p k
-
-         oneMasses.push_back(kaonmass);  twoMasses.push_back(kaonmass);  threeMasses.push_back(kaonmass); fourMasses.push_back(kaonmass); // k k k k
-
-         auto thisSix = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,pionmass,pionmass);
-
-         for(size_t j = 0; j<numMasses;j++)
-          sixTracksMass.push_back(makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass());
+         // for(size_t j = 0; j<numMasses;j++)
+         //  sixTracksMass.push_back(makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass());
 
           sixCand.addUserInt("five_index",int(d));
           sixCand.addUserInt("pId",tpId);
@@ -594,12 +596,12 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addUserInt("dimuonditrk_id",mmtt_id);
 
-          std::string name;
-          for(size_t j = 1; j<numMasses+1;j++)
-          {
-           name = "mass_ref_" + std::to_string(j);
-           sixCand.addUserFloat(name,sixTracksMass[j-1]);
-          }
+          // std::string name;
+          // for(size_t j = 1; j<numMasses+1;j++)
+          // {
+          //  name = "mass_ref_" + std::to_string(j);
+          //  sixCand.addUserFloat(name,sixTracksMass[j-1]);
+          // }
 
           sixCand.addUserInt("five_id",int(d));
 
@@ -617,9 +619,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           }
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
-          sixCand.addDaughter(thisSix,"first_six_ref");
+          // sixCand.addDaughter(thisSix,"first_six_ref");
 
-          sixCand.addUserFloat("mass_ref_0",six_ma_fit);
+          sixCand.addUserFloat("mass_ref",six_ma_fit);
 
           sixCand.addUserFloat("fourthTrackMuonDR",minDR_fourth);
           sixCand.addUserFloat("fourthTrackMuonDP",minDP_fourth);
@@ -792,19 +794,19 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   trackFour.setCharge(track4.charge());
   trackFour.setP4(p4_track4);
 
-  fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
-  fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
-  fiveTrackThree   = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
-  fiveTrackFour    = makeFiveCandidateMixed(dimuon,trackN,track3,track4);
+  // fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
+  // fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
+  // fiveTrackThree   = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
+  // fiveTrackFour    = makeFiveCandidateMixed(dimuon,trackN,track3,track4);
 
   // P N 3
   // P N 4
   // P 3 4
   // N 3 4
   //sixCand.addDaughter(fiveTrackOne,"fiveTrackOne"); is already there
-  sixCand.addDaughter(fiveTrackTwo,"fiveTrackTwo");
-  sixCand.addDaughter(fiveTrackThree,"fiveTrackThree");
-  sixCand.addDaughter(fiveTrackFour,"fiveTrackFour");
+  // sixCand.addDaughter(fiveTrackTwo,"fiveTrackTwo");
+  // sixCand.addDaughter(fiveTrackThree,"fiveTrackThree");
+  // sixCand.addDaughter(fiveTrackFour,"fiveTrackFour");
 
   reco::Candidate::LorentzVector v = p4_trackP + p4_trackN + p4_track3 + p4_track4 + dimuon.p4();
 

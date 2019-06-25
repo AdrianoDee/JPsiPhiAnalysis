@@ -556,8 +556,8 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
          auto thisFive = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,kaonmass,kaonmass,kaonmass);
 
-         for(size_t j = 0; j<numMasses;j++)
-          fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
+         // for(size_t j = 0; j<numMasses;j++)
+         //  fiveTracksMass[j] = makeFiveCandidateMixed(*dimuon_cand, *tp, *tm, thirdTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j]).mass();
 
              fiveCand.addUserInt("dimuontt_index",int(d));
              fiveCand.addUserInt("pId",tpId);
