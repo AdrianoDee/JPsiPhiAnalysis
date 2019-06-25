@@ -193,10 +193,21 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t diTrackFour_pt, diTrackFour_eta, diTrackFour_phi, diTrackFour_p;
   Double_t diTrackFive_pt, diTrackFive_eta, diTrackFive_phi, diTrackFive_p;
   Double_t diTrackSix_pt, diTrackSix_eta, diTrackSix_phi, diTrackSix_p;
+
+  Double_t diTrackOne_kk, diTrackOne_pp, diTrackOne_pk, diTrackOne_kp;
+  Double_t diTrackTwo_kk, diTrackTwo_pp, diTrackTwo_pk, diTrackTwo_kp;
+  Double_t diTrackThree_kk, diTrackThree_pp, diTrackThree_pk, diTrackThree_kp;
+  Double_t diTrackFour_kk, diTrackFour_pp, diTrackFour_pk, diTrackFour_kp;
+
   Double_t dimuonDiTrkOne_mmpp, dimuonDiTrkTwo_mmpp, dimuonDiTrkThree_mmpp, dimuonDiTrkFour_mmpp;
   Double_t dimuonDiTrkOne_mmkk, dimuonDiTrkTwo_mmkk, dimuonDiTrkThree_mmkk, dimuonDiTrkFour_mmkk;
+  Double_t dimuonDiTrkOne_mmpk, dimuonDiTrkTwo_mmpk, dimuonDiTrkThree_mmpk, dimuonDiTrkFour_mmpk
+  Double_t dimuonDiTrkOne_mmkp, dimuonDiTrkTwo_mmkp, dimuonDiTrkThree_mmkp, dimuonDiTrkFour_mmkp;
 
-  Double_t triTrack_pt, triTrack_eta, triTrack_phi, triTrack_charge, triTrack_m;
+  Double_t triTrackOne_kkk, triTrackOne_kkp, triTrackOne_kpp, triTrackOne_ppp, triTrackOne_pt, triTrackOne_eta, triTrackOne_phi, triTrackOne_charge;
+  Double_t triTrackFour_kkk, triTrackFour_kkp, triTrackFour_kpp, triTrackFour_ppp, triTrackFour_pt, triTrackFour_eta, triTrackFour_phi, triTrackFour_charge;
+  Double_t triTrackThree_kkk, triTrackThree_kkp, triTrackThree_kpp, triTrackThree_ppp, triTrackThree_pt, triTrackThree_eta, triTrackThree_phi, triTrackThree_charge;
+  Double_t triTrackTwo_kkk, triTrackTwo_kkp, triTrackTwo_kpp, triTrackTwo_ppp, triTrackTwo_pt, triTrackTwo_eta, triTrackTwo_phi, triTrackTwo_charge;
 
   Bool_t muonP_isLoose, muonP_isSoft, muonP_isMedium, muonP_isHighPt;
   Bool_t muonN_isLoose, muonN_isSoft, muonN_isMedium, muonN_isHighPt;
@@ -406,7 +417,43 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         sixtracks_tree->Branch("dimuonDiTrkThree_mmkk",    &dimuonDiTrkThree_mmkk,  "dimuonDiTrkThree_mmkk/D");
         sixtracks_tree->Branch("dimuonDiTrkFour_mmkk",     &dimuonDiTrkFour_mmkk,   "dimuonDiTrkFour_mmkk/D");
 
+        sixtracks_tree->Branch("dimuonDiTrkOne_mmpk",      &dimuonDiTrkOne_mmpk,    "dimuonDiTrkOne_mmpk/D");
+        sixtracks_tree->Branch("dimuonDiTrkTwo_mmpk",      &dimuonDiTrkTwo_mmpk,    "dimuonDiTrkTwo_mmpk/D");
+        sixtracks_tree->Branch("dimuonDiTrkThree_mmpk",    &dimuonDiTrkThree_mmpk,  "dimuonDiTrkThree_mmpk/D");
+        sixtracks_tree->Branch("dimuonDiTrkFour_mmpk",     &dimuonDiTrkFour_mmpk,   "dimuonDiTrkFour_mmpk/D");
 
+        sixtracks_tree->Branch("dimuonDiTrkOne_mmkp",      &dimuonDiTrkOne_mmkp,    "dimuonDiTrkOne_mmkp/D");
+        sixtracks_tree->Branch("dimuonDiTrkTwo_mmkp",      &dimuonDiTrkTwo_mmkp,    "dimuonDiTrkTwo_mmkp/D");
+        sixtracks_tree->Branch("dimuonDiTrkThree_mmkp",    &dimuonDiTrkThree_mmkp,  "dimuonDiTrkThree_mmkp/D");
+        sixtracks_tree->Branch("dimuonDiTrkFour_mmkp",     &dimuonDiTrkFour_mmkp,   "dimuonDiTrkFour_mmkp/D");
+
+        sixtracks_tree->Branch("diTrackOne_kk",     &diTrackOne_kk,    "diTrackOne_kk/D");
+        sixtracks_tree->Branch("diTrackTwo_kk",     &diTrackTwo_kk,    "diTrackTwo_kk/D");
+        sixtracks_tree->Branch("diTrackThree_kk",     &diTrackThree_kk,    "diTrackThree_kk/D");
+        sixtracks_tree->Branch("diTrackFour_kk",     &diTrackFour_kk,    "diTrackFour_kk/D");
+        sixtracks_tree->Branch("diTrackFive_kk",     &diTrackFive_kk,    "diTrackFive_kk/D");
+        sixtracks_tree->Branch("diTrackSix_kk",     &diTrackSix_kk,    "diTrackSix_kk/D");
+
+        sixtracks_tree->Branch("diTrackOne_pp",     &diTrackOne_pp,    "diTrackOne_pp/D");
+        sixtracks_tree->Branch("diTrackTwo_pp",     &diTrackTwo_pp,    "diTrackTwo_pp/D");
+        sixtracks_tree->Branch("diTrackThree_pp",     &diTrackThree_pp,    "diTrackThree_pp/D");
+        sixtracks_tree->Branch("diTrackFour_pp",     &diTrackFour_pp,    "diTrackFour_pp/D");
+        sixtracks_tree->Branch("diTrackFive_pp",     &diTrackFive_pp,    "diTrackFive_pp/D");
+        sixtracks_tree->Branch("diTrackSix_pp",     &diTrackSix_pp,    "diTrackSix_pp/D");
+
+        sixtracks_tree->Branch("diTrackOne_pk",     &diTrackOne_pk,    "diTrackOne_pk/D");
+        sixtracks_tree->Branch("diTrackTwo_pk",     &diTrackTwo_pk,    "diTrackTwo_pk/D");
+        sixtracks_tree->Branch("diTrackThree_pk",     &diTrackThree_pk,    "diTrackThree_pk/D");
+        sixtracks_tree->Branch("diTrackFour_pk",     &diTrackFour_pk,    "diTrackFour_pk/D");
+        sixtracks_tree->Branch("diTrackFive_pk",     &diTrackFive_pk,    "diTrackFive_pk/D");
+        sixtracks_tree->Branch("diTrackSix_pk",     &diTrackSix_pk,    "diTrackSix_pk/D");
+
+        sixtracks_tree->Branch("diTrackOne_kp",     &diTrackOne_kp,    "diTrackOne_kp/D");
+        sixtracks_tree->Branch("diTrackTwo_kp",     &diTrackTwo_kp,    "diTrackTwo_kp/D");
+        sixtracks_tree->Branch("diTrackThree_kp",     &diTrackThree_kp,    "diTrackThree_kp/D");
+        sixtracks_tree->Branch("diTrackFour_kp",     &diTrackFour_kp,    "diTrackFour_kp/D");
+        sixtracks_tree->Branch("diTrackFive_kp",     &diTrackFive_kp,    "diTrackFive_kp/D");
+        sixtracks_tree->Branch("diTrackSix_kp",     &diTrackSix_kp,    "diTrackSix_kp/D");
 
         //The kinematic doesn't change, only mass
         sixtracks_tree->Branch("highMuon_pt",         &highMuon_pt,         "highMuon_pt/D");
@@ -491,11 +538,45 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         // sixtracks_tree->Branch("dimuon_triggerMatch", &dimuon_triggerMatch, "dimuon_triggerMatch/I");
 
         //TriTrack system
-        sixtracks_tree->Branch("triTrack_m",         &triTrack_m,         "triTrack_m/D");
-        sixtracks_tree->Branch("triTrack_pt",         &triTrack_pt,         "triTrack_pt/D");
-        sixtracks_tree->Branch("triTrack_eta",        &triTrack_eta,        "triTrack_eta/D");
-        sixtracks_tree->Branch("triTrack_phi",        &triTrack_phi,        "triTrack_phi/D");
-        sixtracks_tree->Branch("triTrack_charge",     &triTrack_charge,     "triTrack_charge/D");
+        sixtracks_tree->Branch("triTrackOne_kkk",         &triTrackOne_kkk,         "triTrackOne_kkk/D");
+        sixtracks_tree->Branch("triTrackTwo_kkk",         &triTrackTwo_kkk,         "triTrackTwo_kkk/D");
+        sixtracks_tree->Branch("triTrackThree_kkk",         &triTrackThree_kkk,         "triTrackThree_kkk/D");
+        sixtracks_tree->Branch("triTrackFour_kkk",         &triTrackFour_kkk,         "triTrackFour_kkk/D");
+
+        sixtracks_tree->Branch("triTrackOne_kkp",         &triTrackOne_kkp,         "triTrackOne_kkp/D");
+        sixtracks_tree->Branch("triTrackTwo_kkp",         &triTrackTwo_kkp,         "triTrackTwo_kkp/D");
+        sixtracks_tree->Branch("triTrackThree_kkp",         &triTrackThree_kkp,         "triTrackThree_kkp/D");
+        sixtracks_tree->Branch("triTrackThree_kkp",         &triTrackThree_kkp,         "triTrackThree_kkp/D");
+
+        sixtracks_tree->Branch("triTrackOne_kpp",         &triTrackOne_kpp,         "triTrackOne_kpp/D");
+        sixtracks_tree->Branch("triTrackTwo_kpp",         &triTrackTwo_kpp,         "triTrackTwo_kpp/D");
+        sixtracks_tree->Branch("triTrackThree_kpp",         &triTrackThree_kpp,         "triTrackThree_kpp/D");
+        sixtracks_tree->Branch("triTrackThree_kpp",         &triTrackThree_kpp,         "triTrackThree_kpp/D");
+
+        sixtracks_tree->Branch("triTrackOne_ppp",         &triTrackOne_ppp,         "triTrackOne_ppp/D");
+        sixtracks_tree->Branch("triTrackTwo_ppp",         &triTrackTwo_ppp,         "triTrackTwo_ppp/D");
+        sixtracks_tree->Branch("triTrackThree_ppp",         &triTrackThree_ppp,         "triTrackThree_ppp/D");
+        sixtracks_tree->Branch("triTrackThree_ppp",         &triTrackThree_ppp,         "triTrackThree_ppp/D");
+
+        sixtracks_tree->Branch("triTrackOne_pt",         &triTrackOne_pt,         "triTrackOne_pt/D");
+        sixtracks_tree->Branch("triTrackOne_eta",        &triTrackOne_eta,        "triTrackOne_eta/D");
+        sixtracks_tree->Branch("triTrackOne_phi",        &triTrackOne_phi,        "triTrackOne_phi/D");
+        sixtracks_tree->Branch("triTrackOne_charge",     &triTrackOne_charge,     "triTrackOne_charge/D");
+
+        sixtracks_tree->Branch("triTrackTwo_pt",         &triTrackTwo_pt,         "triTrackTwo_pt/D");
+        sixtracks_tree->Branch("triTrackTwo_eta",        &triTrackTwo_eta,        "triTrackTwo_eta/D");
+        sixtracks_tree->Branch("triTrackTwo_phi",        &triTrackTwo_phi,        "triTrackTwo_phi/D");
+        sixtracks_tree->Branch("triTrackTwo_charge",     &triTrackTwo_charge,     "triTrackTwo_charge/D");
+
+        sixtracks_tree->Branch("triTrackThree_pt",         &triTrackThree_pt,         "triTrackThree_pt/D");
+        sixtracks_tree->Branch("triTrackThree_eta",        &triTrackThree_eta,        "triTrackThree_eta/D");
+        sixtracks_tree->Branch("triTrackThree_phi",        &triTrackThree_phi,        "triTrackThree_phi/D");
+        sixtracks_tree->Branch("triTrackThree_charge",     &triTrackThree_charge,     "triTrackThree_charge/D");
+
+        sixtracks_tree->Branch("triTrackFour_pt",         &triTrackFour_pt,         "triTrackFour_pt/D");
+        sixtracks_tree->Branch("triTrackFour_eta",        &triTrackFour_eta,        "triTrackFour_eta/D");
+        sixtracks_tree->Branch("triTrackFour_phi",        &triTrackFour_phi,        "triTrackFour_phi/D");
+        sixtracks_tree->Branch("triTrackFour_charge",     &triTrackFour_charge,     "triTrackFour_charge/D");
 
         //FourTrack System
         sixtracks_tree->Branch("mumukk_vProb",      &mumukk_vProb,        "mumukk_vProb/D");
@@ -989,12 +1070,11 @@ if(!OnlyGen_)
 
       pat::CompositeCandidate six_cand;
 
-      const pat::CompositeCandidate *six_ref;
+      // const pat::CompositeCandidate *six_ref;
 
       const pat::PackedCandidate *trackOne_cand, *trackTwo_cand, *trackThree_cand,*trackFour_cand;
 
-      const pat::CompositeCandidate *mumukk_cand, *dimuonDiTrkTwo_cand, *dimuonDiTrkThree_cand;
-      const pat::CompositeCandidate *dimuonDiTrkFour_cand, *dimuonDiTrkFive_cand, *dimuonDiTrkSix_cand;
+      const pat::CompositeCandidate *mumukk_cand;
 
       const pat::CompositeCandidate *kk_cand;
 
@@ -1006,7 +1086,7 @@ if(!OnlyGen_)
 
       six_cand  = sixtracks_cand_handle->at(i);
 
-      six_ref       = dynamic_cast<const pat::CompositeCandidate*>(six_cand.daughter("first_six_ref")); // MUMU KK PP
+      // six_ref       = dynamic_cast<const pat::CompositeCandidate*>(six_cand.daughter("first_six_ref")); // MUMU KK PP
       five_cand     = dynamic_cast<const pat::CompositeCandidate*>(six_cand.daughter("fiveCand")); // KK
       mumukk_cand   = dynamic_cast<const pat::CompositeCandidate*>(five_cand->daughter("dimuonditrack")); // P N
       mumu_cand     = dynamic_cast<const pat::CompositeCandidate*>(mumukk_cand->daughter("dimuon"));
@@ -1129,7 +1209,7 @@ if(!OnlyGen_)
       //
       //
       // diTrackTwo_cand     = dynamic_cast<const pat::CompositeCandidate*>(four_two.daughter("ditrack"));
-      // kk_thr.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
+      // kk_three.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
       // kk_four.    = dynamic_cast<const pat::CompositeCandidate*>(four_fou.daughter("ditrack"));
       // kk_five.    = dynamic_cast<const pat::CompositeCandidate*>(four_fiv.daughter("ditrack"));
       // kk_six.     = dynamic_cast<const pat::CompositeCandidate*>(four_six.daughter("ditrack"));
@@ -1313,6 +1393,17 @@ if(!OnlyGen_)
       dimuonDiTrkThree_mmkk = (highMuon_p4 + lowMuon_p4 + lowKaon_p4  + thirdKaon_p4).M();
       dimuonDiTrkFour_mmkk  = (highMuon_p4 + lowMuon_p4 + fourthKaon_p4 + thirdKaon_p4).M();
 
+      dimuonDiTrkOne_mmpk   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + lowKaon_p4).M();
+      dimuonDiTrkTwo_mmpk   = (highMuon_p4 + lowMuon_p4 + highPion_p4 + thirdKaon_p4).M();
+      dimuonDiTrkThree_mmpk = (highMuon_p4 + lowMuon_p4 + lowPion_p4  + thirdKaon_p4).M();
+      dimuonDiTrkFour_mmpk  = (highMuon_p4 + lowMuon_p4 + fourthPion_p4 + thirdKaon_p4).M();
+
+      dimuonDiTrkOne_mmkp   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + lowPion_p4).M();
+      dimuonDiTrkTwo_mmkp   = (highMuon_p4 + lowMuon_p4 + highKaon_p4 + thirdPion_p4).M();
+      dimuonDiTrkThree_mmkp = (highMuon_p4 + lowMuon_p4 + lowKaon_p4  + thirdPion_p4).M();
+      dimuonDiTrkFour_mmkp  = (highMuon_p4 + lowMuon_p4 + fourthKaon_p4 + thirdPion_p4).M();
+
+
       // fiveTrackOne_cand    = dynamic_cast<const pat::CompositeCandidate*>(six_ref->daughter("fiveTrackOne"));
       // fiveTrackTwo_cand    = dynamic_cast<const pat::CompositeCandidate*>(six_ref->daughter("fiveTrackTwo"));
       // fiveTrackThree_cand  = dynamic_cast<const pat::CompositeCandidate*>(six_ref->daughter("fiveTrackThree"));
@@ -1348,30 +1439,58 @@ if(!OnlyGen_)
       auto kk_fiv = lowKaon_p4 + fourthKaon_p4; //4 6 - -
       auto kk_six = fourthKaon_p4 + thirdKaon_p4; //5 6 + -
 
-      diTrackTwo_pt = kk_two->Pt();
-      diTrackTwo_eta = kk_two->Eta();
-      diTrackTwo_phi = kk_two->Phi();
-      diTrackTwo_p = kk_two->P();
+      diTrackOne_kk = ditrack_m;
+      diTrackTwo_kk = kk_two.M();
+      diTrackThree_kk = kk_thr.M();
+      diTrackFour_kk = kk_fou.M();
+      diTrackFive_kk = kk_fiv.M();
+      diTrackSix_kk = kk_six.M();
 
-      diTrackThree_pt = kk_thr->Pt();
-      diTrackThree_eta = kk_thr->Eta();
-      diTrackThree_phi = kk_thr->Phi();
-      diTrackThree_p = kk_thr->P();
+      diTrackTwo_pt = kk_two.Pt();
+      diTrackTwo_eta = kk_two.Eta();
+      diTrackTwo_phi = kk_two.Phi();
+      diTrackTwo_p = kk_two.P();
 
-      diTrackFour_pt = kk_four->Pt();
-      diTrackFour_eta = kk_four->Eta();
-      diTrackFour_phi = kk_four->Phi();
-      diTrackFour_p = kk_four->P();
+      diTrackThree_pt = kk_three.Pt();
+      diTrackThree_eta = kk_three.Eta();
+      diTrackThree_phi = kk_three.Phi();
+      diTrackThree_p = kk_three.P();
 
-      diTrackFive_pt = kk_five->Pt();
-      diTrackFive_eta = kk_five->Eta();
-      diTrackFive_phi = kk_five->Phi();
-      diTrackFive_p = kk_five->P();
+      diTrackFour_pt = kk_four.Pt();
+      diTrackFour_eta = kk_four.Eta();
+      diTrackFour_phi = kk_four.Phi();
+      diTrackFour_p = kk_four.P();
 
-      diTrackSix_pt = kk_six->Pt();
-      diTrackSix_eta = kk_six->Eta();
-      diTrackSix_phi = kk_six->Phi();
-      diTrackSix_p = kk_six->P();
+      diTrackFive_pt = kk_five.Pt();
+      diTrackFive_eta = kk_five.Eta();
+      diTrackFive_phi = kk_five.Phi();
+      diTrackFive_p = kk_five.P();
+
+      diTrackSix_pt = kk_six.Pt();
+      diTrackSix_eta = kk_six.Eta();
+      diTrackSix_phi = kk_six.Phi();
+      diTrackSix_p = kk_six.P();
+
+      diTrackOne_pp = (highPion_p4 + lowPion_p4).M();
+      diTrackTwo_pp = (highPion_p4 + thirdPion_p4).M(); //3 5 + +
+      diTrackThree_pp = (highPion_p4 + fourthPion_p4).M(); //3 6 + -
+      diTrackFour_pp = (lowPion_p4 + thirdPion_p4).M(); //4 5 - +
+      diTrackFive_pp = (lowPion_p4 + fourthPion_p4).M(); //4 6 - -
+      diTrackSix_pp = (fourthPion_p4 + thirdPion_p4).M(); //5 6 + -
+
+      diTrackOne_pk = (highPion_p4 + lowKaon_p4).M();
+      diTrackTwo_pk = (highPion_p4 + thirdKaon_p4).M(); //3 5 + +
+      diTrackThree_pk = (highPion_p4 + fourthKaon_p4).M(); //3 6 + -
+      diTrackFour_pk = (lowPion_p4 + thirdKaon_p4).M(); //4 5 - +
+      diTrackFive_pk = (lowPion_p4 + fourthKaon_p4).M(); //4 6 - -
+      diTrackSix_pk = (fourthPion_p4 + thirdKaon_p4).M(); //5 6 + -
+
+      diTrackOne_kp = (highKaon_p4 + lowPion_p4).M();
+      diTrackTwo_kp = (highKaon_p4 + thirdPion_p4).M(); //3 5 + +
+      diTrackThree_kp = (highKaon_p4 + fourthPion_p4).M(); //3 6 + -
+      diTrackFour_kp = (lowKaon_p4 + thirdPion_p4).M(); //4 5 - +
+      diTrackFive_kp = (lowKaon_p4 + fourthPion_p4).M(); //4 6 - -
+      diTrackSix_kp = (fourthKaon_p4 + thirdPion_p4).M(); //5 6 + -
 
       //trackOne_cand->SetPtEtaPhiM(mumu_cand->pt(),mumu_cand->eta(),mumu_cand->phi(),mumu_cand->mass());
 
@@ -1493,10 +1612,52 @@ if(!OnlyGen_)
       dimuonDiTrkSix_charge = thirdTrack_charge + fourthTrack_charge;
 
       // triTrack_m      = triTrack_cand->mass();
-      // triTrack_pt     = triTrack_cand->pt();
-      // triTrack_eta    = triTrack_cand->eta();
-      // triTrack_phi    = triTrack_cand->phi();
-      // triTrack_charge = triTrack_cand->charge();
+      auto triTrack_one = (highKaon_p4 + lowKaon_p4 + thirdKaon_p4);
+      auto triTrack_two = (highKaon_p4 + lowKaon_p4 + fourthKaon_p4);
+      auto triTrack_thr = (highKaon_p4 + fourthKaon_p4 + thirdKaon_p4);
+      auto triTrack_fou = (lowKaon_p4 + fourthKaon_p4 + thirdKaon_p4);
+
+      triTrackOne_pt     = triTrack_one.Pt();
+      triTrackOne_eta    = triTrack_one.Eta();
+      triTrackOne_phi    = triTrack_one.phi();
+      triTrackOne_charge = lowTrack_charge + thirdTrack_charge + highTrack_charge;
+
+      triTrackTwo_pt     = triTrack_two.Pt();
+      triTrackTwo_eta    = triTrack_two.Eta();
+      triTrackTwo_phi    = triTrack_two.phi();
+      triTrackTwo_charge = lowTrack_charge + highTrack_charge + fourthTrack_charge;
+
+      triTrackThree_pt     = triTrack_thr.Pt();
+      triTrackThree_eta    = triTrack_thr.Eta();
+      triTrackThree_phi    = triTrack_thr.phi();
+      triTrackThree_charge = highTrack_charge + thirdTrack_charge + fourthTrack_charge;
+
+      triTrackFour_pt     = triTrack_fou.Pt();
+      triTrackFour_eta    = triTrack_fou.Eta();
+      triTrackFour_phi    = triTrack_fou.phi();
+      triTrackFour_charge = lowTrack_charge + thirdTrack_charge + fourthTrack_charge;
+
+
+      triTrackOne_kkk = (highKaon_p4 + lowKaon_p4 + thirdKaon_p4).M();
+      triTrackTwo_kkk = (highKaon_p4 + lowKaon_p4 + fourthKaon_p4).M();
+      triTrackThree_kkk = (highKaon_p4 + fourthKaon_p4 + thirdKaon_p4).M();
+      triTrackFour_kkk = (lowKaon_p4 + fourthKaon_p4 + thirdKaon_p4).M();
+
+      triTrackOne_kkp = (highKaon_p4 + lowKaon_p4 + thirdPion_p4).M();
+      triTrackTwo_kkp = (highKaon_p4 + lowKaon_p4 + fourthPion_p4).M();
+      triTrackThree_kkp = (highKaon_p4 + fourthKaon_p4 + thirdPion_p4).M();
+      triTrackFour_kkp = (lowKaon_p4 + fourthKaon_p4 + thirdPion_p4).M();
+
+      triTrackOne_kpp = (highKaon_p4 + lowPion_p4 + thirdPion_p4).M();
+      triTrackTwo_kpp = (highKaon_p4 + lowPion_p4 + fourthPion_p4).M();
+      triTrackThree_kpp = (highKaon_p4 + fourthPion_p4 + thirdPion_p4).M();
+      triTrackFour_kpp = (lowKaon_p4 + fourthPion_p4 + thirdPion_p4).M();
+
+      triTrackOne_ppp = (highPion_p4 + lowPion_p4 + thirdPion_p4).M();
+      triTrackTwo_ppp = (highPion_p4 + lowPion_p4 + fourthPion_p4).M();
+      triTrackThree_ppp = (highPion_p4 + fourthPion_p4 + thirdPion_p4).M();
+      triTrackFour_ppp = (lowPion_p4 + fourthPion_p4 + thirdPion_p4).M();
+
 
       if(IsMC_ || OnlyGen_)
       {
