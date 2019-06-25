@@ -997,7 +997,7 @@ if(!OnlyGen_)
       const pat::CompositeCandidate *dimuonDiTrkFour_cand, *dimuonDiTrkFive_cand, *dimuonDiTrkSix_cand;
 
       const pat::CompositeCandidate *kk_cand, *diTrackTwo_cand, *kk_three.;
-      const pat::CompositeCandidate *kk_four., *kk_five., *kk_six.;
+      const pat::CompositeCandidate *kk_four, *kk_five, *kk_six;
 
       const pat::CompositeCandidate *mumu_cand;
 
@@ -1029,6 +1029,11 @@ if(!OnlyGen_)
         lowMuon = dynamic_cast<const pat::Muon*>(mumu_cand->daughter("highMuon"));
         highMuon = dynamic_cast<const pat::Muon*>(mumu_cand->daughter("lowMuon"));
       }
+
+      const reco::Vertex bestPV = *(six_cand.userData<reco::Vertex>("bestPV"));
+      const reco::Vertex cosPV  = *(six_cand.userData<reco::Vertex>("cosPV"));
+      const reco::Vertex zPV    = *(six_cand.userData<reco::Vertex>("zPV"));
+      const reco::Vertex bs     = *(six_cand.userData<reco::Vertex>("bS"));
 
       highMuon_pt  = highMuon->innerTrack()->pt();
       highMuon_eta  = highMuon->innerTrack()->eta();
@@ -1138,11 +1143,6 @@ if(!OnlyGen_)
       dimuon_id = mumukk_cand->userInt("dimuon_id");
 
 
-      const reco::Vertex bestPV = *(six_cand.userData<reco::Vertex>("bestPV"));
-      const reco::Vertex cosPV  = *(six_cand.userData<reco::Vertex>("cosPV"));
-      const reco::Vertex zPV    = *(six_cand.userData<reco::Vertex>("zPV"));
-      const reco::Vertex bs     = *(six_cand.userData<reco::Vertex>("bS"));
-
 
       six_m    = six_cand.mass();
       six_m_ref       = six_cand.userFloat("mass_ref");
@@ -1226,20 +1226,20 @@ if(!OnlyGen_)
       fiveOne_phi      = five_cand->phi();
       fiveOne_p        = five_cand->p();
 
-      fiveTwo_pt       = five_two.pt();
-      fiveTwo_eta      = five_two.eta();
-      fiveTwo_phi      = five_two.phi();
-      fiveTwo_p        = five_two.p();
+      fiveTwo_pt       = five_two.Pt();
+      fiveTwo_eta      = five_two.Eta();
+      fiveTwo_phi      = five_two.Phi();
+      fiveTwo_p        = five_two.P();
 
-      fiveThree_pt       = five_thr.pt();
-      fiveThree_eta      = five_thr.eta();
-      fiveThree_phi      = five_thr.phi();
-      fiveThree_p        = five_thr.p();
+      fiveThree_pt       = five_thr.Pt();
+      fiveThree_eta      = five_thr.Eta();
+      fiveThree_phi      = five_thr.Phi();
+      fiveThree_p        = five_thr.P();
 
-      fiveFour_pt       = five_fou.pt();
-      fiveFour_eta      = five_fou.eta();
-      fiveFour_phi      = five_fou.phi();
-      fiveFour_p        = five_fou.p();
+      fiveFour_pt       = five_fou.Pt();
+      fiveFour_eta      = five_fou.Eta();
+      fiveFour_phi      = five_fou.Phi();
+      fiveFour_p        = five_fou.P();
 
       five_vProb    = five_cand->userFloat("vProb");
       five_nDof     = five_cand->userFloat("nDof");
@@ -1349,30 +1349,30 @@ if(!OnlyGen_)
       auto kk_fiv = lowKaon_p4 + fourthKaon_p4; //4 6 - -
       auto kk_six = fourthKaon_p4 + thirdKaon_p4; //5 6 + -
 
-      diTrackTwo_pt = kk_two.pt();
-      diTrackTwo_eta = kk_two.eta();
-      diTrackTwo_phi = kk_two.phi();
-      diTrackTwo_p = kk_two.p();
+      diTrackTwo_pt = kk_two.Pt();
+      diTrackTwo_eta = kk_two.Eta();
+      diTrackTwo_phi = kk_two.Phi();
+      diTrackTwo_p = kk_two.P();
 
-      diTrackThree_pt = kk_three.pt();
-      diTrackThree_eta = kk_three.eta();
-      diTrackThree_phi = kk_three.phi();
-      diTrackThree_p = kk_three.p();
+      diTrackThree_pt = kk_three.Pt();
+      diTrackThree_eta = kk_three.Eta();
+      diTrackThree_phi = kk_three.Phi();
+      diTrackThree_p = kk_three.P();
 
-      diTrackFour_pt = kk_four.pt();
-      diTrackFour_eta = kk_four.eta();
-      diTrackFour_phi = kk_four.phi();
-      diTrackFour_p = kk_four.p();
+      diTrackFour_pt = kk_four.Pt();
+      diTrackFour_eta = kk_four.Eta();
+      diTrackFour_phi = kk_four.Phi();
+      diTrackFour_p = kk_four.P();
 
-      diTrackFive_pt = kk_five.pt();
-      diTrackFive_eta = kk_five.eta();
-      diTrackFive_phi = kk_five.phi();
-      diTrackFive_p = kk_five.p();
+      diTrackFive_pt = kk_five.Pt();
+      diTrackFive_eta = kk_five.Eta();
+      diTrackFive_phi = kk_five.Phi();
+      diTrackFive_p = kk_five.P();
 
-      diTrackSix_pt = kk_six.pt();
-      diTrackSix_eta = kk_six.eta();
-      diTrackSix_phi = kk_six.phi();
-      diTrackSix_p = kk_six.p();
+      diTrackSix_pt = kk_six.Pt();
+      diTrackSix_eta = kk_six.Eta();
+      diTrackSix_phi = kk_six.Phi();
+      diTrackSix_p = kk_six.P();
 
       //trackOne_cand->SetPtEtaPhiM(mumu_cand->pt(),mumu_cand->eta(),mumu_cand->phi(),mumu_cand->mass());
 
@@ -1468,29 +1468,29 @@ if(!OnlyGen_)
       dimuonDiTrkOne_phi    = mumukk_cand->phi();
       dimuonDiTrkOne_charge = mumukk_cand->charge();
 
-      dimuonDiTrkTwo_pt     = four_two.pt();
-      dimuonDiTrkTwo_eta    = four_two.eta();
-      dimuonDiTrkTwo_phi    = four_two.phi();
+      dimuonDiTrkTwo_pt     = four_two.Pt();
+      dimuonDiTrkTwo_eta    = four_two.Eta();
+      dimuonDiTrkTwo_phi    = four_two.Phi();
       dimuonDiTrkTwo_charge = highTrack_charge + thirdTrack_charge;
 
-      dimuonDiTrkThree_pt     = four_thr.pt();
-      dimuonDiTrkThree_eta    = four_thr.eta();
-      dimuonDiTrkThree_phi    = four_thr.phi();
+      dimuonDiTrkThree_pt     = four_thr.Pt();
+      dimuonDiTrkThree_eta    = four_thr.Eta();
+      dimuonDiTrkThree_phi    = four_thr.Phi();
       dimuonDiTrkThree_charge = highTrack_charge + fourthTrack_charge;
 
-      dimuonDiTrkFour_pt     = four_fou.pt();
-      dimuonDiTrkFour_eta    = four_fou.eta();
-      dimuonDiTrkFour_phi    = four_fou.phi();
+      dimuonDiTrkFour_pt     = four_fou.Pt();
+      dimuonDiTrkFour_eta    = four_fou.Eta();
+      dimuonDiTrkFour_phi    = four_fou.Phi();
       dimuonDiTrkFour_charge = lowTrack_charge + thirdTrack_charge;
 
-      dimuonDiTrkFive_pt     = four_fiv.pt();
-      dimuonDiTrkFive_eta    = four_fiv.eta();
-      dimuonDiTrkFive_phi    = four_fiv.phi();
+      dimuonDiTrkFive_pt     = four_fiv.Pt();
+      dimuonDiTrkFive_eta    = four_fiv.Eta();
+      dimuonDiTrkFive_phi    = four_fiv.Phi();
       dimuonDiTrkFive_charge = lowTrack_charge + fourthTrack_charge;
 
-      dimuonDiTrkSix_pt     = four_six.pt();
-      dimuonDiTrkSix_eta    = four_six.eta();
-      dimuonDiTrkSix_phi    = four_six.phi();
+      dimuonDiTrkSix_pt     = four_six.Pt();
+      dimuonDiTrkSix_eta    = four_six.Eta();
+      dimuonDiTrkSix_phi    = four_six.Phi();
       dimuonDiTrkSix_charge = thirdTrack_charge + fourthTrack_charge;
 
       // triTrack_m      = triTrack_cand->mass();
