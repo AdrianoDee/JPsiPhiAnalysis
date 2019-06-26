@@ -111,7 +111,7 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   AddSameSig_(iConfig.existsAs<bool>("AddSS") ? iConfig.getParameter<bool>("AddSS") : true),
   PtLeading_(iConfig.existsAs<bool>("PtLead") ? iConfig.getParameter<bool>("PtLead") : false),
-  IsMC_(iConfig.existsAs<bool>("IsMC") ? iConfig.getParameter<bool>("IsMC") : false),
+  IsMC_(iConfig.existsAs<bool>("IsMC") ? iConfig.getParameter<bool>("IsMC") : false)
 {
   produces<pat::CompositeCandidateCollection>("SixTracks");
 
