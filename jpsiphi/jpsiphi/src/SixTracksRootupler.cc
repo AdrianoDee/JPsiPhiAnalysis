@@ -198,10 +198,12 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t diTrackTwo_kk, diTrackTwo_pp, diTrackTwo_pk, diTrackTwo_kp;
   Double_t diTrackThree_kk, diTrackThree_pp, diTrackThree_pk, diTrackThree_kp;
   Double_t diTrackFour_kk, diTrackFour_pp, diTrackFour_pk, diTrackFour_kp;
+  Double_t diTrackFive_kk, diTrackFive_pp, diTrackFive_pk, diTrackFive_kp;
+  Double_t diTrackSix_kk, diTrackSix_pp, diTrackSix_pk, diTrackSix_kp;
 
   Double_t dimuonDiTrkOne_mmpp, dimuonDiTrkTwo_mmpp, dimuonDiTrkThree_mmpp, dimuonDiTrkFour_mmpp;
   Double_t dimuonDiTrkOne_mmkk, dimuonDiTrkTwo_mmkk, dimuonDiTrkThree_mmkk, dimuonDiTrkFour_mmkk;
-  Double_t dimuonDiTrkOne_mmpk, dimuonDiTrkTwo_mmpk, dimuonDiTrkThree_mmpk, dimuonDiTrkFour_mmpk
+  Double_t dimuonDiTrkOne_mmpk, dimuonDiTrkTwo_mmpk, dimuonDiTrkThree_mmpk, dimuonDiTrkFour_mmpk;
   Double_t dimuonDiTrkOne_mmkp, dimuonDiTrkTwo_mmkp, dimuonDiTrkThree_mmkp, dimuonDiTrkFour_mmkp;
 
   Double_t triTrackOne_kkk, triTrackOne_kkp, triTrackOne_kpp, triTrackOne_ppp, triTrackOne_pt, triTrackOne_eta, triTrackOne_phi, triTrackOne_charge;
@@ -1209,9 +1211,9 @@ if(!OnlyGen_)
       //
       //
       // diTrackTwo_cand     = dynamic_cast<const pat::CompositeCandidate*>(four_two.daughter("ditrack"));
-      // kk_three.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
-      // kk_four.    = dynamic_cast<const pat::CompositeCandidate*>(four_fou.daughter("ditrack"));
-      // kk_five.    = dynamic_cast<const pat::CompositeCandidate*>(four_fiv.daughter("ditrack"));
+      // kk_thr.   = dynamic_cast<const pat::CompositeCandidate*>(four_thr.daughter("ditrack"));
+      // kk_fou.    = dynamic_cast<const pat::CompositeCandidate*>(four_fou.daughter("ditrack"));
+      // kk_fiv.    = dynamic_cast<const pat::CompositeCandidate*>(four_fiv.daughter("ditrack"));
       // kk_six.     = dynamic_cast<const pat::CompositeCandidate*>(four_six.daughter("ditrack"));
 
       five_id = six_cand.userInt("five_index");
@@ -1451,20 +1453,20 @@ if(!OnlyGen_)
       diTrackTwo_phi = kk_two.Phi();
       diTrackTwo_p = kk_two.P();
 
-      diTrackThree_pt = kk_three.Pt();
-      diTrackThree_eta = kk_three.Eta();
-      diTrackThree_phi = kk_three.Phi();
-      diTrackThree_p = kk_three.P();
+      diTrackThree_pt = kk_thr.Pt();
+      diTrackThree_eta = kk_thr.Eta();
+      diTrackThree_phi = kk_thr.Phi();
+      diTrackThree_p = kk_thr.P();
 
-      diTrackFour_pt = kk_four.Pt();
-      diTrackFour_eta = kk_four.Eta();
-      diTrackFour_phi = kk_four.Phi();
-      diTrackFour_p = kk_four.P();
+      diTrackFour_pt = kk_fou.Pt();
+      diTrackFour_eta = kk_fou.Eta();
+      diTrackFour_phi = kk_fou.Phi();
+      diTrackFour_p = kk_fou.P();
 
-      diTrackFive_pt = kk_five.Pt();
-      diTrackFive_eta = kk_five.Eta();
-      diTrackFive_phi = kk_five.Phi();
-      diTrackFive_p = kk_five.P();
+      diTrackFive_pt = kk_fiv.Pt();
+      diTrackFive_eta = kk_fiv.Eta();
+      diTrackFive_phi = kk_fiv.Phi();
+      diTrackFive_p = kk_fiv.P();
 
       diTrackSix_pt = kk_six.Pt();
       diTrackSix_eta = kk_six.Eta();
@@ -1619,22 +1621,22 @@ if(!OnlyGen_)
 
       triTrackOne_pt     = triTrack_one.Pt();
       triTrackOne_eta    = triTrack_one.Eta();
-      triTrackOne_phi    = triTrack_one.phi();
+      triTrackOne_phi    = triTrack_one.Phi();
       triTrackOne_charge = lowTrack_charge + thirdTrack_charge + highTrack_charge;
 
       triTrackTwo_pt     = triTrack_two.Pt();
       triTrackTwo_eta    = triTrack_two.Eta();
-      triTrackTwo_phi    = triTrack_two.phi();
+      triTrackTwo_phi    = triTrack_two.Phi();
       triTrackTwo_charge = lowTrack_charge + highTrack_charge + fourthTrack_charge;
 
       triTrackThree_pt     = triTrack_thr.Pt();
       triTrackThree_eta    = triTrack_thr.Eta();
-      triTrackThree_phi    = triTrack_thr.phi();
+      triTrackThree_phi    = triTrack_thr.Phi();
       triTrackThree_charge = highTrack_charge + thirdTrack_charge + fourthTrack_charge;
 
       triTrackFour_pt     = triTrack_fou.Pt();
       triTrackFour_eta    = triTrack_fou.Eta();
-      triTrackFour_phi    = triTrack_fou.phi();
+      triTrackFour_phi    = triTrack_fou.Phi();
       triTrackFour_charge = lowTrack_charge + thirdTrack_charge + fourthTrack_charge;
 
 
