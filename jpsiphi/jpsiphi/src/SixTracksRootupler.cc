@@ -1120,7 +1120,7 @@ if(!OnlyGen_)
 
       swapped  = six_cand.userFloat("swapped");
       sameSign = six_cand.userFloat("isSameSign");
-      sameSign_mmtt = mumukk_cand->mumukk_cand("isSameSign");
+      sameSign_mmtt = mumukk_cand->userFloat("isSameSign");
 
       const reco::Vertex bestPV = *(six_cand.userData<reco::Vertex>("bestPV"));
       const reco::Vertex cosPV  = *(six_cand.userData<reco::Vertex>("cosPV"));
