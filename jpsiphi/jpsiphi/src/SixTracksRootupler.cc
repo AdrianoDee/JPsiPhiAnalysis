@@ -1750,7 +1750,7 @@ if(!OnlyGen_)
 
         Double_t hasHighGen   = mumukk_cand->userFloat("hasHighGen");
         Double_t hasLowGen    = mumukk_cand->userFloat("hasLowGen");
-        Double_t hasThirdGen  = five_cand->userFloat("hasThirdGen");
+        Double_t hasThirdGen  = six_cand.userFloat("hasThirdGen");
         Double_t hasFourthGen = six_cand.userFloat("hasFourthGen");
 
         if(hasHighGen>0.0)
@@ -1758,10 +1758,11 @@ if(!OnlyGen_)
         if(hasLowGen>0.0)
           genlowKaon     = dynamic_cast <const reco::GenParticle *>(mumukk_cand->daughter("lowKaonGen"));
         if(hasThirdGen>0.0)
-          genThirdTrack  = dynamic_cast <const reco::GenParticle *>(five_cand->daughter("thirdTrackGen"));
+          genThirdTrack  = dynamic_cast <const reco::GenParticle *>(six_cand.daughter("thirdTrackGen"));
         if(hasFourthGen>0.0)
           genFourthTrack = dynamic_cast <const reco::GenParticle *>(six_cand.daughter("fourthTrackGen"));
 
+        if(hasFourthGen>0.0)
         if(hasHighGen>0.0)
         {
           gen_highKaon_p4.SetPtEtaPhiM(genhighKaon->pt(),genhighKaon->eta(),genhighKaon->phi(),genhighKaon->mass());

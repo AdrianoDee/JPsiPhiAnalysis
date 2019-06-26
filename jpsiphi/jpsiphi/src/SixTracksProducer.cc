@@ -367,7 +367,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
              }
           }else
           {
-            if(highTrack.charge()<track.charge())
+            if(highTrack.charge()<lowTrack.charge())
              {
                highTrack = track->at(ttId);
                lowTrack  = track->at(i);
@@ -386,6 +386,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
          sixCand.addUserFloat("sixCandMass",sixCand.mass());
          sixCand.addUserFloat("swapped",float(swapped));
+         sixCand.addDaughter(fivetrackCand,"fiveCand");
+
 
          double six_ma_fit = 14000.;
          double six_vp_fit = -9999.;
@@ -645,9 +647,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           Double_t minDR_high = minDR_fourth, minDP_high = minDP_fourth, minDPt_high = minDPt_fourth;
 
-          Doublet_t minDR_low = fiveCand.userFloat("thirdTrackMuonDR");
-          Doublet_t minDP_low = fiveCand.userFloat("thirdTrackMuonDP");
-          Doublet_t minDPt_low = fiveCand.userFloat("thirdTrackMuonDPt");
+          Double_t minDR_low = fiveCand.userFloat("thirdTrackMuonDR");
+          Double_t minDP_low = fiveCand.userFloat("thirdTrackMuonDP");
+          Double_t minDPt_low = fiveCand.userFloat("thirdTrackMuonDPt");
 
           if(sameSign || ptLeading)
           {
@@ -743,7 +745,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]).isNonnull())
                 {
                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]);
-                  hasGen = 1.0;
+                  hasGenH = 1.0;
                   sixCand.addDaughter(*genP,"thirdTrackGen");
 
                  }
@@ -754,7 +756,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]).isNonnull())
                 {
                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]);
-                  hasGen = 1.0;
+                  hasGenL = 1.0;
                   sixCand.addDaughter(*genP,"fourthTrackGen");
 
                  }
@@ -868,6 +870,8 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   trackFour.setCharge(track4.charge());
   trackFour.setP4(p4_track4);
 
+
+  sixCand.addDaughter(track,"fourthTrack");
   // fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
   // fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
   // fiveTrackThree   = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
