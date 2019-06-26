@@ -647,9 +647,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           Double_t minDR_high = minDR_fourth, minDP_high = minDP_fourth, minDPt_high = minDPt_fourth;
 
-          Double_t minDR_low = fiveCand.userFloat("thirdTrackMuonDR");
-          Double_t minDP_low = fiveCand.userFloat("thirdTrackMuonDP");
-          Double_t minDPt_low = fiveCand.userFloat("thirdTrackMuonDPt");
+          Double_t minDR_low = fivetrackCand.userFloat("thirdTrackMuonDR");
+          Double_t minDP_low = fivetrackCand.userFloat("thirdTrackMuonDP");
+          Double_t minDPt_low = fivetrackCand.userFloat("thirdTrackMuonDPt");
 
           if(sameSign || ptLeading)
           {
@@ -678,9 +678,9 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
              }
           }
 
-          fiveCand.addUserFloat("thirdTrackMuonDR",minDR_high);
-          fiveCand.addUserFloat("thirdTrackMuonDP",minDP_high);
-          fiveCand.addUserFloat("thirdTrackMuonDPt",minDPt_high);
+          sixCand.addUserFloat("thirdTrackMuonDR",minDR_high);
+          sixCand.addUserFloat("thirdTrackMuonDP",minDP_high);
+          sixCand.addUserFloat("thirdTrackMuonDPt",minDPt_high);
 
           sixCand.addUserFloat("fourthTrackMuonDR",minDR_low);
           sixCand.addUserFloat("fourthTrackMuonDP",minDP_low);
@@ -870,8 +870,6 @@ pat::CompositeCandidate SixTracksProducer::makeSixCandidateMixed(
   trackFour.setCharge(track4.charge());
   trackFour.setP4(p4_track4);
 
-
-  sixCand.addDaughter(track,"fourthTrack");
   // fiveTrackOne     = makeFiveCandidateMixed(dimuon,trackP,trackN,track3);
   // fiveTrackTwo     = makeFiveCandidateMixed(dimuon,trackP,trackN,track4);
   // fiveTrackThree   = makeFiveCandidateMixed(dimuon,trackP,track3,track4);
