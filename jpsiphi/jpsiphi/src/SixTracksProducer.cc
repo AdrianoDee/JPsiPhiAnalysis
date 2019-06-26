@@ -332,6 +332,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if(float(tCharge * fCharge) < 0.0 && !AddSameSig_) continue;
 	       //if(!IsMC_ and fabs(fourthTrack.pdgId())!=211) continue;
          bool sameSign = (tCharge * fCharge) < 0.0;
+
 	       if(!(fourthTrack.trackHighPurity())) continue;
          if(!(fourthTrack.hasTrackDetails())) continue;
 
@@ -348,14 +349,43 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          else
             doneFlag[std::tuple<int,int,int,int>(ids[0],ids[1],ids[2],ids[3])] = true;
 
+          auto highTrack = track->at(i);
+          auto lowTrack  = track->at(ttId);
+          bool ptLeading = false;
+          bool swapped = false;
+          Double_t highId = i, lowId = ttId;
+
+          if(sameSign || ptLeading)
+          {
+            if(highTrack.pt()<lowTrack.pt())
+             {
+               highTrack = track->at(ttId);
+               lowTrack  = track->at(i);
+               highId = ttId;
+               lowId  = i;
+               swapped = true;
+             }
+          }else
+          {
+            if(highTrack.charge()<track.charge())
+             {
+               highTrack = track->at(ttId);
+               lowTrack  = track->at(i);
+               highId = ttId;
+               lowId  = i;
+               swapped = true;
+             }
+          }
+
          // pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
 
-         pat::CompositeCandidate sixCand = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,kaonmass,kaonmass,pionmass,pionmass);
+         pat::CompositeCandidate sixCand = makeSixCandidateMixed(*dimuon_cand, *tp, *tm, highTrack,lowTrack,kaonmass,kaonmass,pionmass,pionmass);
 
          if (sixCand.mass() < SixTrackMassMin || sixCand.mass() > SixTrackMassMax)
          continue;
 
          sixCand.addUserFloat("sixCandMass",sixCand.mass());
+         sixCand.addUserFloat("swapped",float(swapped));
 
          double six_ma_fit = 14000.;
          double six_vp_fit = -9999.;
@@ -379,8 +409,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          sixTracks.push_back((*theB).build(*(pmu2->innerTrack()))); // µ
          sixTracks.push_back((*theB).build(*(tp->bestTrack()))); // K/π
          sixTracks.push_back((*theB).build(*(tm->bestTrack()))); // K/π
-         sixTracks.push_back((*theB).build(*(tt->bestTrack()))); // K/π
-         sixTracks.push_back((*theB).build(*(fourthTrack.bestTrack()))); // K/π
+         sixTracks.push_back((*theB).build(*(highTrack.bestTrack()))); // K/π
+         sixTracks.push_back((*theB).build(*(lowTrack.bestTrack()))); // K/π
 
          dParticles.push_back(pFactory.particle(sixTracks[0],muonMass,kinChi,kinNdf,muonSigma));
          dParticles.push_back(pFactory.particle(sixTracks[1],muonMass,kinChi,kinNdf,muonSigma));
@@ -585,34 +615,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           sixCand.addUserInt("pId",tpId);
           sixCand.addUserInt("mId",tmId);
 
-          if(sameSign) //if samesig  ptleading
-          {
-            if(tt->pt()>fourthTrack.pt())
-            {
-              sixCand.addUserInt("p2Id",ttId);
-              sixCand.addUserInt("m2Id",i);
-            }
-            else
-            {
-              sixCand.addUserInt("p2Id",i);
-              sixCand.addUserInt("m2Id",ttId);
-            }
 
-          }
-          else
-          {
-            if(tCharge > 0)
-            {
-              sixCand.addUserInt("p2Id",ttId);
-              sixCand.addUserInt("m2Id",i);
-            }
-            else
-            {
-              sixCand.addUserInt("p2Id",i);
-              sixCand.addUserInt("m2Id",ttId);
-            }
 
-          }
+          sixCand.addUserInt("p2Id",highId);
+          sixCand.addUserInt("m2Id",lowId);
 
           sixCand.addUserFloat("isSameSign",float(sameSign));
           sixCand.addUserInt("dimuonditrk_id",mmtt_id);
@@ -628,25 +634,55 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           sixCand.addDaughter(*tp,"trackOne");
           sixCand.addDaughter(*tm,"trackTwo");
-          if(tCharge > 0)
-          {
-            sixCand.addDaughter(*tt,"trackThree");
-            sixCand.addDaughter(fourthTrack,"trackFour");
-          }
-          else
-          {
-            sixCand.addDaughter(fourthTrack,"trackThree");
-            sixCand.addDaughter(*tt,"trackFour");
-          }
+          sixCand.addDaughter(highTrack,"trackThree");
+          sixCand.addDaughter(lowTrack,"trackFour");
+
 
           sixCand.addDaughter(sixCand_rf,"ref_cand");
           // sixCand.addDaughter(thisSix,"first_six_ref");
 
           sixCand.addUserFloat("mass_ref",six_ma_fit);
 
-          sixCand.addUserFloat("fourthTrackMuonDR",minDR_fourth);
-          sixCand.addUserFloat("fourthTrackMuonDP",minDP_fourth);
-          sixCand.addUserFloat("fourthTrackMuonDPt",minDPt_fourth);
+          Double_t minDR_high = minDR_fourth, minDP_high = minDP_fourth, minDPt_high = minDPt_fourth;
+
+          Doublet_t minDR_low = fiveCand.userFloat("thirdTrackMuonDR");
+          Doublet_t minDP_low = fiveCand.userFloat("thirdTrackMuonDP");
+          Doublet_t minDPt_low = fiveCand.userFloat("thirdTrackMuonDPt");
+
+          if(sameSign || ptLeading)
+          {
+            if(fourthTrack.pt()<tt->pt())
+             {
+               minDR_high  = minDR_low;
+               minDP_high  = minDP_low;
+               minDPt_high = minDPt_low;
+
+               minDR_low  = minDR_fourth;
+               minDP_low  = minDP_fourth;
+               minDPt_low  = minDPt_fourth;
+
+             }
+          }else
+          {
+            if(fourthTrack.charge()<tt->charge())
+             {
+               minDR_high  = minDR_low;
+               minDP_high  = minDP_low;
+               minDPt_high = minDPt_low;
+
+               minDR_low  = minDR_fourth;
+               minDP_low  = minDP_fourth;
+               minDPt_low  = minDPt_fourth;
+             }
+          }
+
+          fiveCand.addUserFloat("thirdTrackMuonDR",minDR_high);
+          fiveCand.addUserFloat("thirdTrackMuonDP",minDP_high);
+          fiveCand.addUserFloat("thirdTrackMuonDPt",minDPt_high);
+
+          sixCand.addUserFloat("fourthTrackMuonDR",minDR_low);
+          sixCand.addUserFloat("fourthTrackMuonDP",minDP_low);
+          sixCand.addUserFloat("fourthTrackMuonDPt",minDPt_low);
 
           sixCand.addUserData("bestPV",reco::Vertex(thePrimaryZero));
           sixCand.addUserData("cosPV",reco::Vertex(thePrimaryVCA));
@@ -693,40 +729,41 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           if(IsMC_)
            {
-             float hasGen = -1.0;
+             float hasGenH = -1.0, hasGenL = -1.0;
 
              if(theGenMap.isValid())
              {
                //
-               auto ref = track->refAt(i);
-               Double_t hasThird = fivetrackCand->userFloat("hasThirdGen");
+               auto refH = track->refAt(highId);
+               auto refL = track->refAt(lowId);
+               // Double_t hasThird = fivetrackCand->userFloat("hasThirdGen");
 
-               if(theGenMap->contains(ref.id()))
+               if(theGenMap->contains(refH.id()))
                {
-                if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
+                if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]).isNonnull())
                 {
-                  auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
+                  auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]);
                   hasGen = 1.0;
-                  if(track->charge()>0.0)
-                  {
-                    sixCand.addDaughter(*genP,"thirdTrackGen");
+                  sixCand.addDaughter(*genP,"thirdTrackGen");
 
-                  }
-                  else
-                  {
+                 }
+               }
 
-                  }
-                  if(hasThird>0.0)
-                  {
-                    sixCand.addDaughter(*genP,"fourthTrackGen");
-                  }
-
+               if(theGenMap->contains(refL.id()))
+               {
+                if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]).isNonnull())
+                {
+                  auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]);
+                  hasGen = 1.0;
+                  sixCand.addDaughter(*genP,"fourthTrackGen");
 
                  }
                }
 
              }
-             sixCand.addUserFloat("hasFourthGen",hasGen);
+
+             sixCand.addUserFloat("hasThirdGen",hasGenL);
+             sixCand.addUserFloat("hasFourthGen",hasGenH);
            }
 
           sixCandColl->push_back(sixCand);
