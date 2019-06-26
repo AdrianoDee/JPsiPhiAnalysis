@@ -206,7 +206,9 @@ DiMuonDiTrackProducer::DiMuonDiTrackProducer(const edm::ParameterSet& iConfig):
   product_name_(iConfig.getParameter<std::string>("Product")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
   IsMC_(iConfig.getParameter<bool>("IsMC")),
-  AddSameSig_(iConfig.getParameter<bool>("AddSS")),
+  AddSameSig_(iConfig.existsAs<bool>("AddSS") ? iConfig.getParameter<bool>("AddSS") : true),
+  PtLeading_(iConfig.existsAs<bool>("PtLead") ? iConfig.getParameter<bool>("PtLead") : false),
+  IsMC_(iConfig.existsAs<bool>("IsMC") ? iConfig.getParameter<bool>("IsMC") : false),
   doPionRefit_(iConfig.getParameter<bool>("PionRefit"))
 {
   produces<pat::CompositeCandidateCollection>(product_name_);
@@ -231,8 +233,6 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
   // std::cout << "debug    2 "<< std::endl;
   std::unique_ptr<pat::CompositeCandidateCollection> DiMuonTTCandColl(new pat::CompositeCandidateCollection);
-
-  bool ptLeading = false;
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(allMuons_,muons);
@@ -413,7 +413,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            auto highTrack = track->at(i);
            auto lowTrack  = track->at(j);
 
-           if(sameSign || ptLeading)
+           if(sameSign || PtLeading_)
            {
              if(posTrack.pt()<negTrack.pt())
               {
@@ -431,7 +431,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            pat::CompositeCandidate TTCand = makeTTCandidate(highTrack,lowTrack);
            //
-           // if(sameSign || ptLeading)
+           // if(sameSign || PtLeading_)
            // {
            //   if(posTrack.pt()>negTrack.pt())
            //    TTCand = makeTTCandidate(posTrack, negTrack);
@@ -473,7 +473,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
            xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
 
-           if(posTrack.pt()>=negTrack.pt() || !ptLeading)
+           if(posTrack.pt()>=negTrack.pt() || !PtLeading_)
            {
              xTracks.push_back((*theB).build(*(posTrack.bestTrack()))); // K+
              xTracks.push_back((*theB).build(*(negTrack.bestTrack()))); // K+
@@ -555,7 +555,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserInt("mId",j);
 
 
-           if(ptLeading || sameSign) //pt leading ordering if ptLeading or samesign
+           if(PtLeading_ || sameSign) //pt leading ordering if PtLeading_ or samesign
            {
              if(posTrack.pt()>=negTrack.pt())
              {
@@ -721,7 +721,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            float candRef = -1.0, cand_const_ref = -1.0;
 
-          if(posTrack.pt()>=negTrack.pt() || !ptLeading)
+          if(posTrack.pt()>=negTrack.pt() || !PtLeading_)
            {
              DiMuonTTCand.addUserInt("highKaonMatch",filters[i]);
              DiMuonTTCand.addUserInt("lowKaonMatch",filters[j]);
@@ -1047,7 +1047,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
                  {
                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
-                   if(posTrack.pt()>=negTrack.pt() || !ptLeading)
+                   if(posTrack.pt()>=negTrack.pt() || !PtLeading_)
                    {
                      DiMuonTTCand.addDaughter(*genP,"highKaonGen");
                      hasHighGen = 1.0;
@@ -1065,7 +1065,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                   if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]).isNonnull())
                   {
                     auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]);
-                    if(posTrack.pt()<negTrack.pt() || !ptLeading)
+                    if(posTrack.pt()<negTrack.pt() || !PtLeading_)
                     {
                       DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
                       hasHighGen = 1.0;

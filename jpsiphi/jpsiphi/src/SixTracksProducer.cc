@@ -109,8 +109,9 @@ SixTracksProducer::SixTracksProducer(const edm::ParameterSet& iConfig):
   TriggerResults_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"))),
   SixTrackMassCuts_(iConfig.getParameter<std::vector<double>>("SixTrackCuts")),
   HLTFilters_(iConfig.getParameter<std::vector<std::string>>("Filters")),
-  AddSameSig_(iConfig.getParameter<bool>("AddSS")),
-  IsMC_(iConfig.getParameter<bool>("IsMC"))
+  AddSameSig_(iConfig.existsAs<bool>("AddSS") ? iConfig.getParameter<bool>("AddSS") : true),
+  PtLeading_(iConfig.existsAs<bool>("PtLead") ? iConfig.getParameter<bool>("PtLead") : false),
+  IsMC_(iConfig.existsAs<bool>("IsMC") ? iConfig.getParameter<bool>("IsMC") : false),
 {
   produces<pat::CompositeCandidateCollection>("SixTracks");
 
@@ -351,11 +352,10 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           auto highTrack = track->at(i);
           auto lowTrack  = track->at(ttId);
-          bool ptLeading = false;
           bool swapped = false;
           Double_t highId = i, lowId = ttId;
 
-          if(sameSign || ptLeading)
+          if(sameSign || PtLeading_)
           {
             if(highTrack.pt()<lowTrack.pt())
              {
@@ -444,7 +444,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          six_nd_fit = (double)(fitSVertex->degreesOfFreedom());
          six_vp_fit = ChiSquaredProbability(six_x2_fit,six_nd_fit);
 
-         if(six_vp_fit < 0.0005) continue;
+         if(six_vp_fit < 0.001) continue;
 
          for (size_t ii = 0; ii < muons->size(); ii++)
          {
@@ -614,8 +614,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          //  sixTracksMass.push_back(makeSixCandidateMixed(*dimuon_cand, *tp, *tm, *tt,fourthTrack,oneMasses[j] ,twoMasses[j] ,threeMasses[j],fourMasses[j]).mass());
 
           sixCand.addUserInt("five_index",int(d));
-          sixCand.addUserInt("pId",tpId);
-          sixCand.addUserInt("mId",tmId);
+          sixCand.addUserInt("p1Id",tpId);
+          sixCand.addUserInt("m1Id",tmId);
 
 
 
@@ -651,7 +651,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           Double_t minDP_low = fivetrackCand.userFloat("thirdTrackMuonDP");
           Double_t minDPt_low = fivetrackCand.userFloat("thirdTrackMuonDPt");
 
-          if(sameSign || ptLeading)
+          if(sameSign || PtLeading_)
           {
             if(fourthTrack.pt()<tt->pt())
              {

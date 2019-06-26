@@ -76,6 +76,7 @@ class SixTracksProducer : public edm::EDProducer {
   bool OnlyBest_;
   std::vector<std::string>  HLTFilters_;
   bool AddSameSig_;
+  bool PtLeading_;
   bool IsMC_;
 
   edm::EDGetTokenT<pat::MuonCollection> allMuons_;

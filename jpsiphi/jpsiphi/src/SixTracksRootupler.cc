@@ -98,7 +98,7 @@ class SixTracksRootupler : public edm::EDAnalyzer {
 
 
   UInt_t run, event, lumi, numPrimaryVertices, trigger;
-  UInt_t mumukk_id, five_id, dimuon_id, p_id, t_id, f_id, m_id;
+  UInt_t mumukk_id, five_id, dimuon_id, p1_id, p2_id, m2_id, m1_id;
   TLorentzVector mumukk_p4, dimuon_p4, ditrack_p4, six_p4, five_p4;
   TLorentzVector lowPion_p4, lowProton_p4, highProton_p4, highPion_p4, thirdProton_p4, thirdPion_p4;
   TLorentzVector lowMuon_p4, highMuon_p4, lowKaon_p4, thirdKaon_p4, highKaon_p4;
@@ -267,6 +267,8 @@ class SixTracksRootupler : public edm::EDAnalyzer {
   Double_t six_vProb, six_nDof, six_vChi2;
   Double_t six_vx, six_vy, six_vz, six_charge;
 
+  Double_t swapped, sameSign, sameSign_mmtt;
+
   TTree* sixtracks_tree;
   edm::EDGetTokenT< std::vector <reco::GenParticle> > genCands_;
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
@@ -328,10 +330,15 @@ SixTracksRootupler::SixTracksRootupler(const edm::ParameterSet& iConfig):
         //sixtracks_tree->Branch("mumukk_id",      &mumukk_id,      "mumukk_id/I");
         sixtracks_tree->Branch("five_id",      &five_id,      "five_id/I");
         sixtracks_tree->Branch("dimuon_id",      &dimuon_id,      "dimuon_id/I");
-        sixtracks_tree->Branch("p_id",      &p_id,      "p_id/I");
-        sixtracks_tree->Branch("m_id",      &m_id,      "m_id/I");
-        sixtracks_tree->Branch("t_id",      &t_id,      "t_id/I");
-        sixtracks_tree->Branch("f_id",      &f_id,      "f_id/I");
+
+        sixtracks_tree->Branch("p1_id",      &p1_id,      "p1_id/I");
+        sixtracks_tree->Branch("m1_id",      &m1_id,      "m1_id/I");
+        sixtracks_tree->Branch("p2_id",      &p2_id,      "p2_id/I");
+        sixtracks_tree->Branch("m2_id",      &m2_id,      "m2_id/I");
+
+        sixtracks_tree->Branch("swapped",      &swapped,      "swapped/D");
+        sixtracks_tree->Branch("sameSign",      &sameSign,      "sameSign/D");
+        sixtracks_tree->Branch("sameSign_mmtt",      &sameSign_mmtt,      "sameSign_mmtt/D");
 
         sixtracks_tree->Branch("six_p4",         "TLorentzVector", &six_p4);
         sixtracks_tree->Branch("five_p4",        "TLorentzVector", &five_p4);
@@ -1111,6 +1118,10 @@ if(!OnlyGen_)
         highMuon = dynamic_cast<const pat::Muon*>(mumu_cand->daughter("lowMuon"));
       }
 
+      swapped  = sixCand.userFloat("swapped");
+      sameSign = sixCand.userFloat("isSameSign")
+      sameSign_mmtt = mumukk_cand->mumukk_cand("isSameSign");
+      
       const reco::Vertex bestPV = *(six_cand.userData<reco::Vertex>("bestPV"));
       const reco::Vertex cosPV  = *(six_cand.userData<reco::Vertex>("cosPV"));
       const reco::Vertex zPV    = *(six_cand.userData<reco::Vertex>("zPV"));
@@ -1217,10 +1228,10 @@ if(!OnlyGen_)
       // kk_six.     = dynamic_cast<const pat::CompositeCandidate*>(four_six.daughter("ditrack"));
 
       five_id = six_cand.userInt("five_index");
-      p_id = six_cand.userInt("pId");
-      m_id = six_cand.userInt("mId");
-      t_id = six_cand.userInt("tId");
-      f_id = six_cand.userInt("fId");
+      p1_id = six_cand.userInt("p1Id");
+      m1_id = six_cand.userInt("m1Id");
+      p2_id = six_cand.userInt("p2Id");
+      m2_id = six_cand.userInt("m2Id");
       dimuon_id = mumukk_cand->userInt("dimuon_id");
 
 

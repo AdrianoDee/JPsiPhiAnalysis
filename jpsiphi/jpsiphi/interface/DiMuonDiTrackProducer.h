@@ -105,8 +105,9 @@ class DiMuonDiTrackProducer : public edm::EDProducer {
   bool OnlyBest_;
   std::string product_name_;
   std::vector<std::string>  HLTFilters_;
-  bool IsMC_;
   bool AddSameSig_;
+  bool PtLeading_;
+  bool IsMC_;
   bool doPionRefit_;
 
   edm::EDGetTokenT<pat::PackedGenParticleCollection> packCands_;
