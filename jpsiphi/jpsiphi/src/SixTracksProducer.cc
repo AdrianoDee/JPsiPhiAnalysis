@@ -764,8 +764,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
              }
 
-             sixCand.addUserFloat("hasThirdGen",hasGenL);
-             sixCand.addUserFloat("hasFourthGen",hasGenH);
+             sixCand.addUserFloat("hasThirdGen",hasGenH);
+             sixCand.addUserFloat("hasFourthGen",hasGenL);
            }
 
           sixCandColl->push_back(sixCand);
