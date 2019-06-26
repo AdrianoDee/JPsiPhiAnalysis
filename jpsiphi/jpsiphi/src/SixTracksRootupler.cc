@@ -1118,10 +1118,10 @@ if(!OnlyGen_)
         highMuon = dynamic_cast<const pat::Muon*>(mumu_cand->daughter("lowMuon"));
       }
 
-      swapped  = sixCand.userFloat("swapped");
-      sameSign = sixCand.userFloat("isSameSign")
+      swapped  = six_cand.userFloat("swapped");
+      sameSign = six_cand.userFloat("isSameSign")
       sameSign_mmtt = mumukk_cand->mumukk_cand("isSameSign");
-      
+
       const reco::Vertex bestPV = *(six_cand.userData<reco::Vertex>("bestPV"));
       const reco::Vertex cosPV  = *(six_cand.userData<reco::Vertex>("cosPV"));
       const reco::Vertex zPV    = *(six_cand.userData<reco::Vertex>("zPV"));
