@@ -401,6 +401,8 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
            if(negTrack.pt()<TrackPtCut_) continue;
 
+           bool sameSign = posTrack.charge()*negTrack.charge()<0.;
+
   	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
            if(!(negTrack.hasTrackDetails())) continue;
@@ -408,7 +410,40 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            if (i == j) continue;
            if ( IsTheSame(negTrack,*pmu1) || IsTheSame(negTrack,*pmu2) ) continue;
 
-           pat::CompositeCandidate TTCand = makeTTCandidate(posTrack, negTrack);
+           auto highTrack = track->at(i);
+           auto lowTrack  = track->at(j);
+
+           if(sameSign || ptLeading)
+           {
+             if(posTrack.pt()<negTrack.pt())
+              {
+                highTrack = negTrack;
+                lowTrack  = posTrack;
+              }
+           }else
+           {
+             if(posTrack.charge()<negTrack.charge())
+              {
+                highTrack = negTrack;
+                lowTrack  = posTrack;
+              }
+           }
+
+           pat::CompositeCandidate TTCand = makeTTCandidate(highTrack,lowTrack);
+           //
+           // if(sameSign || ptLeading)
+           // {
+           //   if(posTrack.pt()>negTrack.pt())
+           //    TTCand = makeTTCandidate(posTrack, negTrack);
+           //   else
+           //    TTCand = makeTTCandidate(negTrack,posTrack);
+           // }else
+           // {
+           //   if(posTrack.charge()>negTrack.charge())
+           //    TTCand = makeTTCandidate(posTrack, negTrack);
+           //   else
+           //    TTCand = makeTTCandidate(negTrack,posTrack);
+           // }
 
            if ( !(TTCand.mass() < TrackTrackMassMax_ && TTCand.mass() > TrackTrackMassMin_) ) continue;
 
@@ -519,28 +554,55 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserInt("pId",i);
            DiMuonTTCand.addUserInt("mId",j);
 
-           if(posTrack.pt()>=negTrack.pt() || !ptLeading)   //pt leading ordering
+
+           if(ptLeading || sameSign) //pt leading ordering if ptLeading or samesign
            {
-             DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_pos);
-             DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_pos);
-             DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_pos);
+             if(posTrack.pt()>=negTrack.pt())
+             {
+               DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_pos);
+               DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_pos);
+               DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_pos);
 
-             DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_neg);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_neg);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_neg);
 
-           }else
+             }else
+             {
+               DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_pos);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_pos);
+
+               DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_neg);
+               DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
+               DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_neg);
+             }
+           }
+           else
            {
-             DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_pos);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
-             DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_pos);
+             if(posTrack.charge()>negTrack.charge())   //charge ordering
+             {
+               DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_pos);
+               DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_pos);
+               DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_pos);
 
-             DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_neg);
-             DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
-             DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_neg);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_neg);
+
+             }else
+             {
+               DiMuonTTCand.addUserFloat("lowKaonMuonDR",minDR_pos);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDP",minDP_pos);
+               DiMuonTTCand.addUserFloat("lowKaonMuonDPt",minDPt_pos);
+
+               DiMuonTTCand.addUserFloat("highKaonMuonDR",minDR_neg);
+               DiMuonTTCand.addUserFloat("highKaonMuonDP",minDP_neg);
+               DiMuonTTCand.addUserFloat("highKaonMuonDPt",minDPt_neg);
+             }
            }
 
-
+           DiMuonTTCand.addUserFloat("isSameSign",float(sameSign));
            //////////////////////////////////////////////////////////////////////////////
            //PV Selection(s)
 
@@ -743,6 +805,11 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            MultiTrackKinematicConstraint *jpsi_mtc = new  TwoTrackMassKinematicConstraint(JPsiMass_);
            RefCountedKinematicTree PsiTrTrTree = vertexFitter.fit(xParticles,jpsi_mtc);
            // std::cout << "debug    16 "<< std::endl;
+
+           if (PsiTrTrTree->isEmpty()) continue;
+
+           double dimuontt_vp_fit = -9999.;
+
            if (!PsiTrTrTree->isEmpty()) {
 
               PsiTrTrTree->movePointerToTheTop();
@@ -750,7 +817,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
               RefCountedKinematicVertex PsiTDecayVertex = PsiTrTrTree->currentDecayVertex();
        // Get PsiT reffited
               double dimuontt_ma_fit = 14000.;
-              double dimuontt_vp_fit = -9999.;
+              dimuontt_vp_fit = -9999.;
               double dimuontt_x2_fit = 10000.;
               double dimuontt_ndof_fit = 10000.;
 
@@ -882,6 +949,8 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                  }
               }
 
+           if(dimuontt_vp_fit<0.001) continue;
+
            std::vector<float> massPionRefits,massPionRefits_ref,vProbPionRefits,chi2PionRefits,nDofPionRefits;
 
            for(int i = 0; i < 3; ++i)
@@ -990,6 +1059,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                    }
                   }
                 }
+
                 if(theGenMap->contains(refNegTrack.id()))
                 {
                   if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]).isNonnull())
@@ -997,12 +1067,12 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                     auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]);
                     if(posTrack.pt()<negTrack.pt() || !ptLeading)
                     {
-                      DiMuonTTCand.addDaughter(*genP,"highKaonGen");
+                      DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
                       hasHighGen = 1.0;
                     }
                     else
                     {
-                      DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
+                      DiMuonTTCand.addDaughter(*genP,"highKaonGen");
                       hasLowGen = 1.0;
                     }
                   }
@@ -1101,16 +1171,9 @@ pat::CompositeCandidate DiMuonDiTrackProducer::makeTTCandidate(
                                          ){
 
   pat::CompositeCandidate TTCand;
-  if(highTrack.pt()<lowTrack.pt())
-  {
-    TTCand.addDaughter(lowTrack,"highTrack");
-    TTCand.addDaughter(highTrack,"lowTrack");
-  }
-  else
-  {
-    TTCand.addDaughter(highTrack,"highTrack");
-    TTCand.addDaughter(lowTrack,"lowTrack");
-  }
+
+  TTCand.addDaughter(lowTrack,"highTrack");
+  TTCand.addDaughter(highTrack,"lowTrack");
 
   TTCand.setCharge(highTrack.charge()+lowTrack.charge());
 

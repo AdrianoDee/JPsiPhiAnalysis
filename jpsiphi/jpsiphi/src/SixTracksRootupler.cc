@@ -1744,7 +1744,7 @@ if(!OnlyGen_)
         reco::GenParticleRef genhighMuon  = highMuon->genParticleRef();
         reco::GenParticleRef genlowMuon   = lowMuon->genParticleRef();
 
-        const reco::GenParticle *genhighKaon,*genlowKaon,*genThirdTrack,*genFourthTrack;
+        const reco::GenParticle *genhighKaon,*genlowKaon,*genThirdTrack,*genFourthTrack,*swap;
         reco::GenParticleRef phiMomHigh, phiMomLow, jpsiMomHigh, jpsiMomLow;
         reco::GenParticleRef jpsiMom, phiMom, thirdMom;
 
