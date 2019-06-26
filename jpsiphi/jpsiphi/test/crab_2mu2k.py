@@ -4,7 +4,7 @@ import os
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile2016="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
 jsonFile2017="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt"
+jsonFile2018="Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON_MuonPhys.txt "
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -52,15 +52,10 @@ datasetnames = {
 "bsJpsiPhiBMuon_PU"   : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAODv2-PU2017_12Apr2018_N1_94X_mc2017_realistic_v14-v1/MINIAODSIM",
 "bsJpsiPhiBMuon"      : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-N1_94X_mc2017_realistic_v10-v2/MINIAODSIM",
 
-"A2018_1": datasetbase + "/Run2018A-PromptReco-v1/MINIAOD", #CMSSW_10_1_4_patch1
-"A2018_2": datasetbase + "/Run2018A-PromptReco-v2/MINIAOD", #CMSSW_10_1_5
-"A2018_3": datasetbase + "/Run2018A-PromptReco-v3/MINIAOD", #CMSSW_10_1_5
-"B2018_1": datasetbase + "/Run2018B-PromptReco-v1/MINIAOD", #CMSSW_10_1_6
-"B2018_2": datasetbase + "/Run2018B-PromptReco-v2/MINIAOD", #CMSSW_10_1_7
-"C2018_1": datasetbase + "/Run2018C-PromptReco-v1/MINIAOD", #CMSSW_10_1_7
-"C2018_2": datasetbase + "/Run2018C-PromptReco-v2/MINIAOD", #CMSSW_10_1_8
-"C2018_3": datasetbase + "/Run2018C-PromptReco-v3/MINIAOD", #CMSSW_10_1_9
-"D2018_2": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_5_patch1
+"A2018": datasetbase + "/Charmonium/Run2018C-17Sep2018-v1/MINIAOD", #CMSSW_10_1_4_patch1
+"B2018": datasetbase + "/Charmonium/Run2018B-17Sep2018-v1/MINIAOD ", #CMSSW_10_1_6
+"C2018": datasetbase + "/Charmonium/Run2018A-17Sep2018-v1/MINIAOD ", #CMSSW_10_1_7
+"D2018": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_5_patch1
 
 "B2017" : datasetbase + "/Run2017B-31Mar2018-v1/MINIAOD", #CMSSW_9_4_5_cand1
 "C2017" : datasetbase + "/Run2017C-31Mar2018-v1/MINIAOD",
@@ -106,15 +101,10 @@ GlobalTags = {
     "G2016"   :  "94X_dataRun2_v10",
     "H2016"   :  "94X_dataRun2_v10",
 
-    "A2018_1" :  "101X_dataRun2_Prompt_v9",
-    "A2018_2": "101X_dataRun2_Prompt_v9",
-    "A2018_3": "101X_dataRun2_Prompt_v10",
-    "B2018_1": "101X_dataRun2_Prompt_v10",
-    "B2018_2": "101X_dataRun2_Prompt_v11",
-    "C2018_1": "101X_dataRun2_Prompt_v11",
-    "C2018_2": "101X_dataRun2_Prompt_v11",
-    "C2018_3": "101X_dataRun2_Prompt_v11",
-    "D2018_2": "102X_dataRun2_Prompt_v11",
+    "A2018" : "102X_dataRun2_Sep2018ABC_v2",
+    "B2018" : "102X_dataRun2_Sep2018ABC_v2",
+    "C2018" : "102X_dataRun2_Sep2018ABC_v2",
+    "D2018" : "102X_dataRun2_Prompt_v13",
 
     "bsJpsiPhiSoftQCD_PU" : "94X_mc2017_realistic_v14",
     "bsJpsiPhiSoftQCD"    : "94X_mc2017_realistic_v10",
