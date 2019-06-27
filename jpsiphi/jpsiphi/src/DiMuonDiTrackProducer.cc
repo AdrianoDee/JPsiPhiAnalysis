@@ -421,6 +421,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                 lowTrack  = posTrack;
                 highId = j;
                 lowId  = i;
+              }
            }else
            {
              if(posTrack.charge()<negTrack.charge())

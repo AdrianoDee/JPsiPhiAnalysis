@@ -720,8 +720,8 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidate(
                                          ){
 
   pat::CompositeCandidate fiveCand;
-  fiveCand.addDaughter(dimuonditrack,"dimuonditrack");
-  fiveCand.addDaughter(track,"third");
+  // fiveCand.addDaughter(dimuonditrack,"dimuonditrack");
+  // fiveCand.addDaughter(track,"third");
   fiveCand.setCharge(dimuonditrack.charge()+track.charge());
 
   double m_track = trackmass;
