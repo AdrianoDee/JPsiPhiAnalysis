@@ -571,7 +571,9 @@ void FiveTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
               fiveCand.addUserFloat(name,fiveTracksMass[j-1]);
              }
 
-             // fiveCand.addDaughter(dimuonditrackCand,"dimuonditrack");
+             fiveCand.addDaughter(dimuonditrackCand,"dimuonditrack");
+             fiveCand.addDaughter(*dimuon_cand,"dimuon");
+
              fiveCand.addDaughter(*tp,"trackOne");
              fiveCand.addDaughter(*tm,"trackTwo");
              fiveCand.addDaughter(thirdTrack,"trackThree");
@@ -806,29 +808,29 @@ pat::CompositeCandidate FiveTracksProducer::makeFiveCandidateMixed(
   pat::CompositeCandidate dimuonDiTrackOne, dimuonDiTrackTwo, dimuonDiTrackThree;
   pat::CompositeCandidate triTrack;
 
-  fiveCand.addDaughter(dimuon,"dimuon");
+  // fiveCand.addDaughter(dimuon,"dimuon");
 
   fiveCand.setCharge(dimuon.charge()+trackP.charge()+trackN.charge()+track3.charge());
-  triTrack.setCharge(trackP.charge()+trackN.charge()+track3.charge());
-
-  fiveCand.addDaughter(trackP,"trackOne");
-  fiveCand.addDaughter(trackN,"trackTwo");
-  fiveCand.addDaughter(track3,"trackThree");
-
-  dimuonDiTrackOne     = makeDimuonDiTrackCandidate(dimuon,trackP,trackN);
-  dimuonDiTrackTwo     = makeDimuonDiTrackCandidate(dimuon,trackP,track3);
-  dimuonDiTrackThree   = makeDimuonDiTrackCandidate(dimuon,trackN,track3);
-
-  fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
-  fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
-  fiveCand.addDaughter(dimuonDiTrackThree,"dimuonDiTrackThree");
+  // triTrack.setCharge(trackP.charge()+trackN.charge()+track3.charge());
+  //
+  // fiveCand.addDaughter(trackP,"trackOne");
+  // fiveCand.addDaughter(trackN,"trackTwo");
+  // fiveCand.addDaughter(track3,"trackThree");
+  //
+  // dimuonDiTrackOne     = makeDimuonDiTrackCandidate(dimuon,trackP,trackN);
+  // dimuonDiTrackTwo     = makeDimuonDiTrackCandidate(dimuon,trackP,track3);
+  // dimuonDiTrackThree   = makeDimuonDiTrackCandidate(dimuon,trackN,track3);
+  //
+  // fiveCand.addDaughter(dimuonDiTrackOne,"dimuonDiTrackOne");
+  // fiveCand.addDaughter(dimuonDiTrackTwo,"dimuonDiTrackTwo");
+  // fiveCand.addDaughter(dimuonDiTrackThree,"dimuonDiTrackThree");
 
   reco::Candidate::LorentzVector v  = trackP.p4() + trackN.p4() + track3.p4() + dimuon.p4();
-  reco::Candidate::LorentzVector vT = trackP.p4() + trackN.p4() + track3.p4();
+  // reco::Candidate::LorentzVector vT = trackP.p4() + trackN.p4() + track3.p4();
 
-  triTrack.setP4(vT);
+  // triTrack.setP4(vT);
 
-  fiveCand.addDaughter(triTrack,"triTrack");
+  // fiveCand.addDaughter(triTrack,"triTrack");
 
   fiveCand.setP4(v);
 

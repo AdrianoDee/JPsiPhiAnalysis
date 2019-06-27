@@ -137,8 +137,8 @@ if par.isLocal:
     from bu_jpsiphi_k_4 import *
     from bs_psiphi import *
     from bs_psiphi_2 import *
-    from y4140_official import *
-
+    #from y4140_official import *
+    y4140_official = 0
     filename = par.mc
 
     fileLists = {"bbhook_samet": BBbar_Hook_Samet , "qcd_ml" : qcd_ml_filelist,"bbbar_hard" : bbbar_file_list, "bbbar_soft" : bbbar_soft_filelist,

@@ -411,6 +411,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
            auto highTrack = track->at(i);
            auto lowTrack  = track->at(j);
+           Double_t highId = i, lowId = j;
 
            if(sameSign || PtLeading_)
            {
@@ -418,13 +419,16 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
               {
                 highTrack = negTrack;
                 lowTrack  = posTrack;
-              }
+                highId = j;
+                lowId  = i;
            }else
            {
              if(posTrack.charge()<negTrack.charge())
               {
                 highTrack = negTrack;
                 lowTrack  = posTrack;
+                highId = j;
+                lowId  = i;
               }
            }
 
@@ -550,8 +554,8 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("vProb",x_vp_fit);
            DiMuonTTCand.addUserFloat("vChi2",x_x2_fit);
            DiMuonTTCand.addUserFloat("nDof",x_ndof_fit);
-           DiMuonTTCand.addUserInt("pId",i);
-           DiMuonTTCand.addUserInt("mId",j);
+           DiMuonTTCand.addUserInt("pId",highId);
+           DiMuonTTCand.addUserInt("mId",lowId);
 
 
            if(PtLeading_ || sameSign) //pt leading ordering if PtLeading_ or samesign
@@ -1038,8 +1042,8 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
               if(theGenMap.isValid())
               {
                 //posTrack
-                auto refPosTrack = track->refAt(i);
-                auto refNegTrack = track->refAt(j);
+                auto refPosTrack = track->refAt(highId);
+                auto refNegTrack = track->refAt(lowId);
 
                 if(theGenMap->contains(refPosTrack.id()))
                 {

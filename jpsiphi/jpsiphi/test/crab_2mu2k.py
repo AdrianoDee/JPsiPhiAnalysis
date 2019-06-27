@@ -4,7 +4,7 @@ import os
 #jsonFile="Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt"
 jsonFile2016="Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON_MuonPhys.txt"
 jsonFile2017="Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt"
-jsonFile2018="Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON_MuonPhys.txt "
+jsonFile2018="Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON_MuonPhys.txt"
 from WMCore.Configuration import Configuration
 config = Configuration()
 
@@ -14,7 +14,7 @@ datasetbase = '/Charmonium' # '/Muonia' #
 
 sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ',
  'T2_CH_CERN', 'T2_CH_CERN_AI', 'T2_CH_CERN_HLT',
- 'T2_CH_CSCS', 'T2_CH_CSCS_HPC', 'T2_CN_Beijing', 'T2_DE_DESY', 'T2_DE_RWTH',
+ 'T2_CH_CSCS', 'T2_CN_Beijing', 'T2_DE_DESY', 'T2_DE_RWTH',
  'T2_EE_Estonia', 'T2_ES_CIEMAT', 'T2_ES_IFCA', 'T2_FI_HIP', 'T2_FR_CCIN2P3',
  'T2_FR_GRIF_IRFU', 'T2_FR_GRIF_LLR', 'T2_FR_IPHC', 'T2_GR_Ioannina', 'T2_HU_Budapest',
  'T2_IN_TIFR', 'T2_IT_Bari', 'T2_IT_Legnaro', 'T2_IT_Pisa', 'T2_IT_Rome', 'T2_KR_KISTI',
@@ -29,8 +29,8 @@ sites = ['T2_AT_Vienna', 'T2_BE_IIHE', 'T2_BE_UCL', 'T2_BR_SPRACE', 'T2_BR_UERJ'
  'T3_ES_Oviedo', 'T3_GR_IASA', 'T3_HU_Debrecen',
  'T3_IN_PUHEP', 'T3_IN_TIFRCloud','T3_IT_*', 'T3_KR_*', 'T3_MX_*', 'T3_RU_*',
  #'T3_TW*', #Taiwan gives some troubles with file fetching
- 'T3_UK_*', 'T3_US_Baylor','T3_US_Colorado', 'T3_US_Cornell',
- 'T3_US_FIT', 'T3_US_FIU', 'T3_US_FNALLPC', 'T3_US_FSU', 'T3_US_J*',
+ 'T3_UK_*', 'T3_US_Baylor','T3_US_Colorado',
+ 'T3_US_FIT', 'T3_US_FIU', 'T3_US_FNALLPC', 'T3_US_J*',
  'T3_US_Kansas', 'T3_US_MIT', 'T3_US_N*', 'T3_US_O*', 'T3_US_P*',
  'T3_US_R*', 'T3_US_S*', 'T3_US_T*', 'T3_US_UCD', 'T3_US_UCR',
  'T3_US_UMD']
@@ -52,9 +52,9 @@ datasetnames = {
 "bsJpsiPhiBMuon_PU"   : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAODv2-PU2017_12Apr2018_N1_94X_mc2017_realistic_v14-v1/MINIAODSIM",
 "bsJpsiPhiBMuon"      : "/BsToJpsiPhi_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIFall17MiniAOD-N1_94X_mc2017_realistic_v10-v2/MINIAODSIM",
 
-"A2018": datasetbase + "/Charmonium/Run2018C-17Sep2018-v1/MINIAOD", #CMSSW_10_1_4_patch1
-"B2018": datasetbase + "/Charmonium/Run2018B-17Sep2018-v1/MINIAOD ", #CMSSW_10_1_6
-"C2018": datasetbase + "/Charmonium/Run2018A-17Sep2018-v1/MINIAOD ", #CMSSW_10_1_7
+"A2018": datasetbase + "/Run2018A-17Sep2018-v1/MINIAOD", #CMSSW_10_1_4_patch1
+"B2018": datasetbase + "/Run2018B-17Sep2018-v1/MINIAOD", #CMSSW_10_1_6
+"C2018": datasetbase + "/Run2018C-17Sep2018-v1/MINIAOD", #CMSSW_10_1_7
 "D2018": datasetbase + "/Run2018D-PromptReco-v2/MINIAOD", #CMSSW_10_2_5_patch1
 
 "B2017" : datasetbase + "/Run2017B-31Mar2018-v1/MINIAOD", #CMSSW_9_4_5_cand1
