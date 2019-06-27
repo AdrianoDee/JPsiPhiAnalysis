@@ -1048,37 +1048,25 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
                 if(theGenMap->contains(refPosTrack.id()))
                 {
-                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]).isNonnull())
+                 if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]).isNonnull())
                  {
-                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, i)]);
-                   if(posTrack.pt()>=negTrack.pt() || !PtLeading_)
-                   {
-                     DiMuonTTCand.addDaughter(*genP,"highKaonGen");
-                     hasHighGen = 1.0;
-                   }
-                   else
-                   {
-                     DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
-                     hasLowGen = 1.0;
-                   }
+                   auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, highId)]);
+
+                   DiMuonTTCand.addDaughter(*genP,"highKaonGen");
+                   hasHighGen = 1.0;
+
                   }
                 }
 
                 if(theGenMap->contains(refNegTrack.id()))
                 {
-                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]).isNonnull())
+                  if(((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]).isNonnull())
                   {
-                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, j)]);
-                    if(posTrack.pt()<negTrack.pt() || !PtLeading_)
-                    {
-                      DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
-                      hasHighGen = 1.0;
-                    }
-                    else
-                    {
-                      DiMuonTTCand.addDaughter(*genP,"highKaonGen");
-                      hasLowGen = 1.0;
-                    }
+                    auto genP = ((*theGenMap)[edm::Ref<edm::View<pat::PackedCandidate>>(track, lowId)]);
+
+                    DiMuonTTCand.addDaughter(*genP,"lowKaonGen");
+                    hasLowGen = 1.0;
+
                   }
                 }
               }
