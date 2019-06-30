@@ -79,8 +79,8 @@ datasetnames = {
 "Y4100_OfficialMC_2018" : "/Y4100ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
 "Y4300_OfficialMC_2018" : "/Y4300ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
 "Y4500_OfficialMC_2018" : "/Y4500ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-"Y4700_OfficialMC_2018" : "/Y4700ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM"
-
+"Y4700_OfficialMC_2018" : "/Y4700ToJpsiPhi_ToMuMu_KKorMuMu_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+"BBbar_OfficialML_2018" : "/BToJpsi_ToMuMu_BMuonFilter_HardQCD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM"
 }
 
 
@@ -116,7 +116,8 @@ GlobalTags = {
     "Y4100_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
     "Y4300_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
     "Y4500_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
-    "Y4700_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15"
+    "Y4700_OfficialMC_2018" :   "102X_upgrade2018_realistic_v15",
+    "BBbar_OfficialML_2018" : "102X_upgrade2018_realistic_v15"
 
 
 }
