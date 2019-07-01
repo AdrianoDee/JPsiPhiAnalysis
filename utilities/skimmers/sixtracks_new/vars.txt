@@ -1,0 +1,599 @@
+Last login: Mon Jul  1 10:00:17 on ttys006
+(base) visitor-50230508:CNNFiltering adrianodif$ ssh -X ui-centos7.recas.ba.infn.it
+Last login: Mon Jul  1 11:33:16 2019 from 2001:1458:204:1::102:3fcc
+screen -r C
+Identity added: /lustre/home/adrianodif/.ssh/id_tesla (/lustre/home/adrianodif/.ssh/id_tesla)
+[adrianodif@ui-centos7 ~]$ screen -r C
+There is a screen on:
+	55914.COH	(Attached)
+There is no screen to be resumed matching C.
+[adrianodif@ui-centos7 ~]$ screen -D
+[55914.COH power detached.]
+
+[adrianodif@ui-centos7 ~]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 ~]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 ~]$ cd /lustre/cms/store/user/adiflori/GEN-MINIAODSIMQCD_PhiFilter_Dau_SoftQCD_MiniTracks_/crab_GEN-MINIAODSIM_QCD_PhiFilter_Dau_SoftQCD_MiniTracks__20190701_061305/190701_041401/0001/qcd_ml
+[adrianodif@ui-centos7 qcd_ml]$ ls
+^C
+[adrianodif@ui-centos7 qcd_ml]$ vi to^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toEvent.py
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C^C
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vu ^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ rm *pion*
+^C
+[adrianodif@ui-centos7 qcd_ml]$ rm *electron* &
+[1] 32315
+[adrianodif@ui-centos7 qcd_ml]$ rm *muon*
+^C
+[adrianodif@ui-centos7 qcd_ml]$ rm *muon* &
+[2] 34149
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[1]-  Done                    rm *electron*
+[adrianodif@ui-centos7 qcd_ml]$
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[2]+  Done                    rm *muon*
+[adrianodif@ui-centos7 qcd_ml]$ vi to^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.p^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ ps
+   PID TTY          TIME CMD
+  8843 pts/48   00:00:01 bash
+ 64411 pts/48   00:00:00 ps
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+^[OA[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ pwd
+/lustre/cms/store/user/adiflori/GEN-MINIAODSIMQCD_PhiFilter_Dau_SoftQCD_MiniTracks_/crab_GEN-MINIAODSIM_QCD_PhiFilter_Dau_SoftQCD_MiniTracks__20190701_061305/190701_041401/0001/qcd_ml
+[adrianodif@ui-centos7 qcd_ml]$ cd -
+/lustre/home/adrianodif
+[adrianodif@ui-centos7 ~]$ cd -
+/lustre/cms/store/user/adiflori/GEN-MINIAODSIMQCD_PhiFilter_Dau_SoftQCD_MiniTracks_/crab_GEN-MINIAODSIM_QCD_PhiFilter_Dau_SoftQCD_MiniTracks__20190701_061305/190701_041401/0001/qcd_ml
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ ^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+c[adrianodif@ui-centos7 qcd_ml]$ screen -^C
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ screen -r ^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ vi toPdgs.py
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ cd /lustre/cms/store/user/adiflori/GEN-MINIAODSIMQCD_PhiFilter_Dau_SoftQCD_MiniTracks_/crab_GEN-MINIAODSIM_QCD_PhiFilter_Dau_SoftQCD_MiniTracks__20190701_061305/190701_041401/0000/qcd_ml
+[adrianodif@ui-centos7 qcd_ml]$ vi pdg_0
+^C^C^C^C^[zz^Z
+[adrianodif@ui-centos7 qcd_ml]$ cd data
+vi pdg_[adrianodif@ui-centos7 data]$ vi pdg_3
+[adrianodif@ui-centos7 data]$ vi pdg_4
+[adrianodif@ui-centos7 data]$ vi toPdgs.py^C
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+(reverse-i-search)`v': ^C pdg_4
+[adrianodif@ui-centos7 data]$ vi toP^C
+[adrianodif@ui-centos7 data]$ vi toPdg^C
+[adrianodif@ui-centos7 data]$ vi toPdgs.py
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 data]$ vi toP^C
+[adrianodif@ui-centos7 data]$ vi toPdgs.py
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 data]$ vi to^C
+[adrianodif@ui-centos7 data]$ vi toPdgs.py
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 data]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 data]$ cd /lustre/cms/store/user/adiflori/GEN-MINIAODSIMQCD_PhiFilter_Dau_SoftQCD_MiniTracks_/crab_GEN-MINIAODSIM_QCD_PhiFilter_Dau_SoftQCD_MiniTracks__20190701_061305/190701_041401/0001/qcd_ml
+[adrianodif@ui-centos7 qcd_ml]$ cp toPdgs.py toElectron.py
+[adrianodif@ui-centos7 qcd_ml]$ vi toElectron
+[adrianodif@ui-centos7 qcd_ml]$ vi toElectron.py^C
+[adrianodif@ui-centos7 qcd_ml]$ vi toElectron.py
+(reverse-i-search)`for': ^Cr f in *; do tar xvf $f -P; done
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ ls -Slh *electron* | tail -10
+^C
+[adrianodif@ui-centos7 qcd_ml]$ screen -r C
+[detached from 55914.COH]
+[adrianodif@ui-centos7 qcd_ml]$ vi toElectron.py
+[adrianodif@ui-centos7 qcd_ml]$ char^C
+[adrianodif@ui-centos7 qcd_ml]$ mystore
+[adrianodif@ui-centos7 adiflori]$ cd Charmonium/
+[adrianodif@ui-centos7 Charmonium]$ ls -tlrh
+totale 416K
+-rw-rw-r--+ 1 adrianodif cms 6,1K 14 set  2018 sumlist.txt
+-rw-rw-r--+ 1 adrianodif cms 6,0K 24 set  2018 2mu2mulist.txt
+-rw-rw-r--+ 1 adrianodif cms  24K 26 set  2018 FourMuons.h
+-rw-rw-r--+ 1 adrianodif cms 3,1K 26 set  2018 FourMuons.C
+drwxrwxr-x+ 2 adrianodif cms 4,0K  9 ott  2018 2mu2mu
+-rw-rw-r--+ 1 adrianodif cms 3,5K 27 ott  2018 2017data2mu2k
+-rw-rw-r--+ 1 adrianodif cms 177K 27 ott  2018 log
+-rw-rw-r--+ 1 adrianodif cms 7,6K 28 ott  2018 2016data
+-rw-rw-r--+ 1 adrianodif cms  847 19 nov  2018 mclist.sh
+-rw-rw-r--+ 1 adrianodif cms 6,2K 23 nov  2018 2017data
+-rw-rw-r--+ 1 adrianodif cms 4,2K 28 nov  2018 2018data
+drwxrwxr-x+ 3        497 497 4,0K 23 mar 11.27 crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190323_105234
+-rw-rw-r--+ 1 adrianodif cms  29K  9 apr 18.12 dummy.h
+-rw-rw-r--+ 1 adrianodif cms 3,1K  9 apr 18.12 dummy.C
+drwxrwxr-x+ 3        497 497 4,0K 26 giu 18.50 crab_miniaod_2mu2k_Charmonium_Run2018B-17Sep2018-v1_MINIAOD___20190626_182314
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 09.02 crab_miniaod_2mu2k_Charmonium_Run2018C-17Sep2018-v1_MINIAOD___20190627_084018
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 10.25 crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_095241
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 11.51 crab_miniaod_2mu2k_Charmonium_Run2018C-17Sep2018-v1_MINIAOD___20190627_112903_six_five
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 12.37 crab_miniaod_2mu2k_Charmonium_Run2018B-17Sep2018-v1_MINIAOD___20190627_112839_six_five
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 13.30 crab_miniaod_2mu2k_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190627_125057_six_five
+drwxrwxr-x+ 3        497 497 4,0K 27 giu 13.32 crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five
+[adrianodif@ui-centos7 Charmonium]$ cd crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/
+[adrianodif@ui-centos7 crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five]$ ls -tlrh
+totale 0
+drwxrwxr-x+ 7 497 497 4,0K 30 giu 14.05 190627_104825
+[adrianodif@ui-centos7 crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five]$ cd 190627_104825/
+[adrianodif@ui-centos7 190627_104825]$ ls -tlrh
+totale 110G
+drwxrwxr-x+ 2        497 497 128K 28 giu 16.04 0002
+drwxrwxr-x+ 2        497 497 128K 28 giu 16.04 0001
+drwxrwxr-x+ 2        497 497 128K 28 giu 16.04 0003
+drwxrwxr-x+ 2        497 497  96K 28 giu 16.04 0004
+drwxrwxr-x+ 2        497 497 128K 28 giu 16.04 0000
+-rw-r--r--+ 1 adrianodif cms  17G 28 giu 16.34 0000.root
+-rw-r--r--+ 1 adrianodif cms  22G 28 giu 16.38 0004.root
+-rw-r--r--+ 1 adrianodif cms  23G 28 giu 16.39 0001.root
+-rw-r--r--+ 1 adrianodif cms  23G 28 giu 16.41 0003.root
+-rw-r--r--+ 1 adrianodif cms  26G 28 giu 16.44 0002.root
+-rw-r-----+ 1 adrianodif cms 1,6K 28 giu 17.00 toHdF.py
+-rw-rw-r--+ 1 adrianodif cms  137 28 giu 19.20 DU
+-rw-rw-r--+ 1 adrianodif cms  34K 29 giu 09.38 SixTracks.h
+-rw-rw-r--+ 1 adrianodif cms 3,1K 29 giu 09.38 SixTracks.C
+[adrianodif@ui-centos7 190627_104825]$ pwd
+/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/190627_104825
+[adrianodif@ui-centos7 190627_104825]$ cd --
+[adrianodif@ui-centos7 ~]$ cd jpsiphi/2018/data_2018/analysis/utilities/skimmers/
+[adrianodif@ui-centos7 skimmers]$ ls -tlrh
+totale 128K
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 2muBkg
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 2mukpi
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 2mupik
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 4mu
+-rw-r-----+  1 adrianodif cms 3,1K 13 set  2018 FourMuSkim.C
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 legacy
+-rw-r-----+  1 adrianodif cms  54K 13 set  2018 skimRunII_xmass.C
+-rw-r-----+  1 adrianodif cms 5,1K 13 set  2018 skimRunII_xmass.ipynb
+-rw-r-----+  1 adrianodif cms 1,9K 13 set  2018 skimRunII_xmass.py
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 w_hlts
+drwxr-x---+  2 adrianodif cms 4,0K 13 set  2018 wo_hlts
+-rw-r-----+  1 adrianodif cms 1,4K 25 set  2018 skimvars.sh
+drwxr-x---+  2 adrianodif cms 4,0K 27 ott  2018 2mu2mu
+drwxr-x---+  3 adrianodif cms 4,0K 31 ott  2018 splotskimmers
+drwxr-x---+  2 adrianodif cms 4,0K 21 nov  2018 2mu2k_five
+drwxr-x---+ 12 adrianodif cms 4,0K 23 mar 16.34 2mu2k
+drwxr-x---+  2 adrianodif cms 4,0K 23 mar 16.43 2mu4trk
+-rw-r-----+  1 adrianodif cms  336  6 apr 23.54 DU
+drwxr-x---+  8 adrianodif cms 4,0K  6 apr 23.55 2mu3trk
+-rw-r-----+  1 adrianodif cms  11K 10 apr 15.45 merging.py
+drwxr-x---+  3 adrianodif cms 4,0K 11 apr 04.03 fourtracks
+drwxr-x---+  3 adrianodif cms 4,0K 11 apr 04.05 fivetracks
+drwxr-x---+  5 adrianodif cms 4,0K 11 apr 10.11 sixtracks
+-rw-r-----+  1 adrianodif cms 1,6K 22 mag 00.38 toHdF.py
+drwxr-x---+  2 adrianodif cms 4,0K 29 mag 07.28 2012
+drwxr-x---+  2 adrianodif cms 4,0K 29 giu 09.40 sixtracks_new
+[adrianodif@ui-centos7 skimmers]$ cd sixtracks_new/
+[adrianodif@ui-centos7 sixtracks_new]$ ls -tlrh
+totale 0
+[adrianodif@ui-centos7 sixtracks_new]$ ls -tlr^C
+[adrianodif@ui-centos7 sixtracks_new]$ cp /lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/190627_104825/SixTracks.* .
+[adrianodif@ui-centos7 sixtracks_new]$ cp ../skimvars.sh .
+[adrianodif@ui-centos7 sixtracks_new]$ . skimvars.sh SixTracks.h
+Use this script with the header generated by MakeSelector
+sed: espressione -e #1, carattere 2: ci sono altri caratteri dopo il comando
+[adrianodif@ui-centos7 sixtracks_new]$ vi skimvars.sh
+[adrianodif@ui-centos7 sixtracks_new]$ vi lis^C
+[adrianodif@ui-centos7 sixtracks_new]$ ls
+assign.txt  branches.txt  SixTracks.C  SixTracks.h  skimvars.sh  vars.txt
+[adrianodif@ui-centos7 sixtracks_new]$ vi assign.txt
+[adrianodif@ui-centos7 sixtracks_new]$ vi SixTracks.h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[adrianodif@ui-centos7 sixtracks_new]$ vi SixTracks.C
+[adrianodif@ui-centos7 sixtracks_new]$ vi assign.txt
+[adrianodif@ui-centos7 sixtracks_new]$ ls
+assign.txt  branches.txt  SixTracks.C  SixTracks.h  skimvars.sh  vars.txt
+[adrianodif@ui-centos7 sixtracks_new]$ vi branches.txt
+[adrianodif@ui-centos7 sixtracks_new]$ vi assign.txt
+[adrianodif@ui-centos7 sixtracks_new]$ vi vars.txt
+
+Float_t out_run, out_event, out_lumi, out_numPrimaryVertices, out_trigger;
+Float_t out_noSixCandidates, out_five_id, out_dimuon_id, out_p1_id, out_m1_id;
+Float_t out_p2_id, out_m2_id, out_swapped, out_sameSign, out_sameSign_mmtt;
+Float_t out_six_p4, out_five_p4, out_mumukk_p4, out_ditrack_p4, out_dimuon_p4;
+Float_t out_lowMuon_p4, out_highMuon_p4, out_highKaon_p4, out_lowKaon_p4, out_thirdKaon_p4;
+Float_t out_fourthKaon_p4, out_highPion_p4, out_lowPion_p4, out_thirdPion_p4, out_fourthPion_p4;
+Float_t out_highProton_p4, out_lowProton_p4, out_thirdProton_p4, out_fourthProton_p4, out_mumukk_m;
+Float_t out_mumukk_pt, out_mumukk_eta, out_mumukk_phi, out_mumukk_p, out_dimuon_m;
+Float_t out_dimuon_pt, out_dimuon_eta, out_dimuon_phi, out_dimuon_p, out_highTrackMatch;
+Float_t out_lowTrackMatch, out_lowMuonMatch, out_highMuonMatch, out_thirdTrackMatch, out_fourthTrackMatch;
+Float_t out_ditrack_m, out_diTrackOne_pt, out_diTrackOne_eta, out_diTrackOne_phi, out_diTrackOne_p;
+Float_t out_diTrackTwo_pt, out_diTrackTwo_eta, out_diTrackTwo_phi, out_diTrackTwo_p, out_diTrackThree_pt;
+Float_t out_diTrackThree_eta, out_diTrackThree_phi, out_diTrackThree_p, out_diTrackFour_pt, out_diTrackFour_eta;
+Float_t out_diTrackFour_phi, out_diTrackFour_p, out_diTrackFive_pt, out_diTrackFive_eta, out_diTrackFive_phi;
+Float_t out_diTrackFive_p, out_diTrackSix_pt, out_diTrackSix_eta, out_diTrackSix_phi, out_diTrackSix_p;
+Float_t out_dimuonDiTrkOne_mmpp, out_dimuonDiTrkTwo_mmpp, out_dimuonDiTrkThree_mmpp, out_dimuonDiTrkFour_mmpp, out_dimuonDiTrkOne_mmkk;
+Float_t out_dimuonDiTrkTwo_mmkk, out_dimuonDiTrkThree_mmkk, out_dimuonDiTrkFour_mmkk, out_dimuonDiTrkOne_mmpk, out_dimuonDiTrkTwo_mmpk;
+Float_t out_dimuonDiTrkThree_mmpk, out_dimuonDiTrkFour_mmpk, out_dimuonDiTrkOne_mmkp, out_dimuonDiTrkTwo_mmkp, out_dimuonDiTrkThree_mmkp;
+Float_t out_dimuonDiTrkFour_mmkp, out_diTrackOne_kk, out_diTrackTwo_kk, out_diTrackThree_kk, out_diTrackFour_kk;
+Float_t out_diTrackFive_kk, out_diTrackSix_kk, out_diTrackOne_pp, out_diTrackTwo_pp, out_diTrackThree_pp;
+Float_t out_diTrackFour_pp, out_diTrackFive_pp, out_diTrackSix_pp, out_diTrackOne_pk, out_diTrackTwo_pk;
+Float_t out_diTrackThree_pk, out_diTrackFour_pk, out_diTrackFive_pk, out_diTrackSix_pk, out_diTrackOne_kp;
+Float_t out_diTrackTwo_kp, out_diTrackThree_kp, out_diTrackFour_kp, out_diTrackFive_kp, out_diTrackSix_kp;
+Float_t out_highMuon_pt, out_highMuon_eta, out_highMuon_phi, out_highMuon_charge, out_highMuon_dz;
+Float_t out_highMuon_dxy, out_lowMuon_pt, out_lowMuon_eta, out_lowMuon_phi, out_lowMuon_charge;
+Float_t out_lowMuon_dz, out_lowMuon_dxy, out_highTrack_pt, out_highTrack_eta, out_highTrack_phi;
+Float_t out_highTrack_charge, out_highTrack_dz, out_highTrack_dxy, out_lowTrack_pt, out_lowTrack_eta;
+Float_t out_lowTrack_phi, out_lowTrack_charge, out_lowTrack_dz, out_lowTrack_dxy, out_thirdTrack_pt;
+Float_t out_thirdTrack_eta, out_thirdTrack_phi, out_thirdTrack_charge, out_thirdTrack_dz, out_thirdTrack_dxy;
+Float_t out_dimuonDiTrkOne_pt, out_dimuonDiTrkOne_eta, out_dimuonDiTrkOne_phi, out_dimuonDiTrkOne_charge, out_dimuonDiTrkOne_p;
+Float_t out_dimuonDiTrkTwo_pt, out_dimuonDiTrkTwo_eta, out_dimuonDiTrkTwo_phi, out_dimuonDiTrkTwo_charge, out_dimuonDiTrkTwo_p;
+Float_t out_dimuonDiTrkThree_pt, out_dimuonDiTrkThree_eta, out_dimuonDiTrkThree_phi, out_dimuonDiTrkThree_charge, out_dimuonDiTrkThree_p;
+Float_t out_dimuonDiTrkFour_pt, out_dimuonDiTrkFour_eta, out_dimuonDiTrkFour_phi, out_dimuonDiTrkFour_charge, out_dimuonDiTrkFour_p;
+Float_t out_dimuonDiTrkFive_pt, out_dimuonDiTrkFive_eta, out_dimuonDiTrkFive_phi, out_dimuonDiTrkFive_charge, out_dimuonDiTrkFive_p;
+Float_t out_dimuonDiTrkSix_pt, out_dimuonDiTrkSix_eta, out_dimuonDiTrkSix_phi, out_dimuonDiTrkSix_charge, out_dimuonDiTrkSix_p;
+Float_t out_dimuon_vProb, out_dimuon_vChi2, out_dimuon_DCA, out_dimuon_ctauPV, out_dimuon_ctauErrPV;
+Float_t out_dimuon_cosAlpha, out_triTrackOne_kkk, out_triTrackTwo_kkk, out_triTrackThree_kkk, out_triTrackFour_kkk;
+Float_t out_triTrackOne_kkp, out_triTrackTwo_kkp, out_triTrackThree_kkp, out_triTrackOne_kpp, out_triTrackTwo_kpp;
+Float_t out_triTrackThree_kpp, out_triTrackOne_ppp, out_triTrackTwo_ppp, out_triTrackThree_ppp, out_triTrackOne_pt;
+Float_t out_triTrackOne_eta, out_triTrackOne_phi, out_triTrackOne_charge, out_triTrackTwo_pt, out_triTrackTwo_eta;
+Float_t out_triTrackTwo_phi, out_triTrackTwo_charge, out_triTrackThree_pt, out_triTrackThree_eta, out_triTrackThree_phi;
+Float_t out_triTrackThree_charge, out_triTrackFour_pt, out_triTrackFour_eta, out_triTrackFour_phi, out_triTrackFour_charge;
+Float_t out_mumukk_vProb, out_mumukk_vChi2, out_mumukk_nDof, out_mumukk_charge, out_mumukk_cosAlpha;
+Float_t out_mumukk_ctauPV, out_mumukk_ctauErrPV, out_mumukk_cosAlphaCA, out_mumukk_ctauPVCA, out_mumukk_ctauErrPVCA;
+Float_t out_mumukk_cosAlphaDZ, out_mumukk_ctauPVDZ, out_mumukk_ctauErrPVDZ, out_mumukk_cosAlphaBS, out_mumukk_ctauPVBS;
+Float_t out_mumukk_ctauErrPVBS, out_mumukk_vx, out_mumukk_vy, out_mumukk_vz, out_dca_m1m2;
+Float_t out_dca_m1t1, out_dca_m1t2, out_dca_m2t1, out_dca_m2t2, out_dca_t1t2;
+Float_t out_dca_m1t3, out_dca_m2t3, out_dca_t1t3, out_dca_t2t3, out_dca_m1t4;
+Float_t out_dca_m2t4, out_dca_t1t4, out_dca_t2t4, out_dca_t3t4, out_highTrackMuonDR;
+Float_t out_highTrackMuonDP, out_highTrackMuonDPt, out_lowTrackMuonDR, out_lowTrackMuonDP, out_lowTrackMuonDPt;
+Float_t out_thirdTrackMuonDR, out_thirdTrackMuonDP, out_thirdTrackMuonDPt, out_fourthTrackMuonDR, out_fourthTrackMuonDP;
+Float_t out_fourthTrackMuonDPt, out_tPFromPV, out_tMFromPV, out_tTFromPV, out_tFFromPV;
+Float_t out_tPFromPVCA, out_tMFromPVCA, out_tTFromPVCA, out_tFFromPVCA, out_tPFromPVDZ;
+Float_t out_tMFromPVDZ, out_tTFromPVDZ, out_tFFromPVDZ, out_five_m, out_five_m_ref;
+Float_t out_five_mass_ppk, out_five_mass_kpp, out_five_mass_pkp, out_five_mass_ppp, out_fiveOne_pt;
+Float_t out_fiveOne_eta, out_fiveOne_phi, out_fiveOne_p, out_fiveTwo_pt, out_fiveTwo_eta;
+Float_t out_fiveTwo_phi, out_fiveTwo_p, out_fiveThree_pt, out_fiveThree_eta, out_fiveThree_phi;
+Float_t out_fiveThree_p, out_fiveFour_pt, out_fiveFour_eta, out_fiveFour_phi, out_fiveFour_p;
+Float_t out_fiveFive_pt, out_fiveFive_eta, out_fiveFive_phi, out_fiveFive_p, out_five_cosAlpha;
+Float_t out_five_ctauPV, out_five_ctauErrPV, out_five_cosAlphaCA, out_five_ctauPVCA, out_five_ctauErrPVCA;
+Float_t out_five_cosAlphaDZ, out_five_ctauPVDZ, out_five_ctauErrPVDZ, out_five_cosAlphaBS, out_five_ctauPVBS;
+Float_t out_five_ctauErrPVBS, out_five_vProb, out_five_nDof, out_five_vChi2, out_five_vx;
+Float_t out_five_vy, out_five_vz, out_five_charge, out_bestPV_X, out_bestPV_Y;
+Float_t out_bestPV_Z, out_cosAlphaPV_X, out_cosAlphaPV_Y, out_cosAlphaPV_Z, out_bS_X;
+Float_t out_bS_Y, out_bS_Z, out_zPV_X, out_zPV_Y, out_zPV_Z;
+Float_t out_lowMuon_isTight, out_lowMuon_isLoose, out_lowMuon_isSoft, out_lowMuon_isMedium, out_lowMuon_isHighPt;
+Float_t out_lowMuon_isTracker, out_lowMuon_isGlobal, out_lowMuon_NPixelHits, out_lowMuon_NStripHits, out_lowMuon_NTrackhits;
+Float_t out_lowMuon_NBPixHits, out_lowMuon_NPixLayers, out_lowMuon_NTraLayers, out_lowMuon_NStrLayers, out_lowMuon_NBPixLayers;
+Float_t out_highMuon_isTight, out_highMuon_isLoose, out_highMuon_isSoft, out_highMuon_isMedium, out_highMuon_isHighPt;
+Float_t out_highMuon_isTracker, out_highMuon_isGlobal, out_highMuon_NPixelHits, out_highMuon_NStripHits, out_highMuon_NTrackhits;
+Float_t out_highMuon_NBPixHits, out_highMuon_NPixLayers, out_highMuon_NTraLayers, out_highMuon_NStrLayers, out_highMuon_NBPixLayers;
+Float_t out_lowMuon_type, out_highMuon_type, out_highTrack_NPixelHits, out_highTrack_NStripHits, out_highTrack_NTrackhits;
+Float_t out_highTrack_NBPixHits, out_highTrack_NPixLayers, out_highTrack_NTraLayers, out_highTrack_NStrLayers, out_highTrack_NBPixLayers;
+Float_t out_lowTrack_NPixelHits, out_lowTrack_NStripHits, out_lowTrack_NTrackhits, out_lowTrack_NBPixHits, out_lowTrack_NPixLayers;
+Float_t out_lowTrack_NTraLayers, out_lowTrack_NStrLayers, out_lowTrack_NBPixLayers, out_thirdTrack_NPixelHits, out_thirdTrack_NStripHits;
+Float_t out_thirdTrack_NTrackhits, out_thirdTrack_NBPixHits, out_thirdTrack_NPixLayers, out_thirdTrack_NTraLayers, out_thirdTrack_NStrLayers;
+Float_t out_thirdTrack_NBPixLayers, out_fourthTrack_NPixelHits, out_fourthTrack_NStripHits, out_fourthTrack_NTrackhits, out_fourthTrack_NBPixHits;
+Float_t out_fourthTrack_NPixLayers, out_fourthTrack_NTraLayers, out_fourthTrack_NStrLayers, out_fourthTrack_NBPixLayers, out_six_m_kkpp;
+Float_t out_six_m_ref_kkpp, out_six_mass_ppkk, out_six_mass_pkpk, out_six_mass_pppp, out_six_mass_kpkp;
+Float_t out_six_mass_kppk, out_six_mass_kkkk, out_six_pt, out_six_eta, out_six_phi;
+Float_t out_six_p, out_six_cosAlpha, out_six_ctauPV, out_six_ctauErrPV, out_six_cosAlphaCA;
+Float_t out_six_ctauPVCA, out_six_ctauErrPVCA, out_six_cosAlphaDZ, out_six_ctauPVDZ, out_six_ctauErrPVDZ;
+Float_t out_six_cosAlphaBS, out_six_ctauPVBS, out_six_ctauErrPVBS, out_six_vProb, out_six_nDof;
+Float_t out_six_vChi2, out_six_vx, out_six_vy, out_six_vz, out_six_charge;
