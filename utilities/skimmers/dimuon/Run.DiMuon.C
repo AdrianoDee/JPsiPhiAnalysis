@@ -8,12 +8,7 @@
 
   // INPUT DATA SAMPLE ON LOCAL DISK
 
-  TDSet* dataset = new TDSet("TTree", "SixTracksTree", "rootupleSix");
-
-  //dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_five_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190323_105234/190323_095241/0000/rootuple-2018-dimuondiTrack_fivedataD2018_2_0_999.root");
-  /// 2018
-  //D
-
+  TDSet* dataset = new TDSet("TTree", "dimuonTree", "rootupleMuMu");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/190627_104825/0000.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/190627_104825/0001.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018A-17Sep2018-v1_MINIAOD___20190627_124818_six_five/190627_104825/0002.root");
@@ -42,8 +37,9 @@
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190627_125057_six_five/190627_105102/0008.root");
   dataset->Add("/lustre/cms/store/user/adiflori/Charmonium/crab_miniaod_2mu2k_Charmonium_Run2018D-PromptReco-v2_MINIAOD___20190627_125057_six_five/190627_105102/0009.root");
 
-  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/sixtracks/SixTracks";
-  TProof *p = TProof::Open("workers=40"); // 12 workers for qsub
+
+  TString selector = "/lustre/home/adrianodif/jpsiphi/2018/data_2018/analysis/utilities/skimmers/dimuon/DiMuon";
+  TProof *p = TProof::Open("workers=5"); // 12 workers for qsub
   //gProofDebugMask = TProofDebug::kAll;
   //gProofDebugLevel = 5;
 
