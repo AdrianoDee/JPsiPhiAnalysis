@@ -32,7 +32,7 @@ par.register ('dataset',
                                   "Dataset")
 
 par.register ('ss',
-                                  True,
+                                  False,
                                   VarParsing.multiplicity.singleton,
                                   VarParsing.varType.bool,
                                   "Do Same Sign")
@@ -208,12 +208,12 @@ process.load("jpsiphi.jpsiphi.slimmedMuonsTriggerMatcher2017_cfi")
 
 charmoniumHLT = [
 #Phi
-'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi', #2017
+#'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi', #2017
 'HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05', #2018
-'HLT_Dimuon25_Jpsi'
+#'HLT_Dimuon25_Jpsi'
 #JPsi
-#'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
-#'HLT_DoubleMu4_JpsiTrk_Displaced',
+'HLT_DoubleMu4_JpsiTrkTrk_Displaced',
+'HLT_DoubleMu4_JpsiTrk_Displaced',
 #'HLT_DoubleMu4_Jpsi_Displaced',
 #'HLT_DoubleMu4_3_Jpsi_Displaced',
 #'HLT_Dimuon20_Jpsi_Barrel_Seagulls',
@@ -360,7 +360,7 @@ process.PsiPhiProducer = cms.EDProducer('DiMuonDiTrackProducer',
     DiMuon              = cms.InputTag('JPsi2MuMuPAT'),
     TrackMatcher        = cms.InputTag("trackMatch"),
     PFCandidates        = cms.InputTag('packedPFCandidates'),
-    TrackPtCut            = cms.double(0.85),
+    TrackPtCut            = cms.double(0.7),
     BeamSpot             = cms.InputTag('offlineBeamSpot'),
     PrimaryVertex        = cms.InputTag("offlineSlimmedPrimaryVertices"),
     TriggerInput         = cms.InputTag("unpackPatTriggers"),
@@ -385,7 +385,7 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
     DiMuoDiTrack             = cms.InputTag('PsiPhiProducer','DiMuonDiTrackCandidates'),
     PFCandidates            = cms.InputTag('packedPFCandidates'),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
-    TrackPtCut               = cms.double(0.85),
+    TrackPtCut               = cms.double(0.7),
 
     TrackMatcher            = cms.InputTag("trackMatch"),
 
@@ -393,7 +393,7 @@ process.FiveTracksProducer  = cms.EDProducer('FiveTracksProducer',
     PrimaryVertex           = cms.InputTag("offlineSlimmedPrimaryVertices"),
 
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    FiveTrackCuts            = cms.vdouble(3.0,6.5),
+    FiveTrackCuts            = cms.vdouble(4.5,6.5),
 
     Filters                 = filters,
 
@@ -405,7 +405,7 @@ process.SixTracksProducer  = cms.EDProducer('SixTracksProducer',
     FiveCollection          = cms.InputTag('FiveTracksProducer','FiveTracks'),
     PFCandidates            = cms.InputTag('packedPFCandidates'),
     TriggerInput            = cms.InputTag("unpackPatTriggers"),
-    TrackPtCut               = cms.double(0.85),
+    TrackPtCut               = cms.double(0.7),
 
     TrackMatcher            = cms.InputTag("trackMatch"),
 
@@ -413,8 +413,9 @@ process.SixTracksProducer  = cms.EDProducer('SixTracksProducer',
     PrimaryVertex           = cms.InputTag("offlineSlimmedPrimaryVertices"),
 
     TriggerResults          = cms.InputTag("TriggerResults", "", "HLT"),      # b-hadron mass window
-    SixTrackCuts            = cms.vdouble(3.0,6.5),
+    SixTrackCuts            = cms.vdouble(4.5,6.5),
 
+    AddSS 		    = cms.bool(doss),
     Filters                 = filters,
 
     IsMC                    = cms.bool(IsMC),

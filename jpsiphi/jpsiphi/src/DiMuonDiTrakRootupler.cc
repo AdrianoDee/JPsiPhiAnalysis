@@ -115,17 +115,17 @@ private:
   Double_t pv_x, pv_y, pv_z;
 
   Double_t dimuonditrk_cosAlpha, dimuonditrk_ctauPV, dimuonditrk_ctauErrPV, dimuonditrk_countTksOfPV, dimuonditrk_vertexWeight;
-  Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_tPFromPV, dimuonditrk_tMFromPV;
+  Double_t dimuonditrk_sumPTPV, dimuonditrk_mu1FromPV, dimuonditrk_mu2FromPV, dimuonditrk_highTrackFromPV, dimuonditrk_lowTrackFromPV;
   Double_t dimuonditrk_mu1W, dimuonditrk_mu2W, dimuonditrk_tPW, dimuonditrk_tMW;
 
   Double_t dimuonditrk_cosAlphaDZ, dimuonditrk_ctauPVDZ, dimuonditrk_ctauErrPVDZ, dimuonditrk_countTksOfPVDZ, dimuonditrk_vertexWeightDZ;
-  Double_t dimuonditrk_sumPTPVDZ, dimuonditrk_mu1FromPVDZ, dimuonditrk_mu2FromPVDZ, dimuonditrk_tPFromPVDZ, dimuonditrk_tMFromPVDZ;
+  Double_t dimuonditrk_sumPTPVDZ, dimuonditrk_mu1FromPVDZ, dimuonditrk_mu2FromPVDZ, dimuonditrk_highTrackFromPVDZ, dimuonditrk_lowTrackFromPVDZ;
   Double_t dimuonditrk_mu1DZW, dimuonditrk_mu2DZW, dimuonditrk_tPDZW, dimuonditrk_tMDZW;
 
   Double_t dimuonditrk_cosAlphaBS, dimuonditrk_ctauPVBS, dimuonditrk_ctauErrPVBS, dimuonditrk_countTksOfPVBS, dimuonditrk_vertexWeightBS;
-  Double_t dimuonditrk_sumPTPVBS, dimuonditrk_mu1FromPVBS, dimuonditrk_mu2FromPVBS, dimuonditrk_tPFromPVBS, dimuonditrk_tMFromPVBS;
+  Double_t dimuonditrk_sumPTPVBS, dimuonditrk_mu1FromPVBS, dimuonditrk_mu2FromPVBS, dimuonditrk_highTrackFromPVBS, dimuonditrk_lowTrackFromPVBS;
   Double_t dimuonditrk_mu1BSW, dimuonditrk_mu2BSW, dimuonditrk_tPBSW, dimuonditrk_tMBSW;
-  Double_t dimuonditrk_cosAlphaCA, dimuonditrk_ctauPVCA, dimuonditrk_ctauErrPVCA, dimuonditrk_tPFromPVCA, dimuonditrk_tMFromPVCA;
+  Double_t dimuonditrk_cosAlphaCA, dimuonditrk_ctauPVCA, dimuonditrk_ctauErrPVCA, dimuonditrk_highTrackFromPVCA, dimuonditrk_lowTrackFromPVCA;
 
   Double_t dimuonditrk_dca_m1m2, dimuonditrk_dca_m1t1, dimuonditrk_dca_m1t2, dimuonditrk_dca_m2t1, dimuonditrk_dca_m2t2, dimuonditrk_dca_t1t2;
   Double_t dimuon_vProb, dimuon_vChi2, dimuon_DCA, dimuon_ctauPV, dimuon_ctauErrPV, dimuon_cosAlpha;
@@ -366,29 +366,29 @@ TreeName_(iConfig.getParameter<std::string>("TreeName"))
     dimuonditrk_tree->Branch("dimuonditrk_ctauPV",      &dimuonditrk_ctauPV,        "dimuonditrk_ctauPV/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPV",      &dimuonditrk_ctauErrPV,        "dimuonditrk_ctauErrPV/D");
 
-    dimuonditrk_tree->Branch("dimuonditrk_tPFromPV",      &dimuonditrk_tPFromPV,        "dimuonditrk_tPFromPV/D");
-    dimuonditrk_tree->Branch("dimuonditrk_tMFromPV",      &dimuonditrk_tMFromPV,        "dimuonditrk_tMFromPV/D");
+    dimuonditrk_tree->Branch("dimuonditrk_highTrackFromPV",      &dimuonditrk_highTrackFromPV,        "dimuonditrk_highTrackFromPV/D");
+    dimuonditrk_tree->Branch("dimuonditrk_lowTrackFromPV",      &dimuonditrk_lowTrackFromPV,        "dimuonditrk_lowTrackFromPV/D");
 
     dimuonditrk_tree->Branch("dimuonditrk_cosAlphaCA",      &dimuonditrk_cosAlphaCA,        "dimuonditrk_cosAlphaCA/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVCA",      &dimuonditrk_ctauPVCA,        "dimuonditrk_ctauPVCA/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVCA",      &dimuonditrk_ctauErrPVCA,        "dimuonditrk_ctauErrPVCA/D");
 
-    dimuonditrk_tree->Branch("dimuonditrk_tPFromPVCA",      &dimuonditrk_tPFromPVCA,        "dimuonditrk_tPFromPVCA/D");
-    dimuonditrk_tree->Branch("dimuonditrk_tMFromPVCA",      &dimuonditrk_tMFromPVCA,        "dimuonditrk_tMFromPVCA/D");
+    dimuonditrk_tree->Branch("dimuonditrk_highTrackFromPVCA",      &dimuonditrk_highTrackFromPVCA,        "dimuonditrk_highTrackFromPVCA/D");
+    dimuonditrk_tree->Branch("dimuonditrk_lowTrackFromPVCA",      &dimuonditrk_lowTrackFromPVCA,        "dimuonditrk_lowTrackFromPVCA/D");
 
     dimuonditrk_tree->Branch("dimuonditrk_cosAlphaDZ",      &dimuonditrk_cosAlphaDZ,        "dimuonditrk_cosAlphaDZ/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVDZ",      &dimuonditrk_ctauPVDZ,        "dimuonditrk_ctauPVDZ/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVDZ",      &dimuonditrk_ctauErrPVDZ,        "dimuonditrk_ctauErrPVDZ/D");
 
-    dimuonditrk_tree->Branch("dimuonditrk_tPFromPVDZ",      &dimuonditrk_tPFromPVDZ,        "dimuonditrk_tPFromPVDZ/D");
-    dimuonditrk_tree->Branch("dimuonditrk_tMFromPVDZ",      &dimuonditrk_tMFromPVDZ,        "dimuonditrk_tMFromPVDZ/D");
+    dimuonditrk_tree->Branch("dimuonditrk_highTrackFromPVDZ",      &dimuonditrk_highTrackFromPVDZ,        "dimuonditrk_highTrackFromPVDZ/D");
+    dimuonditrk_tree->Branch("dimuonditrk_lowTrackFromPVDZ",      &dimuonditrk_lowTrackFromPVDZ,        "dimuonditrk_lowTrackFromPVDZ/D");
 
     dimuonditrk_tree->Branch("dimuonditrk_cosAlphaBS",      &dimuonditrk_cosAlphaBS,        "dimuonditrk_cosAlphaBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauPVBS",      &dimuonditrk_ctauPVBS,        "dimuonditrk_ctauPVBS/D");
     dimuonditrk_tree->Branch("dimuonditrk_ctauErrPVBS",      &dimuonditrk_ctauErrPVBS,        "dimuonditrk_ctauErrPVBS/D");
 
-    // dimuonditrk_tree->Branch("dimuonditrk_tPFromPVBS",      &dimuonditrk_tPFromPVBS,        "dimuonditrk_tPFromPVBS/D");
-    // dimuonditrk_tree->Branch("dimuonditrk_tMFromPVBS",      &dimuonditrk_tMFromPVBS,        "dimuonditrk_tMFromPVBS/D");
+    // dimuonditrk_tree->Branch("dimuonditrk_highTrackFromPVBS",      &dimuonditrk_highTrackFromPVBS,        "dimuonditrk_highTrackFromPVBS/D");
+    // dimuonditrk_tree->Branch("dimuonditrk_lowTrackFromPVBS",      &dimuonditrk_lowTrackFromPVBS,        "dimuonditrk_lowTrackFromPVBS/D");
 
 
     dimuonditrk_tree->Branch("dimuonditrk_dca_m1m2",      &dimuonditrk_vProb,        "dimuonditrk_dca_m1m2/D");
@@ -705,29 +705,29 @@ void DiMuonDiTrackRootupler::analyze(const edm::Event& iEvent, const edm::EventS
         dimuonditrk_ctauPVCA = dimuonditrk_cand.userFloat("ctauPVCA");
         dimuonditrk_ctauErrPVCA = dimuonditrk_cand.userFloat("ctauErrPVCA");
 
-        dimuonditrk_tPFromPVCA = dimuonditrk_cand.userFloat("tPFromPVCA");
-        dimuonditrk_tMFromPVCA = dimuonditrk_cand.userFloat("tMFromPVCA");
+        dimuonditrk_highTrackFromPVCA = dimuonditrk_cand.userFloat("highTrackFromPVCA");
+        dimuonditrk_lowTrackFromPVCA = dimuonditrk_cand.userFloat("lowTrackFromPVCA");
 
         dimuonditrk_cosAlphaBS = dimuonditrk_cand.userFloat("cosAlphaBS");
         dimuonditrk_ctauPVBS = dimuonditrk_cand.userFloat("ctauPVBS");
         dimuonditrk_ctauErrPVBS = dimuonditrk_cand.userFloat("ctauErrPVBS");
 
-        // dimuonditrk_tPFromPVBS = dimuonditrk_cand.userFloat("tPFromPVBS");
-        // dimuonditrk_tMFromPVBS = dimuonditrk_cand.userFloat("tMFromPVBS");
+        // dimuonditrk_highTrackFromPVBS = dimuonditrk_cand.userFloat("highTrackFromPVBS");
+        // dimuonditrk_lowTrackFromPVBS = dimuonditrk_cand.userFloat("lowTrackFromPVBS");
 
         dimuonditrk_cosAlpha = dimuonditrk_cand.userFloat("cosAlpha");
         dimuonditrk_ctauPV = dimuonditrk_cand.userFloat("ctauPV");
         dimuonditrk_ctauErrPV = dimuonditrk_cand.userFloat("ctauErrPV");
 
-        dimuonditrk_tPFromPV = dimuonditrk_cand.userFloat("tPFromPV");
-        dimuonditrk_tMFromPV = dimuonditrk_cand.userFloat("tMFromPV");
+        dimuonditrk_highTrackFromPV = dimuonditrk_cand.userFloat("highTrackFromPV");
+        dimuonditrk_lowTrackFromPV = dimuonditrk_cand.userFloat("lowTrackFromPV");
 
         dimuonditrk_cosAlphaDZ = dimuonditrk_cand.userFloat("cosAlphaDZ");
         dimuonditrk_ctauPVDZ = dimuonditrk_cand.userFloat("ctauPVDZ");
         dimuonditrk_ctauErrPVDZ = dimuonditrk_cand.userFloat("ctauErrPVDZ");
 
-        dimuonditrk_tPFromPVDZ = dimuonditrk_cand.userFloat("tPFromPVDZ");
-        dimuonditrk_tMFromPVDZ = dimuonditrk_cand.userFloat("tMFromPVDZ");
+        dimuonditrk_highTrackFromPVDZ = dimuonditrk_cand.userFloat("highTrackFromPVDZ");
+        dimuonditrk_lowTrackFromPVDZ = dimuonditrk_cand.userFloat("lowTrackFromPVDZ");
 
         dimuonditrk_dca_m1m2 = dimuonditrk_cand.userFloat("dca_m1m2");
         dimuonditrk_dca_m1t1 = dimuonditrk_cand.userFloat("dca_m1t1");

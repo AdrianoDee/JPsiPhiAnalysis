@@ -155,9 +155,9 @@ class FiveTracksRootupler : public edm::EDAnalyzer {
   Double_t dimuonditrk_cosAlphaBS, dimuonditrk_ctauPVBS, dimuonditrk_ctauErrPVBS;
   Double_t dimuonditrk_cosAlphaCA, dimuonditrk_ctauPVCA,dimuonditrk_ctauErrPVCA;
 
-  Double_t tPFromPVBS, tMFromPVBS, tPFromPVCA, tMFromPVCA;
-  Double_t tPFromPVDZ, tMFromPVDZ, tPFromPV, tMFromPV;
-  Double_t tTFromPV, tTFromPVDZ, tTFromPVBS, tTFromPVCA;
+  Double_t highTrackFromPVBS, lowTrackFromPVBS, highTrackFromPVCA, lowTrackFromPVCA;
+  Double_t highTrackFromPVDZ, lowTrackFromPVDZ, highTrackFromPV, lowTrackFromPV;
+  Double_t thirdTrackFromPV, thirdTrackFromPVDZ, thirdTrackFromPVBS, thirdTrackFromPVCA;
 
   Double_t dca_m1m2, dca_m1t1, dca_m1t2, dca_m2t1, dca_m2t2, dca_t1t2;
   Double_t dca_m1t3, dca_m2t3, dca_t1t3, dca_t2t3;
@@ -468,18 +468,18 @@ FiveTracksRootupler::FiveTracksRootupler(const edm::ParameterSet& iConfig):
         fivetracks_tree->Branch("thirdTrackMuonDP",        &thirdTrackMuonDP,        "thirdTrackMuonDP/D");
         fivetracks_tree->Branch("thirdTrackMuonDPt",        &thirdTrackMuonDPt,        "thirdTrackMuonDPt/D");
 
-        fivetracks_tree->Branch("tPFromPV",        &tPFromPV,        "tPFromPV/D");
-        fivetracks_tree->Branch("tMFromPV",        &tMFromPV,        "tMFromPV/D");
-        fivetracks_tree->Branch("tTFromPV",        &tTFromPV,        "tMFTomPV/D");
-        fivetracks_tree->Branch("tPFromPVCA",        &tPFromPVCA,        "tPFromPVCA/D");
-        fivetracks_tree->Branch("tMFromPVCA",        &tMFromPVCA,        "tMFromPVCA/D");
-        fivetracks_tree->Branch("tTFromPVCA",        &tTFromPVCA,        "tMFTomPVCA/D");
-        fivetracks_tree->Branch("tPFromPVDZ",      &tPFromPVDZ,        "tPFromPVDZ/D");
-        fivetracks_tree->Branch("tMFromPVDZ",      &tMFromPVDZ,        "tMFromPVDZ/D");
-        fivetracks_tree->Branch("tTFromPVDZ",      &tTFromPVDZ,        "tTFromPVDZ/D");
-        // fivetracks_tree->Branch("tPFromPVBS",      &tPFromPVBS,        "tPFromPVBS/D");
-        // fivetracks_tree->Branch("tMFromPVBS",      &tMFromPVBS,        "tMFromPVBS/D");
-        // fivetracks_tree->Branch("tTFromPVBS",      &tTFromPVBS,        "tTFromPVBS/D");
+        fivetracks_tree->Branch("highTrackFromPV",        &highTrackFromPV,        "highTrackFromPV/D");
+        fivetracks_tree->Branch("lowTrackFromPV",        &lowTrackFromPV,        "lowTrackFromPV/D");
+        fivetracks_tree->Branch("thirdTrackFromPV",        &thirdTrackFromPV,        "tMFTomPV/D");
+        fivetracks_tree->Branch("highTrackFromPVCA",        &highTrackFromPVCA,        "highTrackFromPVCA/D");
+        fivetracks_tree->Branch("lowTrackFromPVCA",        &lowTrackFromPVCA,        "lowTrackFromPVCA/D");
+        fivetracks_tree->Branch("thirdTrackFromPVCA",        &thirdTrackFromPVCA,        "tMFTomPVCA/D");
+        fivetracks_tree->Branch("highTrackFromPVDZ",      &highTrackFromPVDZ,        "highTrackFromPVDZ/D");
+        fivetracks_tree->Branch("lowTrackFromPVDZ",      &lowTrackFromPVDZ,        "lowTrackFromPVDZ/D");
+        fivetracks_tree->Branch("thirdTrackFromPVDZ",      &thirdTrackFromPVDZ,        "thirdTrackFromPVDZ/D");
+        // fivetracks_tree->Branch("highTrackFromPVBS",      &highTrackFromPVBS,        "highTrackFromPVBS/D");
+        // fivetracks_tree->Branch("lowTrackFromPVBS",      &lowTrackFromPVBS,        "lowTrackFromPVBS/D");
+        // fivetracks_tree->Branch("thirdTrackFromPVBS",      &thirdTrackFromPVBS,        "thirdTrackFromPVBS/D");
 
         fivetracks_tree->Branch("five_m",             &five_m,               "five_m/D");
         fivetracks_tree->Branch("five_m_ref",         &five_m_ref,           "five_m_ref/D");
@@ -856,8 +856,8 @@ if(!OnlyGen_)
       dimuonditrk_ctauPVBS = dimuonditrk_cand->userFloat("ctauPVBS");
       dimuonditrk_ctauErrPVBS = dimuonditrk_cand->userFloat("ctauErrPVBS");
 
-      // tPFromPVBS = dimuonditrk_cand->userFloat("tPFromPVBS");
-      // tMFromPVBS = dimuonditrk_cand->userFloat("tMFromPVBS");
+      // highTrackFromPVBS = dimuonditrk_cand->userFloat("highTrackFromPVBS");
+      // lowTrackFromPVBS = dimuonditrk_cand->userFloat("lowTrackFromPVBS");
 
       five_pt       = five_cand.pt();
       five_eta      = five_cand.eta();
@@ -880,10 +880,10 @@ if(!OnlyGen_)
       dca_t1t3 = five_cand.userFloat("dca_t1t3");
       dca_t2t3 = five_cand.userFloat("dca_t2t3");
 
-      tTFromPV        = five_cand.userFloat("tTFromPV");
-      tTFromPVDZ      = five_cand.userFloat("tTFromPVDZ");
-      // tTFromPVBS      = five_cand.userFloat("tTFromPVBS");
-      tTFromPVCA      = five_cand.userFloat("tTFromPVCA");
+      thirdTrackFromPV        = five_cand.userFloat("thirdTrackFromPV");
+      thirdTrackFromPVDZ      = five_cand.userFloat("thirdTrackFromPVDZ");
+      // thirdTrackFromPVBS      = five_cand.userFloat("thirdTrackFromPVBS");
+      thirdTrackFromPVCA      = five_cand.userFloat("thirdTrackFromPVCA");
 
 
 
@@ -891,22 +891,22 @@ if(!OnlyGen_)
       dimuonditrk_ctauPV = dimuonditrk_cand->userFloat("ctauPV");
       dimuonditrk_ctauErrPV = dimuonditrk_cand->userFloat("ctauErrPV");
 
-      tPFromPV = dimuonditrk_cand->userFloat("tPFromPV");
-      tMFromPV = dimuonditrk_cand->userFloat("tMFromPV");
+      highTrackFromPV = dimuonditrk_cand->userFloat("highTrackFromPV");
+      lowTrackFromPV = dimuonditrk_cand->userFloat("lowTrackFromPV");
 
       dimuonditrk_cosAlphaDZ = dimuonditrk_cand->userFloat("cosAlphaDZ");
       dimuonditrk_ctauPVDZ = dimuonditrk_cand->userFloat("ctauPVDZ");
       dimuonditrk_ctauErrPVDZ = dimuonditrk_cand->userFloat("ctauErrPVDZ");
 
-      tPFromPVDZ = dimuonditrk_cand->userFloat("tPFromPVDZ");
-      tMFromPVDZ = dimuonditrk_cand->userFloat("tMFromPVDZ");
+      highTrackFromPVDZ = dimuonditrk_cand->userFloat("highTrackFromPVDZ");
+      lowTrackFromPVDZ = dimuonditrk_cand->userFloat("lowTrackFromPVDZ");
 
       dimuonditrk_cosAlphaCA = dimuonditrk_cand->userFloat("cosAlphaCA");
       dimuonditrk_ctauPVCA = dimuonditrk_cand->userFloat("ctauPVCA");
       dimuonditrk_ctauErrPVCA = dimuonditrk_cand->userFloat("ctauErrPVCA");
 
-      tPFromPVCA = dimuonditrk_cand->userFloat("tPFromPVCA");
-      tMFromPVCA = dimuonditrk_cand->userFloat("tMFromPVCA");
+      highTrackFromPVCA = dimuonditrk_cand->userFloat("highTrackFromPVCA");
+      lowTrackFromPVCA = dimuonditrk_cand->userFloat("lowTrackFromPVCA");
 
 
       dca_m1m2 = dimuonditrk_cand->userFloat("dca_m1m2");

@@ -330,9 +330,11 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
          if(fCharge==0.0) continue;
          if(fourthTrack.pt()<trackPtCut_) continue;
          // if(fourthTrack.charge() == 0) continue;
-         if(float(tCharge * fCharge) < 0.0 && !AddSameSig_) continue;
+
+         bool sameSign = (tCharge * fCharge) > 0.0;
+
+         if(sameSign && !AddSameSig_) continue;
 	       //if(!IsMC_ and fabs(fourthTrack.pdgId())!=211) continue;
-         bool sameSign = (tCharge * fCharge) < 0.0;
 
 	       if(!(fourthTrack.trackHighPurity())) continue;
          if(!(fourthTrack.hasTrackDetails())) continue;
@@ -355,7 +357,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           bool swapped = false;
           Double_t highId = i, lowId = ttId;
 
-          if(sameSign || PtLeading_)
+          if(PtLeading_)
           {
             if(highTrack.pt()<lowTrack.pt())
              {
@@ -367,7 +369,7 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
              }
           }else
           {
-            if(highTrack.charge()<lowTrack.charge())
+            if(highTrack.charge()<0.0)
              {
                highTrack = track->at(ttId);
                lowTrack  = track->at(i);
@@ -376,6 +378,8 @@ void SixTracksProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                swapped = true;
              }
           }
+
+         // std::cout << "Charges" << highTrack.charge() << " - " << lowTrack.charge()<< std::endl;
 
          // pat::CompositeCandidate sixCand = makeSixCandidate(fivetrackCand, fourthTrack);
 

@@ -392,7 +392,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 // loop over second track candidate, negative charge
          // for (std::vector<pat::PackedCandidate>::const_iterator negTrack = track->begin(); negTrack!= trackend; ++negTrack){
          int jstart = 0;
-         if(AddSameSig_) jstart = i+1;
+         if(!AddSameSig_) jstart = i+1;
          for (size_t j = jstart; j < track->size(); j++) {
 
            auto negTrack = track->at(j);
@@ -400,8 +400,9 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            if(!AddSameSig_ && negTrack.charge()>=0) continue;
            if(negTrack.pt()<TrackPtCut_) continue;
 
-           bool sameSign = posTrack.charge()*negTrack.charge()<0.;
+           bool sameSign = posTrack.charge()*negTrack.charge()>0.;
 
+           if(!AddSameSig_ && sameSign) continue;
   	       //if(!IsMC_ and fabs(negTrack.pdgId())!=211) continue;
   	       if(!(negTrack.trackHighPurity())) continue;
            if(!(negTrack.hasTrackDetails())) continue;
@@ -413,7 +414,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            auto lowTrack  = track->at(j);
            Double_t highId = i, lowId = j;
 
-           if(sameSign || PtLeading_)
+           if(PtLeading_)
            {
              if(posTrack.pt()<negTrack.pt())
               {
@@ -424,7 +425,7 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
               }
            }else
            {
-             if(posTrack.charge()<negTrack.charge())
+             if(posTrack.charge()<0)
               {
                 highTrack = negTrack;
                 lowTrack  = posTrack;
@@ -696,18 +697,18 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            //Refit PVs (not BS)
 
            std::vector<TransientVertex> pvs;
-           std::vector<float> tPFromPV,tMFromPV;
+           std::vector<float> highTrackFromPV,lowTrackFromPV;
 
            for(size_t i = 0; i < verteces.size(); i++)
            {
-             tPFromPV.push_back(0.0);
-             tMFromPV.push_back(0.0);
+             highTrackFromPV.push_back(0.0);
+             lowTrackFromPV.push_back(0.0);
            }
 
            for(size_t i = 1; i < verteces.size(); i++)
            {
-             tPFromPV[i] = posTrack.fromPV(vKeys[i]);
-             tMFromPV[i] = negTrack.fromPV(vKeys[i]);
+             highTrackFromPV[i] = posTrack.fromPV(vKeys[i]);
+             lowTrackFromPV[i] = negTrack.fromPV(vKeys[i]);
            }
            // std::cout << "debug    13 "<< std::endl;
            for(size_t i = 0; i < verteces.size(); i++)
@@ -751,32 +752,32 @@ void DiMuonDiTrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
            DiMuonTTCand.addUserFloat("ctauPVBS",ctauPV[0]);
            DiMuonTTCand.addUserFloat("ctauErrPVBS",ctauErrPV[0]);
 
-           // DiMuonTTCand.addUserFloat("tPFromPVBS",float(tPFromPV[0]));
-           // DiMuonTTCand.addUserFloat("tMFromPVBS",float(tMFromPV[0]));
+           // DiMuonTTCand.addUserFloat("highTrackFromPVBS",float(highTrackFromPV[0]));
+           // DiMuonTTCand.addUserFloat("lowTrackFromPVBS",float(lowTrackFromPV[0]));
 
 
            DiMuonTTCand.addUserFloat("cosAlpha",cosAlpha[1]);
            DiMuonTTCand.addUserFloat("ctauPV",ctauPV[1]);
            DiMuonTTCand.addUserFloat("ctauErrPV",ctauErrPV[1]);
 
-           DiMuonTTCand.addUserFloat("tPFromPV",float(tPFromPV[1]));
-           DiMuonTTCand.addUserFloat("tMFromPV",float(tMFromPV[1]));
+           DiMuonTTCand.addUserFloat("highTrackFromPV",float(highTrackFromPV[1]));
+           DiMuonTTCand.addUserFloat("lowTrackFromPV",float(lowTrackFromPV[1]));
 
 
            DiMuonTTCand.addUserFloat("cosAlphaCA",cosAlpha[2]);
            DiMuonTTCand.addUserFloat("ctauPVCA",ctauPV[2]);
            DiMuonTTCand.addUserFloat("ctauErrPVCA",ctauErrPV[2]);
 
-           DiMuonTTCand.addUserFloat("tPFromPVCA",float(tPFromPV[2]));
-           DiMuonTTCand.addUserFloat("tMFromPVCA",float(tMFromPV[2]));
+           DiMuonTTCand.addUserFloat("highTrackFromPVCA",float(highTrackFromPV[2]));
+           DiMuonTTCand.addUserFloat("lowTrackFromPVCA",float(lowTrackFromPV[2]));
 
 
            DiMuonTTCand.addUserFloat("cosAlphaDZ",cosAlpha[3]);
            DiMuonTTCand.addUserFloat("ctauPVDZ",ctauPV[3]);
            DiMuonTTCand.addUserFloat("ctauErrPVDZ",ctauErrPV[3]);
 
-           DiMuonTTCand.addUserFloat("tPFromPVDZ",float(tPFromPV[3]));
-           DiMuonTTCand.addUserFloat("tMFromPVDZ",float(tMFromPV[3]));
+           DiMuonTTCand.addUserFloat("highTrackFromPVDZ",float(highTrackFromPV[3]));
+           DiMuonTTCand.addUserFloat("lowTrackFromPVDZ",float(lowTrackFromPV[3]));
 
            ///DCA
            std::vector<float> DCAs;
